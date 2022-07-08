@@ -1,5 +1,5 @@
 from abc import ABC
-from . import enums
+from . import helper
 from . import node
 
 
@@ -27,7 +27,7 @@ class Connection(ABC):
         Minimum, maximum, and average flow rate through the pipe
     """
     id: str = NotImplemented
-    contents: enums.ContentsType = NotImplemented
+    contents: helper.ContentsType = NotImplemented
     source: node.Node = NotImplemented
     sink: node.Node = NotImplemented
 
@@ -68,7 +68,7 @@ class Connection(ABC):
 
 class Pipe(Connection):
     """
-    Paramters
+    Parameters
     ---------
     id : str
         Pipe ID

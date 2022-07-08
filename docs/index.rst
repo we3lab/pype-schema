@@ -14,7 +14,7 @@ Welcome to the WWTP Configuration package documentation!
    :caption: Class Hierarchy
 
    connection
-   enums
+   helper
    network
    node
    process

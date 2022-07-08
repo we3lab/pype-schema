@@ -1,5 +1,5 @@
 from abc import ABC
-from . import enums
+from . import helper
 
 
 class Node(ABC):
@@ -17,7 +17,7 @@ class Node(ABC):
         Elevation of the node in meters above sea level
     """
     id: str = NotImplemented
-    contents: enums.ContentsType = NotImplemented
+    contents: helper.ContentsType = NotImplemented
     elevation: int = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
@@ -193,7 +193,7 @@ class Pump(Node):
         min_flow,
         max_flow,
         avg_flow=None,
-        pump_type=enums.PumpType.Constant,
+        pump_type=helper.PumpType.Constant,
     ):
         self.id = id
         self.contents = contents

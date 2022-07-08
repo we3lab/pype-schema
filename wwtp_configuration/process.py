@@ -1,5 +1,6 @@
 from abc import ABC
 from collections import OrderedDict
+from . import helper
 
 
 class Train:
@@ -9,16 +10,23 @@ class Train:
 
     Parameters
     ----------
+    id : str
+        Train ID
+
     processes : OrderedDict of Process or Pump
         processes and pummps which make up this treatment train
 
     Attributes
     ----------
+    id : str
+        Train ID
+
     processes : OrderedDict of Process
         processes which make up this treatment train
     """
 
-    def __init__(self, processes=OrderedDict()):
+    def __init__(self, id, processes=OrderedDict()):
+        self.id = id
         self.processes = processes
 
     def add_process(self, process):
@@ -57,7 +65,7 @@ class Process(ABC):
         Tuple of minimum, maximum, and average process flow rate
     """
     id: str = NotImplemented
-    contents: enums.ContentsType = NotImplemented
+    contents: helper.ContentsType = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the process
@@ -243,7 +251,7 @@ class Clarification(Process):
         self.id = id
         self.contents = contents
         self.num_units = units
-        selff.volume = volume
+        self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -294,7 +302,7 @@ class Filtration(Process):
         self.id = id
         self.contents = contents
         self.num_units = units
-        selff.volume = volume
+        self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -345,7 +353,7 @@ class Thickener(Process):
         self.id = id
         self.contents = contents
         self.num_units = units
-        selff.volume = volume
+        self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -396,5 +404,33 @@ class Aeration(Process):
         self.id = id
         self.contents = contents
         self.num_units = units
-        selff.volume = volume
+        self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+
+class Flare(Process):
+    """
+    Parameters
+    ----------
+    id : str
+        Flare ID
+
+    units : int
+        Number of aeration basins running in parallel
+
+    Attributes
+    ----------
+    id : str
+        Thickener ID
+
+    contents : ContentsType
+        Contents of the flare
+
+    num_units : int
+        Number of aeration basin running in parallel
+    """
+
+    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+        self.id = id
+        self.contents = helper.GasType.Biogas
+        self.num_units = units
