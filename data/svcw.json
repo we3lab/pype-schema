@@ -1,0 +1,284 @@
+{
+  "nodes": [
+    "SVCW",
+    "InfluentPump",
+    "StormwaterPump",
+    "BilgePump",
+    "WashwaterPump",
+    "SiteWastePump",
+    "EffluentPump",
+    "RecycledWaterPump",
+    "Number3Pump"
+  ],
+  "connections": [
+    "SewerMain",
+    "StormwaterDrain",
+    "BilgePipe",
+    "WashwaterPipe",
+    "SiteWastePipe",
+    "BayDischarge",
+    "SVCWToWaterRecycling",
+    "Number3ToSVCW"
+  ],
+  "SVCW": {
+    "type": "Facility",
+    "elevation (meters)": 1,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "TreatedSewage",
+    "flowrate (MGD)": {
+      "min": null,
+      "max": 68,
+      "avg": 24
+    },
+    "trains": ["TreatmentTrain", "DigesterSludge", "PrimarySludge", "SludgeRecycling"]
+  },
+  "TreatmentTrain": {
+    "processes": [
+      "PrimaryClarifier",
+      "FFRPump",
+      "FixedFilmReactor",
+      "AerationBasin",
+      "SecondaryClarifier",
+      "DMFPump",
+      "DualMediaFilter",
+      "ChlorineContactTank"
+    ]
+  },
+  "PrimarySolids": {
+    "processes": [
+      "PrimaryClarifier",
+      "TPSPump",
+      "SludgeThickener",
+      "AnaerobicDigester",
+      "Cogenerator"
+    ]
+  },
+  "WasteActivatedSludge": {
+    "processes": [
+      "SecondaryClarifier",
+      "WASPump",
+      "SludgeThickener",
+      "AnaerobicDigester",
+      "Cogenerator"
+    ]
+  },
+  "SludgeRecycling": {
+    "processes": [
+      "SecondaryClarifier",
+      "RASPump",
+      "AerationBasin"
+    ]
+  },
+  "PrimaryClarifier": {
+    "type": "Clarification",
+    "volume (cubic meters)": 2193.5,
+    "num_units": 4,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": 6
+    },
+  },
+  "SecondaryClarifier": {
+    "type": "Clarification",
+    "volume (cubic meters)": 4512,
+    "num_units": 4,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": 17,
+      "avg": 6
+    },
+  },
+  "AerationBasin": {
+    "type": "Aeration",
+    "volume (cubic meters)": 3775.5,
+    "num_units": 4,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": 6
+    },
+  },
+  "AnaerobicDigester": {
+    "type": "Digestion",
+    "digester_type": "Anaerobic",
+    "volume (cubic meters)": null,
+    "num_units": 3,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+    "tags" = {}
+  },
+  "Cogenerator": {
+    "num_units": 2,
+    "generation_capacity (kWh)": {
+      "min": null,
+      "max": 633,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "FixedFilmReactor": {
+    "type": "Digestion",
+    "digester_type": "Aerobic",
+    "volume (cubic meters)": 2534.36,
+    "num_units": 4,
+    "flowrate (MGD)": {
+      "min": 4.18,
+      "max": 13.68,
+      "avg": null
+    }
+  },
+  "DualMediaFilter": {
+    "type": "Filtration",
+    "volume (cubic meters)": null,
+    "num_units": 10,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+    "tags": {
+      "PRI-HIST.DMF_CONTROL.FilterEffFlow": {
+        "type": "Flow",
+        "units": "MGD"
+      }
+    }
+  },
+  "SludgeThickener": {
+    "type": "Thickener",
+    "contents": "Blend",
+    "num_units": 10,
+    "volume (MG)": null,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+  },
+  "ChlorineContactTank": {
+    "type": "Tank",
+    "volume (cubic meters)": 5299.57
+  },
+  "WASPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TWAS"
+  },
+  "RASPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TWAS"
+  },
+  "TPSPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TPS"
+  },
+  "FFRPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "DMFPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "num_units": ,
+    "contents": "UntreatedSewage"
+  },
+  "LiftPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage",
+    "horsepower": 50,
+    "flowrate (MGD)": {
+      "max": 16.99,
+      "min": null,
+      "avg": null
+    },
+    "tags": {
+      "PRI-HIST.FEP_INFLUENT_FLOW.PV": {
+        "type": "Flow",
+        "units": "MGD"
+      }
+    }
+  },
+  "StormwaterPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage"
+  },
+  "BilgePump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage"
+  },
+  "WashwaterPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage"
+  },
+  "SiteWastePump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage"
+  },
+  "EffluentPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TreatedSewage",
+    "num_units": 5,
+    "horsepower": 150,
+    "flowrate (MGD)": {
+      "max": 16.99,
+      "min": null,
+      "avg": null
+    }
+  },
+  "Number3Pump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TreatedSewage"
+  },
+  "Number3Pump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TreatedSewage"
+  },
+  "SewerMain": {
+    "source": "InfluentPump",
+    "sink": "SVCW"
+  },
+  "StormwaterDrain": {
+    "source": "StormwaterPump",
+    "sink": "SVCW"
+  },
+  "BilgePipe": {
+    "source": "BilgePump",
+    "sink": "SVCW"
+  },
+  "WashwaterPipe": {
+    "source": "WashwaterPump",
+    "sink": "SVCW"
+  },
+  "SiteWastePipe": {
+    "source": "SiteWastePump",
+    "sink": "SVCW"
+  },
+  "BayDischarge": {
+    "contents": "TreatedSewage",
+    "source": "SVCW",
+    "sink": "EffluentPump"
+  },
+  "SVCWToWaterRecycling": {
+    "source": "SVCW",
+    "sink": "RecycledWaterPump"
+  },
+  "Number3ToSVCW": {
+    "source": "Number3Pump",
+    "sink": "SVCW"
+  }
+}

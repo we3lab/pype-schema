@@ -78,7 +78,7 @@ class Facility(Node):
         Treatment trains that make up this facility
 
     flow_rate : tuple
-        Tuple of minimum, maximum, and average pump flow rate
+        Tuple of minimum, maximum, and average facility flow rate
     """
 
     def __init__(self, id, contents, elevation, min_flow, max_flow, avg_flow, trains={}):
@@ -140,6 +140,12 @@ class Pump(Node):
     elevation : int
         Elevation of the pump in meters above sea level
 
+    horsepower : int
+        Horsepower of a single pump
+
+    units : int
+        Number of pumps running in parallel
+
     min_flow : int
         Minimum flow rate supplied by the pump
 
@@ -163,8 +169,18 @@ class Pump(Node):
     elevation : int
         Elevation of the pump in meters above sea level
 
+    horsepower : int
+        Horsepower of a single pump
+
+    num_units : int
+        Number of pumps running in parallel
+
     flow_rate : tuple
         Tuple of minimum, maximum, and average pump flow rate
+
+    energy_efficiency : function
+        Function which takes in the current flow rate and returns the energy
+        required to pump at that rate
     """
 
     def __init__(
@@ -172,6 +188,8 @@ class Pump(Node):
         id,
         contents,
         elevation,
+        horsepower,
+        num_units,
         min_flow,
         max_flow,
         avg_flow=None,
@@ -181,6 +199,8 @@ class Pump(Node):
         self.contents = contents
         self.elevation = elevation
         self.pump_type = pump_type
+        self.horsepower = horsepower
+        self.num_units = units
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def set_pump_type(self, pump_type):

@@ -9,9 +9,11 @@ class ContentsType(Enum):
 
 class WaterType(ContentsType):
     """Enum to represent wastewater, drinking water, and recycled water."""
-    Waste = auto()
+    UntreatedSewage = auto()
+    TreatedSewage = auto()
     Drinking = auto()
-    Recycled = auto()
+    PotableReuse = auto()
+    NonpotableReuse = auto()
 
 
 class GasType(ContentsType):
@@ -28,6 +30,7 @@ class SolidsType(ContentsType):
     TPS = auto()
     TWAS = auto()
     Scum = auto()
+    Blend = auto()
 
 
 class PumpType(Enum):
@@ -40,3 +43,15 @@ class DigesterType(Enum):
     """Enum to represent types of digesters"""
     Aerobic = auto()
     Anaerobic = auto()
+
+
+class TagType(Enum):
+    """Enum to represent types of SCADA tags"""
+    Flow = auto()
+    EnergyConsumption = auto()
+    EnergyGeneration = auto()
+    RunTime = auto()
+    RunStatus = auto()
+    VSS = auto()
+    TSS = auto()
+    COD = auto()
