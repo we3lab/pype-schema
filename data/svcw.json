@@ -33,7 +33,7 @@
     "trains": [
       "TreatmentTrain",
       "DigesterSludge",
-      "PrimarySludge",
+      "PrimarySolids",
       "SludgeRecycling"
     ]
   },
@@ -58,7 +58,7 @@
       "Cogenerator"
     ]
   },
-  "WasteActivatedSludge": {
+  "DigesterSludge": {
     "processes": [
       "SecondaryClarifier",
       "WASPump",
@@ -75,28 +75,32 @@
     ]
   },
   "GasFlaring": {
-    "AnaerobicDigester",
-    "Flare"
+    "processes": [
+      "AnaerobicDigester",
+      "Flare"
+    ]
   },
   "PrimaryClarifier": {
     "type": "Clarification",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 2193.5,
     "num_units": 4,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
       "avg": 6
-    },
+    }
   },
   "SecondaryClarifier": {
     "type": "Clarification",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 4512,
     "num_units": 4,
     "flowrate (MGD)": {
       "min": null,
       "max": 17,
       "avg": 6
-    },
+    }
   },
   "AerationBasin": {
     "type": "Aeration",
@@ -107,7 +111,7 @@
       "min": null,
       "max": null,
       "avg": 6
-    },
+    }
   },
   "AnaerobicDigester": {
     "type": "Digestion",
@@ -241,7 +245,7 @@
   "Cogenerator": {
     "type": "Cogeneration",
     "num_units": 2,
-    "input_contents": ["Biogas", "NaturalGas"]
+    "contents": ["Biogas", "NaturalGas"],
     "generation_capacity (kWh)": {
       "min": null,
       "max": 633,
@@ -273,15 +277,15 @@
         "unit_id": 2
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_GROSS_ELECTRICITY_KWH" : {
-        "type": "EnergyGeneration",
+        "type": "GrossEnergyGeneration",
         "units": "kWh",
-        "contents": "Gross",
+        "contents": null,
         "unit_id": "total"
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
-        "type": "EnergyGeneration",
+        "type": "NetEnergyGeneration",
         "units": "kWh",
-        "contents": "Net",
+        "contents": null,
         "unit_id": "total"
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_PARASITICAL_ELECTRICITY_KWH": {
@@ -291,21 +295,21 @@
         "unit_id": "total"
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
-        "type": "EnergyGeneration",
+        "type": "GridPurchase",
         "units": "kWh",
-        "contents": "Grid",
+        "contents": null,
         "unit_id": "total"
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
-        "type": "EnergyGeneration",
+        "type": "GrossEnergyGeneration",
         "units": "kWh",
-        "contents": "Gross",
+        "contents": null,
         "unit_id": 1
       },
       "PRI-HIST.CGN_ENG_DAILY_DATA.GEN2_KWHRS_DAY": {
-        "type": "EnergyGeneration",
+        "type": "GrossEnergyGeneration",
         "units": "kWh",
-        "contents": "Gross",
+        "contents": null,
         "unit_id": 2
       }
     }
@@ -319,7 +323,7 @@
         "type": "InfluentFlow",
         "units": "SCFM",
         "unit_id": 1
-      }
+      },
       "PRI-HIST.Tot_Flow_WasteGas_Burner2.PV": {
         "type": "InfluentFlow",
         "units": "SCFM",
@@ -366,7 +370,7 @@
       "min": null,
       "max": null,
       "avg": 1.17
-    },
+    }
   },
   "ChlorineContactTank": {
     "type": "Tank",
@@ -430,7 +434,7 @@
   "DMFPump": {
     "type": "Pump",
     "pump_type": null,
-    "num_units": ,
+    "num_units": null,
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -553,41 +557,49 @@
   "SewerMain": {
     "contents": "UntreatedSewage",
     "source": "LiftPump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "StormwaterDrain": {
     "contents": "UntreatedSewage",
     "source": "StormwaterPump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "BilgePipe": {
     "contents": "UntreatedSewage",
     "source": "BilgePump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "WashwaterPipe": {
     "contents": "UntreatedSewage",
     "source": "WashwaterPump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "SiteWastePipe": {
     "contents": "UntreatedSewage",
     "source": "SiteWastePump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "BayDischarge": {
     "contents": "TreatedSewage",
     "source": "SVCW",
-    "sink": "EffluentPump"
+    "sink": "EffluentPump",
+    "type": "Pipe"
   },
   "SVCWToWaterRecycling": {
     "contents": "TreatedSewage",
     "source": "SVCW",
-    "sink": "RecycledWaterPump"
+    "sink": "RecycledWaterPump",
+    "type": "Pipe"
   },
   "Number3ToSVCW": {
     "contents": "TreatedSewage",
     "source": "Number3Pump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   }
 }

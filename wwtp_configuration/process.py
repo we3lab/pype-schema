@@ -58,14 +58,22 @@ class Process(ABC):
     id : str
         Process ID
 
-    contents : ContentsType
-        Contents of the process (e.g. biogas or wastewater)
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the process (e.g. biogas or wastewater)
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the process (e.g. biogas or wastewater)
 
     flow_rate : tuple
         Tuple of minimum, maximum, and average process flow rate
+
+    num_units
     """
+
     id: str = NotImplemented
-    contents: helper.ContentsType = NotImplemented
+    input_contents: helper.ContentsType = NotImplemented
+    output_contents: helper.ContentsType = NotImplemented
+    num_units: int = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the process
@@ -90,10 +98,13 @@ class Digestion(Process):
     Parameters
     ----------
     id : str
-        Process ID
+        Digester ID
 
-    contents : ContentsType
-        Contents of the digester
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the digester (e.g. biogas or wastewater)
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the digester (e.g. biogas or wastewater)
 
     min_flow : int
         Minimum flow rate through the process
@@ -104,7 +115,7 @@ class Digestion(Process):
     avg_flow : int
         Average flow rate through the process
 
-    units : int
+    num_units : int
         Number of digesters running in parallel
 
     volume : int
@@ -116,10 +127,13 @@ class Digestion(Process):
     Attributes
     ----------
     id : str
-        Process ID
+        Digester ID
 
-    contents : ContentsType
-        Contents of the digester
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the digester (e.g. biogas or wastewater)
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the digester (e.g. biogas or wastewater)
 
     flow_rate : tuple
         Tuple of minimum, maximum, and average digester flow rate
@@ -134,10 +148,22 @@ class Digestion(Process):
         Type of digestion (aerobic or anaerobic)
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume, digester_type):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        digester_type,
+    ):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
         self.volume = volume
         self.digester_type = digester_type
         self.set_flow_rate(min_flow, max_flow, avg_flow)
@@ -150,8 +176,8 @@ class Cogeneration(Process):
     id : str
         Cogenerator ID
 
-    contents : ContentsType
-        Contents of the cogenerator
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the cogenerator
 
     min_gen : int
         Minimum generation capacity of a single cogenerator
@@ -162,7 +188,7 @@ class Cogeneration(Process):
     avg_gen : int
         Average generation capacity of a single cogenerator
 
-    units : int
+    num_units : int
         Number of cogenerator units running in parallel
 
     Attributes
@@ -170,8 +196,8 @@ class Cogeneration(Process):
     id : str
         Cogenerator ID
 
-    contents : ContentsType
-        Contents of the cogenerator (biogas, natural gas, or a blend of the two)
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the cogenerator (biogas, natural gas, or a blend of the two)
 
     gen_capacity : tuple
         Minimum, maximum, and average generation capacity
@@ -180,26 +206,26 @@ class Cogeneration(Process):
         Number of cogenerator units running in parallel
     """
 
-    def __init__(self, id, contents, min_gen, max_gen, avg_gen, units):
+    def __init__(self, id, input_contents, min_gen, max_gen, avg_gen, num_units):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.num_units = num_units
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
 
     def set_gen_capacity(self, min, max, avg):
         """Set the minimum, maximum, and average generation capacity
 
-            Parameters
-            ----------
-            min : int
-                Minimum generation by a single cogenerator
+        Parameters
+        ----------
+        min : int
+            Minimum generation by a single cogenerator
 
-            max : int
-                Maximum generation by a single cogenerator
+        max : int
+            Maximum generation by a single cogenerator
 
-            avg : int
-                Average generation by a single cogenerator
-            """
+        avg : int
+            Average generation by a single cogenerator
+        """
         # TODO: attach units to generation capacity
         self.flow_rate = (min, max, avg)
 
@@ -211,8 +237,11 @@ class Clarification(Process):
     id : str
         Clarifier ID
 
-    contents : ContentsType
-        Contents of the clarifier
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the clarifier
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the clarifier
 
     min_flow : int
         Minimum flow rate of a single clarifier
@@ -223,7 +252,7 @@ class Clarification(Process):
     avg_flow : int
         Average flow rate of a single clarifier
 
-    units : int
+    num_units : int
         Number of clarifiers running in parallel
 
     volume : int
@@ -232,10 +261,13 @@ class Clarification(Process):
     Attributes
     ----------
     id : str
-        Cogenerator ID
+        Clarifier ID
 
-    contents : ContentsType
-        Contents of the clarifier
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the clarifier
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the clarifier
 
     flow_rate : tuple
         Minimum, maximum, and average flow rate
@@ -247,10 +279,21 @@ class Clarification(Process):
         Volume of a single clarifier in cubic meters
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+    ):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
         self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -262,8 +305,11 @@ class Filtration(Process):
     id : str
         Filter ID
 
-    contents : ContentsType
-        Contents of the filter
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the filter
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the filter
 
     min_flow : int
         Minimum flow rate of a single filter
@@ -274,7 +320,7 @@ class Filtration(Process):
     avg_flow : int
         Average flow rate of a single filter
 
-    units : int
+    num_units : int
         Number of filters running in parallel
 
     volume : int
@@ -285,8 +331,11 @@ class Filtration(Process):
     id : str
         Filter ID
 
-    contents : ContentsType
-        Contents of the filter
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the filter
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the filter
 
     flow_rate : tuple
         Minimum, maximum, and average flow rate
@@ -298,10 +347,21 @@ class Filtration(Process):
         Volume of a single filter in cubic meters
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+    ):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
         self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -313,8 +373,11 @@ class Thickener(Process):
     id : str
         Thickener ID
 
-    contents : ContentsType
-        Contents of the thickener
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the thickener
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the thickener
 
     min_flow : int
         Minimum flow rate of a single thickener
@@ -325,7 +388,7 @@ class Thickener(Process):
     avg_flow : int
         Average flow rate of a single thickener
 
-    units : int
+    num_units : int
         Number of thickeners running in parallel
 
     volume : int
@@ -336,8 +399,11 @@ class Thickener(Process):
     id : str
         Thickener ID
 
-    contents : ContentsType
-        Contents of the thickener
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the thickener
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the thickener
 
     flow_rate : tuple
         Minimum, maximum, and average flow rate
@@ -349,10 +415,21 @@ class Thickener(Process):
         Volume of a single thickener in cubic meters
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+    ):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
         self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -362,10 +439,13 @@ class Aeration(Process):
     Parameters
     ----------
     id : str
-        Aeration ID
+        Aerator ID
 
-    contents : ContentsType
-        Contents of the aeration basin
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the aeration basin
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the aeration basin
 
     min_flow : int
         Minimum flow rate of a single aeration basin
@@ -376,7 +456,7 @@ class Aeration(Process):
     avg_flow : int
         Average flow rate of a single aeration basin
 
-    units : int
+    num_units : int
         Number of aeration basins running in parallel
 
     volume : int
@@ -385,25 +465,29 @@ class Aeration(Process):
     Attributes
     ----------
     id : str
-        Thickener ID
+        Aerator ID
 
-    contents : ContentsType
-        Contents of the aeration basin
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the aeration basin
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the aeration basin
 
     flow_rate : tuple
         Minimum, maximum, and average flow rate
 
     num_units : int
-        Number of aeration basin running in parallel
+        Number of aeration basins running in parallel
 
     volume : int
         Volume of a single aeration basin in cubic meters
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+    def __init__(self, id, input_contents, output_contents, min_flow, max_flow, avg_flow, num_units, volume):
         self.id = id
-        self.contents = contents
-        self.num_units = units
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
         self.volume = volume
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -415,22 +499,22 @@ class Flare(Process):
     id : str
         Flare ID
 
-    units : int
-        Number of aeration basins running in parallel
+    num_units : int
+        Number of flares running in parallel
 
     Attributes
     ----------
     id : str
-        Thickener ID
+        Flare ID
 
-    contents : ContentsType
-        Contents of the flare
+    input_contents : ContentsType
+        Contents entering the flare
 
     num_units : int
-        Number of aeration basin running in parallel
+        Number of flares running in parallel
     """
 
-    def __init__(self, id, contents, min_flow, max_flow, avg_flow, units, volume):
+    def __init__(self, id, num_units, volume):
         self.id = id
-        self.contents = helper.GasType.Biogas
-        self.num_units = units
+        self.input_contents = helper.GasType.Biogas
+        self.num_units = num_units

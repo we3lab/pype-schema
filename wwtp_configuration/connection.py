@@ -26,6 +26,7 @@ class Connection(ABC):
     flow_rate : tuple
         Minimum, maximum, and average flow rate through the pipe
     """
+
     id: str = NotImplemented
     contents: helper.ContentsType = NotImplemented
     source: node.Node = NotImplemented
@@ -74,7 +75,22 @@ class Pipe(Connection):
         Pipe ID
 
     contents : ContentsType
-        Contents moving through the node. Either WaterType, SolidsType, or GasType
+        Contents moving through the connection
+
+    source : Node
+        Starting point of the connection
+
+    sink : Node
+        Endpoint of the connection
+
+    min_flow : int
+        Minimum flow rate through the pipe
+
+    max_flow : int
+        Maximum flow rate through the pipe
+
+    avg_flow : int
+        Average flow rate through the pipe
 
     diameter : int
         Pipe diameter in meters
@@ -91,34 +107,22 @@ class Pipe(Connection):
     avg_pres : int
         Average pressure inside the pipe
 
-    min_flow : int
-        Minimum flow rate through the pipe
-
-    max_flow : int
-        Maximum flow rate through the pipe
-
-    avg_flow : int
-        Average flow rate through the pipe
-
-    source : Node
-        Starting point of the connection
-
-    sink : Node
-        Endpoint of the connection
-
     Attributes
     ----------
     id : str
         Pipe ID
 
     contents : ContentsType
-        Contents moving through the node. Either WaterType, SolidsType, or GasType
+        Contents moving through the connection.
 
     source : Node
         Starting point of the connection
 
     sink : Node
         Endpoint of the connection
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate through the pipe
 
     diameter : int
         Pipe diameter in meters
@@ -128,32 +132,27 @@ class Pipe(Connection):
 
     pressure : tuple
         Minimum, maximum, and average pressure in the pipe
-
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate through the pipe
     """
 
     def __init__(
         self,
         id,
         contents,
-        diameter,
-        friction,
-        min_pres,
-        max_pres,
-        avg_pres,
+        source,
+        sink,
         min_flow,
         max_flow,
         avg_flow,
-        source=None,
-        sink=None
+        diameter=None,
+        friction=None,
+        min_pres=None,
+        max_pres=None,
+        avg_pres=None,
     ):
         self.id = id
         self.contents = contents
-        if source:
-            self.source = source
-        if sink:
-            self.sink = sink
+        self.source = source
+        self.sink = sink
         self.diameter = diameter
         self.friction_coeff = friction
         self.set_pressure(min_pres, max_pres, avg_pres)

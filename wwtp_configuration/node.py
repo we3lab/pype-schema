@@ -10,14 +10,19 @@ class Node(ABC):
     id : str
         Node ID
 
-    contents : ContentsType
-        Contents moving through the node. Either WaterType, SolidsType, or GasType
+    input_contents : ContentsType
+        Contents entering the node.
+
+    output_contents : ContentsType
+        Contents leaving the node.
 
     elevation : int
         Elevation of the node in meters above sea level
     """
+
     id: str = NotImplemented
-    contents: helper.ContentsType = NotImplemented
+    input_contents: helper.ContentsType = NotImplemented
+    output_contents: helper.ContentsType = NotImplemented
     elevation: int = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
@@ -45,8 +50,11 @@ class Facility(Node):
     id : str
         Facility ID
 
-    contents : ContentsType
-        Contents of the facility
+    input_contents : ContentsType
+        Contents entering the facility.
+
+    output_contents : ContentsType
+        Contents leaving the facility.
 
     elevation : int
         Elevation of the facility
@@ -68,8 +76,11 @@ class Facility(Node):
     id : str
         Facility ID
 
-    contents : ContentsType
-        Contents of the facility
+    input_contents : ContentsType
+        Contents entering the facility.
+
+    output_contents : ContentsType
+        Contents leaving the facility.
 
     elevation : int
         Elevation of the facility in meters above sea level
@@ -81,12 +92,48 @@ class Facility(Node):
         Tuple of minimum, maximum, and average facility flow rate
     """
 
-    def __init__(self, id, contents, elevation, min_flow, max_flow, avg_flow, trains={}):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        elevation,
+        min_flow,
+        max_flow,
+        avg_flow,
+        trains={},
+    ):
         self.id = id
-        self.contents = contents
+        self.input_contents = input_contents
+        self.output_contents = output_contents
         self.elevation = elevation
         self.trains = trains
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def add_train(self, train):
+        """Adds a node to the network
+
+        Parameters
+        ----------
+        train : Train
+            Train object to add to the network
+        """
+        self.trains[train.id] = train
+
+    def remove_train(self, train_name):
+        """Removes a node from the network
+
+        Parameters
+        ----------
+        train_name : str
+            name of node to remove
+
+        Raises
+        ------
+        KeyError
+            if `train_name` is not found
+        """
+        del self.trains[train_name]
 
 
 class Tank(Node):
@@ -96,8 +143,11 @@ class Tank(Node):
     id : str
         Tank ID
 
-    contents : ContentsType
-        Contents of the tank
+    input_contents : ContentsType
+        Contents entering the tank.
+
+    output_contents : ContentsType
+        Contents leaving the tank.
 
     elevation : int
         Elevation of the tank in meters above sea level
@@ -110,8 +160,11 @@ class Tank(Node):
     id : str
         Tank ID
 
-    contents : ContentsType
-        Contents of the tank
+    input_contents : ContentsType
+        Contents entering the tank.
+
+    output_contents : ContentsType
+        Contents leaving the tank.
 
     elevation : int
         Elevation of the tank in meters above sea level
@@ -120,9 +173,10 @@ class Tank(Node):
         Volume of the tank in cubic meters
     """
 
-    def __init__(self, id, contents, elevation, volume):
+    def __init__(self, id, input_contents, output_contents, elevation, volume):
         self.id = id
-        self.contents = contents
+        self.input_contents = input_contents
+        self.output_contents = output_contents
         self.elevation = elevation
         self.volume = volume
 
@@ -134,8 +188,11 @@ class Pump(Node):
     id : str
         Pump ID
 
-    contents : ContentsType
-        Contents being pumped
+    input_contents : ContentsType
+        Contents entering the pump.
+
+    output_contents : ContentsType
+        Contents leaving the pump.
 
     elevation : int
         Elevation of the pump in meters above sea level
@@ -143,7 +200,7 @@ class Pump(Node):
     horsepower : int
         Horsepower of a single pump
 
-    units : int
+    num_units : int
         Number of pumps running in parallel
 
     min_flow : int
@@ -163,8 +220,11 @@ class Pump(Node):
     id : str
         Pump ID
 
-    contents : ContentsType
-        Contents being pumped
+    input_contents : ContentsType
+        Contents entering the pump.
+
+    output_contents : ContentsType
+        Contents leaving the pump.
 
     elevation : int
         Elevation of the pump in meters above sea level
@@ -186,7 +246,8 @@ class Pump(Node):
     def __init__(
         self,
         id,
-        contents,
+        input_contents,
+        output_contents,
         elevation,
         horsepower,
         num_units,
@@ -196,11 +257,12 @@ class Pump(Node):
         pump_type=helper.PumpType.Constant,
     ):
         self.id = id
-        self.contents = contents
+        self.input_contents = input_contents
+        self.output_contents = output_contents
         self.elevation = elevation
         self.pump_type = pump_type
         self.horsepower = horsepower
-        self.num_units = units
+        self.num_units = num_units
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def set_pump_type(self, pump_type):
