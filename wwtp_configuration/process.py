@@ -29,6 +29,16 @@ class Train:
         self.id = id
         self.processes = processes
 
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Train id:{self.id} processes:{self.processes}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return self.id == other.id and self.processes == other.processes
+
     def add_process(self, process):
         """Adds a process to the treatment train
 
@@ -64,11 +74,11 @@ class Process(ABC):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the process (e.g. biogas or wastewater)
 
-    flow_rate : tuple
-        Tuple of minimum, maximum, and average process flow rate
-
     num_units : int
         Number of processes running in parallel
+
+    flow_rate : tuple
+        Tuple of minimum, maximum, and average process flow rate
 
     tags : dict of Tag
         Data tags associated with this process
@@ -78,7 +88,24 @@ class Process(ABC):
     input_contents: utils.ContentsType = NotImplemented
     output_contents: utils.ContentsType = NotImplemented
     num_units: int = NotImplemented
+    flow_rate: dict = NotImplemented
     tags: dict = NotImplemented
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Process id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} flow_rate:{self.flow_rate} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+        )
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the process
@@ -163,14 +190,14 @@ class Digestion(Process):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the digester (e.g. biogas or wastewater)
 
-    flow_rate : tuple
-        Tuple of minimum, maximum, and average digester flow rate
-
     num_units : int
         Number of digesters running in parallel
 
     volume : int
         Volume of the digester in cubic meters
+
+    flow_rate : tuple
+        Tuple of minimum, maximum, and average digester flow rate
 
     digester_type : DigesterType
         Type of digestion (aerobic or anaerobic)
@@ -190,7 +217,7 @@ class Digestion(Process):
         num_units,
         volume,
         digester_type,
-        tags={}
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
@@ -200,6 +227,25 @@ class Digestion(Process):
         self.digester_type = digester_type
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Digestion id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} digester_type:{digester_type} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.digester_type == other.digester_type
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
 
 
 class Cogeneration(Process):
@@ -245,12 +291,30 @@ class Cogeneration(Process):
         Data tags associated with this cogenerator
     """
 
-    def __init__(self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}):
+    def __init__(
+        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+    ):
         self.id = id
         self.input_contents = input_contents
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Cogeneration id:{self.id} input_contents:{self.input_contents} num_units:{self.num_units} gen_capacity:{self.gen_capacity} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.num_units == other.num_units
+            and self.gen_capacity == other.gen_capacity
+            and self.tags == other.tags
+        )
 
     def set_gen_capacity(self, min, max, avg):
         """Set the minimum, maximum, and average generation capacity
@@ -267,7 +331,7 @@ class Cogeneration(Process):
             Average generation by a single cogenerator
         """
         # TODO: attach units to generation capacity
-        self.flow_rate = (min, max, avg)
+        self.gen_capacity = (min, max, avg)
 
 
 class Clarification(Process):
@@ -312,14 +376,15 @@ class Clarification(Process):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the clarifier
 
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate
-
     num_units : int
         Number of clarifiers running in parallel
 
     volume : int
         Volume of a single clarifier in cubic meters
+
+    flow_rate : tuple
+        Tuple of minimum, maximum, and average digester flow rate
+
 
     tags : dict of Tag
         Data tags associated with this clarifier
@@ -335,7 +400,7 @@ class Clarification(Process):
         avg_flow,
         num_units,
         volume,
-        tags={}
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
@@ -344,6 +409,24 @@ class Clarification(Process):
         self.volume = volume
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Clarification id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
 
 
 class Filtration(Process):
@@ -388,14 +471,14 @@ class Filtration(Process):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the filter
 
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate
-
     num_units : int
         Number of filters running in parallel
 
     volume : int
         Volume of a single filter in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
 
     tags : dict of Tag
         Data tags associated with this filter
@@ -411,7 +494,7 @@ class Filtration(Process):
         avg_flow,
         num_units,
         volume,
-        tags={}
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
@@ -421,8 +504,26 @@ class Filtration(Process):
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Filtration id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
 
-class Thickener(Process):
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Thickening(Process):
     """
     Parameters
     ----------
@@ -473,6 +574,9 @@ class Thickener(Process):
     volume : int
         Volume of a single thickener in cubic meters
 
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
     tags : dict of Tag
         Data tags associated with this thickener
     """
@@ -487,7 +591,7 @@ class Thickener(Process):
         avg_flow,
         num_units,
         volume,
-        tags={}
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
@@ -496,6 +600,24 @@ class Thickener(Process):
         self.volume = volume
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Thickening id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
 
 
 class Aeration(Process):
@@ -540,20 +662,31 @@ class Aeration(Process):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the aeration basin
 
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate
-
     num_units : int
         Number of aeration basins running in parallel
 
     volume : int
         Volume of a single aeration basin in cubic meters
 
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
     tags : dict of Tag
         Data tags associated with this aerator
     """
 
-    def __init__(self, id, input_contents, output_contents, min_flow, max_flow, avg_flow, num_units, volume, tags={}):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
@@ -562,8 +695,26 @@ class Aeration(Process):
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Aeration id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
 
-class Flare(Process):
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Flaring(Process):
     """
     Parameters
     ----------
@@ -596,3 +747,18 @@ class Flare(Process):
         self.input_contents = utils.GasType.Biogas
         self.num_units = num_units
         self.tags = tags
+
+    def __repr__(self):
+        return f"<wwtp_configuration.process.Flaring id:{self.id} input_contents:{self.input_contents} num_units:{self.num_units} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+        )

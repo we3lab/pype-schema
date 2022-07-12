@@ -316,7 +316,7 @@
     }
   },
   "Flare": {
-    "type": "Flare",
+    "type": "Flaring",
     "num_units": 2,
     "contents": "Biogas",
     "tags": {
@@ -362,7 +362,7 @@
     }
   },
   "SludgeThickener": {
-    "type": "Thickener",
+    "type": "Thickening",
     "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
     "output_contents": "SludgeBlend",
     "num_units": 4,

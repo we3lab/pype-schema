@@ -232,10 +232,10 @@ class JSONParser:
                 num_units,
                 volume,
             )
-        elif self.config[process_id]["type"] == "Flare":
-            process_obj = process.Flare(process_id, input_contents, num_units)
-        elif self.config[process_id]["type"] == "Thickener":
-            process_obj = process.Thickener(
+        elif self.config[process_id]["type"] == "Flaring":
+            process_obj = process.Flaring(process_id, input_contents, num_units)
+        elif self.config[process_id]["type"] == "Thickening":
+            process_obj = process.Thickening(
                 process_id,
                 input_contents,
                 output_contents,
@@ -373,7 +373,7 @@ class JSONParser:
             tag_type,
             unit_id,
             totalized=totalized,
-            contents=contents
+            contents=contents,
         )
 
         return tag

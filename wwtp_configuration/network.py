@@ -22,6 +22,16 @@ class Network:
         self.nodes = nodes
         self.connections = connections
 
+    def __repr__(self):
+        return f"<wwtp_configuration.network.Network nodes:{self.nodes} connections:{self.connections}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return self.nodes == other.nodes and self.connections == other.connections
+
     def add_node(self, node):
         """Adds a node to the network
 

@@ -29,6 +29,9 @@ class Node(ABC):
     elevation: int = NotImplemented
     tags: dict = NotImplemented
 
+    def __repr__(self):
+        return f"<wwtp_configuration.node.Node id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} tags:{self.tags}>"
+
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the node
 
@@ -132,15 +135,33 @@ class Facility(Node):
         max_flow,
         avg_flow,
         trains={},
-        tags={}
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.elevation = elevation
         self.trains = trains
-        self.tagss = tags
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.node.Facility id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} trains:{self.trains} flow_rate:{self.flow_rate} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.elevation == other.elevation
+            and self.trains == other.trains
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
 
     def add_train(self, train):
         """Adds a node to the network
@@ -219,6 +240,23 @@ class Tank(Node):
         self.volume = volume
         self.tags = tags
 
+    def __repr__(self):
+        return f"<wwtp_configuration.node.Tank id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} volume:{self.volume} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.elevation == other.elevation
+            and self.volume == other.volume
+            and self.tags == other.tags
+        )
+
 
 class Pump(Node):
     """
@@ -277,11 +315,11 @@ class Pump(Node):
     num_units : int
         Number of pumps running in parallel
 
-    tags : dict of Tag
-        Data tags associated with this pump
-
     flow_rate : tuple
         Tuple of minimum, maximum, and average pump flow rate
+
+    tags : dict of Tag
+        Data tags associated with this pump
 
     energy_efficiency : function
         Function which takes in the current flow rate and returns the energy
@@ -311,6 +349,28 @@ class Pump(Node):
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+        self.set_energy_efficiency(None)
+
+    def __repr__(self):
+        return f"<wwtp_configuration.node.Pump id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} horsepower:{self.horsepower} num_units:{self.num_units} flow_rate:{self.flow_rate} tags:{self.tags}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.elevation == other.elevation
+            and self.pump_type == other.pump_type
+            and self.horsepower == other.horsepower
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+            and self.flow_rate == other.flow_rate
+            and self.energy_efficiency == other.energy_efficiency
+        )
 
     def set_pump_type(self, pump_type):
         """Set the pump curve to the given function

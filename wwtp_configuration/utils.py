@@ -104,3 +104,20 @@ class Tag:
         self.totalized = totalized
         self.unit_id = unit_id
         self.units = units
+
+    def __repr__(self):
+        return f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} tag_type:{self.tag_type} unit_id:{self.unit_id} totalized:{self.totalized} contents:{self.contents}>"
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.contents == other.contents
+            and self.tag_type == other.tag_type
+            and self.totalized == other.totalized
+            and self.unit_id == other.unit_id
+            and self.units == other.units
+        )
