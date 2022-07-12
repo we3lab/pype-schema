@@ -69,8 +69,11 @@ class Tag:
         integer representing unit number, or `total` if a totalized data point
         across all units of the process
 
+    totalized : bool
+        True if data is totalized. False otherwise
+
     contents : ContentsType
-        Contents moving through the node
+        Contents of the data stream, E.g., `WasteActivatedSludge` or `NaturalGas`
 
     Attributes
     ----------
@@ -84,16 +87,20 @@ class Tag:
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
 
     unit_id : int or str
-        integer representing unit number, or `total` if a totalized data point
+        integer representing unit number, or `total` if a combined data point
         across all units of the process
+
+    totalized : bool
+        True if data is totalized. False otherwise
 
     contents : ContentsType
         Contents moving through the node
     """
 
-    def __init__(self, id, units, tag_type, unit_id, contents=None):
+    def __init__(self, id, units, tag_type, unit_id, totalized=False, contents=None):
         self.id = id
         self.contents = contents
         self.tag_type = tag_type
+        self.totalized = totalized
         self.unit_id = unit_id
         self.units = units

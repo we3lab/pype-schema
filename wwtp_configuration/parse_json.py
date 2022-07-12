@@ -3,7 +3,7 @@ from . import network
 from . import connection
 from . import node
 from . import process
-from . import helper
+from . import utils
 
 
 class JSONParser:
@@ -80,8 +80,8 @@ class JSONParser:
             )
             node_obj = node.Facility(
                 node_id,
-                helper.ContentsType[input_contents],
-                helper.ContentsType[output_contents],
+                utils.ContentsType[input_contents],
+                utils.ContentsType[output_contents],
                 elevation,
                 min,
                 max,
@@ -94,8 +94,8 @@ class JSONParser:
             volume = self.config[node_id].get("volume")
             node_obj = node.Tank(
                 node_id,
-                helper.ContentsType[input_contents],
-                helper.ContentsType[output_contents],
+                utils.ContentsType[input_contents],
+                utils.ContentsType[output_contents],
                 elevation,
                 volume,
             )
@@ -103,13 +103,13 @@ class JSONParser:
             min, max, avg = self.parse_flow_or_gen_capacity(
                 self.config[node_id]["flowrate (MGD)"]
             )
-            pump_type = self.config[node_id].get("pump_type", helper.PumpType.Constant)
+            pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
             horsepower = self.config[node_id].get("horsepower")
             num_units = self.config[node_id].get("horsepower")
             node_obj = node.Pump(
                 node_id,
-                helper.ContentsType[input_contents],
-                helper.ContentsType[output_contents],
+                utils.ContentsType[input_contents],
+                utils.ContentsType[output_contents],
                 elevation,
                 horsepower,
                 num_units,
@@ -120,6 +120,12 @@ class JSONParser:
             )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
+
+        tags = self.config[node_id].get("tags")
+        if tags:
+            for tag_id, tag_info in tags.items():
+                tag = self.parse_tag(tag_id, tag_info)
+                node_obj.add_tag(tag)
 
         return node_obj
 
@@ -213,7 +219,7 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
-                helper.DigesterType[digester_type],
+                utils.DigesterType[digester_type],
             )
         elif self.config[process_id]["type"] == "Filtration":
             process_obj = process.Filtration(
@@ -243,6 +249,12 @@ class JSONParser:
             raise TypeError(
                 "Unsupported Process type: " + self.config[process_id]["type"]
             )
+
+        tags = self.config[process_id].get("tags")
+        if tags:
+            for tag_id, tag_info in tags.items():
+                tag = self.parse_tag(tag_id, tag_info)
+                process_obj.add_tag(tag)
 
         return process_obj
 
@@ -279,7 +291,7 @@ class JSONParser:
             diameter = self.config[connection_id].get("diameter")
             connection_obj = connection.Pipe(
                 connection_id,
-                helper.ContentsType[contents],
+                utils.ContentsType[contents],
                 source,
                 sink,
                 min_flow,
@@ -324,7 +336,47 @@ class JSONParser:
 
         return (input_contents, output_contents)
 
-    # TODO: parse_tags
+    @staticmethod
+    def parse_tag(tag_id, tag_info):
+        """Parse tag ID and dictionary of information into Tag object
+
+        Parameters
+        ----------
+        tag_id : str
+            name of the tag
+
+        tag_info : dict
+            dictionary of the form {
+                'type': TagType,
+                'units': str
+                'contents': str
+                'unit_id': int or str
+                'totalized': bool
+            }
+
+        Returns
+        -------
+        Tag
+            a Python object with the given ID and the values from `tag_info`
+        """
+        try:
+            contents = utils.ContentsType[tag_info["contents"]]
+        except KeyError:
+            # TODO: check for contents of process/node and set contents equal to that
+            contents = None
+        tag_type = utils.TagType[tag_info["type"]]
+        totalized = tag_info.get("totalized", False)
+        unit_id = tag_info.get("unit_id", "total")
+        tag = utils.Tag(
+            tag_id,
+            tag_info["units"],
+            tag_type,
+            unit_id,
+            totalized=totalized,
+            contents=contents
+        )
+
+        return tag
 
     @staticmethod
     def parse_flow_or_gen_capacity(flow_or_gen):

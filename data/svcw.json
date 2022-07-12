@@ -126,115 +126,116 @@
       "avg": 0.15
     },
     "tags": {
-      "PRI-HIST.DIG1.FOG_GALS_DAY": {
+      "DIG1.FOG_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "FatOilGrease",
-        "unit_id": 1
+        "unit_id": 1,
+        "totalized": true
       },
-      "PRI-HIST.DIG1.SCM_GALS_DAY": {
+      "DIG1.SCM_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "Scum",
         "unit_id": 1
       },
-      "PRI-HIST.DIG1.TPS_GALS_DAY": {
+      "DIG1.TPS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "PrimarySludge",
         "unit_id": 1
       },
-      "PRI-HIST.DIG1.TWAS_GALS_DAY": {
+      "DIG1.TWAS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "WasteActivatedSludge",
         "unit_id": 1
       },
-      "PRI-HIST.DIG2.FOG_GALS_DAY": {
+      "DIG2.FOG_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "FatOilGrease",
         "unit_id": 2
       },
-      "PRI-HIST.DIG2.SCM_GALS_DAY": {
+      "DIG2.SCM_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "Scum",
         "unit_id": 2
       },
-      "PRI-HIST.DIG2.TPS_GALS_DAY": {
+      "DIG2.TPS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "PrimarySludge",
         "unit_id": 2
       },
-      "PRI-HIST.DIG2.TWAS_GALS_DAY": {
+      "DIG2.TWAS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "WasteActivatedSludge",
         "unit_id": 2
       },
-      "PRI-HIST.DIG3.FOG_GALS_DAY": {
+      "DIG3.FOG_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "FatOilGrease",
         "unit_id": 3
       },
-      "PRI-HIST.DIG3.SCM_GALS_DAY": {
+      "DIG3.SCM_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "Scum",
         "unit_id": 3
       },
-      "PRI-HIST.DIG3.TPS_GALS_DAY": {
+      "DIG3.TPS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "PrimarySludge",
         "unit_id": 3
       },
-      "PRI-HIST.DIG3.TWAS_GALS_DAY": {
+      "DIG3.TWAS_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "WasteActivatedSludge",
         "unit_id": 3
       },
-      "PRI-HIST.ENGINE_GAS_DATA.DIG1_GAS_FLOW": {
+      "ENGINE_GAS_DATA.DIG1_GAS_FLOW": {
         "type": "EffluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 1
       },
-      "PRI-HIST.ENGINE_GAS_DATA.DIG2_GAS_FLOW": {
+      "ENGINE_GAS_DATA.DIG2_GAS_FLOW": {
         "type": "EffluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 2
       },
-      "PRI-HIST.ENGINE_GAS_DATA.DIG3_GAS_FLOW": {
+      "ENGINE_GAS_DATA.DIG3_GAS_FLOW": {
         "type": "EffluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 3
       },
-      "PRI-HIST.FDW_DIG_FLOW.FLOW_GALS_DAY": {
+      "FDW_DIG_FLOW.FLOW_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "FoodWaste",
         "unit_id": "total"
       },
-      "PRI-HIST.SCM.FLOW_GALS_DAY": {
+      "SCM.FLOW_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "Scum",
         "unit_id": "total"
       },
-      "PRI-HIST.TPS.FLOW_GALS_DAY": {
+      "TPS.FLOW_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "PrimarySludge",
         "unit_id": "total"
       },
-      "PRI-HIST.TWAS.FLOW_GALS_DAY": {
+      "TWAS.FLOW_GALS_DAY": {
         "type": "InfluentFlow",
         "units": "GPD",
         "contents": "WasteActivatedSludge",
@@ -252,61 +253,61 @@
       "avg": null
     },
     "tags": {
-      "PRI-HIST.CGN_SUP_FIT_27102_DG.VAL_ACT": {
+      "CGN_SUP_FIT_27102_DG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 1
       },
-      "PRI-HIST.CGN_SUP_FIT_27202_DG.VAL_ACT": {
+      "CGN_SUP_FIT_27202_DG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 2
       },
-      "PRI-HIST.CGN_SUP_FIT_27102_NG.VAL_ACT": {
+      "CGN_SUP_FIT_27102_NG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "NaturalGas",
         "unit_id": 1
       },
-      "PRI-HIST.CGN_SUP_FIT_27202_NG.VAL_ACT": {
+      "CGN_SUP_FIT_27202_NG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "NaturalGas",
         "unit_id": 2
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_GROSS_ELECTRICITY_KWH" : {
+      "CGN_ENG_DAILY_DATA.CGN_GROSS_ELECTRICITY_KWH" : {
         "type": "GrossEnergyGeneration",
         "units": "kWh",
         "contents": null,
         "unit_id": "total"
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
+      "CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
         "type": "NetEnergyGeneration",
         "units": "kWh",
         "contents": null,
         "unit_id": "total"
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.CGN_PARASITICAL_ELECTRICITY_KWH": {
+      "CGN_ENG_DAILY_DATA.CGN_PARASITICAL_ELECTRICITY_KWH": {
         "type": "EnergyConsumption",
         "units": "kWh",
         "contents": null,
         "unit_id": "total"
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
+      "CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
         "type": "GridPurchase",
         "units": "kWh",
         "contents": null,
         "unit_id": "total"
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
+      "CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
         "type": "GrossEnergyGeneration",
         "units": "kWh",
         "contents": null,
         "unit_id": 1
       },
-      "PRI-HIST.CGN_ENG_DAILY_DATA.GEN2_KWHRS_DAY": {
+      "CGN_ENG_DAILY_DATA.GEN2_KWHRS_DAY": {
         "type": "GrossEnergyGeneration",
         "units": "kWh",
         "contents": null,
@@ -319,12 +320,12 @@
     "num_units": 2,
     "contents": "Biogas",
     "tags": {
-      "PRI-HIST.Tot_Flow_WasteGas_Burner1.PV": {
+      "Tot_Flow_WasteGas_Burner1.PV": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "unit_id": 1
       },
-      "PRI-HIST.Tot_Flow_WasteGas_Burner2.PV": {
+      "Tot_Flow_WasteGas_Burner2.PV": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "unit_id": 2
@@ -353,7 +354,7 @@
       "avg": null
     },
     "tags": {
-      "PRI-HIST.DMF_CONTROL.FilterEffFlow": {
+      "DMF_CONTROL.FilterEffFlow": {
         "type": "EffluentFlow",
         "units": "MGD",
         "unit_id": "total"
@@ -456,7 +457,7 @@
       "avg": null
     },
     "tags": {
-      "PRI-HIST.FEP_INFLUENT_FLOW.PV": {
+      "FEP_INFLUENT_FLOW.PV": {
         "type": "EffluentFlow",
         "units": "MGD",
         "unit_id": "total"

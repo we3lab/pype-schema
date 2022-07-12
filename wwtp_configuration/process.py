@@ -1,6 +1,6 @@
 from abc import ABC
 from collections import OrderedDict
-from . import helper
+from . import utils
 
 
 class Train:
@@ -67,13 +67,18 @@ class Process(ABC):
     flow_rate : tuple
         Tuple of minimum, maximum, and average process flow rate
 
-    num_units
+    num_units : int
+        Number of processes running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this process
     """
 
     id: str = NotImplemented
-    input_contents: helper.ContentsType = NotImplemented
-    output_contents: helper.ContentsType = NotImplemented
+    input_contents: utils.ContentsType = NotImplemented
+    output_contents: utils.ContentsType = NotImplemented
     num_units: int = NotImplemented
+    tags: dict = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the process
@@ -91,6 +96,26 @@ class Process(ABC):
         """
         # TODO: attach units to flow rate
         self.flow_rate = (min, max, avg)
+
+    def add_tag(self, tag):
+        """Adds a tag to the process
+
+        Parameters
+        ----------
+        tag : Tag
+            Tag object to add to the process
+        """
+        self.tags[tag.id] = tag
+
+    def remove_tag(self, tag_name):
+        """Removes a tag from the process
+
+        Parameters
+        ----------
+        tag_name : str
+            name of tag to remove
+        """
+        del self.tags[tag_name]
 
 
 class Digestion(Process):
@@ -124,6 +149,9 @@ class Digestion(Process):
     digester_type : DigesterType
         Type of digestion (aerobic or anaerobic)
 
+    tags : dict of Tag
+        Data tags associated with this digester
+
     Attributes
     ----------
     id : str
@@ -146,6 +174,9 @@ class Digestion(Process):
 
     digester_type : DigesterType
         Type of digestion (aerobic or anaerobic)
+
+    tags : dict of Tag
+        Data tags associated with this digester
     """
 
     def __init__(
@@ -159,6 +190,7 @@ class Digestion(Process):
         num_units,
         volume,
         digester_type,
+        tags={}
     ):
         self.id = id
         self.input_contents = input_contents
@@ -166,6 +198,7 @@ class Digestion(Process):
         self.num_units = num_units
         self.volume = volume
         self.digester_type = digester_type
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -191,6 +224,9 @@ class Cogeneration(Process):
     num_units : int
         Number of cogenerator units running in parallel
 
+    tags : dict of Tag
+        Data tags associated with this cogenerator
+
     Attributes
     ----------
     id : str
@@ -204,12 +240,16 @@ class Cogeneration(Process):
 
     num_units : int
         Number of cogenerator units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this cogenerator
     """
 
-    def __init__(self, id, input_contents, min_gen, max_gen, avg_gen, num_units):
+    def __init__(self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}):
         self.id = id
         self.input_contents = input_contents
         self.num_units = num_units
+        self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
 
     def set_gen_capacity(self, min, max, avg):
@@ -258,6 +298,9 @@ class Clarification(Process):
     volume : int
         Volume of the clarifier in cubic meters
 
+    tags : dict of Tag
+        Data tags associated with this clarifier
+
     Attributes
     ----------
     id : str
@@ -277,6 +320,9 @@ class Clarification(Process):
 
     volume : int
         Volume of a single clarifier in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this clarifier
     """
 
     def __init__(
@@ -289,12 +335,14 @@ class Clarification(Process):
         avg_flow,
         num_units,
         volume,
+        tags={}
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.num_units = num_units
         self.volume = volume
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -326,6 +374,9 @@ class Filtration(Process):
     volume : int
         Volume of a single filter in cubic meters
 
+    tags : dict of Tag
+        Data tags associated with this filter
+
     Attributes
     ----------
     id : str
@@ -345,6 +396,9 @@ class Filtration(Process):
 
     volume : int
         Volume of a single filter in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this filter
     """
 
     def __init__(
@@ -357,12 +411,14 @@ class Filtration(Process):
         avg_flow,
         num_units,
         volume,
+        tags={}
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.num_units = num_units
         self.volume = volume
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -394,6 +450,9 @@ class Thickener(Process):
     volume : int
         Volume of a single thickener in cubic meters
 
+    tags : dict of Tag
+        Data tags associated with this thickener
+
     Attributes
     ----------
     id : str
@@ -413,6 +472,9 @@ class Thickener(Process):
 
     volume : int
         Volume of a single thickener in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this thickener
     """
 
     def __init__(
@@ -425,12 +487,14 @@ class Thickener(Process):
         avg_flow,
         num_units,
         volume,
+        tags={}
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.num_units = num_units
         self.volume = volume
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -462,6 +526,9 @@ class Aeration(Process):
     volume : int
         Volume of a single aeration basin in cubic meters
 
+    tags : dict of Tag
+        Data tags associated with this aerator
+
     Attributes
     ----------
     id : str
@@ -481,14 +548,18 @@ class Aeration(Process):
 
     volume : int
         Volume of a single aeration basin in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this aerator
     """
 
-    def __init__(self, id, input_contents, output_contents, min_flow, max_flow, avg_flow, num_units, volume):
+    def __init__(self, id, input_contents, output_contents, min_flow, max_flow, avg_flow, num_units, volume, tags={}):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.num_units = num_units
         self.volume = volume
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
 
@@ -502,6 +573,9 @@ class Flare(Process):
     num_units : int
         Number of flares running in parallel
 
+    tags : dict of Tag
+        Data tags associated with this flare
+
     Attributes
     ----------
     id : str
@@ -512,9 +586,13 @@ class Flare(Process):
 
     num_units : int
         Number of flares running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this flare
     """
 
-    def __init__(self, id, num_units, volume):
+    def __init__(self, id, num_units, volume, tags={}):
         self.id = id
-        self.input_contents = helper.GasType.Biogas
+        self.input_contents = utils.GasType.Biogas
         self.num_units = num_units
+        self.tags = tags

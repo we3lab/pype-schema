@@ -1,5 +1,5 @@
 from abc import ABC
-from . import helper
+from . import utils
 from . import node
 
 
@@ -28,9 +28,10 @@ class Connection(ABC):
     """
 
     id: str = NotImplemented
-    contents: helper.ContentsType = NotImplemented
+    contents: utils.ContentsType = NotImplemented
     source: node.Node = NotImplemented
     sink: node.Node = NotImplemented
+    tags: dict = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate through the connection

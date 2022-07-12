@@ -1,5 +1,5 @@
 from abc import ABC
-from . import helper
+from . import utils
 
 
 class Node(ABC):
@@ -18,12 +18,16 @@ class Node(ABC):
 
     elevation : int
         Elevation of the node in meters above sea level
+
+    tags : dict of Tag
+        Data tags associated with this node
     """
 
     id: str = NotImplemented
-    input_contents: helper.ContentsType = NotImplemented
-    output_contents: helper.ContentsType = NotImplemented
+    input_contents: utils.ContentsType = NotImplemented
+    output_contents: utils.ContentsType = NotImplemented
     elevation: int = NotImplemented
+    tags: dict = NotImplemented
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the node
@@ -41,6 +45,26 @@ class Node(ABC):
         """
         # TODO: attach units to flow rate
         self.flow_rate = (min, max, avg)
+
+    def add_tag(self, tag):
+        """Adds a tag to the node
+
+        Parameters
+        ----------
+        tag : Tag
+            Tag object to add to the node
+        """
+        self.tags[tag.id] = tag
+
+    def remove_tag(self, tag_name):
+        """Removes a tag from the node
+
+        Parameters
+        ----------
+        tag_name : str
+            name of tag to remove
+        """
+        del self.tags[tag_name]
 
 
 class Facility(Node):
@@ -71,6 +95,9 @@ class Facility(Node):
     trains : dict of Train
         Treatment trains that make up this facility
 
+    tags : dict of Tag
+        Data tags associated with this facility
+
     Attributes
     ----------
     id : str
@@ -88,6 +115,9 @@ class Facility(Node):
     trains : dict of Train
         Treatment trains that make up this facility
 
+    tags : dict of Tag
+        Data tags associated with this facility
+
     flow_rate : tuple
         Tuple of minimum, maximum, and average facility flow rate
     """
@@ -102,12 +132,14 @@ class Facility(Node):
         max_flow,
         avg_flow,
         trains={},
+        tags={}
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.elevation = elevation
         self.trains = trains
+        self.tagss = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def add_train(self, train):
@@ -155,6 +187,9 @@ class Tank(Node):
     volume : int
         Volume of the tank in cubic meters
 
+    tags : dict of Tag
+        Data tags associated with this tank
+
     Attributes
     ----------
     id : str
@@ -171,14 +206,18 @@ class Tank(Node):
 
     volume : int
         Volume of the tank in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this tank
     """
 
-    def __init__(self, id, input_contents, output_contents, elevation, volume):
+    def __init__(self, id, input_contents, output_contents, elevation, volume, tags={}):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.elevation = elevation
         self.volume = volume
+        self.tags = tags
 
 
 class Pump(Node):
@@ -215,6 +254,9 @@ class Pump(Node):
     pump_type : PumpType
         Type of pump (either VFD or constant)
 
+    tags : dict of Tag
+        Data tags associated with this pump
+
     Attributes
     ----------
     id : str
@@ -235,6 +277,9 @@ class Pump(Node):
     num_units : int
         Number of pumps running in parallel
 
+    tags : dict of Tag
+        Data tags associated with this pump
+
     flow_rate : tuple
         Tuple of minimum, maximum, and average pump flow rate
 
@@ -254,7 +299,8 @@ class Pump(Node):
         min_flow,
         max_flow,
         avg_flow=None,
-        pump_type=helper.PumpType.Constant,
+        pump_type=utils.PumpType.Constant,
+        tags={},
     ):
         self.id = id
         self.input_contents = input_contents
@@ -263,6 +309,7 @@ class Pump(Node):
         self.pump_type = pump_type
         self.horsepower = horsepower
         self.num_units = num_units
+        self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def set_pump_type(self, pump_type):
