@@ -8,6 +8,7 @@ setup_requirements = []
 test_requirements = [
     "black>=22.3.0",
     "flake8>=4.0.0",
+    "codecov>=2.1.4",
     "pytest>=6.2.5",
     "pytest-cov>=3.0.0",
     "pytest-html>=3.1.1",

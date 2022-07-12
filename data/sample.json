@@ -6,33 +6,18 @@
     "elevation": 10,
     "contents": "Sewage",
     "flowrate": {
-      "min": 5
-      "max": 25
+      "min": 5,
+      "max": 25,
       "avg": 15
     },
-    "trains": ["Train1"],
-    "water quality":
-    {
-      "Influent COD": ,
-      "Effluent COD": ,
-      "Influent VSS": ,
-      "Effluent VSS": ,
-      "Influent TSS": ,
-      "Effluent TSS":
-    },
-  }
+    "trains": ["Train1"]
+  },
   "Train1": {
     "processes": ["AnaerobicDigestion"]
   },
   "AnaerobicDigestion": {
     "type": "AnaerobicDigester",
-    "volume": 100,
-    "water quality":
-    {
-      "COD": ,
-      "VSS": ,
-      "TSS":
-    }
+    "volume": 100
   },
   "Pipe1": {
     "diameter": 10,
