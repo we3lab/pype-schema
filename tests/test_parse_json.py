@@ -1,0 +1,36 @@
+import os
+import pytest
+import pickle
+from wwtp_configuration.parse_json import JSONParser
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# set skip_all_tests = True to focus on single test
+skip_all_tests = False
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, expected_path",
+    [
+        ("../data/svcw.json", "../data/svcw.pkl"),
+        ("../data/sample.json", "KeyError"),
+    ],
+)
+def test_create_network(json_path, expected_path):
+    parser = JSONParser(json_path)
+    try:
+        result = parser.initialize_network()
+        with open(expected_path, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
+    except Exception as err:
+        result = type(err).__name__
+        expected = expected_path
+
+    assert result == expected
+
+
+# test_create_node()
+# test_create_train()
+# test_create_process()
+# test_create_connection()

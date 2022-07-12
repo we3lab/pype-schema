@@ -9,7 +9,7 @@ Useful Commands
 
   This will install your package in editable mode.
 
-2. ``pytest tests --cov=wwtp-configuration --cov-report=html``
+2. ``pytest tests --cov=wwtp_configuration --cov-report=html``
 
   Produces an HTML test coverage report for the entire project which can
   be found at ``htmlcov/index.html``.

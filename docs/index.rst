@@ -14,16 +14,21 @@ Welcome to the WWTP Configuration package documentation!
    :caption: Class Hierarchy
 
    connection
-   enums
    network
    node
    process
 
 .. toctree::
-  :maxdepth: 1
-  :caption: JSON Parsing
+   :maxdepth: 1
+   :caption: JSON Parsing
 
-  parse_json
+   parse_json
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Miscellaneous
+
+   utils
 
 .. include:: ../README.rst
 

@@ -1,7 +1,7 @@
 {
   "nodes": [
     "SVCW",
-    "InfluentPump",
+    "LiftPump",
     "StormwaterPump",
     "BilgePump",
     "WashwaterPump",
@@ -30,7 +30,12 @@
       "max": 68,
       "avg": 24
     },
-    "trains": ["TreatmentTrain", "DigesterSludge", "PrimarySludge", "SludgeRecycling"]
+    "trains": [
+      "TreatmentTrain",
+      "DigesterSludge",
+      "PrimarySolids",
+      "SludgeRecycling"
+    ]
   },
   "TreatmentTrain": {
     "processes": [
@@ -53,7 +58,7 @@
       "Cogenerator"
     ]
   },
-  "WasteActivatedSludge": {
+  "DigesterSludge": {
     "processes": [
       "SecondaryClarifier",
       "WASPump",
@@ -69,60 +74,267 @@
       "AerationBasin"
     ]
   },
+  "GasFlaring": {
+    "processes": [
+      "AnaerobicDigester",
+      "Flare"
+    ]
+  },
   "PrimaryClarifier": {
     "type": "Clarification",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 2193.5,
     "num_units": 4,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
       "avg": 6
-    },
+    }
   },
   "SecondaryClarifier": {
     "type": "Clarification",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 4512,
     "num_units": 4,
     "flowrate (MGD)": {
       "min": null,
       "max": 17,
       "avg": 6
-    },
+    }
   },
   "AerationBasin": {
     "type": "Aeration",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 3775.5,
     "num_units": 4,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
       "avg": 6
-    },
+    }
   },
   "AnaerobicDigester": {
     "type": "Digestion",
+    "input_contents": "SludgeBlend",
+    "output_contents": "Biogas",
     "digester_type": "Anaerobic",
-    "volume (cubic meters)": null,
+    "volume (cubic meters)": 6145,
     "num_units": 3,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": 0.15
     },
-    "tags" = {}
+    "tags": {
+      "DIG1.FOG_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "FatOilGrease",
+        "unit_id": 1,
+        "totalized": true
+      },
+      "DIG1.SCM_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "Scum",
+        "unit_id": 1
+      },
+      "DIG1.TPS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "PrimarySludge",
+        "unit_id": 1
+      },
+      "DIG1.TWAS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "WasteActivatedSludge",
+        "unit_id": 1
+      },
+      "DIG2.FOG_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "FatOilGrease",
+        "unit_id": 2
+      },
+      "DIG2.SCM_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "Scum",
+        "unit_id": 2
+      },
+      "DIG2.TPS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "PrimarySludge",
+        "unit_id": 2
+      },
+      "DIG2.TWAS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "WasteActivatedSludge",
+        "unit_id": 2
+      },
+      "DIG3.FOG_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "FatOilGrease",
+        "unit_id": 3
+      },
+      "DIG3.SCM_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "Scum",
+        "unit_id": 3
+      },
+      "DIG3.TPS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "PrimarySludge",
+        "unit_id": 3
+      },
+      "DIG3.TWAS_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "WasteActivatedSludge",
+        "unit_id": 3
+      },
+      "ENGINE_GAS_DATA.DIG1_GAS_FLOW": {
+        "type": "EffluentFlow",
+        "units": "SCFM",
+        "contents": "Biogas",
+        "unit_id": 1
+      },
+      "ENGINE_GAS_DATA.DIG2_GAS_FLOW": {
+        "type": "EffluentFlow",
+        "units": "SCFM",
+        "contents": "Biogas",
+        "unit_id": 2
+      },
+      "ENGINE_GAS_DATA.DIG3_GAS_FLOW": {
+        "type": "EffluentFlow",
+        "units": "SCFM",
+        "contents": "Biogas",
+        "unit_id": 3
+      },
+      "FDW_DIG_FLOW.FLOW_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "FoodWaste",
+        "unit_id": "total"
+      },
+      "SCM.FLOW_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "Scum",
+        "unit_id": "total"
+      },
+      "TPS.FLOW_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "PrimarySludge",
+        "unit_id": "total"
+      },
+      "TWAS.FLOW_GALS_DAY": {
+        "type": "InfluentFlow",
+        "units": "GPD",
+        "contents": "WasteActivatedSludge",
+        "unit_id": "total"
+      }
+    }
   },
   "Cogenerator": {
+    "type": "Cogeneration",
     "num_units": 2,
+    "contents": ["Biogas", "NaturalGas"],
     "generation_capacity (kWh)": {
       "min": null,
       "max": 633,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "CGN_SUP_FIT_27102_DG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "Biogas",
+        "unit_id": 1
+      },
+      "CGN_SUP_FIT_27202_DG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "Biogas",
+        "unit_id": 2
+      },
+      "CGN_SUP_FIT_27102_NG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "unit_id": 1
+      },
+      "CGN_SUP_FIT_27202_NG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "unit_id": 2
+      },
+      "CGN_ENG_DAILY_DATA.CGN_GROSS_ELECTRICITY_KWH" : {
+        "type": "GrossEnergyGeneration",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      },
+      "CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
+        "type": "NetEnergyGeneration",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      },
+      "CGN_ENG_DAILY_DATA.CGN_PARASITICAL_ELECTRICITY_KWH": {
+        "type": "EnergyConsumption",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      },
+      "CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
+        "type": "GridPurchase",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      },
+      "CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
+        "type": "GrossEnergyGeneration",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": 1
+      },
+      "CGN_ENG_DAILY_DATA.GEN2_KWHRS_DAY": {
+        "type": "GrossEnergyGeneration",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": 2
+      }
+    }
+  },
+  "Flare": {
+    "type": "Flaring",
+    "num_units": 2,
+    "contents": "Biogas",
+    "tags": {
+      "Tot_Flow_WasteGas_Burner1.PV": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "unit_id": 1
+      },
+      "Tot_Flow_WasteGas_Burner2.PV": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "unit_id": 2
+      }
+    }
   },
   "FixedFilmReactor": {
-    "type": "Digestion",
-    "digester_type": "Aerobic",
+    "type": "Filtration",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": 2534.36,
     "num_units": 4,
     "flowrate (MGD)": {
@@ -133,6 +345,7 @@
   },
   "DualMediaFilter": {
     "type": "Filtration",
+    "contents": "UntreatedSewage",
     "volume (cubic meters)": null,
     "num_units": 10,
     "flowrate (MGD)": {
@@ -141,53 +354,97 @@
       "avg": null
     },
     "tags": {
-      "PRI-HIST.DMF_CONTROL.FilterEffFlow": {
-        "type": "Flow",
-        "units": "MGD"
+      "DMF_CONTROL.FilterEffFlow": {
+        "type": "EffluentFlow",
+        "units": "MGD",
+        "unit_id": "total"
       }
     }
   },
   "SludgeThickener": {
-    "type": "Thickener",
-    "contents": "Blend",
-    "num_units": 10,
+    "type": "Thickening",
+    "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
+    "output_contents": "SludgeBlend",
+    "num_units": 4,
     "volume (MG)": null,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
-    },
+      "avg": 1.17
+    }
   },
   "ChlorineContactTank": {
     "type": "Tank",
-    "volume (cubic meters)": 5299.57
+    "elevation": null,
+    "volume (cubic meters)": 5299.57,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "TreatedSewage"
   },
   "WASPump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "TWAS"
+    "contents": "WasteActivatedSludge",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "RASPump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "TWAS"
+    "contents": "WasteActivatedSludge",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "TPSPump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "TPS"
+    "contents": "PrimarySludge",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "FFRPump": {
     "type": "Pump",
     "pump_type": null,
     "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
     "tags": {}
   },
   "DMFPump": {
     "type": "Pump",
     "pump_type": null,
-    "num_units": ,
-    "contents": "UntreatedSewage"
+    "num_units": null,
+    "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "LiftPump": {
     "type": "Pump",
@@ -200,31 +457,64 @@
       "avg": null
     },
     "tags": {
-      "PRI-HIST.FEP_INFLUENT_FLOW.PV": {
-        "type": "Flow",
-        "units": "MGD"
+      "FEP_INFLUENT_FLOW.PV": {
+        "type": "EffluentFlow",
+        "units": "MGD",
+        "unit_id": "total"
       }
     }
   },
   "StormwaterPump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "BilgePump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "WashwaterPump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "SiteWastePump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "EffluentPump": {
     "type": "Pump",
@@ -236,49 +526,81 @@
       "max": 16.99,
       "min": null,
       "avg": null
-    }
+    },
+    "tags": {}
+  },
+  "RecycledWaterPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "TreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "Number3Pump": {
     "type": "Pump",
     "pump_type": null,
-    "contents": "TreatedSewage"
-  },
-  "Number3Pump": {
-    "type": "Pump",
-    "pump_type": null,
-    "contents": "TreatedSewage"
+    "contents": "TreatedSewage",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "SewerMain": {
-    "source": "InfluentPump",
-    "sink": "SVCW"
+    "contents": "UntreatedSewage",
+    "source": "LiftPump",
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "StormwaterDrain": {
+    "contents": "UntreatedSewage",
     "source": "StormwaterPump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "BilgePipe": {
+    "contents": "UntreatedSewage",
     "source": "BilgePump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "WashwaterPipe": {
+    "contents": "UntreatedSewage",
     "source": "WashwaterPump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "SiteWastePipe": {
+    "contents": "UntreatedSewage",
     "source": "SiteWastePump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   },
   "BayDischarge": {
     "contents": "TreatedSewage",
     "source": "SVCW",
-    "sink": "EffluentPump"
+    "sink": "EffluentPump",
+    "type": "Pipe"
   },
   "SVCWToWaterRecycling": {
+    "contents": "TreatedSewage",
     "source": "SVCW",
-    "sink": "RecycledWaterPump"
+    "sink": "RecycledWaterPump",
+    "type": "Pipe"
   },
   "Number3ToSVCW": {
+    "contents": "TreatedSewage",
     "source": "Number3Pump",
-    "sink": "SVCW"
+    "sink": "SVCW",
+    "type": "Pipe"
   }
 }
