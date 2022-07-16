@@ -34,7 +34,8 @@
       "TreatmentTrain",
       "DigesterSludge",
       "PrimarySolids",
-      "SludgeRecycling"
+      "SludgeRecycling",
+      "GasFlaring"
     ]
   },
   "TreatmentTrain": {
