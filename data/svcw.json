@@ -34,7 +34,8 @@
       "TreatmentTrain",
       "DigesterSludge",
       "PrimarySolids",
-      "SludgeRecycling"
+      "SludgeRecycling",
+      "GasFlaring"
     ]
   },
   "TreatmentTrain": {
@@ -323,12 +324,14 @@
       "Tot_Flow_WasteGas_Burner1.PV": {
         "type": "InfluentFlow",
         "units": "SCFM",
-        "unit_id": 1
+        "unit_id": 1,
+        "totalized": true
       },
       "Tot_Flow_WasteGas_Burner2.PV": {
         "type": "InfluentFlow",
         "units": "SCFM",
-        "unit_id": 2
+        "unit_id": 2,
+        "totalized": true
       }
     }
   },

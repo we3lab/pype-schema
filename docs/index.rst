@@ -1,7 +1,7 @@
 .. contents::
 
 Welcome to the WWTP Configuration package documentation!
-====================================================
+========================================================
 
 .. toctree::
    :maxdepth: 1
