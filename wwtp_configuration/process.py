@@ -30,7 +30,10 @@ class Train:
         self.processes = processes
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Train id:{self.id} processes:{self.processes}>"
+        return (
+            f"<wwtp_configuration.process.Train id:{self.id} "
+            f"processes:{self.processes}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -92,7 +95,13 @@ class Process(ABC):
     tags: dict = NotImplemented
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Process id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Process id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"num_units:{self.num_units} flow_rate:{self.flow_rate} "
+            f"tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -229,7 +238,13 @@ class Digestion(Process):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Digestion id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} digester_type:{digester_type} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Digestion id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} "
+            f"digester_type:{self.digester_type} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -279,7 +294,8 @@ class Cogeneration(Process):
         Cogenerator ID
 
     input_contents : ContentsType or list of ContentsType
-        Contents entering the cogenerator (biogas, natural gas, or a blend of the two)
+        Contents entering the cogenerator
+        (biogas, natural gas, or a blend of the two)
 
     gen_capacity : tuple
         Minimum, maximum, and average generation capacity
@@ -301,7 +317,11 @@ class Cogeneration(Process):
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Cogeneration id:{self.id} input_contents:{self.input_contents} num_units:{self.num_units} gen_capacity:{self.gen_capacity} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Cogeneration id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units} "
+            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -411,7 +431,12 @@ class Clarification(Process):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Clarification id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Clarification id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -505,7 +530,12 @@ class Filtration(Process):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Filtration id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Filtration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -602,7 +632,12 @@ class Thickening(Process):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Thickening id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Thickening id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -696,7 +731,12 @@ class Aeration(Process):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Aeration id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} num_units:{self.num_units} volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Aeration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -749,7 +789,11 @@ class Flaring(Process):
         self.tags = tags
 
     def __repr__(self):
-        return f"<wwtp_configuration.process.Flaring id:{self.id} input_contents:{self.input_contents} num_units:{self.num_units} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.process.Flaring id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units} "
+            f"tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types

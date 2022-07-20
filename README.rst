@@ -3,27 +3,19 @@ WWTP Configuration
 ******************
 
 .. image::
-<<<<<<< Updated upstream
-   https://github.com/aics-int/we3lab/workflows/Build%20Main/badge.svg
-=======
    https://github.com/we3lab/wwtp-configuration/workflows/Build%20Main/badge.svg
->>>>>>> Stashed changes
    :height: 30
    :target: https://github.com/we3lab/wwtp-configuration/actions
    :alt: Build Status
 
 .. image::
-<<<<<<< Updated upstream
-   https://github.com/aics-int/we3lab/workflows/Documentation/badge.svg
-=======
    https://github.com/we3lab/wwtp-configuration/workflows/Documentation/badge.svg
->>>>>>> Stashed changes
    :height: 30
    :target: https://we3lab.github.io/wwtp-configuration
    :alt: Documentation
 
 .. image::
-   https://codecov.io/gh/we3lab/wwtp-configuration/branch/master/graph/badge.svg
+   https://codecov.io/gh/we3lab/wwtp-configuration/branch/main/graph/badge.svg
    :height: 30
    :target: https://codecov.io/gh/we3lab/wwtp-configuration
    :alt: Code Coverage

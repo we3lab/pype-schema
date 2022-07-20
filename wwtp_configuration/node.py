@@ -30,7 +30,12 @@ class Node(ABC):
     tags: dict = NotImplemented
 
     def __repr__(self):
-        return f"<wwtp_configuration.node.Node id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.node.Node id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"elevation:{self.elevation} tags:{self.tags}>"
+        )
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate of the node
@@ -146,7 +151,12 @@ class Facility(Node):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.node.Facility id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} trains:{self.trains} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.node.Facility id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"trains:{self.trains} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -241,7 +251,12 @@ class Tank(Node):
         self.tags = tags
 
     def __repr__(self):
-        return f"<wwtp_configuration.node.Tank id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} volume:{self.volume} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.node.Tank id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"volume:{self.volume} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -352,7 +367,13 @@ class Pump(Node):
         self.set_energy_efficiency(None)
 
     def __repr__(self):
-        return f"<wwtp_configuration.node.Pump id:{self.id} input_contents:{self.input_contents} output_contents:{self.output_contents} elevation:{self.elevation} horsepower:{self.horsepower} num_units:{self.num_units} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.node.Pump id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"horsepower:{self.horsepower} num_units:{self.num_units} "
+            f"flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types

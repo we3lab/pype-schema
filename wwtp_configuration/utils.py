@@ -73,7 +73,7 @@ class Tag:
         True if data is totalized. False otherwise
 
     contents : ContentsType
-        Contents of the data stream, E.g., `WasteActivatedSludge` or `NaturalGas`
+        Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
 
     Attributes
     ----------
@@ -106,7 +106,11 @@ class Tag:
         self.units = units
 
     def __repr__(self):
-        return f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} tag_type:{self.tag_type} unit_id:{self.unit_id} totalized:{self.totalized} contents:{self.contents}>"
+        return (
+            f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
+            f"tag_type:{self.tag_type} unit_id:{self.unit_id} "
+            f"totalized:{self.totalized} contents:{self.contents}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types

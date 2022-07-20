@@ -39,7 +39,8 @@ class JSONParser:
         Returns
         -------
         Network
-            a Python object with all the values from the JSON file stored hierarchically
+            a Python object with all the values from the JSON file
+            stored hierarchically
         """
         for node_id in self.config["nodes"]:
             # check that node exists in dictionary (NameError)
