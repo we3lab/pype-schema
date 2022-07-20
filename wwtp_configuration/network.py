@@ -23,7 +23,10 @@ class Network:
         self.connections = connections
 
     def __repr__(self):
-        return f"<wwtp_configuration.network.Network nodes:{self.nodes} connections:{self.connections}>"
+        return (
+            f"<wwtp_configuration.network.Network nodes:{self.nodes} "
+            f"connections:{self.connections}>"
+        )
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types

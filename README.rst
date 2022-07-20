@@ -2,6 +2,26 @@
 WWTP Configuration
 ******************
 
+.. image::
+   https://github.com/we3lab/workflows/Build%20Main/badge.svg
+   :height: 30
+   :target: https://github.com/we3lab/wwtp-configuration/actions
+   :alt: Build Status
+
+.. image::
+   https://github.com/we3lab/workflows/Documentation/badge.svg
+   :height: 30
+   :target: https://we3lab.github.io/wwtp-configuration
+   :alt: Documentation
+
+.. image::
+   https://codecov.io/gh/we3lab/wwtp-configuration/branch/master/graph/badge.svg
+   :height: 30
+   :target: https://codecov.io/gh/we3lab/wwtp-configuration
+   :alt: Code Coverage
+
+A class hierarchy designed to represent a wastewater treatment plant's configuration.
+
 Useful Commands
 ===============
 

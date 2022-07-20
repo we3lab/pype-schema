@@ -34,7 +34,11 @@ class Connection(ABC):
     tags: dict = NotImplemented
 
     def __repr__(self):
-        return f"<wwtp_configuration.connection.Connection id:{self.id} contents:{self.contents} source:{self.source} sink:{self.sink} tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.connection.Connection id:{self.id} "
+            f"contents:{self.contents} source:{self.source} "
+            f"sink:{self.sink} tags:{self.tags}>"
+        )
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate through the connection
@@ -163,7 +167,13 @@ class Pipe(Connection):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
-        return f"<wwtp_configuration.connection.Pipe id:{self.id} contents:{self.contents} source:{self.source} sink:{self.sink} flow_rate:{self.flow_rate} pressure:{self.pressure} diameter:{self.diameter} friction_coeff:{self.friction_coeff}  tags:{self.tags}>"
+        return (
+            f"<wwtp_configuration.connection.Pipe id:{self.id} "
+            f"contents:{self.contents} source:{self.source} sink:{self.sink} "
+            f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
+            f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
+            f"tags:{self.tags}>"
+        )
 
     def __eq__(self, other):
         if not isinstance(other, Pipe):
