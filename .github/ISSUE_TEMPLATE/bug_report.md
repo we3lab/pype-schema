@@ -3,7 +3,7 @@
 name: Bug Report
 about: '"Something''s wrong..."'
 title: 'BUG:'
-labels: 'Bug, Needs Triage'
+labels: 'bug, needs triage'
 
 ---
 

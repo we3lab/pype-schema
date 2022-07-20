@@ -3,7 +3,7 @@
 name: Test Coverage
 about: This test is missing
 title: "TEST:"
-labels: "Testing, Needs Triage"
+labels: "testing, needs triage"
 
 ---
 

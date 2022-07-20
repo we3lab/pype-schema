@@ -3,7 +3,7 @@
 name: Feature Request
 about: '"It would be really cool if x did y..."'
 title: "ENH:"
-labels: "Enhancement, Needs Triage"
+labels: "enhancement, needs triage"
 
 ---
 

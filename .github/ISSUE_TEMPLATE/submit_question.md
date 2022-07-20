@@ -1,9 +1,9 @@
 ---
 
 name: Submit Question
-about: Ask a general question about pandas
+about: Ask a general question
 title: "QST:"
-labels: "Usage Question, Needs Triage"
+labels: "question, needs triage"
 
 ---
 

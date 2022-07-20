@@ -3,7 +3,7 @@
 name: Documentation Improvement
 about: Report wrong or missing documentation
 title: "DOC:"
-labels: "Docs, Needs Triage"
+labels: "documentation, needs triage"
 
 ---
 
