@@ -744,7 +744,7 @@ class Flaring(Process):
 
     def __init__(self, id, num_units, volume, tags={}):
         self.id = id
-        self.input_contents = utils.GasType.Biogas
+        self.input_contents = utils.ContentsType.Biogas
         self.num_units = num_units
         self.tags = tags
 
