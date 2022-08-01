@@ -3,7 +3,7 @@
   "connections": ["Pipe1"],
   "Facility1": {
     "type": "Facility",
-    "elevation": 10,
+    "elevation (meters)": 10,
     "contents": "Sewage",
     "flowrate": {
       "min": 5,
@@ -20,7 +20,7 @@
     "volume": 100
   },
   "Pipe1": {
-    "diameter": 10,
+    "diameter (inches)": 10,
     "source": "Pump1",
     "sink": "Facility1"
   }

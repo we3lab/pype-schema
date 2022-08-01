@@ -369,7 +369,7 @@
     "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
     "output_contents": "SludgeBlend",
     "num_units": 4,
-    "volume (MG)": null,
+    "volume (cubic meters)": null,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
@@ -378,7 +378,7 @@
   },
   "ChlorineContactTank": {
     "type": "Tank",
-    "elevation": null,
+    "elevation (meters)": null,
     "volume (cubic meters)": 5299.57,
     "input_contents": "UntreatedSewage",
     "output_contents": "TreatedSewage"

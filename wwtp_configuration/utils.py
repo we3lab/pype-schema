@@ -1,4 +1,59 @@
 from enum import Enum, auto
+from .units import u
+
+
+def parse_quantity(value, units):
+    """Convert a value and unit string to a Pint quantity
+
+    Parameters
+    ----------
+    value : float
+
+    units : str
+
+    Returns
+    -------
+    Quantity
+        a Pint Quantity with the given value and units
+    """
+    return value * parse_units(units)
+
+def parse_units(units):
+    """Convert a unit string to a Pint Unit object
+
+    Parameters
+    ----------
+    units : str
+
+    Returns
+    -------
+    Unit
+        a Pint Unit for the given string
+    """
+    if units.lower() == "mgd":
+        return u.MGD
+    elif units == "cubic meters" or units == "m3":
+        return u.m ** 3
+    elif units == "horsepower" or units == "hp":
+        return u.hp
+    elif units.lower() == "scfm":
+        return u.ft ** 3 / u.min
+    elif units == "cubic feet" or units == "ft3":
+        return u.ft ** 3
+    elif units.lower() == "gpm":
+        return u.gal / u.min
+    elif units.lower() == "gpd":
+        return u.gal / u.day
+    elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
+        return u.m / u.s
+    elif units.lower() == "kwh":
+        return u.m / u.s
+    elif units == "meters" or units == "m":
+        return u.m
+    elif units == "inches" or units == "in" or units == "inch":
+        return u.inch
+    else:
+        raise TypeError("Unsupported unit: " + units)
 
 
 class ContentsType(Enum):
