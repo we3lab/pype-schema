@@ -72,16 +72,18 @@ class JSONParser:
             a Python object with all the values from key `node_id`
         """
         input_contents, output_contents = self.parse_contents(node_id)
-        elevation = ut.parse_quantity(self.config[node_id].get("elevation (meters)"), "m")
+        elevation = utils.parse_quantity(
+            self.config[node_id].get("elevation (meters)"), "m"
+        )
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Facility":
             min, max, avg = self.parse_flow_or_gen_capacity(
                 self.config[node_id]["flowrate (MGD)"]
             )
-            min = ut.parse_quantity(min, "MGD")
-            max = ut.parse_quantity(max, "MGD")
-            avg = ut.parse_quantity(avg, "MGD")
+            min = utils.parse_quantity(min, "MGD")
+            max = utils.parse_quantity(max, "MGD")
+            avg = utils.parse_quantity(avg, "MGD")
             node_obj = node.Facility(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -95,7 +97,9 @@ class JSONParser:
             for train in self.config[node_id]["trains"]:
                 node_obj.add_train(self.create_train(train))
         elif self.config[node_id]["type"] == "Tank":
-            volume = ut.parse_quantity(self.config[node_id].get("volume (cubic meters)"), "m3")
+            volume = utils.parse_quantity(
+                self.config[node_id].get("volume (cubic meters)"), "m3"
+            )
             node_obj = node.Tank(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -108,7 +112,9 @@ class JSONParser:
                 self.config[node_id]["flowrate (MGD)"]
             )
             pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
-            horsepower = ut.parse_quantity(self.config[node_id].get("horsepower"), "hp")
+            horsepower = utils.parse_quantity(
+                self.config[node_id].get("horsepower"), "hp"
+            )
             num_units = self.config[node_id].get("num_units")
             node_obj = node.Pump(
                 node_id,
@@ -174,14 +180,16 @@ class JSONParser:
         """
         input_contents, output_contents = self.parse_contents(process_id)
         num_units = self.config[process_id].get("num_units")
-        volume = ut.parse_quantity(self.config[process_id].get("volume (cubic meters)"), "m3")
+        volume = utils.parse_quantity(
+            self.config[process_id].get("volume (cubic meters)"), "m3"
+        )
         try:
             min, max, avg = self.parse_flow_or_gen_capacity(
                 self.config[process_id]["flowrate (MGD)"]
             )
-            min = ut.parse_quantity(min, "MGD")
-            max = ut.parse_quantity(max, "MGD")
-            avg = ut.parse_quantity(avg, "MGD")
+            min = utils.parse_quantity(min, "MGD")
+            max = utils.parse_quantity(max, "MGD")
+            avg = utils.parse_quantity(avg, "MGD")
         except KeyError:
             min, max, avg = (None, None, None)
 
@@ -212,9 +220,9 @@ class JSONParser:
             min, max, avg = self.parse_flow_or_gen_capacity(
                 self.config[process_id]["generation_capacity (kWh)"]
             )
-            min = ut.parse_quantity(min, "kWh")
-            max = ut.parse_quantity(max, "kWh")
-            avg = ut.parse_quantity(avg, "kWh")
+            min = utils.parse_quantity(min, "kWh")
+            max = utils.parse_quantity(max, "kWh")
+            avg = utils.parse_quantity(avg, "kWh")
             process_obj = process.Cogeneration(
                 process_id, input_contents, min, max, avg, num_units
             )
@@ -294,14 +302,16 @@ class JSONParser:
             min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(
                 self.config[connection_id]["flowrate (MGD)"]
             )
-            min_flow = ut.parse_quantity(min_flow, "MGD")
-            max_flow = ut.parse_quantity(max_flow, "MGD")
-            avg_flow = ut.parse_quantity(avg_flow, "MGD")
+            min_flow = utils.parse_quantity(min_flow, "MGD")
+            max_flow = utils.parse_quantity(max_flow, "MGD")
+            avg_flow = utils.parse_quantity(avg_flow, "MGD")
         except KeyError:
             min_flow, max_flow, avg_flow = (None, None, None)
 
         if self.config[connection_id]["type"] == "Pipe":
-            diameter = ut.parse_quantity(self.config[connection_id].get("diameter (inches)"), "in")
+            diameter = utils.parse_quantity(
+                self.config[connection_id].get("diameter (inches)"), "in"
+            )
             connection_obj = connection.Pipe(
                 connection_id,
                 utils.ContentsType[contents],
@@ -379,7 +389,7 @@ class JSONParser:
             contents = None
         tag_type = utils.TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
-        pint_unit = ut.parse_units(tag_info["units"])
+        pint_unit = utils.parse_units(tag_info["units"])
         unit_id = tag_info.get("unit_id", "total")
         tag = utils.Tag(
             tag_id,

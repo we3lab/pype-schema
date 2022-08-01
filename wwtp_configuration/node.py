@@ -1,4 +1,5 @@
 from abc import ABC
+from collections import OrderedDict
 from . import utils
 
 
@@ -16,9 +17,6 @@ class Node(ABC):
     output_contents : ContentsType
         Contents leaving the node.
 
-    elevation : int
-        Elevation of the node in meters above sea level
-
     tags : dict of Tag
         Data tags associated with this node
     """
@@ -26,7 +24,6 @@ class Node(ABC):
     id: str = NotImplemented
     input_contents: utils.ContentsType = NotImplemented
     output_contents: utils.ContentsType = NotImplemented
-    elevation: int = NotImplemented
     tags: dict = NotImplemented
 
     def __repr__(self):
@@ -34,7 +31,7 @@ class Node(ABC):
             f"<wwtp_configuration.node.Node id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
-            f"elevation:{self.elevation} tags:{self.tags}>"
+            f"tags:{self.tags}>"
         )
 
     def set_flow_rate(self, min, max, avg):
@@ -75,7 +72,154 @@ class Node(ABC):
         del self.tags[tag_name]
 
 
-class Facility(Node):
+class Network(Node):
+    """A water utility represented as a set of connections and nodes
+
+    Parameters
+    ----------
+    id : str
+        Network ID
+
+    input_contents : ContentsType
+        Contents entering the network.
+
+    output_contents : ContentsType
+        Contents leaving the network.
+
+    tags : dict of Tag
+        Data tags associated with this network
+
+    nodes : OrderedDict of Node
+        nodes in the network, e.g. pumps, tanks, or facilities
+
+    connections : dict of Connections
+        connections in the network, e.g. pipes
+
+    Attributes
+    ----------
+    nodes : OrderedDict of Node
+        nodes in the network, e.g. pumps, tanks, or facilities
+
+    connections : dict of Connections
+        connections in the network, e.g. pipes
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        tags={},
+        nodes=OrderedDict(),
+        connections={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.tags = tags
+        self.nodes = nodes
+        self.connections = connections
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Network id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} tags:{self.tags} "
+            f"nodes:{self.nodes} connections:{self.connections}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.tags == other.tags
+            and self.nodes == other.nodes
+            and self.connections == other.connections
+        )
+
+    def add_node(self, node):
+        """Adds a node to the network
+        Parameters
+        ----------
+        node : Node
+            Node object to add to the network
+        """
+        self.nodes[node.id] = node
+
+    def remove_node(self, node_name):
+        """Removes a node from the network
+        Parameters
+        ----------
+        node_name : str
+            name of node to remove
+        Raises
+        ------
+        KeyError
+            if `node_name` is not found
+        """
+        del self.nodes[node_name]
+
+    def get_node(self, node_name):
+        """Get a node from the network
+        Parameters
+        ----------
+        node_name : str
+            name of node to retrieve
+        Returns
+        -------
+        Node or None
+            Node object if node is found. None otherwise
+        """
+        try:
+            return self.nodes[node_name]
+        except KeyError:
+            return None
+
+    def add_connection(self, connection):
+        """Adds a connection to the network
+        Parameters
+        ----------
+        connection : Connection
+            Connection object to add to the network
+        """
+        self.connections[connection.id] = connection
+
+    def remove_connection(self, connection_name):
+        """Removes a connection from the network
+        Parameters
+        ----------
+        connection_name : str
+            name of connection to remove
+        Raises
+        ------
+        KeyError
+            if `connection_name` is not found
+        """
+        del self.connections[connection_name]
+
+    def get_connection(self, connection_name):
+        """Get a connection from the network
+        Parameters
+        ----------
+        connection_name : str
+            name of connection to retrieve
+        Returns
+        -------
+        Connection or None
+            Connection object if node is found. None otherwise
+        """
+        try:
+            return self.connections[connection_name]
+        except KeyError:
+            return None
+
+
+class Facility(Network):
     """
     Parameters
     ----------
@@ -100,11 +244,14 @@ class Facility(Node):
     avg_flow : int
         Average flow rate through the facility
 
-    trains : dict of Train
-        Treatment trains that make up this facility
-
     tags : dict of Tag
         Data tags associated with this facility
+
+    nodes : OrderedDict of Node
+        nodes in the facility, e.g. pumps, tanks, or processes
+
+    connections : dict of Connections
+        connections in the facility, e.g. pipes
 
     Attributes
     ----------
@@ -120,14 +267,17 @@ class Facility(Node):
     elevation : int
         Elevation of the facility in meters above sea level
 
-    trains : dict of Train
-        Treatment trains that make up this facility
-
     tags : dict of Tag
         Data tags associated with this facility
 
     flow_rate : tuple
         Tuple of minimum, maximum, and average facility flow rate
+
+    nodes : OrderedDict of Node
+        nodes in the facility, e.g. pumps, tanks, or processes
+
+    connections : dict of Connections
+        connections in the facility, e.g. pipes
     """
 
     def __init__(
@@ -139,14 +289,16 @@ class Facility(Node):
         min_flow,
         max_flow,
         avg_flow,
-        trains={},
         tags={},
+        nodes=OrderedDict(),
+        connections={},
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
         self.elevation = elevation
-        self.trains = trains
+        self.nodes = nodes
+        self.connetions = connections
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -155,7 +307,8 @@ class Facility(Node):
             f"<wwtp_configuration.node.Facility id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"trains:{self.trains} flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"flow_rate:{self.flow_rate} tags:{self.tags} "
+            f"nodes:{self.nodes} connections:{self.connections}>"
         )
 
     def __eq__(self, other):
@@ -168,38 +321,14 @@ class Facility(Node):
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
             and self.elevation == other.elevation
-            and self.trains == other.trains
+            and self.nodes == other.nodes
+            and self.connections == other.connections
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
 
-    def add_train(self, train):
-        """Adds a node to the network
 
-        Parameters
-        ----------
-        train : Train
-            Train object to add to the network
-        """
-        self.trains[train.id] = train
-
-    def remove_train(self, train_name):
-        """Removes a node from the network
-
-        Parameters
-        ----------
-        train_name : str
-            name of node to remove
-
-        Raises
-        ------
-        KeyError
-            if `train_name` is not found
-        """
-        del self.trains[train_name]
-
-
-class Tank(Node):
+class Tank(Network):
     """
     Parameters
     ----------
@@ -242,7 +371,15 @@ class Tank(Node):
         Data tags associated with this tank
     """
 
-    def __init__(self, id, input_contents, output_contents, elevation, volume, tags={}):
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        elevation,
+        volume,
+        tags={},
+    ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
@@ -273,72 +410,65 @@ class Tank(Node):
         )
 
 
-class Pump(Node):
+class Digestion(Node):
     """
     Parameters
     ----------
     id : str
-        Pump ID
+        Digester ID
 
-    input_contents : ContentsType
-        Contents entering the pump.
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the digester (e.g. biogas or wastewater)
 
-    output_contents : ContentsType
-        Contents leaving the pump.
-
-    elevation : int
-        Elevation of the pump in meters above sea level
-
-    horsepower : int
-        Horsepower of a single pump
-
-    num_units : int
-        Number of pumps running in parallel
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the digester (e.g. biogas or wastewater)
 
     min_flow : int
-        Minimum flow rate supplied by the pump
+        Minimum flow rate through the process
 
     max_flow : int
-        Maximum flow rate supplied by the pump
+        Maximum flow rate through the process
 
     avg_flow : int
-        Average flow rate supplied by the pump
+        Average flow rate through the process
 
-    pump_type : PumpType
-        Type of pump (either VFD or constant)
+    num_units : int
+        Number of digesters running in parallel
+
+    volume : int
+        Volume of the digester in cubic meters
+
+    digester_type : DigesterType
+        Type of digestion (aerobic or anaerobic)
 
     tags : dict of Tag
-        Data tags associated with this pump
+        Data tags associated with this digester
 
     Attributes
     ----------
     id : str
-        Pump ID
+        Digester ID
 
-    input_contents : ContentsType
-        Contents entering the pump.
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the digester (e.g. biogas or wastewater)
 
-    output_contents : ContentsType
-        Contents leaving the pump.
-
-    elevation : int
-        Elevation of the pump in meters above sea level
-
-    horsepower : int
-        Horsepower of a single pump
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the digester (e.g. biogas or wastewater)
 
     num_units : int
-        Number of pumps running in parallel
+        Number of digesters running in parallel
+
+    volume : int
+        Volume of the digester in cubic meters
 
     flow_rate : tuple
-        Tuple of minimum, maximum, and average pump flow rate
+        Tuple of minimum, maximum, and average digester flow rate
+
+    digester_type : DigesterType
+        Type of digestion (aerobic or anaerobic)
 
     tags : dict of Tag
-        Data tags associated with this pump
-
-    energy_efficiency : function
-        Function which takes in the current flow rate and returns the energy
-        required to pump at that rate
+        Data tags associated with this digester
     """
 
     def __init__(
@@ -346,33 +476,30 @@ class Pump(Node):
         id,
         input_contents,
         output_contents,
-        elevation,
-        horsepower,
-        num_units,
         min_flow,
         max_flow,
-        avg_flow=None,
-        pump_type=utils.PumpType.Constant,
+        avg_flow,
+        num_units,
+        volume,
+        digester_type,
         tags={},
     ):
         self.id = id
         self.input_contents = input_contents
         self.output_contents = output_contents
-        self.elevation = elevation
-        self.pump_type = pump_type
-        self.horsepower = horsepower
         self.num_units = num_units
+        self.volume = volume
+        self.digester_type = digester_type
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
-        self.set_energy_efficiency(None)
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Pump id:{self.id} "
+            f"<wwtp_configuration.node.Digestion id:{self.id} "
             f"input_contents:{self.input_contents} "
-            f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"horsepower:{self.horsepower} num_units:{self.num_units} "
-            f"flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} "
+            f"digester_type:{self.digester_type} tags:{self.tags}>"
         )
 
     def __eq__(self, other):
@@ -384,33 +511,554 @@ class Pump(Node):
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
-            and self.elevation == other.elevation
-            and self.pump_type == other.pump_type
-            and self.horsepower == other.horsepower
             and self.num_units == other.num_units
-            and self.tags == other.tags
+            and self.volume == other.volume
+            and self.digester_type == other.digester_type
             and self.flow_rate == other.flow_rate
-            and self.energy_efficiency == other.energy_efficiency
+            and self.tags == other.tags
         )
 
-    def set_pump_type(self, pump_type):
-        """Set the pump curve to the given function
+
+class Cogeneration(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Cogenerator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the cogenerator
+
+    min_gen : int
+        Minimum generation capacity of a single cogenerator
+
+    max_gen : int
+        Maximum generation capacity of a single cogenerator
+
+    avg_gen : int
+        Average generation capacity of a single cogenerator
+
+    num_units : int
+        Number of cogenerator units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this cogenerator
+
+    Attributes
+    ----------
+    id : str
+        Cogenerator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the cogenerator
+        (biogas, natural gas, or a blend of the two)
+
+    gen_capacity : tuple
+        Minimum, maximum, and average generation capacity
+
+    num_units : int
+        Number of cogenerator units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this cogenerator
+    """
+
+    def __init__(
+        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.num_units = num_units
+        self.tags = tags
+        self.set_gen_capacity(min_gen, max_gen, avg_gen)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Cogeneration id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units} "
+            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.num_units == other.num_units
+            and self.gen_capacity == other.gen_capacity
+            and self.tags == other.tags
+        )
+
+    def set_gen_capacity(self, min, max, avg):
+        """Set the minimum, maximum, and average generation capacity
 
         Parameters
         ----------
-        pump_type : PumpType
-        """
-        # TODO: check that pump_type is a valid enum
-        self.pump_type = pump_type
+        min : int
+            Minimum generation by a single cogenerator
 
-    def set_energy_efficiency(self, pump_curve):
-        """Set the pump curve to the given function
+        max : int
+            Maximum generation by a single cogenerator
 
-        Parameters
-        ----------
-        pump_curve : function
-            function which takes in the current flow rate and returns the energy
-            required to pump at that rate
+        avg : int
+            Average generation by a single cogenerator
         """
-        # TODO: type check that pump_curve is a function
-        self.energy_efficiency = pump_curve
+        # TODO: attach units to generation capacity
+        self.gen_capacity = (min, max, avg)
+
+
+class Clarification(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Clarifier ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the clarifier
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the clarifier
+
+    min_flow : int
+        Minimum flow rate of a single clarifier
+
+    max_flow : int
+        Maximum flow rate of a single clarifier
+
+    avg_flow : int
+        Average flow rate of a single clarifier
+
+    num_units : int
+        Number of clarifiers running in parallel
+
+    volume : int
+        Volume of the clarifier in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this clarifier
+
+    Attributes
+    ----------
+    id : str
+        Clarifier ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the clarifier
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the clarifier
+
+    num_units : int
+        Number of clarifiers running in parallel
+
+    volume : int
+        Volume of a single clarifier in cubic meters
+
+    flow_rate : tuple
+        Tuple of minimum, maximum, and average digester flow rate
+
+
+    tags : dict of Tag
+        Data tags associated with this clarifier
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Clarification id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Filtration(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Filter ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the filter
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the filter
+
+    min_flow : int
+        Minimum flow rate of a single filter
+
+    max_flow : int
+        Maximum flow rate of a single filter
+
+    avg_flow : int
+        Average flow rate of a single filter
+
+    num_units : int
+        Number of filters running in parallel
+
+    volume : int
+        Volume of a single filter in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this filter
+
+    Attributes
+    ----------
+    id : str
+        Filter ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the filter
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the filter
+
+    num_units : int
+        Number of filters running in parallel
+
+    volume : int
+        Volume of a single filter in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this filter
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Filtration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Thickening(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Thickener ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the thickener
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the thickener
+
+    min_flow : int
+        Minimum flow rate of a single thickener
+
+    max_flow : int
+        Maximum flow rate of a single thickener
+
+    avg_flow : int
+        Average flow rate of a single thickener
+
+    num_units : int
+        Number of thickeners running in parallel
+
+    volume : int
+        Volume of a single thickener in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this thickener
+
+    Attributes
+    ----------
+    id : str
+        Thickener ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the thickener
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the thickener
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    num_units : int
+        Number of thickeners running in parallel
+
+    volume : int
+        Volume of a single thickener in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this thickener
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Thickening id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Aeration(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Aerator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the aeration basin
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the aeration basin
+
+    min_flow : int
+        Minimum flow rate of a single aeration basin
+
+    max_flow : int
+        Maximum flow rate of a single aeration basin
+
+    avg_flow : int
+        Average flow rate of a single aeration basin
+
+    num_units : int
+        Number of aeration basins running in parallel
+
+    volume : int
+        Volume of a single aeration basin in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this aerator
+
+    Attributes
+    ----------
+    id : str
+        Aerator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the aeration basin
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the aeration basin
+
+    num_units : int
+        Number of aeration basins running in parallel
+
+    volume : int
+        Volume of a single aeration basin in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this aerator
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Aeration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Flaring(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Flare ID
+
+    num_units : int
+        Number of flares running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this flare
+
+    Attributes
+    ----------
+    id : str
+        Flare ID
+
+    input_contents : ContentsType
+        Contents entering the flare
+
+    num_units : int
+        Number of flares running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this flare
+    """
+
+    def __init__(self, id, num_units, volume, tags={}):
+        self.id = id
+        self.input_contents = utils.ContentsType.Biogas
+        self.num_units = num_units
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Flaring id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units} "
+            f"tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+        )

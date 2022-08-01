@@ -16,7 +16,11 @@ def parse_quantity(value, units):
     Quantity
         a Pint Quantity with the given value and units
     """
-    return value * parse_units(units)
+    if value is not None:
+        return value * parse_units(units)
+    else:
+        return None
+
 
 def parse_units(units):
     """Convert a unit string to a Pint Unit object
@@ -33,13 +37,13 @@ def parse_units(units):
     if units.lower() == "mgd":
         return u.MGD
     elif units == "cubic meters" or units == "m3":
-        return u.m ** 3
+        return u.m**3
     elif units == "horsepower" or units == "hp":
         return u.hp
     elif units.lower() == "scfm":
-        return u.ft ** 3 / u.min
+        return u.ft**3 / u.min
     elif units == "cubic feet" or units == "ft3":
-        return u.ft ** 3
+        return u.ft**3
     elif units.lower() == "gpm":
         return u.gal / u.min
     elif units.lower() == "gpd":

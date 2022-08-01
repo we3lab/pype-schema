@@ -109,22 +109,19 @@ Constants
 
 import os
 import pint
-import pandas as pd
 
 # A global unit registry that can be used by any of other module.
-unit_registry = pint.UnitRegistry(
-    system='mks',
-    autoconvert_offset_to_baseunit=True
-)
+unit_registry = pint.UnitRegistry(system="mks", autoconvert_offset_to_baseunit=True)
 u = unit_registry
 
 # default formatting includes 4 significant digits.
 # This can be overridden on a per-print basis with
 # print('{:.3f}'.format(3 * ureg.m / 9)).
-u.default_format = '.4g'
-pd.options.display.float_format = '{:,.4g}'.format
+u.default_format = ".4g"
 
-u.load_definitions(os.path.join(os.path.dirname(__file__), "..", "data", "unit_definitions.txt"))
+u.load_definitions(
+    os.path.join(os.path.dirname(__file__), "..", "data", "unit_definitions.txt")
+)
 
 
 def set_sig_figs(n=4):
@@ -136,5 +133,4 @@ def set_sig_figs(n=4):
     n : int
         number of significant figures to display. Defaults to 4.
     """
-    u.default_format = '.' + str(n) + 'g'
-    pd.options.display.float_format = ('{:,.' + str(n) + '}').format
+    u.default_format = "." + str(n) + "g"

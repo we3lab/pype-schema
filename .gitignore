@@ -12,6 +12,8 @@ build
 .settings/
 Icon?
 *.log
+Pipfile
+Pipfile.lock
 
 # Test outputs
 .coverage
