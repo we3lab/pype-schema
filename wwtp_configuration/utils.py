@@ -100,10 +100,7 @@ class TagType(Enum):
 
     InfluentFlow = auto()
     EffluentFlow = auto()
-    EnergyConsumption = auto()
-    GrossEnergyGeneration = auto()
-    NetEnergyGeneration = auto()
-    GridPurchase = auto()
+    BidirectionalFlow = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()

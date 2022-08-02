@@ -309,7 +309,7 @@ class Facility(Network):
         self.output_contents = output_contents
         self.elevation = elevation
         self.nodes = nodes
-        self.connetions = connections
+        self.connections = connections
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -1210,10 +1210,9 @@ class Flaring(Node):
         Data tags associated with this flare
     """
 
-    def __init__(self, id, num_units, volume, tags={}):
+    def __init__(self, id, num_units, tags={}):
         self.id = id
         self.input_contents = utils.ContentsType.Biogas
-        self.output_contents = None
         self.num_units = num_units
         self.tags = tags
 

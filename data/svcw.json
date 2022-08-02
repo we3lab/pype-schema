@@ -24,8 +24,8 @@
       "max": null,
       "avg": null
     },
-    "nodes": {},
-    "connections": {}
+    "nodes": [],
+    "connections": []
   },
   "SVCW": {
     "type": "Facility",
@@ -37,7 +37,7 @@
       "max": 68,
       "avg": 24
     },
-    "nodes": {
+    "nodes": [
       "PrimaryClarifier",
       "FixedFilmReactor",
       "AerationBasin",
@@ -49,8 +49,8 @@
       "Cogenerator",
       "Flare",
       "VirtualDemand"
-    },
-    "connections": {
+    ],
+    "connections": [
       "SiteWastePump",
       "WashwaterPump",
       "BilgePump",
@@ -68,9 +68,8 @@
       "DigesterToFlare",
       "ThickenerToDigester",
       "BatteryToFacility",
-      "CogenToFacility",
-      "CogenToBattery"
-    }
+      "CogenToFacility"
+    ]
   },
   "PrimaryClarifier": {
     "type": "Clarification",
@@ -270,38 +269,14 @@
         "contents": "NaturalGas",
         "unit_id": 2
       },
-      "CGN_ENG_DAILY_DATA.CGN_GROSS_ELECTRICITY_KWH" : {
-        "type": "GrossEnergyGeneration",
-        "units": "kWh",
-        "contents": null,
-        "unit_id": "total"
-      },
-      "CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
-        "type": "NetEnergyGeneration",
-        "units": "kWh",
-        "contents": null,
-        "unit_id": "total"
-      },
-      "CGN_ENG_DAILY_DATA.CGN_PARASITICAL_ELECTRICITY_KWH": {
-        "type": "EnergyConsumption",
-        "units": "kWh",
-        "contents": null,
-        "unit_id": "total"
-      },
-      "CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
-        "type": "GridPurchase",
-        "units": "kWh",
-        "contents": null,
-        "unit_id": "total"
-      },
       "CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
-        "type": "GrossEnergyGeneration",
+        "type": "EffluentFlow",
         "units": "kWh",
         "contents": null,
         "unit_id": 1
       },
       "CGN_ENG_DAILY_DATA.GEN2_KWHRS_DAY": {
-        "type": "GrossEnergyGeneration",
+        "type": "EffluentFlow",
         "units": "kWh",
         "contents": null,
         "unit_id": 2
@@ -581,15 +556,15 @@
   "SewerMain": {
     "type": "Network",
     "contents": "UntreatedSewage",
-    "nodes": {},
-    "connections": {},
+    "nodes": [],
+    "connections": [],
     "tags": {}
   },
   "StormwaterDrain": {
     "type": "Network",
     "contents": "UntreatedSewage",
-    "nodes": {},
-    "connections": {},
+    "nodes": [],
+    "connections": [],
     "tags": {}
   },
   "Bay": {
@@ -601,10 +576,10 @@
     "type": "Network",
     "contents": "Electricity",
     "tags": {},
-    "nodes": {},
-    "connections": {}
+    "nodes": [],
+    "connections": []
   },
-  "Tesla": {
+  "TeslaPowerwall": {
     "type": "Battery",
     "contents": "Electricity",
     "capacity": 2000,
@@ -615,8 +590,8 @@
     "type": "Network",
     "contents": "Electricity",
     "tags": {},
-    "nodes": {},
-    "connections": {}
+    "nodes": [],
+    "connections": []
   },
   "FFRToAerator": {
     "type": "Pipe",
@@ -708,7 +683,14 @@
     "sink": "SVCW",
     "contents": "Electricity",
     "bidirectional": false,
-    "tags": {}
+    "tags": {
+      "CGN_ENG_DAILY_DATA.PLANT_PURCHASED_KWH": {
+        "type": "InfluentFlow",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      }
+    }
   },
   "BatteryToFacility": {
     "type": "Wire",
@@ -724,14 +706,13 @@
     "sink": "VirtualDemand",
     "contents": "Electricity",
     "bidirectional": false,
-    "tags": {}
-  },
-  "CogenToBattery": {
-    "type": "Wire",
-    "source": "Cogenerator",
-    "sink": "Battery",
-    "contents": "Electricity",
-    "bidirectional": false,
-    "tags": {}
+    "tags": {
+      "CGN_ENG_DAILY_DATA.CGN_NET_ELECTRICITY_KWH": {
+        "type": "EffluentFlow",
+        "units": "kWh",
+        "contents": null,
+        "unit_id": "total"
+      }
+    }
   }
 }

@@ -19,13 +19,13 @@ skip_all_tests = False
 )
 def test_create_network(json_path, expected_path):
     parser = JSONParser(json_path)
-    try:
-        result = parser.initialize_network()
-        with open(expected_path, "rb") as pickle_file:
-            expected = pickle.load(pickle_file)
-    except Exception as err:
-        result = type(err).__name__
-        expected = expected_path
+    # try:
+    result = parser.initialize_network()
+    with open(expected_path, "rb") as pickle_file:
+        expected = pickle.load(pickle_file)
+    # except Exception as err:
+        # result = type(err).__name__
+        # expected = expected_path
 
     assert result == expected
 

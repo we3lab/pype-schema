@@ -28,7 +28,7 @@ class JSONParser:
         f = open(path)
         self.path = path
         self.config = json.load(f)
-        self.network_obj = network.Network()
+        self.network_obj = node.Network("ParentNetwork", None, None)
         f.close()
 
     def initialize_network(self):
@@ -89,7 +89,26 @@ class JSONParser:
             min, max, avg = (None, None, None)
 
         # create correct type of node class
-        if self.config[node_id]["type"] == "Facility":
+        if self.config[node_id]["type"] == "Network":
+            node_obj = node.Network(
+                node_id,
+                utils.ContentsType[input_contents],
+                utils.ContentsType[output_contents]
+            )
+
+            for new_node in self.config[node_id]["nodes"]:
+                node_obj.add_node(self.create_node(new_node))
+            for new_connection in self.config[node_id]["connections"]:
+                node_obj.add_connection(self.create_connection(new_connection))
+        elif self.config[node_id]["type"] == "Battery":
+            capacity = self.config[node_id].get("capacity")
+            discharge_rate = self.config[node_id].get("discharge_rate")
+            node_obj = node.Battery(
+                node_id,
+                capacity,
+                discharge_rate
+            )
+        elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -100,8 +119,18 @@ class JSONParser:
                 avg,
             )
 
-            for network in self.config[node_id]["networks"]:
-                node_obj.add_node(self.create_network(network))
+            for new_node in self.config[node_id]["nodes"]:
+                node_obj.add_node(self.create_node(new_node))
+            for new_connection in self.config[node_id]["connections"]:
+                node_obj.add_connection(self.create_connection(new_connection))
+        elif self.config[node_id]["type"] == "Reservoir":
+            node_obj = node.Reservoir(
+                node_id,
+                utils.ContentsType[input_contents],
+                utils.ContentsType[output_contents],
+                elevation,
+                volume,
+            )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
                 node_id,
@@ -109,23 +138,6 @@ class JSONParser:
                 utils.ContentsType[output_contents],
                 elevation,
                 volume,
-            )
-        elif self.config[node_id]["type"] == "Pump":
-            pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
-            horsepower = utils.parse_quantity(
-                self.config[node_id].get("horsepower"), "hp"
-            )
-            node_obj = node.Pump(
-                node_id,
-                utils.ContentsType[input_contents],
-                utils.ContentsType[output_contents],
-                elevation,
-                horsepower,
-                num_units,
-                min,
-                max,
-                avg,
-                pump_type,
             )
         elif self.config[node_id]["type"] == "Aeration":
             node_obj = node.Aeration(
@@ -184,7 +196,7 @@ class JSONParser:
                 volume,
             )
         elif self.config[node_id]["type"] == "Flaring":
-            node_obj = node.Flaring(node_id, input_contents, num_units)
+            node_obj = node.Flaring(node_id, num_units)
         elif self.config[node_id]["type"] == "Thickening":
             node_obj = node.Thickening(
                 node_id,
@@ -207,25 +219,6 @@ class JSONParser:
 
         return node_obj
 
-    def create_network(self, network_id):
-        """Converts a dictionary into a `Network` object
-
-        Parameters
-        ----------
-        network_id : str
-            the string id for the `Network`
-
-        Returns
-        -------
-        Network
-            a Python object with all the values from key `network_id`
-        """
-        network_obj = node.Network(network_id)
-        for node_id in self.config[network_id]["nodes"]:
-            network_obj.add_node(self.create_node(node_id))
-
-        return network_obj
-
     def create_connection(self, connection_id):
         """Converts a dictionary into a `Connection` object
 
@@ -240,6 +233,7 @@ class JSONParser:
             a Python object with all the values from key `connection_id`
         """
         contents = self.config[connection_id].get("contents")
+        bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
         if source_id:
             source = self.network_obj.get_node(source_id)
@@ -271,11 +265,48 @@ class JSONParser:
                 max_flow,
                 avg_flow,
                 diameter,
+                bidirectional=bidirectional
+            )
+        elif self.config[connection_id]["type"] == "Pump":
+            elevation = utils.parse_quantity(
+                self.config[connection_id].get("elevation (meters)"), "m"
+            )
+            num_units = self.config[connection_id].get("num_units")
+            pump_type = self.config[connection_id].get("pump_type", utils.PumpType.Constant)
+            horsepower = utils.parse_quantity(
+                self.config[connection_id].get("horsepower"), "hp"
+            )
+            connection_obj = connection.Pump(
+                connection_id,
+                utils.ContentsType[contents],
+                source,
+                sink,
+                min_flow,
+                max_flow,
+                avg_flow,
+                elevation,
+                horsepower,
+                num_units,
+                pump_type=pump_type,
+                bidirectional=bidirectional
+            )
+        elif self.config[connection_id]["type"] == "Wire":
+            connection_obj = connection.Wire(
+                connection_id,
+                source,
+                sink,
+                bidirectional=bidirectional
             )
         else:
             raise TypeError(
                 "Unsupported Connection type: " + self.config[connection_id]["type"]
             )
+
+        tags = self.config[connection_id].get("tags")
+        if tags:
+            for tag_id, tag_info in tags.items():
+                tag = self.parse_tag(tag_id, tag_info)
+                connection_obj.add_tag(tag)
 
         return connection_obj
 

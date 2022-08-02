@@ -38,7 +38,7 @@ class Connection(ABC):
         return (
             f"<wwtp_configuration.connection.Connection id:{self.id} "
             f"contents:{self.contents} source:{self.source} sink:{self.sink} "
-            f"tags:{self.tags}> bidirectional:{self.bidirectional}"
+            f"tags:{self.tags} bidirectional:{self.bidirectional}>"
         )
 
     def set_flow_rate(self, min, max, avg):
@@ -74,6 +74,26 @@ class Connection(ABC):
         """
         # TODO: attach units to flow rate
         self.pressure = (min, max, avg)
+
+    def add_tag(self, tag):
+        """Adds a tag to the node
+
+        Parameters
+        ----------
+        tag : Tag
+            Tag object to add to the node
+        """
+        self.tags[tag.id] = tag
+
+    def remove_tag(self, tag_name):
+        """Removes a tag from the node
+
+        Parameters
+        ----------
+        tag_name : str
+            name of tag to remove
+        """
+        del self.tags[tag_name]
 
 
 class Pipe(Connection):
@@ -302,8 +322,7 @@ class Pump(Connection):
         bidirectional=False
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.contents = contents
         self.source = source
         self.sink = sink
         self.elevation = elevation
