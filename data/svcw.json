@@ -1,25 +1,34 @@
 {
   "nodes": [
     "SVCW",
+    "SewerMain",
+    "Bay",
+    "StormwaterDrain",
+    "RecycledWater"
+  ],
+  "connections": [
+    "EffluentPump",
     "LiftPump",
     "StormwaterPump",
-    "BilgePump",
-    "WashwaterPump",
     "SiteWastePump",
-    "EffluentPump",
+    "WashwaterPump",
+    "BilgePump",
     "RecycledWaterPump",
     "Number3Pump"
   ],
-  "connections": [
-    "SewerMain",
-    "StormwaterDrain",
-    "BilgePipe",
-    "WashwaterPipe",
-    "SiteWastePipe",
-    "BayDischarge",
-    "SVCWToWaterRecycling",
-    "Number3ToSVCW"
-  ],
+  "RecycledWater": {
+    "type": "Facility",
+    "elevation (meters)": null,
+    "input_contents": "TreatedSewage",
+    "output_contents": "NonpotableReuse",
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+    "nodes": {},
+    "connections": {}
+  },
   "SVCW": {
     "type": "Facility",
     "elevation (meters)": 1,
@@ -30,56 +39,25 @@
       "max": 68,
       "avg": 24
     },
-    "trains": [
-      "TreatmentTrain",
-      "DigesterSludge",
-      "PrimarySolids",
-      "SludgeRecycling",
-      "GasFlaring"
-    ]
-  },
-  "TreatmentTrain": {
-    "processes": [
+    "nodes": {
       "PrimaryClarifier",
-      "FFRPump",
       "FixedFilmReactor",
       "AerationBasin",
       "SecondaryClarifier",
-      "DMFPump",
       "DualMediaFilter",
-      "ChlorineContactTank"
-    ]
-  },
-  "PrimarySolids": {
-    "processes": [
-      "PrimaryClarifier",
-      "TPSPump",
+      "ChlorineContactTank",
       "SludgeThickener",
       "AnaerobicDigester",
       "Cogenerator"
-    ]
-  },
-  "DigesterSludge": {
-    "processes": [
-      "SecondaryClarifier",
-      "WASPump",
-      "SludgeThickener",
-      "AnaerobicDigester",
-      "Cogenerator"
-    ]
-  },
-  "SludgeRecycling": {
-    "processes": [
-      "SecondaryClarifier",
-      "RASPump",
-      "AerationBasin"
-    ]
-  },
-  "GasFlaring": {
-    "processes": [
-      "AnaerobicDigester",
       "Flare"
-    ]
+    },
+    "connections": {
+      "TPSPump",
+      "FFRPump",
+      "DMFPump",
+      "RASPump",
+      "WASPump"
+    }
   },
   "PrimaryClarifier": {
     "type": "Clarification",
@@ -386,6 +364,8 @@
   "WASPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SecondaryClarifier",
+    "sink": "SludgeThickener",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -399,6 +379,8 @@
   "RASPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SecondaryClarifier",
+    "sink": "AerationBasin",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -412,6 +394,8 @@
   "TPSPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "PrimaryClarifier",
+    "sink": "SludgeThickener",
     "contents": "PrimarySludge",
     "num_units": null,
     "horsepower": null,
@@ -425,6 +409,8 @@
   "FFRPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "PrimaryClarifier",
+    "sink": "FixedFilmReactor",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -439,6 +425,8 @@
     "type": "Pump",
     "pump_type": null,
     "num_units": null,
+    "source": "SecondaryClarifier",
+    "sink": "DualMediaFilter",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -452,6 +440,8 @@
   "LiftPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SewerMain",
+    "sink": "SVCW",
     "contents": "UntreatedSewage",
     "horsepower": 50,
     "flowrate (MGD)": {
@@ -470,6 +460,8 @@
   "StormwaterPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "StormwaterDrain",
+    "sink": "SVCW",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -483,6 +475,8 @@
   "BilgePump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SVCW",
+    "sink": "SVCW",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -496,6 +490,8 @@
   "WashwaterPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SVCW",
+    "sink": "SVCW",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -509,6 +505,8 @@
   "SiteWastePump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SVCW",
+    "sink": "SVCW",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -522,6 +520,8 @@
   "EffluentPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SVCW",
+    "sink": "Bay",
     "contents": "TreatedSewage",
     "num_units": 5,
     "horsepower": 150,
@@ -535,6 +535,8 @@
   "RecycledWaterPump": {
     "type": "Pump",
     "pump_type": null,
+    "source": "SVCW",
+    "sink": "RecycledWater",
     "contents": "TreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -547,6 +549,9 @@
   },
   "Number3Pump": {
     "type": "Pump",
+    "source": "SVCW",
+    "sink": "SVCW",
+    "bidirectional": false,
     "pump_type": null,
     "contents": "TreatedSewage",
     "num_units": null,
@@ -559,51 +564,22 @@
     "tags": {}
   },
   "SewerMain": {
+    "type": "Network",
     "contents": "UntreatedSewage",
-    "source": "LiftPump",
-    "sink": "SVCW",
-    "type": "Pipe"
+    "nodes": {},
+    "connections": {},
+    "tags": {}
   },
   "StormwaterDrain": {
+    "type": "Network",
     "contents": "UntreatedSewage",
-    "source": "StormwaterPump",
-    "sink": "SVCW",
-    "type": "Pipe"
+    "nodes": {},
+    "connections": {},
+    "tags": {}
   },
-  "BilgePipe": {
-    "contents": "UntreatedSewage",
-    "source": "BilgePump",
-    "sink": "SVCW",
-    "type": "Pipe"
-  },
-  "WashwaterPipe": {
-    "contents": "UntreatedSewage",
-    "source": "WashwaterPump",
-    "sink": "SVCW",
-    "type": "Pipe"
-  },
-  "SiteWastePipe": {
-    "contents": "UntreatedSewage",
-    "source": "SiteWastePump",
-    "sink": "SVCW",
-    "type": "Pipe"
-  },
-  "BayDischarge": {
+  "Bay": {
+    "type": "Reservoir",
     "contents": "TreatedSewage",
-    "source": "SVCW",
-    "sink": "EffluentPump",
-    "type": "Pipe"
-  },
-  "SVCWToWaterRecycling": {
-    "contents": "TreatedSewage",
-    "source": "SVCW",
-    "sink": "RecycledWaterPump",
-    "type": "Pipe"
-  },
-  "Number3ToSVCW": {
-    "contents": "TreatedSewage",
-    "source": "Number3Pump",
-    "sink": "SVCW",
-    "type": "Pipe"
+    "tags": {}
   }
 }

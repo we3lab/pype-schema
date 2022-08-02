@@ -328,7 +328,7 @@ class Facility(Network):
         )
 
 
-class Tank(Network):
+class Tank(Node):
     """
     Parameters
     ----------
@@ -390,6 +390,88 @@ class Tank(Network):
     def __repr__(self):
         return (
             f"<wwtp_configuration.node.Tank id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"volume:{self.volume} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.elevation == other.elevation
+            and self.volume == other.volume
+            and self.tags == other.tags
+        )
+
+
+class Reservoir(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Reservoir ID
+
+    input_contents : ContentsType
+        Contents entering the reservoir.
+
+    output_contents : ContentsType
+        Contents leaving the reservoir.
+
+    elevation : int
+        Elevation of the reservoir in meters above sea level
+
+    volume : int
+        Volume of the reservoir in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this reservoir
+
+    Attributes
+    ----------
+    id : str
+        Reservoir ID
+
+    input_contents : ContentsType
+        Contents entering the reservoir.
+
+    output_contents : ContentsType
+        Contents leaving the reservoir.
+
+    elevation : int
+        Elevation of the reservoir in meters above sea level
+
+    volume : int
+        Volume of the reservoir in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this reservoir
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        elevation,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.elevation = elevation
+        self.volume = volume
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Reservoir id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"volume:{self.volume} tags:{self.tags}>"

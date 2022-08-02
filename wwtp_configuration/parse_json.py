@@ -1,8 +1,6 @@
 import json
-from . import network
 from . import connection
 from . import node
-from . import process
 from . import utils
 
 
@@ -75,15 +73,23 @@ class JSONParser:
         elevation = utils.parse_quantity(
             self.config[node_id].get("elevation (meters)"), "m"
         )
+        num_units = self.config[node_id].get("num_units")
+        volume = utils.parse_quantity(
+            self.config[node_id].get("volume (cubic meters)"), "m3"
+        )
 
-        # create correct type of node class
-        if self.config[node_id]["type"] == "Facility":
+        try:
             min, max, avg = self.parse_flow_or_gen_capacity(
                 self.config[node_id]["flowrate (MGD)"]
             )
             min = utils.parse_quantity(min, "MGD")
             max = utils.parse_quantity(max, "MGD")
             avg = utils.parse_quantity(avg, "MGD")
+        except KeyError:
+            min, max, avg = (None, None, None)
+
+        # create correct type of node class
+        if self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -94,12 +100,9 @@ class JSONParser:
                 avg,
             )
 
-            for train in self.config[node_id]["trains"]:
-                node_obj.add_train(self.create_train(train))
+            for network in self.config[node_id]["networks"]:
+                node_obj.add_node(self.create_network(network))
         elif self.config[node_id]["type"] == "Tank":
-            volume = utils.parse_quantity(
-                self.config[node_id].get("volume (cubic meters)"), "m3"
-            )
             node_obj = node.Tank(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -108,14 +111,10 @@ class JSONParser:
                 volume,
             )
         elif self.config[node_id]["type"] == "Pump":
-            min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[node_id]["flowrate (MGD)"]
-            )
             pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
             horsepower = utils.parse_quantity(
                 self.config[node_id].get("horsepower"), "hp"
             )
-            num_units = self.config[node_id].get("num_units")
             node_obj = node.Pump(
                 node_id,
                 utils.ContentsType[input_contents],
@@ -128,6 +127,75 @@ class JSONParser:
                 avg,
                 pump_type,
             )
+        elif self.config[node_id]["type"] == "Aeration":
+            node_obj = node.Aeration(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
+                volume,
+            )
+        elif self.config[node_id]["type"] == "Clarification":
+            node_obj = node.Clarification(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
+                volume,
+            )
+        elif self.config[node_id]["type"] == "Cogeneration":
+            min, max, avg = self.parse_flow_or_gen_capacity(
+                self.config[node_id]["generation_capacity (kWh)"]
+            )
+            min = utils.parse_quantity(min, "kWh")
+            max = utils.parse_quantity(max, "kWh")
+            avg = utils.parse_quantity(avg, "kWh")
+            node_obj = node.Cogeneration(
+                node_id, input_contents, min, max, avg, num_units
+            )
+        elif self.config[node_id]["type"] == "Digestion":
+            digester_type = self.config[node_id].get("digester_type")
+            node_obj = node.Digestion(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
+                volume,
+                utils.DigesterType[digester_type],
+            )
+        elif self.config[node_id]["type"] == "Filtration":
+            node_obj = node.Filtration(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
+                volume,
+            )
+        elif self.config[node_id]["type"] == "Flaring":
+            node_obj = node.Flaring(node_id, input_contents, num_units)
+        elif self.config[node_id]["type"] == "Thickening":
+            node_obj = node.Thickening(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
+                volume,
+            )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
 
@@ -139,142 +207,24 @@ class JSONParser:
 
         return node_obj
 
-    def create_train(self, train_id):
-        """Converts a dictionary into a `Train` object
+    def create_network(self, network_id):
+        """Converts a dictionary into a `Network` object
 
         Parameters
         ----------
-        train_id : str
-            the string id for the `Train`
+        network_id : str
+            the string id for the `Network`
 
         Returns
         -------
-        Train
-            a Python object with all the values from key `train_id`
+        Network
+            a Python object with all the values from key `network_id`
         """
-        train_obj = process.Train(train_id)
-        for process_id in self.config[train_id]["processes"]:
-            if (
-                self.config[process_id]["type"] == "Facility"
-                or self.config[process_id]["type"] == "Tank"
-                or self.config[process_id]["type"] == "Pump"
-            ):
-                train_obj.add_process(self.create_node(process_id))
-            else:
-                train_obj.add_process(self.create_process(process_id))
+        network_obj = node.Network(network_id)
+        for node_id in self.config[network_id]["nodes"]:
+            network_obj.add_node(self.create_node(node_id))
 
-        return train_obj
-
-    def create_process(self, process_id):
-        """Converts a dictionary into a `Process` object
-
-        Parameters
-        ----------
-        process_id : str
-            the string id for the `Process`
-
-        Returns
-        -------
-        Process
-            a Python object with all the values from key `process_id`
-        """
-        input_contents, output_contents = self.parse_contents(process_id)
-        num_units = self.config[process_id].get("num_units")
-        volume = utils.parse_quantity(
-            self.config[process_id].get("volume (cubic meters)"), "m3"
-        )
-        try:
-            min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[process_id]["flowrate (MGD)"]
-            )
-            min = utils.parse_quantity(min, "MGD")
-            max = utils.parse_quantity(max, "MGD")
-            avg = utils.parse_quantity(avg, "MGD")
-        except KeyError:
-            min, max, avg = (None, None, None)
-
-        # create correct type of process class
-        if self.config[process_id]["type"] == "Aeration":
-            process_obj = process.Aeration(
-                process_id,
-                input_contents,
-                output_contents,
-                min,
-                max,
-                avg,
-                num_units,
-                volume,
-            )
-        elif self.config[process_id]["type"] == "Clarification":
-            process_obj = process.Clarification(
-                process_id,
-                input_contents,
-                output_contents,
-                min,
-                max,
-                avg,
-                num_units,
-                volume,
-            )
-        elif self.config[process_id]["type"] == "Cogeneration":
-            min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[process_id]["generation_capacity (kWh)"]
-            )
-            min = utils.parse_quantity(min, "kWh")
-            max = utils.parse_quantity(max, "kWh")
-            avg = utils.parse_quantity(avg, "kWh")
-            process_obj = process.Cogeneration(
-                process_id, input_contents, min, max, avg, num_units
-            )
-        elif self.config[process_id]["type"] == "Digestion":
-            digester_type = self.config[process_id].get("digester_type")
-            process_obj = process.Digestion(
-                process_id,
-                input_contents,
-                output_contents,
-                min,
-                max,
-                avg,
-                num_units,
-                volume,
-                utils.DigesterType[digester_type],
-            )
-        elif self.config[process_id]["type"] == "Filtration":
-            process_obj = process.Filtration(
-                process_id,
-                input_contents,
-                output_contents,
-                min,
-                max,
-                avg,
-                num_units,
-                volume,
-            )
-        elif self.config[process_id]["type"] == "Flaring":
-            process_obj = process.Flaring(process_id, input_contents, num_units)
-        elif self.config[process_id]["type"] == "Thickening":
-            process_obj = process.Thickening(
-                process_id,
-                input_contents,
-                output_contents,
-                min,
-                max,
-                avg,
-                num_units,
-                volume,
-            )
-        else:
-            raise TypeError(
-                "Unsupported Process type: " + self.config[process_id]["type"]
-            )
-
-        tags = self.config[process_id].get("tags")
-        if tags:
-            for tag_id, tag_info in tags.items():
-                tag = self.parse_tag(tag_id, tag_info)
-                process_obj.add_tag(tag)
-
-        return process_obj
+        return network_obj
 
     def create_connection(self, connection_id):
         """Converts a dictionary into a `Connection` object
@@ -335,7 +285,7 @@ class JSONParser:
         Parameters
         ----------
         id : str
-            ID of the process or node to get the contents for
+            ID of the node to get the contents for
 
         Returns
         -------
@@ -385,7 +335,7 @@ class JSONParser:
         try:
             contents = utils.ContentsType[tag_info["contents"]]
         except KeyError:
-            # TODO: check for contents of process/node and set contents equal to that
+            # TODO: check for contents of node and set contents equal to that
             contents = None
         tag_type = utils.TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
