@@ -78,6 +78,7 @@ class ContentsType(Enum):
     Scum = auto()
     FoodWaste = auto()
     SludgeBlend = auto()
+    Electricity = auto()
 
 
 class PumpType(Enum):

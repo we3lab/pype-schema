@@ -4,17 +4,15 @@
     "SewerMain",
     "Bay",
     "StormwaterDrain",
-    "RecycledWater"
+    "RecycledWater",
+    "ElectricGrid"
   ],
   "connections": [
     "EffluentPump",
     "LiftPump",
     "StormwaterPump",
-    "SiteWastePump",
-    "WashwaterPump",
-    "BilgePump",
     "RecycledWaterPump",
-    "Number3Pump"
+    "GridToFacility"
   ],
   "RecycledWater": {
     "type": "Facility",
@@ -48,15 +46,30 @@
       "ChlorineContactTank",
       "SludgeThickener",
       "AnaerobicDigester",
-      "Cogenerator"
-      "Flare"
+      "Cogenerator",
+      "Flare",
+      "VirtualDemand"
     },
     "connections": {
+      "SiteWastePump",
+      "WashwaterPump",
+      "BilgePump",
+      "Number3Pump",
       "TPSPump",
       "FFRPump",
       "DMFPump",
       "RASPump",
-      "WASPump"
+      "WASPump",
+      "FFRToAerator",
+      "PrimaryToAerator",
+      "AeratorToSecondary",
+      "DMFToChlorine",
+      "DigesterToCogen",
+      "DigesterToFlare",
+      "ThickenerToDigester",
+      "BatteryToFacility",
+      "CogenToFacility",
+      "CogenToBattery"
     }
   },
   "PrimaryClarifier": {
@@ -225,7 +238,8 @@
   "Cogenerator": {
     "type": "Cogeneration",
     "num_units": 2,
-    "contents": ["Biogas", "NaturalGas"],
+    "input_contents": ["Biogas", "NaturalGas"],
+    "output_contents": "Electricity",
     "generation_capacity (kWh)": {
       "min": null,
       "max": 633,
@@ -412,6 +426,7 @@
     "source": "PrimaryClarifier",
     "sink": "FixedFilmReactor",
     "contents": "UntreatedSewage",
+    "bidirectional": true,
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -475,8 +490,8 @@
   "BilgePump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SVCW",
-    "sink": "SVCW",
+    "source": "DualMediaFilter",
+    "sink": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -490,8 +505,8 @@
   "WashwaterPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SVCW",
-    "sink": "SVCW",
+    "source": "DualMediaFilter",
+    "sink": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -505,8 +520,8 @@
   "SiteWastePump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SVCW",
-    "sink": "SVCW",
+    "source": "SludgeThickener",
+    "sink": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -549,8 +564,8 @@
   },
   "Number3Pump": {
     "type": "Pump",
-    "source": "SVCW",
-    "sink": "SVCW",
+    "source": "ChlorineContactTank",
+    "sink": "PrimaryClarifier",
     "bidirectional": false,
     "pump_type": null,
     "contents": "TreatedSewage",
@@ -580,6 +595,143 @@
   "Bay": {
     "type": "Reservoir",
     "contents": "TreatedSewage",
+    "tags": {}
+  },
+  "ElectricGrid": {
+    "type": "Network",
+    "contents": "Electricity",
+    "tags": {},
+    "nodes": {},
+    "connections": {}
+  },
+  "Tesla": {
+    "type": "Battery",
+    "contents": "Electricity",
+    "capacity": 2000,
+    "discharge_rate": 550,
+    "tags": {}
+  },
+  "VirtualDemand": {
+    "type": "Network",
+    "contents": "Electricity",
+    "tags": {},
+    "nodes": {},
+    "connections": {}
+  },
+  "FFRToAerator": {
+    "type": "Pipe",
+    "source": "FixedFilmReactor",
+    "sink": "AerationBasin",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "PrimaryToAerator": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "sink": "AerationBasin",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "AeratorToSecondary":{
+    "type": "Pipe",
+    "source": "AerationBasin",
+    "sink": "SecondaryClarifier",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DMFToChlorine": {
+    "type": "Pipe",
+    "source": "DualMediaFilter",
+    "sink": "ChlorineContactTank",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DigesterToCogen": {
+    "type": "Pipe",
+    "source": "AnaerobicDigester",
+    "sink": "Cogenerator",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DigesterToFlare": {
+    "type": "Pipe",
+    "source": "AnaerobicDigester",
+    "sink": "Cogenerator",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "ThickenerToDigester": {
+    "type": "Pipe",
+    "source": "SludgeThickener",
+    "sink": "AnaerobicDigester",
+    "contents": "SludgeBlend",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "GridToFacility": {
+    "type": "Wire",
+    "source": "ElectricGrid",
+    "sink": "SVCW",
+    "contents": "Electricity",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "BatteryToFacility": {
+    "type": "Wire",
+    "source": "Battery",
+    "sink": "VirtualDemand",
+    "contents": "Electricity",
+    "bidirectional": true,
+    "tags": {}
+  },
+  "CogenToFacility": {
+    "type": "Wire",
+    "source": "Cogenerator",
+    "sink": "VirtualDemand",
+    "contents": "Electricity",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "CogenToBattery": {
+    "type": "Wire",
+    "source": "Cogenerator",
+    "sink": "Battery",
+    "contents": "Electricity",
+    "bidirectional": false,
     "tags": {}
   }
 }

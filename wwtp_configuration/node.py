@@ -1,5 +1,4 @@
 from abc import ABC
-from collections import OrderedDict
 from . import utils
 
 
@@ -89,7 +88,7 @@ class Network(Node):
     tags : dict of Tag
         Data tags associated with this network
 
-    nodes : OrderedDict of Node
+    nodes : dict of Node
         nodes in the network, e.g. pumps, tanks, or facilities
 
     connections : dict of Connections
@@ -97,7 +96,19 @@ class Network(Node):
 
     Attributes
     ----------
-    nodes : OrderedDict of Node
+    id : str
+        Network ID
+
+    input_contents : ContentsType
+        Contents entering the network.
+
+    output_contents : ContentsType
+        Contents leaving the network.
+
+    tags : dict of Tag
+        Data tags associated with this network
+
+    nodes : dict of Node
         nodes in the network, e.g. pumps, tanks, or facilities
 
     connections : dict of Connections
@@ -110,7 +121,7 @@ class Network(Node):
         input_contents,
         output_contents,
         tags={},
-        nodes=OrderedDict(),
+        nodes={},
         connections={},
     ):
         self.id = id
@@ -247,7 +258,7 @@ class Facility(Network):
     tags : dict of Tag
         Data tags associated with this facility
 
-    nodes : OrderedDict of Node
+    nodes : dict of Node
         nodes in the facility, e.g. pumps, tanks, or processes
 
     connections : dict of Connections
@@ -273,7 +284,7 @@ class Facility(Network):
     flow_rate : tuple
         Tuple of minimum, maximum, and average facility flow rate
 
-    nodes : OrderedDict of Node
+    nodes : dict of Node
         nodes in the facility, e.g. pumps, tanks, or processes
 
     connections : dict of Connections
@@ -290,7 +301,7 @@ class Facility(Network):
         max_flow,
         avg_flow,
         tags={},
-        nodes=OrderedDict(),
+        nodes={},
         connections={},
     ):
         self.id = id
@@ -492,6 +503,80 @@ class Reservoir(Node):
         )
 
 
+class Battery(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Battery ID
+
+    capacity : int
+        Storage capacity of the battery in kWh
+
+    discharge_rate : int
+        Maximum discharge rate of the battery in kW
+
+    tags : dict of Tag
+        Data tags associated with this battery
+
+    Attributes
+    ----------
+    id : str
+        Battery ID
+
+    input_contents : ContentsType
+        Contents entering the reservoir.
+
+    output_contents : ContentsType
+        Contents leaving the reservoir.
+
+    capacity : int
+        Storage capacity of the battery in kWh
+
+    discharge_rate : int
+        Maximum discharge rate of the battery in kW
+
+    tags : dict of Tag
+        Data tags associated with this reservoir
+    """
+
+    def __init__(
+        self,
+        id,
+        capacity,
+        discharge_rate,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = utils.ContentsType.Electricity
+        self.output_contents = utils.ContentsType.Electricity
+        self.capacity = capacity
+        self.discharge_rate = discharge_rate
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Reservoir id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} capacity:{self.capacity} "
+            f"discharge_rate:{self.discharge_rate} tags:{self.tags}>"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.capacity == other.capacity
+            and self.discharge_rate == other.discharge_rate
+            and self.tags == other.tags
+        )
+
+
 class Digestion(Node):
     """
     Parameters
@@ -635,6 +720,9 @@ class Cogeneration(Node):
         Contents entering the cogenerator
         (biogas, natural gas, or a blend of the two)
 
+    output_contents : ContentsType
+        Contents leaving the cogenerator (Electricity)
+
     gen_capacity : tuple
         Minimum, maximum, and average generation capacity
 
@@ -650,6 +738,7 @@ class Cogeneration(Node):
     ):
         self.id = id
         self.input_contents = input_contents
+        self.output_contents = utils.ContentsType.Electricity
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
@@ -657,7 +746,8 @@ class Cogeneration(Node):
     def __repr__(self):
         return (
             f"<wwtp_configuration.node.Cogeneration id:{self.id} "
-            f"input_contents:{self.input_contents} num_units:{self.num_units} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.input_contents} num_units:{self.num_units} "
             f"gen_capacity:{self.gen_capacity} tags:{self.tags}>"
         )
 
@@ -1123,6 +1213,7 @@ class Flaring(Node):
     def __init__(self, id, num_units, volume, tags={}):
         self.id = id
         self.input_contents = utils.ContentsType.Biogas
+        self.output_contents = None
         self.num_units = num_units
         self.tags = tags
 

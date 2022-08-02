@@ -374,9 +374,6 @@ class Wire(Connection):
     id : str
         Pipe ID
 
-    contents : ContentsType
-        Contents moving through the connection
-
     source : Node
         Starting point of the connection
 
@@ -413,18 +410,17 @@ class Wire(Connection):
     def __init__(
         self,
         id,
-        contents,
         source,
         sink,
         tags={},
         bidirectional=False
     ):
         self.id = id
-        self.contents = contents
         self.source = source
         self.sink = sink
         self.tags = tags
         self.bidirectional = bidirectional
+        self.contents = utils.ContentsType.Electricity
 
     def __repr__(self):
         return (
