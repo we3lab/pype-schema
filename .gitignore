@@ -19,6 +19,8 @@ Pipfile.lock
 .coverage
 htmlcov
 .pytest-cache
+.png
+.html
 
 # Executables
 *.swf
