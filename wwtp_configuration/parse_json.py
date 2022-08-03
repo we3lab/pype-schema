@@ -51,7 +51,7 @@ class JSONParser:
                 raise NameError(
                     "Connection " + connection_id + " not found in " + self.path
                 )
-            self.network_obj.add_connection(self.create_connection(connection_id))
+            self.network_obj.add_connection(self.create_connection(connection_id, self.network_obj))
 
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
@@ -99,7 +99,7 @@ class JSONParser:
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
             for new_connection in self.config[node_id]["connections"]:
-                node_obj.add_connection(self.create_connection(new_connection))
+                node_obj.add_connection(self.create_connection(new_connection, node_obj))
         elif self.config[node_id]["type"] == "Battery":
             capacity = self.config[node_id].get("capacity")
             discharge_rate = self.config[node_id].get("discharge_rate")
@@ -122,7 +122,7 @@ class JSONParser:
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
             for new_connection in self.config[node_id]["connections"]:
-                node_obj.add_connection(self.create_connection(new_connection))
+                node_obj.add_connection(self.create_connection(new_connection, node_obj))
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id,
@@ -219,13 +219,17 @@ class JSONParser:
 
         return node_obj
 
-    def create_connection(self, connection_id):
+    def create_connection(self, connection_id, node_obj):
         """Converts a dictionary into a `Connection` object
 
         Parameters
         ----------
         connection_id : str
             the string id for the `Connection`
+
+        node_id : str
+            the string id for the `Node` which holds this connection.
+            If None the default ID, 'ParentNetwork' is used
 
         Returns
         -------
@@ -236,11 +240,11 @@ class JSONParser:
         bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
         if source_id:
-            source = self.network_obj.get_node(source_id)
+            source = node_obj.get_node(source_id)
 
         sink_id = self.config[connection_id].get("sink")
         if sink_id:
-            sink = self.network_obj.get_node(sink_id)
+            sink = node_obj.get_node(sink_id)
 
         try:
             min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(

@@ -48,7 +48,8 @@
       "AnaerobicDigester",
       "Cogenerator",
       "Flare",
-      "VirtualDemand"
+      "VirtualDemand",
+      "TeslaPowerwall"
     ],
     "connections": [
       "SiteWastePump",
@@ -656,7 +657,7 @@
   "DigesterToFlare": {
     "type": "Pipe",
     "source": "AnaerobicDigester",
-    "sink": "Cogenerator",
+    "sink": "Flare",
     "contents": "Biogas",
     "flowrate (MGD)": {
       "max": null,
@@ -694,7 +695,7 @@
   },
   "BatteryToFacility": {
     "type": "Wire",
-    "source": "Battery",
+    "source": "TeslaPowerwall",
     "sink": "VirtualDemand",
     "contents": "Electricity",
     "bidirectional": true,

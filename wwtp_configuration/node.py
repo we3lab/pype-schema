@@ -30,7 +30,7 @@ class Node(ABC):
             f"<wwtp_configuration.node.Node id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
-            f"tags:{self.tags}>"
+            f"tags:{self.tags}>\n"
         )
 
     def set_flow_rate(self, min, max, avg):
@@ -136,7 +136,7 @@ class Network(Node):
             f"<wwtp_configuration.node.Network id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} tags:{self.tags} "
-            f"nodes:{self.nodes} connections:{self.connections}>"
+            f"nodes:{self.nodes} connections:{self.connections}>\n"
         )
 
     def __eq__(self, other):
@@ -319,7 +319,7 @@ class Facility(Network):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"flow_rate:{self.flow_rate} tags:{self.tags} "
-            f"nodes:{self.nodes} connections:{self.connections}>"
+            f"nodes:{self.nodes} connections:{self.connections}>\n"
         )
 
     def __eq__(self, other):
@@ -403,7 +403,7 @@ class Tank(Node):
             f"<wwtp_configuration.node.Tank id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"volume:{self.volume} tags:{self.tags}>"
+            f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -485,7 +485,7 @@ class Reservoir(Node):
             f"<wwtp_configuration.node.Reservoir id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"volume:{self.volume} tags:{self.tags}>"
+            f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -559,7 +559,7 @@ class Battery(Node):
             f"<wwtp_configuration.node.Reservoir id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} capacity:{self.capacity} "
-            f"discharge_rate:{self.discharge_rate} tags:{self.tags}>"
+            f"discharge_rate:{self.discharge_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -666,7 +666,7 @@ class Digestion(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} "
-            f"digester_type:{self.digester_type} tags:{self.tags}>"
+            f"digester_type:{self.digester_type} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -748,7 +748,7 @@ class Cogeneration(Node):
             f"<wwtp_configuration.node.Cogeneration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.input_contents} num_units:{self.num_units} "
-            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>"
+            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -863,7 +863,7 @@ class Clarification(Node):
             f"<wwtp_configuration.node.Clarification id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -962,7 +962,7 @@ class Filtration(Node):
             f"<wwtp_configuration.node.Filtration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1064,7 +1064,7 @@ class Thickening(Node):
             f"<wwtp_configuration.node.Thickening id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1163,7 +1163,7 @@ class Aeration(Node):
             f"<wwtp_configuration.node.Aeration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>"
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1220,7 +1220,7 @@ class Flaring(Node):
         return (
             f"<wwtp_configuration.node.Flaring id:{self.id} "
             f"input_contents:{self.input_contents} num_units:{self.num_units} "
-            f"tags:{self.tags}>"
+            f"tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):

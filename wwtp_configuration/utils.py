@@ -166,7 +166,7 @@ class Tag:
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} unit_id:{self.unit_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>"
+            f"totalized:{self.totalized} contents:{self.contents}>\n"
         )
 
     def __eq__(self, other):

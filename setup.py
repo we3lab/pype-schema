@@ -22,7 +22,8 @@ dev_requirements = [
 ]
 
 requirements = [
-    "pint==0.19.2"
+    "pint==0.19.2",
+    "networkx==2.8.5"
 ]
 
 extra_requirements = {

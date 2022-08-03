@@ -37,8 +37,8 @@ class Connection(ABC):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Connection id:{self.id} "
-            f"contents:{self.contents} source:{self.source} sink:{self.sink} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>"
+            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
     def set_flow_rate(self, min, max, avg):
@@ -206,10 +206,10 @@ class Pipe(Connection):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Pipe id:{self.id} "
-            f"contents:{self.contents} source:{self.source} sink:{self.sink} "
+            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>"
+            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
     def __eq__(self, other):
@@ -336,11 +336,11 @@ class Pump(Connection):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Pump id:{self.id} "
-            f"contents:{self.contents} source:{self.source} sink:{self.sink} "
+            f"<wwtp_configuration.connection.Pump id:{self.id} "
+            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
             f"horsepower:{self.horsepower} num_units:{self.num_units} "
-            f"tags:{self.tags}> bidirectional:{self.bidirectional}"
+            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
     def __eq__(self, other):
@@ -444,8 +444,8 @@ class Wire(Connection):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Wire id:{self.id} "
-            f"contents:{self.contents} source:{self.source} sink:{self.sink} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>"
+            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
     def __eq__(self, other):
