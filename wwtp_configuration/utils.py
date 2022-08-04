@@ -51,7 +51,7 @@ def parse_units(units):
     elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
         return u.m / u.s
     elif units.lower() == "kwh":
-        return u.m / u.s
+        return u.kW * u.hr
     elif units == "meters" or units == "m":
         return u.m
     elif units == "inches" or units == "in" or units == "inch":

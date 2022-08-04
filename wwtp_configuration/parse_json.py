@@ -92,8 +92,8 @@ class JSONParser:
         if self.config[node_id]["type"] == "Network":
             node_obj = node.Network(
                 node_id,
-                utils.ContentsType[input_contents],
-                utils.ContentsType[output_contents]
+                input_contents,
+                output_contents
             )
 
             for new_node in self.config[node_id]["nodes"]:
@@ -111,8 +111,8 @@ class JSONParser:
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
-                utils.ContentsType[input_contents],
-                utils.ContentsType[output_contents],
+                input_contents,
+                output_contents,
                 elevation,
                 min,
                 max,
@@ -126,16 +126,16 @@ class JSONParser:
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id,
-                utils.ContentsType[input_contents],
-                utils.ContentsType[output_contents],
+                input_contents,
+                output_contents,
                 elevation,
                 volume,
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
                 node_id,
-                utils.ContentsType[input_contents],
-                utils.ContentsType[output_contents],
+                input_contents,
+                output_contents,
                 elevation,
                 volume,
             )
@@ -237,6 +237,11 @@ class JSONParser:
             a Python object with all the values from key `connection_id`
         """
         contents = self.config[connection_id].get("contents")
+        if isinstance(contents, list):
+            contents = map(lambda con : utils.ContentsType[con], contents)
+        else:
+            contents = utils.ContentsType[contents]
+
         bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
         if source_id:
@@ -262,7 +267,7 @@ class JSONParser:
             )
             connection_obj = connection.Pipe(
                 connection_id,
-                utils.ContentsType[contents],
+                contents,
                 source,
                 sink,
                 min_flow,
@@ -282,7 +287,7 @@ class JSONParser:
             )
             connection_obj = connection.Pump(
                 connection_id,
-                utils.ContentsType[contents],
+                contents,
                 source,
                 sink,
                 min_flow,
@@ -341,6 +346,16 @@ class JSONParser:
             raise ValueError(
                 "Either contents or output_contents must be defined for " + id
             )
+
+        if isinstance(input_contents, list):
+            input_contents = map(lambda contents : utils.ContentsType[contents], input_contents)
+        else:
+            input_contents = utils.ContentsType[input_contents]
+
+        if isinstance(output_contents, list):
+            output_contents = map(lambda contents : utils.ContentsType[contents], output_contents)
+        else:
+            output_contents = utils.ContentsType[output_contents]
 
         return (input_contents, output_contents)
 

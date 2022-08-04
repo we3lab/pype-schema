@@ -10,7 +10,8 @@ color_map = {
     "WasteActivatedSludge": "black",
     "PrimarySludge": "black",
     "SludgeBlend": "black",
-    "Biogas": "green"
+    "Biogas": "green",
+    "NaturalGas": "gray"
 }
 
 def draw_graph(network, pyvis=False):
@@ -26,7 +27,7 @@ def draw_graph(network, pyvis=False):
         False (networkx) by default
     """
     # create empty graph
-    g = nx.Graph()
+    g = nx.MultiDiGraph()
 
     # add list of nodes and edges to graph
     g.add_nodes_from(network.nodes.__iter__())
@@ -39,26 +40,60 @@ def draw_graph(network, pyvis=False):
 
         g.add_edge(connection.source.id, connection.sink.id, color=color, label=id)
 
-    custom_lines = [Line2D([0], [0], color="black", lw=4),
-                    Line2D([0], [0], color="brown", lw=4),
-                    Line2D([0], [0], color="blue", lw=4),
-                    Line2D([0], [0], color="yellow", lw=4),
-                    Line2D([0], [0], color="green", lw=4)]
-    fig, ax = plt.subplots()
-    ax.legend(custom_lines, ["Sludge", "Untreated Sewage", "Treated Sewage", "Electricity", "Biogas"])
+    colors = ["black", "brown", "blue", "yellow", "green", "gray"]
+    labels = ["Sludge", "Untreated Sewage", "Treated Sewage", "Electricity", "Biogas", "Natural Gas"]
+    font_colors = ["white", "white", "white", "black", "black", "black"]
 
     if pyvis:
-        nt = Network("500px", "500px")
+        nt = Network("500px", "500px", directed=True)
+
+        # create legend based on https://github.com/WestHealth/pyvis/issues/50
+        num_legend_nodes = len(colors)
+        num_actual_nodes = len(g.nodes())
+        step = 50
+        x = -300
+        y = -250
+        legend_nodes = [
+            (
+                num_actual_nodes + legend_node,
+                {
+                    'color': colors[legend_node],
+                    'label': labels[legend_node],
+                    'size': 30,
+                    'physics': False,
+                    'x': x,
+                    'y': f'{y + legend_node*step}px',
+                    'shape': 'box',
+                    'font': {'size': 12, 'color': font_colors[legend_node]}
+                }
+            )
+            for legend_node in range(num_legend_nodes)
+        ]
+        g.add_nodes_from(legend_nodes)
+
         nt.from_nx(g)
         nt.show(network.id + ".html")
     else:
+        # create legend
+        custom_lines = []
+        for color in colors:
+            custom_lines.append(Line2D([0], [0], color=color, lw=4))
+        fig, ax = plt.subplots()
+        ax.legend(custom_lines, labels)
+
+        edge_colors = []
         edges = g.edges()
-        colors = [g[u][v]["color"] for u,v in edges]
-        nx.draw(g, with_labels=True, edge_color=colors)
+        node_to_node = [g[u][v] for u,v in edges]
+        for edge_dict in node_to_node:
+            for _, edge in edge_dict.items():
+                edge_colors.append(edge["color"])
+
+        # TODO: don't draw multiple connections on top of one another
+        nx.draw(g, with_labels=True, edge_color=edge_colors)
+
         plt.axis('off')
         axis = plt.gca()
         axis.set_xlim([1.2*x for x in axis.get_xlim()])
         axis.set_ylim([1.2*y for y in axis.get_ylim()])
         plt.tight_layout()
-        plt.show()
         plt.savefig(network.id + ".png")

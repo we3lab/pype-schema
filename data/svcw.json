@@ -5,14 +5,15 @@
     "Bay",
     "StormwaterDrain",
     "RecycledWater",
-    "ElectricGrid"
+    "PowerGrid"
   ],
   "connections": [
     "EffluentPump",
     "LiftPump",
     "StormwaterPump",
     "RecycledWaterPump",
-    "GridToFacility"
+    "ElectricToFacility",
+    "GasToFacility"
   ],
   "RecycledWater": {
     "type": "Facility",
@@ -49,7 +50,7 @@
       "Cogenerator",
       "Flare",
       "VirtualDemand",
-      "TeslaPowerwall"
+      "TeslaPowerpack"
     ],
     "connections": [
       "SiteWastePump",
@@ -256,18 +257,6 @@
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
-        "unit_id": 2
-      },
-      "CGN_SUP_FIT_27102_NG.VAL_ACT": {
-        "type": "InfluentFlow",
-        "units": "SCFM",
-        "contents": "NaturalGas",
-        "unit_id": 1
-      },
-      "CGN_SUP_FIT_27202_NG.VAL_ACT": {
-        "type": "InfluentFlow",
-        "units": "SCFM",
-        "contents": "NaturalGas",
         "unit_id": 2
       },
       "CGN_ENG_DAILY_DATA.GEN1_KWHRS_DAY": {
@@ -573,14 +562,14 @@
     "contents": "TreatedSewage",
     "tags": {}
   },
-  "ElectricGrid": {
+  "PowerGrid": {
     "type": "Network",
-    "contents": "Electricity",
+    "contents": ["Electricity", "NaturalGas"],
     "tags": {},
     "nodes": [],
     "connections": []
   },
-  "TeslaPowerwall": {
+  "TeslaPowerpack": {
     "type": "Battery",
     "contents": "Electricity",
     "capacity": 2000,
@@ -678,9 +667,9 @@
     },
     "tags": {}
   },
-  "GridToFacility": {
+  "ElectricToFacility": {
     "type": "Wire",
-    "source": "ElectricGrid",
+    "source": "PowerGrid",
     "sink": "SVCW",
     "contents": "Electricity",
     "bidirectional": false,
@@ -693,9 +682,30 @@
       }
     }
   },
+  "GasToFacility": {
+    "type": "Pipe",
+    "source": "PowerGrid",
+    "sink": "SVCW",
+    "contents": "NaturalGas",
+    "bidirectional": false,
+    "tags": {
+      "CGN_SUP_FIT_27102_NG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "unit_id": 1
+      },
+      "CGN_SUP_FIT_27202_NG.VAL_ACT": {
+        "type": "InfluentFlow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "unit_id": 2
+      }
+    }
+  },
   "BatteryToFacility": {
     "type": "Wire",
-    "source": "TeslaPowerwall",
+    "source": "TeslaPowerpack",
     "sink": "VirtualDemand",
     "contents": "Electricity",
     "bidirectional": true,
