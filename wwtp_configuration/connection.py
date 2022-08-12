@@ -190,7 +190,7 @@ class Pipe(Connection):
         max_pres=None,
         avg_pres=None,
         tags={},
-        bidirectional=False
+        bidirectional=False,
     ):
         self.id = id
         self.contents = contents
@@ -319,7 +319,7 @@ class Pump(Connection):
         num_units,
         pump_type=utils.PumpType.Constant,
         tags={},
-        bidirectional=False
+        bidirectional=False,
     ):
         self.id = id
         self.contents = contents
@@ -426,14 +426,7 @@ class Wire(Connection):
         whether electricity can flow from sink to source. False by default
     """
 
-    def __init__(
-        self,
-        id,
-        source,
-        sink,
-        tags={},
-        bidirectional=False
-    ):
+    def __init__(self, id, source, sink, tags={}, bidirectional=False):
         self.id = id
         self.source = source
         self.sink = sink

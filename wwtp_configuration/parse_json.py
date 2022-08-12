@@ -51,7 +51,9 @@ class JSONParser:
                 raise NameError(
                     "Connection " + connection_id + " not found in " + self.path
                 )
-            self.network_obj.add_connection(self.create_connection(connection_id, self.network_obj))
+            self.network_obj.add_connection(
+                self.create_connection(connection_id, self.network_obj)
+            )
 
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
@@ -69,7 +71,7 @@ class JSONParser:
         Node
             a Python object with all the values from key `node_id`
         """
-        input_contents, output_contents = self.parse_contents(node_id)
+        (input_contents, output_contents) = self.parse_contents(node_id)
         elevation = utils.parse_quantity(
             self.config[node_id].get("elevation (meters)"), "m"
         )
@@ -93,21 +95,22 @@ class JSONParser:
             node_obj = node.Network(
                 node_id,
                 input_contents,
-                output_contents
+                output_contents,
+                tags={},
+                nodes={},
+                connections={},
             )
 
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
             for new_connection in self.config[node_id]["connections"]:
-                node_obj.add_connection(self.create_connection(new_connection, node_obj))
+                node_obj.add_connection(
+                    self.create_connection(new_connection, node_obj)
+                )
         elif self.config[node_id]["type"] == "Battery":
             capacity = self.config[node_id].get("capacity")
             discharge_rate = self.config[node_id].get("discharge_rate")
-            node_obj = node.Battery(
-                node_id,
-                capacity,
-                discharge_rate
-            )
+            node_obj = node.Battery(node_id, capacity, discharge_rate, tags={})
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
@@ -117,12 +120,17 @@ class JSONParser:
                 min,
                 max,
                 avg,
+                tags={},
+                nodes={},
+                connections={},
             )
 
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
             for new_connection in self.config[node_id]["connections"]:
-                node_obj.add_connection(self.create_connection(new_connection, node_obj))
+                node_obj.add_connection(
+                    self.create_connection(new_connection, node_obj)
+                )
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id,
@@ -133,11 +141,7 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
-                node_id,
-                input_contents,
-                output_contents,
-                elevation,
-                volume,
+                node_id, input_contents, output_contents, elevation, volume, tags={}
             )
         elif self.config[node_id]["type"] == "Aeration":
             node_obj = node.Aeration(
@@ -149,6 +153,7 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Clarification":
             node_obj = node.Clarification(
@@ -160,6 +165,7 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Cogeneration":
             min, max, avg = self.parse_flow_or_gen_capacity(
@@ -169,7 +175,7 @@ class JSONParser:
             max = utils.parse_quantity(max, "kWh")
             avg = utils.parse_quantity(avg, "kWh")
             node_obj = node.Cogeneration(
-                node_id, input_contents, min, max, avg, num_units
+                node_id, input_contents, min, max, avg, num_units, tags={}
             )
         elif self.config[node_id]["type"] == "Digestion":
             digester_type = self.config[node_id].get("digester_type")
@@ -183,6 +189,7 @@ class JSONParser:
                 num_units,
                 volume,
                 utils.DigesterType[digester_type],
+                tags={},
             )
         elif self.config[node_id]["type"] == "Filtration":
             node_obj = node.Filtration(
@@ -194,6 +201,7 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Flaring":
             node_obj = node.Flaring(node_id, num_units)
@@ -207,6 +215,7 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
             )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
@@ -238,7 +247,7 @@ class JSONParser:
         """
         contents = self.config[connection_id].get("contents")
         if isinstance(contents, list):
-            contents = map(lambda con : utils.ContentsType[con], contents)
+            contents = list(map(lambda con: utils.ContentsType[con], contents))
         else:
             contents = utils.ContentsType[contents]
 
@@ -274,14 +283,16 @@ class JSONParser:
                 max_flow,
                 avg_flow,
                 diameter,
-                bidirectional=bidirectional
+                bidirectional=bidirectional,
             )
         elif self.config[connection_id]["type"] == "Pump":
             elevation = utils.parse_quantity(
                 self.config[connection_id].get("elevation (meters)"), "m"
             )
             num_units = self.config[connection_id].get("num_units")
-            pump_type = self.config[connection_id].get("pump_type", utils.PumpType.Constant)
+            pump_type = self.config[connection_id].get(
+                "pump_type", utils.PumpType.Constant
+            )
             horsepower = utils.parse_quantity(
                 self.config[connection_id].get("horsepower"), "hp"
             )
@@ -297,14 +308,11 @@ class JSONParser:
                 horsepower,
                 num_units,
                 pump_type=pump_type,
-                bidirectional=bidirectional
+                bidirectional=bidirectional,
             )
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
-                connection_id,
-                source,
-                sink,
-                bidirectional=bidirectional
+                connection_id, source, sink, bidirectional=bidirectional
             )
         else:
             raise TypeError(
@@ -348,12 +356,16 @@ class JSONParser:
             )
 
         if isinstance(input_contents, list):
-            input_contents = map(lambda contents : utils.ContentsType[contents], input_contents)
+            input_contents = list(
+                map(lambda contents: utils.ContentsType[contents], input_contents)
+            )
         else:
             input_contents = utils.ContentsType[input_contents]
 
         if isinstance(output_contents, list):
-            output_contents = map(lambda contents : utils.ContentsType[contents], output_contents)
+            output_contents = list(
+                map(lambda contents: utils.ContentsType[contents], output_contents)
+            )
         else:
             output_contents = utils.ContentsType[output_contents]
 

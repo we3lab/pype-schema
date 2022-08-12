@@ -11,8 +11,9 @@ color_map = {
     "PrimarySludge": "black",
     "SludgeBlend": "black",
     "Biogas": "green",
-    "NaturalGas": "gray"
+    "NaturalGas": "gray",
 }
+
 
 def draw_graph(network, pyvis=False):
     """Draw all of the nodes and connections in the given network
@@ -41,7 +42,14 @@ def draw_graph(network, pyvis=False):
         g.add_edge(connection.source.id, connection.sink.id, color=color, label=id)
 
     colors = ["black", "brown", "blue", "yellow", "green", "gray"]
-    labels = ["Sludge", "Untreated Sewage", "Treated Sewage", "Electricity", "Biogas", "Natural Gas"]
+    labels = [
+        "Sludge",
+        "Untreated Sewage",
+        "Treated Sewage",
+        "Electricity",
+        "Biogas",
+        "Natural Gas",
+    ]
     font_colors = ["white", "white", "white", "black", "black", "black"]
 
     if pyvis:
@@ -57,15 +65,15 @@ def draw_graph(network, pyvis=False):
             (
                 num_actual_nodes + legend_node,
                 {
-                    'color': colors[legend_node],
-                    'label': labels[legend_node],
-                    'size': 30,
-                    'physics': False,
-                    'x': x,
-                    'y': f'{y + legend_node*step}px',
-                    'shape': 'box',
-                    'font': {'size': 12, 'color': font_colors[legend_node]}
-                }
+                    "color": colors[legend_node],
+                    "label": labels[legend_node],
+                    "size": 30,
+                    "physics": False,
+                    "x": x,
+                    "y": f"{y + legend_node*step}px",
+                    "shape": "box",
+                    "font": {"size": 12, "color": font_colors[legend_node]},
+                },
             )
             for legend_node in range(num_legend_nodes)
         ]
@@ -83,7 +91,7 @@ def draw_graph(network, pyvis=False):
 
         edge_colors = []
         edges = g.edges()
-        node_to_node = [g[u][v] for u,v in edges]
+        node_to_node = [g[u][v] for u, v in edges]
         for edge_dict in node_to_node:
             for _, edge in edge_dict.items():
                 edge_colors.append(edge["color"])
@@ -91,9 +99,9 @@ def draw_graph(network, pyvis=False):
         # TODO: don't draw multiple connections on top of one another
         nx.draw(g, with_labels=True, edge_color=edge_colors)
 
-        plt.axis('off')
+        plt.axis("off")
         axis = plt.gca()
-        axis.set_xlim([1.2*x for x in axis.get_xlim()])
-        axis.set_ylim([1.2*y for y in axis.get_ylim()])
+        axis.set_xlim([1.2 * x for x in axis.get_xlim()])
+        axis.set_ylim([1.2 * y for y in axis.get_ylim()])
         plt.tight_layout()
         plt.savefig(network.id + ".png")

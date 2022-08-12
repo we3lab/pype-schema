@@ -21,9 +21,11 @@
     "nodes": [],
     "connections": []
   },
-  "AnaerobicDigestion": {
-    "type": "AnaerobicDigester",
-    "volume": 100
+  "Digester": {
+    "type": "Digestion",
+    "volume": 100,
+    "contents": "SludgeBlend",
+    "digester_type": "Anaerobic"
   },
   "Pipe1": {
     "diameter (inches)": 10,
