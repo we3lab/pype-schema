@@ -135,12 +135,7 @@ class JSONParser:
                 )
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
-                node_id,
-                input_contents,
-                output_contents,
-                elevation,
-                volume,
-                tags={}
+                node_id, input_contents, output_contents, elevation, volume, tags={}
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
