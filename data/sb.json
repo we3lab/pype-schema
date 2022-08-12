@@ -58,7 +58,7 @@
       "DigesterToCogen",
       "DigesterToFlare",
       "CogenToFacility"
-    ]
+    ],
   },
   "BarScreen": {
     "type": "Screening",
@@ -226,8 +226,8 @@
       "max": null,
       "avg": null
     },
-    "nodes": [],
-    "connections": []
+    "nodes": ["Ultrafiltration", "ChlorineContactBasin", "ReclaimedReservoir", "OffSiteReservoir"],
+    "connections": ["UFToDisinfection", "DisinfectionPump", "DistributionPump"]
   },
   "RecycledWater": {
     "type": "Facility",
