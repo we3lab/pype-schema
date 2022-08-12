@@ -58,7 +58,7 @@
       "DigesterToCogen",
       "DigesterToFlare",
       "CogenToFacility"
-    ],
+    ]
   },
   "BarScreen": {
     "type": "Screening",
@@ -137,7 +137,7 @@
   },
   "AnaerobicDigester": {
     "type": "Digestion",
-    "input_contents": ["SludgeBlend", "PrimarySludge"]
+    "input_contents": ["SludgeBlend", "PrimarySludge"],
     "output_contents": "Biogas",
     "digester_type": "Anaerobic",
     "volume (cubic meters)": null,
@@ -180,7 +180,7 @@
       "avg": null
     }
   },
-  "SewerMain": {
+  "SewerNetwork": {
     "type": "Network",
     "contents": "UntreatedSewage",
     "nodes": [],
@@ -189,7 +189,17 @@
   },
   "PacificOcean": {
     "type": "Reservoir",
-    "contents": ["TreatedSewage", "Brine", "Seawater"]
+    "contents": ["TreatedSewage", "Brine", "Seawater"],
+    "tags": {}
+  },
+  "ReclaimedReservoir": {
+    "type": "Reservoir",
+    "contents": "NonpotableReuse",
+    "tags": {}
+  },
+  "OffSiteReservoir": {
+    "type": "Reservoir",
+    "contents": "NonpotableReuse",
     "tags": {}
   },
   "WaterDistribution": {
@@ -210,14 +220,14 @@
     "type": "Facility",
     "elevation (meters)": null,
     "input_contents": "Seawater",
-    "output_contents": ["DrinkingWater", "Brine"]
+    "output_contents": ["DrinkingWater", "Brine"],
     "flowrate (MGD)": {
       "min": null,
       "max": null,
       "avg": null
     },
-    "nodes": ["Ultrafiltration", "ChlorineContactBasin", "ReclaimedReservoir", "OffSiteReservoir"],
-    "connections": ["UFToDisinfection", "DisinfectionPump", "DistributionPump"]
+    "nodes": [],
+    "connections": []
   },
   "RecycledWater": {
     "type": "Facility",
@@ -249,6 +259,60 @@
     "volume (cubic meters)": null,
     "input_contents": "TreatedSewage",
     "output_contents": "NonpotableReuse"
+  },
+  "UFToDisinfection": {
+    "type": "Pipe",
+    "source": "Ultrafiltration",
+    "sink": "ChlorineContactBasin",
+    "contents": "TreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DisinfectionPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "source": "ChlorineContactBasin",
+    "sink": "ReclaimedReservoir",
+    "contents": "NonpotableReuse",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DistributionPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "source": "ReclaimedReservoir",
+    "sink": "OffSiteReservoir",
+    "contents": "NonpotableReuse",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "SewerIntake": {
+    "type": "Pipe",
+    "source": "SewerNetwork",
+    "sink": "ElEstero",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "GritToPrimary": {
     "type": "Pipe",
@@ -287,6 +351,7 @@
     "tags": {}
   },
   "SecondaryToContact": {
+    "type": "Pipe",
     "source": "SecondaryClarifier",
     "sink": "ContactChamber",
     "contents": "UntreatedSewage",
