@@ -14,21 +14,21 @@ Welcome to the WWTP Configuration package documentation!
    :caption: Class Hierarchy
 
    connection
-   network
    node
-   process
 
 .. toctree::
    :maxdepth: 1
    :caption: JSON Parsing
 
    parse_json
+   units
 
 .. toctree::
    :maxdepth: 1
    :caption: Miscellaneous
 
    utils
+   visualize
 
 .. include:: ../README.rst
 

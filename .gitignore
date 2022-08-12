@@ -12,11 +12,15 @@ build
 .settings/
 Icon?
 *.log
+Pipfile
+Pipfile.lock
 
 # Test outputs
 .coverage
 htmlcov
 .pytest-cache
+*.png
+*.html
 
 # Executables
 *.swf

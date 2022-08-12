@@ -1,4 +1,63 @@
 from enum import Enum, auto
+from .units import u
+
+
+def parse_quantity(value, units):
+    """Convert a value and unit string to a Pint quantity
+
+    Parameters
+    ----------
+    value : float
+
+    units : str
+
+    Returns
+    -------
+    Quantity
+        a Pint Quantity with the given value and units
+    """
+    if value is not None:
+        return value * parse_units(units)
+    else:
+        return None
+
+
+def parse_units(units):
+    """Convert a unit string to a Pint Unit object
+
+    Parameters
+    ----------
+    units : str
+
+    Returns
+    -------
+    Unit
+        a Pint Unit for the given string
+    """
+    if units.lower() == "mgd":
+        return u.MGD
+    elif units == "cubic meters" or units == "m3":
+        return u.m**3
+    elif units == "horsepower" or units == "hp":
+        return u.hp
+    elif units.lower() == "scfm":
+        return u.ft**3 / u.min
+    elif units == "cubic feet" or units == "ft3":
+        return u.ft**3
+    elif units.lower() == "gpm":
+        return u.gal / u.min
+    elif units.lower() == "gpd":
+        return u.gal / u.day
+    elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
+        return u.m / u.s
+    elif units.lower() == "kwh":
+        return u.kW * u.hr
+    elif units == "meters" or units == "m":
+        return u.m
+    elif units == "inches" or units == "in" or units == "inch":
+        return u.inch
+    else:
+        raise TypeError("Unsupported unit: " + units)
 
 
 class ContentsType(Enum):
@@ -19,6 +78,7 @@ class ContentsType(Enum):
     Scum = auto()
     FoodWaste = auto()
     SludgeBlend = auto()
+    Electricity = auto()
 
 
 class PumpType(Enum):
@@ -40,10 +100,7 @@ class TagType(Enum):
 
     InfluentFlow = auto()
     EffluentFlow = auto()
-    EnergyConsumption = auto()
-    GrossEnergyGeneration = auto()
-    NetEnergyGeneration = auto()
-    GridPurchase = auto()
+    BidirectionalFlow = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
@@ -109,7 +166,7 @@ class Tag:
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} unit_id:{self.unit_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>"
+            f"totalized:{self.totalized} contents:{self.contents}>\n"
         )
 
     def __eq__(self, other):
