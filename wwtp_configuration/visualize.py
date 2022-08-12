@@ -12,6 +12,8 @@ color_map = {
     "SludgeBlend": "black",
     "Biogas": "green",
     "NaturalGas": "gray",
+    "Seawater": "light blue",
+    "Brine", "light blue"
 }
 
 
@@ -41,7 +43,7 @@ def draw_graph(network, pyvis=False):
 
         g.add_edge(connection.source.id, connection.sink.id, color=color, label=id)
 
-    colors = ["black", "brown", "blue", "yellow", "green", "gray"]
+    colors = ["black", "brown", "blue", "yellow", "green", "gray", "light blue"]
     labels = [
         "Sludge",
         "Untreated Sewage",
@@ -49,8 +51,9 @@ def draw_graph(network, pyvis=False):
         "Electricity",
         "Biogas",
         "Natural Gas",
+        "Saline Water"
     ]
-    font_colors = ["white", "white", "white", "black", "black", "black"]
+    font_colors = ["white", "white", "white", "black", "black", "black", "black"]
 
     if pyvis:
         nt = Network("500px", "500px", directed=True)

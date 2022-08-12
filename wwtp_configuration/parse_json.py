@@ -138,6 +138,7 @@ class JSONParser:
                 output_contents,
                 elevation,
                 volume,
+                tags={}
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
@@ -215,6 +216,17 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Screening":
+            node_obj = node.Screening(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
                 tags={},
             )
         else:
