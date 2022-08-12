@@ -32,9 +32,6 @@ def test_create_network(json_path, expected_path):
         result = type(err).__name__
         expected = expected_path
 
-    print(expected)
-
-    print(result)
     assert result == expected
 
 

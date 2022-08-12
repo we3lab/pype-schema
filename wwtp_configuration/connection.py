@@ -442,7 +442,7 @@ class Wire(Connection):
         )
 
     def __eq__(self, other):
-        if not isinstance(other, Pipe):
+        if not isinstance(other, Wire):
             # don't attempt to compare against unrelated types
             return NotImplemented
 

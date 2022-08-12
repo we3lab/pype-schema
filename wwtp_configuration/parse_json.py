@@ -283,6 +283,7 @@ class JSONParser:
                 max_flow,
                 avg_flow,
                 diameter,
+                tags={},
                 bidirectional=bidirectional,
             )
         elif self.config[connection_id]["type"] == "Pump":
@@ -308,11 +309,12 @@ class JSONParser:
                 horsepower,
                 num_units,
                 pump_type=pump_type,
+                tags={},
                 bidirectional=bidirectional,
             )
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
-                connection_id, source, sink, bidirectional=bidirectional
+                connection_id, source, sink, tags={}, bidirectional=bidirectional,
             )
         else:
             raise TypeError(
