@@ -28,7 +28,9 @@ class JSONParser:
         f = open(path)
         self.path = path
         self.config = json.load(f)
-        self.network_obj = node.Network("ParentNetwork", None, None)
+        self.network_obj = node.Network(
+            "ParentNetwork", None, None, tags={}, nodes={}, connections={}
+        )
         f.close()
 
     def initialize_network(self):
@@ -133,11 +135,7 @@ class JSONParser:
                 )
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
-                node_id,
-                input_contents,
-                output_contents,
-                elevation,
-                volume,
+                node_id, input_contents, output_contents, elevation, volume, tags={}
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
@@ -215,6 +213,17 @@ class JSONParser:
                 avg,
                 num_units,
                 volume,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Screening":
+            node_obj = node.Screening(
+                node_id,
+                input_contents,
+                output_contents,
+                min,
+                max,
+                avg,
+                num_units,
                 tags={},
             )
         else:
@@ -314,7 +323,11 @@ class JSONParser:
             )
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
-                connection_id, source, sink, tags={}, bidirectional=bidirectional,
+                connection_id,
+                source,
+                sink,
+                tags={},
+                bidirectional=bidirectional,
             )
         else:
             raise TypeError(

@@ -247,13 +247,13 @@
       "avg": null
     },
     "tags": {
-      "CGN_SUP_FIT_27102_DG.VAL_ACT": {
+      "CGN_SUP_FIT_27101_DG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
         "unit_id": 1
       },
-      "CGN_SUP_FIT_27202_DG.VAL_ACT": {
+      "CGN_SUP_FIT_27201_DG.VAL_ACT": {
         "type": "InfluentFlow",
         "units": "SCFM",
         "contents": "Biogas",
@@ -559,7 +559,7 @@
   },
   "Bay": {
     "type": "Reservoir",
-    "contents": "TreatedSewage",
+    "contents": ["TreatedSewage", "Seawater"],
     "tags": {}
   },
   "PowerGrid": {

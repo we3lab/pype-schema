@@ -981,6 +981,100 @@ class Filtration(Node):
         )
 
 
+class Screening(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Screen ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the screen
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the screen
+
+    min_flow : int
+        Minimum flow rate of a single screen
+
+    max_flow : int
+        Maximum flow rate of a single screen
+
+    avg_flow : int
+        Average flow rate of a single screen
+
+    num_units : int
+        Number of screens running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this screen
+
+    Attributes
+    ----------
+    id : str
+        Screen ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the screen
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the screen
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    num_units : int
+        Number of screens running in parallel
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this screen
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Screening id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
 class Thickening(Node):
     """
     Parameters
