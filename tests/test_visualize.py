@@ -20,6 +20,7 @@ skip_all_tests = False
         ("../data/svcw.json", "SVCW", True),
         ("../data/sb.json", None, True),
         ("../data/sb.json", "ElEstero", True),
+        ("../data/sb.json", "RecycledWater", True),
     ],
 )
 def test_create_network(json_path, node_id, pyvis):
