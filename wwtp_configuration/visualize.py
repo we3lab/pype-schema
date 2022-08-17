@@ -6,14 +6,21 @@ from matplotlib.lines import Line2D
 color_map = {
     "Electricity": "yellow",
     "UntreatedSewage": "saddlebrown",
-    "TreatedSewage": "blue",
+    "TreatedSewage": "green",
     "WasteActivatedSludge": "black",
     "PrimarySludge": "black",
+    "Scum": "black",
     "SludgeBlend": "black",
-    "Biogas": "green",
+    "Biogas": "red",
+    "GasBlend": "red",
     "NaturalGas": "gray",
     "Seawater": "aqua",
     "Brine": "aqua",
+    "NonpotableReuse": "purple",
+    "DrinkingWater": "blue",
+    "PotableReuse": "blue",
+    "FatOilGrease": "orange",
+    "FoodWaste": "orange"
 }
 
 
@@ -43,17 +50,20 @@ def draw_graph(network, pyvis=False):
 
         g.add_edge(connection.source.id, connection.sink.id, color=color, label=id)
 
-    colors = ["black", "saddlebrown", "blue", "yellow", "green", "gray", "aqua"]
+    colors = ["black", "saddlebrown", "green", "yellow", "red", "gray", "aqua", "purple", "blue", "orange"]
     labels = [
-        "Sludge",
+        "Sludge/Scum",
         "Untreated Sewage",
         "Treated Sewage",
         "Electricity",
         "Biogas",
         "Natural Gas",
         "Saline Water",
+        "Non-potable Reuse",
+        "Drinking Water",
+        "FOG/Food Waste"
     ]
-    font_colors = ["white", "white", "white", "black", "black", "black", "black"]
+    font_colors = ["white", "white", "black", "black", "black", "black", "black", "black", "white", "black"]
 
     if pyvis:
         nt = Network("500px", "500px", directed=True)
