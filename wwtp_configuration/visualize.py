@@ -20,7 +20,7 @@ color_map = {
     "DrinkingWater": "blue",
     "PotableReuse": "blue",
     "FatOilGrease": "orange",
-    "FoodWaste": "orange"
+    "FoodWaste": "orange",
 }
 
 
@@ -47,9 +47,22 @@ def draw_graph(network, pyvis=False):
         except KeyError:
             color = "red"
 
-        g.add_edge(connection.source.id, connection.destination.id, color=color, label=id)
+        g.add_edge(
+            connection.source.id, connection.destination.id, color=color, label=id
+        )
 
-    colors = ["black", "saddlebrown", "green", "yellow", "red", "gray", "aqua", "purple", "blue", "orange"]
+    colors = [
+        "black",
+        "saddlebrown",
+        "green",
+        "yellow",
+        "red",
+        "gray",
+        "aqua",
+        "purple",
+        "blue",
+        "orange",
+    ]
     labels = [
         "Sludge/Scum",
         "Untreated Sewage",
@@ -60,9 +73,20 @@ def draw_graph(network, pyvis=False):
         "Saline Water",
         "Non-potable Reuse",
         "Drinking Water",
-        "FOG/Food Waste"
+        "FOG/Food Waste",
     ]
-    font_colors = ["white", "white", "black", "black", "black", "black", "black", "black", "white", "black"]
+    font_colors = [
+        "white",
+        "white",
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+        "black",
+        "white",
+        "black",
+    ]
 
     if pyvis:
         nt = Network("500px", "500px", directed=True)
