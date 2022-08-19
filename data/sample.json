@@ -30,6 +30,6 @@
   "Pipe1": {
     "diameter (inches)": 10,
     "source": "Facility1",
-    "sink": "Facility2"
+    "destination": "Facility2"
   }
 }

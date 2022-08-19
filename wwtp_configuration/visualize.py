@@ -41,14 +41,13 @@ def draw_graph(network, pyvis=False):
 
     # add list of nodes and edges to graph
     g.add_nodes_from(network.nodes.__iter__())
-    # TODO: change color of connection based on contents
     for id, connection in network.connections.items():
         try:
             color = color_map[connection.contents.name]
         except KeyError:
             color = "red"
 
-        g.add_edge(connection.source.id, connection.sink.id, color=color, label=id)
+        g.add_edge(connection.source.id, connection.destination.id, color=color, label=id)
 
     colors = ["black", "saddlebrown", "green", "yellow", "red", "gray", "aqua", "purple", "blue", "orange"]
     labels = [

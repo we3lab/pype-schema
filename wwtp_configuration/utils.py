@@ -100,9 +100,7 @@ class DigesterType(Enum):
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
-    InfluentFlow = auto()
-    EffluentFlow = auto()
-    BidirectionalFlow = auto()
+    Flow = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
@@ -124,9 +122,13 @@ class Tag:
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
 
-    unit_id : int or str
-        integer representing unit number, or `total` if a totalized data point
-        across all units of the process
+    source_unit_id : int or str
+        integer representing unit number, or `total` if a combined data point
+        across all units of the sources node
+
+    dest_unit_id : int or str
+        integer representing unit number, or `total` if a combined data point
+        across all units of the destination node
 
     totalized : bool
         True if data is totalized. False otherwise
@@ -145,9 +147,13 @@ class Tag:
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
 
-    unit_id : int or str
+    source_unit_id : int or str
         integer representing unit number, or `total` if a combined data point
-        across all units of the process
+        across all units of the sources node
+
+    dest_unit_id : int or str
+        integer representing unit number, or `total` if a combined data point
+        across all units of the destination node
 
     totalized : bool
         True if data is totalized. False otherwise
@@ -156,19 +162,21 @@ class Tag:
         Contents moving through the node
     """
 
-    def __init__(self, id, units, tag_type, unit_id, totalized=False, contents=None):
+    def __init__(self, id, units, tag_type, source_unit_id, dest_unit_id, totalized=False, contents=None):
         self.id = id
+        self.units = units
         self.contents = contents
         self.tag_type = tag_type
         self.totalized = totalized
-        self.unit_id = unit_id
-        self.units = units
+        self.source_unit_id = source_unit_id
+        self.dest_unit_id = dest_unit_id
 
     def __repr__(self):
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
-            f"tag_type:{self.tag_type} unit_id:{self.unit_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>\n"
+            f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
+            f"dest_unit_id:{self.dest_unit_id} totalized:{self.totalized} "
+            f"contents:{self.contents}>\n"
         )
 
     def __eq__(self, other):
@@ -181,6 +189,7 @@ class Tag:
             and self.contents == other.contents
             and self.tag_type == other.tag_type
             and self.totalized == other.totalized
-            and self.unit_id == other.unit_id
+            and self.source_unit_id == other.source_unit_id
+            and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
         )
