@@ -533,7 +533,16 @@ class Wire(Connection):
         Whether electricity can flow from destination to source. False by default
     """
 
-    def __init__(self, id, source, destination, tags={}, bidirectional=False, exit_point=None, entry_point=None):
+    def __init__(
+        self,
+        id,
+        source,
+        destination,
+        tags={},
+        bidirectional=False,
+        exit_point=None,
+        entry_point=None,
+    ):
         self.id = id
         self.source = source
         self.destination = destination

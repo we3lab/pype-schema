@@ -162,7 +162,16 @@ class Tag:
         Contents moving through the node
     """
 
-    def __init__(self, id, units, tag_type, source_unit_id, dest_unit_id, totalized=False, contents=None):
+    def __init__(
+        self,
+        id,
+        units,
+        tag_type,
+        source_unit_id,
+        dest_unit_id,
+        totalized=False,
+        contents=None,
+    ):
         self.id = id
         self.units = units
         self.contents = contents

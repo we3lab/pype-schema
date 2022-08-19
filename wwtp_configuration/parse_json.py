@@ -303,7 +303,7 @@ class JSONParser:
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
-                entry_point=entry_point
+                entry_point=entry_point,
             )
         elif self.config[connection_id]["type"] == "Pump":
             elevation = utils.parse_quantity(
@@ -331,7 +331,7 @@ class JSONParser:
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
-                entry_point=entry_point
+                entry_point=entry_point,
             )
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
@@ -341,7 +341,7 @@ class JSONParser:
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
-                entry_point=entry_point
+                entry_point=entry_point,
             )
         else:
             raise TypeError(
@@ -488,7 +488,9 @@ class JSONParser:
             try:
                 contents = obj.contents
             except AttributeError:
-                if obj.input_contents == obj.output_contents and not isinstance(obj.input_contents, list):
+                if obj.input_contents == obj.output_contents and not isinstance(
+                    obj.input_contents, list
+                ):
                     contents = obj.input_contents
                 else:
                     raise ValueError("Ambiguous contents definition for tag " + tag_id)
