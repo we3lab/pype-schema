@@ -17,27 +17,27 @@ class Connection(ABC):
     source : Node
         Starting point of the connection
 
-    sink : Node
+    destination : Node
         Endpoint of the connection
 
     tags : dict of Tag
         Data tags associated with this connection
 
     bidirectional : bool
-        whether flow can go from sink to source. False by default
+        whether flow can go from destination to source. False by default
     """
 
     id: str = NotImplemented
     contents: utils.ContentsType = NotImplemented
     source: node.Node = NotImplemented
-    sink: node.Node = NotImplemented
+    destination: node.Node = NotImplemented
     tags: dict = NotImplemented
     bidirectional: bool = False
 
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Connection id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
@@ -55,7 +55,6 @@ class Connection(ABC):
         avg : int
             Average flow rate through the connection
         """
-        # TODO: attach units to flow rate
         self.flow_rate = (min, max, avg)
 
     def set_pressure(self, min, max, avg):
@@ -72,7 +71,6 @@ class Connection(ABC):
         avg : int
             Average pressure inside the connection
         """
-        # TODO: attach units to flow rate
         self.pressure = (min, max, avg)
 
     def add_tag(self, tag):
@@ -95,6 +93,34 @@ class Connection(ABC):
         """
         del self.tags[tag_name]
 
+    def get_num_source_units(self):
+        """
+        Returns
+        -------
+        int
+            number of units in the source node
+        """
+        try:
+            num_units = self.source.num_units
+        except AttributeError:
+            num_units = None
+
+        return num_units
+
+    def get_num_dest_units(self):
+        """
+        Returns
+        -------
+        int
+            number of units in the destination node
+        """
+        try:
+            num_units = self.destination.num_units
+        except AttributeError:
+            num_units = None
+
+        return num_units
+
 
 class Pipe(Connection):
     """
@@ -109,7 +135,7 @@ class Pipe(Connection):
     source : Node
         Starting point of the connection
 
-    sink : Node
+    destination : Node
         Endpoint of the connection
 
     min_flow : int
@@ -140,7 +166,7 @@ class Pipe(Connection):
         Data tags associated with this pump
 
     bidirectional : bool
-        whether flow can go from sink to source. False by default
+        Whether flow can go from destination to source. False by default
 
     Attributes
     ----------
@@ -153,7 +179,7 @@ class Pipe(Connection):
     source : Node
         Starting point of the connection
 
-    sink : Node
+    destination : Node
         Endpoint of the connection
 
     flow_rate : tuple
@@ -172,7 +198,7 @@ class Pipe(Connection):
         Data tags associated with this pipe
 
     bidirectional : bool
-        whether flow can go from sink to source. False by default
+        Whether flow can go from destination to source. False by default
     """
 
     def __init__(
@@ -180,7 +206,7 @@ class Pipe(Connection):
         id,
         contents,
         source,
-        sink,
+        destination,
         min_flow,
         max_flow,
         avg_flow,
@@ -195,7 +221,7 @@ class Pipe(Connection):
         self.id = id
         self.contents = contents
         self.source = source
-        self.sink = sink
+        self.destination = destination
         self.diameter = diameter
         self.friction_coeff = friction
         self.set_pressure(min_pres, max_pres, avg_pres)
@@ -206,7 +232,7 @@ class Pipe(Connection):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Pipe id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
             f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
@@ -221,7 +247,7 @@ class Pipe(Connection):
             self.id == other.id
             and self.contents == other.contents
             and self.source == other.source
-            and self.sink == other.sink
+            and self.destination == other.destination
             and self.diameter == other.diameter
             and self.friction_coeff == other.friction_coeff
             and self.pressure == other.pressure
@@ -238,11 +264,8 @@ class Pump(Connection):
     id : str
         Pump ID
 
-    input_contents : ContentsType
-        Contents entering the pump.
-
-    output_contents : ContentsType
-        Contents leaving the pump.
+    contents : ContentsType
+        Contents of the pump
 
     elevation : int
         Elevation of the pump in meters above sea level
@@ -269,18 +292,15 @@ class Pump(Connection):
         Data tags associated with this pump
 
     bidirectional : bool
-        whether flow can go from sink to source. False by default
+        Whether flow can go from destination to source. False by default
 
     Attributes
     ----------
     id : str
         Pump ID
 
-    input_contents : ContentsType
-        Contents entering the pump.
-
-    output_contents : ContentsType
-        Contents leaving the pump.
+    contents : ContentsType
+        Contents of the pump
 
     elevation : int
         Elevation of the pump in meters above sea level
@@ -298,7 +318,7 @@ class Pump(Connection):
         Data tags associated with this pump
 
     bidirectional : bool
-        whether flow can go from sink to source. False by default
+        Whether flow can go from destination to source. False by default
 
     energy_efficiency : function
         Function which takes in the current flow rate and returns the energy
@@ -310,7 +330,7 @@ class Pump(Connection):
         id,
         contents,
         source,
-        sink,
+        destination,
         min_flow,
         max_flow,
         avg_flow,
@@ -324,7 +344,7 @@ class Pump(Connection):
         self.id = id
         self.contents = contents
         self.source = source
-        self.sink = sink
+        self.destination = destination
         self.elevation = elevation
         self.pump_type = pump_type
         self.horsepower = horsepower
@@ -337,7 +357,7 @@ class Pump(Connection):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Pump id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
             f"horsepower:{self.horsepower} num_units:{self.num_units} "
             f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
@@ -352,7 +372,7 @@ class Pump(Connection):
             self.id == other.id
             and self.contents == other.contents
             and self.source == other.source
-            and self.sink == other.sink
+            and self.destination == other.destination
             and self.elevation == other.elevation
             and self.pump_type == other.pump_type
             and self.horsepower == other.horsepower
@@ -396,14 +416,14 @@ class Wire(Connection):
     source : Node
         Starting point of the connection
 
-    sink : Node
+    destination : Node
         Endpoint of the connection
 
     tags : dict of Tag
         Data tags associated with this pump
 
     bidirectional
-        whether electricity can flow from sink to source. False by default
+        whether electricity can flow from destination to source. False by default
 
     Attributes
     ----------
@@ -416,20 +436,20 @@ class Wire(Connection):
     source : Node
         Starting point of the connection
 
-    sink : Node
+    destination : Node
         Endpoint of the connection
 
     tags : dict of Tag
         Data tags associated with this pipe
 
     bidirectional
-        whether electricity can flow from sink to source. False by default
+        Whether electricity can flow from destination to source. False by default
     """
 
-    def __init__(self, id, source, sink, tags={}, bidirectional=False):
+    def __init__(self, id, source, destination, tags={}, bidirectional=False):
         self.id = id
         self.source = source
-        self.sink = sink
+        self.destination = destination
         self.tags = tags
         self.bidirectional = bidirectional
         self.contents = utils.ContentsType.Electricity
@@ -437,7 +457,7 @@ class Wire(Connection):
     def __repr__(self):
         return (
             f"<wwtp_configuration.connection.Wire id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} sink:{self.sink.id} "
+            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
         )
 
@@ -450,7 +470,7 @@ class Wire(Connection):
             self.id == other.id
             and self.contents == other.contents
             and self.source == other.source
-            and self.sink == other.sink
+            and self.destination == other.destination
             and self.tags == other.tags
             and self.bidirectional == other.bidirectional
         )

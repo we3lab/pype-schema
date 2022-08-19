@@ -232,7 +232,7 @@ class JSONParser:
         tags = self.config[node_id].get("tags")
         if tags:
             for tag_id, tag_info in tags.items():
-                tag = self.parse_tag(tag_id, tag_info)
+                tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
 
         return node_obj
@@ -265,9 +265,9 @@ class JSONParser:
         if source_id:
             source = node_obj.get_node(source_id)
 
-        sink_id = self.config[connection_id].get("sink")
-        if sink_id:
-            sink = node_obj.get_node(sink_id)
+        dest_id = self.config[connection_id].get("destination")
+        if dest_id:
+            destination = node_obj.get_node(dest_id)
 
         try:
             min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(
@@ -287,7 +287,7 @@ class JSONParser:
                 connection_id,
                 contents,
                 source,
-                sink,
+                destination,
                 min_flow,
                 max_flow,
                 avg_flow,
@@ -310,7 +310,7 @@ class JSONParser:
                 connection_id,
                 contents,
                 source,
-                sink,
+                destination,
                 min_flow,
                 max_flow,
                 avg_flow,
@@ -325,7 +325,7 @@ class JSONParser:
             connection_obj = connection.Wire(
                 connection_id,
                 source,
-                sink,
+                destination,
                 tags={},
                 bidirectional=bidirectional,
             )
@@ -337,7 +337,7 @@ class JSONParser:
         tags = self.config[connection_id].get("tags")
         if tags:
             for tag_id, tag_info in tags.items():
-                tag = self.parse_tag(tag_id, tag_info)
+                tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
 
         return connection_obj
@@ -387,7 +387,7 @@ class JSONParser:
         return (input_contents, output_contents)
 
     @staticmethod
-    def parse_tag(tag_id, tag_info):
+    def parse_tag(tag_id, tag_info, obj):
         """Parse tag ID and dictionary of information into Tag object
 
         Parameters
@@ -398,36 +398,88 @@ class JSONParser:
         tag_info : dict
             dictionary of the form {
                 'type': TagType,
-                'units': str
-                'contents': str
-                'unit_id': int or str
+                'units': str,
+                'contents': str,
+                'source_unit_id': int or str,
+                'dest_unit_id': int or str,
                 'totalized': bool
             }
+
+        obj : Node or Connection
+            object that this tag is associated with, which is used to gather relevant metadata
 
         Returns
         -------
         Tag
             a Python object with the given ID and the values from `tag_info`
         """
-        try:
-            contents = utils.ContentsType[tag_info["contents"]]
-        except KeyError:
-            # TODO: check for contents of node and set contents equal to that
-            contents = None
+        contents = JSONParser.get_tag_contents(tag_id, tag_info, obj)
         tag_type = utils.TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
         pint_unit = utils.parse_units(tag_info["units"])
-        unit_id = tag_info.get("unit_id", "total")
+        source_unit_id = tag_info.get("source_unit_id", "total")
+        dest_unit_id = tag_info.get("dest_unit_id", "total")
         tag = utils.Tag(
             tag_id,
             pint_unit,
             tag_type,
-            unit_id,
+            source_unit_id,
+            dest_unit_id,
             totalized=totalized,
             contents=contents,
         )
 
         return tag
+
+    @staticmethod
+    def get_tag_contents(tag_id, tag_info, obj):
+        """Parse tag ID and dictionary of information into Tag object
+
+        Parameters
+        ----------
+        tag_id : str
+            name of the tag
+
+        tag_info : dict
+            dictionary of the form {
+                'type': TagType,
+                'units': str,
+                'contents': str,
+                'source_unit_id': int or str,
+                'dest_unit_id': int or str,
+                'totalized': bool
+            }
+
+        obj : Node or Connection
+            object that this tag is associated with, which is used to gather relevant metadata
+
+        Returns
+        -------
+        ContentsType
+            the contents of this tag
+
+        Raises
+        ------
+        ValueError
+            If contents are ambiguously defined in JSON.
+            E.g., contents not defined in tag itself and parent object has a list of contents
+        """
+        try:
+            contents = utils.ContentsType[tag_info["contents"]]
+        except KeyError:
+            contents = None
+
+        if contents is None:
+            # will work if obj is of type Connection, otherwise exception occurs
+            try:
+                contents = obj.contents
+            except AttributeError:
+                if obj.input_contents == obj.output_contents and not isinstance(obj.input_contents, list):
+                    contents = obj.input_contents
+                else:
+                    raise ValueError("Ambiguous contents definition for tag " + tag_id)
+
+        return contents
 
     @staticmethod
     def parse_flow_or_gen_capacity(flow_or_gen):

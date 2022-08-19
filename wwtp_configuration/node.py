@@ -47,7 +47,6 @@ class Node(ABC):
         avg : int
             Average flow rate through the node
         """
-        # TODO: attach units to flow rate
         self.flow_rate = (min, max, avg)
 
     def add_tag(self, tag):
@@ -155,6 +154,7 @@ class Network(Node):
 
     def add_node(self, node):
         """Adds a node to the network
+
         Parameters
         ----------
         node : Node
@@ -164,10 +164,12 @@ class Network(Node):
 
     def remove_node(self, node_name):
         """Removes a node from the network
+
         Parameters
         ----------
         node_name : str
             name of node to remove
+
         Raises
         ------
         KeyError
@@ -177,10 +179,12 @@ class Network(Node):
 
     def get_node(self, node_name):
         """Get a node from the network
+
         Parameters
         ----------
         node_name : str
             name of node to retrieve
+
         Returns
         -------
         Node or None
@@ -193,6 +197,7 @@ class Network(Node):
 
     def add_connection(self, connection):
         """Adds a connection to the network
+
         Parameters
         ----------
         connection : Connection
@@ -206,6 +211,7 @@ class Network(Node):
         ----------
         connection_name : str
             name of connection to remove
+
         Raises
         ------
         KeyError
@@ -219,6 +225,7 @@ class Network(Node):
         ----------
         connection_name : str
             name of connection to retrieve
+
         Returns
         -------
         Connection or None
@@ -778,7 +785,6 @@ class Cogeneration(Node):
         avg : int
             Average generation by a single cogenerator
         """
-        # TODO: attach units to generation capacity
         self.gen_capacity = (min, max, avg)
 
 
