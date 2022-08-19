@@ -191,15 +191,7 @@
       "max": null,
       "avg": 0.69
     },
-    "tags": {
-      "A6Pump3Flow": {
-        "type": "EffluentFlow",
-        "units": "GPM",
-        "unit_id": 1,
-        "contents": "SludgeBlend",
-        "totalized": false
-      }
-    }
+    "tags": {}
   },
   "SewerNetwork": {
     "type": "Network",
@@ -315,9 +307,9 @@
     },
     "tags": {
       "1508FQ5322": {
-        "type": "InfluentFlow",
+        "type": "Flow",
         "units": "GPM",
-        "unit_id": "total",
+        "dest_unit_id": "total",
         "totalized": true
       }
     }
@@ -650,7 +642,16 @@
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A6Pump3Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "SludgeBlend",
+        "totalized": false
+      }
+    }
   },
   "GTPump": {
     "type": "Pump",

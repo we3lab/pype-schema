@@ -133,7 +133,7 @@
       "WasteActivatedSludge",
       "FoodWaste",
       "FatOilGrease"
-    ]
+    ],
     "output_contents": "Biogas",
     "digester_type": "Anaerobic",
     "volume (cubic meters)": 6145,
@@ -670,7 +670,7 @@
         "source_unit_id": "total",
         "dest_unit_id": 2,
         "totalized": false
-      },
+      }
     }
   },
   "DigesterToFlare": {
@@ -809,6 +809,7 @@
     "type": "Pipe",
     "source": "PowerGrid",
     "destination": "SVCW",
+    "entry_point": "Cogenerator",
     "contents": "NaturalGas",
     "bidirectional": false,
     "tags": {
