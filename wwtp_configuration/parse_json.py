@@ -265,9 +265,17 @@ class JSONParser:
         if source_id:
             source = node_obj.get_node(source_id)
 
+        exit_point = self.config[connection_id].get("exit_point")
+        if exit_point:
+            exit_point = source.get_node(exit_point)
+
         dest_id = self.config[connection_id].get("destination")
         if dest_id:
             destination = node_obj.get_node(dest_id)
+
+        entry_point = self.config[connection_id].get("entry_point")
+        if entry_point:
+            entry_point = destination.get_node(entry_point)
 
         try:
             min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(
@@ -294,6 +302,8 @@ class JSONParser:
                 diameter,
                 tags={},
                 bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point
             )
         elif self.config[connection_id]["type"] == "Pump":
             elevation = utils.parse_quantity(
@@ -320,6 +330,8 @@ class JSONParser:
                 pump_type=pump_type,
                 tags={},
                 bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point
             )
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
@@ -328,6 +340,8 @@ class JSONParser:
                 destination,
                 tags={},
                 bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point
             )
         else:
             raise TypeError(

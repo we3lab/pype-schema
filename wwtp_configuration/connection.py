@@ -25,6 +25,14 @@ class Connection(ABC):
 
     bidirectional : bool
         whether flow can go from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
     """
 
     id: str = NotImplemented
@@ -33,12 +41,25 @@ class Connection(ABC):
     destination: node.Node = NotImplemented
     tags: dict = NotImplemented
     bidirectional: bool = False
+    exit_point: node.Node = None
+    entry_point: node.Node = None
 
     def __repr__(self):
+        if self.exit_point is None:
+            exit_point_id = "None"
+        else:
+            exit_point_id = self.exit_point.id
+
+        if self.entry_point is None:
+            entry_point_id = "None"
+        else:
+            entry_point_id = self.entry_point.id
+
         return (
             f"<wwtp_configuration.connection.Connection id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
+            f"tags:{self.tags} bidirectional:{self.bidirectional} "
+            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
 
     def set_flow_rate(self, min, max, avg):
@@ -168,6 +189,14 @@ class Pipe(Connection):
     bidirectional : bool
         Whether flow can go from destination to source. False by default
 
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
+
     Attributes
     ----------
     id : str
@@ -199,6 +228,14 @@ class Pipe(Connection):
 
     bidirectional : bool
         Whether flow can go from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
     """
 
     def __init__(
@@ -217,6 +254,8 @@ class Pipe(Connection):
         avg_pres=None,
         tags={},
         bidirectional=False,
+        exit_point=None,
+        entry_point=None,
     ):
         self.id = id
         self.contents = contents
@@ -228,14 +267,27 @@ class Pipe(Connection):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
         self.tags = tags
         self.bidirectional = bidirectional
+        self.exit_point = exit_point
+        self.entry_point = entry_point
 
     def __repr__(self):
+        if self.exit_point is None:
+            exit_point_id = "None"
+        else:
+            exit_point_id = self.exit_point.id
+
+        if self.entry_point is None:
+            entry_point_id = "None"
+        else:
+            entry_point_id = self.entry_point.id
+
         return (
             f"<wwtp_configuration.connection.Pipe id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
+            f"tags:{self.tags} bidirectional:{self.bidirectional} "
+            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
 
     def __eq__(self, other):
@@ -254,6 +306,8 @@ class Pipe(Connection):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
             and self.bidirectional == other.bidirectional
+            and self.exit_point == other.exit_point
+            and self.entry_point == other.entry_point
         )
 
 
@@ -294,6 +348,14 @@ class Pump(Connection):
     bidirectional : bool
         Whether flow can go from destination to source. False by default
 
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
+
     Attributes
     ----------
     id : str
@@ -320,6 +382,14 @@ class Pump(Connection):
     bidirectional : bool
         Whether flow can go from destination to source. False by default
 
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
+
     energy_efficiency : function
         Function which takes in the current flow rate and returns the energy
         required to pump at that rate
@@ -340,6 +410,8 @@ class Pump(Connection):
         pump_type=utils.PumpType.Constant,
         tags={},
         bidirectional=False,
+        exit_point=None,
+        entry_point=None,
     ):
         self.id = id
         self.contents = contents
@@ -353,14 +425,27 @@ class Pump(Connection):
         self.set_flow_rate(min_flow, max_flow, avg_flow)
         self.set_energy_efficiency(None)
         self.bidirectional = bidirectional
+        self.exit_point = exit_point
+        self.entry_point = entry_point
 
     def __repr__(self):
+        if self.exit_point is None:
+            exit_point_id = "None"
+        else:
+            exit_point_id = self.exit_point.id
+
+        if self.entry_point is None:
+            entry_point_id = "None"
+        else:
+            entry_point_id = self.entry_point.id
+
         return (
             f"<wwtp_configuration.connection.Pump id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
             f"horsepower:{self.horsepower} num_units:{self.num_units} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
+            f"tags:{self.tags} bidirectional:{self.bidirectional} "
+            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
 
     def __eq__(self, other):
@@ -381,6 +466,8 @@ class Pump(Connection):
             and self.flow_rate == other.flow_rate
             and self.energy_efficiency == other.energy_efficiency
             and self.bidirectional == other.bidirectional
+            and self.exit_point == other.exit_point
+            and self.entry_point == other.entry_point
         )
 
     def set_pump_type(self, pump_type):
@@ -446,19 +533,32 @@ class Wire(Connection):
         Whether electricity can flow from destination to source. False by default
     """
 
-    def __init__(self, id, source, destination, tags={}, bidirectional=False):
+    def __init__(self, id, source, destination, tags={}, bidirectional=False, exit_point=None, entry_point=None):
         self.id = id
         self.source = source
         self.destination = destination
         self.tags = tags
         self.bidirectional = bidirectional
+        self.exit_point = exit_point
+        self.entry_point = entry_point
         self.contents = utils.ContentsType.Electricity
 
     def __repr__(self):
+        if self.exit_point is None:
+            exit_point_id = "None"
+        else:
+            exit_point_id = self.exit_point.id
+
+        if self.entry_point is None:
+            entry_point_id = "None"
+        else:
+            entry_point_id = self.entry_point.id
+
         return (
             f"<wwtp_configuration.connection.Wire id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional}>\n"
+            f"tags:{self.tags} bidirectional:{self.bidirectional} "
+            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
 
     def __eq__(self, other):
@@ -473,4 +573,6 @@ class Wire(Connection):
             and self.destination == other.destination
             and self.tags == other.tags
             and self.bidirectional == other.bidirectional
+            and self.exit_point == other.exit_point
+            and self.entry_point == other.entry_point
         )
