@@ -106,7 +106,14 @@
     "type": "Tank",
     "elevation (meters)": null,
     "volume (cubic meters)": null,
-    "contents": "FatOilGrease"
+    "contents": "FatOilGrease",
+    "tags": {
+      "1508VI5541": {
+        "type": "Volume",
+        "units": "gallons",
+        "contents": "FatOilGrease"
+      }
+    }
   },
   "GritChamber": {
     "type": "Tank",
@@ -349,12 +356,22 @@
     "source": "SewerNetwork",
     "destination": "ElEstero",
     "contents": "UntreatedSewage",
+    "entry_point": "BarScreen",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "1003IPS_InfFlow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "UntreatedSewage",
+        "totalized": false
+      }
+    }
   },
   "GritToPrimary": {
     "type": "Pipe",
@@ -430,7 +447,38 @@
       "avg": null
     },
     "tags": {
-
+      "A5Dig1GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "A5Dig2GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 2,
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "A5DigesterToCogenTotalizer": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": true
+      },
+      "A5DigestorsgasflowtoCogen": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
     }
   },
   "DigesterToFlare": {
@@ -443,7 +491,16 @@
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A5WasteGasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
+    }
   },
   "WASPump": {
     "type": "Pump",
@@ -567,7 +624,16 @@
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A3ConfluentFlow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "UntreatedSewage",
+        "totalized": false
+      }
+    }
   },
   "DesalInfluentPump": {
     "type": "Pump",
@@ -659,14 +725,31 @@
     "source": "GravityThickener",
     "destination": "AnaerobicDigester",
     "contents": "PrimarySludge",
-    "num_units": null,
+    "num_units": 2,
     "horsepower": null,
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A6Pump1Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "PrimarySludge",
+        "totalized": false
+      },
+      "A6Pump2Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 2,
+        "dest_unit_id": "total",
+        "contents": "PrimarySludge",
+        "totalized": false
+      }
+    }
   },
   "CogenToFacility": {
     "type": "Wire",

@@ -46,6 +46,8 @@ def parse_units(units):
         return u.ft**3
     elif units.lower() == "gpm":
         return u.gal / u.min
+    elif units.lower() == "gal" or units.lower() == "gallon" or units.lower() == "gallons":
+        return u.gal
     elif units.lower() == "gpd":
         return u.gal / u.day
     elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
@@ -101,6 +103,7 @@ class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
     Flow = auto()
+    Volume = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
