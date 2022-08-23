@@ -552,6 +552,7 @@
     "source": "ElEstero",
     "destination": "PacificOcean",
     "contents": "TreatedSewage",
+    "exit_point": "ContactChamber",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -579,6 +580,8 @@
     "contents": "TreatedSewage",
     "num_units": null,
     "horsepower": null,
+    "exit_point": "SecondaryClarifier",
+    "entry_point": "Ultrafiltration",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -591,6 +594,7 @@
     "source": "RecycledWater",
     "destination": "PurplePipeSystem",
     "contents": "NonpotableReuse",
+    "exit_point": "OffSiteReservoir",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -684,6 +688,7 @@
     "source": "PowerGrid",
     "destination": "ElEstero",
     "contents": "Electricity",
+    "entry_point": "VirtualDemand",
     "bidirectional": false,
     "tags": {}
   },
@@ -692,6 +697,7 @@
     "source": "PowerGrid",
     "destination": "ElEstero",
     "contents": "NaturalGas",
+    "entry_point": "Cogenerator",
     "bidirectional": false,
     "tags": {}
   },
