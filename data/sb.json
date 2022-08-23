@@ -6,17 +6,21 @@
     "RecycledWater",
     "PowerGrid",
     "PacificOcean",
-    "WaterDistribution"
+    "WaterDistribution",
+    "PurplePipeSystem"
   ],
   "connections": [
     "SewerIntake",
     "RecycledWaterPump",
-    "ElectricToFacility",
+    "ElectricToElEstero",
+    "ElectricToDesal",
+    "ElectricToRecycledWater",
     "GasToFacility",
     "OceanOutfall",
     "DesalWasteBrine",
     "DesalInfluentPump",
-    "DesalEffluentPump"
+    "DesalEffluentPump",
+    "RecycledWaterOutlet"
   ],
   "ElEstero": {
     "type": "Facility",
@@ -40,7 +44,8 @@
       "AnaerobicDigester",
       "Cogenerator",
       "Flare",
-      "VirtualDemand"
+      "VirtualDemand",
+      "FOGTank"
     ],
     "connections": [
       "LiftPump",
@@ -57,7 +62,8 @@
       "GTPump",
       "DigesterToCogen",
       "DigesterToFlare",
-      "CogenToFacility"
+      "CogenToFacility",
+      "FOGPump"
     ]
   },
   "BarScreen": {
@@ -96,43 +102,56 @@
     "nodes": [],
     "connections": []
   },
-  "GritChamber": {
+  "FOGTank": {
     "type": "Tank",
     "elevation (meters)": null,
     "volume (cubic meters)": null,
+    "contents": "FatOilGrease",
+    "tags": {
+      "1508VI5541": {
+        "type": "Volume",
+        "units": "gallons",
+        "contents": "FatOilGrease"
+      }
+    }
+  },
+  "GritChamber": {
+    "type": "Tank",
+    "elevation (meters)": null,
+    "volume (cubic meters)": 271.16,
     "contents": "UntreatedSewage"
   },
   "PrimaryClarifier": {
     "type": "Clarification",
     "contents": "UntreatedSewage",
-    "volume (cubic meters)": null,
-    "num_units": null,
+    "volume (cubic meters)": 792.87,
+    "num_units": 5,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": 2
     }
   },
   "SecondaryClarifier": {
     "type": "Clarification",
     "contents": "UntreatedSewage",
-    "volume (cubic meters)": null,
-    "num_units": null,
+    "volume (cubic meters)": 821.2,
+    "num_units": 7,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": 2.28
     }
   },
   "AerationBasin": {
     "type": "Aeration",
     "contents": "UntreatedSewage",
-    "volume (cubic meters)": null,
-    "num_units": null,
+    "volume (cubic meters)": 2319.72,
+    "num_units": 8,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": 1.63
     }
   },
   "AnaerobicDigester": {
@@ -140,8 +159,8 @@
     "input_contents": ["SludgeBlend", "PrimarySludge"],
     "output_contents": "Biogas",
     "digester_type": "Anaerobic",
-    "volume (cubic meters)": null,
-    "num_units": null,
+    "volume (cubic meters)": 3114.85,
+    "num_units": 2,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
@@ -152,7 +171,7 @@
   "ContactChamber": {
     "type": "Tank",
     "elevation (meters)": null,
-    "volume (cubic meters)": null,
+    "volume (cubic meters)": 1641.2,
     "input_contents": "UntreatedSewage",
     "output_contents": "TreatedSewage"
   },
@@ -161,11 +180,11 @@
     "input_contents": "PrimarySludge",
     "output_contents": "PrimarySludge",
     "num_units": 1,
-    "volume (cubic meters)": null,
+    "volume (cubic meters)": 290.6,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": 0.3
     }
   },
   "DAFThickener": {
@@ -173,12 +192,13 @@
     "input_contents": ["SludgeBlend", "WasteActivatedSludge"],
     "output_contents": "SludgeBlend",
     "num_units": 1,
-    "volume (cubic meters)": null,
+    "volume (cubic meters)": 120,
     "flowrate (MGD)": {
       "min": null,
       "max": null,
-      "avg": null
-    }
+      "avg": 0.69
+    },
+    "tags": {}
   },
   "SewerNetwork": {
     "type": "Network",
@@ -201,6 +221,13 @@
     "type": "Reservoir",
     "contents": "NonpotableReuse",
     "tags": {}
+  },
+  "PurplePipeSystem": {
+    "type": "Network",
+    "contents": "NonpotableReuse",
+    "tags": {},
+    "nodes": [],
+    "connections": []
   },
   "WaterDistribution": {
     "type": "Network",
@@ -263,7 +290,7 @@
   "UFToDisinfection": {
     "type": "Pipe",
     "source": "Ultrafiltration",
-    "sink": "ChlorineContactBasin",
+    "destination": "ChlorineContactBasin",
     "contents": "TreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -272,11 +299,33 @@
     },
     "tags": {}
   },
+  "FOGPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "source": "FOGTank",
+    "destination": "AnaerobicDigester",
+    "contents": "FatOilGrease",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {
+      "1508FQ5322": {
+        "type": "Flow",
+        "units": "GPM",
+        "dest_unit_id": "total",
+        "totalized": true
+      }
+    }
+  },
   "DisinfectionPump": {
     "type": "Pump",
     "pump_type": null,
     "source": "ChlorineContactBasin",
-    "sink": "ReclaimedReservoir",
+    "destination": "ReclaimedReservoir",
     "contents": "NonpotableReuse",
     "num_units": null,
     "horsepower": null,
@@ -291,7 +340,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "ReclaimedReservoir",
-    "sink": "OffSiteReservoir",
+    "destination": "OffSiteReservoir",
     "contents": "NonpotableReuse",
     "num_units": null,
     "horsepower": null,
@@ -305,19 +354,29 @@
   "SewerIntake": {
     "type": "Pipe",
     "source": "SewerNetwork",
-    "sink": "ElEstero",
+    "destination": "ElEstero",
     "contents": "UntreatedSewage",
+    "entry_point": "BarScreen",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "1003IPS_InfFlow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "UntreatedSewage",
+        "totalized": false
+      }
+    }
   },
   "GritToPrimary": {
     "type": "Pipe",
     "source": "GritChamber",
-    "sink": "PrimaryClarifier",
+    "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -329,7 +388,7 @@
   "PrimaryToAerator": {
     "type": "Pipe",
     "source": "PrimaryClarifier",
-    "sink": "AerationBasin",
+    "destination": "AerationBasin",
     "contents": "UntreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -341,7 +400,7 @@
   "AeratorToSecondary":{
     "type": "Pipe",
     "source": "AerationBasin",
-    "sink": "SecondaryClarifier",
+    "destination": "SecondaryClarifier",
     "contents": "UntreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -353,7 +412,7 @@
   "SecondaryToContact": {
     "type": "Pipe",
     "source": "SecondaryClarifier",
-    "sink": "ContactChamber",
+    "destination": "ContactChamber",
     "contents": "UntreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -366,7 +425,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "SecondaryClarifier",
-    "sink": "DAFThickener",
+    "destination": "DAFThickener",
     "contents": "SludgeBlend",
     "num_units": null,
     "horsepower": null,
@@ -380,32 +439,74 @@
   "DigesterToCogen": {
     "type": "Pipe",
     "source": "AnaerobicDigester",
-    "sink": "Cogenerator",
+    "destination": "Cogenerator",
     "contents": "Biogas",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A5Dig1GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "A5Dig2GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 2,
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "A5DigesterToCogenTotalizer": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": true
+      },
+      "A5DigestorsgasflowtoCogen": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
+    }
   },
   "DigesterToFlare": {
     "type": "Pipe",
     "source": "AnaerobicDigester",
-    "sink": "Flare",
+    "destination": "Flare",
     "contents": "Biogas",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A5WasteGasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
+    }
   },
   "WASPump": {
     "type": "Pump",
     "pump_type": null,
     "source": "SecondaryClarifier",
-    "sink": "DAFThickener",
+    "destination": "DAFThickener",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -420,7 +521,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "SecondaryClarifier",
-    "sink": "AerationBasin",
+    "destination": "AerationBasin",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -435,7 +536,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "PrimaryClarifier",
-    "sink": "GravityThickener",
+    "destination": "GravityThickener",
     "contents": "PrimarySludge",
     "num_units": null,
     "horsepower": null,
@@ -449,8 +550,9 @@
   "OceanOutfall": {
     "type": "Pipe",
     "source": "ElEstero",
-    "sink": "PacificOcean",
+    "destination": "PacificOcean",
     "contents": "TreatedSewage",
+    "exit_point": "ContactChamber",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -461,7 +563,7 @@
   "DesalWasteBrine": {
     "type": "Pipe",
     "source": "DesalPlant",
-    "sink": "PacificOcean",
+    "destination": "PacificOcean",
     "contents": "Brine",
     "flowrate (MGD)": {
       "max": null,
@@ -474,10 +576,25 @@
     "type": "Pump",
     "pump_type": null,
     "source": "ElEstero",
-    "sink": "RecycledWater",
+    "destination": "RecycledWater",
     "contents": "TreatedSewage",
     "num_units": null,
     "horsepower": null,
+    "exit_point": "SecondaryClarifier",
+    "entry_point": "Ultrafiltration",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "RecycledWaterOutlet": {
+    "type": "Pipe",
+    "source": "RecycledWater",
+    "destination": "PurplePipeSystem",
+    "contents": "NonpotableReuse",
+    "exit_point": "OffSiteReservoir",
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -489,7 +606,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "SecondaryClarifier",
-    "sink": "BarScreen",
+    "destination": "BarScreen",
     "contents": "UntreatedSewage",
     "horsepower": null,
     "flowrate (MGD)": {
@@ -503,7 +620,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "BarScreen",
-    "sink": "GritChamber",
+    "destination": "GritChamber",
     "contents": "UntreatedSewage",
     "horsepower": null,
     "flowrate (MGD)": {
@@ -511,13 +628,22 @@
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A3ConfluentFlow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "UntreatedSewage",
+        "totalized": false
+      }
+    }
   },
   "DesalInfluentPump": {
     "type": "Pump",
     "pump_type": null,
     "source": "PacificOcean",
-    "sink": "DesalPlant",
+    "destination": "DesalPlant",
     "contents": "Seawater",
     "horsepower": null,
     "flowrate (MGD)": {
@@ -531,7 +657,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "DesalPlant",
-    "sink": "WaterDistribution",
+    "destination": "WaterDistribution",
     "contents": "DrinkingWater",
     "horsepower": null,
     "flowrate (MGD)": {
@@ -541,19 +667,37 @@
     },
     "tags": {}
   },
-  "ElectricToFacility": {
+  "ElectricToRecycledWater": {
     "type": "Wire",
     "source": "PowerGrid",
-    "sink": "ElEstero",
+    "destination": "RecycledWater",
     "contents": "Electricity",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "ElectricToDesal": {
+    "type": "Wire",
+    "source": "PowerGrid",
+    "destination": "DesalPlant",
+    "contents": "Electricity",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "ElectricToElEstero": {
+    "type": "Wire",
+    "source": "PowerGrid",
+    "destination": "ElEstero",
+    "contents": "Electricity",
+    "entry_point": "VirtualDemand",
     "bidirectional": false,
     "tags": {}
   },
   "GasToFacility": {
     "type": "Pipe",
     "source": "PowerGrid",
-    "sink": "ElEstero",
+    "destination": "ElEstero",
     "contents": "NaturalGas",
+    "entry_point": "Cogenerator",
     "bidirectional": false,
     "tags": {}
   },
@@ -561,7 +705,7 @@
     "type": "Pump",
     "pump_type": null,
     "source": "DAFThickener",
-    "sink": "AnaerobicDigester",
+    "destination": "AnaerobicDigester",
     "contents": "SludgeBlend",
     "num_units": null,
     "horsepower": null,
@@ -570,27 +714,53 @@
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A6Pump3Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "SludgeBlend",
+        "totalized": false
+      }
+    }
   },
   "GTPump": {
     "type": "Pump",
     "pump_type": null,
     "source": "GravityThickener",
-    "sink": "AnaerobicDigester",
+    "destination": "AnaerobicDigester",
     "contents": "PrimarySludge",
-    "num_units": null,
+    "num_units": 2,
     "horsepower": null,
     "flowrate (MGD)": {
       "max": null,
       "min": null,
       "avg": null
     },
-    "tags": {}
+    "tags": {
+      "A6Pump1Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 1,
+        "dest_unit_id": "total",
+        "contents": "PrimarySludge",
+        "totalized": false
+      },
+      "A6Pump2Flow": {
+        "type": "Flow",
+        "units": "GPM",
+        "source_unit_id": 2,
+        "dest_unit_id": "total",
+        "contents": "PrimarySludge",
+        "totalized": false
+      }
+    }
   },
   "CogenToFacility": {
     "type": "Wire",
     "source": "Cogenerator",
-    "sink": "VirtualDemand",
+    "destination": "VirtualDemand",
     "contents": "Electricity",
     "bidirectional": false,
     "tags": {}
