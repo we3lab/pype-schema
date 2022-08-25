@@ -131,9 +131,7 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Pump":
-            pump_type = self.config[node_id].get(
-                "pump_type", utils.PumpType.Constant
-            )
+            pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
             horsepower = utils.parse_quantity(
                 self.config[node_id].get("horsepower"), "hp"
             )
@@ -502,4 +500,8 @@ class JSONParser:
         if flow_or_gen is None:
             return (None, None, None)
         else:
-            return (flow_or_gen.get("min"), flow_or_gen.get("max"), flow_or_gen.get("avg"))
+            return (
+                flow_or_gen.get("min"),
+                flow_or_gen.get("max"),
+                flow_or_gen.get("avg"),
+            )
