@@ -1,17 +1,17 @@
 {
   "nodes": [
     "SVCW",
-    "SewerMain",
-    "Bay",
-    "StormwaterDrain",
-    "RecycledWater",
-    "PowerGrid"
-  ],
-  "connections": [
     "EffluentPump",
     "LiftPump",
     "StormwaterPump",
     "RecycledWaterPump",
+    "PowerGrid"
+  ],
+  "connections": [
+    "FinalEffluent",
+    "SewageIntake",
+    "RecyledWaterOutlet",
+    "StorwaterToFacility",
     "ElectricToFacility",
     "GasToFacility"
   ],
@@ -52,19 +52,20 @@
       "Flare",
       "VirtualDemand",
       "TeslaPowerpack",
-      "FOGTank",
-      "FoodWasteTank"
-    ],
-    "connections": [
+      "FOGPump",
+      "FoodWastePump",
+      "ScumPump",
       "SiteWastePump",
       "WashwaterPump",
+      "DMFPump",
       "BilgePump",
       "Number3Pump",
       "TPSPump",
-      "FFRPump",
-      "DMFPump",
       "RASPump",
       "WASPump",
+      "FFRPump"
+    ],
+    "connections": [
       "FFRToAerator",
       "PrimaryToAerator",
       "AeratorToSecondary",
@@ -73,24 +74,32 @@
       "DigesterToFlare",
       "GravityThickenerToDigester",
       "GravityBeltThickenerToDigester",
-      "ScumPump",
-      "FOGPump",
-      "FoodWastePump",
       "BatteryToFacility",
-      "CogenToFacility"
+      "CogenToFacility",
+      "FoodWasteToDigester",
+      "FOGToDigester",
+      "ScumToPump",
+      "ScumToDigester",
+      "SiteWasteToPrimary",
+      "GravityThickenerToSiteWaste",
+      "WashwaterToPrimary",
+      "DMFToWashwater",
+      "SecondaryToDMFPump",
+      "DMFPumpToFilter",
+      "DMFToBilge",
+      "BilgeToPrimary",
+      "ChlorinatorToNumber3",
+      "Number3ToPrimary",
+      "TPSToThickener",
+      "PrimaryToTPS",
+      "WASToThickener",
+      "SecondaryToWAS",
+      "SecondaryToRAS",
+      "RASToAerator",
+      "FFRToPrimary",
+      "PrimaryToFFR",
+      "FFRPumpToReactor"
     ]
-  },
-  "FOGTank": {
-    "type": "Tank",
-    "elevation (meters)": null,
-    "volume (cubic meters)": null,
-    "contents": "FatOilGrease"
-  },
-  "FoodWasteTank": {
-    "type": "Tank",
-    "elevation (meters)": null,
-    "volume (cubic meters)": null,
-    "contents": "FoodWaste"
   },
   "PrimaryClarifier": {
     "type": "Clarification",
@@ -217,19 +226,11 @@
     "input_contents": "UntreatedSewage",
     "output_contents": "TreatedSewage"
   },
-  "FOGPump": {
-    "type": "Pump",
-    "pump_type": null,
-    "source": "FOGTank",
+  "FOGToDigester": {
+    "type": "Pipe",
+    "source": "FOGPump",
     "destination": "AnaerobicDigester",
     "contents": "FatOilGrease",
-    "num_units": null,
-    "horsepower": null,
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
     "tags": {
       "DIG1.FOG_GALS_DAY": {
         "type": "Flow",
@@ -254,12 +255,10 @@
       }
     }
   },
-  "FoodWastePump": {
+  "FOGPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "FoodWasteTank",
-    "destination": "AnaerobicDigester",
-    "contents": "FoodWaste",
+    "contents": "FatOilGrease",
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -267,6 +266,13 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "FoodWasteToDigester": {
+    "type": "Pipe",
+    "source": "FoodWastePump",
+    "destination": "AnaerobicDigester",
+    "contents": "FoodWaste",
     "tags": {
       "FDW_DIG_FLOW.FLOW_GALS_DAY": {
         "type": "Flow",
@@ -276,12 +282,10 @@
       }
     }
   },
-  "ScumPump": {
+  "FoodWastePump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "AnaerobicDigester",
-    "contents": "Scum",
+    "contents": "FoodWaste",
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -289,6 +293,20 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "ScumToPump": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "AnaerobicDigester",
+    "contents": "Scum",
+    "tags": {}
+  },
+  "ScumToDigester": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "AnaerobicDigester",
+    "contents": "Scum",
     "tags": {
       "DIG1.SCM_GALS_DAY": {
         "type": "Flow",
@@ -324,11 +342,22 @@
       }
     }
   },
+  "ScumPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "Scum",
+    "num_units": null,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
   "WASPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "GravityBeltThickener",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -342,8 +371,6 @@
   "RASPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "AerationBasin",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -357,8 +384,6 @@
   "TPSPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "PrimaryClarifier",
-    "destination": "GravityThickener",
     "contents": "PrimarySludge",
     "num_units": null,
     "horsepower": null,
@@ -372,10 +397,7 @@
   "FFRPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "PrimaryClarifier",
-    "destination": "FixedFilmReactor",
     "contents": "UntreatedSewage",
-    "bidirectional": true,
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -383,6 +405,20 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "SecondaryToDMFPump": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "DMFPump",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "DMFPumpToFilter": {
+    "type": "Pipe",
+    "source": "DMFPump",
+    "destination": "DualMediaFilter",
+    "contents": "UntreatedSewage",
     "tags": {}
   },
   "DMFPump": {
@@ -421,13 +457,18 @@
       }
     }
   },
+  "StorwaterToFacility": {
+    "type": "Pipe",
+    "source": "StormwaterPump",
+    "destination": "SVCW",
+    "entry_point": "PrimaryClarifier",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
   "StormwaterPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "StormwaterDrain",
-    "destination": "SVCW",
     "contents": "UntreatedSewage",
-    "entry_point": "PrimaryClarifier",
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -435,13 +476,25 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "BilgeToPrimary": {
+    "type": "Pipe",
+    "source": "BilgePump",
+    "destination": "PrimaryClarifier",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "DMFToBilge": {
+    "type": "Pipe",
+    "source": "DualMediaFilter",
+    "destination": "BilgePump",
+    "contents": "UntreatedSewage",
     "tags": {}
   },
   "BilgePump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "DualMediaFilter",
-    "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -450,13 +503,25 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "WashwaterToPrimary": {
+    "type": "Pipe",
+    "source": "WashwaterPump",
+    "destination": "PrimaryClarifier",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "DMFToWashwater": {
+    "type": "Pipe",
+    "source": "DualMediaFilter",
+    "destination": "WashwaterPump",
+    "contents": "UntreatedSewage",
     "tags": {}
   },
   "WashwaterPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "DualMediaFilter",
-    "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -465,13 +530,25 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "SiteWasteToPrimary": {
+    "type": "Pipe",
+    "source": "SiteWastePump",
+    "destination": "PrimaryClarifier",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "GravityThickenerToSiteWaste": {
+    "type": "Pipe",
+    "source": "GravityThickener",
+    "destination": "SiteWastePump",
+    "contents": "UntreatedSewage",
     "tags": {}
   },
   "SiteWastePump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "GravityThickener",
-    "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
@@ -482,12 +559,17 @@
     },
     "tags": {}
   },
+  "FinalEffluent": {
+    "type": "Pipe",
+    "source": "SVCW",
+    "destination": "EffluentPump",
+    "exit_point": "ChlorineContactTank",
+    "contents": "TreatedSewage",
+    "tags": {}
+  },
   "EffluentPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SVCW",
-    "destination": "Bay",
-    "exit_point": "ChlorineContactTank",
     "contents": "TreatedSewage",
     "num_units": 5,
     "horsepower": 150,
@@ -498,13 +580,18 @@
     },
     "tags": {}
   },
-  "RecycledWaterPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "RecyledWaterOutlet": {
+    "type": "Pipe",
     "source": "SVCW",
-    "destination": "RecycledWater",
+    "destination": "RecycledWaterPump",
     "contents": "TreatedSewage",
     "exit_point": "ChlorineContactTank",
+    "tags": {}
+  },
+  "RecycledWaterPump": {
+    "type": "Pump",
+    "contents": "TreatedSewage",
+    "pump_type": null,
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -512,15 +599,27 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "ChlorinatorToNumber3": {
+    "type": "Pipe",
+    "source": "ChlorineContactTank",
+    "destination": "Number3Pump",
+    "contents": "TreatedSewage",
+    "tags": {}
+  },
+  "Number3ToPrimary": {
+    "type": "Pipe",
+    "source": "Number3Pump",
+    "destination": "PrimaryClarifier",
+    "contents": "UntreatedSewage",
     "tags": {}
   },
   "Number3Pump": {
     "type": "Pump",
-    "source": "ChlorineContactTank",
-    "destination": "PrimaryClarifier",
-    "bidirectional": false,
     "pump_type": null,
-    "contents": "TreatedSewage",
+    "input_contents": "TreatedSewage",
+    "output_contents": "UntreatedSewage",
     "num_units": null,
     "horsepower": null,
     "flowrate (MGD)": {
@@ -530,23 +629,12 @@
     },
     "tags": {}
   },
-  "SewerMain": {
-    "type": "Network",
+  "SewageIntake": {
+    "type": "Pipe",
+    "source": "LiftPump",
+    "destination": "SVCW",
     "contents": "UntreatedSewage",
-    "nodes": [],
-    "connections": [],
-    "tags": {}
-  },
-  "StormwaterDrain": {
-    "type": "Network",
-    "contents": "UntreatedSewage",
-    "nodes": [],
-    "connections": [],
-    "tags": {}
-  },
-  "Bay": {
-    "type": "Reservoir",
-    "contents": ["TreatedSewage", "Seawater"],
+    "entry_point": "PrimaryClarifier",
     "tags": {}
   },
   "PowerGrid": {
@@ -574,6 +662,32 @@
     "type": "Pipe",
     "source": "FixedFilmReactor",
     "destination": "AerationBasin",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "PrimaryToFFR": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "destination": "FFRPump",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "FFRPumpToReactor": {
+    "type": "Pipe",
+    "source": "FFRPump",
+    "destination": "FixedFilmReactor",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "FFRToPrimary": {
+    "type": "Pipe",
+    "source": "FixedFilmReactor",
+    "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -871,5 +985,47 @@
         "totalized": true
       }
     }
+  },
+  "PrimaryToTPS": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "destination": "TPSPump",
+    "contents": "PrimarySludge",
+    "tags": {}
+  },
+  "TPSToThickener": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "destination": "GravityThickener",
+    "contents": "PrimarySludge",
+    "tags": {}
+  },
+  "SecondaryToRAS": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "RASPump",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "RASToAerator": {
+    "type": "Pipe",
+    "source": "RASPump",
+    "destination": "AerationBasin",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "SecondaryToWAS": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "WASPump",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "WASToThickener": {
+    "type": "Pipe",
+    "source": "WASPump",
+    "destination": "GravityBeltThickener",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
   }
 }
