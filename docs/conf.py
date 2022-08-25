@@ -21,8 +21,8 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = u"WWTP Configuration"
-copyright = u"2021, Stanford University"
-author = u"Stanford University"
+copyright = u"2022, WE3 Lab"
+author = u"WE3 Lab"
 
 # The short X.Y version
 version = u""
@@ -103,7 +103,7 @@ html_theme = "alabaster"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -209,3 +209,8 @@ intersphinx_mapping = {"https://docs.python.org/": None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+
+# fix page width, from https://stackoverflow.com/questions/23211695/modifying-content-width-of-the-sphinx-theme-read-the-docs
+def setup(app):
+    app.add_css_file('css/custom.css')

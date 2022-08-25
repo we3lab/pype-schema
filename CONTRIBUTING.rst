@@ -1,6 +1,6 @@
-******************************
-WE3 Lab Contribution Agreement
-******************************
+**********************
+Contribution Agreement
+**********************
 
 Contribution Status
 ===================
