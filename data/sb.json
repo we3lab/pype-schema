@@ -11,15 +11,15 @@
   ],
   "connections": [
     "SewerIntake",
-    "RecycledWaterPump",
+    "ElEsteroToRecycledWater",
     "ElectricToElEstero",
     "ElectricToDesal",
     "ElectricToRecycledWater",
     "GasToFacility",
     "OceanOutfall",
     "DesalWasteBrine",
-    "DesalInfluentPump",
-    "DesalEffluentPump",
+    "DesalInlet",
+    "DesalOutlet",
     "RecycledWaterOutlet"
   ],
   "ElEstero": {
@@ -45,25 +45,41 @@
       "Cogenerator",
       "Flare",
       "VirtualDemand",
-      "FOGTank"
-    ],
-    "connections": [
-      "LiftPump",
-      "GritToPrimary",
+      "SERPump",
+      "FOGTank",
+      "DAFTPump",
+      "GTPump",
+      "FOGPump",
       "TPSPump",
       "RASPump",
       "WASPump",
       "WMLPump",
+      "LiftPump"
+    ],
+    "connections": [
+      "GritToPrimary",
       "PrimaryToAerator",
       "AeratorToSecondary",
-      "SERPump",
+      "SERPumpToIPS",
+      "SecondaryToSER",
       "SecondaryToContact",
-      "DAFTPump",
-      "GTPump",
       "DigesterToCogen",
       "DigesterToFlare",
       "CogenToFacility",
-      "FOGPump"
+      "SecondaryToWAS",
+      "WASToDAFT",
+      "SecondaryToWML",
+      "WMLToDAFT",
+      "SecondaryToRAS",
+      "RASToAerator",
+      "TPSToGT",
+      "PrimaryToTPS",
+      "DAFTToPump",
+      "DAFTPumpToDigester",
+      "GTToPump",
+      "GTPumpToDigester",
+      "ScreenToLift",
+      "LiftToGrit"
     ]
   },
   "BarScreen": {
@@ -266,8 +282,8 @@
       "max": null,
       "avg": null
     },
-    "nodes": ["Ultrafiltration", "ChlorineContactBasin", "ReclaimedReservoir", "OffSiteReservoir"],
-    "connections": ["UFToDisinfection", "DisinfectionPump", "DistributionPump"]
+    "nodes": ["Ultrafiltration", "ChlorineContactBasin", "ReclaimedReservoir", "OffSiteReservoir", "DistributionPump"],
+    "connections": ["UFToDisinfection", "ChlorinatorToReservoir", "PumpToOffSiteReservoir", "ReclaimedReservoirToPump"]
   },
   "Ultrafiltration": {
     "type": "Filtration",
@@ -321,26 +337,30 @@
       }
     }
   },
-  "DisinfectionPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "ChlorinatorToReservoir": {
+    "type": "Pipe",
     "source": "ChlorineContactBasin",
     "destination": "ReclaimedReservoir",
     "contents": "NonpotableReuse",
-    "num_units": null,
-    "horsepower": null,
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
+    "tags": {}
+  },
+  "ReclaimedReservoirToPump": {
+    "type": "Pipe",
+    "source": "ReclaimedReservoir",
+    "destination": "DistributionPump",
+    "contents": "NonpotableReuse",
+    "tags": {}
+  },
+  "PumpToOffSiteReservoir": {
+    "type": "Pipe",
+    "source": "DistributionPump",
+    "destination": "OffSiteReservoir",
+    "contents": "NonpotableReuse",
     "tags": {}
   },
   "DistributionPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "ReclaimedReservoir",
-    "destination": "OffSiteReservoir",
     "contents": "NonpotableReuse",
     "num_units": null,
     "horsepower": null,
@@ -414,18 +434,25 @@
     "source": "SecondaryClarifier",
     "destination": "ContactChamber",
     "contents": "UntreatedSewage",
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
+    "tags": {}
+  },
+  "SecondaryToWML": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "WMLPump",
+    "contents": "SludgeBlend",
+    "tags": {}
+  },
+  "WMLToDAFT": {
+    "type": "Pipe",
+    "source": "WMLPump",
+    "destination": "DAFThickener",
+    "contents": "SludgeBlend",
     "tags": {}
   },
   "WMLPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "DAFThickener",
     "contents": "SludgeBlend",
     "num_units": null,
     "horsepower": null,
@@ -502,11 +529,25 @@
       }
     }
   },
+  "SecondaryToWAS": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "WASPump",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "WASToDAFT": {
+    "type": "Pipe",
+    "source": "WASPump",
+    "destination": "DAFThickener",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "source": "SecondaryClarifier",
+  "destination": "DAFThickener",
   "WASPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "DAFThickener",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -515,13 +556,25 @@
       "min": null,
       "avg": null
     },
+    "tags": {}
+  },
+  "SecondaryToRAS": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "RASPump",
+    "contents": "WasteActivatedSludge",
+    "tags": {}
+  },
+  "RASToAerator": {
+    "type": "Pipe",
+    "source": "RASPump",
+    "destination": "AerationBasin",
+    "contents": "WasteActivatedSludge",
     "tags": {}
   },
   "RASPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "AerationBasin",
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
@@ -532,11 +585,23 @@
     },
     "tags": {}
   },
+  "PrimaryToTPS": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "destination": "TPSPump",
+    "contents": "PrimarySludge",
+    "tags": {}
+  },
+  "TPSToGT": {
+    "type": "Pipe",
+    "source": "PrimaryClarifier",
+    "destination": "GravityThickener",
+    "contents": "PrimarySludge",
+    "tags": {}
+  },
   "TPSPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "PrimaryClarifier",
-    "destination": "GravityThickener",
     "contents": "PrimarySludge",
     "num_units": null,
     "horsepower": null,
@@ -572,14 +637,11 @@
     },
     "tags": {}
   },
-  "RecycledWaterPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "ElEsteroToRecycledWater": {
+    "type": "Pipe",
     "source": "ElEstero",
     "destination": "RecycledWater",
     "contents": "TreatedSewage",
-    "num_units": null,
-    "horsepower": null,
     "exit_point": "SecondaryClarifier",
     "entry_point": "Ultrafiltration",
     "flowrate (MGD)": {
@@ -602,11 +664,28 @@
     },
     "tags": {}
   },
+  "SecondaryToSER": {
+    "type": "Pipe",
+    "source": "SecondaryClarifier",
+    "destination": "BarScreen",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "SERPumpToIPS":{
+    "type": "Pipe",
+    "source": "SERPump",
+    "destination": "BarScreen",
+    "contents": "UntreatedSewage",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
   "SERPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "SecondaryClarifier",
-    "destination": "BarScreen",
     "contents": "UntreatedSewage",
     "horsepower": null,
     "flowrate (MGD)": {
@@ -616,18 +695,18 @@
     },
     "tags": {}
   },
-  "LiftPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "ScreenToLift": {
+    "type": "Pipe",
     "source": "BarScreen",
+    "destination": "LiftPump",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "LiftToGrit": {
+    "type": "Pipe",
+    "source": "LiftPump",
     "destination": "GritChamber",
     "contents": "UntreatedSewage",
-    "horsepower": null,
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
     "tags": {
       "A3ConfluentFlow": {
         "type": "Flow",
@@ -639,12 +718,10 @@
       }
     }
   },
-  "DesalInfluentPump": {
+  "LiftPump": {
     "type": "Pump",
     "pump_type": null,
-    "source": "PacificOcean",
-    "destination": "DesalPlant",
-    "contents": "Seawater",
+    "contents": "UntreatedSewage",
     "horsepower": null,
     "flowrate (MGD)": {
       "max": null,
@@ -653,13 +730,24 @@
     },
     "tags": {}
   },
-  "DesalEffluentPump": {
-    "type": "Pump",
+  "DesalInlet": {
+    "type": "Pipe",
     "pump_type": null,
+    "source": "PacificOcean",
+    "destination": "DesalPlant",
+    "contents": "Seawater",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "DesalOutlet": {
+    "type": "Pipe",
     "source": "DesalPlant",
     "destination": "WaterDistribution",
     "contents": "DrinkingWater",
-    "horsepower": null,
     "flowrate (MGD)": {
       "max": null,
       "min": null,
@@ -701,19 +789,18 @@
     "bidirectional": false,
     "tags": {}
   },
-  "DAFTPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "DAFTToPump": {
+    "type": "Pipe",
     "source": "DAFThickener",
-    "destination": "AnaerobicDigester",
+    "destination": "DAFTPump",
     "contents": "SludgeBlend",
-    "num_units": null,
-    "horsepower": null,
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
+    "tags": {}
+  },
+  "DAFTPumpToDigester": {
+    "type": "Pipe",
+    "source": "DAFThickener",
+    "destination": "DAFTPump",
+    "contents": "SludgeBlend",
     "tags": {
       "A6Pump3Flow": {
         "type": "Flow",
@@ -725,19 +812,18 @@
       }
     }
   },
-  "GTPump": {
-    "type": "Pump",
-    "pump_type": null,
+  "GTToPump": {
+    "type": "Pipe",
     "source": "GravityThickener",
+    "destination": "GTPump",
+    "contents": "PrimarySludge",
+    "tags": {}
+  },
+  "GTPumpToDigester": {
+    "type": "Pipe",
+    "source": "GTPump",
     "destination": "AnaerobicDigester",
     "contents": "PrimarySludge",
-    "num_units": 2,
-    "horsepower": null,
-    "flowrate (MGD)": {
-      "max": null,
-      "min": null,
-      "avg": null
-    },
     "tags": {
       "A6Pump1Flow": {
         "type": "Flow",
@@ -756,6 +842,32 @@
         "totalized": false
       }
     }
+  },
+  "DAFTPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "SludgeBlend",
+    "num_units": 1,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "GTPump": {
+    "type": "Pump",
+    "contents": "PrimarySludge",
+    "pump_type": null,
+    "num_units": 2,
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   },
   "CogenToFacility": {
     "type": "Wire",

@@ -82,15 +82,12 @@ class JSONParser:
             self.config[node_id].get("volume (cubic meters)"), "m3"
         )
 
-        try:
-            min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[node_id]["flowrate (MGD)"]
-            )
-            min = utils.parse_quantity(min, "MGD")
-            max = utils.parse_quantity(max, "MGD")
-            avg = utils.parse_quantity(avg, "MGD")
-        except KeyError:
-            min, max, avg = (None, None, None)
+        min, max, avg = self.parse_flow_or_gen_capacity(
+            self.config[node_id].get("flowrate (MGD)")
+        )
+        min_flow = utils.parse_quantity(min, "MGD")
+        max_flow = utils.parse_quantity(max, "MGD")
+        avg_flow = utils.parse_quantity(avg, "MGD")
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -119,9 +116,9 @@ class JSONParser:
                 input_contents,
                 output_contents,
                 elevation,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 tags={},
                 nodes={},
                 connections={},
@@ -133,6 +130,26 @@ class JSONParser:
                 node_obj.add_connection(
                     self.create_connection(new_connection, node_obj)
                 )
+        elif self.config[node_id]["type"] == "Pump":
+            pump_type = self.config[node_id].get(
+                "pump_type", utils.PumpType.Constant
+            )
+            horsepower = utils.parse_quantity(
+                self.config[node_id].get("horsepower"), "hp"
+            )
+            node_obj = node.Pump(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                avg_flow,
+                elevation,
+                horsepower,
+                num_units,
+                pump_type=pump_type,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id, input_contents, output_contents, elevation, volume, tags={}
@@ -146,9 +163,9 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 volume,
                 tags={},
@@ -158,16 +175,16 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 volume,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Cogeneration":
             min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[node_id]["generation_capacity (kWh)"]
+                self.config[node_id].get("generation_capacity (kWh)")
             )
             min = utils.parse_quantity(min, "kWh")
             max = utils.parse_quantity(max, "kWh")
@@ -181,9 +198,9 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 volume,
                 utils.DigesterType[digester_type],
@@ -194,9 +211,9 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 volume,
                 tags={},
@@ -208,9 +225,9 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 volume,
                 tags={},
@@ -220,9 +237,9 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                min,
-                max,
-                avg,
+                min_flow,
+                max_flow,
+                avg_flow,
                 num_units,
                 tags={},
             )
@@ -277,15 +294,12 @@ class JSONParser:
         if entry_point:
             entry_point = destination.get_node(entry_point)
 
-        try:
-            min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(
-                self.config[connection_id]["flowrate (MGD)"]
-            )
-            min_flow = utils.parse_quantity(min_flow, "MGD")
-            max_flow = utils.parse_quantity(max_flow, "MGD")
-            avg_flow = utils.parse_quantity(avg_flow, "MGD")
-        except KeyError:
-            min_flow, max_flow, avg_flow = (None, None, None)
+        min_flow, max_flow, avg_flow = self.parse_flow_or_gen_capacity(
+            self.config[connection_id].get("flowrate (MGD)")
+        )
+        min_flow = utils.parse_quantity(min_flow, "MGD")
+        max_flow = utils.parse_quantity(max_flow, "MGD")
+        avg_flow = utils.parse_quantity(avg_flow, "MGD")
 
         if self.config[connection_id]["type"] == "Pipe":
             diameter = utils.parse_quantity(
@@ -300,34 +314,6 @@ class JSONParser:
                 max_flow,
                 avg_flow,
                 diameter,
-                tags={},
-                bidirectional=bidirectional,
-                exit_point=exit_point,
-                entry_point=entry_point,
-            )
-        elif self.config[connection_id]["type"] == "Pump":
-            elevation = utils.parse_quantity(
-                self.config[connection_id].get("elevation (meters)"), "m"
-            )
-            num_units = self.config[connection_id].get("num_units")
-            pump_type = self.config[connection_id].get(
-                "pump_type", utils.PumpType.Constant
-            )
-            horsepower = utils.parse_quantity(
-                self.config[connection_id].get("horsepower"), "hp"
-            )
-            connection_obj = connection.Pump(
-                connection_id,
-                contents,
-                source,
-                destination,
-                min_flow,
-                max_flow,
-                avg_flow,
-                elevation,
-                horsepower,
-                num_units,
-                pump_type=pump_type,
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
@@ -513,4 +499,7 @@ class JSONParser:
         (int, int, int)
             min, max, and average flow rate as a tuple
         """
-        return (flow_or_gen.get("min"), flow_or_gen.get("max"), flow_or_gen.get("avg"))
+        if flow_or_gen is None:
+            return (None, None, None)
+        else:
+            return (flow_or_gen.get("min"), flow_or_gen.get("max"), flow_or_gen.get("avg"))

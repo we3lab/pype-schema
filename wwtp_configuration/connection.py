@@ -115,6 +115,34 @@ class Connection(ABC):
         """
         del self.tags[tag_name]
 
+    def get_source_id(self):
+        """
+        Returns
+        -------
+        str
+            name of the source node
+        """
+        try:
+            id = self.source.id
+        except AttributeError:
+            id = None
+
+        return id
+
+    def get_dest_id(self):
+        """
+        Returns
+        -------
+        str
+            name of the destination node
+        """
+        try:
+            id = self.destination.id
+        except AttributeError:
+            id = None
+
+        return id
+
     def get_num_source_units(self):
         """
         Returns
@@ -185,7 +213,7 @@ class Pipe(Connection):
         Average pressure inside the pipe
 
     tags : dict of Tag
-        Data tags associated with this pump
+        Data tags associated with this pipe
 
     bidirectional : bool
         Whether flow can go from destination to source. False by default
@@ -311,189 +339,6 @@ class Pipe(Connection):
             and self.exit_point == other.exit_point
             and self.entry_point == other.entry_point
         )
-
-
-class Pump(Connection):
-    """
-    Parameters
-    ----------
-    id : str
-        Pump ID
-
-    contents : ContentsType
-        Contents of the pump
-
-    elevation : int
-        Elevation of the pump in meters above sea level
-
-    horsepower : int
-        Horsepower of a single pump
-
-    num_units : int
-        Number of pumps running in parallel
-
-    min_flow : int
-        Minimum flow rate supplied by the pump
-
-    max_flow : int
-        Maximum flow rate supplied by the pump
-
-    avg_flow : int
-        Average flow rate supplied by the pump
-
-    pump_type : PumpType
-        Type of pump (either VFD or constant)
-
-    tags : dict of Tag
-        Data tags associated with this pump
-
-    bidirectional : bool
-        Whether flow can go from destination to source. False by default
-
-    exit_point : Node
-        The child node from which this connection leaves its source.
-        Default is None, indicating the source does not have any children
-
-    entry_point : Node
-        The child node at which this connection enters its destination.
-        Default is None, indicating the destination does not have any children
-
-    Attributes
-    ----------
-    id : str
-        Pump ID
-
-    contents : ContentsType
-        Contents of the pump
-
-    elevation : int
-        Elevation of the pump in meters above sea level
-
-    horsepower : int
-        Horsepower of a single pump
-
-    num_units : int
-        Number of pumps running in parallel
-
-    flow_rate : tuple
-        Tuple of minimum, maximum, and average pump flow rate
-
-    tags : dict of Tag
-        Data tags associated with this pump
-
-    bidirectional : bool
-        Whether flow can go from destination to source. False by default
-
-    exit_point : Node
-        The child node from which this connection leaves its source.
-        Default is None, indicating the source does not have any children
-
-    entry_point : Node
-        The child node at which this connection enters its destination.
-        Default is None, indicating the destination does not have any children
-
-    energy_efficiency : function
-        Function which takes in the current flow rate and returns the energy
-        required to pump at that rate
-    """
-
-    def __init__(
-        self,
-        id,
-        contents,
-        source,
-        destination,
-        min_flow,
-        max_flow,
-        avg_flow,
-        elevation,
-        horsepower,
-        num_units,
-        pump_type=utils.PumpType.Constant,
-        tags={},
-        bidirectional=False,
-        exit_point=None,
-        entry_point=None,
-    ):
-        self.id = id
-        self.contents = contents
-        self.source = source
-        self.destination = destination
-        self.elevation = elevation
-        self.pump_type = pump_type
-        self.horsepower = horsepower
-        self.num_units = num_units
-        self.tags = tags
-        self.set_flow_rate(min_flow, max_flow, avg_flow)
-        self.set_energy_efficiency(None)
-        self.bidirectional = bidirectional
-        self.exit_point = exit_point
-        self.entry_point = entry_point
-
-    def __repr__(self):
-        if self.exit_point is None:
-            exit_point_id = "None"
-        else:
-            exit_point_id = self.exit_point.id
-
-        if self.entry_point is None:
-            entry_point_id = "None"
-        else:
-            entry_point_id = self.entry_point.id
-
-        return (
-            f"<wwtp_configuration.connection.Pump id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} "
-            f"destination:{self.destination.id} "
-            f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
-            f"horsepower:{self.horsepower} num_units:{self.num_units} "
-            f"tags:{self.tags} bidirectional:{self.bidirectional} "
-            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
-        )
-
-    def __eq__(self, other):
-        # don't attempt to compare against unrelated types
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-
-        return (
-            self.id == other.id
-            and self.contents == other.contents
-            and self.source == other.source
-            and self.destination == other.destination
-            and self.elevation == other.elevation
-            and self.pump_type == other.pump_type
-            and self.horsepower == other.horsepower
-            and self.num_units == other.num_units
-            and self.tags == other.tags
-            and self.flow_rate == other.flow_rate
-            and self.energy_efficiency == other.energy_efficiency
-            and self.bidirectional == other.bidirectional
-            and self.exit_point == other.exit_point
-            and self.entry_point == other.entry_point
-        )
-
-    def set_pump_type(self, pump_type):
-        """Set the pump curve to the given function
-
-        Parameters
-        ----------
-        pump_type : PumpType
-        """
-        # TODO: check that pump_type is a valid enum
-        self.pump_type = pump_type
-
-    def set_energy_efficiency(self, pump_curve):
-        """Set the pump curve to the given function
-
-        Parameters
-        ----------
-        pump_curve : function
-            function which takes in the current flow rate and returns the energy
-            required to pump at that rate
-        """
-        # TODO: type check that pump_curve is a function
-        self.energy_efficiency = pump_curve
 
 
 class Wire(Connection):
