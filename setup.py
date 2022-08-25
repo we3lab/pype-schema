@@ -39,9 +39,22 @@ extra_requirements = {
 }
 
 setup(
+    author="WE3 Lab",
+    author_email="fchapin@stanford.edu",
+    classifiers=[
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: Developers",
+        "License :: Free for non-commercial use",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+    ],
+    description="Class hierarchy to represent a wastewater treatment plant's configuration.",
+    entry_points={},
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
+    keywords="wwtp-configuration",
     name="wwtp-configuration",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
     python_requires=">=3.8",
@@ -51,5 +64,6 @@ setup(
     extras_require=extra_requirements,
     test_suite="tests",
     url="https://github.com/we3lab/wwtp-configuration",
-    version="0.0.1",
+    version="0.0.0",
+    zip_safe=False,
 )
