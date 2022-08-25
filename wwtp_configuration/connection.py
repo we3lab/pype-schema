@@ -57,7 +57,8 @@ class Connection(ABC):
 
         return (
             f"<wwtp_configuration.connection.Connection id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
+            f"contents:{self.contents} source:{self.source.id} "
+            f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
             f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
@@ -283,7 +284,8 @@ class Pipe(Connection):
 
         return (
             f"<wwtp_configuration.connection.Pipe id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
+            f"contents:{self.contents} source:{self.source.id} "
+            f"destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -441,7 +443,8 @@ class Pump(Connection):
 
         return (
             f"<wwtp_configuration.connection.Pump id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
+            f"contents:{self.contents} source:{self.source.id} "
+            f"destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
             f"horsepower:{self.horsepower} num_units:{self.num_units} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -565,7 +568,8 @@ class Wire(Connection):
 
         return (
             f"<wwtp_configuration.connection.Wire id:{self.id} "
-            f"contents:{self.contents} source:{self.source.id} destination:{self.destination.id} "
+            f"contents:{self.contents} source:{self.source.id} "
+            f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
             f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )

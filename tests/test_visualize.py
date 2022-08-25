@@ -1,6 +1,5 @@
 import os
 import pytest
-import pickle
 from wwtp_configuration.parse_json import JSONParser
 from wwtp_configuration.visualize import draw_graph
 
@@ -27,6 +26,6 @@ def test_create_network(json_path, node_id, pyvis):
     parser = JSONParser(json_path)
     graph = parser.initialize_network()
     if node_id is None:
-        result = draw_graph(graph, pyvis)
+        draw_graph(graph, pyvis)
     else:
-        result = draw_graph(graph.get_node(node_id), pyvis)
+        draw_graph(graph.get_node(node_id), pyvis)

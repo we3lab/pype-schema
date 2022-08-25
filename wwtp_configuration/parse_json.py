@@ -420,7 +420,8 @@ class JSONParser:
             }
 
         obj : Node or Connection
-            object that this tag is associated with, which is used to gather relevant metadata
+            object that this tag is associated with,
+            which is used to gather relevant metadata
 
         Returns
         -------
@@ -465,7 +466,8 @@ class JSONParser:
             }
 
         obj : Node or Connection
-            object that this tag is associated with, which is used to gather relevant metadata
+            object that this tag is associated with,
+            which is used to gather relevant metadata
 
         Returns
         -------
@@ -476,7 +478,7 @@ class JSONParser:
         ------
         ValueError
             If contents are ambiguously defined in JSON.
-            E.g., contents not defined in tag itself and parent object has a list of contents
+            E.g., contents not defined in tag and parent object has a list of contents
         """
         try:
             contents = utils.ContentsType[tag_info["contents"]]

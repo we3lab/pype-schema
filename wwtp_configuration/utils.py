@@ -46,7 +46,11 @@ def parse_units(units):
         return u.ft**3
     elif units.lower() == "gpm":
         return u.gal / u.min
-    elif units.lower() == "gal" or units.lower() == "gallon" or units.lower() == "gallons":
+    elif (
+        units.lower() == "gal"
+        or units.lower() == "gallon"
+        or units.lower() == "gallons"
+    ):
         return u.gal
     elif units.lower() == "gpd":
         return u.gal / u.day
