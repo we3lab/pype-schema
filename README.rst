@@ -46,3 +46,9 @@ Useful Commands
 5. ``black wwtp_configuration``
 
   This will reformat the code according to strict style guidelines.
+
+Legal Documents
+===============
+
+- `LICENSE <https://github.com/we3lab/wwtp-configuration/blob/main/LICENSE/>`_
+- `CONTRIBUTING <https://github.com/we3lab/wwtp-configuration/blob/main/CONTRIBUTING.rst/>`_

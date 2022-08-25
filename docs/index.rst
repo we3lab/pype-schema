@@ -8,6 +8,8 @@ Welcome to the WWTP Configuration package documentation!
    :caption: Overview
 
    README <self>
+   CONTRIBUTING
+   LICENSE
 
 .. toctree::
    :maxdepth: 1
