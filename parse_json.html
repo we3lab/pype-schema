@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>parse_json &#8212; WWTP Configuration 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="units" href="units.html" />
+    <link rel="prev" title="node" href="node.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#parse-json" id="id2">parse_json</a></p></li>
+</ul>
+</div>
+<section id="parse-json">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">parse_json</a><a class="headerlink" href="#parse-json" title="Permalink to this headline">¶</a></h1>
+<p>This module consists of a single class, <code class="docutils literal notranslate"><span class="pre">JSONParser</span></code>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.parse_json.</span></span><span class="sig-name descname"><span class="pre">JSONParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>A parser to convert a JSON file into a <cite>Network</cite> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to the JSON file to load</p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the JSON file to load</p></li>
+<li><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – dictionary with the contents the JSON file</p></li>
+<li><p><strong>network_obj</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Network" title="wwtp_configuration.node.Network"><em>Network</em></a>) – Python representation of the JSON file</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.create_connection">
+<span class="sig-name descname"><span class="pre">create_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.create_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.create_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a <cite>Connection</cite> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<em>str</em>) – the string id for the <cite>Connection</cite></p></li>
+<li><p><strong>node_id</strong> (<em>str</em>) – the string id for the <cite>Node</cite> which holds this connection.
+If None the default ID, ‘ParentNetwork’ is used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Python object with all the values from key <cite>connection_id</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.connection.Connection" title="wwtp_configuration.connection.Connection">Connection</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a <cite>Node</cite> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node_id</strong> (<em>str</em>) – the string id for the <cite>Node</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Python object with all the values from key <cite>node_id</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node">Node</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.get_tag_contents">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_tag_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.get_tag_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.get_tag_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse tag ID and dictionary of information into Tag object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>tag_id</strong> (<em>str</em>) – name of the tag</p></li>
+<li><p><strong>tag_info</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>dictionary of the form {</dt><dd><p>‘type’: TagType,
+‘units’: str,
+‘contents’: str,
+‘source_unit_id’: int or str,
+‘dest_unit_id’: int or str,
+‘totalized’: bool</p>
+</dd>
+</dl>
+<p>}</p>
+</li>
+<li><p><strong>obj</strong> (<em>Node or Connection</em>) – object that this tag is associated with,
+which is used to gather relevant metadata</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the contents of this tag</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType">ContentsType</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – If contents are ambiguously defined in JSON.
+    E.g., contents not defined in tag and parent object has a list of contents</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.initialize_network">
+<span class="sig-name descname"><span class="pre">initialize_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.initialize_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.initialize_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a <cite>Network</cite> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a Python object with all the values from the JSON file
+stored hierarchically</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Network" title="wwtp_configuration.node.Network">Network</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_contents">
+<span class="sig-name descname"><span class="pre">parse_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a tuple of input and output contents</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>str</em>) – ID of the node to get the contents for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(input_contents, output_contents)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_flow_or_gen_capacity">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_flow_or_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow_or_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_flow_or_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_flow_or_gen_capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a tuple of flow rates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>flowrate</strong> (<em>dict</em>) – dictionary of the form {‘min’: int, ‘max’: int, ‘avg’: int}</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>min, max, and average flow rate as a tuple</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_tag">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse tag ID and dictionary of information into Tag object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>tag_id</strong> (<em>str</em>) – name of the tag</p></li>
+<li><p><strong>tag_info</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>dictionary of the form {</dt><dd><p>‘type’: TagType,
+‘units’: str,
+‘contents’: str,
+‘source_unit_id’: int or str,
+‘dest_unit_id’: int or str,
+‘totalized’: bool</p>
+</dd>
+</dl>
+<p>}</p>
+</li>
+<li><p><strong>obj</strong> (<em>Node or Connection</em>) – object that this tag is associated with,
+which is used to gather relevant metadata</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Python object with the given ID and the values from <cite>tag_info</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.Tag" title="wwtp_configuration.utils.Tag">Tag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">WWTP Configuration</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">WE3 Lab Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="node.html" title="previous chapter">node</a></li>
+      <li>Next: <a href="units.html" title="next chapter">units</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/parse_json.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

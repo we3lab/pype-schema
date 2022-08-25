@@ -1,0 +1,1600 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wwtp_configuration.node &#8212; WWTP Configuration 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for wwtp_configuration.node</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for all nodes</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Node ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the node.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the node.</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">NotImplemented</span>
+    <span class="n">input_contents</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span> <span class="o">=</span> <span class="bp">NotImplemented</span>
+    <span class="n">output_contents</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span> <span class="o">=</span> <span class="bp">NotImplemented</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Node id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Node.set_flow_rate"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate of the node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min : int</span>
+<span class="sd">            Minimum flow rate through the node</span>
+
+<span class="sd">        max : int</span>
+<span class="sd">            Maximum flow rate through the node</span>
+
+<span class="sd">        avg : int</span>
+<span class="sd">            Average flow rate through the node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Node.add_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.add_tag">[docs]</a>    <span class="k">def</span> <span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tag : Tag</span>
+<span class="sd">            Tag object to add to the node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span></div>
+
+<div class="viewcode-block" id="Node.remove_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.remove_tag">[docs]</a>    <span class="k">def</span> <span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes a tag from the node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tag_name : str</span>
+<span class="sd">            name of tag to remove</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A water utility represented as a set of connections and nodes</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Network ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the network.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the network.</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this network</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the network, e.g. pumps, tanks, or facilities</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the network, e.g. pipes</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Network ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the network.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the network.</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this network</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the network, e.g. pumps, tanks, or facilities</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the network, e.g. pipes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Network id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;nodes:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="si">}</span><span class="s2"> connections:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">connections</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Network.add_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a node to the network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : Node</span>
+<span class="sd">            Node object to add to the network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span></div>
+
+<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes a node from the network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node_name : str</span>
+<span class="sd">            name of node to remove</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            if `node_name` is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Network.get_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a node from the network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node_name : str</span>
+<span class="sd">            name of node to retrieve</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Node or None</span>
+<span class="sd">            Node object if node is found. None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Network.add_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.add_connection">[docs]</a>    <span class="k">def</span> <span class="nf">add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a connection to the network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connection : Connection</span>
+<span class="sd">            Connection object to add to the network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">connection</span></div>
+
+<div class="viewcode-block" id="Network.remove_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.remove_connection">[docs]</a>    <span class="k">def</span> <span class="nf">remove_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes a connection from the network</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connection_name : str</span>
+<span class="sd">            name of connection to remove</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            if `connection_name` is not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Network.get_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a connection from the network</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connection_name : str</span>
+<span class="sd">            name of connection to retrieve</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Connection or None</span>
+<span class="sd">            Connection object if node is found. None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="Facility"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Facility">[docs]</a><span class="k">class</span> <span class="nc">Facility</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Facility ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the facility.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the facility.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the facility</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate through the facility</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate through the facility</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate through the facility</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this facility</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the facility, e.g. pumps, tanks, or processes</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the facility, e.g. pipes</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Facility ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the facility.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the facility.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the facility in meters above sea level</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this facility</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Tuple of minimum, maximum, and average facility flow rate</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the facility, e.g. pumps, tanks, or processes</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the facility, e.g. pipes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Facility id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;nodes:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="si">}</span><span class="s2"> connections:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">connections</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pump"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Pump">[docs]</a><span class="k">class</span> <span class="nc">Pump</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Pump ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the pump</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the pump</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the pump in meters above sea level</span>
+
+<span class="sd">    horsepower : int</span>
+<span class="sd">        Horsepower of a single pump</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of pumps running in parallel</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate supplied by the pump</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate supplied by the pump</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate supplied by the pump</span>
+
+<span class="sd">    pump_type : PumpType</span>
+<span class="sd">        Type of pump (either VFD or constant)</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this pump</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Pump ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the pump</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the pump</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the pump in meters above sea level</span>
+
+<span class="sd">    horsepower : int</span>
+<span class="sd">        Horsepower of a single pump</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of pumps running in parallel</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Tuple of minimum, maximum, and average pump flow rate</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this pump</span>
+
+<span class="sd">    energy_efficiency : function</span>
+<span class="sd">        Function which takes in the current flow rate and returns the energy</span>
+<span class="sd">        required to pump at that rate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">horsepower</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">pump_type</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">PumpType</span><span class="o">.</span><span class="n">Constant</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">=</span> <span class="n">pump_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span> <span class="o">=</span> <span class="n">horsepower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_energy_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.connection.Pump id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;horsepower:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pump_type</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">horsepower</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">energy_efficiency</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Pump.set_pump_type"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Pump.set_pump_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_pump_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the pump curve to the given function</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pump_type : PumpType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: check that pump_type is a valid enum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">=</span> <span class="n">pump_type</span></div>
+
+<div class="viewcode-block" id="Pump.set_energy_efficiency"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Pump.set_energy_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_energy_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_curve</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the pump curve to the given function</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pump_curve : function</span>
+<span class="sd">            function which takes in the current flow rate and returns the energy</span>
+<span class="sd">            required to pump at that rate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: type check that pump_curve is a function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency</span> <span class="o">=</span> <span class="n">pump_curve</span></div></div>
+
+
+<div class="viewcode-block" id="Tank"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Tank">[docs]</a><span class="k">class</span> <span class="nc">Tank</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Tank ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the tank.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the tank.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the tank in meters above sea level</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the tank in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this tank</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Tank ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the tank.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the tank.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the tank in meters above sea level</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the tank in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this tank</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Tank id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reservoir"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Reservoir">[docs]</a><span class="k">class</span> <span class="nc">Reservoir</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Reservoir ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the reservoir.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the reservoir.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the reservoir in meters above sea level</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the reservoir in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this reservoir</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Reservoir ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the reservoir.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the reservoir.</span>
+
+<span class="sd">    elevation : int</span>
+<span class="sd">        Elevation of the reservoir in meters above sea level</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the reservoir in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this reservoir</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Reservoir id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Battery"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Battery">[docs]</a><span class="k">class</span> <span class="nc">Battery</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Battery ID</span>
+
+<span class="sd">    capacity : int</span>
+<span class="sd">        Storage capacity of the battery in kWh</span>
+
+<span class="sd">    discharge_rate : int</span>
+<span class="sd">        Maximum discharge rate of the battery in kW</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this battery</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Battery ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the reservoir.</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the reservoir.</span>
+
+<span class="sd">    capacity : int</span>
+<span class="sd">        Storage capacity of the battery in kWh</span>
+
+<span class="sd">    discharge_rate : int</span>
+<span class="sd">        Maximum discharge rate of the battery in kW</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this reservoir</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">capacity</span><span class="p">,</span>
+        <span class="n">discharge_rate</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span> <span class="o">=</span> <span class="n">discharge_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Reservoir id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">discharge_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Digestion"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Digestion">[docs]</a><span class="k">class</span> <span class="nc">Digestion</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Digester ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the digester (e.g. biogas or wastewater)</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the digester (e.g. biogas or wastewater)</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate through the process</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate through the process</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate through the process</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of digesters running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the digester in cubic meters</span>
+
+<span class="sd">    digester_type : DigesterType</span>
+<span class="sd">        Type of digestion (aerobic or anaerobic)</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this digester</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Digester ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the digester (e.g. biogas or wastewater)</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the digester (e.g. biogas or wastewater)</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of digesters running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the digester in cubic meters</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Tuple of minimum, maximum, and average digester flow rate</span>
+
+<span class="sd">    digester_type : DigesterType</span>
+<span class="sd">        Type of digestion (aerobic or anaerobic)</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this digester</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">digester_type</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span> <span class="o">=</span> <span class="n">digester_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Digestion id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;digester_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">digester_type</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Cogeneration"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Cogeneration">[docs]</a><span class="k">class</span> <span class="nc">Cogeneration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Cogenerator ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the cogenerator</span>
+
+<span class="sd">    min_gen : int</span>
+<span class="sd">        Minimum generation capacity of a single cogenerator</span>
+
+<span class="sd">    max_gen : int</span>
+<span class="sd">        Maximum generation capacity of a single cogenerator</span>
+
+<span class="sd">    avg_gen : int</span>
+<span class="sd">        Average generation capacity of a single cogenerator</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of cogenerator units running in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this cogenerator</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Cogenerator ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the cogenerator</span>
+<span class="sd">        (biogas, natural gas, or a blend of the two)</span>
+
+<span class="sd">    output_contents : ContentsType</span>
+<span class="sd">        Contents leaving the cogenerator (Electricity)</span>
+
+<span class="sd">    gen_capacity : tuple</span>
+<span class="sd">        Minimum, maximum, and average generation capacity</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of cogenerator units running in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this cogenerator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_gen_capacity</span><span class="p">(</span><span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Cogeneration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;gen_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">gen_capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Cogeneration.set_gen_capacity"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Cogeneration.set_gen_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_gen_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average generation capacity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        min : int</span>
+<span class="sd">            Minimum generation by a single cogenerator</span>
+
+<span class="sd">        max : int</span>
+<span class="sd">            Maximum generation by a single cogenerator</span>
+
+<span class="sd">        avg : int</span>
+<span class="sd">            Average generation by a single cogenerator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Clarification"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Clarification">[docs]</a><span class="k">class</span> <span class="nc">Clarification</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Clarifier ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the clarifier</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the clarifier</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single clarifier</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single clarifier</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate of a single clarifier</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of clarifiers running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of the clarifier in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this clarifier</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Clarifier ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the clarifier</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the clarifier</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of clarifiers running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single clarifier in cubic meters</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Tuple of minimum, maximum, and average digester flow rate</span>
+
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this clarifier</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Clarification id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Filtration"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Filtration">[docs]</a><span class="k">class</span> <span class="nc">Filtration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Filter ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the filter</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the filter</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single filter</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single filter</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate of a single filter</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of filters running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single filter in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this filter</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Filter ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the filter</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the filter</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of filters running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single filter in cubic meters</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this filter</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Filtration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Screening"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Screening">[docs]</a><span class="k">class</span> <span class="nc">Screening</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Screen ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the screen</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the screen</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single screen</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single screen</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate of a single screen</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of screens running in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this screen</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Screen ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the screen</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the screen</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of screens running in parallel</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this screen</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Screening id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Thickening"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Thickening">[docs]</a><span class="k">class</span> <span class="nc">Thickening</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Thickener ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the thickener</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the thickener</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single thickener</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single thickener</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate of a single thickener</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of thickeners running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single thickener in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this thickener</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Thickener ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the thickener</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the thickener</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of thickeners running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single thickener in cubic meters</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this thickener</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Thickening id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Aeration"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Aeration">[docs]</a><span class="k">class</span> <span class="nc">Aeration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Aerator ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the aeration basin</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the aeration basin</span>
+
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single aeration basin</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single aeration basin</span>
+
+<span class="sd">    avg_flow : int</span>
+<span class="sd">        Average flow rate of a single aeration basin</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of aeration basins running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single aeration basin in cubic meters</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this aerator</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Aerator ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the aeration basin</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the aeration basin</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of aeration basins running in parallel</span>
+
+<span class="sd">    volume : int</span>
+<span class="sd">        Volume of a single aeration basin in cubic meters</span>
+
+<span class="sd">    flow_rate : tuple</span>
+<span class="sd">        Minimum, maximum, and average flow rate</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this aerator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">input_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="n">output_contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Aeration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Flaring"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Flaring">[docs]</a><span class="k">class</span> <span class="nc">Flaring</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Flare ID</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of flares running in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this flare</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Flare ID</span>
+
+<span class="sd">    input_contents : ContentsType</span>
+<span class="sd">        Contents entering the flare</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of flares running in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this flare</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Biogas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Flaring id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">WWTP Configuration</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">WE3 Lab Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../wwtp_configuration.html">wwtp_configuration</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

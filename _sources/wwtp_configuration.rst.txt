@@ -1,0 +1,61 @@
+wwtp\_configuration package
+===========================
+
+Submodules
+----------
+
+wwtp\_configuration.connection module
+-------------------------------------
+
+.. automodule:: wwtp_configuration.connection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+wwtp\_configuration.node module
+-------------------------------
+
+.. automodule:: wwtp_configuration.node
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+wwtp\_configuration.parse\_json module
+--------------------------------------
+
+.. automodule:: wwtp_configuration.parse_json
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+wwtp\_configuration.units module
+--------------------------------
+
+.. automodule:: wwtp_configuration.units
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+wwtp\_configuration.utils module
+--------------------------------
+
+.. automodule:: wwtp_configuration.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+wwtp\_configuration.visualize module
+------------------------------------
+
+.. automodule:: wwtp_configuration.visualize
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: wwtp_configuration
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>units &#8212; WWTP Configuration 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utils" href="utils.html" />
+    <link rel="prev" title="parse_json" href="parse_json.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#units" id="id2">units</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prefixes-for-metric-units" id="id3">Prefixes for Metric Units</a></p></li>
+<li><p><a class="reference internal" href="#units-of-length" id="id4">Units of Length</a></p></li>
+<li><p><a class="reference internal" href="#units-of-mass" id="id5">Units of Mass</a></p></li>
+<li><p><a class="reference internal" href="#units-of-time" id="id6">Units of Time</a></p></li>
+<li><p><a class="reference internal" href="#units-of-temperature" id="id7">Units of Temperature</a></p></li>
+<li><p><a class="reference internal" href="#units-of-angle" id="id8">Units of Angle</a></p></li>
+<li><p><a class="reference internal" href="#units-of-force" id="id9">Units of Force</a></p></li>
+<li><p><a class="reference internal" href="#units-of-frequency" id="id10">Units of Frequency</a></p></li>
+<li><p><a class="reference internal" href="#units-of-money" id="id11">Units of Money</a></p></li>
+<li><p><a class="reference internal" href="#units-of-power" id="id12">Units of Power</a></p></li>
+<li><p><a class="reference internal" href="#units-of-pressure" id="id13">Units of Pressure</a></p></li>
+<li><p><a class="reference internal" href="#units-of-volume" id="id14">Units of Volume</a></p></li>
+<li><p><a class="reference internal" href="#other-units" id="id15">Other Units</a></p></li>
+<li><p><a class="reference internal" href="#constants" id="id16">Constants</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="units">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">units</a><a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h1>
+<p>This module consists of a Pint unit registry, which helps to process and apply units to data.</p>
+<span class="target" id="module-wwtp_configuration.units"></span><p>Module containing global unit registry.
+The <a class="reference external" href="https://pint.readthedocs.io/en/latest/">Pint package</a> supports arithmetic
+of physical quantities, which are combinations of numerical values and units of
+measurement. The units of a quantity come from Pint’s unit registry. This
+module contains a unit registry, named <code class="docutils literal notranslate"><span class="pre">u</span></code>, based on Pint’s unit registry.
+It also defines a few additional units.
+Frequently Used Units and Constants in <code class="docutils literal notranslate"><span class="pre">u</span></code></p>
+<section id="prefixes-for-metric-units">
+<h2><a class="toc-backref" href="#id3">Prefixes for Metric Units</a><a class="headerlink" href="#prefixes-for-metric-units" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>pico- =  1e-12 = p-</p></li>
+<li><p>nano- =  1e-9  = n-</p></li>
+<li><p>micro- = 1e-6  = u- = µ-</p></li>
+<li><p>milli- = 1e-3  = m-</p></li>
+<li><p>centi- = 1e-2  = c-</p></li>
+<li><p>deci- =  1e-1  = d-</p></li>
+<li><p>deca- =  1e+1  = da-</p></li>
+<li><p>hecto- = 1e2   = h-</p></li>
+<li><p>kilo- =  1e3   = k-</p></li>
+<li><p>mega- =  1e6   = M-</p></li>
+<li><p>giga- =  1e9   = G-</p></li>
+<li><p>tera- =  1e12  = T-</p></li>
+</ul>
+</section>
+<section id="units-of-length">
+<h2><a class="toc-backref" href="#id4">Units of Length</a><a class="headerlink" href="#units-of-length" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.meter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.metre</span></code> = <code class="docutils literal notranslate"><span class="pre">u.m</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.inch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.foot</span></code> = <code class="docutils literal notranslate"><span class="pre">u.ft</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.yard</span></code> = <code class="docutils literal notranslate"><span class="pre">u.yd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.mile</span></code> = <code class="docutils literal notranslate"><span class="pre">u.mi</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-mass">
+<h2><a class="toc-backref" href="#id5">Units of Mass</a><a class="headerlink" href="#units-of-mass" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.gram</span></code> = <code class="docutils literal notranslate"><span class="pre">u.g</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.metric_ton</span></code> = <code class="docutils literal notranslate"><span class="pre">u.tonne</span></code> = <code class="docutils literal notranslate"><span class="pre">u.t</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.ounce</span></code> = <code class="docutils literal notranslate"><span class="pre">u.oz</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.pound</span></code> = <code class="docutils literal notranslate"><span class="pre">u.lb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.ton</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.atomic_mass_unit</span></code> = <code class="docutils literal notranslate"><span class="pre">u.amu</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-time">
+<h2><a class="toc-backref" href="#id6">Units of Time</a><a class="headerlink" href="#units-of-time" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.second</span></code> = <code class="docutils literal notranslate"><span class="pre">u.sec</span></code> = <code class="docutils literal notranslate"><span class="pre">u.s</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.minute</span></code> = <code class="docutils literal notranslate"><span class="pre">u.min</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.hour</span></code> = <code class="docutils literal notranslate"><span class="pre">u.hr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.day</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.week</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.year</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-temperature">
+<h2><a class="toc-backref" href="#id7">Units of Temperature</a><a class="headerlink" href="#units-of-temperature" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.kelvin</span></code> = <code class="docutils literal notranslate"><span class="pre">u.degK</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.celsius</span></code> = <code class="docutils literal notranslate"><span class="pre">u.degC</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.fahrenheit</span></code> = <code class="docutils literal notranslate"><span class="pre">u.degF</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-angle">
+<h2><a class="toc-backref" href="#id8">Units of Angle</a><a class="headerlink" href="#units-of-angle" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.revolution</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rev</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.radian</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rad</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.degree</span></code> = <code class="docutils literal notranslate"><span class="pre">u.deg</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-force">
+<h2><a class="toc-backref" href="#id9">Units of Force</a><a class="headerlink" href="#units-of-force" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.newton</span></code> = <code class="docutils literal notranslate"><span class="pre">u.N</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.gram_force</span></code> = <code class="docutils literal notranslate"><span class="pre">u.gf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.kilogram_force</span></code> = <code class="docutils literal notranslate"><span class="pre">u.kgf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.pound_force</span></code> = <code class="docutils literal notranslate"><span class="pre">u.lbf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.ton_force</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.kip</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-frequency">
+<h2><a class="toc-backref" href="#id10">Units of Frequency</a><a class="headerlink" href="#units-of-frequency" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.hertz</span></code> = <code class="docutils literal notranslate"><span class="pre">u.Hz</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.revolutions_per_minute</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rpm</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-money">
+<h2><a class="toc-backref" href="#id11">Units of Money</a><a class="headerlink" href="#units-of-money" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.dollar</span></code> = <code class="docutils literal notranslate"><span class="pre">u.USD</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.lempira</span></code> = <code class="docutils literal notranslate"><span class="pre">u.HNL</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-power">
+<h2><a class="toc-backref" href="#id12">Units of Power</a><a class="headerlink" href="#units-of-power" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.watt</span></code> = <code class="docutils literal notranslate"><span class="pre">u.W</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.horsepower</span></code> = <code class="docutils literal notranslate"><span class="pre">u.hp</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-pressure">
+<h2><a class="toc-backref" href="#id13">Units of Pressure</a><a class="headerlink" href="#units-of-pressure" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.pascal</span></code> = <code class="docutils literal notranslate"><span class="pre">u.Pa</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.bar</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.atmosphere</span></code> = <code class="docutils literal notranslate"><span class="pre">u.atm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.torr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.millimeter_Hg</span></code> = <code class="docutils literal notranslate"><span class="pre">u.mmHg</span></code></p></li>
+</ul>
+</section>
+<section id="units-of-volume">
+<h2><a class="toc-backref" href="#id14">Units of Volume</a><a class="headerlink" href="#units-of-volume" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.liter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.litre</span></code> = <code class="docutils literal notranslate"><span class="pre">u.L</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.cubic_centimeter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.cc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.gallon</span></code> = <code class="docutils literal notranslate"><span class="pre">u.gal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.quart</span></code> = <code class="docutils literal notranslate"><span class="pre">u.qt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.pint</span></code> = <code class="docutils literal notranslate"><span class="pre">u.pt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.cup</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.fluid_ounce</span></code> = <code class="docutils literal notranslate"><span class="pre">u.floz</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.tablespoon</span></code> = <code class="docutils literal notranslate"><span class="pre">u.tbsp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.teaspoon</span></code> = <code class="docutils literal notranslate"><span class="pre">tsp</span></code></p></li>
+</ul>
+</section>
+<section id="other-units">
+<h2><a class="toc-backref" href="#id15">Other Units</a><a class="headerlink" href="#other-units" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.joule</span></code> = <code class="docutils literal notranslate"><span class="pre">u.J</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.mole</span></code> = <code class="docutils literal notranslate"><span class="pre">u.mol</span></code> = <code class="docutils literal notranslate"><span class="pre">u.equivalent</span></code> = <code class="docutils literal notranslate"><span class="pre">u.eq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.NTU</span></code> = 1.47 * (<code class="docutils literal notranslate"><span class="pre">u.mg</span></code> / <code class="docutils literal notranslate"><span class="pre">u.L</span></code>)
+* This turbidity-concentration relation applies to kaolinite clay and is</p>
+<blockquote>
+<div><p>obtained from <a class="reference external" href="https://doi.org/10.1016/j.cjche.2015.02.003">Coagulation behavior of polyaluminum chloride (Wei et al.,
+2015)</a>.</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="constants">
+<h2><a class="toc-backref" href="#id16">Constants</a><a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">u.gravity</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.molar_gas_constant</span></code> = <code class="docutils literal notranslate"><span class="pre">u.R</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.avogadro_number</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.boltzmann_constant</span></code></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="wwtp_configuration.units.set_sig_figs">
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.units.</span></span><span class="sig-name descname"><span class="pre">set_sig_figs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/units.html#set_sig_figs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.units.set_sig_figs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the default number of significant figures used to print Pint,
+Pandas and NumPy value quantities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number of significant figures to display. Defaults to 4.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">WWTP Configuration</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">WE3 Lab Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="parse_json.html">parse_json</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="parse_json.html" title="previous chapter">parse_json</a></li>
+      <li>Next: <a href="utils.html" title="next chapter">utils</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/units.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

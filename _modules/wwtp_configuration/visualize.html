@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wwtp_configuration.visualize &#8212; WWTP Configuration 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for wwtp_configuration.visualize</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pyvis.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+
+<span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Electricity&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UntreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WasteActivatedSludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PrimarySludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Scum&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SludgeBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Biogas&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GasBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NaturalGas&quot;</span><span class="p">:</span> <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Seawater&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Brine&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NonpotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DrinkingWater&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FatOilGrease&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FoodWaste&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="draw_graph"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.visualize.draw_graph">[docs]</a><span class="k">def</span> <span class="nf">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Draw all of the nodes and connections in the given network</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    network : Network</span>
+<span class="sd">        `Network` object to draw</span>
+
+<span class="sd">    pyvis : bool</span>
+<span class="sd">        Whether to draw the graph with PyVis or Networkx.</span>
+<span class="sd">        False (networkx) by default</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create empty graph</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
+
+    <span class="c1"># add list of nodes and edges to graph</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">())</span>
+    <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">color_map</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
+        <span class="p">)</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Sludge/Scum&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Untreated Sewage&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Treated Sewage&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Electricity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Biogas&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Natural Gas&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Saline Water&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Non-potable Reuse&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Drinking Water&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FOG/Food Waste&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">font_colors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">pyvis</span><span class="p">:</span>
+        <span class="n">nt</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s2">&quot;500px&quot;</span><span class="p">,</span> <span class="s2">&quot;500px&quot;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># create legend based on https://github.com/WestHealth/pyvis/issues/50</span>
+        <span class="n">num_legend_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="n">num_actual_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">300</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">250</span>
+        <span class="n">legend_nodes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">num_actual_nodes</span> <span class="o">+</span> <span class="n">legend_node</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="p">[</span><span class="n">legend_node</span><span class="p">],</span>
+                    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">[</span><span class="n">legend_node</span><span class="p">],</span>
+                    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                    <span class="s2">&quot;physics&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y</span> <span class="o">+</span> <span class="n">legend_node</span><span class="o">*</span><span class="n">step</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;box&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">font_colors</span><span class="p">[</span><span class="n">legend_node</span><span class="p">]},</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">legend_node</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_legend_nodes</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">legend_nodes</span><span class="p">)</span>
+
+        <span class="n">nt</span><span class="o">.</span><span class="n">from_nx</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">nt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># create legend</span>
+        <span class="n">custom_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">:</span>
+            <span class="n">custom_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">custom_lines</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+        <span class="n">edge_colors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+        <span class="n">node_to_node</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">edge_dict</span> <span class="ow">in</span> <span class="n">node_to_node</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edge_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">edge_colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span>
+
+        <span class="c1"># TODO: don&#39;t draw multiple connections on top of one another</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="n">edge_colors</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()])</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">WWTP Configuration</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">WE3 Lab Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  <li><a href="../wwtp_configuration.html">wwtp_configuration</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
