@@ -1219,7 +1219,6 @@ class Screening(Node):
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
             and self.num_units == other.num_units
-            and self.volume == other.volume
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )

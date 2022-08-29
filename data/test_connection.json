@@ -1,0 +1,41 @@
+{
+  "nodes": ["Digester", "Cogenerator"],
+  "connections": ["GasToCogen"],
+  "Digester": {
+    "type": "Digestion",
+    "input_contents": ["WasteActivatedSludge", "PrimarySludge"],
+    "output_contents": "Biogas",
+    "num_units": 3,
+    "digester_type": "Anaerobic",
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "Cogenerator": {
+    "type": "Cogeneration",
+    "num_units": 1,
+    "input_contents": ["Biogas", "NaturalGas"],
+    "output_contents": "Electricity",
+    "generation_capacity (kWh)": {
+      "min": 400,
+      "max": 750,
+      "avg": 600
+    },
+    "tags": {}
+  },
+  "GasToCogen": {
+    "type": "Pipe",
+    "source": "Digester",
+    "destination": "Cogenerator",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  }
+}

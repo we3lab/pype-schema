@@ -18,8 +18,8 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, expected_path",
     [
-        ("../data/svcw.json", "../data/svcw.pkl"),
-        ("../data/sample.json", "KeyError"),
+        ("../data/sample.json", "../data/sample.pkl"),
+        ("../data/test_key_error.json", "KeyError"),
     ],
 )
 def test_create_network(json_path, expected_path):

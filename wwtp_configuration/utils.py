@@ -58,6 +58,8 @@ def parse_units(units):
         return u.m / u.s
     elif units.lower() == "kwh":
         return u.kW * u.hr
+    elif units.lower() == "kw":
+        return u.kW
     elif units == "meters" or units == "m":
         return u.m
     elif units == "inches" or units == "in" or units == "inch":
@@ -87,6 +89,8 @@ class ContentsType(Enum):
     Electricity = auto()
     Brine = auto()
     Seawater = auto()
+    SurfaceWater = auto()
+    Groundwater = auto()
 
 
 class PumpType(Enum):
