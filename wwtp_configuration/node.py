@@ -1425,6 +1425,105 @@ class Aeration(Node):
         )
 
 
+class Chlorination(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Chlorinator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the chlorinator
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the chlorinator
+
+    min_flow : int
+        Minimum flow rate of a single chlorinator
+
+    max_flow : int
+        Maximum flow rate of a single chlorinator
+
+    avg_flow : int
+        Average flow rate of a single chlorinator
+
+    num_units : int
+        Number of chlorinators running in parallel
+
+    volume : int
+        Volume of a single chlorinator in cubic meters
+
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+
+    Attributes
+    ----------
+    id : str
+        Chlorinator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the chlorinator
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the chlorinator
+
+    num_units : int
+        Number of chlorinators running in parallel
+
+    volume : int
+        Volume of a single chlorinator in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Chlorination id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
 class Flaring(Node):
     """
     Parameters
