@@ -62,7 +62,8 @@
       "FOGTank",
       "FOGPump",
       "RASPump",
-      "LiftPump"
+      "LiftPump",
+      "TeslaBattery"
     ],
     "connections": [
       "GritToPrimary",
@@ -80,7 +81,8 @@
       "ScreenToLift",
       "LiftToGrit",
       "FOGToPump",
-      "FOGToDigester"
+      "FOGToDigester",
+      "BatteryToFacility"
     ]
   },
   "BarScreen": {
@@ -118,6 +120,21 @@
     "tags": {},
     "nodes": [],
     "connections": []
+  },
+  "TeslaBattery": {
+    "type": "Battery",
+    "contents": "Electricity",
+    "capacity (kWh)": 2000,
+    "discharge_rate (kW)": 550,
+    "tags": {}
+  },
+  "BatteryToFacility": {
+    "type": "Wire",
+    "source": "TeslaBattery",
+    "destination": "VirtualDemand",
+    "contents": "Electricity",
+    "bidirectional": true,
+    "tags": {}
   },
   "FOGTank": {
     "type": "Tank",

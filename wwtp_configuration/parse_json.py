@@ -107,8 +107,12 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Battery":
-            capacity = self.config[node_id].get("capacity")
-            discharge_rate = self.config[node_id].get("discharge_rate")
+            capacity = utils.parse_quantity(
+                self.config[node_id].get("capacity (kWh)"), "kwh"
+            )
+            discharge_rate = utils.parse_quantity(
+                self.config[node_id].get("discharge_rate (kW)"), "kw"
+            )
             node_obj = node.Battery(node_id, capacity, discharge_rate, tags={})
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
