@@ -92,6 +92,8 @@
         <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
     <span class="k">elif</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kwh&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hr</span>
+    <span class="k">elif</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;kw&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span>
     <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;meters&quot;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
     <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;inches&quot;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;inch&quot;</span><span class="p">:</span>
@@ -120,7 +122,9 @@
     <span class="n">SludgeBlend</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Electricity</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Brine</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Seawater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">Seawater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SurfaceWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Groundwater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.PumpType">[docs]</a><span class="k">class</span> <span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
