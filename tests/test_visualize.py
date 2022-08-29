@@ -13,6 +13,9 @@ skip_all_tests = False
 @pytest.mark.parametrize(
     "json_path, node_id, pyvis",
     [
+        ("../data/sample.json", None, False),
+        ("../data/sample.json", "WWTP", False),
+        ("../data/sample.json", "RecycledWaterFacility", False),
         ("../data/sample.json", None, True),
         ("../data/sample.json", "WWTP", True),
         ("../data/sample.json", "RecycledWaterFacility", True),
