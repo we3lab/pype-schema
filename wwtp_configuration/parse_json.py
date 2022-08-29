@@ -220,6 +220,18 @@ class JSONParser:
                 volume,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "Chlorination":
+            node_obj = node.Chlorination(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                avg_flow,
+                num_units,
+                volume,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Flaring":
             node_obj = node.Flaring(node_id, num_units)
         elif self.config[node_id]["type"] == "Thickening":

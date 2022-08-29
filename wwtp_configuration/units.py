@@ -119,8 +119,10 @@ u = unit_registry
 # print('{:.3f}'.format(3 * ureg.m / 9)).
 u.default_format = ".4g"
 
+# switch to top level directory
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 u.load_definitions(
-    os.path.join(os.path.dirname(__file__), "..", "data", "unit_definitions.txt")
+    os.path.join("data", "unit_definitions.txt")
 )
 
 

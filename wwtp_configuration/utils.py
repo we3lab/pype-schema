@@ -112,6 +112,7 @@ class TagType(Enum):
 
     Flow = auto()
     Volume = auto()
+    Level = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()

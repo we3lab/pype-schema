@@ -204,11 +204,11 @@
     "tags": {}
   },
   "WWTPContactChamber": {
-    "type": "Tank",
-    "elevation (meters)": null,
+    "type": "Chlorination",
     "volume (cubic meters)": 2000,
     "input_contents": "UntreatedSewage",
-    "output_contents": "TreatedSewage"
+    "output_contents": "TreatedSewage",
+    "num_units": 1
   },
   "GravityThickener": {
     "type": "Thickening",
@@ -283,7 +283,7 @@
       "max": null,
       "avg": null
     },
-    "nodes": ["Ultrafiltration", "RWContactChamber", "ReclaimedReservoir"],
+    "nodes": ["Ultrafiltration", "RWFContactChamber", "ReclaimedReservoir"],
     "connections": ["UFToDisinfection", "ChlorinatorToReservoir"]
   },
   "Ultrafiltration": {
@@ -297,17 +297,17 @@
       "avg": null
     }
   },
-  "RWContactChamber": {
-    "type": "Reservoir",
-    "elevation (meters)": null,
+  "RWFContactChamber": {
+    "type": "Chlorination",
     "volume (cubic meters)": null,
+    "num_units": 1,
     "input_contents": "TreatedSewage",
     "output_contents": "NonpotableReuse"
   },
   "UFToDisinfection": {
     "type": "Pipe",
     "source": "Ultrafiltration",
-    "destination": "RWContactChamber",
+    "destination": "RWFContactChamber",
     "contents": "TreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -345,7 +345,7 @@
   },
   "ChlorinatorToReservoir": {
     "type": "Pipe",
-    "source": "RWContactChamber",
+    "source": "RWFContactChamber",
     "destination": "ReclaimedReservoir",
     "contents": "NonpotableReuse",
     "tags": {}

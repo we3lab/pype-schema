@@ -33,9 +33,3 @@ def test_create_network(json_path, expected_path):
         expected = expected_path
 
     assert result == expected
-
-
-# test_create_node()
-# test_create_train()
-# test_create_process()
-# test_create_connection()
