@@ -13,13 +13,9 @@ skip_all_tests = False
 @pytest.mark.parametrize(
     "json_path, node_id, pyvis",
     [
-        ("../data/svcw.json", None, False),
-        ("../data/svcw.json", None, True),
-        ("../data/svcw.json", "SVCW", False),
-        ("../data/svcw.json", "SVCW", True),
-        ("../data/sb.json", None, True),
-        ("../data/sb.json", "ElEstero", True),
-        ("../data/sb.json", "RecycledWater", True),
+        ("../data/sample.json", None, True),
+        ("../data/sample.json", "WWTP", True),
+        ("../data/sample.json", "RecycledWaterFacility", True),
     ],
 )
 def test_create_network(json_path, node_id, pyvis):

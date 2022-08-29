@@ -87,6 +87,8 @@ class ContentsType(Enum):
     Electricity = auto()
     Brine = auto()
     Seawater = auto()
+    SurfaceWater = auto()
+    Groundwater = auto()
 
 
 class PumpType(Enum):
