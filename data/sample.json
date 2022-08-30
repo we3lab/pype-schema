@@ -72,7 +72,7 @@
       "AeratorToSecondary",
       "SecondaryToContact",
       "DigesterToConditioner",
-      "ConditinerToCogen",
+      "ConditionerToCogen",
       "ConditionerToFlare",
       "CogenToFacility",
       "PrimaryToGT",
@@ -321,7 +321,7 @@
   "FOGToPump": {
     "type": "Pipe",
     "source": "FOGTank",
-    "destination": "AnaerobicDigester",
+    "destination": "FOGPump",
     "contents": "FatOilGrease",
     "tags": {}
   },
