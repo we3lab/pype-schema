@@ -65,6 +65,6 @@ setup(
     extras_require=extra_requirements,
     test_suite="tests",
     url="https://github.com/we3lab/wwtp-configuration",
-    version="0.0.7",
+    version="0.0.8",
     zip_safe=False,
 )
