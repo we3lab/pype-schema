@@ -56,6 +56,7 @@
       "WWTPContactChamber",
       "GravityThickener",
       "AnaerobicDigester",
+      "Conditioner",
       "Cogenerator",
       "Flare",
       "VirtualDemand",
@@ -70,8 +71,9 @@
       "PrimaryToAerator",
       "AeratorToSecondary",
       "SecondaryToContact",
-      "DigesterToCogen",
-      "DigesterToFlare",
+      "DigesterToConditioner",
+      "ConditionerToCogen",
+      "ConditionerToFlare",
       "CogenToFacility",
       "PrimaryToGT",
       "SecondaryToGT",
@@ -101,7 +103,7 @@
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
     "output_contents": "Electricity",
-    "generation_capacity (kWh)": {
+    "generation_capacity (kW)": {
       "min": null,
       "max": null,
       "avg": null
@@ -179,7 +181,8 @@
   },
   "AerationBasin": {
     "type": "Aeration",
-    "contents": "UntreatedSewage",
+    "input_contents": ["UntreatedSewage", "WasteActivatedSludge"],
+    "output_contents": "UntreatedSewage",
     "volume (cubic meters)": 2500,
     "num_units": 8,
     "flowrate (MGD)": {
@@ -190,7 +193,7 @@
   },
   "AnaerobicDigester": {
     "type": "Digestion",
-    "input_contents": ["SludgeBlend", "PrimarySludge"],
+    "input_contents": "ThickenedSludgeBlend",
     "output_contents": "Biogas",
     "digester_type": "Anaerobic",
     "volume (cubic meters)": 2500,
@@ -203,16 +206,16 @@
     "tags": {}
   },
   "WWTPContactChamber": {
-    "type": "Tank",
-    "elevation (meters)": null,
+    "type": "Chlorination",
     "volume (cubic meters)": 2000,
     "input_contents": "UntreatedSewage",
-    "output_contents": "TreatedSewage"
+    "output_contents": "TreatedSewage",
+    "num_units": 1
   },
   "GravityThickener": {
     "type": "Thickening",
     "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
-    "output_contents": "SludgeBlend",
+    "output_contents": "ThickenedSludgeBlend",
     "num_units": 1,
     "volume (cubic meters)": 300,
     "flowrate (MGD)": {
@@ -282,7 +285,7 @@
       "max": null,
       "avg": null
     },
-    "nodes": ["Ultrafiltration", "RWContactChamber", "ReclaimedReservoir"],
+    "nodes": ["Ultrafiltration", "RWFContactChamber", "ReclaimedReservoir"],
     "connections": ["UFToDisinfection", "ChlorinatorToReservoir"]
   },
   "Ultrafiltration": {
@@ -296,17 +299,17 @@
       "avg": null
     }
   },
-  "RWContactChamber": {
-    "type": "Reservoir",
-    "elevation (meters)": null,
+  "RWFContactChamber": {
+    "type": "Chlorination",
     "volume (cubic meters)": null,
+    "num_units": 1,
     "input_contents": "TreatedSewage",
     "output_contents": "NonpotableReuse"
   },
   "UFToDisinfection": {
     "type": "Pipe",
     "source": "Ultrafiltration",
-    "destination": "RWContactChamber",
+    "destination": "RWFContactChamber",
     "contents": "TreatedSewage",
     "flowrate (MGD)": {
       "max": null,
@@ -318,7 +321,7 @@
   "FOGToPump": {
     "type": "Pipe",
     "source": "FOGTank",
-    "destination": "AnaerobicDigester",
+    "destination": "FOGPump",
     "contents": "FatOilGrease",
     "tags": {}
   },
@@ -344,7 +347,7 @@
   },
   "ChlorinatorToReservoir": {
     "type": "Pipe",
-    "source": "RWContactChamber",
+    "source": "RWFContactChamber",
     "destination": "ReclaimedReservoir",
     "contents": "NonpotableReuse",
     "tags": {}
@@ -414,9 +417,32 @@
     "contents": "UntreatedSewage",
     "tags": {}
   },
-  "DigesterToCogen": {
+  "DigesterToConditioner": {
     "type": "Pipe",
     "source": "AnaerobicDigester",
+    "destination": "Conditioner",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "Conditioner": {
+    "type": "Conditioning",
+    "input_contents": "Biogas",
+    "output_contents": "Biogas",
+    "num_units": 5,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    }
+  },
+  "ConditionerToCogen": {
+    "type": "Pipe",
+    "source": "Conditioner",
     "destination": "Cogenerator",
     "contents": "Biogas",
     "flowrate (MGD)": {
@@ -459,9 +485,9 @@
       }
     }
   },
-  "DigesterToFlare": {
+  "ConditionerToFlare": {
     "type": "Pipe",
-    "source": "AnaerobicDigester",
+    "source": "Conditioner",
     "destination": "Flare",
     "contents": "Biogas",
     "flowrate (MGD)": {
@@ -674,7 +700,7 @@
     "type": "Pipe",
     "source": "GravityThickener",
     "destination": "AnaerobicDigester",
-    "contents": "SludgeBlend",
+    "contents": "ThickenedSludgeBlend",
     "tags": {}
   },
   "CogenToFacility": {

@@ -186,11 +186,11 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Cogeneration":
             min, max, avg = self.parse_flow_or_gen_capacity(
-                self.config[node_id].get("generation_capacity (kWh)")
+                self.config[node_id].get("generation_capacity (kW)")
             )
-            min = utils.parse_quantity(min, "kWh")
-            max = utils.parse_quantity(max, "kWh")
-            avg = utils.parse_quantity(avg, "kWh")
+            min = utils.parse_quantity(min, "kW")
+            max = utils.parse_quantity(max, "kW")
+            avg = utils.parse_quantity(avg, "kW")
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
@@ -220,6 +220,18 @@ class JSONParser:
                 volume,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "Chlorination":
+            node_obj = node.Chlorination(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                avg_flow,
+                num_units,
+                volume,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Flaring":
             node_obj = node.Flaring(node_id, num_units)
         elif self.config[node_id]["type"] == "Thickening":
@@ -236,6 +248,17 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Screening":
             node_obj = node.Screening(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                avg_flow,
+                num_units,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Conditioning":
+            node_obj = node.Conditioning(
                 node_id,
                 input_contents,
                 output_contents,
