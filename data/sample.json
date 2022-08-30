@@ -191,7 +191,7 @@
   },
   "AnaerobicDigester": {
     "type": "Digestion",
-    "input_contents": ["SludgeBlend", "PrimarySludge"],
+    "input_contents": "ThickenedSludgeBlend",
     "output_contents": "Biogas",
     "digester_type": "Anaerobic",
     "volume (cubic meters)": 2500,
@@ -213,7 +213,7 @@
   "GravityThickener": {
     "type": "Thickening",
     "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
-    "output_contents": "SludgeBlend",
+    "output_contents": "ThickenedSludgeBlend",
     "num_units": 1,
     "volume (cubic meters)": 300,
     "flowrate (MGD)": {
@@ -675,7 +675,7 @@
     "type": "Pipe",
     "source": "GravityThickener",
     "destination": "AnaerobicDigester",
-    "contents": "SludgeBlend",
+    "contents": "ThickenedSludgeBlend",
     "tags": {}
   },
   "CogenToFacility": {
