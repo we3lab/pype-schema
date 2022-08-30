@@ -119,9 +119,13 @@ u = unit_registry
 # print('{:.3f}'.format(3 * ureg.m / 9)).
 u.default_format = ".4g"
 
-# switch to top level directory
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-u.load_definitions(os.path.join("data", "unit_definitions.txt"))
+print(os.getcwd())
+units_path = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    "data",
+    "unit_definitions.txt"
+)
+u.load_definitions(units_path)
 
 
 def set_sig_figs(n=4):
