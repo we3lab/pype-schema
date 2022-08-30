@@ -101,6 +101,37 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Chlorination">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.node.</span></span><span class="sig-name descname"><span class="pre">Chlorination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Chlorination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Chlorination" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Chlorinator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the chlorinator</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the chlorinator</p></li>
+<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single chlorinator</p></li>
+<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single chlorinator</p></li>
+<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single chlorinator</p></li>
+<li><p><strong>num_units</strong> (<em>int</em>) – Number of chlorinators running in parallel</p></li>
+<li><p><strong>volume</strong> (<em>int</em>) – Volume of a single chlorinator in cubic meters</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this chlorinator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Chlorinator ID</p></li>
+<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the chlorinator</p></li>
+<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the chlorinator</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of chlorinators running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single chlorinator in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this chlorinator</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Clarification">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.node.</span></span><span class="sig-name descname"><span class="pre">Clarification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Clarification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Clarification" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -125,11 +156,8 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of clarifiers running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single clarifier in cubic meters</p></li>
 <li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this clarifier</p></li>
 </ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>tags<span class="classifier">dict of Tag</span></dt><dd><p>Data tags associated with this clarifier</p>
 </dd>
 </dl>
 </dd></dl>
@@ -176,6 +204,35 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Conditioning">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.node.</span></span><span class="sig-name descname"><span class="pre">Conditioning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Conditioning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Conditioning" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Conditioner ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the biogas conditioner</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the biogas conditioner</p></li>
+<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single biogas conditioner</p></li>
+<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single biogas conditioner</p></li>
+<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single biogas conditioner</p></li>
+<li><p><strong>num_units</strong> (<em>int</em>) – Number of biogas conditioners running in parallel</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this biogas conditioner</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Conditioner ID</p></li>
+<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the biogas conditioner</p></li>
+<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the biogas conditioner</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of biogas conditioners running in parallel</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this screen</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -565,9 +622,8 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Screen ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the screen</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the screen</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of screens running in parallel</p></li>
-<li><p><strong>flow_rate</strong> – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this screen</p></li>
 </ul>
 </dd>
@@ -623,10 +679,9 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Thickener ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the thickener</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the thickener</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of thickeners running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single thickener in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this thickener</p></li>
 </ul>
 </dd>

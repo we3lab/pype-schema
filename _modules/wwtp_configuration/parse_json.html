@@ -220,11 +220,11 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Cogeneration&quot;</span><span class="p">:</span>
             <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_flow_or_gen_capacity</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation_capacity (kWh)&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation_capacity (kW)&quot;</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="nb">min</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="s2">&quot;kWh&quot;</span><span class="p">)</span>
-            <span class="nb">max</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="s2">&quot;kWh&quot;</span><span class="p">)</span>
-            <span class="n">avg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="s2">&quot;kWh&quot;</span><span class="p">)</span>
+            <span class="nb">min</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="s2">&quot;kW&quot;</span><span class="p">)</span>
+            <span class="nb">max</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="nb">max</span><span class="p">,</span> <span class="s2">&quot;kW&quot;</span><span class="p">)</span>
+            <span class="n">avg</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="s2">&quot;kW&quot;</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Cogeneration</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
             <span class="p">)</span>
@@ -254,6 +254,18 @@
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Chlorination&quot;</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Chlorination</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Flaring&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Flaring</span><span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">num_units</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Thickening&quot;</span><span class="p">:</span>
@@ -270,6 +282,17 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Screening&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Screening</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Conditioning&quot;</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Conditioning</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
                 <span class="n">input_contents</span><span class="p">,</span>
                 <span class="n">output_contents</span><span class="p">,</span>
