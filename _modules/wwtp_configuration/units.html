@@ -153,12 +153,7 @@
 <span class="c1"># print(&#39;{:.3f}&#39;.format(3 * ureg.m / 9)).</span>
 <span class="n">u</span><span class="o">.</span><span class="n">default_format</span> <span class="o">=</span> <span class="s2">&quot;.4g&quot;</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
-<span class="n">units_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span>
-    <span class="s2">&quot;data&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;unit_definitions.txt&quot;</span>
-<span class="p">)</span>
+<span class="n">units_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;unit_definitions.txt&quot;</span><span class="p">)</span>
 <span class="n">u</span><span class="o">.</span><span class="n">load_definitions</span><span class="p">(</span><span class="n">units_path</span><span class="p">)</span>
 
 
