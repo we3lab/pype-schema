@@ -12,6 +12,7 @@ skip_all_tests = False
 # set default pint registry so that custom units like MGD are understood
 pint.set_application_registry(u)
 
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, connection_name, num_source, num_dest",
