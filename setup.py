@@ -53,6 +53,7 @@ setup(
     entry_points={},
     long_description=readme,
     long_description_content_type="text/x-rst",
+    package_data={"wwtp_configuration': ['wwtp_configuration/data/*"]},
     include_package_data=True,
     keywords="wwtp-configuration",
     name="wwtp-configuration",
