@@ -983,7 +983,6 @@ class Clarification(Node):
     flow_rate : tuple
         Tuple of minimum, maximum, and average digester flow rate
 
-
     tags : dict of Tag
         Data tags associated with this clarifier
     """
@@ -1170,9 +1169,6 @@ class Screening(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the screen
 
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate
-
     num_units : int
         Number of screens running in parallel
 
@@ -1204,6 +1200,96 @@ class Screening(Node):
     def __repr__(self):
         return (
             f"<wwtp_configuration.node.Screening id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
+
+
+class Conditioning(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Conditioner ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the biogas conditioner
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the biogas conditioner
+
+    min_flow : int
+        Minimum flow rate of a single biogas conditioner
+
+    max_flow : int
+        Maximum flow rate of a single biogas conditioner
+
+    avg_flow : int
+        Average flow rate of a single biogas conditioner
+
+    num_units : int
+        Number of biogas conditioners running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this biogas conditioner
+
+    Attributes
+    ----------
+    id : str
+        Conditioner ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the biogas conditioner
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the biogas conditioner
+
+    num_units : int
+        Number of biogas conditioners running in parallel
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with this screen
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        tags={},
+    ):
+        self.id = id
+        self.input_contents = input_contents
+        self.output_contents = output_contents
+        self.num_units = num_units
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.node.Conditioning id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -1265,9 +1351,6 @@ class Thickening(Node):
 
     output_contents : ContentsType or list of ContentsType
         Contents leaving the thickener
-
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate
 
     num_units : int
         Number of thickeners running in parallel

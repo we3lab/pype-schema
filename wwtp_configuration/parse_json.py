@@ -257,6 +257,17 @@ class JSONParser:
                 num_units,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "Conditioning":
+            node_obj = node.Conditioning(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                avg_flow,
+                num_units,
+                tags={},
+            )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
 

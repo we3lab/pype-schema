@@ -56,6 +56,7 @@
       "WWTPContactChamber",
       "GravityThickener",
       "AnaerobicDigester",
+      "Conditioner",
       "Cogenerator",
       "Flare",
       "VirtualDemand",
@@ -70,8 +71,9 @@
       "PrimaryToAerator",
       "AeratorToSecondary",
       "SecondaryToContact",
-      "DigesterToCogen",
-      "DigesterToFlare",
+      "DigesterToConditioner",
+      "ConditinerToCogen",
+      "ConditionerToFlare",
       "CogenToFacility",
       "PrimaryToGT",
       "SecondaryToGT",
@@ -415,9 +417,32 @@
     "contents": "UntreatedSewage",
     "tags": {}
   },
-  "DigesterToCogen": {
+  "DigesterToConditioner": {
     "type": "Pipe",
     "source": "AnaerobicDigester",
+    "destination": "Conditioner",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
+  },
+  "Conditioner": {
+    "type": "Conditioning",
+    "input_contents": "Biogas",
+    "output_contents": "Biogas",
+    "num_units": 5,
+    "flowrate (MGD)": {
+      "min": null,
+      "max": null,
+      "avg": null
+    }
+  },
+  "ConditionerToCogen": {
+    "type": "Pipe",
+    "source": "Conditioner",
     "destination": "Cogenerator",
     "contents": "Biogas",
     "flowrate (MGD)": {
@@ -460,9 +485,9 @@
       }
     }
   },
-  "DigesterToFlare": {
+  "ConditionerToFlare": {
     "type": "Pipe",
-    "source": "AnaerobicDigester",
+    "source": "Conditioner",
     "destination": "Flare",
     "contents": "Biogas",
     "flowrate (MGD)": {
