@@ -1,6 +1,14 @@
 wwtp\_configuration package
 ===========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   wwtp_configuration.data
+
 Submodules
 ----------
 

@@ -1,0 +1,10 @@
+wwtp\_configuration.data package
+================================
+
+Module contents
+---------------
+
+.. automodule:: wwtp_configuration.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
