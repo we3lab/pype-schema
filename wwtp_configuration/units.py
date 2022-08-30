@@ -121,9 +121,7 @@ u.default_format = ".4g"
 
 # switch to top level directory
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-u.load_definitions(
-    os.path.join("data", "unit_definitions.txt")
-)
+u.load_definitions(os.path.join("data", "unit_definitions.txt"))
 
 
 def set_sig_figs(n=4):
