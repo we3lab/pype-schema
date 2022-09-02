@@ -34,35 +34,51 @@ def parse_units(units):
     Unit
         a Pint Unit for the given string
     """
-    if units.lower() == "mgd":
+    clean_units = units.lower().replace(" ", "")
+    if clean_units == "mgd" or clean_units == "milliongallonsday":
         return u.MGD
-    elif units == "cubic meters" or units == "m3":
+    elif (
+        clean_units == "cubicmeters"
+        or clean_units == "m**3"
+        or clean_units == "m^3"
+        or clean_units == "m3"
+    ):
         return u.m**3
-    elif units == "horsepower" or units == "hp":
+    elif clean_units == "horsepower" or clean_units == "hp":
         return u.hp
-    elif units.lower() == "scfm":
+    elif clean_units == "scfm":
         return u.ft**3 / u.min
-    elif units == "cubic feet" or units == "ft3":
+    elif (
+        clean_units == "cubicfeet"
+        or clean_units == "ft3"
+        or clean_units == "ft**3"
+        or clean_units == "ft^3"
+    ):
         return u.ft**3
-    elif units.lower() == "gpm":
+    elif clean_units == "gpm" or clean_units == "gallon/min":
         return u.gal / u.min
     elif (
-        units.lower() == "gal"
-        or units.lower() == "gallon"
-        or units.lower() == "gallons"
+        clean_units == "gal"
+        or clean_units == "gallon"
+        or clean_units == "gallons"
     ):
         return u.gal
-    elif units.lower() == "gpd":
+    elif clean_units == "gpd":
         return u.gal / u.day
-    elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
+    elif clean_units == "m/s" or clean_units == "meter/s":
         return u.m / u.s
-    elif units.lower() == "kwh":
+    elif (
+        clean_units == "kwh"
+        or clean_units == "hour*kilowatt"
+        or clean_units == "kilowatt*hour"
+        or clean_units == "kilowatthour"
+    ):
         return u.kW * u.hr
-    elif units.lower() == "kw":
+    elif clean_units == "kw":
         return u.kW
-    elif units == "meters" or units == "m":
+    elif clean_units == "meters" or clean_units == "m" or clean_units == "meter":
         return u.m
-    elif units == "inches" or units == "in" or units == "inch":
+    elif clean_units == "inches" or clean_units == "in" or clean_units == "inch":
         return u.inch
     else:
         raise TypeError("Unsupported unit: " + units)
