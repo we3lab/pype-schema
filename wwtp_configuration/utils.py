@@ -130,11 +130,7 @@ def parse_units(units):
         or clean_units == "gallons/minute"
     ):
         return u.gal / u.min
-    elif (
-        clean_units == "gal"
-        or clean_units == "gallon"
-        or clean_units == "gallons"
-    ):
+    elif clean_units == "gal" or clean_units == "gallon" or clean_units == "gallons":
         return u.gal
     elif (
         clean_units == "gpd"
