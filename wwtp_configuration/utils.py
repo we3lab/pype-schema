@@ -34,35 +34,140 @@ def parse_units(units):
     Unit
         a Pint Unit for the given string
     """
-    if units.lower() == "mgd":
-        return u.MGD
-    elif units == "cubic meters" or units == "m3":
-        return u.m**3
-    elif units == "horsepower" or units == "hp":
-        return u.hp
-    elif units.lower() == "scfm":
-        return u.ft**3 / u.min
-    elif units == "cubic feet" or units == "ft3":
-        return u.ft**3
-    elif units.lower() == "gpm":
-        return u.gal / u.min
-    elif (
-        units.lower() == "gal"
-        or units.lower() == "gallon"
-        or units.lower() == "gallons"
+    clean_units = units.lower().replace(" ", "")
+    if (
+        clean_units == "mgd"
+        or clean_units == "milliongalperday"
+        or clean_units == "milliongal/day"
+        or clean_units == "10**6gal/day"
+        or clean_units == "milliongallonperday"
+        or clean_units == "milliongallon/day"
+        or clean_units == "10**6gallon/day"
+        or clean_units == "milliongallonsperday"
+        or clean_units == "milliongallons/day"
+        or clean_units == "10**6gallons/day"
+        or clean_units == "milliongalperd"
+        or clean_units == "milliongal/d"
+        or clean_units == "10**6gal/d"
+        or clean_units == "milliongallonperd"
+        or clean_units == "milliongallon/d"
+        or clean_units == "10**6gallon/d"
+        or clean_units == "milliongallonsperd"
+        or clean_units == "milliongallons/d"
+        or clean_units == "10**6gallons/d"
     ):
+        return u.MGD
+    elif (
+        clean_units == "cubicmeters"
+        or clean_units == "cubicmeter"
+        or clean_units == "m**3"
+        or clean_units == "m^3"
+        or clean_units == "m3"
+        or clean_units == "meter3"
+        or clean_units == "meter**3"
+        or clean_units == "meter^3"
+        or clean_units == "meters3"
+        or clean_units == "meters**3"
+        or clean_units == "meters^3"
+    ):
+        return u.m**3
+    elif clean_units == "horsepower" or clean_units == "hp":
+        return u.hp
+    elif (
+        clean_units == "scfm"
+        or clean_units == "cfm"
+        or clean_units == "cubicfeet/min"
+        or clean_units == "cubicfoot/min"
+        or clean_units == "ft3/min"
+        or clean_units == "ft**3/min"
+        or clean_units == "ft^3/min"
+        or clean_units == "foot3/min"
+        or clean_units == "foot^3/min"
+        or clean_units == "foot**3/min"
+        or clean_units == "feet3/min"
+        or clean_units == "feet**3/min"
+        or clean_units == "feet^3/min"
+        or clean_units == "cubicfeet/minute"
+        or clean_units == "cubicfoot/minute"
+        or clean_units == "ft3/minute"
+        or clean_units == "ft**3/minute"
+        or clean_units == "ft^3/minute"
+        or clean_units == "foot3/minute"
+        or clean_units == "foot^3/minute"
+        or clean_units == "foot**3/minute"
+        or clean_units == "feet3/minute"
+        or clean_units == "feet**3/minute"
+        or clean_units == "feet^3/minute"
+    ):
+        return u.ft**3 / u.min
+    elif (
+        clean_units == "cubicfeet"
+        or clean_units == "cubicfoot"
+        or clean_units == "ft3"
+        or clean_units == "ft**3"
+        or clean_units == "ft^3"
+        or clean_units == "foot3"
+        or clean_units == "foot**3"
+        or clean_units == "foot^3"
+        or clean_units == "feet3"
+        or clean_units == "feet**3"
+        or clean_units == "feet^3"
+    ):
+        return u.ft**3
+    elif (
+        clean_units == "gpm"
+        or clean_units == "galpermin"
+        or clean_units == "gallonpermin"
+        or clean_units == "gallonspermin"
+        or clean_units == "galperminute"
+        or clean_units == "gallonperminute"
+        or clean_units == "gallonsperminute"
+        or clean_units == "gal/min"
+        or clean_units == "gal/minute"
+        or clean_units == "gallon/min"
+        or clean_units == "gallon/minute"
+        or clean_units == "gallons/min"
+        or clean_units == "gallons/minute"
+    ):
+        return u.gal / u.min
+    elif clean_units == "gal" or clean_units == "gallon" or clean_units == "gallons":
         return u.gal
-    elif units.lower() == "gpd":
+    elif (
+        clean_units == "gpd"
+        or clean_units == "galperday"
+        or clean_units == "gallonperday"
+        or clean_units == "gallonsperday"
+        or clean_units == "gal/d"
+        or clean_units == "gal/day"
+        or clean_units == "gallon/d"
+        or clean_units == "gallon/day"
+        or clean_units == "gallons/d"
+        or clean_units == "gallons/day"
+    ):
         return u.gal / u.day
-    elif units.replace(" ", "") == "m/s" or units.replace(" ", "") == "meter/s":
+    elif (
+        clean_units == "m/s"
+        or clean_units == "meter/s"
+        or clean_units == "meters/s"
+        or clean_units == "m/second"
+        or clean_units == "meter/second"
+        or clean_units == "meters/second"
+    ):
         return u.m / u.s
-    elif units.lower() == "kwh":
+    elif (
+        clean_units == "kwh"
+        or clean_units == "kwhr"
+        or clean_units == "kilowatthr"
+        or clean_units == "hour*kilowatt"
+        or clean_units == "kilowatt*hour"
+        or clean_units == "kilowatthour"
+    ):
         return u.kW * u.hr
-    elif units.lower() == "kw":
+    elif clean_units == "kw" or clean_units == "kilowatt":
         return u.kW
-    elif units == "meters" or units == "m":
+    elif clean_units == "meters" or clean_units == "m" or clean_units == "meter":
         return u.m
-    elif units == "inches" or units == "in" or units == "inch":
+    elif clean_units == "inches" or clean_units == "in" or clean_units == "inch":
         return u.inch
     else:
         raise TypeError("Unsupported unit: " + units)
