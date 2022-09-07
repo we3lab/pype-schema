@@ -51,6 +51,11 @@ def draw_graph(network, pyvis=False):
             connection.source.id, connection.destination.id, color=color, label=id
         )
 
+        if connection.bidirectional:
+            g.add_edge(
+                connection.destination.id, connection.source.id, color=color, label=id
+            )
+
     colors = [
         "black",
         "saddlebrown",

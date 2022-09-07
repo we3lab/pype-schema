@@ -155,6 +155,43 @@ def parse_units(units):
     ):
         return u.m / u.s
     elif (
+        clean_units == "psi"
+        or clean_units == "poundspersquareinch"
+        or clean_units == "poundpersquareinch"
+        or clean_units == "poundspersquarein"
+        or clean_units == "poundpersquarein"
+        or clean_units == "poundspersqin"
+        or clean_units == "poundpersqin"
+        or clean_units == "pound/inch**2"
+        or clean_units == "pounds/inch**2"
+        or clean_units == "lbs/inch**2"
+        or clean_units == "lb/inch**2"
+        or clean_units == "pound/inch^2"
+        or clean_units == "pounds/inch^2"
+        or clean_units == "lbs/inch^2"
+        or clean_units == "lb/inch^2"
+        or clean_units == "pound/squareinch"
+        or clean_units == "pounds/squareinch"
+        or clean_units == "lbs/squareinch"
+        or clean_units == "lb/squareinch"
+        or clean_units == "pound/in**2"
+        or clean_units == "pounds/in**2"
+        or clean_units == "lbs/in**2"
+        or clean_units == "lb/in**2"
+        or clean_units == "pound/in^2"
+        or clean_units == "pounds/in^2"
+        or clean_units == "lbs/in^2"
+        or clean_units == "lb/in^2"
+    ):
+        return u.lb / (u.inch ** 2)
+    elif (
+        clean_units == "btu"
+        or clean_units == "btus"
+        or clean_units == "britishthermalunit"
+        or clean_units == "britishthermalunits"
+    ):
+        return u.btu
+    elif (
         clean_units == "kwh"
         or clean_units == "kwhr"
         or clean_units == "kilowatthr"

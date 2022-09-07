@@ -882,6 +882,10 @@ class Cogeneration(Node):
 
     tags : dict of Tag
         Data tags associated with this cogenerator
+
+    energy_efficiency : function
+        Function which takes in the current heat produced in BTU and returns
+        the energy produced in kWh
     """
 
     def __init__(
@@ -930,6 +934,18 @@ class Cogeneration(Node):
             Average generation by a single cogenerator
         """
         self.gen_capacity = (min, max, avg)
+
+    def set_energy_efficiency(self, efficiency_curve):
+        """Set the cogeneration efficiency to the given function
+
+        Parameters
+        ----------
+        efficiency_curve : function
+            function takes in the current heat produced in BTU and returns
+            the energy produced in kWh
+        """
+        # TODO: type check that pump_curve is a function
+        self.energy_efficiency = efficiency_curve
 
 
 class Clarification(Node):
