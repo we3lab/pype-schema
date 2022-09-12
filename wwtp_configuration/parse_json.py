@@ -188,6 +188,11 @@ class JSONParser:
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
+            # TODO: support non-constant efficiency curve
+            efficiency = self.config[node_id].get("efficiency")
+            if efficiency:
+                efficiency_curve = lambda e : float(efficiency)
+                node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
             digester_type = self.config[node_id].get("digester_type")
             node_obj = node.Digestion(
