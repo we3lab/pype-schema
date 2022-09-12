@@ -82,7 +82,7 @@ class JSONParser:
             self.config[node_id].get("volume (cubic meters)"), "m3"
         )
 
-        min, max, avg = self.parse_min_max_avg(
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
             self.config[node_id].get("flowrate (MGD)"), "MGD"
         )
 
@@ -563,15 +563,15 @@ class JSONParser:
 
         """
         if heating_vals is None:
-            return (None, None, None)
+            return (None, None)
         else:
             if units:
                 return (
                     utils.parse_quantity(heating_vals.get("lower"), units),
-                    utils.parse_quantity(heating_vals.get("higher"), units),
+                    utils.parse_quantity(heating_vals.get("higher"), units)
                 )
             else:
                 return (
                     heating_vals.get("lower"),
-                    heating_vals.get("higher"),
+                    heating_vals.get("higher")
                 )

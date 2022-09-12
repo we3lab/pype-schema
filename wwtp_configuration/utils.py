@@ -191,7 +191,7 @@ def parse_units(units):
         or clean_units == "britishthermalunit"
         or clean_units == "britishthermalunits"
     ):
-        return u.btu
+        return u.BTU
     elif (
         clean_units == "btu/scf"
         or clean_units == "btus/scf"
@@ -242,7 +242,7 @@ def parse_units(units):
         or clean_units == "britishthermalunit/feet^3"
         or clean_units == "britishthermalunits/feet^3"
     ):
-        return u.btu / (u.ft ** 3)
+        return u.BTU / (u.ft ** 3)
     elif (
         clean_units == "kwh"
         or clean_units == "kwhr"
