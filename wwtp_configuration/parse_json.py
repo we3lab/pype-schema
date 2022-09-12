@@ -325,7 +325,7 @@ class JSONParser:
             self.config[connection_id].get("pressure (PSI)"), "PSI"
         )
         lower, higher = self.parse_heating_values(
-            self.config[connection_id].get("heating_values (BTU)"), "BTU"
+            self.config[connection_id].get("heating_values (BTU/scf)"), "BTU/scf"
         )
 
         if self.config[connection_id]["type"] == "Pipe":

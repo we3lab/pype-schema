@@ -108,6 +108,7 @@
       "max": null,
       "avg": null
     },
+    "efficiency": 0.35,
     "tags": {}
   },
   "Flare": {
@@ -450,9 +451,9 @@
       "min": null,
       "avg": null
     },
-    "heating_values (BTU)": {
-      "lower": null,
-      "higher": null
+    "heating_values (BTU/scf)": {
+      "lower": 600,
+      "higher": 700
     },
     "tags": {
       "Digester1GasFlow": {
