@@ -184,7 +184,7 @@ def parse_units(units):
         or clean_units == "lbs/in^2"
         or clean_units == "lb/in^2"
     ):
-        return u.lb / (u.inch ** 2)
+        return u.lb / (u.inch**2)
     elif (
         clean_units == "btu"
         or clean_units == "btus"
@@ -242,7 +242,7 @@ def parse_units(units):
         or clean_units == "britishthermalunit/feet^3"
         or clean_units == "britishthermalunits/feet^3"
     ):
-        return u.BTU / (u.ft ** 3)
+        return u.BTU / (u.ft**3)
     elif (
         clean_units == "kwh"
         or clean_units == "kwhr"
@@ -320,7 +320,7 @@ def parse_units(units):
         or clean_units == "kilowatthr/meters^3"
         or clean_units == "kilowatthour/meters^3"
     ):
-        return u.kW * u.hr / (u.m ** 3)
+        return u.kW * u.hr / (u.m**3)
     elif clean_units == "kw" or clean_units == "kilowatt":
         return u.kW
     elif clean_units == "meters" or clean_units == "m" or clean_units == "meter":

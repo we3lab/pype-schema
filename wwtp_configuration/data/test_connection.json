@@ -24,6 +24,7 @@
       "max": 750,
       "avg": 600
     },
+    "efficiency": 0.32,
     "tags": {}
   },
   "GasToCogen": {
@@ -35,6 +36,10 @@
       "max": null,
       "min": null,
       "avg": null
+    },
+    "heating_values (BTU/scf)": {
+      "lower": 600,
+      "higher": 700
     },
     "tags": {}
   }

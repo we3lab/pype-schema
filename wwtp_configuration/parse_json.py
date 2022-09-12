@@ -191,7 +191,7 @@ class JSONParser:
             # TODO: support non-constant efficiency curve
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
-                efficiency_curve = lambda e : float(efficiency)
+                efficiency_curve = lambda e: float(efficiency)
                 node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
             digester_type = self.config[node_id].get("digester_type")
@@ -340,7 +340,9 @@ class JSONParser:
                 min_flow,
                 max_flow,
                 avg_flow,
-                diameter,
+                diameter=diameter,
+                lower_heating_value=lower,
+                higher_heating_value=higher,
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
@@ -568,10 +570,7 @@ class JSONParser:
             if units:
                 return (
                     utils.parse_quantity(heating_vals.get("lower"), units),
-                    utils.parse_quantity(heating_vals.get("higher"), units)
+                    utils.parse_quantity(heating_vals.get("higher"), units),
                 )
             else:
-                return (
-                    heating_vals.get("lower"),
-                    heating_vals.get("higher")
-                )
+                return (heating_vals.get("lower"), heating_vals.get("higher"))

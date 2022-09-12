@@ -368,6 +368,7 @@ class Pipe(Connection):
         """
         self.heating_values = (lower, higher)
 
+
 class Wire(Connection):
     """
     Parameters
