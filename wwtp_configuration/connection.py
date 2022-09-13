@@ -63,38 +63,6 @@ class Connection(ABC):
             f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )
 
-    def set_flow_rate(self, min, max, avg):
-        """Set the minimum, maximum, and average flow rate through the connection
-
-        Parameters
-        ----------
-        min : int
-            Minimum flow rate through the connection
-
-        max : int
-            Maximum flow rate through the connection
-
-        avg : int
-            Average flow rate through the connection
-        """
-        self.flow_rate = (min, max, avg)
-
-    def set_pressure(self, min, max, avg):
-        """Set the minimum, maximum, and average pressure inside the connection
-
-        Parameters
-        ----------
-        min : int
-            Minimum pressure inside the connection
-
-        max : int
-            Maximum pressure inside the connection
-
-        avg : int
-            Average pressure inside the connection
-        """
-        self.pressure = (min, max, avg)
-
     def add_tag(self, tag):
         """Adds a tag to the node
 
@@ -212,6 +180,12 @@ class Pipe(Connection):
     avg_pres : int
         Average pressure inside the pipe
 
+    lower_heating_value : float
+        Lower heating value of gas in the pipe
+
+    higher_heating_value : float
+        Higher heating value of gas in the pipe
+
     tags : dict of Tag
         Data tags associated with this pipe
 
@@ -232,7 +206,7 @@ class Pipe(Connection):
         Pipe ID
 
     contents : ContentsType
-        Contents moving through the connection.
+        Contents moving through the connection
 
     source : Node
         Starting point of the connection
@@ -251,6 +225,10 @@ class Pipe(Connection):
 
     pressure : tuple
         Minimum, maximum, and average pressure in the pipe
+
+    heating_values : tuple
+        The lower and higher heating values of the gas in the pipe.
+        None if the pipe is not transporting gas
 
     tags : dict of Tag
         Data tags associated with this pipe
@@ -281,6 +259,8 @@ class Pipe(Connection):
         min_pres=None,
         max_pres=None,
         avg_pres=None,
+        lower_heating_value=None,
+        higher_heating_value=None,
         tags={},
         bidirectional=False,
         exit_point=None,
@@ -294,6 +274,7 @@ class Pipe(Connection):
         self.friction_coeff = friction
         self.set_pressure(min_pres, max_pres, avg_pres)
         self.set_flow_rate(min_flow, max_flow, avg_flow)
+        self.set_heating_values(lower_heating_value, higher_heating_value)
         self.tags = tags
         self.bidirectional = bidirectional
         self.exit_point = exit_point
@@ -315,6 +296,7 @@ class Pipe(Connection):
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
+            f"heating_values:{self.heating_values} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
             f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
@@ -333,12 +315,58 @@ class Pipe(Connection):
             and self.diameter == other.diameter
             and self.friction_coeff == other.friction_coeff
             and self.pressure == other.pressure
+            and self.heating_values == other.heating_values
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
             and self.bidirectional == other.bidirectional
             and self.exit_point == other.exit_point
             and self.entry_point == other.entry_point
         )
+
+    def set_flow_rate(self, min, max, avg):
+        """Set the minimum, maximum, and average flow rate through the connection
+
+        Parameters
+        ----------
+        min : int
+            Minimum flow rate through the connection
+
+        max : int
+            Maximum flow rate through the connection
+
+        avg : int
+            Average flow rate through the connection
+        """
+        self.flow_rate = (min, max, avg)
+
+    def set_pressure(self, min, max, avg):
+        """Set the minimum, maximum, and average pressure inside the connection
+
+        Parameters
+        ----------
+        min : int
+            Minimum pressure inside the connection
+
+        max : int
+            Maximum pressure inside the connection
+
+        avg : int
+            Average pressure inside the connection
+        """
+        self.pressure = (min, max, avg)
+
+    def set_heating_values(self, lower, higher):
+        """Set the lower and higher heating values for gas in the connection
+
+        Parameters
+        ----------
+        lower : float
+            Lower heating value of gas in the pipe
+
+        higher : float
+            Higher heating value of gas in the pipe
+        """
+        self.heating_values = (lower, higher)
 
 
 class Wire(Connection):

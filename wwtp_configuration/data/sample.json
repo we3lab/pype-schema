@@ -450,6 +450,10 @@
       "min": null,
       "avg": null
     },
+    "heating_values (BTU/scf)": {
+      "lower": 600,
+      "higher": 700
+    },
     "tags": {
       "Digester1GasFlow": {
         "type": "Flow",
