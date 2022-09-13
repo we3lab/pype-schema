@@ -186,9 +186,23 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 <li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of cogenerator units running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this cogenerator</p></li>
+<li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current heat produced in BTU and returns
+the energy produced in kWh</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Cogeneration.set_energy_efficiency">
+<span class="sig-name descname"><span class="pre">set_energy_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Cogeneration.set_energy_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Cogeneration.set_energy_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cogeneration efficiency to the given function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current heat produced in BTU and returns
+the energy produced in kWh</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Cogeneration.set_gen_capacity">
 <span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Cogeneration.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Cogeneration.set_gen_capacity" title="Permalink to this definition">¶</a></dt>

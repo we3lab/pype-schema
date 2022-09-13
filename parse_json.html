@@ -167,18 +167,40 @@ stored hierarchically</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_flow_or_gen_capacity">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_flow_or_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow_or_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_flow_or_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_flow_or_gen_capacity" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_heating_values">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heating_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_heating_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>flowrate</strong> (<em>dict</em>) – dictionary of the form {‘min’: int, ‘max’: int, ‘avg’: int}</p>
+<dd class="field-odd"><p><strong>heating_vals</strong> (<em>dict</em>) – dictionary of the form {‘lower’: float, ‘higher’: float}</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>min, max, and average flow rate as a tuple</p>
+<dd class="field-even"><p>(lower, higher) heating values as a tuple, with units applied.
+Given as a float if no units are specified</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>)</p>
+<dd class="field-odd"><p>(Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_min_max_avg">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_min_max_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_avg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_min_max_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_min_max_avg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a dictionary into a tuple of flow rates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_max_avg</strong> (<em>dict</em>) – dictionary of the form {‘min’: int, ‘max’: int, ‘avg’: int}</p></li>
+<li><p><strong>units</strong> (<em>str</em>) – units to be parsed into a Pint Quantity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(min, max, and average) with the given Pint units as a tuple.
+If no units given, then returns a tuple of floats.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(Quantity, Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>

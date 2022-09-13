@@ -85,6 +85,11 @@
             <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
         <span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
+            <span class="p">)</span>
+
     <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
