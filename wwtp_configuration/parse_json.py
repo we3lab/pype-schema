@@ -191,8 +191,10 @@ class JSONParser:
             # TODO: support non-constant efficiency curve
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
+
                 def efficiency_curve(arg):
                     return float(efficiency)
+
                 node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
             digester_type = self.config[node_id].get("digester_type")
