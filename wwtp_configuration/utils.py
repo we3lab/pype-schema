@@ -345,9 +345,9 @@ class ContentsType(Enum):
     GasBlend = auto()
     FatOilGrease = auto()
     PrimarySludge = auto()
-    TPS = auto()
+    TPS = auto() # thickened primary sludge
     WasteActivatedSludge = auto()
-    TWAS = auto()
+    TWAS = auto() # thickened waste activated sludge
     Scum = auto()
     FoodWaste = auto()
     SludgeBlend = auto()
@@ -383,8 +383,11 @@ class TagType(Enum):
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
-    TSS = auto()
-    COD = auto()
+    TSS = auto() # total suspended solids
+    TDS = auto() # total dissolved solids
+    COD = auto() # chemical oxygen demand
+    BOD = auto() # biochemical oxygen demand
+    pH = auto()
 
 
 class Tag:
