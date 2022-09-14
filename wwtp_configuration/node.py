@@ -69,6 +69,33 @@ class Node(ABC):
         """
         del self.tags[tag_name]
 
+    def get_tag(self, tag_name):
+        """Gets the Tag object associated with `tag_name`
+
+        Parameters
+        ----------
+        tag_name : str
+
+        node : Node
+            `Node` object to be recursively searched for the tag
+
+        Returns
+        ------
+        Tag
+            wwtp_configuration Tag object associated with the variable name.
+            Returns None if the `tag_name` is not found
+        """
+        tag = None
+        if tag_name in self.tags.keys():
+            tag = self.tags[tag_name]
+        elif hasattr(self, "nodes"):
+            for node in self.nodes.values():
+                tag = node.get_tag(tag_name)
+                if tag:
+                    break
+
+        return tag
+
 
 class Network(Node):
     """A water utility represented as a set of connections and nodes
