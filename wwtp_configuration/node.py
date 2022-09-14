@@ -88,6 +88,10 @@ class Node(ABC):
         tag = None
         if tag_name in self.tags.keys():
             tag = self.tags[tag_name]
+        elif hasattr(self, "connections"):
+            for connection in self.connections.values():
+                if tag_name in connection.tags.keys():
+                    tag = connection.tags[tag_name]
         elif hasattr(self, "nodes"):
             for node in self.nodes.values():
                 tag = node.get_tag(tag_name)
