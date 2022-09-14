@@ -100,6 +100,58 @@ class Node(ABC):
 
         return tag
 
+    def get_all_connections(self, recurse=False):
+        """Gets all Connection objects associated with this Node
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get connections recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Connection
+            Connection objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        connections = []
+        if hasattr(self, "connections"):
+            connections = self.connections.values()
+
+        if recurse:
+            if hasattr(self, "nodes"):
+                for node in self.nodes.values():
+                    connections.append(node.get_all_connections(node, recurse=recurse))
+
+        return connections
+
+    def get_all_nodes(self, recurse=False):
+        """Gets all Node objects associated with this Node
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get nodes recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Node
+            Node objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        nodes = []
+        if hasattr(self, "nodes"):
+            nodes = self.nodes.values()
+            if recurse:
+                for node in self.nodes.values():
+                    nodes.append(node.get_all_nodes(node, recurse=recurse))
+
+        return nodes
+
 
 class Network(Node):
     """A water utility represented as a set of connections and nodes
