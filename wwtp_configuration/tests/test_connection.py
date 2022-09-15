@@ -17,7 +17,7 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, connection_name, num_source, num_dest",
     [
-        ("../data/test_connection.json", "GasToCogen", 3, 1),
+        ("data/connection.json", "GasToCogen", 3, 1),
     ],
 )
 def test_get_num_source_dest_units(json_path, connection_name, num_source, num_dest):
@@ -34,7 +34,7 @@ def test_get_num_source_dest_units(json_path, connection_name, num_source, num_d
 @pytest.mark.parametrize(
     "json_path, connection_name, source_id, dest_id",
     [
-        ("../data/test_connection.json", "GasToCogen", "Digester", "Cogenerator"),
+        ("data/connection.json", "GasToCogen", "Digester", "Cogenerator"),
     ],
 )
 def test_get_source_dest_ids(json_path, connection_name, source_id, dest_id):
@@ -52,7 +52,7 @@ def test_get_source_dest_ids(json_path, connection_name, source_id, dest_id):
     "json_path, connection_name, expected",
     [
         (
-            "../data/test_connection.json",
+            "data/connection.json",
             "GasToCogen",
             (600 * u.BTU / u.ft**3, 700 * u.BTU / u.ft**3),
         ),
@@ -65,20 +65,3 @@ def test_set_heating_values(json_path, connection_name, expected):
     connection = result.get_connection(connection_name)
 
     assert connection.heating_values == expected
-
-
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-@pytest.mark.parametrize(
-    "json_path, cogen_id, efficiency_arg, expected",
-    [
-        ("../data/test_connection.json", "Cogenerator", None, 0.32),
-        ("../data/test_connection.json", "Cogenerator", 2000, 0.32),
-    ],
-)
-def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
-    parser = JSONParser(json_path)
-
-    result = parser.initialize_network()
-    cogen = result.get_node(cogen_id)
-
-    assert cogen.energy_efficiency(efficiency_arg) == expected

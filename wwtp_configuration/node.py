@@ -88,15 +88,17 @@ class Node(ABC):
         tag = None
         if tag_name in self.tags.keys():
             tag = self.tags[tag_name]
-        elif hasattr(self, "connections"):
-            for connection in self.connections.values():
-                if tag_name in connection.tags.keys():
-                    tag = connection.tags[tag_name]
-        elif hasattr(self, "nodes"):
-            for node in self.nodes.values():
-                tag = node.get_tag(tag_name)
-                if tag:
-                    break
+        else:
+            if hasattr(self, "connections"):
+                for connection in self.connections.values():
+                    if tag_name in connection.tags.keys():
+                        tag = connection.tags[tag_name]
+
+            if hasattr(self, "nodes") and tag is None:
+                for node in self.nodes.values():
+                    tag = node.get_tag(tag_name)
+                    if tag:
+                        break
 
         return tag
 
@@ -118,12 +120,12 @@ class Node(ABC):
         """
         connections = []
         if hasattr(self, "connections"):
-            connections = self.connections.values()
+            connections = list(self.connections.values())
 
         if recurse:
             if hasattr(self, "nodes"):
                 for node in self.nodes.values():
-                    connections.append(node.get_all_connections(node, recurse=recurse))
+                    connections.append(node.get_all_connections(recurse=recurse))
 
         return connections
 
@@ -145,10 +147,10 @@ class Node(ABC):
         """
         nodes = []
         if hasattr(self, "nodes"):
-            nodes = self.nodes.values()
+            nodes = list(self.nodes.values())
             if recurse:
                 for node in self.nodes.values():
-                    nodes.append(node.get_all_nodes(node, recurse=recurse))
+                    nodes.append(node.get_all_nodes(recurse=recurse))
 
         return nodes
 
@@ -524,7 +526,7 @@ class Pump(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.connection.Pump id:{self.id} "
+            f"<wwtp_configuration.node.Pump id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "

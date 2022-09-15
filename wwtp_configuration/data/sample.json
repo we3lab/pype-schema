@@ -144,9 +144,14 @@
     "volume (cubic meters)": null,
     "contents": "FatOilGrease",
     "tags": {
-      "TankLevel": {
+      "TankVolume": {
         "type": "Volume",
         "units": "gallons",
+        "contents": "FatOilGrease"
+      },
+      "TankLevel": {
+        "type": "Level",
+        "units": "feet",
         "contents": "FatOilGrease"
       }
     }
