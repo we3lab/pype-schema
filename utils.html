@@ -73,9 +73,10 @@ whether they are sludge, water, or gas</p>
 <li><p><strong>units</strong> (<em>str</em>) – Units represented as a string. E.g., <cite>MGD</cite> or <cite>cubic meters</cite></p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>source_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the sources node</p></li>
+across all units of the source node</p></li>
 <li><p><strong>dest_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the destination node</p></li>
+across all units of the destination node.
+None if the Tag is associated with a Node object instead of a Connection</p></li>
 <li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
 </ul>

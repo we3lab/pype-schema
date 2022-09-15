@@ -122,13 +122,73 @@
         <span class="n">tag</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">tag_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                <span class="n">tag</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">tag_name</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
-                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">tag_name</span> <span class="ow">in</span> <span class="n">connection</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">tag</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">tag</span></div></div>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">tag</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">tag_name</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">tag</span></div>
+
+<div class="viewcode-block" id="Node.get_all_connections"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_connections">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets all Connection objects associated with this Node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get connections recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Connection</span>
+<span class="sd">            Connection objects inside this Node.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">connections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
+            <span class="n">connections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span>
+                        <span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">connections</span></div>
+
+<div class="viewcode-block" id="Node.get_all_nodes"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets all Node objects associated with this Node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get nodes recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Node</span>
+<span class="sd">            Node objects inside this Node.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nodes</span></div></div>
 
 
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -502,7 +562,7 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.connection.Pump id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.node.Pump id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>

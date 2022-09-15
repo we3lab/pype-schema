@@ -502,6 +502,46 @@ the energy produced in kWh</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_connections">
+<span class="sig-name descname"><span class="pre">get_all_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_connections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all Connection objects associated with this Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get connections recursively.
+Default is False, meaning that only direct children will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Connection objects inside this Node.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_nodes">
+<span class="sig-name descname"><span class="pre">get_all_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all Node objects associated with this Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get nodes recursively.
+Default is False, meaning that only direct children will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Node objects inside this Node.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_tag">
 <span class="sig-name descname"><span class="pre">get_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the Tag object associated with <cite>tag_name</cite></p>

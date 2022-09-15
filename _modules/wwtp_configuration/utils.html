@@ -33,6 +33,7 @@
             
   <h1>Source code for wwtp_configuration.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span>
 <span class="kn">from</span> <span class="nn">.units</span> <span class="kn">import</span> <span class="n">u</span>
 
 
@@ -69,300 +70,305 @@
 <span class="sd">        a Pint Unit for the given string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">clean_units</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;mgd&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongalperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongal/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gal/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallon/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallon/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonsperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallons/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallons/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongalperd&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongal/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gal/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonperd&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallon/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallon/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonsperd&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallons/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallons/d&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">MGD</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters^3&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">3</span>
-    <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;horsepower&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hp&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">hp</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;scfm&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cfm&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3/minute&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">min</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;scf&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gpm&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galpermin&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonpermin&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonspermin&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galperminute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonperminute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonsperminute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/minute&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/min&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/minute&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">min</span>
-    <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gpd&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonsperday&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/day&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/d&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/day&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">day</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m/s&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter/s&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters/s&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m/second&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter/second&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters/second&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;psi&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersquareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersquareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersquarein&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersquarein&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersqin&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersqin&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/inch**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/inch**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/inch**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/inch**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/inch^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/inch^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/inch^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/inch^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/squareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/squareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/squareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/squareinch&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/in**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/in**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/in**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/in**2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/in^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/in^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/in^2&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/in^2&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">lb</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">inch</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">BTU</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/scf&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/scf&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/scf&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/scf&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/cubicfeet&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/cubicfeet&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/cubicfeet&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/cubicfeet&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/cubicfoot&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/cubicfoot&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/cubicfoot&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/cubicfoot&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet^3&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">BTU</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hr</span>
-    <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/cubicmeters&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/cubicmeter&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters**3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters^3&quot;</span>
-        <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters^3&quot;</span>
-    <span class="p">):</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hr</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kw&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span>
-    <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
-    <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inches&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inch&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">inch</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported unit: &quot;</span> <span class="o">+</span> <span class="n">units</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">u</span><span class="p">(</span><span class="n">clean_units</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">UndefinedUnitError</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;mgd&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongalperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongal/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gal/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallon/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallon/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonsperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallons/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallons/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongalperd&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongal/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gal/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonperd&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallon/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallon/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallonsperd&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;milliongallons/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;10**6gallons/d&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">MGD</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters^3&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">3</span>
+        <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;horsepower&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hp&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">hp</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;scfm&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cfm&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3/minute&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">min</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;scf&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfeet&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicfoot&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;ft^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;foot^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;feet^3&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gpm&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galpermin&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonpermin&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonspermin&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galperminute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonperminute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonsperminute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/minute&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/min&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/minute&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">min</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gpd&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;galperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallonsperday&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gal/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallon/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;gallons/day&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">gal</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">day</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m/s&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter/s&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters/s&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m/second&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter/second&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters/second&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;psi&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersquareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersquareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersquarein&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersquarein&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersqin&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundpersqin&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/inch**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/inch**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/inch**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/inch**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/inch^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/inch^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/inch^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/inch^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/squareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/squareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/squareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/squareinch&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/in**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/in**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/in**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/in**2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pound/in^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;pounds/in^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lbs/in^2&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lb/in^2&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">lb</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">inch</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">BTU</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/scf&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/scf&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/scf&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/scf&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/cubicfeet&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/cubicfeet&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/cubicfeet&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/cubicfeet&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/cubicfoot&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/cubicfoot&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/cubicfoot&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/cubicfoot&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/ft^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/ft^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/ft^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/ft^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/foot^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/foot^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/foot^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/foot^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btu/feet^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;btus/feet^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunit/feet^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;britishthermalunits/feet^3&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">BTU</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">ft</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hr</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/cubicmeters&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/cubicmeter&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/m3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meter^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters**3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt*hour/meters^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hour*kilowatt/meters^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwh/meters^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kwhr/meters^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthr/meters^3&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatthour/meters^3&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">hr</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kw&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;kilowatt&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">kW</span>
+        <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span>
+        <span class="k">elif</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inches&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inch&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">inch</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">UndefinedUnitError</span><span class="p">(</span><span class="s2">&quot;Unsupported unit: &quot;</span> <span class="o">+</span> <span class="n">units</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ContentsType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.ContentsType">[docs]</a><span class="k">class</span> <span class="nc">ContentsType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -379,9 +385,9 @@
     <span class="n">GasBlend</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">FatOilGrease</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">PrimarySludge</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">TPS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">TPS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># thickened primary sludge</span>
     <span class="n">WasteActivatedSludge</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">TWAS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">TWAS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># thickened waste activated sludge</span>
     <span class="n">Scum</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">FoodWaste</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">SludgeBlend</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -417,8 +423,11 @@
     <span class="n">RunTime</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">RunStatus</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">VSS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">TSS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">COD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">TSS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># total suspended solids</span>
+    <span class="n">TDS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># total dissolved solids</span>
+    <span class="n">COD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># chemical oxygen demand</span>
+    <span class="n">BOD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># biochemical oxygen demand</span>
+    <span class="n">pH</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.Tag">[docs]</a><span class="k">class</span> <span class="nc">Tag</span><span class="p">:</span>
@@ -437,11 +446,12 @@
 
 <span class="sd">    source_unit_id : int or str</span>
 <span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the sources node</span>
+<span class="sd">        across all units of the source node</span>
 
 <span class="sd">    dest_unit_id : int or str</span>
 <span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the destination node</span>
+<span class="sd">        across all units of the destination node.</span>
+<span class="sd">        None if the Tag is associated with a Node object instead of a Connection</span>
 
 <span class="sd">    totalized : bool</span>
 <span class="sd">        True if data is totalized. False otherwise</span>

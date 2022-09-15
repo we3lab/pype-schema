@@ -783,6 +783,46 @@ the energy produced in kWh</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_connections">
+<span class="sig-name descname"><span class="pre">get_all_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_connections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all Connection objects associated with this Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get connections recursively.
+Default is False, meaning that only direct children will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Connection objects inside this Node.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_nodes">
+<span class="sig-name descname"><span class="pre">get_all_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all Node objects associated with this Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get nodes recursively.
+Default is False, meaning that only direct children will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Node objects inside this Node.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_tag">
 <span class="sig-name descname"><span class="pre">get_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the Tag object associated with <cite>tag_name</cite></p>
@@ -1563,9 +1603,10 @@ whether they are sludge, water, or gas</p>
 <li><p><strong>units</strong> (<em>str</em>) – Units represented as a string. E.g., <cite>MGD</cite> or <cite>cubic meters</cite></p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>source_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the sources node</p></li>
+across all units of the source node</p></li>
 <li><p><strong>dest_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the destination node</p></li>
+across all units of the destination node.
+None if the Tag is associated with a Node object instead of a Connection</p></li>
 <li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
 </ul>
@@ -1592,8 +1633,13 @@ across all units of the destination node</p></li>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Enum to represent types of SCADA tags</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.BOD">
+<span class="sig-name descname"><span class="pre">BOD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">11</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.BOD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.COD">
-<span class="sig-name descname"><span class="pre">COD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.COD" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">COD</span></span><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.COD" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1622,6 +1668,11 @@ across all units of the destination node</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.TDS">
+<span class="sig-name descname"><span class="pre">TDS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.TDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.TSS">
 <span class="sig-name descname"><span class="pre">TSS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.TSS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1634,6 +1685,11 @@ across all units of the destination node</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.Volume">
 <span class="sig-name descname"><span class="pre">Volume</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.Volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.TagType.pH">
+<span class="sig-name descname"><span class="pre">pH</span></span><em class="property"> <span class="pre">=</span> <span class="pre">12</span></em><a class="headerlink" href="#wwtp_configuration.utils.TagType.pH" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
