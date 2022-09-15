@@ -156,6 +156,35 @@ class Node(ABC):
 
         return nodes
 
+        def get_all_tags(self, recurse=False):
+            """Gets all Tag objects associated with this Node
+
+            Parameters
+            ----------
+            recurse : bool
+                Whether or not to get tags recursively.
+                Default is False, meaning that only direct children will be returned.
+
+            Returns
+            ------
+            list of Tag
+                Tag objects inside this Node.
+                If `recurse` is True, all children, grandchildren, etc. are returned.
+                If False, only direct children are returned.
+            """
+            tags = list(self.tags.values())
+
+            if hasattr(self, "connections"):
+                for connection in self.connections.values():
+                    tags = tags + list(connection.tags.values())
+
+            if recurse:
+                if hasattr(self, "nodes"):
+                    for node in self.nodes.values():
+                        tags = tags + node.get_all_tags(recurse=recurse)
+
+            return tags
+
 
 class Network(Node):
     """A water utility represented as a set of connections and nodes
@@ -431,6 +460,31 @@ class Facility(Network):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
+
+    def get_cogen(self, recurse=False):
+        """Searches the Facility and returns a list of all Cogeneration objects
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get cogenerators recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Cogeneration
+            Cogeneration objects inside this Facility.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        cogen = []
+        nodes = self.get_all_nodes(recurse=recurse)
+
+        for node in nodes:
+            if isinstance(node, Cogeneration):
+                cogen.append(node)
+
+        return cogen
 
 
 class Pump(Node):
@@ -1031,7 +1085,7 @@ class Cogeneration(Node):
             function takes in the current heat produced in BTU and returns
             the energy produced in kWh
         """
-        # TODO: type check that pump_curve is a function
+        # TODO: type check that efficiency_curve is a function
         self.energy_efficiency = efficiency_curve
 
 
