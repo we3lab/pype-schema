@@ -135,7 +135,9 @@ def parse_units(units):
             or clean_units == "gallons/minute"
         ):
             return u.gal / u.min
-        elif clean_units == "gal" or clean_units == "gallon" or clean_units == "gallons":
+        elif (
+            clean_units == "gal" or clean_units == "gallon" or clean_units == "gallons"
+        ):
             return u.gal
         elif (
             clean_units == "gpd"
@@ -349,9 +351,9 @@ class ContentsType(Enum):
     GasBlend = auto()
     FatOilGrease = auto()
     PrimarySludge = auto()
-    TPS = auto() # thickened primary sludge
+    TPS = auto()  # thickened primary sludge
     WasteActivatedSludge = auto()
-    TWAS = auto() # thickened waste activated sludge
+    TWAS = auto()  # thickened waste activated sludge
     Scum = auto()
     FoodWaste = auto()
     SludgeBlend = auto()
@@ -387,10 +389,10 @@ class TagType(Enum):
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
-    TSS = auto() # total suspended solids
-    TDS = auto() # total dissolved solids
-    COD = auto() # chemical oxygen demand
-    BOD = auto() # biochemical oxygen demand
+    TSS = auto()  # total suspended solids
+    TDS = auto()  # total dissolved solids
+    COD = auto()  # chemical oxygen demand
+    BOD = auto()  # biochemical oxygen demand
     pH = auto()
 
 

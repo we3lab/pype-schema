@@ -21,7 +21,11 @@ pint.set_application_registry(u)
         ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
         ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
         ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
-        ("data/node.json", "CombinedDigesterGasFlow", "data/lower_level_connection_tag.pkl"),
+        (
+            "data/node.json",
+            "CombinedDigesterGasFlow",
+            "data/lower_level_connection_tag.pkl",
+        ),
         ("data/node.json", "NonexistentTag", None),
     ],
 )
@@ -43,7 +47,12 @@ def test_get_tag(json_path, tag_name, expected_path):
 @pytest.mark.parametrize(
     "json_path, recurse, connection_path, node_path",
     [
-        ("data/node.json", False, "data/top_level_connections.pkl", "data/top_level_nodes.pkl"),
+        (
+            "data/node.json",
+            False,
+            "data/top_level_connections.pkl",
+            "data/top_level_nodes.pkl",
+        ),
         ("data/node.json", True, "data/all_connections.pkl", "data/all_nodes.pkl"),
     ],
 )
