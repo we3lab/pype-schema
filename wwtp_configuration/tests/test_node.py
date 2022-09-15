@@ -1,5 +1,6 @@
 import os
 import pint
+import pickle
 import pytest
 from wwtp_configuration.units import u
 from wwtp_configuration.parse_json import JSONParser
@@ -15,12 +16,12 @@ pint.set_application_registry(u)
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, tag_name, expected",
+    "json_path, tag_name, expected_path",
     [
-        ("data/node.json", "PumpRuntime", "top_level_node_tag.pkl"),
-        ("data/node.json", "GridElectricityConsumption", "top_level_connection_tag.pkl"),
-        ("data/node.json", "Digester1Level", "lower_level_node_tag.pkl"),
-        ("data/node.json", "CombinedDigesterGasFlow", "lower_level_connection_tag.pkl"),
+        ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
+        ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
+        ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
+        ("data/node.json", "CombinedDigesterGasFlow", "data/lower_level_connection_tag.pkl"),
         ("data/node.json", "NonexistentTag", None),
     ],
 )
@@ -40,10 +41,10 @@ def test_get_tag(json_path, tag_name, expected_path):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, recurse, connections, nodes",
+    "json_path, recurse, connection_path, node_path",
     [
-        ("data/node.json", False, "top_level_connections.pkl", "top_level_nodes.pkl"),
-        ("data/node.json", True, "all_connections.pkl", "all_nodes.pkl"),
+        ("data/node.json", False, "data/top_level_connections.pkl", "data/top_level_nodes.pkl"),
+        ("data/node.json", True, "data/all_connections.pkl", "data/all_nodes.pkl"),
     ],
 )
 def test_get_all(json_path, recurse, connection_path, node_path):

@@ -125,7 +125,7 @@ class Node(ABC):
         if recurse:
             if hasattr(self, "nodes"):
                 for node in self.nodes.values():
-                    connections.append(node.get_all_connections(recurse=recurse))
+                    connections = connections + node.get_all_connections(recurse=recurse)
 
         return connections
 
@@ -150,7 +150,7 @@ class Node(ABC):
             nodes = list(self.nodes.values())
             if recurse:
                 for node in self.nodes.values():
-                    nodes.append(node.get_all_nodes(recurse=recurse))
+                    nodes = nodes + node.get_all_nodes(recurse=recurse)
 
         return nodes
 
