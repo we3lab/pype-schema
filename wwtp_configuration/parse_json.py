@@ -276,6 +276,8 @@ class JSONParser:
         tags = self.config[node_id].get("tags")
         if tags:
             for tag_id, tag_info in tags.items():
+                # ensure that the destination ID for Node-associated Tags is null
+                tag_info["dest_unit_id"] = None
                 tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
 

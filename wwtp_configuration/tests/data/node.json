@@ -1,0 +1,126 @@
+{
+  "nodes": ["WWTP", "PowerGrid", "RawSewagePump"],
+  "connections": ["ElectricityToWWTP", "SewerIntake"],
+  "WWTP": {
+    "type": "Facility",
+    "elevation (meters)": 1,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "TreatedSewage",
+    "flowrate (MGD)": {
+      "min": null,
+      "max": 68,
+      "avg": 24
+    },
+    "nodes": ["Digester", "Cogenerator"],
+    "connections": ["GasToCogen"],
+    "tags": {}
+  },
+  "Digester": {
+    "type": "Digestion",
+    "input_contents": ["WasteActivatedSludge", "PrimarySludge"],
+    "output_contents": "Biogas",
+    "num_units": 2,
+    "digester_type": "Anaerobic",
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null
+    },
+    "tags": {
+      "Digester1Level": {
+        "type": "Level",
+        "units": "gallons",
+        "contents": "SludgeBlend",
+        "source_unit_id": 1,
+        "dest_unit_id": null
+      },
+      "Digester2Level": {
+        "type": "Level",
+        "units": "gallons",
+        "contents": "SludgeBlend",
+        "source_unit_id": 2,
+        "dest_unit_id": null
+      }
+    }
+  },
+  "Cogenerator": {
+    "type": "Cogeneration",
+    "num_units": 1,
+    "input_contents": ["Biogas", "NaturalGas"],
+    "output_contents": "Electricity",
+    "generation_capacity (kWh)": {
+      "min": 400,
+      "max": 750,
+      "avg": 600
+    },
+    "tags": {}
+  },
+  "GasToCogen": {
+    "type": "Pipe",
+    "source": "Digester",
+    "destination": "Cogenerator",
+    "contents": "Biogas",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {
+      "CombinedDigesterGasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
+    }
+  },
+  "PowerGrid": {
+    "type": "Network",
+    "contents": ["Electricity", "NaturalGas"],
+    "tags": {},
+    "nodes": [],
+    "connections": []
+  },
+  "ElectricityToWWTP": {
+    "type": "Wire",
+    "source": "PowerGrid",
+    "destination": "WWTP",
+    "contents": "Electricity",
+    "tags": {
+      "ElectricityPurchases": {
+        "type": "Flow",
+        "units": "kWh",
+        "contents": "Electricity",
+        "totalized": false
+      }
+    }
+  },
+  "SewerIntake": {
+    "type": "Pipe",
+    "source": "RawSewagePump",
+    "destination": "WWTP",
+    "contents": "UntreatedSewage"
+  },
+  "RawSewagePump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "UntreatedSewage",
+    "horsepower": null,
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {
+      "PumpRuntime": {
+        "type": "RunTime",
+        "units": "Hours",
+        "contents": "Electricity",
+        "source_unit_id": "total",
+        "totalized": true
+      }
+    }
+  }
+}
