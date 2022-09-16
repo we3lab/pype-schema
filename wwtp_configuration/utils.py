@@ -37,7 +37,7 @@ def parse_units(units):
     """
     clean_units = units.lower().replace(" ", "")
     try:
-        return u(clean_units)
+        return u(clean_units).units
     except UndefinedUnitError:
         if (
             clean_units == "mgd"
@@ -420,14 +420,14 @@ class Tag:
         across all units of the destination node.
         None if the Tag is associated with a Node object instead of a Connection
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     totalized : bool
         True if data is totalized. False otherwise
 
     contents : ContentsType
         Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
-
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
 
     Attributes
     ----------
@@ -449,14 +449,14 @@ class Tag:
         integer representing unit number, or `total` if a combined data point
         across all units of the destination node
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     totalized : bool
         True if data is totalized. False otherwise
 
     contents : ContentsType
         Contents moving through the node
-
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
     """
 
     def __init__(
@@ -466,9 +466,9 @@ class Tag:
         tag_type,
         source_unit_id,
         dest_unit_id,
+        parent_id,
         totalized=False,
-        contents=None,
-        parent_id=""
+        contents=None
     ):
         self.id = id
         self.units = units
@@ -483,8 +483,8 @@ class Tag:
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
-            f"dest_unit_id:{self.dest_unit_id} totalized:{self.totalized} "
-            f"contents:{self.contents} parent_id:{self.parent_id}>\n"
+            f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
+            f"totalized:{self.totalized} contents:{self.contents}>\n"
         )
 
     def __eq__(self, other):

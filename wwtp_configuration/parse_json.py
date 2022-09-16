@@ -460,9 +460,9 @@ class JSONParser:
             tag_type,
             source_unit_id,
             dest_unit_id,
+            obj.id,
             totalized=totalized,
             contents=contents,
-            parent_id=obj.id
         )
 
         return tag

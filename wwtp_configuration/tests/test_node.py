@@ -82,7 +82,7 @@ def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
     with open(tag_path, "rb") as pickle_file:
         tags = pickle.load(pickle_file)
 
-    # note that Counter is used so that order is ignored
+    # Counter is used so that order is ignored
     assert Counter(result.get_all_tags(recurse=recurse)) == Counter(tags)
 
 
