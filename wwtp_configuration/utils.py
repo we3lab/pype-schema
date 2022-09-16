@@ -468,7 +468,7 @@ class Tag:
         dest_unit_id,
         parent_id,
         totalized=False,
-        contents=None
+        contents=None,
     ):
         self.id = id
         self.units = units
@@ -513,6 +513,6 @@ class Tag:
                 self.source_unit_id,
                 self.dest_unit_id,
                 self.units,
-                self.parent_id
+                self.parent_id,
             )
         )
