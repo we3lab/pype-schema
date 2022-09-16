@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from abc import ABC
 from . import utils
 
@@ -156,34 +157,38 @@ class Node(ABC):
 
         return nodes
 
-        def get_all_tags(self, recurse=False):
-            """Gets all Tag objects associated with this Node
+    def get_all_tags(self, recurse=False):
+        """Gets all Tag objects associated with this Node
 
-            Parameters
-            ----------
-            recurse : bool
-                Whether or not to get tags recursively.
-                Default is False, meaning that only direct children will be returned.
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get tags recursively.
+            Default is False, meaning that only tags involving direct children
+            (and this Node itself) will be returned.
 
-            Returns
-            ------
-            list of Tag
-                Tag objects inside this Node.
-                If `recurse` is True, all children, grandchildren, etc. are returned.
-                If False, only direct children are returned.
-            """
-            tags = list(self.tags.values())
+        Returns
+        ------
+        list of Tag
+            Tag objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        tags = list(self.tags.values())
 
-            if hasattr(self, "connections"):
-                for connection in self.connections.values():
-                    tags = tags + list(connection.tags.values())
+        if hasattr(self, "connections"):
+            for connection in self.connections.values():
+                tags = tags + list(connection.tags.values())
 
-            if recurse:
-                if hasattr(self, "nodes"):
-                    for node in self.nodes.values():
-                        tags = tags + node.get_all_tags(recurse=recurse)
+        if hasattr(self, "nodes"):
+            for node in self.nodes.values():
+                tags = tags + list(node.tags.values())
+                if recurse:
+                    tags = tags + node.get_all_tags(recurse=recurse)
 
-            return tags
+        # remove duplicates from grabbing top level and next level
+        tags = list(set(tags))
+        return tags
 
 
 class Network(Node):
@@ -461,7 +466,7 @@ class Facility(Network):
             and self.tags == other.tags
         )
 
-    def get_cogen(self, recurse=False):
+    def get_cogen_list(self, recurse=False):
         """Searches the Facility and returns a list of all Cogeneration objects
 
         Parameters

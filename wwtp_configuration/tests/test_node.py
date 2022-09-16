@@ -45,18 +45,19 @@ def test_get_tag(json_path, tag_name, expected_path):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, recurse, connection_path, node_path",
+    "json_path, recurse, connection_path, node_path, tag_path",
     [
         (
             "data/node.json",
             False,
             "data/top_level_connections.pkl",
             "data/top_level_nodes.pkl",
+            "data/top_level_tags.pkl"
         ),
-        ("data/node.json", True, "data/all_connections.pkl", "data/all_nodes.pkl"),
+        ("data/node.json", True, "data/all_connections.pkl", "data/all_nodes.pkl", "data/all_tags.pkl"),
     ],
 )
-def test_get_all(json_path, recurse, connection_path, node_path):
+def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
     parser = JSONParser(json_path)
 
     result = parser.initialize_network()
@@ -67,8 +68,12 @@ def test_get_all(json_path, recurse, connection_path, node_path):
     with open(node_path, "rb") as pickle_file:
         nodes = pickle.load(pickle_file)
 
+    with open(tag_path, "rb") as pickle_file:
+        tags = pickle.load(pickle_file)
+
     assert result.get_all_connections(recurse=recurse) == connections
     assert result.get_all_nodes(recurse=recurse) == nodes
+    assert result.get_all_tags(recurse=recurse) == tags
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
@@ -86,3 +91,23 @@ def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
     cogen = result.get_node(cogen_id)
 
     assert cogen.energy_efficiency(efficiency_arg) == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, recurse, expected_path",
+    [
+        ("data/node.json", False, []),
+        ("data/connection.json", False, "get_cogen.pkl"),
+        ("data/node.json", True, "get_cogen.pkl"),
+    ],
+)
+def test_get_cogen_list(json_path, recurse, expected_path):
+    parser = JSONParser(json_path)
+
+    result = parser.initialize_network()
+
+    with open(expected_path, "rb") as pickle_file:
+        expected = pickle.load(pickle_file)
+
+    assert result.get_cogen(recurse) == expected
