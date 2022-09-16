@@ -2,6 +2,7 @@ import os
 import pint
 import pickle
 import pytest
+from collections import Counter
 from wwtp_configuration.units import u
 from wwtp_configuration.parse_json import JSONParser
 
@@ -65,15 +66,18 @@ def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
     with open(connection_path, "rb") as pickle_file:
         connections = pickle.load(pickle_file)
 
+    assert result.get_all_connections(recurse=recurse) == connections
+
     with open(node_path, "rb") as pickle_file:
         nodes = pickle.load(pickle_file)
+
+    assert result.get_all_nodes(recurse=recurse) == nodes
 
     with open(tag_path, "rb") as pickle_file:
         tags = pickle.load(pickle_file)
 
-    assert result.get_all_connections(recurse=recurse) == connections
-    assert result.get_all_nodes(recurse=recurse) == nodes
-    assert result.get_all_tags(recurse=recurse) == tags
+    # note that Counter is used so that order is ignored
+    assert Counter(result.get_all_tags(recurse=recurse)) == Counter(tags)
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
@@ -95,19 +99,20 @@ def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, recurse, expected_path",
+    "json_path, recurse, expected",
     [
         ("data/node.json", False, []),
-        ("data/connection.json", False, "get_cogen.pkl"),
-        ("data/node.json", True, "get_cogen.pkl"),
+        ("data/connection.json", False, "data/get_cogen.pkl"),
+        ("data/node.json", True, "data/get_cogen.pkl"),
     ],
 )
-def test_get_cogen_list(json_path, recurse, expected_path):
+def test_get_cogen_list(json_path, recurse, expected):
     parser = JSONParser(json_path)
 
     result = parser.initialize_network()
 
-    with open(expected_path, "rb") as pickle_file:
-        expected = pickle.load(pickle_file)
+    if isinstance(expected, str) and os.path.isfile(expected):
+        with open(expected, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
 
-    assert result.get_cogen(recurse) == expected
+    assert result.get_cogen_list(recurse) == expected

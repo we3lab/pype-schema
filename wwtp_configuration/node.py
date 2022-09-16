@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from abc import ABC
 from . import utils
 
@@ -357,6 +356,31 @@ class Network(Node):
         except KeyError:
             return None
 
+    def get_cogen_list(self, recurse=False):
+        """Searches the Facility and returns a list of all Cogeneration objects
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get cogenerators recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Cogeneration
+            Cogeneration objects inside this Facility.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        cogen = []
+        nodes = self.get_all_nodes(recurse=recurse)
+
+        for node in nodes:
+            if isinstance(node, Cogeneration):
+                cogen.append(node)
+
+        return cogen
+
 
 class Facility(Network):
     """
@@ -465,31 +489,6 @@ class Facility(Network):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
-    def get_cogen_list(self, recurse=False):
-        """Searches the Facility and returns a list of all Cogeneration objects
-
-        Parameters
-        ----------
-        recurse : bool
-            Whether or not to get cogenerators recursively.
-            Default is False, meaning that only direct children will be returned.
-
-        Returns
-        ------
-        list of Cogeneration
-            Cogeneration objects inside this Facility.
-            If `recurse` is True, all children, grandchildren, etc. are returned.
-            If False, only direct children are returned.
-        """
-        cogen = []
-        nodes = self.get_all_nodes(recurse=recurse)
-
-        for node in nodes:
-            if isinstance(node, Cogeneration):
-                cogen.append(node)
-
-        return cogen
 
 
 class Pump(Node):
