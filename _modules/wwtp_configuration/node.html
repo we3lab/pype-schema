@@ -188,7 +188,40 @@
                 <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                     <span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">nodes</span></div></div>
+        <span class="k">return</span> <span class="n">nodes</span></div>
+
+<div class="viewcode-block" id="Node.get_all_tags"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_tags">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets all Tag objects associated with this Node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get tags recursively.</span>
+<span class="sd">            Default is False, meaning that only tags involving direct children</span>
+<span class="sd">            (and this Node itself) will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Tag</span>
+<span class="sd">            Tag objects inside this Node.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                    <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_tags</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
+
+        <span class="c1"># remove duplicates from grabbing top level and next level</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tags</span></div></div>
 
 
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -355,7 +388,32 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div></div>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Network.get_cogen_list"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_cogen_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_cogen_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Searches the Facility and returns a list of all Cogeneration objects</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get cogenerators recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Cogeneration</span>
+<span class="sd">            Cogeneration objects inside this Facility.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cogen</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Cogeneration</span><span class="p">):</span>
+                <span class="n">cogen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cogen</span></div></div>
 
 
 <div class="viewcode-block" id="Facility"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Facility">[docs]</a><span class="k">class</span> <span class="nc">Facility</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
@@ -1065,7 +1123,7 @@
 <span class="sd">            function takes in the current heat produced in BTU and returns</span>
 <span class="sd">            the energy produced in kWh</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO: type check that pump_curve is a function</span>
+        <span class="c1"># TODO: type check that efficiency_curve is a function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div></div>
 
 

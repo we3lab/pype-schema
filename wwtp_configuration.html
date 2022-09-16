@@ -697,6 +697,26 @@ the energy produced in kWh</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Network.get_cogen_list">
+<span class="sig-name descname"><span class="pre">get_cogen_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Network.get_cogen_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Network.get_cogen_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the Facility and returns a list of all Cogeneration objects</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get cogenerators recursively.
+Default is False, meaning that only direct children will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Cogeneration objects inside this Facility.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Cogeneration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Network.get_connection">
 <span class="sig-name descname"><span class="pre">get_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Network.get_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Network.get_connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a connection from the network
@@ -818,6 +838,27 @@ If False, only direct children are returned.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list of Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_tags">
+<span class="sig-name descname"><span class="pre">get_all_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all Tag objects associated with this Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get tags recursively.
+Default is False, meaning that only tags involving direct children
+(and this Node itself) will be returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tag objects inside this Node.
+If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
+If False, only direct children are returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Tag</p>
 </dd>
 </dl>
 </dd></dl>
