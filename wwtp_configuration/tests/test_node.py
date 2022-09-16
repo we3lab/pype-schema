@@ -53,9 +53,15 @@ def test_get_tag(json_path, tag_name, expected_path):
             False,
             "data/top_level_connections.pkl",
             "data/top_level_nodes.pkl",
-            "data/top_level_tags.pkl"
+            "data/top_level_tags.pkl",
         ),
-        ("data/node.json", True, "data/all_connections.pkl", "data/all_nodes.pkl", "data/all_tags.pkl"),
+        (
+            "data/node.json",
+            True,
+            "data/all_connections.pkl",
+            "data/all_nodes.pkl",
+            "data/all_tags.pkl",
+        ),
     ],
 )
 def test_get_all(json_path, recurse, connection_path, node_path, tag_path):

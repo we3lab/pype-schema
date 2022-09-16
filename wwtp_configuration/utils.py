@@ -493,4 +493,14 @@ class Tag:
         )
 
     def __hash__(self):
-        return hash((self.id, self.contents, self.tag_type, self.totalized, self.source_unit_id, self.dest_unit_id, self.units))
+        return hash(
+            (
+                self.id,
+                self.contents,
+                self.tag_type,
+                self.totalized,
+                self.source_unit_id,
+                self.dest_unit_id,
+                self.units,
+            )
+        )
