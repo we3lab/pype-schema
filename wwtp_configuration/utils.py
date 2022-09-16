@@ -491,3 +491,16 @@ class Tag:
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
         )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.contents,
+                self.tag_type,
+                self.totalized,
+                self.source_unit_id,
+                self.dest_unit_id,
+                self.units,
+            )
+        )
