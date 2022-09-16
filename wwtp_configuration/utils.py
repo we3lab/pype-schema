@@ -404,8 +404,9 @@ class Tag:
     id : str
         Tag ID
 
-    units : str
-        Units represented as a string. E.g., `MGD` or `cubic meters`
+    units : str or Unit
+        Units represented as a string Pint unit.
+        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
@@ -425,13 +426,17 @@ class Tag:
     contents : ContentsType
         Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     Attributes
     ----------
     id : str
         Tag ID
 
-    units : str
-        Units represented as a string. E.g., `MGD` or `cubic meters`
+    units : str or Unit
+        Units represented as a string Pint unit.
+        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
@@ -449,6 +454,9 @@ class Tag:
 
     contents : ContentsType
         Contents moving through the node
+
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
     """
 
     def __init__(
@@ -460,6 +468,7 @@ class Tag:
         dest_unit_id,
         totalized=False,
         contents=None,
+        parent_id=""
     ):
         self.id = id
         self.units = units
@@ -468,13 +477,14 @@ class Tag:
         self.totalized = totalized
         self.source_unit_id = source_unit_id
         self.dest_unit_id = dest_unit_id
+        self.parent_id = parent_id
 
     def __repr__(self):
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} totalized:{self.totalized} "
-            f"contents:{self.contents}>\n"
+            f"contents:{self.contents} parent_id:{self.parent_id}>\n"
         )
 
     def __eq__(self, other):
@@ -490,6 +500,7 @@ class Tag:
             and self.source_unit_id == other.source_unit_id
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
+            and self.parent_id == other.parent_id
         )
 
     def __hash__(self):
@@ -502,5 +513,6 @@ class Tag:
                 self.source_unit_id,
                 self.dest_unit_id,
                 self.units,
+                self.parent_id
             )
         )

@@ -462,6 +462,7 @@ class JSONParser:
             dest_unit_id,
             totalized=totalized,
             contents=contents,
+            parent_id=obj.id
         )
 
         return tag
