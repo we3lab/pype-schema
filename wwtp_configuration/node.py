@@ -102,60 +102,6 @@ class Node(ABC):
 
         return tag
 
-    def get_all_connections(self, recurse=False):
-        """Gets all Connection objects associated with this Node
-
-        Parameters
-        ----------
-        recurse : bool
-            Whether or not to get connections recursively.
-            Default is False, meaning that only direct children will be returned.
-
-        Returns
-        ------
-        list of Connection
-            Connection objects inside this Node.
-            If `recurse` is True, all children, grandchildren, etc. are returned.
-            If False, only direct children are returned.
-        """
-        connections = []
-        if hasattr(self, "connections"):
-            connections = list(self.connections.values())
-
-        if recurse:
-            if hasattr(self, "nodes"):
-                for node in self.nodes.values():
-                    connections = connections + node.get_all_connections(
-                        recurse=recurse
-                    )
-
-        return connections
-
-    def get_all_nodes(self, recurse=False):
-        """Gets all Node objects associated with this Node
-
-        Parameters
-        ----------
-        recurse : bool
-            Whether or not to get nodes recursively.
-            Default is False, meaning that only direct children will be returned.
-
-        Returns
-        ------
-        list of Node
-            Node objects inside this Node.
-            If `recurse` is True, all children, grandchildren, etc. are returned.
-            If False, only direct children are returned.
-        """
-        nodes = []
-        if hasattr(self, "nodes"):
-            nodes = list(self.nodes.values())
-            if recurse:
-                for node in self.nodes.values():
-                    nodes = nodes + node.get_all_nodes(recurse=recurse)
-
-        return nodes
-
     def get_all_tags(self, recurse=False):
         """Gets all Tag objects associated with this Node
 
@@ -188,6 +134,119 @@ class Node(ABC):
         # remove duplicates from grabbing top level and next level
         tags = list(set(tags))
         return tags
+
+    def get_connection(self, connection_name, recurse=False):
+        """Get a connection from the network
+        Parameters
+        ----------
+        connection_name : str
+            name of connection to retrieve
+
+        recurse : bool
+            Whether or not to get connections recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        -------
+        Connection or None
+            Connection object if node is found. None otherwise
+        """
+        result = None
+        if hasattr(self, "connections"):
+            try:
+                return self.connections[connection_name]
+            except KeyError:
+                if recurse:
+                    for node in self.nodes.values():
+                        result = self.get_connection(node_name)
+                        if result:
+                            break
+
+        return result
+
+    def get_all_connections(self, recurse=False):
+        """Gets all Connection objects associated with this Node
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get connections recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Connection
+            Connection objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        connections = []
+        if hasattr(self, "connections"):
+            connections = list(self.connections.values())
+
+        if recurse:
+            if hasattr(self, "nodes"):
+                for node in self.nodes.values():
+                    connections = connections + node.get_all_connections(
+                        recurse=recurse
+                    )
+        return connections
+
+    def get_node(self, node_name, recurse=False):
+        """Get a node from the network
+
+        Parameters
+        ----------
+        node_name : str
+            name of node to retrieve
+
+        recurse : bool
+            Whether or not to get nodes recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        -------
+        Node or None
+            Node object if node is found. None otherwise
+        """
+        result = None
+        if hasattr(self, "nodes"):
+            try:
+                return self.nodes[node_name]
+            except KeyError:
+                if recurse:
+                    for node in self.nodes.values():
+                        result = self.get_node(node_name)
+                        if result:
+                            break
+
+        return result
+
+    def get_all_nodes(self, recurse=False):
+        """Gets all Node objects associated with this Node
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get nodes recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Node
+            Node objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        nodes = []
+        if hasattr(self, "nodes"):
+            nodes = list(self.nodes.values())
+            if recurse:
+                for node in self.nodes.values():
+                    nodes = nodes + node.get_all_nodes(recurse=recurse)
+
+        return nodes
+
 
 
 class Network(Node):
@@ -297,24 +356,6 @@ class Network(Node):
         """
         del self.nodes[node_name]
 
-    def get_node(self, node_name):
-        """Get a node from the network
-
-        Parameters
-        ----------
-        node_name : str
-            name of node to retrieve
-
-        Returns
-        -------
-        Node or None
-            Node object if node is found. None otherwise
-        """
-        try:
-            return self.nodes[node_name]
-        except KeyError:
-            return None
-
     def add_connection(self, connection):
         """Adds a connection to the network
 
@@ -338,23 +379,6 @@ class Network(Node):
             if `connection_name` is not found
         """
         del self.connections[connection_name]
-
-    def get_connection(self, connection_name):
-        """Get a connection from the network
-        Parameters
-        ----------
-        connection_name : str
-            name of connection to retrieve
-
-        Returns
-        -------
-        Connection or None
-            Connection object if node is found. None otherwise
-        """
-        try:
-            return self.connections[connection_name]
-        except KeyError:
-            return None
 
     def get_cogen_list(self, recurse=False):
         """Searches the Facility and returns a list of all Cogeneration objects
