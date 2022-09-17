@@ -158,7 +158,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = self.get_connection(node_name)
+                        result = node.get_connection(connection_name)
                         if result:
                             break
 
@@ -216,7 +216,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = self.get_node(node_name)
+                        result = node.get_node(node_name)
                         if result:
                             break
 
@@ -246,7 +246,6 @@ class Node(ABC):
                     nodes = nodes + node.get_all_nodes(recurse=recurse)
 
         return nodes
-
 
 
 class Network(Node):
