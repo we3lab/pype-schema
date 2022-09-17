@@ -136,60 +136,6 @@
 
         <span class="k">return</span> <span class="n">tag</span></div>
 
-<div class="viewcode-block" id="Node.get_all_connections"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_connections">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets all Connection objects associated with this Node</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        recurse : bool</span>
-<span class="sd">            Whether or not to get connections recursively.</span>
-<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        ------</span>
-<span class="sd">        list of Connection</span>
-<span class="sd">            Connection objects inside this Node.</span>
-<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
-<span class="sd">            If False, only direct children are returned.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">connections</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
-            <span class="n">connections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                    <span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span>
-                        <span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span>
-                    <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">connections</span></div>
-
-<div class="viewcode-block" id="Node.get_all_nodes"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Gets all Node objects associated with this Node</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        recurse : bool</span>
-<span class="sd">            Whether or not to get nodes recursively.</span>
-<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        ------</span>
-<span class="sd">        list of Node</span>
-<span class="sd">            Node objects inside this Node.</span>
-<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
-<span class="sd">            If False, only direct children are returned.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
-            <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                    <span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">nodes</span></div>
-
 <div class="viewcode-block" id="Node.get_all_tags"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_tags">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets all Tag objects associated with this Node</span>
 
@@ -221,7 +167,119 @@
 
         <span class="c1"># remove duplicates from grabbing top level and next level</span>
         <span class="n">tags</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">tags</span></div></div>
+        <span class="k">return</span> <span class="n">tags</span></div>
+
+<div class="viewcode-block" id="Node.get_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a connection from the network</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connection_name : str</span>
+<span class="sd">            name of connection to retrieve</span>
+
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get connections recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Connection or None</span>
+<span class="sd">            Connection object if node is found. None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_connection</span><span class="p">(</span><span class="n">connection_name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Node.get_all_connections"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_connections">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets all Connection objects associated with this Node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get connections recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Connection</span>
+<span class="sd">            Connection objects inside this Node.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">connections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">):</span>
+            <span class="n">connections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span>
+                        <span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span>
+                    <span class="p">)</span>
+        <span class="k">return</span> <span class="n">connections</span></div>
+
+<div class="viewcode-block" id="Node.get_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a node from the network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node_name : str</span>
+<span class="sd">            name of node to retrieve</span>
+
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get nodes recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Node or None</span>
+<span class="sd">            Node object if node is found. None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                            <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Node.get_all_nodes"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Node.get_all_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets all Node objects associated with this Node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to get nodes recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------</span>
+<span class="sd">        list of Node</span>
+<span class="sd">            Node objects inside this Node.</span>
+<span class="sd">            If `recurse` is True, all children, grandchildren, etc. are returned.</span>
+<span class="sd">            If False, only direct children are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">):</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">node</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nodes</span></div></div>
 
 
 <div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -331,24 +389,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Network.get_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get a node from the network</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        node_name : str</span>
-<span class="sd">            name of node to retrieve</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Node or None</span>
-<span class="sd">            Node object if node is found. None otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
-
 <div class="viewcode-block" id="Network.add_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.add_connection">[docs]</a>    <span class="k">def</span> <span class="nf">add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Adds a connection to the network</span>
 
@@ -372,23 +412,6 @@
 <span class="sd">            if `connection_name` is not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="Network.get_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get a connection from the network</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        connection_name : str</span>
-<span class="sd">            name of connection to retrieve</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Connection or None</span>
-<span class="sd">            Connection object if node is found. None otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Network.get_cogen_list"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.node.Network.get_cogen_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_cogen_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Searches the Facility and returns a list of all Cogeneration objects</span>

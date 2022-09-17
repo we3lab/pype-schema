@@ -64,19 +64,21 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.Tag">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.Tag" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.Tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to represent a SCADA or other data tag</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Tag ID</p></li>
-<li><p><strong>units</strong> (<em>str</em>) – Units represented as a string. E.g., <cite>MGD</cite> or <cite>cubic meters</cite></p></li>
+<li><p><strong>units</strong> (<em>str or Unit</em>) – Units represented as a string Pint unit.
+E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>source_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the source node</p></li>
 <li><p><strong>dest_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the destination node.
 None if the Tag is associated with a Node object instead of a Connection</p></li>
+<li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
 </ul>
@@ -84,12 +86,14 @@ None if the Tag is associated with a Node object instead of a Connection</p></li
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tag ID</p></li>
-<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Units represented as a string. E.g., <cite>MGD</cite> or <cite>cubic meters</cite></p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string Pint unit.
+E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.TagType" title="wwtp_configuration.utils.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>source_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the sources node</p></li>
 <li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the destination node</p></li>
+<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
 </ul>
