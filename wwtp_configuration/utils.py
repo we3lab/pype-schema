@@ -37,7 +37,7 @@ def parse_units(units):
     """
     clean_units = units.lower().replace(" ", "")
     try:
-        return u(clean_units)
+        return u(clean_units).units
     except UndefinedUnitError:
         if (
             clean_units == "mgd"
@@ -404,8 +404,9 @@ class Tag:
     id : str
         Tag ID
 
-    units : str
-        Units represented as a string. E.g., `MGD` or `cubic meters`
+    units : str or Unit
+        Units represented as a string Pint unit.
+        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
@@ -419,6 +420,9 @@ class Tag:
         across all units of the destination node.
         None if the Tag is associated with a Node object instead of a Connection
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     totalized : bool
         True if data is totalized. False otherwise
 
@@ -430,8 +434,9 @@ class Tag:
     id : str
         Tag ID
 
-    units : str
-        Units represented as a string. E.g., `MGD` or `cubic meters`
+    units : str or Unit
+        Units represented as a string Pint unit.
+        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
@@ -443,6 +448,9 @@ class Tag:
     dest_unit_id : int or str
         integer representing unit number, or `total` if a combined data point
         across all units of the destination node
+
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
 
     totalized : bool
         True if data is totalized. False otherwise
@@ -458,6 +466,7 @@ class Tag:
         tag_type,
         source_unit_id,
         dest_unit_id,
+        parent_id,
         totalized=False,
         contents=None,
     ):
@@ -468,13 +477,14 @@ class Tag:
         self.totalized = totalized
         self.source_unit_id = source_unit_id
         self.dest_unit_id = dest_unit_id
+        self.parent_id = parent_id
 
     def __repr__(self):
         return (
             f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
-            f"dest_unit_id:{self.dest_unit_id} totalized:{self.totalized} "
-            f"contents:{self.contents}>\n"
+            f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
+            f"totalized:{self.totalized} contents:{self.contents}>\n"
         )
 
     def __eq__(self, other):
@@ -490,6 +500,7 @@ class Tag:
             and self.source_unit_id == other.source_unit_id
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
+            and self.parent_id == other.parent_id
         )
 
     def __hash__(self):
@@ -502,5 +513,6 @@ class Tag:
                 self.source_unit_id,
                 self.dest_unit_id,
                 self.units,
+                self.parent_id,
             )
         )
