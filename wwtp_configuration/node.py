@@ -158,7 +158,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = node.get_connection(connection_name)
+                        result = node.get_connection(connection_name, recurse=True)
                         if result:
                             break
 
@@ -188,7 +188,7 @@ class Node(ABC):
             if hasattr(self, "nodes"):
                 for node in self.nodes.values():
                     connections = connections + node.get_all_connections(
-                        recurse=recurse
+                        recurse=True
                     )
         return connections
 
@@ -216,7 +216,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = node.get_node(node_name)
+                        result = node.get_node(node_name, recurse=True)
                         if result:
                             break
 
@@ -243,7 +243,7 @@ class Node(ABC):
             nodes = list(self.nodes.values())
             if recurse:
                 for node in self.nodes.values():
-                    nodes = nodes + node.get_all_nodes(recurse=recurse)
+                    nodes = nodes + node.get_all_nodes(recurse=True)
 
         return nodes
 
