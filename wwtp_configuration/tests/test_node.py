@@ -32,7 +32,6 @@ pint.set_application_registry(u)
 )
 def test_get_tag(json_path, tag_name, expected_path):
     parser = JSONParser(json_path)
-
     result = parser.initialize_network()
     tag = result.get_tag(tag_name)
 
@@ -66,7 +65,6 @@ def test_get_tag(json_path, tag_name, expected_path):
 )
 def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
     parser = JSONParser(json_path)
-
     result = parser.initialize_network()
 
     with open(connection_path, "rb") as pickle_file:
@@ -96,10 +94,8 @@ def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
 )
 def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
     parser = JSONParser(json_path)
-
     result = parser.initialize_network()
     cogen = result.get_node(cogen_id)
-
     assert cogen.energy_efficiency(efficiency_arg) == expected
 
 
@@ -122,3 +118,56 @@ def test_get_cogen_list(json_path, recurse, expected):
             expected = pickle.load(pickle_file)
 
     assert result.get_cogen_list(recurse) == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, tag_path, expected",
+    [
+        # Case 1: node does not exist
+        ("data/node.json", "InvalidNode", []),
+        # Case 2: no connections but node exists
+        ("data/node.json", "PowerGrid", []),
+        # Case 3: only normal connections
+        ("data/connection.json", "Cogenerator", "data/connection_to_cogen.pkl"),
+        # Case 4: normal connections and entry_point
+        ("data/node.json", "Digester", "data/connection_to_digester.pkl"),
+    ],
+)
+def test_get_all_connections_to(json_path, node_id, expected):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+
+    with open(tag_path, "rb") as pickle_file:
+        tag = pickle.load(pickle_file)
+
+    with open(expected, "rb") as pickle_file:
+        expected = pickle.load(pickle_file)
+
+    result = config.get_all_connections_to(tag)
+    assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, tag_path, expected",
+    [
+        ("data/connection.json", "Digester", []),
+        ("data/node.json", "data/combined_gas_tag.pkl", "data/connection_from_gas_flow.pkl"),
+        ("data/node.json", "data/electricity_purchase_tag.pkl", "data/connection_from_elec_flow.pkl"),
+    ],
+)
+def test_get_all_connections_from(json_path, node_id, expected):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+
+    with open(tag_path, "rb") as pickle_file:
+        tag = pickle.load(pickle_file)
+
+    with open(expected, "rb") as pickle_file:
+        expected = pickle.load(pickle_file)
+
+    result = config.get_all_connections_from(tag)
+    assert result == expected
+
+# test_get_parent_from_tag

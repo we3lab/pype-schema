@@ -101,7 +101,9 @@
     "type": "Pipe",
     "source": "RawSewagePump",
     "destination": "WWTP",
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "entry_point": "Digester",
+    "tags": {}
   },
   "RawSewagePump": {
     "type": "Pump",

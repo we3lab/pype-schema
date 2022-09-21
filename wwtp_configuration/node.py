@@ -247,6 +247,63 @@ class Node(ABC):
 
         return nodes
 
+    def get_all_connections_to(self, node):
+        """Gets all connections entering the specified Node, including those
+        from a different level of the hierarchy with `entry_point` specified.
+
+        Paremeters
+        ----------
+        node : Node
+            wwtp_configuration `Node` object for which we want to get connections
+
+        Returns
+        -------
+        list of Connection
+            List of `Connection` objects entering the specified `node`
+        """
+        connections = self.get_all_connections(recurse=True)
+        return [connection for connection in connections if connection.destination == node or connection.entry_point == node]
+
+    def get_all_connections_from(self, node):
+        """Gets all connections leaving the specified Node, including those
+        from a different level of the hierarchy with `exit_point` specified.
+
+        Paremeters
+        ----------
+        node : Node
+            wwtp_configuration `Node` object for which we want to get connections
+
+        Returns
+        -------
+        list of Connection
+            List of `Connection` objects leaving the specified `node`
+        """
+        connections = self.get_all_connections(recurse=True)
+        return [connection for connection in connections if connection.source == node or connection.exit_point == node]
+
+    def get_parent_from_tag(self, tag):
+        """Gets the parent object of a `Tag` object, as long as both the tag and its
+        parent object are children of `self`
+
+        Parameters
+        ----------
+        tag : Tag
+            wwtp_configuration `Node` object for which we want the parent object
+
+        Returns
+        -------
+        Node or Connection
+            parent object of the Tag
+        """
+        # this logic relies on the guarantee from parse_json that
+        # only tags associated with connections will have a valid destination unit ID
+        if tag.dest_unit_id:
+            parent_obj = self.get_connection(tag.parent_id, recurse=True)
+        else:
+            parent_obj = self.get_node(tag.parent_id, recurse=True)
+
+        return parent_obj
+
 
 class Network(Node):
     """A water utility represented as a set of connections and nodes
