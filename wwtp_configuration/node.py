@@ -261,6 +261,9 @@ class Node(ABC):
         list of Connection
             List of `Connection` objects entering the specified `node`
         """
+        if node is None:
+            return []
+
         connections = self.get_all_connections(recurse=True)
         return [connection for connection in connections if connection.destination == node or connection.entry_point == node]
 
@@ -278,6 +281,9 @@ class Node(ABC):
         list of Connection
             List of `Connection` objects leaving the specified `node`
         """
+        if node is None:
+            return []
+
         connections = self.get_all_connections(recurse=True)
         return [connection for connection in connections if connection.source == node or connection.exit_point == node]
 
