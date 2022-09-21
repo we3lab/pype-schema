@@ -192,9 +192,7 @@ class Node(ABC):
         if recurse:
             if hasattr(self, "nodes"):
                 for node in self.nodes.values():
-                    connections = connections + node.get_all_connections(
-                        recurse=True
-                    )
+                    connections = connections + node.get_all_connections(recurse=True)
         return connections
 
     def get_node(self, node_name, recurse=False):
@@ -270,7 +268,11 @@ class Node(ABC):
             return []
 
         connections = self.get_all_connections(recurse=True)
-        return [connection for connection in connections if connection.destination == node or connection.entry_point == node]
+        return [
+            connection
+            for connection in connections
+            if connection.destination == node or connection.entry_point == node
+        ]
 
     def get_all_connections_from(self, node):
         """Gets all connections leaving the specified Node, including those
@@ -290,7 +292,11 @@ class Node(ABC):
             return []
 
         connections = self.get_all_connections(recurse=True)
-        return [connection for connection in connections if connection.source == node or connection.exit_point == node]
+        return [
+            connection
+            for connection in connections
+            if connection.source == node or connection.exit_point == node
+        ]
 
     def get_parent_from_tag(self, tag):
         """Gets the parent object of a `Tag` object, as long as both the tag and its

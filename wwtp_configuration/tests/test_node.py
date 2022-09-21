@@ -187,9 +187,17 @@ def test_get_all_connections_from(json_path, node_id, expected):
         # Case 1: tag does not exist
         ("data/node.json", "NonexistentTag", None),
         # Case 2: tag exists at a top level connection
-        ("data/node.json", "data/top_level_connection_tag.pkl", "data/electricty_to_wwtp.pkl"),
+        (
+            "data/node.json",
+            "data/top_level_connection_tag.pkl",
+            "data/electricty_to_wwtp.pkl",
+        ),
         # Case 3: tag exists at a lower level connection
-        ("data/node.json", "data/lower_level_connection_tag.pkl", "data/gas_to_cogen.pkl"),
+        (
+            "data/node.json",
+            "data/lower_level_connection_tag.pkl",
+            "data/gas_to_cogen.pkl",
+        ),
         # Case 4: tag exists at a top level node
         ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
         # Case 5: tag exists at a lower level node
