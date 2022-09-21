@@ -4,7 +4,10 @@ import pickle
 import pytest
 from collections import Counter
 from wwtp_configuration.units import u
+from wwtp_configuration.utils import Tag
 from wwtp_configuration.parse_json import JSONParser
+from wwtp_configuration.node import Cogeneration
+from wwtp_configuration.connection import Pipe
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -33,7 +36,7 @@ pint.set_application_registry(u)
 def test_get_tag(json_path, tag_name, expected_path):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
-    tag = result.get_tag(tag_name)
+    tag = result.get_tag(tag_name, recurse=True)
 
     expected = None
     if expected_path:
@@ -101,23 +104,28 @@ def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, recurse, expected",
+    "json_path, desired_type, recurse, expected",
     [
-        ("data/node.json", False, []),
-        ("data/connection.json", False, "data/get_cogen.pkl"),
-        ("data/node.json", True, "data/get_cogen.pkl"),
+        ("data/node.json", None, False, "TypeError"),
+        ("data/node.json", Cogeneration, False, []),
+        ("data/node.json", Pipe, False, "data/get_pipe_no_recurse.pkl"),
+        ("data/connection.json", Cogeneration, False, "data/get_cogen.pkl"),
+        ("data/node.json", Cogeneration, True, "data/get_cogen.pkl"),
+        ("data/node.json", Pipe, True, "data/get_pipe_recurse.pkl"),
     ],
 )
-def test_get_cogen_list(json_path, recurse, expected):
-    parser = JSONParser(json_path)
+def test_get_list_of_type(json_path, desired_type, recurse, expected):
+    try:
+        parser = JSONParser(json_path)
+        result = parser.initialize_network().get_list_of_type(desired_type, recurse)
 
-    result = parser.initialize_network()
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "wb") as pickle_file:
+                expected = pickle.dump(result, pickle_file)
+    except Exception as err:
+        result = type(err).__name__
 
-    if isinstance(expected, str) and os.path.isfile(expected):
-        with open(expected, "rb") as pickle_file:
-            expected = pickle.load(pickle_file)
-
-    assert result.get_cogen_list(recurse) == expected
+    assert result == expected
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
@@ -171,4 +179,36 @@ def test_get_all_connections_from(json_path, node_id, expected):
 
     assert result == expected
 
-# test_get_parent_from_tag
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, tag_path, expected",
+    [
+        # Case 1: tag does not exist
+        ("data/node.json", "NonexistentTag", None),
+        # Case 2: tag exists at a top level connection
+        ("data/node.json", "data/top_level_connection_tag.pkl", "data/electricty_to_wwtp.pkl"),
+        # Case 3: tag exists at a lower level connection
+        ("data/node.json", "data/lower_level_connection_tag.pkl", "data/gas_to_cogen.pkl"),
+        # Case 4: tag exists at a top level node
+        ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
+        # Case 5: tag exists at a lower level node
+        ("data/node.json", "data/lower_level_node_tag.pkl", "data/digester.pkl"),
+    ],
+)
+def test_get_parent_from_tag(json_path, tag_path, expected):
+    if isinstance(tag_path, str) and os.path.isfile(tag_path):
+        with open(tag_path, "rb") as pickle_file:
+            tag = pickle.load(pickle_file)
+    else:
+        tag = Tag(tag_path, None, None, None, None, None)
+
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+    result = config.get_parent_from_tag(tag)
+
+    if isinstance(expected, str) and os.path.isfile(expected):
+        with open(expected, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
+
+    assert result == expected

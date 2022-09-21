@@ -69,15 +69,17 @@ class Node(ABC):
         """
         del self.tags[tag_name]
 
-    def get_tag(self, tag_name):
+    def get_tag(self, tag_name, recurse=False):
         """Gets the Tag object associated with `tag_name`
 
         Parameters
         ----------
         tag_name : str
 
-        node : Node
-            `Node` object to be recursively searched for the tag
+        recurse : bool
+            Whether or not to get tags recursively.
+            Default is False, meaning that only tags involving direct children
+            (and this Node itself) will be returned.
 
         Returns
         ------
@@ -93,10 +95,13 @@ class Node(ABC):
                 for connection in self.connections.values():
                     if tag_name in connection.tags.keys():
                         tag = connection.tags[tag_name]
-
             if hasattr(self, "nodes") and tag is None:
                 for node in self.nodes.values():
-                    tag = node.get_tag(tag_name)
+                    if recurse:
+                        tag = node.get_tag(tag_name, recurse=True)
+                    else:
+                        tag = node.tags[tag_name]
+
                     if tag:
                         break
 
@@ -442,11 +447,13 @@ class Network(Node):
         """
         del self.connections[connection_name]
 
-    def get_cogen_list(self, recurse=False):
+    def get_list_of_type(self, desired_type, recurse=False):
         """Searches the Facility and returns a list of all Cogeneration objects
 
         Parameters
         ----------
+        desired_type : Node or Connection
+
         recurse : bool
             Whether or not to get cogenerators recursively.
             Default is False, meaning that only direct children will be returned.
@@ -458,14 +465,17 @@ class Network(Node):
             If `recurse` is True, all children, grandchildren, etc. are returned.
             If False, only direct children are returned.
         """
-        cogen = []
-        nodes = self.get_all_nodes(recurse=recurse)
+        desired_objs = []
+        if issubclass(desired_type, Node):
+            objs = self.get_all_nodes(recurse=recurse)
+        else:
+            objs = self.get_all_connections(recurse=recurse)
 
-        for node in nodes:
-            if isinstance(node, Cogeneration):
-                cogen.append(node)
+        for obj in objs:
+            if isinstance(obj, desired_type):
+                desired_objs.append(obj)
 
-        return cogen
+        return desired_objs
 
 
 class Facility(Network):
