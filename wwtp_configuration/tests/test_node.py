@@ -120,8 +120,8 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         result = parser.initialize_network().get_list_of_type(desired_type, recurse)
 
         if isinstance(expected, str) and os.path.isfile(expected):
-            with open(expected, "wb") as pickle_file:
-                expected = pickle.dump(result, pickle_file)
+            with open(expected, "rb") as pickle_file:
+                expected = pickle.load(pickle_file)
     except Exception as err:
         result = type(err).__name__
 
