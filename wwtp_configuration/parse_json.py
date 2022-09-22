@@ -451,7 +451,7 @@ class JSONParser:
         contents = JSONParser.get_tag_contents(tag_id, tag_info, obj)
         tag_type = utils.TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
-        pint_unit = utils.parse_units(tag_info["units"])
+        pint_unit = utils.parse_units(tag_info["units"]) if tag_info["units"] else None
         source_unit_id = tag_info.get("source_unit_id", "total")
         dest_unit_id = tag_info.get("dest_unit_id", "total")
         tag = utils.Tag(
