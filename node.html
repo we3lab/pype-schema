@@ -419,22 +419,22 @@ the energy produced in kWh</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Network.get_list_of_type">
 <span class="sig-name descname"><span class="pre">get_list_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Network.get_list_of_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Network.get_list_of_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Searches the Facility and returns a list of all Cogeneration objects</p>
+<dd><p>Searches the Facility and returns a list of all objects of <cite>desired_type</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>desired_type</strong> (<em>Node or Connection</em>)</p></li>
-<li><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get cogenerators recursively.
+<li><p><strong>desired_type</strong> (<em>Node or Connection subclass</em>)</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get objects recursively.
 Default is False, meaning that only direct children will be returned.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Cogeneration objects inside this Facility.
+<dd class="field-even"><p>Objects of <cite>desired_type</cite> inside this Facility.
 If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
 If False, only direct children are returned.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Cogeneration</p>
+<dd class="field-odd"><p>list of <cite>desired_type</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -629,6 +629,27 @@ Default is False, meaning that only direct children will be returned.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node">Node</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_node_or_connection">
+<span class="sig-name descname"><span class="pre">get_node_or_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_node_or_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_node_or_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the <cite>Node</cite> or <cite>Connection</cite> object with name <cite>obj_id</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj_id</strong> (<em>str</em>) – name of the object to query</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get connections or nodes recursively.
+Default is False, meaning that only direct children will be returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>object with the name <cite>obj_id</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node">Node</a> or <a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.connection.Connection" title="wwtp_configuration.connection.Connection">Connection</a></p>
 </dd>
 </dl>
 </dd></dl>
