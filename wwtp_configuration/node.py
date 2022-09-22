@@ -69,15 +69,17 @@ class Node(ABC):
         """
         del self.tags[tag_name]
 
-    def get_tag(self, tag_name):
+    def get_tag(self, tag_name, recurse=False):
         """Gets the Tag object associated with `tag_name`
 
         Parameters
         ----------
         tag_name : str
 
-        node : Node
-            `Node` object to be recursively searched for the tag
+        recurse : bool
+            Whether or not to get tags recursively.
+            Default is False, meaning that only tags involving direct children
+            (and this Node itself) will be returned.
 
         Returns
         ------
@@ -93,10 +95,13 @@ class Node(ABC):
                 for connection in self.connections.values():
                     if tag_name in connection.tags.keys():
                         tag = connection.tags[tag_name]
-
             if hasattr(self, "nodes") and tag is None:
                 for node in self.nodes.values():
-                    tag = node.get_tag(tag_name)
+                    if recurse:
+                        tag = node.get_tag(tag_name, recurse=True)
+                    else:
+                        tag = node.tags[tag_name]
+
                     if tag:
                         break
 
@@ -158,7 +163,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = node.get_connection(connection_name)
+                        result = node.get_connection(connection_name, recurse=True)
                         if result:
                             break
 
@@ -187,9 +192,7 @@ class Node(ABC):
         if recurse:
             if hasattr(self, "nodes"):
                 for node in self.nodes.values():
-                    connections = connections + node.get_all_connections(
-                        recurse=recurse
-                    )
+                    connections = connections + node.get_all_connections(recurse=True)
         return connections
 
     def get_node(self, node_name, recurse=False):
@@ -216,7 +219,7 @@ class Node(ABC):
             except KeyError:
                 if recurse:
                     for node in self.nodes.values():
-                        result = node.get_node(node_name)
+                        result = node.get_node(node_name, recurse=True)
                         if result:
                             break
 
@@ -243,9 +246,80 @@ class Node(ABC):
             nodes = list(self.nodes.values())
             if recurse:
                 for node in self.nodes.values():
-                    nodes = nodes + node.get_all_nodes(recurse=recurse)
+                    nodes = nodes + node.get_all_nodes(recurse=True)
 
         return nodes
+
+    def get_all_connections_to(self, node):
+        """Gets all connections entering the specified Node, including those
+        from a different level of the hierarchy with `entry_point` specified.
+
+        Paremeters
+        ----------
+        node : Node
+            wwtp_configuration `Node` object for which we want to get connections
+
+        Returns
+        -------
+        list of Connection
+            List of `Connection` objects entering the specified `node`
+        """
+        if node is None:
+            return []
+
+        connections = self.get_all_connections(recurse=True)
+        return [
+            connection
+            for connection in connections
+            if connection.destination == node or connection.entry_point == node
+        ]
+
+    def get_all_connections_from(self, node):
+        """Gets all connections leaving the specified Node, including those
+        from a different level of the hierarchy with `exit_point` specified.
+
+        Paremeters
+        ----------
+        node : Node
+            wwtp_configuration `Node` object for which we want to get connections
+
+        Returns
+        -------
+        list of Connection
+            List of `Connection` objects leaving the specified `node`
+        """
+        if node is None:
+            return []
+
+        connections = self.get_all_connections(recurse=True)
+        return [
+            connection
+            for connection in connections
+            if connection.source == node or connection.exit_point == node
+        ]
+
+    def get_parent_from_tag(self, tag):
+        """Gets the parent object of a `Tag` object, as long as both the tag and its
+        parent object are children of `self`
+
+        Parameters
+        ----------
+        tag : Tag
+            wwtp_configuration `Node` object for which we want the parent object
+
+        Returns
+        -------
+        Node or Connection
+            parent object of the Tag
+        """
+        # this logic relies on the guarantee from parse_json that
+        # only tags associated with connections will have a valid destination unit ID
+        if tag.dest_unit_id:
+            parent_obj = self.get_connection(tag.parent_id, recurse=True)
+        else:
+            parent_obj = self.get_node(tag.parent_id, recurse=True)
+
+        return parent_obj
 
 
 class Network(Node):
@@ -379,11 +453,13 @@ class Network(Node):
         """
         del self.connections[connection_name]
 
-    def get_cogen_list(self, recurse=False):
+    def get_list_of_type(self, desired_type, recurse=False):
         """Searches the Facility and returns a list of all Cogeneration objects
 
         Parameters
         ----------
+        desired_type : Node or Connection
+
         recurse : bool
             Whether or not to get cogenerators recursively.
             Default is False, meaning that only direct children will be returned.
@@ -395,14 +471,17 @@ class Network(Node):
             If `recurse` is True, all children, grandchildren, etc. are returned.
             If False, only direct children are returned.
         """
-        cogen = []
-        nodes = self.get_all_nodes(recurse=recurse)
+        desired_objs = []
+        if issubclass(desired_type, Node):
+            objs = self.get_all_nodes(recurse=recurse)
+        else:
+            objs = self.get_all_connections(recurse=recurse)
 
-        for node in nodes:
-            if isinstance(node, Cogeneration):
-                cogen.append(node)
+        for obj in objs:
+            if isinstance(obj, desired_type):
+                desired_objs.append(obj)
 
-        return cogen
+        return desired_objs
 
 
 class Facility(Network):

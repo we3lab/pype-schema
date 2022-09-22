@@ -1,6 +1,6 @@
 {
   "nodes": ["WWTP", "PowerGrid", "RawSewagePump"],
-  "connections": ["ElectricityToWWTP", "SewerIntake"],
+  "connections": ["ElectricityToWWTP", "SewerIntake", "GasToGrid"],
   "WWTP": {
     "type": "Facility",
     "elevation (meters)": 1,
@@ -101,7 +101,9 @@
     "type": "Pipe",
     "source": "RawSewagePump",
     "destination": "WWTP",
-    "contents": "UntreatedSewage"
+    "contents": "UntreatedSewage",
+    "entry_point": "Digester",
+    "tags": {}
   },
   "RawSewagePump": {
     "type": "Pump",
@@ -122,5 +124,18 @@
         "totalized": true
       }
     }
+  },
+  "GasToGrid": {
+    "type": "Pipe",
+    "source": "WWTP",
+    "destination": "PowerGrid",
+    "contents": "Biogas",
+    "exit_point": "Digester",
+    "flowrate (MGD)": {
+      "max": null,
+      "min": null,
+      "avg": null
+    },
+    "tags": {}
   }
 }
