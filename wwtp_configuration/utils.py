@@ -18,7 +18,10 @@ def parse_quantity(value, units):
         a Pint Quantity with the given value and units
     """
     if value is not None:
-        return value * parse_units(units)
+        if units:
+            return value * parse_units(units)
+        else:
+            return value
     else:
         return None
 
