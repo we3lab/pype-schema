@@ -140,61 +140,6 @@ class Node(ABC):
         tags = list(set(tags))
         return tags
 
-    def get_connection(self, connection_name, recurse=False):
-        """Get a connection from the network
-        Parameters
-        ----------
-        connection_name : str
-            name of connection to retrieve
-
-        recurse : bool
-            Whether or not to get connections recursively.
-            Default is False, meaning that only direct children will be returned.
-
-        Returns
-        -------
-        Connection or None
-            Connection object if node is found. None otherwise
-        """
-        result = None
-        if hasattr(self, "connections"):
-            try:
-                return self.connections[connection_name]
-            except KeyError:
-                if recurse:
-                    for node in self.nodes.values():
-                        result = node.get_connection(connection_name, recurse=True)
-                        if result:
-                            break
-
-        return result
-
-    def get_all_connections(self, recurse=False):
-        """Gets all Connection objects associated with this Node
-
-        Parameters
-        ----------
-        recurse : bool
-            Whether or not to get connections recursively.
-            Default is False, meaning that only direct children will be returned.
-
-        Returns
-        ------
-        list of Connection
-            Connection objects inside this Node.
-            If `recurse` is True, all children, grandchildren, etc. are returned.
-            If False, only direct children are returned.
-        """
-        connections = []
-        if hasattr(self, "connections"):
-            connections = list(self.connections.values())
-
-        if recurse:
-            if hasattr(self, "nodes"):
-                for node in self.nodes.values():
-                    connections = connections + node.get_all_connections(recurse=True)
-        return connections
-
     def get_node(self, node_name, recurse=False):
         """Get a node from the network
 
@@ -250,6 +195,61 @@ class Node(ABC):
 
         return nodes
 
+    def get_connection(self, connection_name, recurse=False):
+        """Get a connection from the network
+        Parameters
+        ----------
+        connection_name : str
+            name of connection to retrieve
+
+        recurse : bool
+            Whether or not to get connections recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        -------
+        Connection or None
+            Connection object if node is found. None otherwise
+        """
+        result = None
+        if hasattr(self, "connections"):
+            try:
+                return self.connections[connection_name]
+            except KeyError:
+                if recurse:
+                    for node in self.nodes.values():
+                        result = node.get_connection(connection_name, recurse=True)
+                        if result:
+                            break
+
+        return result
+
+    def get_all_connections(self, recurse=False):
+        """Gets all Connection objects associated with this Node
+
+        Parameters
+        ----------
+        recurse : bool
+            Whether or not to get connections recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        ------
+        list of Connection
+            Connection objects inside this Node.
+            If `recurse` is True, all children, grandchildren, etc. are returned.
+            If False, only direct children are returned.
+        """
+        connections = []
+        if hasattr(self, "connections"):
+            connections = list(self.connections.values())
+
+        if recurse:
+            if hasattr(self, "nodes"):
+                for node in self.nodes.values():
+                    connections = connections + node.get_all_connections(recurse=True)
+        return connections
+
     def get_all_connections_to(self, node):
         """Gets all connections entering the specified Node, including those
         from a different level of the hierarchy with `entry_point` specified.
@@ -297,6 +297,29 @@ class Node(ABC):
             for connection in connections
             if connection.source == node or connection.exit_point == node
         ]
+
+    def get_node_or_connection(self, obj_id, recurse=False):
+        """Gets the `Node` or `Connection` object with name `obj_id`
+
+        Parameters
+        ----------
+        obj_id : str
+            name of the object to query
+
+        recurse : bool
+            Whether or not to get connections or nodes recursively.
+            Default is False, meaning that only direct children will be returned.
+
+        Returns
+        -------
+        Node or Connection
+            object with the name `obj_id`
+        """
+        obj = self.get_node(obj_id, recurse=recurse)
+        if obj is None:
+            obj = self.get_connection(obj_id, recurse=recurse)
+
+        return obj
 
     def get_parent_from_tag(self, tag):
         """Gets the parent object of a `Tag` object, as long as both the tag and its
@@ -454,20 +477,20 @@ class Network(Node):
         del self.connections[connection_name]
 
     def get_list_of_type(self, desired_type, recurse=False):
-        """Searches the Facility and returns a list of all Cogeneration objects
+        """Searches the Facility and returns a list of all objects of `desired_type`
 
         Parameters
         ----------
-        desired_type : Node or Connection
+        desired_type : Node or Connection subclass
 
         recurse : bool
-            Whether or not to get cogenerators recursively.
+            Whether or not to get objects recursively.
             Default is False, meaning that only direct children will be returned.
 
         Returns
         ------
-        list of Cogeneration
-            Cogeneration objects inside this Facility.
+        list of `desired_type`
+            Objects of `desired_type` inside this Facility.
             If `recurse` is True, all children, grandchildren, etc. are returned.
             If False, only direct children are returned.
         """

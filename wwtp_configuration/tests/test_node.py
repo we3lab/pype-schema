@@ -4,7 +4,7 @@ import pickle
 import pytest
 from collections import Counter
 from wwtp_configuration.units import u
-from wwtp_configuration.utils import Tag
+from wwtp_configuration.utils import Tag, ContentsType
 from wwtp_configuration.parse_json import JSONParser
 from wwtp_configuration.node import Cogeneration
 from wwtp_configuration.connection import Pipe
@@ -44,6 +44,42 @@ def test_get_tag(json_path, tag_name, expected_path):
             expected = pickle.load(pickle_file)
 
     assert tag == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, obj_id, recurse, expected",
+    [
+        ("data/node.json", "Cogenerator", False, None),
+        (
+            "data/node.json",
+            "Cogenerator",
+            True,
+            Cogeneration(
+                "Cogenerator",
+                [ContentsType.Biogas, ContentsType.NaturalGas],
+                400 * u.kW,
+                750 * u.kW,
+                600 * u.kW,
+                1,
+            ),
+        ),
+        ("data/node.json", "SewerIntake", False, "data/sewer_intake.pkl"),
+        ("data/node.json", "InvalidID", True, None),
+    ],
+)
+def test_get_node_or_connection(json_path, obj_id, recurse, expected):
+    result = (
+        JSONParser(json_path)
+        .initialize_network()
+        .get_node_or_connection(obj_id, recurse=recurse)
+    )
+
+    if isinstance(expected, str) and os.path.isfile(expected):
+        with open(expected, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
+
+    assert result == expected
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
