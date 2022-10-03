@@ -508,7 +508,11 @@ class JSONParser:
 
         tag_type = utils.TagType[tag_info["type"]]
         # these TagType do not have any contents
-        contentless_types = [utils.TagType.RunTime, utils.TagType.RunStatus, utils.TagType.Rotation]
+        contentless_types = [
+            utils.TagType.RunTime,
+            utils.TagType.RunStatus,
+            utils.TagType.Rotation,
+        ]
         if contents is None and tag_type not in contentless_types:
             # will work if obj is of type Connection, otherwise exception occurs
             try:
