@@ -540,7 +540,14 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="n">contents</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tag_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
+        <span class="c1"># these TagType do not have any contents</span>
+        <span class="n">contentless_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">RunTime</span><span class="p">,</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">RunStatus</span><span class="p">,</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">Rotation</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tag_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contentless_types</span><span class="p">:</span>
             <span class="c1"># will work if obj is of type Connection, otherwise exception occurs</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">contents</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">contents</span>
