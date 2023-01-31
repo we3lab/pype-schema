@@ -188,12 +188,14 @@ class JSONParser:
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
-            # TODO: support non-constant efficiency curve
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
 
                 def efficiency_curve(arg):
-                    return float(efficiency)
+                    if type(efficiency) is dict:
+                        return efficiency[arg]
+                    else:
+                        return float(efficiency)
 
                 node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
@@ -376,7 +378,12 @@ class JSONParser:
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
 
-            # TODO: create source_unit_id "total" if it does not exist
+
+            tags = 
+            if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
+                varnames += [get_varname_from_obj(obj, tag = tag, source_unit_id = "total")]
+            if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
+                varnames += [get_varname_from_obj(obj, tag = tag, dest_unit_id = "total")]
 
         return connection_obj
 
