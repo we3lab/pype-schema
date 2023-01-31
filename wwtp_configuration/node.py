@@ -2,6 +2,8 @@ from abc import ABC
 from . import utils
 
 
+# TODO: create merge_nodes() function
+
 class Node(ABC):
     """Abstract class for all nodes
 
@@ -1203,6 +1205,7 @@ class Cogeneration(Node):
         avg : int
             Average generation by a single cogenerator
         """
+        # TODO: make into function
         self.gen_capacity = (min, max, avg)
 
     def set_energy_efficiency(self, efficiency_curve):

@@ -281,6 +281,8 @@ class JSONParser:
                 tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
 
+            # TODO: create source_unit_id "total" if it does not exist
+
         return node_obj
 
     def create_connection(self, connection_id, node_obj):
@@ -373,6 +375,8 @@ class JSONParser:
             for tag_id, tag_info in tags.items():
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
+
+            # TODO: create source_unit_id "total" if it does not exist
 
         return connection_obj
 
