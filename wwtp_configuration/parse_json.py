@@ -60,6 +60,38 @@ class JSONParser:
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
 
+    def merge_network(self, old_network, inplace=False):
+        """ Incorporates nodes/connections (i.e. the `new_network`) into a network (i.e. `old_newtwork`)
+        modifying it in place and returning the modified network
+
+        Parameters
+        ----------
+        old_network: str or wwtp_configuration.Network
+            JSON file path or Network objet to merge with `self`
+
+        Raises
+        ------
+        TypeError:
+            When user does not provide a valid path or Network object for `old_network`
+
+        Returns
+        -------
+        wwtp_configuration.node.Network:
+            Modified network object
+        """
+        if isinstance(old_network, str) and old_network.endswith("json"):
+            old_network = JSONParser(old_network).initialize_network()
+        if type(old_network) is not node.Network:
+            raise TypeError("Please provide a valid json path or object for network to add to")
+        for node in self.network_obj.nodes.values():
+            self.add_node(node)
+        for connection in new_network.connections.values():
+            connection = self.create_connection(connection.id, old_network)
+            old_network.add_connection(connection)
+        if inplace:
+            self.network_obj = old_network
+        return old_network
+
     def create_node(self, node_id):
         """Converts a dictionary into a `Node` object
 

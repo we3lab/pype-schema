@@ -506,35 +506,6 @@ class Network(Node):
 
         return desired_objs
 
-    def merge_network(self, new_network):
-        """ Incorporates nodes/connections (i.e. the `new_network`) into a network (i.e. `old_newtwork`)
-        modifying it in place and returning the modified network
-
-        Parameters
-        ----------
-        new_network: wwtp_configuration.Network
-            network objet to merge with `self`
-
-        Raises
-        ------
-        TypeError:
-            When user does not provide a new_network object
-
-        Returns
-        -------
-        wwtp_configuration.node.Network:
-            Modified network object
-        """
-        if type(new_network) is not Network:
-            raise TypeError("Please provide the wwtp_configuration.Network object to be merged")
-        for node in new_network.nodes.values():
-            self.add_node(node)
-        for connection in new_network.connections.values():
-            # TODO: figure out how to create connection without parser
-            connection = parser.create_connection(connection.id, old_network)
-            self.add_connection(connection)
-        return old_network
-
 
 class Facility(Network):
     """
