@@ -378,12 +378,24 @@ class JSONParser:
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
 
+            if type(connection_obj.contents) is not list:
+                contents = [connection_obj.contents]
+            else:
+                contents = connection_obj.contents
 
-            tags = 
-            if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
-                varnames += [get_varname_from_obj(obj, tag = tag, source_unit_id = "total")]
-            if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
-                varnames += [get_varname_from_obj(obj, tag = tag, dest_unit_id = "total")]
+            for content in contents:
+                # TODO: filter by contents_type
+
+                tag_dest_unit_ids =
+                tag_source_unit_ids =
+                if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
+                    tag = 
+                    connection_obj.add_tag(tag)
+                    # varnames += [get_varname_from_obj(obj, tag=tag, source_unit_id = "total")]
+                if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
+                    tag =
+                    # varnames += [get_varname_from_obj(obj, tag = tag, dest_unit_id = "total")]
+                    connection_obj.add_tag(tag)
 
         return connection_obj
 
