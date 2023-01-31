@@ -139,6 +139,46 @@ class Connection(ABC):
 
         return num_units
 
+    def get_source_node(self, recurse=False):
+        """ Gets a connection's source node returning its exit point if `recurse` is True
+
+        Parameters
+        ----------
+        recurse : bool
+            Return `exit_point` if True. Otherwise just return `source`
+
+        Returns
+        -------
+        wwtp_configuration.Node
+            The source node corresponding to `connection`
+        """
+        node_obj = self.source
+        if recurse:
+            node_obj = self.exit_point
+            if node_obj is None:
+                node_obj = self.source
+        return node_obj
+
+    def get_dest_node(self, recurse=False):
+        """ Gets a connection's destination node, returning its entry point if `recurse` is True
+
+        Parameters
+        ----------
+        recurse : bool
+            Return `entry_point` if True. Otherwise just return `destination`
+
+        Returns
+        -------
+        wwtp_configuration.Node
+            The destination node corresponding to `connection`
+        """
+        node_obj = self.destination
+        if recurse:
+            node_obj = self.entry_point
+            if node_obj is None:
+                node_obj = self.destination
+        return node_obj
+
 
 class Pipe(Connection):
     """
