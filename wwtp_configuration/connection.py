@@ -180,10 +180,7 @@ class Connection(ABC):
         return node_obj
 
     def select_objs(
-        source_id=None,
-        dest_id=None,
-        source_node_type=None,
-        dest_node_type=None,
+        
         contents_type=None,
         tag_type=None,
         recurse=False,
@@ -224,72 +221,20 @@ class Connection(ABC):
 
         """
         selected_objs = []
-        if isinstance(objs, list):
-            objs = {obj.id : obj for obj in objs}
         # Select according to source/destination node type/id
-        for obj in objs.values():
-            if isinstance(obj, Tag):
-                if source_node_type is not None or dest_node_type is not None:
-                    raise ValueError("Only Connections objects have source and destination nodes/node-types")
-                obj_source_unit_id = str(obj.source_unit_id)
-                obj_dest_unit_id = str(obj.dest_unit_id)
-                obj_source_id, obj_entry_point, obj_dest_id, obj_exit_point = None, None, None, None
-            elif isinstance(obj, Connection):
-                obj_source_unit_id, obj_dest_unit_id = None, None
-                source_node = obj.get_source_node(recurse=True)
-                obj_exit_point = source_node.id
-                obj_source_id = obj.source.id
-                destination_node = obj.get_dest_node(recurse=True)
-                obj_entry_point = destination_node.id
-                obj_dest_id = obj.destination.id
-            else:
-                raise TypeError("Object must be of type 'Connection' or 'Tag'")
-            if source_id:
-                if source_id == dest_id and (
-                    source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]
-                    or dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]
-                ):
-                    selected_objs.append(obj)
-                elif source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]:
-                    if dest_id:
-                        if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-                            selected_objs.append(obj)
-                    else:
-                        selected_objs.append(obj)
-            elif dest_id:
-                if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-                    selected_objs.append(obj)
-            elif source_node_type:
-                if source_node_type == dest_node_type and (
-                    isinstance(source_node, source_node_type)
-                    or isinstance(obj.source, source_node_type)
-                    or isinstance(destination_node, dest_node_type)
-                    or isinstance(obj.destination, dest_node_type)
-                ):
-                    selected_objs.append(obj)
-                elif (
-                    isinstance(source_node, source_node_type)
-                    or isinstance(obj.source, source_node_type)
-                ):
-                    if dest_node_type:
-                        if (
-                            isinstance(destination_node, dest_node_type)
-                            or isinstance(obj.destination, dest_node_type)
-                        ):
-                            selected_objs.append(obj)
-                    else:
-                        selected_objs.append(obj)
-            elif dest_node_type:
-                if (
-                    isinstance(destination_node, dest_node_type)
-                    or isinstance(obj.destination, dest_node_type)
-                ):
-                    selected_objs.append(obj)
-            else:
-                selected_objs.append(obj)
-            # Select according to contents
-            if contents_type is not None:
-                selected_objs = [obj for obj in selected_objs if obj.contents == contents_type]
+        for id, tag in self.tags.items():
+            selected_objs = utils.select_objs_helper(
+                tag,
+                selected_objs,
+                obj_source_unit_id=str(tag.source_unit_id),
+                obj_dest_unit_id=str(tag.dest_unit_id),
+                contents_type=contents_type,
+                tag_type=tag_type,
+            )
+
+        # Select according to contents
+        if contents_type is not None:
+            selected_objs = [obj for obj in selected_objs if obj.contents == contents_type]
 
         return selected_objs
 

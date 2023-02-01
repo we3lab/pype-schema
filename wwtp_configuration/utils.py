@@ -520,3 +520,108 @@ class Tag:
                 self.parent_id,
             )
         )
+
+def select_objs_helper(
+    obj,
+    selected_objs,
+    obj_source_id=None,
+    obj_dest_id=None,
+    obj_exit_point=None,
+    obj_entry_point=None,
+    obj_source_unit_id=None,
+    obj_dest_unit_id=None,
+    source_id=None,
+    dest_id=None,
+    source_node_type=None,
+    dest_node_type=None,
+    contents_type=None,
+    tag_type=None,
+):
+    """Helper to select from objects which match source/destination node class, unit ID, and contents
+
+    Parameters
+    ----------
+    obj : Node, Connection, or Tag
+        Object to check if it meets the specified filtering criteria
+
+    selected_objs : list
+        List of previously selected objects to append to
+
+    source_id : str, None
+        Optional id of the source node to filter by
+
+    dest_id : str, None
+        Optional id of the destination node to filter by
+
+    source_node_type : Node, None
+        Optional source `Node` subclass to filter by
+
+    dest_node_type : Node, None
+        Optional destination `Node` subclass to filter by
+
+    contents_type : ContentsType, None
+        Optional contents to filter by
+
+    tag_type : TagType, None
+        Optional tag type to filter by
+
+    Raises
+    ------
+    ValueError
+        When a source/destination node type is provided to subset tags
+
+    TypeError
+        When the objects to select among are not of type {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
+
+    Returns
+    -------
+    list
+        List of 'wwtp_configuration.Tag' or `wwtp_configuration.Connection` objects subset according to source/destination
+        id and `content_type`
+    """
+    # TODO: handle the case of searching for a Node
+    if source_id:
+        if source_id == dest_id and (
+            source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]
+            or dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]
+        ):
+            selected_objs.append(obj)
+        elif source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]:
+            if dest_id:
+                if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
+                    selected_objs.append(obj)
+            else:
+                selected_objs.append(obj)
+    elif dest_id:
+        if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
+            selected_objs.append(obj)
+    elif source_node_type:
+        if source_node_type == dest_node_type and (
+            isinstance(source_node, source_node_type)
+            or isinstance(obj.source, source_node_type)
+            or isinstance(destination_node, dest_node_type)
+            or isinstance(obj.destination, dest_node_type)
+        ):
+            selected_objs.append(obj)
+        elif (
+            isinstance(source_node, source_node_type)
+            or isinstance(obj.source, source_node_type)
+        ):
+            if dest_node_type:
+                if (
+                    isinstance(destination_node, dest_node_type)
+                    or isinstance(obj.destination, dest_node_type)
+                ):
+                    selected_objs.append(obj)
+            else:
+                selected_objs.append(obj)
+    elif dest_node_type:
+        if (
+            isinstance(destination_node, dest_node_type)
+            or isinstance(obj.destination, dest_node_type)
+        ):
+            selected_objs.append(obj)
+    else:
+        selected_objs.append(obj)
+
+    return selected_objs

@@ -344,101 +344,6 @@ class Node(ABC):
 
         return parent_obj
 
-    # TODO: add arguments for obj_dest_id, obj_source_id, etc.
-    def select_objs_helper(
-        self,
-        obj,
-        selected_objs,
-        source_id=source_id,
-        dest_id=dest_id,
-        source_node_type=source_node_type,
-        dest_node_type=dest_node_type,
-        contents_type=contents_type,
-        tag_type=tag_type,
-    ):
-        """Helper to select from objects which match source/destination node-type/unit_id/contents
-        (if none given, returns all objects in the Node)
-
-        Parameters
-        ----------
-        source_id : str, None
-            Optional id of the source node to filter by
-
-        dest_id : str, None
-            Optional id of the destination node to filter by
-
-        source_node_type : Node, None
-            Optional source `Node` subclass to filter by
-
-        dest_node_type : Node, None
-            Optional destination `Node` subclass to filter by
-
-        contents_type : ContentsType, None
-            Optional contents to filter by
-
-        tag_type : TagType, None
-            Optional tag type to filter by
-
-        Raises
-        ------
-        ValueError
-            When a source/destination node type is provided to subset tags
-
-        TypeError
-            When the objects to select among are not of type {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
-
-        Returns
-        -------
-        list
-            List of 'wwtp_configuration.Tag' or `wwtp_configuration.Connection` objects subset according to source/destination
-            id and `content_type`
-        """
-        # TODO: handle the case of searching for a Node
-        if source_id:
-            if source_id == dest_id and (
-                source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]
-                or dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]
-            ):
-                selected_objs.append(obj)
-            elif source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]:
-                if dest_id:
-                    if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-                        selected_objs.append(obj)
-                else:
-                    selected_objs.append(obj)
-        elif dest_id:
-            if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-                selected_objs.append(obj)
-        elif source_node_type:
-            if source_node_type == dest_node_type and (
-                isinstance(source_node, source_node_type)
-                or isinstance(obj.source, source_node_type)
-                or isinstance(destination_node, dest_node_type)
-                or isinstance(obj.destination, dest_node_type)
-            ):
-                selected_objs.append(obj)
-            elif (
-                isinstance(source_node, source_node_type)
-                or isinstance(obj.source, source_node_type)
-            ):
-                if dest_node_type:
-                    if (
-                        isinstance(destination_node, dest_node_type)
-                        or isinstance(obj.destination, dest_node_type)
-                    ):
-                        selected_objs.append(obj)
-                else:
-                    selected_objs.append(obj)
-        elif dest_node_type:
-            if (
-                isinstance(destination_node, dest_node_type)
-                or isinstance(obj.destination, dest_node_type)
-            ):
-                selected_objs.append(obj)
-        else:
-            selected_objs.append(obj)
-
-        return selected_objs
 
     def select_objs(
         self,
@@ -450,31 +355,32 @@ class Node(ABC):
         tag_type=None,
         recurse=False,
     ):
-        """Selects from this Node all Connection or Tag objects which match source/destination node-type/unit_id/contents
-        (if none given, returns all objects in the Node)
+        """Selects from this Node all Connection or Tag objects
+        which match source/destination node class, unit ID, and contents.
+        (If none given, returns all objects in the Node.)
 
         Parameters
         ----------
-        source_id : str, None
-            Optional id of the source node to filter by
+        source_id : str
+            Optional id of the source node to filter by. None by default
 
-        dest_id : str, None
-            Optional id of the destination node to filter by
+        dest_id : str
+            Optional id of the destination node to filter by. None by default
 
-        source_node_type : Node, None
-            Optional source `Node` subclass to filter by
+        source_node_type : Node
+            Optional source `Node` subclass to filter by. None by default
 
-        dest_node_type : Node, None
-            Optional destination `Node` subclass to filter by
+        dest_node_type : Node
+            Optional destination `Node` subclass to filter by. None by default
 
-        contents_type : ContentsType, None
-            Optional contents to filter by
+        contents_type : ContentsType
+            Optional contents to filter by. None by default
 
-        tag_type : TagType, None
-            Optional tag type to filter by
+        tag_type : TagType
+            Optional tag type to filter by. None by default
 
         recurse : bool
-            False by default. Whether to search for objects within nodes
+            Whether to search for objects within nodes. False by default
 
         Raises
         ------
@@ -487,19 +393,20 @@ class Node(ABC):
         Returns
         -------
         list
-            List of 'wwtp_configuration.Tag' or `wwtp_configuration.Connection` objects subset according to source/destination
-            id and `content_type`
+            List of `Tag` or `Connection` objects subset according to source/destination
+            id and `contents_type`
         """
         selected_objs = []
         # Select according to source/destination node type/id
         for tag in self.get_all_tags(recurse=recurse):
-            obj_source_unit_id = str(tag.source_unit_id)
-            obj_dest_unit_id = str(tag.dest_unit_id)
             # TODO: why set source ID and dest ID to None for Tags?
-            obj_source_id, obj_entry_point, obj_dest_id, obj_exit_point = None, None, None, None
-            selected_objs = self.selected_objs_helper(
+            # I.e., couldn't we use the parent's souce/dest ID and exit/entry point?
+            # obj_source_id, obj_entry_point, obj_dest_id, obj_exit_point = None, None, None, None
+            selected_objs = utils.select_objs_helper(
                 tag,
                 selected_objs,
+                obj_source_unit_id=str(tag.source_unit_id),
+                obj_dest_unit_id=str(tag.dest_unit_id),
                 source_id=source_id,
                 dest_id=dest_id,
                 source_node_type=source_node_type,
@@ -508,39 +415,13 @@ class Node(ABC):
                 tag_type=tag_type,
             )
         for conn in self.get_all_connections(recurse=recurse):
-            obj_source_unit_id, obj_dest_unit_id = None, None
-            source_node = conn.get_source_node(recurse=True)
-            obj_exit_point = source_node.id
-            obj_source_id = conn.source.id
-            destination_node = conn.get_dest_node(recurse=True)
-            obj_entry_point = destination_node.id
-            obj_dest_id = conn.destination.id
-
-            selected_objs = self.selected_objs_helper(
+            selected_objs = utils.select_objs_helper(
                 conn,
                 selected_objs,
-                source_id=source_id,
-                dest_id=dest_id,
-                source_node_type=source_node_type,
-                dest_node_type=dest_node_type,
-                contents_type=contents_type,
-                tag_type=tag_type,
-            )
-        for node in self.get_all_nodes(recurse=recurse):
-            if recurse:
-                selected_objs = selected_objs + node.select_objs(
-                    source_id=source_id,
-                    dest_id=dest_id,
-                    source_node_type=source_node_type,
-                    dest_node_type=dest_node_type,
-                    contents_type=contents_type,
-                    tag_type=tag_type,
-                    recurse=True,
-                )
-
-            selected_objs = self.selected_objs_helper(
-                node,
-                selected_objs,
+                obj_source_id=conn.source.id,
+                obj_dest_id=conn.destination.id,
+                obj_exit_point=conn.exit_point,
+                obj_entry_point=conn.entry_point,
                 source_id=source_id,
                 dest_id=dest_id,
                 source_node_type=source_node_type,
