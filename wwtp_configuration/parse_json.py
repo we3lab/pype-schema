@@ -225,6 +225,7 @@ class JSONParser:
             if efficiency:
 
                 def efficiency_curve(arg):
+                    # TODO: fix this so that it interpolates between dictionary values
                     if type(efficiency) is dict:
                         return efficiency[arg]
                     else:
@@ -436,7 +437,7 @@ class JSONParser:
                         connection_obj.add_tag(tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag = copy.deepcopy(tag)
-                        tag.dest_unit_id = "total" 
+                        tag.dest_unit_id = "total"
                         connection_obj.add_tag(tag)
 
         return connection_obj

@@ -180,13 +180,13 @@ class Connection(ABC):
         return node_obj
 
     def select_objs(
+        contents_type=None,
+        tag_type=None,
+        recurse=False,
         source_id=None,
         dest_id=None,
         source_node_type=None,
         dest_node_type=None,
-        contents_type=None,
-        tag_type=None,
-        recurse=False
     ):
         """ Selects from this Connection all Tag objects which match source/destination node-type/unit_id/contents
         (if none given, returns all objects in the Node)

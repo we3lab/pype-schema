@@ -345,11 +345,12 @@ class Node(ABC):
         return parent_obj
 
     def select_objs(
+        contents_type=None,
+        tag_type=None,
+        recurse=False,
         source_id=None,
         dest_id=None,
-        source_node_type=None,
-        dest_node_type=None,
-        contents_type=None
+        source_node_type=None
     ):
         """ Selects from this Node all Connection or Tag objects which match source/destination node-type/unit_id/contents
         (if none given, returns all objects in the Node)
@@ -1266,8 +1267,8 @@ class Cogeneration(Node):
         Data tags associated with this cogenerator
 
     energy_efficiency : function
-        Function which takes in the current heat produced in BTU and returns
-        the energy produced in kWh
+        Function which takes in the current kWh and returns
+        the efficiency as a fraction
     """
 
     def __init__(
@@ -1323,8 +1324,7 @@ class Cogeneration(Node):
         Parameters
         ----------
         efficiency_curve : function
-            function takes in the current heat produced in BTU and returns
-            the energy produced in kWh
+            function takes in the current kWh and returns the fractional efficency
         """
         # TODO: type check that efficiency_curve is a function
         self.energy_efficiency = efficiency_curve
