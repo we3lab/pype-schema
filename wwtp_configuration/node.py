@@ -399,14 +399,32 @@ class Node(ABC):
         selected_objs = []
         # Select according to source/destination node type/id
         for tag in self.get_all_tags(recurse=recurse):
-            # TODO: why set source ID and dest ID to None for Tags?
-            # I.e., couldn't we use the parent's souce/dest ID and exit/entry point?
-            # obj_source_id, obj_entry_point, obj_dest_id, obj_exit_point = None, None, None, None
+            if tag.parent_id == self.id:
+                parent_obj = self
+            else:
+                parent_obj = self.get_node_or_connection(tag.parent_id, recurse=recurse)
+
+            if isinstance(parent_obj, Node):
+                obj_source_id = parent_obj.get_source_id()
+                obj_source_unit_id = str(tag.source_unit_id)
+                obj_dest_id, obj_dest_unit_id, obj_entry_point, obj_exit_point = None
+            else: # the parent must be a Connection if it is not a Node
+                obj_source_id = parent_obj.get_source_id()
+                obj_source_unit_id = str(tag.source_unit_id)
+                obj_exit_point = parent_obj.get_exit_point()
+                obj_dest_id = parent_obj.get_dest_id()
+                obj_dest_unit_id = str(tag.dest_unit_id)
+                obj_entry_point = parent_obj.get_entry_point()
+
             selected_objs = utils.select_objs_helper(
                 tag,
                 selected_objs,
-                obj_source_unit_id=str(tag.source_unit_id),
-                obj_dest_unit_id=str(tag.dest_unit_id),
+                obj_source_id=obj_source_id,
+                obj_dest_id=obj_dest_id,
+                obj_exit_point=obj_exit_point,
+                obj_entry_point=obj_entry_point,
+                obj_source_unit_id=obj_source_unit_id,
+                obj_dest_unit_id=obj_dest_unit_id,
                 source_id=source_id,
                 dest_id=dest_id,
                 source_node_type=source_node_type,
@@ -418,10 +436,10 @@ class Node(ABC):
             selected_objs = utils.select_objs_helper(
                 conn,
                 selected_objs,
-                obj_source_id=conn.source.id,
-                obj_dest_id=conn.destination.id,
-                obj_exit_point=conn.exit_point,
-                obj_entry_point=conn.entry_point,
+                obj_source_id=conn.get_source_id(),
+                obj_dest_id=conn.get_dest_id(),
+                obj_exit_point=conn.get_exit_point(),
+                obj_entry_point=conn.get_entry_point(),
                 source_id=source_id,
                 dest_id=dest_id,
                 source_node_type=source_node_type,

@@ -97,6 +97,20 @@ class Connection(ABC):
 
         return id
 
+    def get_exit_point(self):
+        """
+        Returns
+        -------
+        str
+            name of the exit point Node (if it exists - None otherwise)
+        """
+        try:
+            id = self.exit_point
+        except AttributeError:
+            id = None
+
+        return id
+
     def get_dest_id(self):
         """
         Returns
@@ -106,6 +120,20 @@ class Connection(ABC):
         """
         try:
             id = self.destination.id
+        except AttributeError:
+            id = None
+
+        return id
+
+    def get_entry_point(self):
+        """
+        Returns
+        -------
+        str
+            name of the entry point Node (if it exists - None otherwise)
+        """
+        try:
+            id = self.entry_point
         except AttributeError:
             id = None
 
@@ -178,65 +206,6 @@ class Connection(ABC):
             if node_obj is None:
                 node_obj = self.destination
         return node_obj
-
-    def select_objs(
-        
-        contents_type=None,
-        tag_type=None,
-        recurse=False,
-    ):
-        """ Selects from this Connection all Tag objects which match source/destination node-type/unit_id/contents
-        (if none given, returns all objects in the Node)
-
-        Parameters
-        ----------
-        source_id : str, None
-            Optional id of the source node whose connections we want to subset to
-
-        dest_id : str, None
-            Optional id of the destination node whose connections we want to subset to
-
-        source_node_type : wwtp_configuration.NodeType, None
-            Optional type of source node whose connections we want to subset to
-
-        dest_node_type : wwtp_configuration.NodeType, None
-            Optional type of destination node whose connections we want to subset to
-
-        contents_type : wwtp_configuration.utils.ContentsType, None
-            Optional contents of the objects we want to subset to
-
-        Raises
-        ------
-        ValueError
-            When a source/destination node type is provided to subset tags
-
-        TypeError
-            When the objects to select among are not of type {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
-
-        Returns
-        -------
-        list
-            List of 'wwtp_configuration.Tag' or `wwtp_configuration.Connection` objects subset according to source/destination
-            id and `content_type`
-
-        """
-        selected_objs = []
-        # Select according to source/destination node type/id
-        for id, tag in self.tags.items():
-            selected_objs = utils.select_objs_helper(
-                tag,
-                selected_objs,
-                obj_source_unit_id=str(tag.source_unit_id),
-                obj_dest_unit_id=str(tag.dest_unit_id),
-                contents_type=contents_type,
-                tag_type=tag_type,
-            )
-
-        # Select according to contents
-        if contents_type is not None:
-            selected_objs = [obj for obj in selected_objs if obj.contents == contents_type]
-
-        return selected_objs
 
 
 class Pipe(Connection):
