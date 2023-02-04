@@ -382,145 +382,6 @@ class DigesterType(Enum):
     Anaerobic = auto()
 
 
-class TagType(Enum):
-    """Enum to represent types of SCADA tags"""
-
-    Flow = auto()
-    Volume = auto()
-    Level = auto()
-    Pressure = auto()
-    RunTime = auto()
-    RunStatus = auto()
-    VSS = auto()
-    TSS = auto()  # total suspended solids
-    TDS = auto()  # total dissolved solids
-    COD = auto()  # chemical oxygen demand
-    BOD = auto()  # biochemical oxygen demand
-    pH = auto()
-    Rotation = auto()
-
-
-class Tag:
-    """Class to represent a SCADA or other data tag
-
-    Parameters
-    ----------
-    id : str
-        Tag ID
-
-    units : str or Unit
-        Units represented as a string Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
-
-    tag_type : TagType
-        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
-
-    source_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the source node
-
-    dest_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the destination node.
-        None if the Tag is associated with a Node object instead of a Connection
-
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
-
-    totalized : bool
-        True if data is totalized. False otherwise
-
-    contents : ContentsType
-        Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
-
-    Attributes
-    ----------
-    id : str
-        Tag ID
-
-    units : str or Unit
-        Units represented as a string Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
-
-    tag_type : TagType
-        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
-
-    source_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the sources node
-
-    dest_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the destination node
-
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
-
-    totalized : bool
-        True if data is totalized. False otherwise
-
-    contents : ContentsType
-        Contents moving through the node
-    """
-
-    def __init__(
-        self,
-        id,
-        units,
-        tag_type,
-        source_unit_id,
-        dest_unit_id,
-        parent_id,
-        totalized=False,
-        contents=None,
-    ):
-        self.id = id
-        self.units = units
-        self.contents = contents
-        self.tag_type = tag_type
-        self.totalized = totalized
-        self.source_unit_id = source_unit_id
-        self.dest_unit_id = dest_unit_id
-        self.parent_id = parent_id
-
-    def __repr__(self):
-        return (
-            f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
-            f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
-            f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>\n"
-        )
-
-    def __eq__(self, other):
-        # don't attempt to compare against unrelated types
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-
-        return (
-            self.id == other.id
-            and self.contents == other.contents
-            and self.tag_type == other.tag_type
-            and self.totalized == other.totalized
-            and self.source_unit_id == other.source_unit_id
-            and self.dest_unit_id == other.dest_unit_id
-            and self.units == other.units
-            and self.parent_id == other.parent_id
-        )
-
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.contents,
-                self.tag_type,
-                self.totalized,
-                self.source_unit_id,
-                self.dest_unit_id,
-                self.units,
-                self.parent_id,
-            )
-        )
-
 def select_objs_helper(
     obj,
     selected_objs,
@@ -625,3 +486,40 @@ def select_objs_helper(
         selected_objs.append(obj)
 
     return selected_objs
+
+
+def operation_helper(operation, unit, prev_unit):
+    """Helper for parsing operations and checking units
+
+    Parameters
+    ----------
+    operation : ["+", "-", "*", "/"]
+        Function to apply when combining tags.
+        Supported functions are "+", "-", "*", and "/".
+
+    unit : Unit
+        Units for the right side of the operation, represented as a Pint unit.
+
+    prev_unit : Unit
+        Units for the left side of the operation, represented as a Pint unit.
+
+    Returns
+    -------
+    Unit
+        Resulting Pint Unit from combining the `unit` and `prev_unit` according to `operation`
+    """
+    if operation == "+" or operation == "-":
+        if unit != prev_unit:
+            try:
+                unit.to(prev_unit)
+            except:
+                raise ValueError("Units for addition and subtraction must be identical")
+    elif operation == "*" or operation == "/":
+        if operations == "/":
+            prev_unit = prev_unit / unit
+        else:
+            prev_unit = prev_unit * unit
+    else:
+        raise ValueError("Unsupported operation " + operation)
+
+    return prev_unit
