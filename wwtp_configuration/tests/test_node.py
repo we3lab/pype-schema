@@ -296,6 +296,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 8: return a single tag by destination unit ID
         # Case 9: return multiple tags by source
         # Case 10: return multiple tags by destination
+        # Case 11: bidirectional connection
     ],
 )
 def test_select_objs(

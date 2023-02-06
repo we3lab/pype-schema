@@ -85,11 +85,22 @@ class JSONParser:
             old_network = JSONParser(old_network).initialize_network()
         if type(old_network) is not node.Network:
             raise TypeError("Please provide a valid json path or object for network to merge with")
-        for node in self.network_obj.nodes.values():
-            self.add_node(node)
-        for connection in new_network.connections.values():
-            connection = self.create_connection(connection.id, old_network)
-            old_network.add_connection(connection)
+        for node_id in self.config["nodes"]:
+            if node_id not in self.config:
+                raise NameError("Node " + node_id + " not found in " + self.path)
+            # delete existing node before creating the new one if necessary
+            elif hasattr(old_network, "nodes") and node_id in old_network.nodes.keys():
+                old_network.remove_node(node_id)
+            old_network.add_node(self.create_node(node_id))
+        for connection_id in self.config["connections"]:
+            if connection_id not in self.config:
+                raise NameError(
+                    "Connection " + connection_id + " not found in " + self.path
+                )
+            # delete existing connection before creating the new one if necessary
+            if hasattr(old_network, "connections") and connection_id in old_network.connections.keys():
+                old_network.remove_connection(connection_id)
+            old_network.add_connection(self.create_connection(connection.id, old_network))
         if inplace:
             self.network_obj = old_network
         return old_network
@@ -319,16 +330,26 @@ class JSONParser:
                 node_obj.add_tag(tag)
 
             # create virtual "total" tag if it was missing
-            contents_list = [node_obj.input_contents, node_obj.output_contents]
-            contents = [item for sublist in contents_list for item in sublist]
-            for content in contents:
-                # check that ContentsType is not None
-                if content:
-                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info.contents_type == content]
-                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
+            contents_list = node_obj.input_contents
+            if isinstance(contents_list, list):
+                if isinstance(node_obj.output_contents, list):
+                    contents_list += node_obj.output_contents
+                else:
+                    contents_list += [node_obj.output_contents]
+            elif isinstance(node_obj.output_contents, list):
+                contents_list = [contents_list] + node_obj.output_contents
+            else:
+                contents_list = [contents_list, node_obj.output_contents]
+
+            for contents in contents_list:
+                if contents is not None:
+                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info["contents"] == contents]
+                    tag_source_unit_ids = [tag["source_unit_id"] for tag in tags_by_contents]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
-                        tag = copy.deepcopy(tag)
-                        tag.source_unit_id = "total"
+                        tag_info = tags_by_contents[0]
+                        tag_id = "".join(node_id, "Total", tag_info["contents"], tag_info["type"])
+                        tag_info["source_unit_id"] = "total"
+                        tag = self.parse_tag(tag_id, tag_info, node_obj)
                         node_obj.add_tag(tag)
 
         return node_obj
@@ -425,21 +446,30 @@ class JSONParser:
                 connection_obj.add_tag(tag)
 
             # create virtual "total" tag if it was missing
-            contents = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
-            for content in contents:
-                # check that ContentsType is not None
-                if content:
-                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info.contents_type == content]
+            contents_list = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
+            for contents in contents_list:
+                if contents is not None:
+                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info["contents"] == contents]
                     tag_dest_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
                     tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
-                        tag = copy.deepcopy(tag)
-                        tag.source_unit_id = "total"
-                        connection_obj.add_tag(tag)
+                        tag_info = tags_by_contents[0]
+                        # create a separate virtual total for each destination unit
+                        for id in tag_dest_unit_ids:
+                            tag_info["dest_unit_id"] = id
+                            id = "Total" if id == "total" else str(id)
+                            tag.id = "".join(connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), id, utils.ContentsType[contents], TagType[tag_info["type"]])
+                            tag_info["source_unit_id"] = "total"
+                            connection_obj.add_tag(tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
-                        tag = copy.deepcopy(tag)
-                        tag.dest_unit_id = "total"
-                        connection_obj.add_tag(tag)
+                        tag_info = tags_by_contents[0]
+                        # create a separate virtual total for each source unit
+                        for id in tag_source_unit_ids:
+                            tag_info["source_unit_id"] = id
+                            id = "Total" if id == "total" else str(id)
+                            tag.id = "".join(connection_obj.get_source_id(), id, connection_obj.get_dest_id(), "Total", utils.ContentsType[contents], TagType[tag_info["type"]])
+                            tag_info["dest_unit_id"] = "total"
+                            connection_obj.add_tag(tag)
 
         return connection_obj
 

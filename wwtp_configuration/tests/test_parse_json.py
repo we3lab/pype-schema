@@ -24,17 +24,36 @@ pint.set_application_registry(u)
 )
 def test_create_network(json_path, expected_path):
     parser = JSONParser(json_path)
-    try:
-        result = parser.initialize_network()
-        with open(expected_path, "rb") as pickle_file:
-            expected = pickle.load(pickle_file)
-    except Exception as err:
-        result = type(err).__name__
-        expected = expected_path
+    # try:
+    result = parser.initialize_network()
+    with open(expected_path, "rb") as pickle_file:
+        expected = pickle.load(pickle_file)
+    # except Exception as err:
+        # result = type(err).__name__
+        # expected = expected_path
 
     assert result == expected
 
 
-# TODO: fill in test
-def test_merge_network():
-    
+# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+# @pytest.mark.parametrize(
+#     "json_path, original_network_path, use_str, inplace, expected_path",
+#     [
+#         ("data/expansion.json", "../data/sample.json", False, False, "data/merged.json"),
+#         ("data/expansion.json", "../data/sample.json", True, False, "data/merged.json"),
+#         ("data/expansion.json", "../data/sample.json", False, True, "data/merged.json"),
+#     ],
+# )
+# def test_merge_network(json_path, original_network_path, use_str, inplace, expected_path):
+#     parser = JSONParser(json_path)
+#     if use_str:
+#         original = original_network_path
+#     else:
+#         original = JSONParser(original_network_path)
+        
+#     result = parser.merge_network(original, inplace=inplace)
+
+#     expected = JSONParser(expected_path).initialize_network()
+
+#     assert result == expected
+#     assert inplace == (expected == parser.network_obj)
