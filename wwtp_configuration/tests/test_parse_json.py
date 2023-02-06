@@ -33,3 +33,8 @@ def test_create_network(json_path, expected_path):
         expected = expected_path
 
     assert result == expected
+
+
+# TODO: fill in test
+def test_merge_network():
+    

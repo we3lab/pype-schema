@@ -1,5 +1,6 @@
 import json
 import copy
+from .tag import TagType, Tag, VirtualTag
 from . import connection
 from . import node
 from . import utils
@@ -515,12 +516,12 @@ class JSONParser:
             a Python object with the given ID and the values from `tag_info`
         """
         contents = JSONParser.get_tag_contents(tag_id, tag_info, obj)
-        tag_type = utils.TagType[tag_info["type"]]
+        tag_type = TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
         pint_unit = utils.parse_units(tag_info["units"]) if tag_info["units"] else None
         source_unit_id = tag_info.get("source_unit_id", "total")
         dest_unit_id = tag_info.get("dest_unit_id", "total")
-        tag = utils.Tag(
+        tag = Tag(
             tag_id,
             pint_unit,
             tag_type,
@@ -572,12 +573,12 @@ class JSONParser:
         except KeyError:
             contents = None
 
-        tag_type = utils.TagType[tag_info["type"]]
+        tag_type = TagType[tag_info["type"]]
         # these TagType do not have any contents
         contentless_types = [
-            utils.TagType.RunTime,
-            utils.TagType.RunStatus,
-            utils.TagType.Rotation,
+            TagType.RunTime,
+            TagType.RunStatus,
+            TagType.Rotation,
         ]
         if contents is None and tag_type not in contentless_types:
             # will work if obj is of type Connection, otherwise exception occurs

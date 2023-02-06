@@ -106,7 +106,7 @@ class Tag:
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
+            f"<wwtp_configuration.tag.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
             f"totalized:{self.totalized} contents:{self.contents}>\n"
@@ -203,182 +203,182 @@ class VirtualTag:
         Contents moving through the node
     """
 
-        def __init__(
-            self,
-            id,
-            tags,
-            operations="+",
-            tag_type=None
-        ):
-            self.id = id
-            self.tags = tags
+    def __init__(
+        self,
+        id,
+        tags,
+        operations="+",
+        tag_type=None
+    ):
+        self.id = id
+        self.tags = tags
 
-            units = []
-            contents = None
-            totalized = None
+        units = []
+        contents = None
+        totalized = None
 
-            if tag_type is not None:
-                determine_type = False
+        if tag_type is not None:
+            determine_type = False
+        else:
+            determine_type = True
+
+        for tag in tags:
+            units.append(tag.units)
+            if totalized is not None:
+                if totalized != tag.totalized:
+                    raise ValueError("All Tags must have the same value for 'totalized'")
             else:
-                determine_type = True
+                totalized = tag.totalized
 
-            for tag in tags:
-                units.append(tag.units)
-                if totalized is not None:
-                    if totalized != tag.totalized:
-                        raise ValueError("All Tags must have the same value for 'totalized'")
+            if determine_type:
+                if tag_type is not None:
+                    if tag_type != tag.tag_type:
+                        raise ValueError("All Tags must have the same value for 'tag_type'")
                 else:
-                    totalized = tag.totalized
+                    tag_type = tag.tag_type
 
-                if determine_type:
-                    if tag_type is not None:
-                        if tag_type != tag.tag_type:
-                            raise ValueError("All Tags must have the same value for 'tag_type'")
-                    else:
-                        tag_type = tag.tag_type
-
-                if contents is not None:
-                    if contents != tag.contents:
-                        raise ValueError("All Tags must have the same value for 'contents'")
-                else:
-                    contents = tag.contents
-
-            self.contents = contents
-            self.tag_type = tag_type
-            self.totalized = totalized
-
-            if isinstance(operations, list):
-                if len(operations) != len(tags) - 1:
-                    raise ValueError("Operations list must be of length one less than the Tag list")
-                else:
-                    self.operations = operations
-                    prev_unit = None
-                    for i, unit in enumerate(units):
-                        if isinstance(unit, str):
-                            unit = parse_units(unit)
-
-                        if prev_unit is not None:
-                            prev_unit = operation_helper(operations[i-1], unit, prev_unit)
-                        else:
-                            prev_unit = unit
+            if contents is not None:
+                if contents != tag.contents:
+                    raise ValueError("All Tags must have the same value for 'contents'")
             else:
+                contents = tag.contents
+
+        self.contents = contents
+        self.tag_type = tag_type
+        self.totalized = totalized
+
+        if isinstance(operations, list):
+            if len(operations) != len(tags) - 1:
+                raise ValueError("Operations list must be of length one less than the Tag list")
+            else:
+                self.operations = operations
                 prev_unit = None
-                for unit in units:
+                for i, unit in enumerate(units):
                     if isinstance(unit, str):
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = operation_helper(operations, unit, prev_unit)
+                        prev_unit = operation_helper(operations[i-1], unit, prev_unit)
                     else:
                         prev_unit = unit
+        else:
+            prev_unit = None
+            for unit in units:
+                if isinstance(unit, str):
+                    unit = parse_units(unit)
 
-                self.operations = [operations] * (len(self.tags) - 1)
+                if prev_unit is not None:
+                    prev_unit = operation_helper(operations, unit, prev_unit)
+                else:
+                    prev_unit = unit
 
-            self.units = prev_unit
+            self.operations = [operations] * (len(self.tags) - 1)
 
-        def __repr__(self):
-            return (
-                f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
-                f"tag_type:{self.tag_type} totalized:{self.totalized} contents:{self.contents}"
-                f"tags:{[tag.id for tag in self.tags]} operations:{self.operations}>\n"
+        self.units = prev_unit
+
+    def __repr__(self):
+        return (
+            f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
+            f"tag_type:{self.tag_type} totalized:{self.totalized} contents:{self.contents}"
+            f"tags:{[tag.id for tag in self.tags]} operations:{self.operations}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        return (
+            self.id == other.id
+            and self.contents == other.contents
+            and self.tag_type == other.tag_type
+            and self.totalized == other.totalized
+            and self.units == other.units
+            and self.tags == other.tags
+            and self.operations == other.operations
+        )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.tags,
+                self.operations,
+                self.contents,
+                self.tag_type,
+                self.totalized,
+                self.units,
             )
+        )
 
-        def __eq__(self, other):
-            # don't attempt to compare against unrelated types
-            if not isinstance(other, self.__class__):
-                return NotImplemented
+    def calculate_values(self, data):
+        """Combine the given data according to the VirtualTag's operations
 
-            return (
-                self.id == other.id
-                and self.contents == other.contents
-                and self.tag_type == other.tag_type
-                and self.totalized == other.totalized
-                and self.units == other.units
-                and self.tags == other.tags
-                and self.operations == other.operations
-            )
+        Parameters
+        ----------
+        data : list, array, or DataFrame
+            a list, numpy array, or pandas DataFrame of data that has the
+            correct dimensions. I.e., the number of columns is one more than operations
 
-        def __hash__(self):
-            return hash(
-                (
-                    self.id,
-                    self.tags,
-                    self.operations,
-                    self.contents,
-                    self.tag_type,
-                    self.totalized,
-                    self.units,
+        Returns
+        -------
+        array
+            numpy array of combined dataset
+        """
+        # TODO: check units are handled correctly
+        if isinstance(data, list):
+            if len(self.operations) != len(data) - 1:
+                raise ValueError("Data must have the correct dimensions (one more element than operations). "
+                    "Currently there are {} operations and {} data tags".format(
+                    len(self.operations, len(data)))
                 )
-            )
-
-        def calculate_values(self, data):
-            """Combine the given data according to the VirtualTag's operations
-
-            Parameters
-            ----------
-            data : list, array, or DataFrame
-                a list, numpy array, or pandas DataFrame of data that has the
-                correct dimensions. I.e., the number of columns is one more than operations
-
-            Returns
-            -------
-            array
-                numpy array of combined dataset
-            """
-            # TODO: check units are handled correctly
-            if isinstance(data, list):
-                if len(self.operations) != len(data) - 1:
-                    raise ValueError("Data must have the correct dimensions (one more element than operations). "
-                        "Currently there are {} operations and {} data tags".format(
-                        len(self.operations, len(data)))
-                    )
-                else:
-                    result = data[0]
-                    for i in range(len(data) - 1):
-                        if operations[i] == "+":
-                            result += data[i+1]
-                        elif operations[i] == "-":
-                            result -= data[i+1]
-                        elif operations[i] == "*":
-                            result *= data[i+1]
-                        elif operations[i] == "/":
-                            result /= data[i+1]
-            if isinstance(data, DataFrame):
-                if len(self.operations) != len(data.columns) - 1:
-                    raise ValueError("Data must have the correct dimensions (one more element than operations). "
-                        "Currently there are {} operations and {} data tags".format(
-                        len(self.operations, len(data.columns)))
-                    )
-                else:
-                    result = None
-                    for _, colData in data.iteritems():
-                        if result is None:
-                            result = colData
-                        else:
-                            if operations[i] == "+":
-                                result += colData
-                            elif operations[i] == "-":
-                                result -= colData
-                            elif operations[i] == "*":
-                                result *= colData
-                            elif operations[i] == "/":
-                                result /= colData
-            if isinstance(data, array):
-                if len(self.operations) != data.shape[1] - 1:
-                    raise ValueError("Data must have the correct dimensions (one more element than operations). "
-                        "Currently there are {} operations and {} data tags".format(
-                        len(self.operations, data.shape[1]))
-                    )
-                else:
-                    result = data[:, 0]
-                    for i in range(data.shape[1] - 1):
-                        if operations[i] == "+":
-                            result += data[:, i+1]
-                        elif operations[i] == "-":
-                            result -= data[:, i+1]
-                        elif operations[i] == "*":
-                            result *= data[:, i+1]
-                        elif operations[i] == "/":
-                            result /= data[:, i+1]
             else:
-                raise TypeError("Data must be either a list, array, or DataFrame")
+                result = data[0]
+                for i in range(len(data) - 1):
+                    if operations[i] == "+":
+                        result += data[i+1]
+                    elif operations[i] == "-":
+                        result -= data[i+1]
+                    elif operations[i] == "*":
+                        result *= data[i+1]
+                    elif operations[i] == "/":
+                        result /= data[i+1]
+        if isinstance(data, DataFrame):
+            if len(self.operations) != len(data.columns) - 1:
+                raise ValueError("Data must have the correct dimensions (one more element than operations). "
+                    "Currently there are {} operations and {} data tags".format(
+                    len(self.operations, len(data.columns)))
+                )
+            else:
+                result = None
+                for _, colData in data.iteritems():
+                    if result is None:
+                        result = colData
+                    else:
+                        if operations[i] == "+":
+                            result += colData
+                        elif operations[i] == "-":
+                            result -= colData
+                        elif operations[i] == "*":
+                            result *= colData
+                        elif operations[i] == "/":
+                            result /= colData
+        if isinstance(data, array):
+            if len(self.operations) != data.shape[1] - 1:
+                raise ValueError("Data must have the correct dimensions (one more element than operations). "
+                    "Currently there are {} operations and {} data tags".format(
+                    len(self.operations, data.shape[1]))
+                )
+            else:
+                result = data[:, 0]
+                for i in range(data.shape[1] - 1):
+                    if operations[i] == "+":
+                        result += data[:, i+1]
+                    elif operations[i] == "-":
+                        result -= data[:, i+1]
+                    elif operations[i] == "*":
+                        result *= data[:, i+1]
+                    elif operations[i] == "/":
+                        result /= data[:, i+1]
+        else:
+            raise TypeError("Data must be either a list, array, or DataFrame")

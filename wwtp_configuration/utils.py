@@ -384,7 +384,6 @@ class DigesterType(Enum):
 
 def select_objs_helper(
     obj,
-    selected_objs,
     obj_source_id=None,
     obj_dest_id=None,
     obj_exit_point=None,
@@ -393,38 +392,61 @@ def select_objs_helper(
     obj_dest_unit_id=None,
     source_id=None,
     dest_id=None,
+    source_unit_id=None,
+    dest_unit_id=None,
     source_node_type=None,
     dest_node_type=None,
-    contents_type=None,
     tag_type=None,
+    recurse=False
 ):
     """Helper to select from objects which match source/destination node class, unit ID, and contents
 
     Parameters
     ----------
-    obj : Node, Connection, or Tag
+    obj : [Node, Connection, Tag]
         Object to check if it meets the specified filtering criteria
 
-    selected_objs : list
-        List of previously selected objects to append to
+    obj_source_id : str
+        Object's source ID to match against. None by default
 
-    source_id : str, None
-        Optional id of the source node to filter by
+    obj_dest_id : str
+        Object's destination ID to match against. None by default
 
-    dest_id : str, None
-        Optional id of the destination node to filter by
+    obj_exit_point : str
+        Object's exit point ID to match against. None by default
 
-    source_node_type : Node, None
-        Optional source `Node` subclass to filter by
+    obj_entry_point : str
+        Object's entry point ID to match against. None by default
 
-    dest_node_type : Node, None
-        Optional destination `Node` subclass to filter by
+    obj_source_unit_id : int, str
+        Object's source unit ID to match against. None by default
 
-    contents_type : ContentsType, None
-        Optional contents to filter by
+    obj_dest_unit_id : int, str
+        Object's destination unit ID to match against. None by default
 
-    tag_type : TagType, None
-        Optional tag type to filter by
+    source_id : str
+        Optional id of the source node to filter by. None by default
+
+    dest_id : str
+        Optional id of the destination node to filter by. None by default
+
+    source_unit_id : int, str
+        Optional unit id of the source to filter by. None by default
+
+    dest_unit_id : int, str
+        Optional unit id of the destination to filter by. None by default 
+
+    source_node_type : Node
+        Optional source `Node` subclass to filter by. None by default
+
+    dest_node_type : Node
+        Optional destination `Node` subclass to filter by. None by default
+
+    tag_type : TagType
+        Optional tag type to filter by. None by default
+
+    recurse : bool
+        Whether to search for objects within nodes. False by default
 
     Raises
     ------
@@ -436,57 +458,28 @@ def select_objs_helper(
 
     Returns
     -------
-    list
-        List of 'wwtp_configuration.Tag' or `wwtp_configuration.Connection` objects subset according to source/destination
-        id and `content_type`
+    bool
+        True if `obj` fits the filter criteria; False otherwise.
     """
-    # TODO: handle the case of searching for a Node
-    if source_id:
-        if source_id == dest_id and (
-            source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]
-            or dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]
-        ):
-            selected_objs.append(obj)
-        elif source_id in [obj_source_id, obj_exit_point, obj_source_unit_id]:
-            if dest_id:
-                if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-                    selected_objs.append(obj)
-            else:
-                selected_objs.append(obj)
-    elif dest_id:
-        if dest_id in [obj_dest_id, obj_entry_point, obj_dest_unit_id]:
-            selected_objs.append(obj)
-    elif source_node_type:
-        if source_node_type == dest_node_type and (
-            isinstance(source_node, source_node_type)
-            or isinstance(obj.source, source_node_type)
-            or isinstance(destination_node, dest_node_type)
-            or isinstance(obj.destination, dest_node_type)
-        ):
-            selected_objs.append(obj)
-        elif (
-            isinstance(source_node, source_node_type)
-            or isinstance(obj.source, source_node_type)
-        ):
-            if dest_node_type:
-                if (
-                    isinstance(destination_node, dest_node_type)
-                    or isinstance(obj.destination, dest_node_type)
-                ):
-                    selected_objs.append(obj)
-            else:
-                selected_objs.append(obj)
-    elif dest_node_type:
-        if (
-            isinstance(destination_node, dest_node_type)
-            or isinstance(obj.destination, dest_node_type)
-        ):
-            selected_objs.append(obj)
-    else:
-        selected_objs.append(obj)
+    if source_id is not None and source_id not in [obj_source_id, obj_exit_point]:
+        return False
+    
+    if dest_id is not None and dest_id not in [obj_source_id, obj_exit_point]:
+        return False
 
-    return selected_objs
+    if source_unit_id is not None and source_unit_id != obj_source_unit_id:
+        return False
 
+    if source_node_type is not None and not isinstance(source_node_type, obj.get_source_node(recurse=recurse)):
+        return False
+
+    if dest_node_type is not None and not isinstance(dest_node_type, obj.get_dest_node(recurse=recurse)):
+        return False
+
+    if tag_type is not None and obj.tag_type != tag_type:
+        return False
+
+    return True
 
 def operation_helper(operation, unit, prev_unit):
     """Helper for parsing operations and checking units

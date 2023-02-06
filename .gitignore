@@ -14,6 +14,7 @@ Icon?
 *.log
 Pipfile
 Pipfile.lock
+.vscode
 
 # Test outputs
 .coverage

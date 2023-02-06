@@ -4,7 +4,8 @@ import pickle
 import pytest
 from collections import Counter
 from wwtp_configuration.units import u
-from wwtp_configuration.utils import Tag, ContentsType
+from wwtp_configuration.utils import ContentsType
+from wwtp_configuration.tag import Tag
 from wwtp_configuration.parse_json import JSONParser
 from wwtp_configuration.node import Cogeneration
 from wwtp_configuration.connection import Pipe
@@ -257,300 +258,74 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
 
     assert result == expected
 
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "config_path, obj_id, expected",
+    "json_path, source_id, dest_id, source_node_type, dest_node_type, "
+    "contents_type, tag_type, recurse, expected",
     [
-        ("data/input/svcw_config.json", "SVCW", []),
+        # Case 1: no objects match search criteria
         (
-            "data/input/svcw_config.json",
-            "RASPump",
-            [
-                "RASPump_1_Electricity_RunStatus",
-                "RASPump_2_Electricity_RunStatus",
-                "RASPump_3_Electricity_RunStatus",
-                "RASPump_4_Electricity_RunStatus",
-                "RASPump_5_Electricity_RunStatus",
-                "RASPump_6_Electricity_RunStatus",
-                "RASPump_Electricity_RunStatus"
-            ],
+            "data/node.json", 
+            "NonexistentConnection", 
+            None, 
+            None,
+            None,
+            None,
+            None,
+            True,
+            []
         ),
+        # Case 2: return a single connection by source and destination
         (
-            "data/input/svcw_config.json",
-            "ConditionerToCogen",
-            [
-                "Conditioner_Cogenerator_1_Biogas_Flow",
-                "Conditioner_Cogenerator_2_Biogas_Flow",
-                "Conditioner_Cogenerator_Biogas_Flow"
-            ],
+            "data/node.json", 
+            "NonexistentConnection", 
+            None, 
+            None,
+            None,
+            None,
+            None,
+            True,
+            []
         ),
+        # Case 3: return multiple connections by source
+        # Case 4: return multiple connections by destination
+        # Case 5: return connections by exit point
+        # Case 6: return connections by entry point
+        # Case 7: return a single tag by source unit ID
+        # Case 8: return a single tag by destination unit ID
+        # Case 9: return multiple tags by source
+        # Case 10: return multiple tags by destination
     ],
 )
-def test_get_varnames_from_obj(config_path, obj_id, expected):
-    config = JSONParser(config_path).initialize_network()
-    obj = config.get_node_or_connection(obj_id, recurse=True)
-    try:
-        result = vn.get_varnames_from_obj(obj)
-    except Exception as err:
-        result = type(err).__name__
-    assert expected == result
-
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-@pytest.mark.parametrize(
-    "config, contents_type, source_node_type, dest_node_type, source_id, dest_id, source_unit_id, dest_unit_id, tags_only, recurse, expected",
-    [
-        (
-            facility,
-            None,
-            Cogeneration,
-            None,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            [
-                'Cogenerator_VirtualDemand_Electricity_Flow',
-                'Cogenerator_1_VirtualDemand_Electricity_Flow',
-                'Cogenerator_2_VirtualDemand_Electricity_Flow'
-            ],
-        ),
-        (
-            facility,
-            None,
-            Cogeneration,
-            Network,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            [
-                'Cogenerator_VirtualDemand_Electricity_Flow',
-                'Cogenerator_1_VirtualDemand_Electricity_Flow',
-                'Cogenerator_2_VirtualDemand_Electricity_Flow'
-            ],
-        ),
-        (
-            config,
-            ContentsType.UntreatedSewage,
-            None,
-            Facility,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            ['LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow'],
-        ),
-        (
-            config,
-            ContentsType.UntreatedSewage,
-            None,
-            None,
-            None,
-            "SVCW",
-            None,
-            None,
-            True,
-            True,
-            ['LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow'],
-        ),
-        (
-            config,
-            ContentsType.UntreatedSewage,
-            None,
-            None,
-            None,
-            "PrimaryClarifier",
-            None,
-            None,
-            True,
-            True,
-            ['LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow'],
-        ),
-        (
-            config,
-            None,
-            None,
-            None,
-            None,
-            "VirtualDemand",
-            None,
-            None,
-            True,
-            True,
-            [
-                'PowerGrid_SVCW_VirtualDemand_Electricity_Flow',
-                'Cogenerator_VirtualDemand_Electricity_Flow',
-                'Cogenerator_1_VirtualDemand_Electricity_Flow',
-                'Cogenerator_2_VirtualDemand_Electricity_Flow'
-            ],
-        ),
-        (
-            config,
-            None,
-            None,
-            None,
-            None,
-            "VirtualDemand",
-            None,
-            None,
-            True,
-            False,
-            ['PowerGrid_SVCW_VirtualDemand_Electricity_Flow'],
-        ),
-        (
-            config,
-            ContentsType.UntreatedSewage,
-            None,
-            Clarification,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            ['LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow'],
-        ),
-        (
-            config,
-            None,
-            None,
-            Facility,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            [
-                'LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow',
-                'PowerGrid_SVCW_VirtualDemand_Electricity_Flow',
-                'PowerGrid_SVCW_Cogenerator_1_NaturalGas_Flow',
-                'PowerGrid_SVCW_Cogenerator_2_NaturalGas_Flow',
-                'PowerGrid_SVCW_Cogenerator_NaturalGas_Flow'
-            ],
-        ),
-        (
-            config,
-            None,
-            None,
-            Facility,
-            None,
-            None,
-            None,
-            None,
-            False,
-            True,
-            [
-                'LiftPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow',
-                "StormwaterPump_SVCW_PrimaryClarifier_UntreatedSewage_Flow",
-                'PowerGrid_SVCW_VirtualDemand_Electricity_Flow',
-                'PowerGrid_SVCW_TeslaPowerpack_Electricity_Flow',
-                'PowerGrid_SVCW_Cogenerator_1_NaturalGas_Flow',
-                'PowerGrid_SVCW_Cogenerator_2_NaturalGas_Flow',
-                'PowerGrid_SVCW_Cogenerator_NaturalGas_Flow'
-            ],
-        ),
-        (
-            facility,
-            None,
-            Cogeneration,
-            Cogeneration,
-            None,
-            None,
-            None,
-            None,
-            True,
-            True,
-            [
-                'Conditioner_Cogenerator_1_Biogas_Flow',
-                'Conditioner_Cogenerator_2_Biogas_Flow',
-                'Conditioner_Cogenerator_Biogas_Flow',
-                'Cogenerator_VirtualDemand_Electricity_Flow',
-                'Cogenerator_1_VirtualDemand_Electricity_Flow',
-                'Cogenerator_2_VirtualDemand_Electricity_Flow'
-            ],
-        ),
-        (
-            facility,
-            None,
-            Cogeneration,
-            None,
-            None,
-            "VirtualDemand",
-            "1",
-            None,
-            True,
-            True,
-            ['Cogenerator_1_VirtualDemand_Electricity_Flow'],
-        ),
-        (
-            facility,
-            None,
-            None,
-            None,
-            "Cogenerator",
-            "VirtualDemand",
-            "1",
-            None,
-            True,
-            True,
-            ['Cogenerator_1_VirtualDemand_Electricity_Flow'],
-        ),
-        (
-            facility,
-            None,
-            None,
-            None,
-            "Cogenerator",
-            "Cogenerator",
-            None,
-            None,
-            False,
-            True,
-            [
-                'Conditioner_Cogenerator_1_Biogas_Flow',
-                'Conditioner_Cogenerator_2_Biogas_Flow',
-                'Conditioner_Cogenerator_Biogas_Flow',
-                'Cogenerator_VirtualDemand_Electricity_Flow',
-                'Cogenerator_1_VirtualDemand_Electricity_Flow',
-                'Cogenerator_2_VirtualDemand_Electricity_Flow'
-            ],
-        ),
-    ]
-)
-
-def test_get_tag_varnames(
-    config,
-    contents_type,
-    source_node_type,
-    dest_node_type,
+def test_select_objs(
+    json_path, 
     source_id,
     dest_id,
-    source_unit_id,
-    dest_unit_id,
-    tags_only,
+    source_node_type,
+    dest_node_type,
+    contents_type,
+    tag_type,
     recurse,
     expected
 ):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network() 
     try:
-        result = vn.get_flow_varnames(
-            config,
-            contents_type = contents_type,
-            source_node_type = source_node_type,
-            dest_node_type = dest_node_type,
-            source_id = source_id,
-            dest_id = dest_id,
-            source_unit_id = source_unit_id,
-            dest_unit_id = dest_unit_id,
-            tags_only = tags_only,
-            recurse = recurse
+        result = config.select_objs(
+            source_id,
+            dest_id,
+            source_node_type,
+            dest_node_type,
+            contents_type,
+            tag_type,
+            recurse,
         )
     except Exception as err:
         result = type(err).__name__
+
+    if isinstance(expected, str) and os.path.isfile(expected):
+        with open(expected, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
+
     assert result == expected

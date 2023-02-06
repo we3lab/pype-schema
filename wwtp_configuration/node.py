@@ -344,15 +344,17 @@ class Node(ABC):
 
         return parent_obj
 
-
     def select_objs(
         self,
         source_id=None,
         dest_id=None,
+        source_unit_id=None,
+        dest_unit_id=None,
         source_node_type=None,
         dest_node_type=None,
         contents_type=None,
         tag_type=None,
+        obj_type=None,
         recurse=False,
     ):
         """Selects from this Node all Connection or Tag objects
@@ -366,6 +368,12 @@ class Node(ABC):
 
         dest_id : str
             Optional id of the destination node to filter by. None by default
+        
+        source_unit_id : int, str
+            Optional unit id of the source to filter by. None by default
+
+        dest_unit_id : int, str
+            Optional unit id of the destination to filter by. None by default
 
         source_node_type : Node
             Optional source `Node` subclass to filter by. None by default
@@ -378,6 +386,9 @@ class Node(ABC):
 
         tag_type : TagType
             Optional tag type to filter by. None by default
+
+        obj_type : [Node, Connection, Tag]
+            The type of object to filter by. None by default
 
         recurse : bool
             Whether to search for objects within nodes. False by default
@@ -416,9 +427,8 @@ class Node(ABC):
                 obj_dest_unit_id = str(tag.dest_unit_id)
                 obj_entry_point = parent_obj.get_entry_point()
 
-            selected_objs = utils.select_objs_helper(
+            if utils.select_objs_helper(
                 tag,
-                selected_objs,
                 obj_source_id=obj_source_id,
                 obj_dest_id=obj_dest_id,
                 obj_exit_point=obj_exit_point,
@@ -427,15 +437,17 @@ class Node(ABC):
                 obj_dest_unit_id=obj_dest_unit_id,
                 source_id=source_id,
                 dest_id=dest_id,
+                source_unit_id=source_unit_id,
+                dest_unit_id=dest_unit_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
                 contents_type=contents_type,
                 tag_type=tag_type,
-            )
+            ):
+                selected_objs.append(tag)
         for conn in self.get_all_connections(recurse=recurse):
-            selected_objs = utils.select_objs_helper(
+            if utils.select_objs_helper(
                 conn,
-                selected_objs,
                 obj_source_id=conn.get_source_id(),
                 obj_dest_id=conn.get_dest_id(),
                 obj_exit_point=conn.get_exit_point(),
@@ -446,11 +458,16 @@ class Node(ABC):
                 dest_node_type=dest_node_type,
                 contents_type=contents_type,
                 tag_type=tag_type,
-            )
+            ):
+                selected_objs.append(conn)
 
         # Select according to contents
         if contents_type is not None:
             selected_objs = [obj for obj in selected_objs if obj.contents == contents_type]
+
+        # Select according to obj_type
+        if obj_type is not None:
+            selected_objs = [obj for obj in selected_objs if isinstance(obj, obj_type)]
 
         return selected_objs
 
