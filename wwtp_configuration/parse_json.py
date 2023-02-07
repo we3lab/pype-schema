@@ -330,7 +330,7 @@ class JSONParser:
                 node_obj.add_tag(tag)
 
             # create virtual "total" tag if it was missing
-            contents_list = node_obj.input_contents
+            contents_list = copy.deepcopy(node_obj.input_contents)
             if isinstance(contents_list, list):
                 if isinstance(node_obj.output_contents, list):
                     contents_list += node_obj.output_contents
