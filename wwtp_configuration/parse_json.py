@@ -83,7 +83,7 @@ class JSONParser:
         """
         if isinstance(old_network, str) and old_network.endswith("json"):
             old_network = JSONParser(old_network).initialize_network()
-        if type(old_network) is not node.Network:
+        if not isinstance(old_network, node.Network):
             raise TypeError("Please provide a valid json path or object for network to merge with")
         for node_id in self.config["nodes"]:
             if node_id not in self.config:
@@ -100,7 +100,7 @@ class JSONParser:
             # delete existing connection before creating the new one if necessary
             if hasattr(old_network, "connections") and connection_id in old_network.connections.keys():
                 old_network.remove_connection(connection_id)
-            old_network.add_connection(self.create_connection(connection.id, old_network))
+            old_network.add_connection(self.create_connection(connection_id, old_network))
         if inplace:
             self.network_obj = old_network
         return old_network

@@ -1,0 +1,50 @@
+{
+    "nodes": ["PumpStation"],
+    "connections": ["SewerIntake", "MainSewerLine"],
+    "PumpStation": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "UntreatedSewage",
+        "output_contents": "UntreatedSewage",
+        "flowrate": {
+          "min": 5,
+          "max": 25,
+          "avg": 15
+        },
+        "nodes": [],
+        "connections": []
+    },
+    "MainSewerLine": {
+        "type": "Pipe",
+        "source": "SewerNetwork",
+        "destination": "PumpStation",
+        "contents": "UntreatedSewage",
+        "flowrate (MGD)": {
+          "max": null,
+          "min": null,
+          "avg": null
+        }
+    },
+    "SewerIntake": {
+        "type": "Pipe",
+        "source": "PumpStation",
+        "destination": "WWTP",
+        "contents": "UntreatedSewage",
+        "entry_point": "BarScreen",
+        "flowrate (MGD)": {
+            "max": null,
+            "min": null,
+            "avg": null
+        },
+        "tags": {
+            "InfluentFlow": {
+            "type": "Flow",
+            "units": "GPM",
+            "source_unit_id": "total",
+            "dest_unit_id": "total",
+            "contents": "UntreatedSewage",
+            "totalized": false
+            }
+        }
+    }
+}
