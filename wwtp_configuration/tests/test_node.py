@@ -5,9 +5,9 @@ import pytest
 from collections import Counter
 from wwtp_configuration.units import u
 from wwtp_configuration.utils import ContentsType
-from wwtp_configuration.tag import Tag
+from wwtp_configuration.tag import Tag, TagType
 from wwtp_configuration.parse_json import JSONParser
-from wwtp_configuration.node import Cogeneration
+from wwtp_configuration.node import Cogeneration, Digestion
 from wwtp_configuration.connection import Pipe
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -259,12 +259,60 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     assert result == expected
 
 
-# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, source_id, dest_id, source_unit_id, dest_unit_id, source_node_type, "
     "dest_node_type, contents_type, tag_type, obj_type, recurse, expected_ids",
     [
-        # Case 1: no objects match search criteria
+        # Case 0: all objects without recursion
+        (
+            "data/node.json", 
+            None, 
+            None, 
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            ["WWTP", "SewerIntake", "PowerGrid", "RawSewagePump", "ElectricityToWWTP", "GasToGrid"]
+        ),
+        # Case 1: all objects with recursion
+        (
+            "data/node.json", 
+            None, 
+            None, 
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            [
+                "WWTP", 
+                "SewerIntake", 
+                "PowerGrid", 
+                "RawSewagePump", 
+                "ElectricityToWWTP", 
+                "GasToGrid",
+                "Digester1Level",
+                "Digester2Level",
+                "DigesterTotalSludgeBlendLevel",
+                "ElectricityPurchases",
+                "GasToCogen",
+                "Digester", 
+                "Cogenerator",
+                "Digester1GasFlow",
+                "Digester2GasFlow", 
+                "Digester3GasFlow",
+                "DigesterTotalCogeneratorTotalBiogasFlow"
+            ]
+        ),
+        # Case 2: no objects match search criteria
         (
             "data/node.json", 
             "NonexistentNode", 
@@ -279,7 +327,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             True,
             []
         ),
-        # Case 2: return a single connection by source and destination (with recursion)
+        # Case 3: return a single connection and tag by source and destination
         (
             "data/node.json", 
             "RawSewagePump", 
@@ -291,18 +339,219 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            False,
+            ["PumpRuntime", "SewerIntake"]
+        ),
+        # Case 4: return just the connection from Case 2
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            Pipe,
+            False,
+            ["SewerIntake"]
+        ),
+        # Case 5: return just the tag from Case 2
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            Tag,
+            False,
+            ["PumpRuntime"]
+        ),
+        # Case 6: return a connection and tag by source node type (with recursion)
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            None, 
+            None,
+            Digestion,
+            None,
+            None,
+            None,
             True,
             ["PumpRuntime", "SewerIntake"]
+        ),
+        # Case 7: return a connection and tags by destination node type (with recursion)
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            None, 
+            None,
+            None,
+            Cogeneration,
+            None,
+            None,
+            True,
+            ["GasToCogen", "DigesterTotalCogeneratorTotalBiogasFlow", "Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"]
+        ),
+        # Case 8: return mutliple tags by numeric source unit ID
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            2, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["Digester2Level", "Digester3GasFlow"]
+        ),
+        # Case 9: return mutliple tags by numeric source unit ID
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            2, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["Digester2Level", "Digester3GasFlow"]
+        ),
+        # Case 10: return a single tag by "total" source unit ID
+        (
+            "data/node.json", 
+            "RawSewagePump", 
+            None, 
+            None,
+            "total", 
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            ["DigesterTotalCogeneratorTotalBiogasFlow"]
+        ),
+        # Case 11: return multiple connections by destination without recursion
+        (
+            "data/node.json",
+            None,
+            "WWTP",
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            ["ElectricityToWWTP", "SewerIntake"]
+        ),
+        # Case 12: return multiple connections by destination with recursion
+        (
+            "data/node.json",
+            None,
+            "WWTP",
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["ElectricityToWWTP", "SewerIntake", "ElectricityPurchases"]
+        ),
+        # Case 13: return objects by exit point
+        (   
+            "data/node.json",
+            "Digester",
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            Pipe,
+            True,
+            ["GasToGrid", "GasToCogen"]
+        ),
+        # Case 14: return objects by entry point
+        (   
+            "data/node.json",
+            None,
+            "Digester",
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["SewerIntake"]
+        ),
+        # Case 15: bidirectional connection as source but searching for destination
+        (   
+            "../data/sample.json",
+            None,
+            "TeslaBattery",
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["BatteryToFacility"]
+        ),
+        # Case 16: bidirectional connection as destination but searching for source
+        (   
+            "../data/sample.json",
+            "VirtualDemand",
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["BatteryToFacility"]
+        ),
+        # Case 17: all flow tags
+        (
+            "data/node.json",
+            "Digester",
+            None,
+            None, 
+            None,
+            None,
+            None,
+            None,
+            TagType.Flow,
+            None,
+            True,
+            ["GasToGrid", "GasToCogen"]
         )
-        # Case 3: return multiple connections by source
-        # Case 4: return multiple connections by destination
-        # Case 5: return connections by exit point
-        # Case 6: return connections by entry point
-        # Case 7: return a single tag by source unit ID
-        # Case 8: return a single tag by destination unit ID
-        # Case 9: return multiple tags by source
-        # Case 10: return multiple tags by destination
-        # Case 11: bidirectional connection
     ],
 )
 def test_select_objs(

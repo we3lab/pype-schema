@@ -476,7 +476,7 @@ def select_objs_helper(
     if dest_node_type is not None and not isinstance(dest_node_type, obj.get_dest_node(recurse=recurse)):
         return False
 
-    if tag_type is not None and obj.tag_type != tag_type:
+    if tag_type is not None and (not hasattr(obj, "tag_type") or obj.tag_type != tag_type):
         return False
 
     return True
