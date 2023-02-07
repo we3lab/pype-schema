@@ -66,11 +66,24 @@
       "avg": null
     },
     "tags": {
-      "CombinedDigesterGasFlow": {
+      "Digester1GasFlow": {
         "type": "Flow",
         "units": "SCFM",
-        "source_unit_id": "total",
-        "dest_unit_id": "total",
+        "source_unit_id": 1,
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "Digester2GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 2,
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "Digester3GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 3,
         "contents": "Biogas",
         "totalized": false
       }

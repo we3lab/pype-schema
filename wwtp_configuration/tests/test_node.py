@@ -259,74 +259,75 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     assert result == expected
 
 
-# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-# @pytest.mark.parametrize(
-#     "json_path, source_id, dest_id, source_node_type, dest_node_type, "
-#     "contents_type, tag_type, recurse, expected",
-#     [
-#         # Case 1: no objects match search criteria
-#         (
-#             "data/node.json", 
-#             "NonexistentConnection", 
-#             None, 
-#             None,
-#             None,
-#             None,
-#             None,
-#             True,
-#             []
-#         ),
-#         # Case 2: return a single connection by source and destination
-#         (
-#             "data/node.json", 
-#             "NonexistentConnection", 
-#             None, 
-#             None,
-#             None,
-#             None,
-#             None,
-#             True,
-#             []
-#         ),
-#         # Case 3: return multiple connections by source
-#         # Case 4: return multiple connections by destination
-#         # Case 5: return connections by exit point
-#         # Case 6: return connections by entry point
-#         # Case 7: return a single tag by source unit ID
-#         # Case 8: return a single tag by destination unit ID
-#         # Case 9: return multiple tags by source
-#         # Case 10: return multiple tags by destination
-#         # Case 11: bidirectional connection
-#     ],
-# )
-# def test_select_objs(
-#     json_path, 
-#     source_id,
-#     dest_id,
-#     source_node_type,
-#     dest_node_type,
-#     contents_type,
-#     tag_type,
-#     recurse,
-#     expected
-# ):
-#     parser = JSONParser(json_path)
-#     config = parser.initialize_network() 
-#     try:
-#         result = config.select_objs(
-#             source_id,
-#             dest_id,
-#             source_node_type,
-#             dest_node_type,
-#             contents_type,
-#             tag_type,
-#             recurse,
-#         )
-#     except Exception as err:
-#         result = type(err).__name__
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, source_id, dest_id, source_node_type, dest_node_type, "
+    "contents_type, tag_type, recurse, expected",
+    [
+        # Case 1: no objects match search criteria
+        (
+            "data/node.json", 
+            "NonexistentConnection", 
+            None, 
+            None,
+            None,
+            None,
+            None,
+            True,
+            []
+        ),
+        # Case 2: return a single connection by source and destination
+        (
+            "data/node.json", 
+            "NonexistentConnection", 
+            None, 
+            None,
+            None,
+            None,
+            None,
+            True,
+            []
+        ),
+        # Case 3: return multiple connections by source
+        # Case 4: return multiple connections by destination
+        # Case 5: return connections by exit point
+        # Case 6: return connections by entry point
+        # Case 7: return a single tag by source unit ID
+        # Case 8: return a single tag by destination unit ID
+        # Case 9: return multiple tags by source
+        # Case 10: return multiple tags by destination
+        # Case 11: bidirectional connection
+    ],
+)
+def test_select_objs(
+    json_path, 
+    source_id,
+    dest_id,
+    source_node_type,
+    dest_node_type,
+    contents_type,
+    tag_type,
+    recurse,
+    expected
+):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network() 
 
-#     if isinstance(expected, str) and os.path.isfile(expected):
-#         with open(expected, "rb") as pickle_file:
-#             expected = pickle.load(pickle_file)
+    try:
+        result = config.select_objs(
+            source_id,
+            dest_id,
+            source_node_type,
+            dest_node_type,
+            contents_type,
+            tag_type,
+            recurse,
+        )
+    except Exception as err:
+        result = type(err).__name__
 
-#     assert result == expected
+    if isinstance(expected, str) and os.path.isfile(expected):
+        with open(expected, "rb") as pickle_file:
+            expected = pickle.load(pickle_file)
+
+    assert result == expected

@@ -323,31 +323,23 @@ class JSONParser:
 
         tags = self.config[node_id].get("tags")
         if tags:
+            contents_list = []
             for tag_id, tag_info in tags.items():
                 # ensure that the destination ID for Node-associated Tags is null
                 tag_info["dest_unit_id"] = None
                 tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
 
-            # create virtual "total" tag if it was missing
-            contents_list = copy.deepcopy(node_obj.input_contents)
-            if isinstance(contents_list, list):
-                if isinstance(node_obj.output_contents, list):
-                    contents_list += node_obj.output_contents
-                else:
-                    contents_list += [node_obj.output_contents]
-            elif isinstance(node_obj.output_contents, list):
-                contents_list = [contents_list] + node_obj.output_contents
-            else:
-                contents_list = [contents_list, node_obj.output_contents]
+                if utils.ContentsType[tag_info["contents"]] not in contents_list:
+                    contents_list.append(utils.ContentsType[tag_info["contents"]])
 
             for contents in contents_list:
                 if contents is not None:
-                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info["contents"] == contents]
-                    tag_source_unit_ids = [tag["source_unit_id"] for tag in tags_by_contents]
+                    tags_by_contents = [tag_info for _, tag_info in tags.items() if utils.ContentsType[tag_info["contents"]] == contents]
+                    tag_source_unit_ids = [tag["source_unit_id"] for tag in tags_by_contents if "source_unit_id" in tag.keys()]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
                         tag_info = tags_by_contents[0]
-                        tag_id = "".join(node_id, "Total", tag_info["contents"], tag_info["type"])
+                        tag_id = "".join([node_id, "Total", tag_info["contents"], tag_info["type"]])
                         tag_info["source_unit_id"] = "total"
                         tag = self.parse_tag(tag_id, tag_info, node_obj)
                         node_obj.add_tag(tag)
@@ -449,27 +441,40 @@ class JSONParser:
             contents_list = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
             for contents in contents_list:
                 if contents is not None:
-                    tags_by_contents = [tag_info for _, tag_info in tags.items() if tag_info["contents"] == contents]
-                    tag_dest_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
-                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
+                    tags_by_contents = [tag_info for _, tag_info in tags.items() if utils.ContentsType[tag_info["contents"]] == contents]
+                    tag_source_unit_ids = [tag["source_unit_id"] for tag in tags_by_contents if "source_unit_id" in tag.keys()]
+                    tag_dest_unit_ids = [tag["dest_unit_id"] for tag in tags_by_contents if "dest_unit_id" in tag.keys()]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
                         tag_info = tags_by_contents[0]
-                        # create a separate virtual total for each destination unit
-                        for id in tag_dest_unit_ids:
-                            tag_info["dest_unit_id"] = id
-                            id = "Total" if id == "total" else str(id)
-                            tag.id = "".join(connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), id, utils.ContentsType[contents], TagType[tag_info["type"]])
+                        # create a separate virtual total for each destination unit. If none exist then just use total
+                        if tag_dest_unit_ids:
+                            for id in tag_dest_unit_ids:
+                                tag_info["dest_unit_id"] = id
+                                id = "Total" if id == "total" else str(id)
+                                tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), id, tag_info["contents"], tag_info["type"]])
+                                tag_info["source_unit_id"] = "total"
+                                connection_obj.add_tag(tag)
+                        else:
+                            tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
+                            tag_info["dest_unit_id"] = "total"
                             tag_info["source_unit_id"] = "total"
                             connection_obj.add_tag(tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_info = tags_by_contents[0]
-                        # create a separate virtual total for each source unit
-                        for id in tag_source_unit_ids:
-                            tag_info["source_unit_id"] = id
-                            id = "Total" if id == "total" else str(id)
-                            tag.id = "".join(connection_obj.get_source_id(), id, connection_obj.get_dest_id(), "Total", utils.ContentsType[contents], TagType[tag_info["type"]])
+                        # create a separate virtual total for each source unit. If none exist then just use total
+                        if tag_source_unit_ids:
+                            for id in tag_source_unit_ids:
+                                tag_info["source_unit_id"] = id
+                                id = "Total" if id == "total" else str(id)
+                                tag.id = "".join([connection_obj.get_source_id(), id, connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
+                                tag_info["dest_unit_id"] = "total"
+                                connection_obj.add_tag(tag)
+                        else:
+                            tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
                             tag_info["dest_unit_id"] = "total"
+                            tag_info["source_unit_id"] = "total"
                             connection_obj.add_tag(tag)
+
 
         return connection_obj
 
