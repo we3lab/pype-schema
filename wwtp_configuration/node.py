@@ -416,9 +416,9 @@ class Node(ABC):
                 parent_obj = self.get_node_or_connection(tag.parent_id, recurse=recurse)
 
             if isinstance(parent_obj, Node):
-                obj_source_id = parent_obj.get_source_id()
+                obj_source_id = parent_obj.id
                 obj_source_unit_id = str(tag.source_unit_id)
-                obj_dest_id, obj_dest_unit_id, obj_entry_point, obj_exit_point = None
+                obj_dest_id, obj_dest_unit_id, obj_entry_point, obj_exit_point = None, None, None, None
             else: # the parent must be a Connection if it is not a Node
                 obj_source_id = parent_obj.get_source_id()
                 obj_source_unit_id = str(tag.source_unit_id)
@@ -441,7 +441,6 @@ class Node(ABC):
                 dest_unit_id=dest_unit_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
-                contents_type=contents_type,
                 tag_type=tag_type,
             ):
                 selected_objs.append(tag)
@@ -456,7 +455,6 @@ class Node(ABC):
                 dest_id=dest_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
-                contents_type=contents_type,
                 tag_type=tag_type,
             ):
                 selected_objs.append(conn)

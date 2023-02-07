@@ -259,16 +259,19 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     assert result == expected
 
 
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, source_id, dest_id, source_node_type, dest_node_type, "
-    "contents_type, tag_type, recurse, expected",
+    "json_path, source_id, dest_id, source_unit_id, dest_unit_id, source_node_type, "
+    "dest_node_type, contents_type, tag_type, obj_type, recurse, expected_ids",
     [
         # Case 1: no objects match search criteria
         (
             "data/node.json", 
-            "NonexistentConnection", 
+            "NonexistentNode", 
             None, 
+            None,
+            None, 
+            None,
             None,
             None,
             None,
@@ -276,18 +279,21 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             True,
             []
         ),
-        # Case 2: return a single connection by source and destination
+        # Case 2: return a single connection by source and destination (with recursion)
         (
             "data/node.json", 
-            "NonexistentConnection", 
+            "RawSewagePump", 
+            None, 
+            None,
             None, 
             None,
             None,
             None,
             None,
+            None,
             True,
-            []
-        ),
+            ["PumpRuntime", "SewerIntake"]
+        )
         # Case 3: return multiple connections by source
         # Case 4: return multiple connections by destination
         # Case 5: return connections by exit point
@@ -303,31 +309,40 @@ def test_select_objs(
     json_path, 
     source_id,
     dest_id,
+    source_unit_id,
+    dest_unit_id,
     source_node_type,
     dest_node_type,
     contents_type,
     tag_type,
+    obj_type,
     recurse,
-    expected
+    expected_ids
 ):
     parser = JSONParser(json_path)
     config = parser.initialize_network() 
 
-    try:
-        result = config.select_objs(
-            source_id,
-            dest_id,
-            source_node_type,
-            dest_node_type,
-            contents_type,
-            tag_type,
-            recurse,
-        )
-    except Exception as err:
-        result = type(err).__name__
+    result = config.select_objs(
+        source_id=source_id,
+        dest_id=dest_id,
+        source_unit_id=source_unit_id,
+        dest_unit_id=dest_unit_id,
+        source_node_type=source_node_type,
+        dest_node_type=dest_node_type,
+        contents_type=contents_type,
+        tag_type=tag_type,
+        obj_type=obj_type,
+        recurse=recurse,
+    )
 
-    if isinstance(expected, str) and os.path.isfile(expected):
-        with open(expected, "rb") as pickle_file:
-            expected = pickle.load(pickle_file)
+    expected = []
+    for id in expected_ids:
+        obj = config.get_tag(id, recurse=True)
+        if obj is None:
+            obj = config.get_connection(id, recurse=True)
+            if obj is None:
+                obj = config.get_node(id, recurse=True)
+        
+        expected.append(obj)
 
     assert result == expected
