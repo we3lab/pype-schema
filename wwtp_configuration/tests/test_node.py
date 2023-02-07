@@ -28,7 +28,7 @@ pint.set_application_registry(u)
         ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
         (
             "data/node.json",
-            "CombinedDigesterGasFlow",
+            "Digester1GasFlow",
             "data/lower_level_connection_tag.pkl",
         ),
         ("data/node.json", "NonexistentTag", None),
