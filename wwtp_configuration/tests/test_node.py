@@ -594,4 +594,5 @@ def test_select_objs(
         
         expected.append(obj)
 
-    assert result == expected
+    # Counter is used so that order is ignored
+    assert Counter(result) == Counter(expected)

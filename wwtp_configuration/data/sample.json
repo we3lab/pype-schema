@@ -92,10 +92,11 @@
     "input_contents": "UntreatedSewage",
     "output_contents": "UntreatedSewage",
     "num_units": 2,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     }
   },
   "Cogenerator": {
@@ -103,10 +104,11 @@
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
     "output_contents": "Electricity",
-    "generation_capacity (kW)": {
+    "generation_capacity": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "kW"
     },
     "tags": {}
   },
@@ -167,10 +169,11 @@
     "contents": "UntreatedSewage",
     "volume (cubic meters)": 800,
     "num_units": 8,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": 2
+      "avg": 2,
+      "units": "MGD"
     }
   },
   "SecondaryClarifier": {
@@ -178,10 +181,11 @@
     "contents": "UntreatedSewage",
     "volume (cubic meters)": 800,
     "num_units": 8,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": 2
+      "avg": 2,
+      "units": "MGD"
     }
   },
   "AerationBasin": {
@@ -190,10 +194,11 @@
     "output_contents": "UntreatedSewage",
     "volume (cubic meters)": 2500,
     "num_units": 8,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": 1.5
+      "avg": 1.5,
+      "units": "MGD"
     }
   },
   "AnaerobicDigester": {
@@ -203,10 +208,11 @@
     "digester_type": "Anaerobic",
     "volume (cubic meters)": 2500,
     "num_units": 3,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -223,10 +229,11 @@
     "output_contents": "ThickenedSludgeBlend",
     "num_units": 1,
     "volume (cubic meters)": 300,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     }
   },
   "SewerNetwork": {
@@ -272,10 +279,11 @@
     "elevation (meters)": null,
     "input_contents": "Seawater",
     "output_contents": ["DrinkingWater", "Brine"],
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "nodes": [],
     "connections": []
@@ -285,10 +293,11 @@
     "elevation (meters)": null,
     "input_contents": "TreatedSewage",
     "output_contents": "NonpotableReuse",
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "nodes": ["Ultrafiltration", "RWFContactChamber", "ReclaimedReservoir"],
     "connections": ["UFToDisinfection", "ChlorinatorToReservoir"]
@@ -298,10 +307,11 @@
     "contents": "TreatedSewage",
     "volume (cubic meters)": null,
     "num_units": null,
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     }
   },
   "RWFContactChamber": {
@@ -316,10 +326,11 @@
     "source": "Ultrafiltration",
     "destination": "RWFContactChamber",
     "contents": "TreatedSewage",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -343,10 +354,11 @@
     "contents": "FatOilGrease",
     "num_units": null,
     "horsepower": null,
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -363,10 +375,11 @@
     "destination": "WWTP",
     "contents": "UntreatedSewage",
     "entry_point": "BarScreen",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {
       "InfluentFlow": {
@@ -384,10 +397,11 @@
     "source": "GritChamber",
     "destination": "PrimaryClarifier",
     "contents": "UntreatedSewage",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -396,10 +410,11 @@
     "source": "PrimaryClarifier",
     "destination": "AerationBasin",
     "contents": "UntreatedSewage",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -408,10 +423,11 @@
     "source": "AerationBasin",
     "destination": "SecondaryClarifier",
     "contents": "UntreatedSewage",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -427,10 +443,11 @@
     "source": "AnaerobicDigester",
     "destination": "Conditioner",
     "contents": "Biogas",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -450,14 +467,16 @@
     "source": "Conditioner",
     "destination": "Cogenerator",
     "contents": "Biogas",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
-    "heating_values (BTU/scf)": {
+    "heating_values": {
       "lower": 600,
-      "higher": 700
+      "higher": 700,
+      "units": "BTU/scf"
     },
     "tags": {
       "Digester1GasFlow": {
@@ -499,10 +518,11 @@
     "source": "Conditioner",
     "destination": "Flare",
     "contents": "Biogas",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {
       "TotalizedFlaredGas": {
@@ -542,10 +562,11 @@
     "contents": "WasteActivatedSludge",
     "num_units": null,
     "horsepower": null,
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -562,10 +583,11 @@
     "destination": "Ocean",
     "contents": "TreatedSewage",
     "exit_point": "WWTPContactChamber",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -574,10 +596,11 @@
     "source": "DesalPlant",
     "destination": "Ocean",
     "contents": "Brine",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -588,10 +611,11 @@
     "contents": "TreatedSewage",
     "exit_point": "SecondaryClarifier",
     "entry_point": "Ultrafiltration",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -601,10 +625,11 @@
     "destination": "PurplePipeSystem",
     "contents": "NonpotableReuse",
     "exit_point": "ReclaimedReservoir",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -613,10 +638,11 @@
     "source": "DrinkingWaterFacility",
     "destination": "WaterDistribution",
     "contents": "DrinkingWater",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -639,10 +665,11 @@
     "pump_type": null,
     "contents": "UntreatedSewage",
     "horsepower": null,
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -652,10 +679,11 @@
     "source": "Ocean",
     "destination": "DesalPlant",
     "contents": "Seawater",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },
@@ -664,10 +692,11 @@
     "source": "DesalPlant",
     "destination": "WaterDistribution",
     "contents": "DrinkingWater",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "tags": {}
   },

@@ -391,6 +391,25 @@ class Pipe(Connection):
             and self.entry_point == other.entry_point
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.contents,
+                self.source,
+                self.destination,
+                self.diameter,
+                self.friction_coeff,
+                self.pressure,
+                self.heating_values,
+                self.flow_rate,
+                self.tags,
+                self.bidirectional,
+                self.exit_point,
+                self.entry_point
+            )
+        )
+
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate through the connection
 
@@ -529,4 +548,18 @@ class Wire(Connection):
             and self.bidirectional == other.bidirectional
             and self.exit_point == other.exit_point
             and self.entry_point == other.entry_point
+        )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.contents,
+                self.source,
+                self.destination,
+                self.tags,
+                self.bidirectional,
+                self.exit_point,
+                self.entry_point
+            )
         )

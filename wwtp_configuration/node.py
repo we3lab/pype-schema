@@ -552,6 +552,18 @@ class Network(Node):
             and self.connections == other.connections
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.nodes,
+                self.connections,
+                self.tags
+            )
+        )
+
     def add_node(self, node):
         """Adds a node to the network
 
@@ -740,6 +752,20 @@ class Facility(Network):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.elevation,
+                self.nodes,
+                self.connections,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Pump(Node):
     """
@@ -862,6 +888,22 @@ class Pump(Node):
             and self.energy_efficiency == other.energy_efficiency
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.elevation,
+                self.pump_type,
+                self.horsepower,
+                self.num_units,
+                self.tags,                
+                self.flow_rate,
+                self.energy_efficiency,
+            )
+        )
+
     def set_pump_type(self, pump_type):
         """Set the pump curve to the given function
 
@@ -966,6 +1008,18 @@ class Tank(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.elevation,
+                self.volume,
+                self.tags
+            )
+        )
+
 
 class Reservoir(Node):
     """
@@ -1048,6 +1102,18 @@ class Reservoir(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.elevation,
+                self.volume,
+                self.tags
+            )
+        )
+
 
 class Battery(Node):
     """
@@ -1121,6 +1187,19 @@ class Battery(Node):
             and self.discharge_rate == other.discharge_rate
             and self.tags == other.tags
         )
+    
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.capacity,
+                self.discharge_rate,
+                self.tags
+            )
+        )
+
 
 
 class Digestion(Node):
@@ -1231,6 +1310,20 @@ class Digestion(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.digester_type,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Cogeneration(Node):
     """
@@ -1297,7 +1390,7 @@ class Cogeneration(Node):
         return (
             f"<wwtp_configuration.node.Cogeneration id:{self.id} "
             f"input_contents:{self.input_contents} "
-            f"output_contents:{self.input_contents} num_units:{self.num_units} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
         )
 
@@ -1309,9 +1402,22 @@ class Cogeneration(Node):
         return (
             self.id == other.id
             and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
             and self.num_units == other.num_units
             and self.gen_capacity == other.gen_capacity
             and self.tags == other.tags
+        )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.gen_capacity,
+                self.tags
+            )
         )
 
     def set_gen_capacity(self, min, max, avg):
@@ -1440,6 +1546,19 @@ class Clarification(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Filtration(Node):
     """
@@ -1539,6 +1658,19 @@ class Filtration(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Screening(Node):
     """
@@ -1629,6 +1761,18 @@ class Screening(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Conditioning(Node):
     """
@@ -1717,6 +1861,18 @@ class Conditioning(Node):
             and self.num_units == other.num_units
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
+        )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.flow_rate,
+                self.tags
+            )
         )
 
 
@@ -1818,6 +1974,19 @@ class Thickening(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.flow_rate,
+                self.tags
+            )
+        )
+
 
 class Aeration(Node):
     """
@@ -1917,6 +2086,18 @@ class Aeration(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.flow_rate,
+                self.tags
+            )
+        )
 
 class Chlorination(Node):
     """
@@ -2016,6 +2197,18 @@ class Chlorination(Node):
             and self.tags == other.tags
         )
 
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.output_contents,
+                self.num_units,
+                self.volume,
+                self.flow_rate,
+                self.tags
+            )
+        )
 
 class Flaring(Node):
     """
@@ -2026,6 +2219,15 @@ class Flaring(Node):
 
     num_units : int
         Number of flares running in parallel
+
+    min_flow : int
+        Minimum flow rate of a single flare
+
+    max_flow : int
+        Maximum flow rate of a single flare
+
+    avg_flow : int
+        Average flow rate of a single flare
 
     tags : dict of Tag
         Data tags associated with this flare
@@ -2041,21 +2243,25 @@ class Flaring(Node):
     num_units : int
         Number of flares running in parallel
 
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
     tags : dict of Tag
         Data tags associated with this flare
     """
 
-    def __init__(self, id, num_units, tags={}):
+    def __init__(self, id, num_units, min_flow, max_flow, avg_flow, tags={}):
         self.id = id
         self.input_contents = utils.ContentsType.Biogas
         self.num_units = num_units
         self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
 
     def __repr__(self):
         return (
             f"<wwtp_configuration.node.Flaring id:{self.id} "
             f"input_contents:{self.input_contents} num_units:{self.num_units} "
-            f"tags:{self.tags}>\n"
+            f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -2067,5 +2273,17 @@ class Flaring(Node):
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.num_units == other.num_units
+            and self.flow_rate == other.flow_rate
             and self.tags == other.tags
+        )
+
+    def __hash__(self):
+        return hash(
+            (
+                self.id,
+                self.input_contents,
+                self.num_units,
+                self.flow_rate,
+                self.tags
+            )
         )

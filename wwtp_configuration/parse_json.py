@@ -127,9 +127,7 @@ class JSONParser:
             self.config[node_id].get("volume (cubic meters)"), "m3"
         )
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[node_id].get("flowrate (MGD)"), "MGD"
-        )
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(self.config[node_id].get("flowrate"))
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -227,9 +225,7 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "Cogeneration":
-            min, max, avg = self.parse_min_max_avg(
-                self.config[node_id].get("generation_capacity (kW)"), "kW"
-            )
+            min, max, avg = self.parse_min_max_avg(self.config[node_id].get("generation_capacity"))
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
@@ -283,7 +279,14 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "Flaring":
-            node_obj = node.Flaring(node_id, num_units)
+            node_obj = node.Flaring(
+                node_id, 
+                num_units,  
+                min_flow,
+                max_flow,
+                avg_flow,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Thickening":
             node_obj = node.Thickening(
                 node_id,
@@ -386,15 +389,9 @@ class JSONParser:
         if entry_point:
             entry_point = destination.get_node(entry_point)
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[connection_id].get("flowrate (MGD)"), "MGD"
-        )
-        min_pres, max_pres, avg_pres = self.parse_min_max_avg(
-            self.config[connection_id].get("pressure (PSI)"), "PSI"
-        )
-        lower, higher = self.parse_heating_values(
-            self.config[connection_id].get("heating_values (BTU/scf)"), "BTU/scf"
-        )
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(self.config[connection_id].get("flowrate"))
+        min_pres, max_pres, avg_pres = self.parse_min_max_avg(self.config[connection_id].get("pressure"))
+        lower, higher = self.parse_heating_values(self.config[connection_id].get("heating_values"))
 
         if self.config[connection_id]["type"] == "Pipe":
             diameter = utils.parse_quantity(
@@ -630,16 +627,13 @@ class JSONParser:
         return contents
 
     @staticmethod
-    def parse_min_max_avg(min_max_avg, units=None):
+    def parse_min_max_avg(min_max_avg):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
         ----------
         min_max_avg : dict
             dictionary of the form {'min': int, 'max': int, 'avg': int}
-
-        units : str
-            units to be parsed into a Pint Quantity
 
         Returns
         -------
@@ -650,6 +644,7 @@ class JSONParser:
         if min_max_avg is None:
             return (None, None, None)
         else:
+            units = min_max_avg.get("units")
             if units:
                 return (
                     utils.parse_quantity(min_max_avg.get("min"), units),
@@ -664,7 +659,7 @@ class JSONParser:
                 )
 
     @staticmethod
-    def parse_heating_values(heating_vals, units=None):
+    def parse_heating_values(heating_vals):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
@@ -677,11 +672,11 @@ class JSONParser:
         (Quantity, Quantity) or (float, float)
             (lower, higher) heating values as a tuple, with units applied.
             Given as a float if no units are specified
-
         """
         if heating_vals is None:
             return (None, None)
         else:
+            units = heating_vals.get("units")
             if units:
                 return (
                     utils.parse_quantity(heating_vals.get("lower"), units),
