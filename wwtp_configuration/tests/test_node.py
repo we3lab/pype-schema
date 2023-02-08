@@ -7,7 +7,7 @@ from wwtp_configuration.units import u
 from wwtp_configuration.utils import ContentsType
 from wwtp_configuration.tag import Tag, TagType
 from wwtp_configuration.parse_json import JSONParser
-from wwtp_configuration.node import Cogeneration, Digestion
+from wwtp_configuration.node import Cogeneration, Digestion, Pump
 from wwtp_configuration.connection import Pipe
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -327,7 +327,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             True,
             []
         ),
-        # Case 3: return a single connection and tag by source and destination
+        # Case 3: return a single connection and tag by source
         (
             "data/node.json", 
             "RawSewagePump", 
@@ -375,12 +375,12 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 6: return a connection and tag by source node type (with recursion)
         (
             "data/node.json", 
-            "RawSewagePump", 
+            None, 
             None, 
             None,
             None, 
             None,
-            Digestion,
+            Pump,
             None,
             None,
             None,
@@ -390,7 +390,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 7: return a connection and tags by destination node type (with recursion)
         (
             "data/node.json", 
-            "RawSewagePump", 
+            None, 
             None, 
             None,
             None, 
@@ -405,7 +405,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 8: return mutliple tags by numeric source unit ID
         (
             "data/node.json", 
-            "RawSewagePump", 
+            None, 
             None, 
             None,
             2, 
@@ -415,22 +415,22 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             True,
-            ["Digester2Level", "Digester3GasFlow"]
+            ["Digester2Level", "Digester2GasFlow"]
         ),
-        # Case 9: return mutliple tags by numeric source unit ID
+        # Case 9: return a single tag by numeric source unit ID
         (
             "data/node.json", 
-            "RawSewagePump", 
+            None, 
             None, 
             None,
-            2, 
+            3, 
             None,
             None,
             None,
             None,
             None,
             True,
-            ["Digester2Level", "Digester3GasFlow"]
+            ["Digester3GasFlow"]
         ),
         # Case 10: return a single tag by "total" source unit ID
         (
@@ -445,7 +445,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             False,
-            ["DigesterTotalCogeneratorTotalBiogasFlow"]
+            ["InfluentFlow"]
         ),
         # Case 11: return multiple connections by destination without recursion
         (

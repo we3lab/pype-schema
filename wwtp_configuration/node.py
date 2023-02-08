@@ -558,60 +558,46 @@ class Network(Node):
             return NotImplemented
 
         if len(self.nodes) < len(other.nodes):
-                return True
+            return True
         elif len(self.nodes) > len(other.nodes):
             return False
-        elif self.nodes == other.nodes:
-            if len(self.connections) < len(other.connections):
+        elif len(self.connections) < len(other.connections):
+            return True
+        elif len(self.connections) > len(other.connections):
+            return False
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            if len(self.output_contents) < len(other.output_contents):
                 return True
-            elif len(self.connections) > len(other.connections):
+            elif len(self.output_contents) > len(other.output_contents):
                 return False
-            elif self.connections == other.connections:
-                if len(self.tags) < len(other.tags):
+            elif self.output_contents == other.output_contents:
+                if len(self.input_contents) < len(other.input_contents):
                     return True
-                if len(self.tags) > len(other.tags):
+                elif len(self.input_contents) > len(other.input_contents):
                     return False
-                if self.tags == other.tags:
-                    if len(self.output_contents) < len(other.output_contents):
-                        return True
-                    elif len(self.output_contents) > len(other.output_contents):
-                        return False
-                    elif self.output_contents == other.output_contents:
-                        if len(self.input_contents) < len(other.input_contents):
-                            return True
-                        elif len(self.input_contents) > len(other.input_contents):
-                            return False
-                        elif self.input_contents == other.input_contents:
-                            # if all else fails, compare ID
-                            return self.id < other.id
-                        else:
-                            other_vals = sorted([contents.value for contents in other.input_contents])
-                            for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
-                                if contents not in other_vals:
-                                    return contents < other_vals[i]
-                    else:  
-                        other_vals = sorted([contents.value for contents in other.output_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
-                            if contents not in other_vals:
-                                return contents < other_vals[i]
-                # case with same number of tags, so we compare tags in order
+                elif self.input_contents == other.input_contents:
+                    # if all else fails, compare ID
+                    return self.id < other.id
                 else:
-                    other_tags =  [tag for _, tag in sorted(other.tags.items())]
-                    for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-                        if tag != other_tags[i]:
-                            return tag < other_tags[i]
-            # case with same number of connections, so we compare connections in order
-            else:
-                other_conns =  [conn for _, conn in sorted(other.connections.items())]
-                for i, conn in enumerate([conn for _, conn in sorted(self.connections.items())]):
-                    if conn != other_conns[i]:
-                        return conn < other_conns[i]
-        # case with same number of nodes, so we compare nodes in order
+                    other_vals = sorted([contents.value for contents in other.input_contents])
+                    for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        if contents not in other_vals:
+                            return contents < other_vals[i]
+            else:  
+                other_vals = sorted([contents.value for contents in other.output_contents])
+                for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    if contents not in other_vals:
+                        return contents < other_vals[i]
+        # case with same number of tags, so we compare tags in order
         else:
-            other_nodes =  [node for _, node in sorted(other.nodes.items())]
-            for i, node in enumerate([node for _, node in sorted(self.nodes.items())]):
-                if node != other_nodes[i]:
-                    return node < other_nodes[i]
+            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]
 
     def add_node(self, node):
         """Adds a node to the network
@@ -810,63 +796,49 @@ class Facility(Network):
                 return True
         elif len(self.nodes) > len(other.nodes):
             return False
-        elif self.nodes == other.nodes:
-            if len(self.connections) < len(other.connections):
+        elif len(self.connections) < len(other.connections):
+            return True
+        elif len(self.connections) > len(other.connections):
+            return False
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            if len(self.output_contents) < len(other.output_contents):
                 return True
-            elif len(self.connections) > len(other.connections):
+            elif len(self.output_contents) > len(other.output_contents):
                 return False
-            elif self.connections == other.connections:
-                if len(self.tags) < len(other.tags):
+            elif self.output_contents == other.output_contents:
+                if len(self.input_contents) < len(other.input_contents):
                     return True
-                if len(self.tags) > len(other.tags):
+                elif len(self.input_contents) > len(other.input_contents):
                     return False
-                if self.tags == other.tags:
-                    if len(self.output_contents) < len(other.output_contents):
-                        return True
-                    elif len(self.output_contents) > len(other.output_contents):
-                        return False
-                    elif self.output_contents == other.output_contents:
-                        if len(self.input_contents) < len(other.input_contents):
-                            return True
-                        elif len(self.input_contents) > len(other.input_contents):
-                            return False
-                        elif self.input_contents == other.input_contents:
-                            # if all else fails, compare elevation, flow rates, and ID
-                            if self.elevation == other.elevation:
-                                if self.flow_rate == other.flow_rate:
-                                    return self.id < other.id
-                                else:
-                                    return self.flow_rate < other.flow_rate
-                            else:
-                                return self.elevation < other.elevation
+                elif self.input_contents == other.input_contents:
+                    # if all else fails, compare elevation, flow rates, and ID
+                    if self.elevation == other.elevation:
+                        if self.flow_rate == other.flow_rate:
+                            return self.id < other.id
                         else:
-                            other_vals = sorted([contents.value for contents in other.input_contents])
-                            for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
-                                if contents not in other_vals:
-                                    return contents < other_vals[i]
-                    else:  
-                        other_vals = sorted([contents.value for contents in other.output_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
-                            if contents not in other_vals:
-                                return contents < other_vals[i]
-                # case with same number of tags, so we compare tags in order
+                            return self.flow_rate < other.flow_rate
+                    else:
+                        return self.elevation < other.elevation
                 else:
-                    other_tags =  [tag for _, tag in sorted(other.tags.items())]
-                    for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-                        if tag != other_tags[i]:
-                            return tag < other_tags[i]
-            # case with same number of connections, so we compare connections in order
-            else:
-                other_conns =  [conn for _, conn in sorted(other.connections.items())]
-                for i, conn in enumerate([conn for _, conn in sorted(self.connections.items())]):
-                    if conn != other_conns[i]:
-                        return conn < other_conns[i]
-        # case with same number of nodes, so we compare nodes in order
+                    other_vals = sorted([contents.value for contents in other.input_contents])
+                    for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        if contents not in other_vals:
+                            return contents < other_vals[i]
+            else:  
+                other_vals = sorted([contents.value for contents in other.output_contents])
+                for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    if contents not in other_vals:
+                        return contents < other_vals[i]
+        # case with same number of tags, so we compare tags in order
         else:
-            other_nodes =  [node for _, node in sorted(other.nodes.items())]
-            for i, node in enumerate([node for _, node in sorted(self.nodes.items())]):
-                if node != other_nodes[i]:
-                    return node < other_nodes[i]
+            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                        return tag < other_tags[i]
 
 
 class Pump(Node):
@@ -987,7 +959,6 @@ class Pump(Node):
             and self.num_units == other.num_units
             and self.tags == other.tags
             and self.flow_rate == other.flow_rate
-            and self.energy_efficiency == other.energy_efficiency
         )
 
     def __lt__(self, other):
@@ -1674,7 +1645,6 @@ class Cogeneration(Node):
             and self.num_units == other.num_units
             and self.gen_capacity == other.gen_capacity
             and self.tags == other.tags
-            and self.energy_efficiency == other.energy_efficiency
         )
 
     def __lt__(self, other):
@@ -2598,6 +2568,7 @@ class Aeration(Node):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
 
+
 class Chlorination(Node):
     """
     Parameters
@@ -2740,6 +2711,7 @@ class Chlorination(Node):
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
+
 
 class Flaring(Node):
     """

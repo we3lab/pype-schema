@@ -400,10 +400,6 @@ class Pipe(Connection):
             return self.diameter < other.diameter
         elif self.flow_rate != other.flow_rate:
             return self.flow_rate < other.flow_rate
-        elif self.source != other.source:
-            return self.source < other.source
-        elif self.destination != other.destination:
-            return self.destination < other.destination
         elif self.friction_coeff != other.friction_coeff:
             return self.friction_coeff < other.friction_coeff
         elif self.pressure != other.pressure:
@@ -423,7 +419,18 @@ class Pipe(Connection):
         elif len(self.tags) > len(other.tags):
             return False
         elif self.tags == other.tags:
-            return self.id < other.id
+            if self.source != other.source:
+                if isinstance(self.source, type(other.source)):
+                    return self.source < other.source
+                else:
+                    return self.source.id < other.source.id
+            elif self.destination != other.destination:
+                if isinstance(self.destination, type(other.destination)):
+                    return self.destination < other.destination
+                else:
+                    return self.destination.id < other.destination.id
+            else:
+                return self.id < other.id
         # case with same number of different tags, so we compare tags in order
         else:
             other_tags =  [tag for _, tag in sorted(other.tags.items())]
@@ -576,11 +583,7 @@ class Wire(Connection):
         if not isinstance(other, self.__class__):
             return NotImplemented
 
-        if self.source != other.source:
-            return self.source < other.source
-        elif self.destination != other.destination:
-            return self.destination < other.destination
-        elif self.contents != other.contents:
+        if self.contents != other.contents:
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
@@ -593,7 +596,18 @@ class Wire(Connection):
         elif len(self.tags) > len(other.tags):
             return False
         elif self.tags == other.tags:
-            return self.id < other.id
+            if self.source != other.source:
+                if isinstance(self.source, type(other.source)):
+                    return self.source < other.source
+                else:
+                    return self.source.id < other.source.id
+            elif self.destination != other.destination:
+                if isinstance(self.destination, type(other.destination)):
+                    return self.destination < other.destination
+                else:
+                    return self.destination.id < other.destination.id
+            else:
+                return self.id < other.id
         # case with same number of different tags, so we compare tags in order
         else:
             other_tags =  [tag for _, tag in sorted(other.tags.items())]
