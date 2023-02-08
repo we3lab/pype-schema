@@ -10,10 +10,10 @@ class Node(ABC):
     id : str
         Node ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the node.
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the node.
 
     tags : dict of Tag
@@ -21,8 +21,8 @@ class Node(ABC):
     """
 
     id: str = NotImplemented
-    input_contents: utils.ContentsType = NotImplemented
-    output_contents: utils.ContentsType = NotImplemented
+    input_contents: List[utils.ContentsType] = NotImplemented
+    output_contents: List[utils.ContentsType] = NotImplemented
     tags: dict = NotImplemented
 
     def __repr__(self):
@@ -48,6 +48,24 @@ class Node(ABC):
             Average flow rate through the node
         """
         self.flow_rate = (min, max, avg)
+
+    def set_contents(self, contents, attribute="input_contents"):
+        """Set the input or output contents of a node
+
+        Parameters
+        ----------
+        contents : ContentsType or list of ContentsType
+            Single value or list of ContentsType entering/exiting the node.
+
+        attribute : ["input_contents", "output_contents"]
+            Attribute to set (either `input_contents` or `output_contents`)
+        """
+        if isinstance(contents, utils.ContentsType):
+            setattr(self, attribute, [contents])
+        elif isinstance(input_contents, list):
+            setattr(self, attribute, contents)
+        else:
+            raise TypeError("'contents' must be either ContentsType or list of ContentsType")
 
     def add_tag(self, tag):
         """Adds a tag to the node
@@ -478,10 +496,10 @@ class Network(Node):
     id : str
         Network ID
 
-    input_contents : ContentsType
+    input_contents : ContentsType or list of ContentsType
         Contents entering the network.
 
-    output_contents : ContentsType
+    output_contents : ContentsType or list of ContentsType
         Contents leaving the network.
 
     tags : dict of Tag
@@ -498,10 +516,10 @@ class Network(Node):
     id : str
         Network ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the network.
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the network.
 
     tags : dict of Tag
@@ -524,8 +542,8 @@ class Network(Node):
         connections={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "input_contents")
         self.tags = tags
         self.nodes = nodes
         self.connections = connections
@@ -686,11 +704,11 @@ class Facility(Network):
     id : str
         Facility ID
 
-    input_contents : ContentsType
-        Contents entering the facility.
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the network.
 
-    output_contents : ContentsType
-        Contents leaving the facility.
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the network.
 
     elevation : int
         Elevation of the facility
@@ -718,10 +736,10 @@ class Facility(Network):
     id : str
         Facility ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the facility.
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the facility.
 
     elevation : int
@@ -754,8 +772,8 @@ class Facility(Network):
         connections={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.nodes = nodes
         self.connections = connections
@@ -848,10 +866,10 @@ class Pump(Node):
     id : str
         Pump ID
 
-    input_contents : ContentsType
+    input_contents : ContentsType or list of ContentsType
         Contents entering the pump
 
-    output_contents : ContentsType
+    output_contents : ContentsType or list of ContentsType
         Contents leaving the pump
 
     elevation : int
@@ -883,10 +901,10 @@ class Pump(Node):
     id : str
         Pump ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the pump
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the pump
 
     elevation : int
@@ -924,8 +942,8 @@ class Pump(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.pump_type = pump_type
         self.horsepower = horsepower
@@ -1049,10 +1067,10 @@ class Tank(Node):
     id : str
         Tank ID
 
-    input_contents : ContentsType
+    input_contents : ContentsType or list of ContentsType
         Contents entering the tank.
 
-    output_contents : ContentsType
+    output_contents : ContentsType or list of ContentsType
         Contents leaving the tank.
 
     elevation : int
@@ -1069,10 +1087,10 @@ class Tank(Node):
     id : str
         Tank ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the tank.
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the tank.
 
     elevation : int
@@ -1095,8 +1113,8 @@ class Tank(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
         self.tags = tags
@@ -1174,10 +1192,10 @@ class Reservoir(Node):
     id : str
         Reservoir ID
 
-    input_contents : ContentsType
+    input_contents : ContentsType or list of ContentsType
         Contents entering the reservoir.
 
-    output_contents : ContentsType
+    output_contents : ContentsType or list of ContentsType
         Contents leaving the reservoir.
 
     elevation : int
@@ -1194,10 +1212,10 @@ class Reservoir(Node):
     id : str
         Reservoir ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the reservoir.
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the reservoir.
 
     elevation : int
@@ -1220,8 +1238,8 @@ class Reservoir(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
         self.tags = tags
@@ -1313,11 +1331,11 @@ class Battery(Node):
     id : str
         Battery ID
 
-    input_contents : ContentsType
-        Contents entering the reservoir.
+    input_contents : list of ContentsType
+        Contents entering the battery.
 
-    output_contents : ContentsType
-        Contents leaving the reservoir.
+    output_contents : list of ContentsType
+        Contents leaving the battery.
 
     capacity : int
         Storage capacity of the battery in kWh
@@ -1326,7 +1344,7 @@ class Battery(Node):
         Maximum discharge rate of the battery in kW
 
     tags : dict of Tag
-        Data tags associated with this reservoir
+        Data tags associated with this battery
     """
 
     def __init__(
@@ -1337,8 +1355,8 @@ class Battery(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = utils.ContentsType.Electricity
-        self.output_contents = utils.ContentsType.Electricity
+        self.input_contents = [utils.ContentsType.Electricity]
+        self.output_contents = [utils.ContentsType.Electricity]
         self.capacity = capacity
         self.discharge_rate = discharge_rate
         self.tags = tags
@@ -1448,10 +1466,10 @@ class Digestion(Node):
     id : str
         Digester ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the digester (e.g. biogas or wastewater)
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the digester (e.g. biogas or wastewater)
 
     num_units : int
@@ -1484,8 +1502,8 @@ class Digestion(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.digester_type = digester_type
@@ -1594,11 +1612,11 @@ class Cogeneration(Node):
     id : str
         Cogenerator ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the cogenerator
         (biogas, natural gas, or a blend of the two)
 
-    output_contents : ContentsType
+    output_contents : list of ContentsType
         Contents leaving the cogenerator (Electricity)
 
     gen_capacity : tuple
@@ -1619,8 +1637,8 @@ class Cogeneration(Node):
         self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = utils.ContentsType.Electricity
+        self.set_contents(input_contents, "input_contents")
+        self.output_contents = [utils.ContentsType.Electricity]
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
@@ -1764,10 +1782,10 @@ class Clarification(Node):
     id : str
         Clarifier ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the clarifier
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the clarifier
 
     num_units : int
@@ -1796,8 +1814,8 @@ class Clarification(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.tags = tags
@@ -1908,10 +1926,10 @@ class Filtration(Node):
     id : str
         Filter ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the filter
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the filter
 
     num_units : int
@@ -1940,8 +1958,8 @@ class Filtration(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.tags = tags
@@ -2049,10 +2067,10 @@ class Screening(Node):
     id : str
         Screen ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the screen
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the screen
 
     num_units : int
@@ -2077,8 +2095,8 @@ class Screening(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
@@ -2182,10 +2200,10 @@ class Conditioning(Node):
     id : str
         Conditioner ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the biogas conditioner
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the biogas conditioner
 
     num_units : int
@@ -2210,8 +2228,8 @@ class Conditioning(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")s
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
@@ -2318,10 +2336,10 @@ class Thickening(Node):
     id : str
         Thickener ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the thickener
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the thickener
 
     num_units : int
@@ -2350,8 +2368,8 @@ class Thickening(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.tags = tags
@@ -2462,10 +2480,10 @@ class Aeration(Node):
     id : str
         Aerator ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the aeration basin
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the aeration basin
 
     num_units : int
@@ -2494,8 +2512,8 @@ class Aeration(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.tags = tags
@@ -2606,10 +2624,10 @@ class Chlorination(Node):
     id : str
         Chlorinator ID
 
-    input_contents : ContentsType or list of ContentsType
+    input_contents : list of ContentsType
         Contents entering the chlorinator
 
-    output_contents : ContentsType or list of ContentsType
+    output_contents : list of ContentsType
         Contents leaving the chlorinator
 
     num_units : int
@@ -2638,8 +2656,8 @@ class Chlorination(Node):
         tags={},
     ):
         self.id = id
-        self.input_contents = input_contents
-        self.output_contents = output_contents
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
         self.tags = tags
@@ -2741,7 +2759,7 @@ class Flaring(Node):
     id : str
         Flare ID
 
-    input_contents : ContentsType
+    input_contents : list of ContentsType
         Contents entering the flare
 
     num_units : int
@@ -2756,7 +2774,7 @@ class Flaring(Node):
 
     def __init__(self, id, num_units, min_flow, max_flow, avg_flow, tags={}):
         self.id = id
-        self.input_contents = utils.ContentsType.Biogas
+        self.input_contents = [utils.ContentsType.Biogas]
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
