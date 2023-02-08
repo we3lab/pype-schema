@@ -552,17 +552,54 @@ class Network(Node):
             and self.connections == other.connections
         )
 
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.input_contents,
-                self.output_contents,
-                self.nodes,
-                self.connections,
-                self.tags
-            )
-        )
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.nodes == other.nodes:
+            if self.connections == other.connections:
+                if self.tags == other.tags:
+                    if len(self.output_contents) == len(other.output_contents):
+                        for contents in self.output_contents:
+                            if contents not in other.output_contents:
+                                if str(contents) < str(other.output_contents[0]):
+                                    return True
+                                else:
+                                    return False
+                        if len(self.input_contents) == len(other.input_contents):
+                            for contents in self.output_contents:
+                                if contents not in other.output_contents:
+                                    if str(contents) < str(other.output_contents[0]):
+                                        return True
+                                    else:
+                                        return False
+                            if self.id < other.id:
+                                return True
+                            else:
+                                return False
+                        elif len(self.input_contents) < len(other.input_contents):
+                            return True
+                        else:
+                            return False             
+                    elif len(self.output_contents) < len(other.output_contents):
+                        return True
+                    else:
+                        return False
+                else:
+                    if len(self.tags) < len(other.tags):
+                        return  True
+                    else:
+                        return False
+            elif len(self.connections) < len(other.connections):
+                return True
+            else:
+                return False
+        else:
+            if len(self.nodes) < len(other.nodes):
+                return True
+            else:
+                return False
 
     def add_node(self, node):
         """Adds a node to the network
