@@ -21,8 +21,8 @@ class Node(ABC):
     """
 
     id: str = NotImplemented
-    input_contents: List[utils.ContentsType] = NotImplemented
-    output_contents: List[utils.ContentsType] = NotImplemented
+    input_contents: list[utils.ContentsType] = NotImplemented
+    output_contents: list[utils.ContentsType] = NotImplemented
     tags: dict = NotImplemented
 
     def __repr__(self):
@@ -62,7 +62,7 @@ class Node(ABC):
         """
         if isinstance(contents, utils.ContentsType):
             setattr(self, attribute, [contents])
-        elif isinstance(input_contents, list):
+        elif isinstance(contents, list) or contents is None:
             setattr(self, attribute, contents)
         else:
             raise TypeError("'contents' must be either ContentsType or list of ContentsType")
@@ -2229,7 +2229,7 @@ class Conditioning(Node):
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
-        self.set_contents(output_contents, "output_contents")s
+        self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
