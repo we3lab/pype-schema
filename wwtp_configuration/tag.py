@@ -115,7 +115,7 @@ class Tag:
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -318,7 +318,7 @@ class VirtualTag:
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -342,6 +342,8 @@ class VirtualTag:
                 self.units,
             )
         )
+
+    # TODO: define __lt__() for VirtualTag
 
     def calculate_values(self, data):
         """Combine the given data according to the VirtualTag's operations

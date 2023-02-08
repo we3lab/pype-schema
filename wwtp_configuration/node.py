@@ -541,7 +541,7 @@ class Network(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -774,7 +774,7 @@ class Facility(Network):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -947,7 +947,8 @@ class Pump(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
+
 
         return (
             self.id == other.id
@@ -1111,7 +1112,7 @@ class Tank(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1236,7 +1237,7 @@ class Reservoir(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1353,7 +1354,7 @@ class Battery(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1503,7 +1504,7 @@ class Digestion(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1636,7 +1637,7 @@ class Cogeneration(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1813,7 +1814,7 @@ class Clarification(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -1957,7 +1958,7 @@ class Filtration(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2093,7 +2094,7 @@ class Screening(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2226,7 +2227,7 @@ class Conditioning(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2367,7 +2368,7 @@ class Thickening(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2511,7 +2512,7 @@ class Aeration(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2655,7 +2656,7 @@ class Chlorination(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -2770,7 +2771,7 @@ class Flaring(Node):
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id

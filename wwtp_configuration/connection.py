@@ -371,9 +371,9 @@ class Pipe(Connection):
         )
 
     def __eq__(self, other):
-        if not isinstance(other, Pipe):
+        if not isinstance(other, self.__class__):
             # don't attempt to compare against unrelated types
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -563,9 +563,9 @@ class Wire(Connection):
         )
 
     def __eq__(self, other):
-        if not isinstance(other, Wire):
+        if not isinstance(other, self.__class__):
             # don't attempt to compare against unrelated types
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
