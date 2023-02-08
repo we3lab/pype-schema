@@ -391,24 +391,45 @@ class Pipe(Connection):
             and self.entry_point == other.entry_point
         )
 
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.contents,
-                self.source,
-                self.destination,
-                self.diameter,
-                self.friction_coeff,
-                self.pressure,
-                self.heating_values,
-                self.flow_rate,
-                self.tags,
-                self.bidirectional,
-                self.exit_point,
-                self.entry_point
-            )
-        )
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.diameter != other.diameter:
+            return self.diameter < other.diameter
+        elif self.flow_rate != other.flow_rate:
+            return self.flow_rate < other.flow_rate
+        elif self.source != other.source:
+            return self.source < other.source
+        elif self.destination != other.destination:
+            return self.destination < other.destination
+        elif self.friction_coeff != other.friction_coeff:
+            return self.friction_coeff < other.friction_coeff
+        elif self.pressure != other.pressure:
+            return self.pressure < other.pressure
+        elif self.heating_values != other.heating_values:
+            return self.heating_values < other.heating_values
+        elif self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.bidirectional != other.bidirectional:
+            return not self.bidirectional
+        elif self.exit_point != self.exit_point:
+            return self.exit_point < self.exit_point
+        elif self.entry_point != self.entry_point:
+            return self.entry_point < self.entry_point
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            return self.id < other.id
+        # case with same number of different tags, so we compare tags in order
+        else:
+            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate through the connection
@@ -550,16 +571,32 @@ class Wire(Connection):
             and self.entry_point == other.entry_point
         )
 
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.contents,
-                self.source,
-                self.destination,
-                self.tags,
-                self.bidirectional,
-                self.exit_point,
-                self.entry_point
-            )
-        )
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.source != other.source:
+            return self.source < other.source
+        elif self.destination != other.destination:
+            return self.destination < other.destination
+        elif self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.bidirectional != other.bidirectional:
+            return not self.bidirectional
+        elif self.exit_point != self.exit_point:
+            return self.exit_point < self.exit_point
+        elif self.entry_point != self.entry_point:
+            return self.entry_point < self.entry_point
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            return self.id < other.id
+        # case with same number of different tags, so we compare tags in order
+        else:
+            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]

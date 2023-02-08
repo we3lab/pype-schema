@@ -142,6 +142,38 @@ class Tag:
             )
         )
 
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.id != other.id:
+            return self.id < other.id
+        elif self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.tag_type != other.tag_type:
+            return self.tag_type.value < other.tag_type.value
+        elif self.totalized != other.totalized:
+            return not self.totalized
+        elif self.source_unit_id != other.source_unit_id:
+            if self.source_unit_id == "total":
+                return False
+            elif other.source_unit_id == "total":
+                return True
+            else:
+                return self.source_unit_id < other.source_unit_id
+        elif self.dest_unit_id != other.dest_unit_id:
+            if self.dest_unit_id == "total":
+                return False
+            elif other.dest_unit_id == "total":
+                return True
+            else:
+                return self.dest_unit_id < other.dest_unit_id
+        elif self.units != other.units:
+            return str(self.units) < str(other.units)
+        else:
+            return self.parent_id < other.parent_id
+
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system,
