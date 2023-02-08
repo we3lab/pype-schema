@@ -368,7 +368,7 @@ class Node(ABC):
 
         dest_id : str
             Optional id of the destination node to filter by. None by default
-        
+
         source_unit_id : int, str
             Optional unit id of the source to filter by. None by default
 
@@ -574,14 +574,12 @@ class Network(Node):
                                         return True
                                     else:
                                         return False
-                            if self.id < other.id:
-                                return True
-                            else:
-                                return False
+                            # if all else fails, compare ID
+                            return self.id < other.id
                         elif len(self.input_contents) < len(other.input_contents):
                             return True
                         else:
-                            return False             
+                            return False
                     elif len(self.output_contents) < len(other.output_contents):
                         return True
                     else:
@@ -789,19 +787,63 @@ class Facility(Network):
             and self.tags == other.tags
         )
 
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.input_contents,
-                self.output_contents,
-                self.elevation,
-                self.nodes,
-                self.connections,
-                self.flow_rate,
-                self.tags
-            )
-        )
+        def __lt__(self, other):
+            if self.nodes == other.nodes:
+                # TODO: edge case with connections similar to those with Node
+                if self.connections == other.connections:
+                    if self.tags == other.tags:
+                        if len(self.output_contents) == len(other.output_contents):
+                            for contents in self.output_contents:
+                                if contents not in other.output_contents:
+                                    if str(contents) < str(other.output_contents[0]):
+                                        return True
+                                    else:
+                                        return False
+                            if len(self.input_contents) == len(other.input_contents):
+                                for contents in self.output_contents:
+                                    if contents not in other.output_contents:
+                                        if str(contents) < str(other.output_contents[0]):
+                                            return True
+                                        else:
+                                            return False
+                                # if all else fails, compare elevation, flow rates, and ID
+                                if self.elevation == other.elevation:
+                                    if self.flow_rate == other.flow_rate:
+                                        return self.id < other.id
+                                    else:
+                                        return self.flow_rate < other.flow_rate
+                                else:
+                                    return self.elevation < other.elevation
+                            elif len(self.input_contents) < len(other.input_contents):
+                                return True
+                            else:
+                                return False
+                        elif len(self.output_contents) < len(other.output_contents):
+                            return True
+                        else:
+                            return False
+                    else:
+                        if len(self.tags) < len(other.tags):
+                            return  True
+                        else:
+                            return False
+                elif len(self.connections) < len(other.connections):
+                    return True
+                else:
+                    return False
+            else:
+                if len(self.nodes) < len(other.nodes):
+                    return True
+                elif len(self.nodes) < len(other.nodes):
+                    return False
+                # case with same number of nodes, so we compare nodes in order
+                else:
+                    _, other_nodes = sorted(other.nodes).items()
+                    i = 0
+                    for _, node in sorted(self.nodes).items():
+                        if node != other_nodes[i]:
+                            return node < other_nodes[i]
+                        i += 1
 
 
 class Pump(Node):
@@ -935,7 +977,7 @@ class Pump(Node):
                 self.pump_type,
                 self.horsepower,
                 self.num_units,
-                self.tags,                
+                self.tags,
                 self.flow_rate,
                 self.energy_efficiency,
             )
@@ -1224,7 +1266,7 @@ class Battery(Node):
             and self.discharge_rate == other.discharge_rate
             and self.tags == other.tags
         )
-    
+
     def __hash__(self):
         return hash(
             (
