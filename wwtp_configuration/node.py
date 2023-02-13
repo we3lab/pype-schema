@@ -393,10 +393,10 @@ class Node(ABC):
         dest_unit_id : int, str
             Optional unit id of the destination to filter by. None by default
 
-        source_node_type : Node
+        source_node_type : class
             Optional source `Node` subclass to filter by. None by default
 
-        dest_node_type : Node
+        dest_node_type : class
             Optional destination `Node` subclass to filter by. None by default
 
         contents_type : ContentsType
@@ -435,24 +435,35 @@ class Node(ABC):
 
             if isinstance(parent_obj, Node):
                 obj_source_id = parent_obj.id
-                obj_source_unit_id = str(tag.source_unit_id)
-                obj_dest_id, obj_dest_unit_id, obj_entry_point, obj_exit_point = None, None, None, None
+                obj_source_unit_id = tag.source_unit_id
+                obj_source_node = parent_obj
+                obj_dest_id, obj_dest_unit_id, obj_dest_node, obj_entry_point_id, obj_exit_point_id = None, None, None, None, None
             else: # the parent must be a Connection if it is not a Node
                 obj_source_id = parent_obj.get_source_id()
-                obj_source_unit_id = str(tag.source_unit_id)
-                obj_exit_point = parent_obj.get_exit_point()
+                obj_source_unit_id = tag.source_unit_id
+                obj_source_node = parent_obj.get_source_node(recurse=recurse)
                 obj_dest_id = parent_obj.get_dest_id()
-                obj_dest_unit_id = str(tag.dest_unit_id)
-                obj_entry_point = parent_obj.get_entry_point()
+                obj_dest_unit_id = tag.dest_unit_id
+                obj_dest_node = parent_obj.get_dest_node(recurse=recurse)
+
+                obj_exit_point_id = None
+                obj_entry_point_id = None
+                if recurse:
+                    if parent_obj.get_exit_point():
+                        obj_exit_point_id = parent_obj.get_exit_point().id
+                    if parent_obj.get_entry_point():
+                        obj_entry_point_id = parent_obj.get_entry_point().id
 
             if utils.select_objs_helper(
                 tag,
                 obj_source_id=obj_source_id,
                 obj_dest_id=obj_dest_id,
-                obj_exit_point=obj_exit_point,
-                obj_entry_point=obj_entry_point,
+                obj_exit_point_id=obj_exit_point_id,
+                obj_entry_point_id=obj_entry_point_id,
                 obj_source_unit_id=obj_source_unit_id,
                 obj_dest_unit_id=obj_dest_unit_id,
+                obj_source_node=obj_source_node,
+                obj_dest_node=obj_dest_node,
                 source_id=source_id,
                 dest_id=dest_id,
                 source_unit_id=source_unit_id,
@@ -463,23 +474,49 @@ class Node(ABC):
             ):
                 selected_objs.append(tag)
         for conn in self.get_all_connections(recurse=recurse):
+            obj_exit_point_id = None
+            obj_entry_point_id = None
+            if recurse:
+                if conn.get_exit_point():
+                    obj_exit_point_id = conn.get_exit_point().id
+                if conn.get_entry_point():
+                    obj_entry_point_id = conn.get_entry_point().id
             if utils.select_objs_helper(
                 conn,
                 obj_source_id=conn.get_source_id(),
                 obj_dest_id=conn.get_dest_id(),
-                obj_exit_point=conn.get_exit_point(),
-                obj_entry_point=conn.get_entry_point(),
+                obj_exit_point_id=obj_exit_point_id,
+                obj_entry_point_id=obj_entry_point_id,
+                obj_source_node=conn.get_source_node(recurse=recurse),
+                obj_dest_node=conn.get_dest_node(recurse=recurse),
                 source_id=source_id,
                 dest_id=dest_id,
+                source_unit_id=source_unit_id,
+                dest_unit_id=dest_unit_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
                 tag_type=tag_type,
             ):
                 selected_objs.append(conn)
+        for node in self.get_all_nodes(recurse=recurse):
+            
+            if utils.select_objs_helper(
+                node,
+                obj_source_id=node.id,
+                obj_source_node=node,
+                source_id=source_id,
+                dest_id=dest_id,
+                source_unit_id=source_unit_id,
+                dest_unit_id=dest_unit_id,
+                source_node_type=source_node_type,
+                dest_node_type=dest_node_type,
+                tag_type=tag_type,
+            ):
+                selected_objs.append(node)
 
         # Select according to contents
         if contents_type is not None:
-            selected_objs = [obj for obj in selected_objs if obj.contents == contents_type]
+            selected_objs = [obj for obj in selected_objs if hasattr(obj, "contents") and obj.contents == contents_type]
 
         # Select according to obj_type
         if obj_type is not None:

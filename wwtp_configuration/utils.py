@@ -389,10 +389,12 @@ def select_objs_helper(
     obj,
     obj_source_id=None,
     obj_dest_id=None,
-    obj_exit_point=None,
-    obj_entry_point=None,
+    obj_exit_point_id=None,
+    obj_entry_point_id=None,
     obj_source_unit_id=None,
     obj_dest_unit_id=None,
+    obj_source_node=None,
+    obj_dest_node=None,
     source_id=None,
     dest_id=None,
     source_unit_id=None,
@@ -415,10 +417,10 @@ def select_objs_helper(
     obj_dest_id : str
         Object's destination ID to match against. None by default
 
-    obj_exit_point : str
+    obj_exit_point_id : str
         Object's exit point ID to match against. None by default
 
-    obj_entry_point : str
+    obj_entry_point_id : str
         Object's entry point ID to match against. None by default
 
     obj_source_unit_id : int, str
@@ -426,6 +428,12 @@ def select_objs_helper(
 
     obj_dest_unit_id : int, str
         Object's destination unit ID to match against. None by default
+
+    obj_source_node : Node
+        Optional source `Node` to check the type of. None by default
+
+    obj_dest_node : Node
+        Optional destination `Node` to check the type of. None by default
 
     source_id : str
         Optional id of the source node to filter by. None by default
@@ -439,10 +447,10 @@ def select_objs_helper(
     dest_unit_id : int, str
         Optional unit id of the destination to filter by. None by default 
 
-    source_node_type : Node
+    source_node_type : class
         Optional source `Node` subclass to filter by. None by default
 
-    dest_node_type : Node
+    dest_node_type : class
         Optional destination `Node` subclass to filter by. None by default
 
     tag_type : TagType
@@ -464,19 +472,22 @@ def select_objs_helper(
     bool
         True if `obj` fits the filter criteria; False otherwise.
     """
-    if source_id is not None and source_id not in [obj_source_id, obj_exit_point]:
+    if source_id is not None and source_id not in [obj_source_id, obj_exit_point_id]:
         return False
     
-    if dest_id is not None and dest_id not in [obj_source_id, obj_exit_point]:
+    if dest_id is not None and dest_id not in [obj_dest_id, obj_entry_point_id]:
         return False
 
     if source_unit_id is not None and source_unit_id != obj_source_unit_id:
         return False
 
-    if source_node_type is not None and not isinstance(source_node_type, obj.get_source_node(recurse=recurse)):
+    if dest_unit_id is not None and dest_unit_id != obj_dest_unit_id:
         return False
 
-    if dest_node_type is not None and not isinstance(dest_node_type, obj.get_dest_node(recurse=recurse)):
+    if source_node_type is not None and not isinstance(obj_source_node, source_node_type):
+        return False
+
+    if dest_node_type is not None and not isinstance(obj_dest_node, dest_node_type):
         return False
 
     if tag_type is not None and (not hasattr(obj, "tag_type") or obj.tag_type != tag_type):
