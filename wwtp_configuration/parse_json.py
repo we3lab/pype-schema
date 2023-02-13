@@ -348,6 +348,7 @@ class JSONParser:
                 if utils.ContentsType[tag_info["contents"]] not in contents_list:
                     contents_list.append(utils.ContentsType[tag_info["contents"]])
 
+            # TODO: change this to employ new VirtualTag objects
             for contents in contents_list:
                 if contents is not None:
                     tags_by_contents = [tag_info for _, tag_info in tags.items() if utils.ContentsType[tag_info["contents"]] == contents]
@@ -358,6 +359,12 @@ class JSONParser:
                         tag_info["source_unit_id"] = "total"
                         tag = self.parse_tag(tag_id, tag_info, node_obj)
                         node_obj.add_tag(tag)
+
+        v_tags = self.config[node_id].get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                node_obj.add_tag(tag)
 
         return node_obj
 
@@ -446,6 +453,7 @@ class JSONParser:
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
 
+            # TODO: change this to employ new VirtualTag objects
             # create virtual "total" tag if it was missing
             contents_list = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
             for contents in contents_list:
@@ -488,6 +496,11 @@ class JSONParser:
                             tag = self.parse_tag(tag_id, tag_info, connection_obj)
                             connection_obj.add_tag(tag)
 
+        v_tags = self.config[node_id].get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                node_obj.add_tag(tag)
 
         return connection_obj
 
@@ -534,6 +547,46 @@ class JSONParser:
             output_contents = utils.ContentsType[output_contents]
 
         return (input_contents, output_contents)
+
+    @staticmethod
+    def parse_virtual_tag(tag_id, tag_info, obj):
+        """Parse tag ID and dictionary information into VirtualTag object
+
+        Parameters
+        ----------
+        tag_id : str
+            name of the tag
+
+        tag_info : dict
+            dictionary of the form {
+                'type': TagType,
+                'units': str,
+                'contents': str,
+                'source_unit_id': int or str,
+                'dest_unit_id': int or str,
+                'totalized': bool
+            }
+
+        obj : Node or Connection
+            parent object that contains all constituent tags,
+            which is used to gather the tag list for combining data correctly
+
+        Returns
+        -------
+        VirtualTag
+            a Python object with the given ID and the values from `tag_info`
+        """
+        tag_list = []
+        for subtag_id in tag_info["tags"]:
+            subtag = obj.get_tag(tag_id, recurse=True)
+            if subtag is None:
+                raise ValueError("Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id))
+            tag_list.append(subtag)
+
+        tag_type = tag_info.get("type", None)
+        v_tag = VirtualTag(tag_id, tag_list, tag_info["operations"], tag_type)
+        return v_tag
+
 
     @staticmethod
     def parse_tag(tag_id, tag_info, obj):

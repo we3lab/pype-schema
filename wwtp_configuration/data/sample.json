@@ -87,7 +87,14 @@
       "FOGToPump",
       "FOGToDigester",
       "BatteryToFacility"
-    ]
+    ],
+    "virtual_tags": {
+      "ElectricityProductionByGasVolume": {
+        "tags": ["ElectricityGeneration", "CombinedDigesterGasFlow", "ElectricityGeneration"],
+        "operations": ["+", "/"],
+        "type": "Efficiency"
+      }
+    }
   },
   "BarScreen": {
     "type": "Screening",
@@ -734,7 +741,14 @@
     "contents": "NaturalGas",
     "entry_point": "Cogenerator",
     "bidirectional": false,
-    "tags": {}
+    "tags": {
+      "GasPurchases": {
+        "type": "Flow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "totalized": false
+      }
+    }
   },
   "GTToDigester": {
     "type": "Pipe",

@@ -19,6 +19,7 @@ class TagType(Enum):
     BOD = auto()  # biochemical oxygen demand
     pH = auto()
     Rotation = auto()
+    Efficiency = auto()
 
 
 class Tag:
@@ -183,7 +184,7 @@ class VirtualTag:
     Parameters
     ----------
     id : str
-        Tag ID
+        VirtualTag ID
 
     tags : list of Tag
         List of Tag objects to combine
