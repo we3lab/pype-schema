@@ -17,6 +17,7 @@ Welcome to the WWTP Configuration package documentation!
 
    connection
    node
+   tag
 
 .. toctree::
    :maxdepth: 1
