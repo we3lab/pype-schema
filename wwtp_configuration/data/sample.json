@@ -31,7 +31,8 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
     "nodes": [],
     "connections": [],
@@ -45,7 +46,8 @@
     "flowrate": {
       "min": 5,
       "max": 25,
-      "avg": 15
+      "avg": 15,
+      "units": "MGD"
     },
     "nodes": [
       "BarScreen",

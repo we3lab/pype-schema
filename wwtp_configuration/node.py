@@ -543,7 +543,7 @@ class Network(Node):
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
-        self.set_contents(output_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
         self.tags = tags
         self.nodes = nodes
         self.connections = connections

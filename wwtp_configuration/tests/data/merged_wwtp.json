@@ -9,7 +9,8 @@
       "flowrate": {
         "min": 5,
         "max": 25,
-        "avg": 15
+        "avg": 15,
+        "units": "MGD"
       },
       "nodes": [
         "BarScreen",
@@ -139,7 +140,8 @@
       "flowrate": {
         "min": null,
         "max": null,
-        "avg": 2
+        "avg": 2,
+        "units": "MGD"
       }
     },
     "SecondaryClarifier": {
@@ -150,7 +152,8 @@
       "flowrate": {
         "min": null,
         "max": null,
-        "avg": 2
+        "avg": 2,
+        "units": "MGD"
       }
     },
     "AerationBasin": {
@@ -162,7 +165,8 @@
       "flowrate": {
         "min": null,
         "max": null,
-        "avg": 1.5
+        "avg": 1.5,
+        "units": "MGD"
       }
     },
     "AnaerobicDigester": {
