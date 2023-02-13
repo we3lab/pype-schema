@@ -217,7 +217,7 @@ def test_get_all_connections_from(json_path, node_id, expected):
     assert result == expected
 
 
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, tag_path, expected",
     [

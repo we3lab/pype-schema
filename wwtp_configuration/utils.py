@@ -345,9 +345,9 @@ class ContentsType(Enum):
     whether they are sludge, water, or gas"""
 
     UntreatedSewage = auto()
-    # PrimaryEffluent = auto()
-    # SecondaryEffluent = auto()
-    # TertiaryEffluent = auto()
+    PrimaryEffluent = auto()
+    SecondaryEffluent = auto()
+    TertiaryEffluent = auto()
     TreatedSewage = auto()
     DrinkingWater = auto()
     PotableReuse = auto()
