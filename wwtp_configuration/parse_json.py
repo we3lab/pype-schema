@@ -292,8 +292,8 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Flaring":
             node_obj = node.Flaring(
-                node_id, 
-                num_units,  
+                node_id,
+                num_units,
                 min_flow,
                 max_flow,
                 avg_flow,
@@ -460,13 +460,15 @@ class JSONParser:
                             for id in tag_dest_unit_ids:
                                 tag_info["dest_unit_id"] = id
                                 id = "Total" if id == "total" else str(id)
-                                tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), id, tag_info["contents"], tag_info["type"]])
+                                tag_id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), id, tag_info["contents"], tag_info["type"]])
                                 tag_info["source_unit_id"] = "total"
+                                tag = self.parse_tag(tag_id, tag_info, connection_obj)
                                 connection_obj.add_tag(tag)
                         else:
-                            tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
+                            tag_id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
                             tag_info["dest_unit_id"] = "total"
                             tag_info["source_unit_id"] = "total"
+                            tag = self.parse_tag(tag_id, tag_info, connection_obj)
                             connection_obj.add_tag(tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_info = tags_by_contents[0]
@@ -475,13 +477,15 @@ class JSONParser:
                             for id in tag_source_unit_ids:
                                 tag_info["source_unit_id"] = id
                                 id = "Total" if id == "total" else str(id)
-                                tag.id = "".join([connection_obj.get_source_id(), id, connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
+                                tag_id = "".join([connection_obj.get_source_id(), id, connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
                                 tag_info["dest_unit_id"] = "total"
+                                tag = self.parse_tag(tag_id, tag_info, connection_obj)
                                 connection_obj.add_tag(tag)
                         else:
-                            tag.id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
+                            tag_id = "".join([connection_obj.get_source_id(), "Total", connection_obj.get_dest_id(), "Total", tag_info["contents"], tag_info["type"]])
                             tag_info["dest_unit_id"] = "total"
                             tag_info["source_unit_id"] = "total"
+                            tag = self.parse_tag(tag_id, tag_info, connection_obj)
                             connection_obj.add_tag(tag)
 
 

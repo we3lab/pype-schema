@@ -445,7 +445,7 @@ def select_objs_helper(
         Optional unit id of the source to filter by. None by default
 
     dest_unit_id : int, str
-        Optional unit id of the destination to filter by. None by default 
+        Optional unit id of the destination to filter by. None by default
 
     source_node_type : class
         Optional source `Node` subclass to filter by. None by default
@@ -474,7 +474,7 @@ def select_objs_helper(
     """
     if source_id is not None and source_id not in [obj_source_id, obj_exit_point_id]:
         return False
-    
+
     if dest_id is not None and dest_id not in [obj_dest_id, obj_entry_point_id]:
         return False
 

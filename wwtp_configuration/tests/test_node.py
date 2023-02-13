@@ -8,7 +8,7 @@ from wwtp_configuration.utils import ContentsType
 from wwtp_configuration.tag import Tag, TagType
 from wwtp_configuration.parse_json import JSONParser
 from wwtp_configuration.node import Cogeneration, Digestion, Pump
-from wwtp_configuration.connection import Pipe
+from wwtp_configuration.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -259,18 +259,18 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     assert result == expected
 
 
-# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, source_id, dest_id, source_unit_id, dest_unit_id, source_node_type, "
     "dest_node_type, contents_type, tag_type, obj_type, recurse, expected_ids",
     [
         # Case 0: all objects without recursion
         (
-            "data/node.json", 
-            None, 
-            None, 
+            "data/node.json",
             None,
-            None, 
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -278,23 +278,23 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             False,
             [
-                "WWTP", 
-                "SewerIntake", 
-                "PowerGrid", 
-                "RawSewagePump", 
-                "ElectricityToWWTP", 
-                "GasToGrid", 
+                "WWTP",
+                "SewerIntake",
+                "PowerGrid",
+                "RawSewagePump",
+                "ElectricityToWWTP",
+                "GasToGrid",
                 "PumpRuntime",
                 "ElectricityPurchases"
             ]
         ),
         # Case 1: all objects with recursion
         (
-            "data/node.json", 
-            None, 
-            None, 
+            "data/node.json",
             None,
-            None, 
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -302,11 +302,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             True,
             [
-                "WWTP", 
-                "SewerIntake", 
-                "PowerGrid", 
-                "RawSewagePump", 
-                "ElectricityToWWTP", 
+                "WWTP",
+                "SewerIntake",
+                "PowerGrid",
+                "RawSewagePump",
+                "ElectricityToWWTP",
                 "GasToGrid",
                 "PumpRuntime",
                 "Digester1Level",
@@ -314,21 +314,21 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "DigesterTotalSludgeBlendLevel",
                 "ElectricityPurchases",
                 "GasToCogen",
-                "Digester", 
+                "Digester",
                 "Cogenerator",
                 "Digester1GasFlow",
-                "Digester2GasFlow", 
+                "Digester2GasFlow",
                 "Digester3GasFlow",
                 "DigesterTotalCogeneratorTotalBiogasFlow"
             ]
         ),
         # Case 2: no objects match search criteria
         (
-            "data/node.json", 
-            "NonexistentNode", 
-            None, 
+            "data/node.json",
+            "NonexistentNode",
             None,
-            None, 
+            None,
+            None,
             None,
             None,
             None,
@@ -339,11 +339,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 3: return a node, connection, and tag by source
         (
-            "data/node.json", 
-            "RawSewagePump", 
-            None, 
+            "data/node.json",
+            "RawSewagePump",
             None,
-            None, 
+            None,
+            None,
             None,
             None,
             None,
@@ -354,11 +354,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 4: return just the connection from Case 2
         (
-            "data/node.json", 
-            "RawSewagePump", 
-            None, 
+            "data/node.json",
+            "RawSewagePump",
             None,
-            None, 
+            None,
+            None,
             None,
             None,
             None,
@@ -369,11 +369,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 5: return just the tag from Case 2
         (
-            "data/node.json", 
-            "RawSewagePump", 
-            None, 
+            "data/node.json",
+            "RawSewagePump",
             None,
-            None, 
+            None,
+            None,
             None,
             None,
             None,
@@ -384,11 +384,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 6: return just the Node from Case 2
         (
-            "data/node.json", 
-            "RawSewagePump", 
-            None, 
+            "data/node.json",
+            "RawSewagePump",
             None,
-            None, 
+            None,
+            None,
             None,
             None,
             None,
@@ -399,11 +399,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 7: return a connection and tag by source node type (with recursion)
         (
-            "data/node.json", 
-            None, 
-            None, 
+            "data/node.json",
             None,
-            None, 
+            None,
+            None,
+            None,
             Pump,
             None,
             None,
@@ -414,11 +414,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 8: return a connection and tags by destination node type (with recursion)
         (
-            "data/node.json", 
-            None, 
-            None, 
+            "data/node.json",
             None,
-            None, 
+            None,
+            None,
+            None,
             None,
             Cogeneration,
             None,
@@ -429,11 +429,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 9: return mutliple tags by numeric source unit ID
         (
-            "data/node.json", 
-            None, 
-            None, 
+            "data/node.json",
+            None,
+            None,
             2,
-            None, 
+            None,
             None,
             None,
             None,
@@ -444,9 +444,9 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 10: return a single tag by "total" destination unit ID
         (
-            "../data/sample.json", 
-            "SewerNetwork", 
-            None, 
+            "../data/sample.json",
+            "SewerNetwork",
+            None,
             None,
             "total",
             None,
@@ -462,7 +462,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             "data/node.json",
             None,
             "WWTP",
-            None, 
+            None,
             None,
             None,
             None,
@@ -477,7 +477,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             "data/node.json",
             None,
             "WWTP",
-            None, 
+            None,
             None,
             None,
             None,
@@ -488,11 +488,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             ["ElectricityToWWTP", "SewerIntake", "ElectricityPurchases", "InfluentFlow"]
         ),
         # Case 13: return objects by exit point
-        (   
+        (
             "data/node.json",
             "Digester",
             None,
-            None, 
+            None,
             None,
             None,
             None,
@@ -503,11 +503,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             ["GasToGrid", "GasToCogen"]
         ),
         # Case 14: return objects by entry point
-        (   
+        (
             "data/node.json",
             None,
             "Digester",
-            None, 
+            None,
             None,
             None,
             None,
@@ -518,84 +518,101 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             ["SewerIntake"]
         ),
         # Case 15: bidirectional connection as source but searching for destination
-        # (   
-        #     "../data/sample.json",
-        #     None,
-        #     "TeslaBattery",
-        #     None, 
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     True,
-        #     ["BatteryToFacility"]
-        # ),
+        (
+            "../data/sample.json",
+            None,
+            "TeslaBattery",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            ["BatteryToFacility"]
+        ),
         # Case 16: bidirectional connection as destination but searching for source
-        # (   
-        #     "../data/sample.json",
-        #     "VirtualDemand",
-        #     None,
-        #     None, 
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     True,
-        #     ["BatteryToFacility"]
-        # ),
+        (
+            "../data/sample.json",
+            "VirtualDemand",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Wire,
+            True,
+            ["BatteryToFacility"]
+        ),
         # Case 17: all flow tags
-        # (
-        #     "data/node.json",
-        #     "Digester",
-        #     None,
-        #     None, 
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     TagType.Flow,
-        #     None,
-        #     True,
-        #     ["GasToGrid", "GasToCogen"]
-        # )
+        (
+            "data/node.json",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            TagType.Flow,
+            None,
+            True,
+            [
+                "Digester1GasFlow",
+                "Digester2GasFlow",
+                "Digester3GasFlow",
+                "DigesterTotalCogeneratorTotalBiogasFlow",
+                "ElectricityPurchases"
+            ]
+        ),
         # Case 18: node of type Cogenerator
-        # (
-        #     "data/node.json",
-        #     "Digester",
-        #     None,
-        #     None, 
-        #     None,
-        #     None,
-        #     Cogenerator,
-        #     None,
-        #     None,
-        #     None,
-        #     True,
-        #     ["Cogenerator"]
-        # )
+        (
+            "data/node.json",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            Cogeneration,
+            True,
+            ["Cogenerator"]
+        ),
         # Case 19: node, tags, and connections associated with id "Digester"
-        # (
-        #     "data/node.json",
-        #     "Digester",
-        #     None,
-        #     None, 
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     None,
-        #     True,
-        #     ["Digester", "GasToCogen", "Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"]
-        # )
+        (
+            "data/node.json",
+            "Digester",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            True,
+            [
+                "Digester",
+                "GasToCogen",
+                "Digester1GasFlow",
+                "Digester2GasFlow",
+                "Digester3GasFlow",
+                "DigesterTotalCogeneratorTotalBiogasFlow",
+                "DigesterTotalSludgeBlendLevel",
+                "Digester1Level",
+                "Digester2Level",
+                "GasToGrid"
+            ]
+        )
     ],
 )
 def test_select_objs(
-    json_path, 
+    json_path,
     source_id,
     dest_id,
     source_unit_id,
@@ -609,7 +626,7 @@ def test_select_objs(
     expected_ids
 ):
     parser = JSONParser(json_path)
-    config = parser.initialize_network() 
+    config = parser.initialize_network()
 
     result = config.select_objs(
         source_id=source_id,
@@ -631,7 +648,7 @@ def test_select_objs(
             obj = config.get_connection(id, recurse=True)
             if obj is None:
                 obj = config.get_node(id, recurse=True)
-        
+
         if obj is not None:
             expected.append(obj)
 

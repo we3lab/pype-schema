@@ -433,6 +433,7 @@ class Node(ABC):
             else:
                 parent_obj = self.get_node_or_connection(tag.parent_id, recurse=recurse)
 
+            bidirectional = False
             if isinstance(parent_obj, Node):
                 obj_source_id = parent_obj.id
                 obj_source_unit_id = tag.source_unit_id
@@ -445,6 +446,9 @@ class Node(ABC):
                 obj_dest_id = parent_obj.get_dest_id()
                 obj_dest_unit_id = tag.dest_unit_id
                 obj_dest_node = parent_obj.get_dest_node(recurse=recurse)
+
+                if parent_obj.bidirectional:
+                    bidirectional = True
 
                 obj_exit_point_id = None
                 obj_entry_point_id = None
@@ -473,6 +477,26 @@ class Node(ABC):
                 tag_type=tag_type,
             ):
                 selected_objs.append(tag)
+            if bidirectional:
+                if utils.select_objs_helper(
+                    tag,
+                    obj_source_id=obj_dest_id,
+                    obj_dest_id=obj_source_id,
+                    obj_exit_point_id=obj_entry_point_id,
+                    obj_entry_point_id=obj_exit_point_id,
+                    obj_source_unit_id=obj_dest_unit_id,
+                    obj_dest_unit_id=obj_source_unit_id,
+                    obj_source_node=obj_dest_node,
+                    obj_dest_node=obj_source_node,
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    tag_type=tag_type,
+                ):
+                    selected_objs.append(tag)
         for conn in self.get_all_connections(recurse=recurse):
             obj_exit_point_id = None
             obj_entry_point_id = None
@@ -498,8 +522,25 @@ class Node(ABC):
                 tag_type=tag_type,
             ):
                 selected_objs.append(conn)
+            if conn.bidirectional:
+                if utils.select_objs_helper(
+                    conn,
+                    obj_source_id=conn.get_dest_id(),
+                    obj_dest_id=conn.get_source_id(),
+                    obj_exit_point_id=obj_entry_point_id,
+                    obj_entry_point_id=obj_exit_point_id,
+                    obj_source_node=conn.get_dest_node(recurse=recurse),
+                    obj_dest_node=conn.get_source_node(recurse=recurse),
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    tag_type=tag_type,
+                ):
+                    selected_objs.append(conn)
         for node in self.get_all_nodes(recurse=recurse):
-            
             if utils.select_objs_helper(
                 node,
                 obj_source_id=node.id,
@@ -642,7 +683,7 @@ class Network(Node):
                     for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                         if contents not in other_vals:
                             return contents < other_vals[i]
-            else:  
+            else:
                 other_vals = sorted([contents.value for contents in other.output_contents])
                 for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                     if contents not in other_vals:
@@ -883,7 +924,7 @@ class Facility(Network):
                     for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                         if contents not in other_vals:
                             return contents < other_vals[i]
-            else:  
+            else:
                 other_vals = sorted([contents.value for contents in other.output_contents])
                 for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                     if contents not in other_vals:
@@ -1062,7 +1103,7 @@ class Pump(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1209,7 +1250,7 @@ class Tank(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1334,7 +1375,7 @@ class Reservoir(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1451,7 +1492,7 @@ class Battery(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1607,7 +1648,7 @@ class Digestion(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1743,7 +1784,7 @@ class Cogeneration(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -1914,7 +1955,7 @@ class Clarification(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2058,7 +2099,7 @@ class Filtration(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2191,7 +2232,7 @@ class Screening(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2324,7 +2365,7 @@ class Conditioning(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2468,7 +2509,7 @@ class Thickening(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2612,7 +2653,7 @@ class Aeration(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2756,7 +2797,7 @@ class Chlorination(Node):
                         for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
-                else:  
+                else:
                     other_vals = sorted([contents.value for contents in other.output_contents])
                     for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
                         if contents not in other_vals:
@@ -2835,7 +2876,7 @@ class Flaring(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-        
+
     def __lt__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
