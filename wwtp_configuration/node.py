@@ -102,7 +102,7 @@ class Node(ABC):
 
         Returns
         ------
-        Tag
+        Tag or VirtualTag
             wwtp_configuration Tag object associated with the variable name.
             Returns None if the `tag_name` is not found
         """
@@ -382,6 +382,7 @@ class Node(ABC):
         dest_node_type,
         tag_type,
         recurse=False,
+        virtual=False,
     ):
         """Helper function for selecting `Tag` objects from inside a `Node`.
 
@@ -417,6 +418,9 @@ class Node(ABC):
         recurse : bool
             Whether to search for objects within nodes. False by default
 
+        virtual : bool
+            True if `tag` is being queried as part of a `VirtualTag`. False by default
+
         Returns
         -------
         bool
@@ -451,6 +455,10 @@ class Node(ABC):
                     obj_exit_point_id = parent_obj.get_exit_point().id
                 if parent_obj.get_entry_point():
                     obj_entry_point_id = parent_obj.get_entry_point().id
+
+        if virtual:
+            obj_source_unit_id = None
+            obj_dest_unit_id = None
 
         if utils.select_objs_helper(
             tag,
@@ -503,7 +511,7 @@ class Node(ABC):
         source_node_type,
         dest_node_type,
         tag_type,
-        recurse
+        recurse=False
     ):
         """Helper function for selecting `VirtualTag` objects from inside a `Node`.
 
@@ -555,7 +563,7 @@ class Node(ABC):
                     source_node_type,
                     dest_node_type,
                     tag_type,
-                    recurse
+                    recurse=recurse,
                 ):
                     return True
             else:
@@ -568,10 +576,11 @@ class Node(ABC):
                     source_node_type,
                     dest_node_type,
                     tag_type,
-                    recurse
+                    recurse=recurse,
+                    virtual=True,
                 ):
                     return True
-        
+
         return False
 
     def select_objs(

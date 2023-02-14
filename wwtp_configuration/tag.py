@@ -327,7 +327,7 @@ class VirtualTag:
     def __repr__(self):
         return (
             f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
-            f"tag_type:{self.tag_type} totalized:{self.totalized} contents:{self.contents}"
+            f"tag_type:{self.tag_type} totalized:{self.totalized} contents:{self.contents} "
             f"tags:{[tag.id for tag in self.tags]} operations:{self.operations}>\n"
         )
 

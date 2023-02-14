@@ -85,10 +85,11 @@ def test_get_node_or_connection(json_path, obj_id, recurse, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, recurse, connection_path, node_path, tag_path",
+    "json_path, virtual, recurse, connection_path, node_path, tag_path",
     [
         (
             "data/node.json",
+            False,
             False,
             "data/top_level_connections.pkl",
             "data/top_level_nodes.pkl",
@@ -96,14 +97,23 @@ def test_get_node_or_connection(json_path, obj_id, recurse, expected):
         ),
         (
             "data/node.json",
+            False,
             True,
             "data/all_connections.pkl",
             "data/all_nodes.pkl",
             "data/all_tags.pkl",
         ),
+        (
+            "data/node.json",
+            True,
+            True,
+            "data/all_connections.pkl",
+            "data/all_nodes.pkl",
+            "data/all_tags_virtual.pkl"
+        ),
     ],
 )
-def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
+def test_get_all(json_path, virtual, recurse, connection_path, node_path, tag_path):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
 
@@ -121,7 +131,7 @@ def test_get_all(json_path, recurse, connection_path, node_path, tag_path):
         tags = pickle.load(pickle_file)
 
     # Counter is used so that order is ignored
-    assert Counter(result.get_all_tags(recurse=recurse)) == Counter(tags)
+    assert Counter(result.get_all_tags(virtual=virtual, recurse=recurse)) == Counter(tags)
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
