@@ -1,10 +1,9 @@
 import json
 import copy
-from .tag import TagType, Tag, VirtualTag
+from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
 from . import utils
-
 
 class JSONParser:
     """A parser to convert a JSON file into a `Network` object
@@ -58,6 +57,11 @@ class JSONParser:
             self.network_obj.add_connection(
                 self.create_connection(connection_id, self.network_obj)
             )
+        v_tags = self.config.get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, self.network_obj)
+                self.network_obj.add_tag(v_tag)
 
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
@@ -363,8 +367,8 @@ class JSONParser:
         v_tags = self.config[node_id].get("virtual_tags")
         if v_tags:
             for v_tag_id, v_tag_info in v_tags.items():
-                self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
-                node_obj.add_tag(tag)
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                node_obj.add_tag(v_tag)
 
         return node_obj
 
@@ -496,11 +500,11 @@ class JSONParser:
                             tag = self.parse_tag(tag_id, tag_info, connection_obj)
                             connection_obj.add_tag(tag)
 
-        v_tags = self.config[node_id].get("virtual_tags")
+        v_tags = self.config[connection_id].get("virtual_tags")
         if v_tags:
             for v_tag_id, v_tag_info in v_tags.items():
-                self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
-                node_obj.add_tag(tag)
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                connection_obj.add_tag(v_tag)
 
         return connection_obj
 
@@ -559,12 +563,10 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
+                'tags': dict of Tag,
+                'operations': list of str,
                 'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                'contents': str
             }
 
         obj : Node or Connection
@@ -578,13 +580,20 @@ class JSONParser:
         """
         tag_list = []
         for subtag_id in tag_info["tags"]:
-            subtag = obj.get_tag(tag_id, recurse=True)
+            subtag = obj.get_tag(subtag_id, recurse=True)
             if subtag is None:
                 raise ValueError("Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id))
             tag_list.append(subtag)
 
-        tag_type = tag_info.get("type", None)
-        v_tag = VirtualTag(tag_id, tag_list, tag_info["operations"], tag_type)
+        try:
+            tag_type = TagType[tag_info["type"]]
+        except KeyError:
+            tag_type = None
+        try:
+            contents_type = utils.ContentsType[tag_info["contents"]]
+        except KeyError:
+            contents_type = None
+        v_tag = VirtualTag(tag_id, tag_list, tag_info["operations"], tag_type, contents_type)
         return v_tag
 
 
@@ -675,13 +684,7 @@ class JSONParser:
             contents = None
 
         tag_type = TagType[tag_info["type"]]
-        # these TagType do not have any contents
-        contentless_types = [
-            TagType.RunTime,
-            TagType.RunStatus,
-            TagType.Rotation,
-        ]
-        if contents is None and tag_type not in contentless_types:
+        if contents is None and tag_type not in CONTENTLESS_TYPES:
             # will work if obj is of type Connection, otherwise exception occurs
             try:
                 contents = obj.contents

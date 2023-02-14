@@ -425,7 +425,7 @@ class Node(ABC):
         if tag.parent_id == self.id:
             parent_obj = self
         else:
-            parent_obj = self.get_node_or_connection(tag.parent_id, recurse=recurse)
+            parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
 
         bidirectional = False
         if isinstance(parent_obj, Node):
@@ -493,6 +493,86 @@ class Node(ABC):
         else:
             return False
 
+    def virtual_tag_helper(
+        self,
+        virtual_tag,
+        source_id,
+        dest_id,
+        source_unit_id,
+        dest_unit_id,
+        source_node_type,
+        dest_node_type,
+        tag_type,
+        recurse
+    ):
+        """Helper function for selecting `VirtualTag` objects from inside a `Node`.
+
+        Parameters
+        ----------
+        virtual_tag : VirtualTag
+            VirtualTag object to check against the search criteria
+
+        source_id : str
+            Optional id of the source node to filter by. None by default
+
+        dest_id : str
+            Optional id of the destination node to filter by. None by default
+
+        source_unit_id : int, str
+            Optional unit id of the source to filter by. None by default
+
+        dest_unit_id : int, str
+            Optional unit id of the destination to filter by. None by default
+
+        source_node_type : class
+            Optional source `Node` subclass to filter by. None by default
+
+        dest_node_type : class
+            Optional destination `Node` subclass to filter by. None by default
+
+        contents_type : ContentsType
+            Optional contents to filter by. None by default
+
+        tag_type : TagType
+            Optional tag type to filter by. None by default
+
+        recurse : bool
+            Whether to search for objects within nodes. False by default
+
+        Returns
+        -------
+        bool
+            True if `virtual_tag` meets the filtering criteria
+        """
+        for subtag in virtual_tag.tags:
+            if isinstance(subtag, VirtualTag):
+                if self.virtual_tag_helper(
+                    subtag,
+                    source_id,
+                    dest_id,
+                    source_unit_id,
+                    dest_unit_id,
+                    source_node_type,
+                    dest_node_type,
+                    tag_type,
+                    recurse
+                ):
+                    return True
+            else:
+                if self.tag_selection_helper(
+                    subtag,
+                    source_id,
+                    dest_id,
+                    source_unit_id,
+                    dest_unit_id,
+                    source_node_type,
+                    dest_node_type,
+                    tag_type,
+                    recurse
+                ):
+                    return True
+        
+        return False
 
     def select_objs(
         self,
@@ -561,20 +641,18 @@ class Node(ABC):
         # Select according to source/destination node type/id
         for tag in self.get_all_tags(virtual=True, recurse=recurse):
             if isinstance(tag, VirtualTag):
-                for subtag in tag.tags:
-                    if self.tag_selection_helper(
-                        subtag,
-                        source_id,
-                        dest_id,
-                        source_unit_id,
-                        dest_unit_id,
-                        source_node_type,
-                        dest_node_type,
-                        tag_type,
-                        recurse
-                    ):
-                        selected_objs.append(tag)
-                        break
+                if self.virtual_tag_helper(
+                    tag,
+                    source_id,
+                    dest_id,
+                    source_unit_id,
+                    dest_unit_id,
+                    source_node_type,
+                    dest_node_type,
+                    tag_type,
+                    recurse
+                ):
+                    selected_objs.append(tag)
             else:
                 if self.tag_selection_helper(
                     tag,

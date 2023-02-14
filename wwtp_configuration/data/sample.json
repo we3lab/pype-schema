@@ -23,6 +23,18 @@
     "DrinkingWaterToDistribution",
     "GasToFacility"
   ],
+  "virtual_tags": {
+    "GrossGasProduction": {
+      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "operations": "+",
+      "contents": "GasBlend"
+    },
+    "ElectricityProductionByGasVolume": {
+      "tags": ["ElectricityGeneration", "GrossGasProduction"],
+      "operations": ["/"],
+      "type": "Efficiency"
+    }
+  },
   "DrinkingWaterFacility": {
     "type": "Facility",
     "elevation (meters)": null,
@@ -87,14 +99,7 @@
       "FOGToPump",
       "FOGToDigester",
       "BatteryToFacility"
-    ],
-    "virtual_tags": {
-      "ElectricityProductionByGasVolume": {
-        "tags": ["ElectricityGeneration", "CombinedDigesterGasFlow", "ElectricityGeneration"],
-        "operations": ["+", "/"],
-        "type": "Efficiency"
-      }
-    }
+    ]
   },
   "BarScreen": {
     "type": "Screening",

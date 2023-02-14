@@ -522,7 +522,7 @@ def operation_helper(operation, unit, prev_unit):
             except:
                 raise ValueError("Units for addition and subtraction must be identical")
     elif operation == "*" or operation == "/":
-        if operations == "/":
+        if operation == "/":
             prev_unit = prev_unit / unit
         else:
             prev_unit = prev_unit * unit

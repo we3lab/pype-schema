@@ -25,6 +25,18 @@
     "GasToFacility",
     "MainSewerLine"
   ],
+  "virtual_tags": {
+    "GrossGasProduction": {
+      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "operations": "+",
+      "contents": "GasBlend"
+    },
+    "ElectricityProductionByGasVolume": {
+      "tags": ["ElectricityGeneration", "GrossGasProduction"],
+      "operations": ["/"],
+      "type": "Efficiency"
+    }
+  },
   "DrinkingWaterFacility": {
     "type": "Facility",
     "elevation (meters)": null,
@@ -736,7 +748,14 @@
     "contents": "NaturalGas",
     "entry_point": "Cogenerator",
     "bidirectional": false,
-    "tags": {}
+    "tags": {
+      "GasPurchases": {
+        "type": "Flow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "totalized": false
+      }
+    }
   },
   "GTToDigester": {
     "type": "Pipe",

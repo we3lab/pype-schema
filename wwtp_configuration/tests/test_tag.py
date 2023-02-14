@@ -1,5 +1,6 @@
 import os
 import pint
+import pytest
 import pandas as pd
 from wwtp_configuration.units import u
 from wwtp_configuration.tag import VirtualTag
@@ -18,17 +19,29 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, csv_path, tag_name, expected_path",
     [
-        # TODO: create test files
-        (),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "GrossGasProduction",
+            "data/gross_gas.csv"
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "ElectricityProductionByGasVolume",
+            "data/electrical_efficiency.csv"
+        ),
     ],
 )
 def test_calculate_values(json_path, csv_path, tag_name, expected_path):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
     tag = result.get_tag(tag_name, recurse=True)
-
+    
     # TODO: add numpy array and list test cases
     data = pd.read_csv(csv_path)
     expected = pd.read_csv(expected_path)
 
-    assert tag.calculate_values(data) == expected
+    pd.testing.assert_series_equal(tag.calculate_values(data), expected[tag_name])
+
+    # TODO: check expected units are correct

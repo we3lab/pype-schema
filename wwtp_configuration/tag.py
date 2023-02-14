@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from pandas import DataFrame
-from numpy import array
+from numpy import ndarray
+from .utils import operation_helper
 
 
 class TagType(Enum):
@@ -20,6 +21,14 @@ class TagType(Enum):
     pH = auto()
     Rotation = auto()
     Efficiency = auto()
+
+
+CONTENTLESS_TYPES = [
+    TagType.RunTime,
+    TagType.RunStatus,
+    TagType.Rotation,
+    TagType.Efficiency
+]
 
 
 class Tag:
@@ -200,6 +209,10 @@ class VirtualTag:
         Default is None, and it will be automatically determined from constituent
         Tags if they all have the same type.
 
+    contents : ContentsType
+        Contents moving through the node. Default is None, and it will be automatically
+        determined from consituent Tag contents
+
     Raises
     ------
     ValueError
@@ -241,19 +254,17 @@ class VirtualTag:
         id,
         tags,
         operations="+",
-        tag_type=None
+        tag_type=None,
+        contents=None
     ):
         self.id = id
         self.tags = tags
 
         units = []
-        contents = None
         totalized = None
-
-        if tag_type is not None:
-            determine_type = False
-        else:
-            determine_type = True
+        
+        determine_type = True if tag_type is None else False
+        determine_contents = True if contents is None else False
 
         for tag in tags:
             units.append(tag.units)
@@ -270,13 +281,17 @@ class VirtualTag:
                 else:
                     tag_type = tag.tag_type
 
-            if contents is not None:
-                if contents != tag.contents:
-                    raise ValueError("All Tags must have the same value for 'contents'")
-            else:
-                contents = tag.contents
-
-        self.contents = contents
+            if determine_contents and tag_type not in CONTENTLESS_TYPES:
+                if contents is not None:
+                    if contents != tag.contents:
+                        raise ValueError("All Tags must have the same value for 'contents'")
+                else:
+                    contents = tag.contents
+        
+        if tag_type in CONTENTLESS_TYPES:
+            self.contents = None
+        else:
+            self.contents = contents
         self.tag_type = tag_type
         self.totalized = totalized
 
@@ -335,8 +350,8 @@ class VirtualTag:
         return hash(
             (
                 self.id,
-                self.tags,
-                self.operations,
+                str(self.tags),
+                str(self.operations),
                 self.contents,
                 self.tag_type,
                 self.totalized,
@@ -357,63 +372,64 @@ class VirtualTag:
 
         Returns
         -------
-        array
+        list, array, or Series
             numpy array of combined dataset
         """
-        # TODO: check units are handled correctly
         if isinstance(data, list):
             if len(self.operations) != len(data) - 1:
-                raise ValueError("Data must have the correct dimensions (one more element than operations). "
+                raise ValueError(
+                    "Data must have the correct dimensions (one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
-                    len(self.operations, len(data)))
+                    len(self.operations), len(data))
                 )
             else:
                 result = data[0]
                 for i in range(len(data) - 1):
-                    if operations[i] == "+":
+                    if self.operations[i] == "+":
                         result += data[i+1]
-                    elif operations[i] == "-":
+                    elif self.operations[i] == "-":
                         result -= data[i+1]
-                    elif operations[i] == "*":
+                    elif self.operations[i] == "*":
                         result *= data[i+1]
-                    elif operations[i] == "/":
+                    elif self.operations[i] == "/":
                         result /= data[i+1]
-        if isinstance(data, DataFrame):
-            if len(self.operations) != len(data.columns) - 1:
-                raise ValueError("Data must have the correct dimensions (one more element than operations). "
-                    "Currently there are {} operations and {} data tags".format(
-                    len(self.operations, len(data.columns)))
-                )
-            else:
-                result = None
-                for _, colData in data.iteritems():
-                    if result is None:
-                        result = colData
-                    else:
-                        if operations[i] == "+":
-                            result += colData
-                        elif operations[i] == "-":
-                            result -= colData
-                        elif operations[i] == "*":
-                            result *= colData
-                        elif operations[i] == "/":
-                            result /= colData
-        if isinstance(data, array):
+        elif isinstance(data, DataFrame):
+            result = None
+            for i, tag_obj in enumerate(self.tags):
+                if isinstance(tag_obj, self.__class__):
+                    relevant_data = tag_obj.calculate_values(data)
+                else:
+                    relevant_data = data[tag_obj.id]
+
+                if result is None:
+                    result = relevant_data.rename(self.id, inplace=False)
+                else:
+                    if self.operations[i-1] == "+":
+                        result += relevant_data
+                    elif self.operations[i-1] == "-":
+                        result -= relevant_data
+                    elif self.operations[i-1] == "*":
+                        result *= relevant_data
+                    elif self.operations[i-1] == "/":
+                        result /= relevant_data
+        elif isinstance(data, ndarray):
             if len(self.operations) != data.shape[1] - 1:
                 raise ValueError("Data must have the correct dimensions (one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
-                    len(self.operations, data.shape[1]))
+                    len(self.operations), data.shape[1])
                 )
             else:
                 result = data[:, 0]
                 for i in range(data.shape[1] - 1):
-                    if operations[i] == "+":
+                    if self.operations[i] == "+":
                         result += data[:, i+1]
-                    elif operations[i] == "-":
+                    elif self.operations[i] == "-":
                         result -= data[:, i+1]
-                    elif operations[i] == "*":
+                    elif self.operations[i] == "*":
                         result *= data[:, i+1]
-                    elif operations[i] == "/":
+                    elif self.operations[i] == "/":
                         result /= data[:, i+1]
         else:
             raise TypeError("Data must be either a list, array, or DataFrame")
+
+        return result
