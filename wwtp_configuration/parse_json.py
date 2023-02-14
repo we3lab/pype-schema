@@ -355,22 +355,21 @@ class JSONParser:
             for contents in contents_list:
                 if contents is not None:
                     tags_by_contents = [
-                        tag_info for _, tag_info in tags.items()
-                        if utils.ContentsType[tag_info["contents"]] == contents
+                        tag_obj for _, tag_obj in node_obj.tags.items()
+                        if tag_obj.contents == contents
                     ]
-                    tag_source_unit_ids = [
-                        tag["source_unit_id"] for tag in tags_by_contents
-                        if "source_unit_id" in tag.keys()
-                    ]
+                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
-                        tag_info = tags_by_contents[0]
+                        tag_obj = tags_by_contents[0]
                         tag_list = [
-                            node_obj.get_tag(tag_id, recurse=True)
-                            for tag_id, _ in tags.items()
-                            if utils.ContentsType[tag_info["contents"]] == contents
+                            connection_obj.tags[tag_obj.id]
+                            for tag_obj in tags_by_contents
+                            if tag_obj.contents == contents
+                            and tag_obj.dest_unit_id == id
                         ]
-                        tag_id = "".join([node_id, "Total", tag_info["contents"], tag_info["type"]])
-                        v_tag = VirtualTag(tag_id, tag_list, "+")
+
+                        tag_id = "".join([node_id, "Total", tag_obj.contents.name, tag_obj.tag_type.name])
+                        v_tag = VirtualTag(tag_id, tags_by_contents, "+")
                         node_obj.add_tag(v_tag)
 
         v_tags = self.config[node_id].get("virtual_tags")
@@ -466,24 +465,26 @@ class JSONParser:
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
 
-            # TODO: change this to employ new VirtualTag objects
             # create virtual "total" tag if it was missing
             contents_list = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
             for contents in contents_list:
                 if contents is not None:
-                    tags_by_contents = [tag_info for _, tag_info in tags.items() if utils.ContentsType[tag_info["contents"]] == contents]
-                    tag_source_unit_ids = [tag["source_unit_id"] for tag in tags_by_contents if "source_unit_id" in tag.keys()]
-                    tag_dest_unit_ids = [tag["dest_unit_id"] for tag in tags_by_contents if "dest_unit_id" in tag.keys()]
+                    tags_by_contents = [
+                        tag_obj for _, tag_obj in connection_obj.tags.items()
+                        if tag_obj.contents == contents
+                    ]
+                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
+                    tag_dest_unit_ids = [tag.dest_unit_id for tag in tags_by_contents]
                     if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
-                        tag_info = tags_by_contents[0]
+                        tag_obj = tags_by_contents[0]
                         # create a separate virtual total for each destination unit. If none exist then just use total
                         if tag_dest_unit_ids:
                             for id in tag_dest_unit_ids:
                                 tag_list = [
-                                    connection_obj.tags[tag_id]
-                                    for tag_id, _ in tags.items()
-                                    if utils.ContentsType[tag_info["contents"]] == contents
-                                    and tag_info["dest_unit_id"] == id
+                                    connection_obj.tags[tag_obj.id]
+                                    for tag_obj in tags_by_contents
+                                    if tag_obj.contents == contents
+                                    and tag_obj.dest_unit_id == id
                                 ]
                                 id = "Total" if id == "total" else str(id)
                                 tag_id = "".join([
@@ -491,37 +492,39 @@ class JSONParser:
                                     "Total",
                                     connection_obj.get_dest_id(),
                                     id,
-                                    tag_info["contents"],
-                                    tag_info["type"]]
-                                )
+                                    tag_obj.contents.name,
+                                    tag.tag_type.name
+                                ])
+                                print(tag_id)
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
                         else:
                             tag_list = [
-                                connection_obj.tags[tag_id]
-                                for tag_id, _ in tags.items()
-                                if utils.ContentsType[tag_info["contents"]] == contents
+                                connection_obj.tags[tag_obj.id]
+                                for tag_obj in tags_by_contents
+                                if tag_obj.contents == contents
                             ]
                             tag_id = "".join([
                                 connection_obj.get_source_id(),
                                 "Total",
                                 connection_obj.get_dest_id(),
                                 "Total",
-                                tag_info["contents"],
-                                tag_info["type"]
+                                tag_obj.contents.name,
+                                tag_obj.type
                             ])
+                            print(tag_id)
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
-                        tag_info = tags_by_contents[0]
+                        tag_obj = tags_by_contents[0]
                         # create a separate virtual total for each source unit. If none exist then just use total
                         if tag_source_unit_ids:
                             for id in tag_source_unit_ids:
                                 tag_list = [
-                                    connection_obj.tags[tag_id]
-                                    for tag_id, _ in tags.items()
-                                    if utils.ContentsType[tag_info["contents"]] == contents
-                                    and tag_info["source_unit_id"] == id
+                                    connection_obj.tags[tag_obj.id]
+                                    for tag_obj in tags_by_contents
+                                    if tag_obj.contents == contents
+                                    and tag_obj.source_unit_id == id
                                 ]
                                 id = "Total" if id == "total" else str(id)
                                 tag_id = "".join([
@@ -529,31 +532,34 @@ class JSONParser:
                                     id,
                                     connection_obj.get_dest_id(),
                                     "Total",
-                                    tag_info["contents"],
-                                    tag_info["type"]
+                                    tag_obj.contents.name,
+                                    tag_obj.tag_type.name
                                 ])
+                                print(tag_id)
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
                         else:
                             tag_list = [
-                                connection_obj.tags[tag_id]
-                                for tag_id, _ in tags.items()
-                                if utils.ContentsType[tag_info["contents"]] == contents
+                                connection_obj.tags[tag_obj.id]
+                                for tag_obj in tags_by_contents
+                                if tag_obj.contents == contents
                             ]
                             tag_id = "".join([
                                 connection_obj.get_source_id(),
                                 "Total",
                                 connection_obj.get_dest_id(),
-                                "Total", tag_info["contents"],
-                                tag_info["type"]
+                                "Total",
+                                tag_obj.contents.name,
+                                tag_obj.type
                             ])
+                            print(tag_id)
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)
 
         v_tags = self.config[connection_id].get("virtual_tags")
         if v_tags:
             for v_tag_id, v_tag_info in v_tags.items():
-                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, connection_obj)
                 connection_obj.add_tag(v_tag)
 
         return connection_obj
