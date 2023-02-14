@@ -262,7 +262,7 @@ class VirtualTag:
 
         units = []
         totalized = None
-        
+
         determine_type = True if tag_type is None else False
         determine_contents = True if contents is None else False
 
@@ -287,7 +287,7 @@ class VirtualTag:
                         raise ValueError("All Tags must have the same value for 'contents'")
                 else:
                     contents = tag.contents
-        
+
         if tag_type in CONTENTLESS_TYPES:
             self.contents = None
         else:
@@ -359,7 +359,27 @@ class VirtualTag:
             )
         )
 
-    # TODO: define __lt__() for VirtualTag
+    def __lt__(self, other):
+        if isinstance(other, Tag):
+            return False
+        elif not isinstance(other, self.__class__):
+            raise NotImplemented
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.operations != other.operations:
+            return self.operations < other.operations
+        elif self.id != other.id:
+            return self.id < other.id
+        elif self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.tag_type != other.tag_type:
+            return self.tag_type.value < other.tag_type.value
+        elif self.totalized != other.totalized:
+            return other.totalized
+        else:
+            return str(self.units) < str(other.units)
 
     def calculate_values(self, data):
         """Combine the given data according to the VirtualTag's operations
