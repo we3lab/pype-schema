@@ -321,7 +321,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "PumpRuntime",
                 "Digester1Level",
                 "Digester2Level",
-                "DigesterTotalSludgeBlendLevel",
+                "Digester_SludgeBlend_Level",
                 "ElectricityPurchases",
                 "GasToCogen",
                 "Digester",
@@ -329,7 +329,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "Digester1GasFlow",
                 "Digester2GasFlow",
                 "Digester3GasFlow",
-                "DigesterTotalCogeneratorTotalBiogasFlow"
+                "Digester_Cogenerator_Biogas_Flow"
             ]
         ),
         # Case 2: no objects match search criteria
@@ -435,7 +435,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             True,
-            ["GasToCogen", "DigesterTotalCogeneratorTotalBiogasFlow", "Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"]
+            ["GasToCogen", "Digester_Cogenerator_Biogas_Flow", "Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"]
         ),
         # Case 9: return mutliple tags by numeric source unit ID
         (
@@ -574,7 +574,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "Digester1GasFlow",
                 "Digester2GasFlow",
                 "Digester3GasFlow",
-                "DigesterTotalCogeneratorTotalBiogasFlow",
+                "Digester_Cogenerator_Biogas_Flow",
                 "ElectricityPurchases"
             ]
         ),
@@ -612,8 +612,8 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "Digester1GasFlow",
                 "Digester2GasFlow",
                 "Digester3GasFlow",
-                "DigesterTotalCogeneratorTotalBiogasFlow",
-                "DigesterTotalSludgeBlendLevel",
+                "Digester_Cogenerator_Biogas_Flow",
+                "Digester_SludgeBlend_Level",
                 "Digester1Level",
                 "Digester2Level",
                 "GasToGrid"

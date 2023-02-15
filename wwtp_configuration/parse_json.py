@@ -368,7 +368,7 @@ class JSONParser:
                             and tag_obj.dest_unit_id == id
                         ]
 
-                        tag_id = "".join([node_id, "Total", tag_obj.contents.name, tag_obj.tag_type.name])
+                        tag_id = "_".join([node_id, tag_obj.contents.name, tag_obj.tag_type.name])
                         v_tag = VirtualTag(tag_id, tags_by_contents, "+")
                         node_obj.add_tag(v_tag)
 
