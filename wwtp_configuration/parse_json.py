@@ -486,6 +486,16 @@ class JSONParser:
             )
 
         tags = self.config[connection_id].get("tags")
+        exit_point_id = (
+            ""
+            if connection_obj.get_exit_point() is None
+            else "_" + connection_obj.get_exit_point().id
+        )
+        entry_point_id = (
+            ""
+            if connection_obj.get_entry_point() is None
+            else "_" + connection_obj.get_entry_point().id
+        )
         if tags:
             for tag_id, tag_info in tags.items():
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
@@ -497,6 +507,7 @@ class JSONParser:
                 if (type(connection_obj.contents) is list)
                 else [connection_obj.contents]
             )
+
             for contents in contents_list:
                 if contents is not None:
                     tags_by_contents = [
@@ -522,40 +533,34 @@ class JSONParser:
                                     if tag_obj.contents == contents
                                     and tag_obj.dest_unit_id == id
                                 ]
-                                if id == "total":
-                                    tag_id = "_".join(
-                                        [
-                                            connection_obj.get_source_id(),
-                                            connection_obj.get_dest_id(),
-                                            tag_obj.contents.name,
-                                            tag.tag_type.name,
-                                        ]
-                                    )
-                                else:
-                                    tag_id = "_".join(
-                                        [
-                                            connection_obj.get_source_id(),
-                                            connection_obj.get_dest_id(),
-                                            str(id),
-                                            tag_obj.contents.name,
-                                            tag.tag_type.name,
-                                        ]
-                                    )
+                                dest_unit_id = "" if id == "total" else "_" + str(id)
+
+                                tag_id = "{}{}_{}{}{}_{}_{}".format(
+                                    connection_obj.get_source_id(),
+                                    exit_point_id,
+                                    connection_obj.get_dest_id(),
+                                    entry_point_id,
+                                    dest_unit_id,
+                                    tag_obj.contents.name,
+                                    tag.tag_type.name,
+                                )
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
+
                         else:
                             tag_list = [
                                 connection_obj.tags[tag_obj.id]
                                 for tag_obj in tags_by_contents
                                 if tag_obj.contents == contents
                             ]
-                            tag_id = "_".join(
-                                [
-                                    connection_obj.get_source_id(),
-                                    connection_obj.get_dest_id(),
-                                    tag_obj.contents.name,
-                                    tag_obj.type,
-                                ]
+
+                            tag_id = "{}{}_{}{}_{}_{}".format(
+                                connection_obj.get_source_id(),
+                                exit_point_id,
+                                connection_obj.get_dest_id(),
+                                entry_point_id,
+                                tag_obj.contents.name,
+                                tag.tag_type.name,
                             )
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)
@@ -570,25 +575,16 @@ class JSONParser:
                                     if tag_obj.contents == contents
                                     and tag_obj.source_unit_id == id
                                 ]
-                                if id == "total":
-                                    tag_id = "_".join(
-                                        [
-                                            connection_obj.get_source_id(),
-                                            connection_obj.get_dest_id(),
-                                            tag_obj.contents.name,
-                                            tag_obj.tag_type.name,
-                                        ]
-                                    )
-                                else:
-                                    tag_id = "_".join(
-                                        [
-                                            connection_obj.get_source_id(),
-                                            str(id),
-                                            connection_obj.get_dest_id(),
-                                            tag_obj.contents.name,
-                                            tag_obj.tag_type.name,
-                                        ]
-                                    )
+                                source_unit_id = "" if id == "total" else "_" + str(id)
+                                tag_id = "{}{}{}_{}{}_{}_{}".format(
+                                    connection_obj.get_source_id(),
+                                    exit_point_id,
+                                    source_unit_id,
+                                    connection_obj.get_dest_id(),
+                                    entry_point_id,
+                                    tag_obj.contents.name,
+                                    tag.tag_type.name,
+                                )
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -597,15 +593,14 @@ class JSONParser:
                                 for tag_obj in tags_by_contents
                                 if tag_obj.contents == contents
                             ]
-                            tag_id = "".join(
-                                [
-                                    connection_obj.get_source_id(),
-                                    "Total",
-                                    connection_obj.get_dest_id(),
-                                    "Total",
-                                    tag_obj.contents.name,
-                                    tag_obj.type,
-                                ]
+
+                            tag_id = "{}{}_{}{}_{}_{}".format(
+                                connection_obj.get_source_id(),
+                                exit_point_id,
+                                connection_obj.get_dest_id(),
+                                entry_point_id,
+                                tag_obj.contents.name,
+                                tag.tag_type.name,
                             )
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)

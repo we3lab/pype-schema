@@ -468,6 +468,12 @@ def select_objs_helper(
     bool
         True if `obj` fits the filter criteria; False otherwise.
     """
+    # convert string source and destination unit IDs to integers
+    if isinstance(source_unit_id, str) and source_unit_id != "total":
+        source_unit_id = int(source_unit_id)
+    if isinstance(dest_unit_id, str) and dest_unit_id != "total":
+        dest_unit_id = int(dest_unit_id)
+
     if source_id is not None and (
         not hasattr(obj_source_node, "id") or obj_source_node.id != source_id
     ):
