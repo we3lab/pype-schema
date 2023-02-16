@@ -482,10 +482,10 @@ def select_objs_helper(
     if dest_unit_id is not None and dest_unit_id != obj_dest_unit_id:
         return False
 
-    if exit_point_id is not None and (not hasattr(exit_point_id, "id") or obj_exit_point.id != entry_point_id):
+    if exit_point_id is not None and (not hasattr(obj_exit_point, "id") or obj_exit_point.id != exit_point_id):
         return False
 
-    if entry_point_id is not None and (not hasattr(entry_point_id, "id") or obj_entry_point.id != entry_point_id):
+    if entry_point_id is not None and (not hasattr(obj_entry_point, "id") or obj_entry_point.id != entry_point_id):
         return False
 
     if source_node_type is not None and not isinstance(obj_source_node, source_node_type):

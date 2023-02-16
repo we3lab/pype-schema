@@ -453,9 +453,9 @@ class Node(ABC):
             obj_source_unit_id = tag.source_unit_id
             obj_dest_id, obj_dest_unit_id, obj_dest_node, obj_entry_point, obj_exit_point = None, None, None, None, None
         else: # the parent must be a Connection if it is not a Node
-            obj_source_node = parent_obj.get_source_node(recurse=recurse)
+            obj_source_node = parent_obj.get_source_node()
             obj_source_unit_id = tag.source_unit_id
-            obj_dest_node = parent_obj.get_dest_node(recurse=recurse)
+            obj_dest_node = parent_obj.get_dest_node()
             obj_dest_unit_id = tag.dest_unit_id
             obj_exit_point = parent_obj.get_exit_point()
             obj_entry_point = parent_obj.get_entry_point()
@@ -486,6 +486,7 @@ class Node(ABC):
             exit_point_type=exit_point_type,
             entry_point_type=entry_point_type,
             tag_type=tag_type,
+            recurse=recurse
         ):
             return True
         if bidirectional:
@@ -508,6 +509,7 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
+                recurse=recurse
             )
         else:
             return False
@@ -737,8 +739,8 @@ class Node(ABC):
         for conn in self.get_all_connections(recurse=recurse):
             if utils.select_objs_helper(
                 conn,
-                obj_source_node=conn.get_source_node(recurse=recurse),
-                obj_dest_node=conn.get_dest_node(recurse=recurse),
+                obj_source_node=conn.get_source_node(),
+                obj_dest_node=conn.get_dest_node(),
                 obj_exit_point=conn.get_exit_point(),
                 obj_entry_point=conn.get_entry_point(),
                 source_id=source_id,
@@ -752,13 +754,14 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
+                recurse=recurse
             ):
                 selected_objs.append(conn)
             if conn.bidirectional:
                 if utils.select_objs_helper(
                     conn,
-                    obj_source_node=conn.get_dest_node(recurse=recurse),
-                    obj_dest_node=conn.get_source_node(recurse=recurse),
+                    obj_source_node=conn.get_dest_node(),
+                    obj_dest_node=conn.get_source_node(),
                     obj_exit_point=conn.get_entry_point(),
                     obj_entry_point=conn.get_exit_point(),
                     source_id=source_id,
@@ -772,6 +775,7 @@ class Node(ABC):
                     exit_point_type=exit_point_type,
                     entry_point_type=entry_point_type,
                     tag_type=tag_type,
+                    recurse=recurse
                 ):
                     selected_objs.append(conn)
         for node in self.get_all_nodes(recurse=recurse):
@@ -789,6 +793,7 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
+                recurse=recurse
             ):
                 selected_objs.append(node)
 

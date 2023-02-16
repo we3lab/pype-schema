@@ -700,7 +700,26 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "GasToGrid"
             ]
         ),
-        # Case 20: return objects by entry point
+        # Case 20: return objects by exit point
+        (
+            "data/node.json",
+            None,
+            None,
+            None,
+            None,
+            "Digester",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            ["GasToGrid"]
+        ),
+        # Case 21: return objects by entry point
         (
             "data/node.json",
             None,
