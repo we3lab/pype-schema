@@ -5,6 +5,7 @@ from . import connection
 from . import node
 from . import utils
 
+
 class JSONParser:
     """A parser to convert a JSON file into a `Network` object
 
@@ -67,7 +68,7 @@ class JSONParser:
         return self.network_obj
 
     def merge_network(self, old_network, inplace=False):
-        """ Incorporates nodes/connections (i.e. the `new_network`) into a network (i.e. `old_newtwork`)
+        """Incorporates nodes/connections (i.e. the `new_network`) into a network (i.e. `old_newtwork`)
         modifying it in place and returning the modified network
 
         Parameters
@@ -88,7 +89,9 @@ class JSONParser:
         if isinstance(old_network, str) and old_network.endswith("json"):
             old_network = JSONParser(old_network).initialize_network()
         if not isinstance(old_network, node.Network):
-            raise TypeError("Please provide a valid json path or object for network to merge with")
+            raise TypeError(
+                "Please provide a valid json path or object for network to merge with"
+            )
         for node_id in self.config["nodes"]:
             if node_id not in self.config:
                 raise NameError("Node " + node_id + " not found in " + self.path)
@@ -102,9 +105,14 @@ class JSONParser:
                     "Connection " + connection_id + " not found in " + self.path
                 )
             # delete existing connection before creating the new one if necessary
-            if hasattr(old_network, "connections") and connection_id in old_network.connections.keys():
+            if (
+                hasattr(old_network, "connections")
+                and connection_id in old_network.connections.keys()
+            ):
                 old_network.remove_connection(connection_id)
-            old_network.add_connection(self.create_connection(connection_id, old_network))
+            old_network.add_connection(
+                self.create_connection(connection_id, old_network)
+            )
         if inplace:
             self.network_obj = old_network
         return old_network
@@ -131,7 +139,9 @@ class JSONParser:
             self.config[node_id].get("volume (cubic meters)"), "m3"
         )
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(self.config[node_id].get("flowrate"))
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
+            self.config[node_id].get("flowrate")
+        )
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -241,7 +251,9 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "Cogeneration":
-            min, max, avg = self.parse_min_max_avg(self.config[node_id].get("generation_capacity"))
+            min, max, avg = self.parse_min_max_avg(
+                self.config[node_id].get("generation_capacity")
+            )
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
@@ -355,11 +367,17 @@ class JSONParser:
             for contents in contents_list:
                 if contents is not None:
                     tags_by_contents = [
-                        tag_obj for _, tag_obj in node_obj.tags.items()
+                        tag_obj
+                        for _, tag_obj in node_obj.tags.items()
                         if tag_obj.contents == contents
                     ]
-                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
-                    if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
+                    tag_source_unit_ids = [
+                        tag.source_unit_id for tag in tags_by_contents
+                    ]
+                    if (
+                        "total" not in tag_source_unit_ids
+                        and len(tag_source_unit_ids) > 1
+                    ):
                         tag_obj = tags_by_contents[0]
                         tag_list = [
                             connection_obj.tags[tag_obj.id]
@@ -368,7 +386,9 @@ class JSONParser:
                             and tag_obj.dest_unit_id == id
                         ]
 
-                        tag_id = "_".join([node_id, tag_obj.contents.name, tag_obj.tag_type.name])
+                        tag_id = "_".join(
+                            [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
+                        )
                         v_tag = VirtualTag(tag_id, tags_by_contents, "+")
                         node_obj.add_tag(v_tag)
 
@@ -420,9 +440,15 @@ class JSONParser:
         if entry_point:
             entry_point = destination.get_node(entry_point)
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(self.config[connection_id].get("flowrate"))
-        min_pres, max_pres, avg_pres = self.parse_min_max_avg(self.config[connection_id].get("pressure"))
-        lower, higher = self.parse_heating_values(self.config[connection_id].get("heating_values"))
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
+            self.config[connection_id].get("flowrate")
+        )
+        min_pres, max_pres, avg_pres = self.parse_min_max_avg(
+            self.config[connection_id].get("pressure")
+        )
+        lower, higher = self.parse_heating_values(
+            self.config[connection_id].get("heating_values")
+        )
 
         if self.config[connection_id]["type"] == "Pipe":
             diameter = utils.parse_quantity(
@@ -466,16 +492,26 @@ class JSONParser:
                 connection_obj.add_tag(tag)
 
             # create virtual "total" tag if it was missing
-            contents_list = connection_obj.contents if (type(connection_obj.contents) is list) else [connection_obj.contents]
+            contents_list = (
+                connection_obj.contents
+                if (type(connection_obj.contents) is list)
+                else [connection_obj.contents]
+            )
             for contents in contents_list:
                 if contents is not None:
                     tags_by_contents = [
-                        tag_obj for _, tag_obj in connection_obj.tags.items()
+                        tag_obj
+                        for _, tag_obj in connection_obj.tags.items()
                         if tag_obj.contents == contents
                     ]
-                    tag_source_unit_ids = [tag.source_unit_id for tag in tags_by_contents]
+                    tag_source_unit_ids = [
+                        tag.source_unit_id for tag in tags_by_contents
+                    ]
                     tag_dest_unit_ids = [tag.dest_unit_id for tag in tags_by_contents]
-                    if "total" not in tag_source_unit_ids and len(tag_source_unit_ids) > 1:
+                    if (
+                        "total" not in tag_source_unit_ids
+                        and len(tag_source_unit_ids) > 1
+                    ):
                         tag_obj = tags_by_contents[0]
                         # create a separate virtual total for each destination unit. If none exist then just use total
                         if tag_dest_unit_ids:
@@ -487,20 +523,24 @@ class JSONParser:
                                     and tag_obj.dest_unit_id == id
                                 ]
                                 if id == "total":
-                                    tag_id = "_".join([
-                                        connection_obj.get_source_id(),
-                                        connection_obj.get_dest_id(),
-                                        tag_obj.contents.name,
-                                        tag.tag_type.name
-                                    ])
+                                    tag_id = "_".join(
+                                        [
+                                            connection_obj.get_source_id(),
+                                            connection_obj.get_dest_id(),
+                                            tag_obj.contents.name,
+                                            tag.tag_type.name,
+                                        ]
+                                    )
                                 else:
-                                    tag_id = "_".join([
-                                        connection_obj.get_source_id(),
-                                        connection_obj.get_dest_id(),
-                                        str(id),
-                                        tag_obj.contents.name,
-                                        tag.tag_type.name
-                                    ])
+                                    tag_id = "_".join(
+                                        [
+                                            connection_obj.get_source_id(),
+                                            connection_obj.get_dest_id(),
+                                            str(id),
+                                            tag_obj.contents.name,
+                                            tag.tag_type.name,
+                                        ]
+                                    )
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -509,12 +549,14 @@ class JSONParser:
                                 for tag_obj in tags_by_contents
                                 if tag_obj.contents == contents
                             ]
-                            tag_id = "_".join([
-                                connection_obj.get_source_id(),
-                                connection_obj.get_dest_id(),
-                                tag_obj.contents.name,
-                                tag_obj.type
-                            ])
+                            tag_id = "_".join(
+                                [
+                                    connection_obj.get_source_id(),
+                                    connection_obj.get_dest_id(),
+                                    tag_obj.contents.name,
+                                    tag_obj.type,
+                                ]
+                            )
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
@@ -529,20 +571,24 @@ class JSONParser:
                                     and tag_obj.source_unit_id == id
                                 ]
                                 if id == "total":
-                                    tag_id = "_".join([
-                                        connection_obj.get_source_id(),
-                                        connection_obj.get_dest_id(),
-                                        tag_obj.contents.name,
-                                        tag_obj.tag_type.name
-                                    ])
+                                    tag_id = "_".join(
+                                        [
+                                            connection_obj.get_source_id(),
+                                            connection_obj.get_dest_id(),
+                                            tag_obj.contents.name,
+                                            tag_obj.tag_type.name,
+                                        ]
+                                    )
                                 else:
-                                    tag_id = "_".join([
-                                        connection_obj.get_source_id(),
-                                        str(id),
-                                        connection_obj.get_dest_id(),
-                                        tag_obj.contents.name,
-                                        tag_obj.tag_type.name
-                                    ])
+                                    tag_id = "_".join(
+                                        [
+                                            connection_obj.get_source_id(),
+                                            str(id),
+                                            connection_obj.get_dest_id(),
+                                            tag_obj.contents.name,
+                                            tag_obj.tag_type.name,
+                                        ]
+                                    )
                                 v_tag = VirtualTag(tag_id, tag_list, "+")
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -551,14 +597,16 @@ class JSONParser:
                                 for tag_obj in tags_by_contents
                                 if tag_obj.contents == contents
                             ]
-                            tag_id = "".join([
-                                connection_obj.get_source_id(),
-                                "Total",
-                                connection_obj.get_dest_id(),
-                                "Total",
-                                tag_obj.contents.name,
-                                tag_obj.type
-                            ])
+                            tag_id = "".join(
+                                [
+                                    connection_obj.get_source_id(),
+                                    "Total",
+                                    connection_obj.get_dest_id(),
+                                    "Total",
+                                    tag_obj.contents.name,
+                                    tag_obj.type,
+                                ]
+                            )
                             v_tag = VirtualTag(tag_id, tag_list, "+")
                             connection_obj.add_tag(v_tag)
 
@@ -644,7 +692,9 @@ class JSONParser:
         for subtag_id in tag_info["tags"]:
             subtag = obj.get_tag(subtag_id, recurse=True)
             if subtag is None:
-                raise ValueError("Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id))
+                raise ValueError(
+                    "Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
+                )
             tag_list.append(subtag)
 
         try:
@@ -655,9 +705,10 @@ class JSONParser:
             contents_type = utils.ContentsType[tag_info["contents"]]
         except KeyError:
             contents_type = None
-        v_tag = VirtualTag(tag_id, tag_list, tag_info["operations"], tag_type, contents_type)
+        v_tag = VirtualTag(
+            tag_id, tag_list, tag_info["operations"], tag_type, contents_type
+        )
         return v_tag
-
 
     @staticmethod
     def parse_tag(tag_id, tag_info, obj):

@@ -25,14 +25,14 @@ pint.set_application_registry(u)
             "data/sample_data.csv",
             "GrossGasProduction",
             "data/gross_gas.csv",
-            "SCFM"
+            "SCFM",
         ),
         (
             "../data/sample.json",
             "data/sample_data.csv",
             "ElectricityProductionByGasVolume",
             "data/electrical_efficiency.csv",
-            "kilowatt * hour * minute / (feet ** 3)"
+            "kilowatt * hour * minute / (feet ** 3)",
         ),
     ],
 )

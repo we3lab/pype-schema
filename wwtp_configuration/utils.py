@@ -404,7 +404,7 @@ def select_objs_helper(
     exit_point_type=None,
     entry_point_type=None,
     tag_type=None,
-    recurse=False
+    recurse=False,
 ):
     """Helper to select from objects which match source/destination node class, unit ID, and contents
 
@@ -468,12 +468,24 @@ def select_objs_helper(
     bool
         True if `obj` fits the filter criteria; False otherwise.
     """
-    if source_id is not None and (not hasattr(obj_source_node, "id") or obj_source_node.id != source_id):
-        if not recurse or not hasattr(obj_exit_point, "id") or obj_exit_point.id != source_id:
+    if source_id is not None and (
+        not hasattr(obj_source_node, "id") or obj_source_node.id != source_id
+    ):
+        if (
+            not recurse
+            or not hasattr(obj_exit_point, "id")
+            or obj_exit_point.id != source_id
+        ):
             return False
 
-    if dest_id is not None and (not hasattr(obj_dest_node, "id") or obj_dest_node.id != dest_id):
-        if not recurse or not hasattr(obj_entry_point, "id") or obj_entry_point.id != dest_id:
+    if dest_id is not None and (
+        not hasattr(obj_dest_node, "id") or obj_dest_node.id != dest_id
+    ):
+        if (
+            not recurse
+            or not hasattr(obj_entry_point, "id")
+            or obj_entry_point.id != dest_id
+        ):
             return False
 
     if source_unit_id is not None and source_unit_id != obj_source_unit_id:
@@ -482,13 +494,19 @@ def select_objs_helper(
     if dest_unit_id is not None and dest_unit_id != obj_dest_unit_id:
         return False
 
-    if exit_point_id is not None and (not hasattr(obj_exit_point, "id") or obj_exit_point.id != exit_point_id):
+    if exit_point_id is not None and (
+        not hasattr(obj_exit_point, "id") or obj_exit_point.id != exit_point_id
+    ):
         return False
 
-    if entry_point_id is not None and (not hasattr(obj_entry_point, "id") or obj_entry_point.id != entry_point_id):
+    if entry_point_id is not None and (
+        not hasattr(obj_entry_point, "id") or obj_entry_point.id != entry_point_id
+    ):
         return False
 
-    if source_node_type is not None and not isinstance(obj_source_node, source_node_type):
+    if source_node_type is not None and not isinstance(
+        obj_source_node, source_node_type
+    ):
         return False
 
     if dest_node_type is not None and not isinstance(obj_dest_node, dest_node_type):
@@ -500,10 +518,13 @@ def select_objs_helper(
     if entry_point_type is not None and isinstance(obj_entry_point, exit_point_type):
         return False
 
-    if tag_type is not None and (not hasattr(obj, "tag_type") or obj.tag_type != tag_type):
+    if tag_type is not None and (
+        not hasattr(obj, "tag_type") or obj.tag_type != tag_type
+    ):
         return False
 
     return True
+
 
 def operation_helper(operation, unit, prev_unit):
     """Helper for parsing operations and checking units

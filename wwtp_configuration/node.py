@@ -66,7 +66,9 @@ class Node(ABC):
         elif isinstance(contents, list) or contents is None:
             setattr(self, attribute, contents)
         else:
-            raise TypeError("'contents' must be either ContentsType or list of ContentsType")
+            raise TypeError(
+                "'contents' must be either ContentsType or list of ContentsType"
+            )
 
     def add_tag(self, tag):
         """Adds a tag to the node
@@ -451,8 +453,14 @@ class Node(ABC):
         if isinstance(parent_obj, Node):
             obj_source_node = parent_obj
             obj_source_unit_id = tag.source_unit_id
-            obj_dest_id, obj_dest_unit_id, obj_dest_node, obj_entry_point, obj_exit_point = None, None, None, None, None
-        else: # the parent must be a Connection if it is not a Node
+            (
+                obj_dest_id,
+                obj_dest_unit_id,
+                obj_dest_node,
+                obj_entry_point,
+                obj_exit_point,
+            ) = (None, None, None, None, None)
+        else:  # the parent must be a Connection if it is not a Node
             obj_source_node = parent_obj.get_source_node()
             obj_source_unit_id = tag.source_unit_id
             obj_dest_node = parent_obj.get_dest_node()
@@ -486,7 +494,7 @@ class Node(ABC):
             exit_point_type=exit_point_type,
             entry_point_type=entry_point_type,
             tag_type=tag_type,
-            recurse=recurse
+            recurse=recurse,
         ):
             return True
         if bidirectional:
@@ -509,7 +517,7 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
-                recurse=recurse
+                recurse=recurse,
             )
         else:
             return False
@@ -528,7 +536,7 @@ class Node(ABC):
         exit_point_type=None,
         entry_point_type=None,
         tag_type=None,
-        recurse=False
+        recurse=False,
     ):
         """Helper function for selecting `VirtualTag` objects from inside a `Node`.
 
@@ -754,7 +762,7 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
-                recurse=recurse
+                recurse=recurse,
             ):
                 selected_objs.append(conn)
             if conn.bidirectional:
@@ -775,7 +783,7 @@ class Node(ABC):
                     exit_point_type=exit_point_type,
                     entry_point_type=entry_point_type,
                     tag_type=tag_type,
-                    recurse=recurse
+                    recurse=recurse,
                 ):
                     selected_objs.append(conn)
         for node in self.get_all_nodes(recurse=recurse):
@@ -793,13 +801,17 @@ class Node(ABC):
                 exit_point_type=exit_point_type,
                 entry_point_type=entry_point_type,
                 tag_type=tag_type,
-                recurse=recurse
+                recurse=recurse,
             ):
                 selected_objs.append(node)
 
         # Select according to contents
         if contents_type is not None:
-            selected_objs = [obj for obj in selected_objs if hasattr(obj, "contents") and obj.contents == contents_type]
+            selected_objs = [
+                obj
+                for obj in selected_objs
+                if hasattr(obj, "contents") and obj.contents == contents_type
+            ]
 
         # Select according to obj_type
         if obj_type is not None:
@@ -921,18 +933,26 @@ class Network(Node):
                     # if all else fails, compare ID
                     return self.id < other.id
                 else:
-                    other_vals = sorted([contents.value for contents in other.input_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.input_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.input_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             else:
-                other_vals = sorted([contents.value for contents in other.output_contents])
-                for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                other_vals = sorted(
+                    [contents.value for contents in other.output_contents]
+                )
+                for i, contents in enumerat(
+                    sorted([contents.value for contents in self.output_contents])
+                ):
                     if contents not in other_vals:
                         return contents < other_vals[i]
         # case with same number of tags, so we compare tags in order
         else:
-            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
@@ -1131,7 +1151,7 @@ class Facility(Network):
             return NotImplemented
 
         if len(self.nodes) < len(other.nodes):
-                return True
+            return True
         elif len(self.nodes) > len(other.nodes):
             return False
         elif len(self.connections) < len(other.connections):
@@ -1162,21 +1182,29 @@ class Facility(Network):
                     else:
                         return self.elevation < other.elevation
                 else:
-                    other_vals = sorted([contents.value for contents in other.input_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.input_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.input_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             else:
-                other_vals = sorted([contents.value for contents in other.output_contents])
-                for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                other_vals = sorted(
+                    [contents.value for contents in other.output_contents]
+                )
+                for i, contents in enumerat(
+                    sorted([contents.value for contents in self.output_contents])
+                ):
                     if contents not in other_vals:
                         return contents < other_vals[i]
         # case with same number of tags, so we compare tags in order
         else:
-            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
-                        return tag < other_tags[i]
+                    return tag < other_tags[i]
 
 
 class Pump(Node):
@@ -1287,7 +1315,6 @@ class Pump(Node):
         if not isinstance(other, self.__class__):
             return False
 
-
         return (
             self.id == other.id
             and self.input_contents == other.input_contents
@@ -1318,7 +1345,9 @@ class Pump(Node):
         elif self.energy_efficiency != other.energy_efficiency:
             if self.energy_efficiency is not None:
                 if other.energy_efficiency is not None:
-                    return self.energy_efficiency(self.flow_rate[2]) < other.energy_efficiency(other.flow_rate[2])
+                    return self.energy_efficiency(
+                        self.flow_rate[2]
+                    ) < other.energy_efficiency(other.flow_rate[2])
                 else:
                     return False
             else:
@@ -1341,18 +1370,26 @@ class Pump(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -1488,18 +1525,26 @@ class Tank(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -1613,18 +1658,26 @@ class Reservoir(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -1730,18 +1783,26 @@ class Battery(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -1886,21 +1947,30 @@ class Digestion(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
+
 
 class Cogeneration(Node):
     """
@@ -1999,7 +2069,9 @@ class Cogeneration(Node):
         elif self.energy_efficiency != other.energy_efficiency:
             if self.energy_efficiency is not None:
                 if other.energy_efficiency is not None:
-                    return self.energy_efficiency(self.gen_capacity[2]) < other.energy_efficiency(other.gen_capacity[2])
+                    return self.energy_efficiency(
+                        self.gen_capacity[2]
+                    ) < other.energy_efficiency(other.gen_capacity[2])
                 else:
                     return False
             else:
@@ -2022,18 +2094,26 @@ class Cogeneration(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2193,18 +2273,26 @@ class Clarification(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2337,18 +2425,26 @@ class Filtration(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2470,18 +2566,26 @@ class Screening(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2603,18 +2707,26 @@ class Conditioning(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2747,18 +2859,26 @@ class Thickening(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -2891,18 +3011,26 @@ class Aeration(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -3035,18 +3163,26 @@ class Chlorination(Node):
                     elif self.input_contents == other.input_contents:
                         return self.id < other.id
                     else:
-                        other_vals = sorted([contents.value for contents in other.input_contents])
-                        for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                        other_vals = sorted(
+                            [contents.value for contents in other.input_contents]
+                        )
+                        for i, contents in enumerat(
+                            sorted([contents.value for contents in self.input_contents])
+                        ):
                             if contents not in other_vals:
                                 return contents < other_vals[i]
                 else:
-                    other_vals = sorted([contents.value for contents in other.output_contents])
-                    for i, contents in enumerat(sorted([contents.value for contents in self.output_contents])):
+                    other_vals = sorted(
+                        [contents.value for contents in other.output_contents]
+                    )
+                    for i, contents in enumerat(
+                        sorted([contents.value for contents in self.output_contents])
+                    ):
                         if contents not in other_vals:
                             return contents < other_vals[i]
             # case with same number of different tags, so we compare tags in order
             else:
-                other_tags =  [tag for _, tag in sorted(other.tags.items())]
+                other_tags = [tag for _, tag in sorted(other.tags.items())]
                 for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                     if tag != other_tags[i]:
                         return tag < other_tags[i]
@@ -3140,13 +3276,17 @@ class Flaring(Node):
             elif self.input_contents == other.input_contents:
                 return self.id < other.id
             else:
-                other_vals = sorted([contents.value for contents in other.input_contents])
-                for i, contents in enumerat(sorted([contents.value for contents in self.input_contents])):
+                other_vals = sorted(
+                    [contents.value for contents in other.input_contents]
+                )
+                for i, contents in enumerat(
+                    sorted([contents.value for contents in self.input_contents])
+                ):
                     if contents not in other_vals:
                         return contents < other_vals[i]
         # case with same number of different tags, so we compare tags in order
         else:
-            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]

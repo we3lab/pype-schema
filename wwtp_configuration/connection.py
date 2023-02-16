@@ -168,7 +168,7 @@ class Connection(ABC):
         return num_units
 
     def get_source_node(self, recurse=False):
-        """ Gets a connection's source node returning its exit point if `recurse` is True
+        """Gets a connection's source node returning its exit point if `recurse` is True
 
         Parameters
         ----------
@@ -188,7 +188,7 @@ class Connection(ABC):
         return node_obj
 
     def get_dest_node(self, recurse=False):
-        """ Gets a connection's destination node, returning its entry point if `recurse` is True
+        """Gets a connection's destination node, returning its entry point if `recurse` is True
 
         Parameters
         ----------
@@ -433,7 +433,7 @@ class Pipe(Connection):
                 return self.id < other.id
         # case with same number of different tags, so we compare tags in order
         else:
-            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
@@ -610,7 +610,7 @@ class Wire(Connection):
                 return self.id < other.id
         # case with same number of different tags, so we compare tags in order
         else:
-            other_tags =  [tag for _, tag in sorted(other.tags.items())]
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]

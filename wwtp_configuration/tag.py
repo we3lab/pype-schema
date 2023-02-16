@@ -27,7 +27,7 @@ CONTENTLESS_TYPES = [
     TagType.RunTime,
     TagType.RunStatus,
     TagType.Rotation,
-    TagType.Efficiency
+    TagType.Efficiency,
 ]
 
 
@@ -249,14 +249,7 @@ class VirtualTag:
         Contents moving through the node
     """
 
-    def __init__(
-        self,
-        id,
-        tags,
-        operations="+",
-        tag_type=None,
-        contents=None
-    ):
+    def __init__(self, id, tags, operations="+", tag_type=None, contents=None):
         self.id = id
         self.tags = tags
 
@@ -270,21 +263,27 @@ class VirtualTag:
             units.append(tag.units)
             if totalized is not None:
                 if totalized != tag.totalized:
-                    raise ValueError("All Tags must have the same value for 'totalized'")
+                    raise ValueError(
+                        "All Tags must have the same value for 'totalized'"
+                    )
             else:
                 totalized = tag.totalized
 
             if determine_type:
                 if tag_type is not None:
                     if tag_type != tag.tag_type:
-                        raise ValueError("All Tags must have the same value for 'tag_type'")
+                        raise ValueError(
+                            "All Tags must have the same value for 'tag_type'"
+                        )
                 else:
                     tag_type = tag.tag_type
 
             if determine_contents and tag_type not in CONTENTLESS_TYPES:
                 if contents is not None:
                     if contents != tag.contents:
-                        raise ValueError("All Tags must have the same value for 'contents'")
+                        raise ValueError(
+                            "All Tags must have the same value for 'contents'"
+                        )
                 else:
                     contents = tag.contents
 
@@ -297,7 +296,9 @@ class VirtualTag:
 
         if isinstance(operations, list):
             if len(operations) != len(tags) - 1:
-                raise ValueError("Operations list must be of length one less than the Tag list")
+                raise ValueError(
+                    "Operations list must be of length one less than the Tag list"
+                )
             else:
                 self.operations = operations
                 prev_unit = None
@@ -306,7 +307,7 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = operation_helper(operations[i-1], unit, prev_unit)
+                        prev_unit = operation_helper(operations[i - 1], unit, prev_unit)
                     else:
                         prev_unit = unit
         else:
@@ -400,19 +401,20 @@ class VirtualTag:
                 raise ValueError(
                     "Data must have the correct dimensions (one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
-                    len(self.operations), len(data))
+                        len(self.operations), len(data)
+                    )
                 )
             else:
                 result = data[0]
                 for i in range(len(data) - 1):
                     if self.operations[i] == "+":
-                        result += data[i+1]
+                        result += data[i + 1]
                     elif self.operations[i] == "-":
-                        result -= data[i+1]
+                        result -= data[i + 1]
                     elif self.operations[i] == "*":
-                        result *= data[i+1]
+                        result *= data[i + 1]
                     elif self.operations[i] == "/":
-                        result /= data[i+1]
+                        result /= data[i + 1]
         elif isinstance(data, DataFrame):
             result = None
             for i, tag_obj in enumerate(self.tags):
@@ -424,31 +426,33 @@ class VirtualTag:
                 if result is None:
                     result = relevant_data.rename(self.id, inplace=False)
                 else:
-                    if self.operations[i-1] == "+":
+                    if self.operations[i - 1] == "+":
                         result += relevant_data
-                    elif self.operations[i-1] == "-":
+                    elif self.operations[i - 1] == "-":
                         result -= relevant_data
-                    elif self.operations[i-1] == "*":
+                    elif self.operations[i - 1] == "*":
                         result *= relevant_data
-                    elif self.operations[i-1] == "/":
+                    elif self.operations[i - 1] == "/":
                         result /= relevant_data
         elif isinstance(data, ndarray):
             if len(self.operations) != data.shape[1] - 1:
-                raise ValueError("Data must have the correct dimensions (one more element than operations). "
+                raise ValueError(
+                    "Data must have the correct dimensions (one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
-                    len(self.operations), data.shape[1])
+                        len(self.operations), data.shape[1]
+                    )
                 )
             else:
                 result = data[:, 0]
                 for i in range(data.shape[1] - 1):
                     if self.operations[i] == "+":
-                        result += data[:, i+1]
+                        result += data[:, i + 1]
                     elif self.operations[i] == "-":
-                        result -= data[:, i+1]
+                        result -= data[:, i + 1]
                     elif self.operations[i] == "*":
-                        result *= data[:, i+1]
+                        result *= data[:, i + 1]
                     elif self.operations[i] == "/":
-                        result /= data[:, i+1]
+                        result /= data[:, i + 1]
         else:
             raise TypeError("Data must be either a list, array, or DataFrame")
 
