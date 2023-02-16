@@ -371,16 +371,20 @@ class Node(ABC):
 
         return parent_obj
 
-    def tag_selection_helper(
+    def select_tags(
         self,
         tag,
-        source_id,
-        dest_id,
-        source_unit_id,
-        dest_unit_id,
-        source_node_type,
-        dest_node_type,
-        tag_type,
+        source_id=None,
+        dest_id=None,
+        source_unit_id=None,
+        dest_unit_id=None,
+        exit_point_id=None,
+        entry_point_id=None,
+        source_node_type=None,
+        dest_node_type=None,
+        exit_point_type=None,
+        entry_point_type=None,
+        tag_type=None,
         recurse=False,
         virtual=False,
     ):
@@ -403,11 +407,23 @@ class Node(ABC):
         dest_unit_id : int, str
             Optional unit id of the destination to filter by. None by default
 
+        exit_point_id : str
+            Optional id of the `exit_point` node to filter by. None by default
+
+        entry_point_id : str
+            Optional id of the `entry_point` node to filter by. None by default
+
         source_node_type : class
             Optional source `Node` subclass to filter by. None by default
 
         dest_node_type : class
             Optional destination `Node` subclass to filter by. None by default
+
+        exit_point_type : class
+            Optional `exit_point` `Node` subclass to filter by. None by default
+
+        entry_point_type : class
+            Optional `entry_point` `Node` subclass to filter by. None by default
 
         contents_type : ContentsType
             Optional contents to filter by. None by default
@@ -433,28 +449,19 @@ class Node(ABC):
 
         bidirectional = False
         if isinstance(parent_obj, Node):
-            obj_source_id = parent_obj.id
-            obj_source_unit_id = tag.source_unit_id
             obj_source_node = parent_obj
-            obj_dest_id, obj_dest_unit_id, obj_dest_node, obj_entry_point_id, obj_exit_point_id = None, None, None, None, None
-        else: # the parent must be a Connection if it is not a Node
-            obj_source_id = parent_obj.get_source_id()
             obj_source_unit_id = tag.source_unit_id
+            obj_dest_id, obj_dest_unit_id, obj_dest_node, obj_entry_point, obj_exit_point = None, None, None, None, None
+        else: # the parent must be a Connection if it is not a Node
             obj_source_node = parent_obj.get_source_node(recurse=recurse)
-            obj_dest_id = parent_obj.get_dest_id()
-            obj_dest_unit_id = tag.dest_unit_id
+            obj_source_unit_id = tag.source_unit_id
             obj_dest_node = parent_obj.get_dest_node(recurse=recurse)
+            obj_dest_unit_id = tag.dest_unit_id
+            obj_exit_point = parent_obj.get_exit_point()
+            obj_entry_point = parent_obj.get_entry_point()
 
             if parent_obj.bidirectional:
                 bidirectional = True
-
-            obj_exit_point_id = None
-            obj_entry_point_id = None
-            if recurse:
-                if parent_obj.get_exit_point():
-                    obj_exit_point_id = parent_obj.get_exit_point().id
-                if parent_obj.get_entry_point():
-                    obj_entry_point_id = parent_obj.get_entry_point().id
 
         if virtual:
             obj_source_unit_id = None
@@ -462,55 +469,63 @@ class Node(ABC):
 
         if utils.select_objs_helper(
             tag,
-            obj_source_id=obj_source_id,
-            obj_dest_id=obj_dest_id,
-            obj_exit_point_id=obj_exit_point_id,
-            obj_entry_point_id=obj_entry_point_id,
-            obj_source_unit_id=obj_source_unit_id,
-            obj_dest_unit_id=obj_dest_unit_id,
             obj_source_node=obj_source_node,
             obj_dest_node=obj_dest_node,
+            obj_source_unit_id=obj_source_unit_id,
+            obj_dest_unit_id=obj_dest_unit_id,
+            obj_exit_point=obj_exit_point,
+            obj_entry_point=obj_entry_point,
             source_id=source_id,
             dest_id=dest_id,
             source_unit_id=source_unit_id,
             dest_unit_id=dest_unit_id,
+            exit_point_id=exit_point_id,
+            entry_point_id=entry_point_id,
             source_node_type=source_node_type,
             dest_node_type=dest_node_type,
+            exit_point_type=exit_point_type,
+            entry_point_type=entry_point_type,
             tag_type=tag_type,
         ):
             return True
         if bidirectional:
             return utils.select_objs_helper(
                 tag,
-                obj_source_id=obj_dest_id,
-                obj_dest_id=obj_source_id,
-                obj_exit_point_id=obj_entry_point_id,
-                obj_entry_point_id=obj_exit_point_id,
-                obj_source_unit_id=obj_dest_unit_id,
-                obj_dest_unit_id=obj_source_unit_id,
                 obj_source_node=obj_dest_node,
                 obj_dest_node=obj_source_node,
+                obj_source_unit_id=obj_dest_unit_id,
+                obj_dest_unit_id=obj_source_unit_id,
+                obj_exit_point=obj_entry_point,
+                obj_entry_point=obj_exit_point,
                 source_id=source_id,
                 dest_id=dest_id,
                 source_unit_id=source_unit_id,
                 dest_unit_id=dest_unit_id,
+                exit_point_id=exit_point_id,
+                entry_point_id=entry_point_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
+                exit_point_type=exit_point_type,
+                entry_point_type=entry_point_type,
                 tag_type=tag_type,
             )
         else:
             return False
 
-    def virtual_tag_helper(
+    def select_virtual_tags(
         self,
         virtual_tag,
-        source_id,
-        dest_id,
-        source_unit_id,
-        dest_unit_id,
-        source_node_type,
-        dest_node_type,
-        tag_type,
+        source_id=None,
+        dest_id=None,
+        source_unit_id=None,
+        dest_unit_id=None,
+        exit_point_id=None,
+        entry_point_id=None,
+        source_node_type=None,
+        dest_node_type=None,
+        exit_point_type=None,
+        entry_point_type=None,
+        tag_type=None,
         recurse=False
     ):
         """Helper function for selecting `VirtualTag` objects from inside a `Node`.
@@ -532,11 +547,23 @@ class Node(ABC):
         dest_unit_id : int, str
             Optional unit id of the destination to filter by. None by default
 
+        exit_point_id : str
+            Optional id of the `exit_point` node to filter by. None by default
+
+        entry_point_id : str
+            Optional id of the `entry_point` node to filter by. None by default
+
         source_node_type : class
             Optional source `Node` subclass to filter by. None by default
 
         dest_node_type : class
             Optional destination `Node` subclass to filter by. None by default
+
+        exit_point_type : class
+            Optional `exit_point` `Node` subclass to filter by. None by default
+
+        entry_point_type : class
+            Optional `entry_point` `Node` subclass to filter by. None by default
 
         contents_type : ContentsType
             Optional contents to filter by. None by default
@@ -554,28 +581,36 @@ class Node(ABC):
         """
         for subtag in virtual_tag.tags:
             if isinstance(subtag, VirtualTag):
-                if self.virtual_tag_helper(
+                if self.select_virtual_tags(
                     subtag,
-                    source_id,
-                    dest_id,
-                    source_unit_id,
-                    dest_unit_id,
-                    source_node_type,
-                    dest_node_type,
-                    tag_type,
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    exit_point_id=exit_point_id,
+                    entry_point_id=entry_point_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    exit_point_type=exit_point_type,
+                    entry_point_type=entry_point_type,
+                    tag_type=tag_type,
                     recurse=recurse,
                 ):
                     return True
             else:
-                if self.tag_selection_helper(
+                if self.select_tags(
                     subtag,
-                    source_id,
-                    dest_id,
-                    source_unit_id,
-                    dest_unit_id,
-                    source_node_type,
-                    dest_node_type,
-                    tag_type,
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    exit_point_id=exit_point_id,
+                    entry_point_id=entry_point_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    exit_point_type=exit_point_type,
+                    entry_point_type=entry_point_type,
+                    tag_type=tag_type,
                     recurse=recurse,
                     virtual=True,
                 ):
@@ -589,8 +624,12 @@ class Node(ABC):
         dest_id=None,
         source_unit_id=None,
         dest_unit_id=None,
+        exit_point_id=None,
+        entry_point_id=None,
         source_node_type=None,
         dest_node_type=None,
+        exit_point_type=None,
+        entry_point_type=None,
         contents_type=None,
         tag_type=None,
         obj_type=None,
@@ -614,11 +653,23 @@ class Node(ABC):
         dest_unit_id : int, str
             Optional unit id of the destination to filter by. None by default
 
+        exit_point_id : str
+            Optional id of the `exit_point` node to filter by. None by default
+
+        entry_point_id : str
+            Optional id of the `entry_point` node to filter by. None by default
+
         source_node_type : class
             Optional source `Node` subclass to filter by. None by default
 
         dest_node_type : class
             Optional destination `Node` subclass to filter by. None by default
+
+        exit_point_type : class
+            Optional `exit_point` `Node` subclass to filter by. None by default
+
+        entry_point_type : class
+            Optional `entry_point` `Node` subclass to filter by. None by default
 
         contents_type : ContentsType
             Optional contents to filter by. None by default
@@ -650,85 +701,93 @@ class Node(ABC):
         # Select according to source/destination node type/id
         for tag in self.get_all_tags(virtual=True, recurse=recurse):
             if isinstance(tag, VirtualTag):
-                if self.virtual_tag_helper(
+                if self.select_virtual_tags(
                     tag,
-                    source_id,
-                    dest_id,
-                    source_unit_id,
-                    dest_unit_id,
-                    source_node_type,
-                    dest_node_type,
-                    tag_type,
-                    recurse
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    exit_point_id=exit_point_id,
+                    entry_point_id=entry_point_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    exit_point_type=exit_point_type,
+                    entry_point_type=entry_point_type,
+                    tag_type=tag_type,
+                    recurse=recurse,
                 ):
                     selected_objs.append(tag)
             else:
-                if self.tag_selection_helper(
+                if self.select_tags(
                     tag,
-                    source_id,
-                    dest_id,
-                    source_unit_id,
-                    dest_unit_id,
-                    source_node_type,
-                    dest_node_type,
-                    tag_type,
-                    recurse
+                    source_id=source_id,
+                    dest_id=dest_id,
+                    source_unit_id=source_unit_id,
+                    dest_unit_id=dest_unit_id,
+                    exit_point_id=exit_point_id,
+                    entry_point_id=entry_point_id,
+                    source_node_type=source_node_type,
+                    dest_node_type=dest_node_type,
+                    exit_point_type=exit_point_type,
+                    entry_point_type=entry_point_type,
+                    tag_type=tag_type,
+                    recurse=recurse,
                 ):
                     selected_objs.append(tag)
         for conn in self.get_all_connections(recurse=recurse):
-            obj_exit_point_id = None
-            obj_entry_point_id = None
-            if recurse:
-                if conn.get_exit_point():
-                    obj_exit_point_id = conn.get_exit_point().id
-                if conn.get_entry_point():
-                    obj_entry_point_id = conn.get_entry_point().id
             if utils.select_objs_helper(
                 conn,
-                obj_source_id=conn.get_source_id(),
-                obj_dest_id=conn.get_dest_id(),
-                obj_exit_point_id=obj_exit_point_id,
-                obj_entry_point_id=obj_entry_point_id,
                 obj_source_node=conn.get_source_node(recurse=recurse),
                 obj_dest_node=conn.get_dest_node(recurse=recurse),
+                obj_exit_point=conn.get_exit_point(),
+                obj_entry_point=conn.get_entry_point(),
                 source_id=source_id,
                 dest_id=dest_id,
                 source_unit_id=source_unit_id,
                 dest_unit_id=dest_unit_id,
+                exit_point_id=exit_point_id,
+                entry_point_id=entry_point_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
+                exit_point_type=exit_point_type,
+                entry_point_type=entry_point_type,
                 tag_type=tag_type,
             ):
                 selected_objs.append(conn)
             if conn.bidirectional:
                 if utils.select_objs_helper(
                     conn,
-                    obj_source_id=conn.get_dest_id(),
-                    obj_dest_id=conn.get_source_id(),
-                    obj_exit_point_id=obj_entry_point_id,
-                    obj_entry_point_id=obj_exit_point_id,
                     obj_source_node=conn.get_dest_node(recurse=recurse),
                     obj_dest_node=conn.get_source_node(recurse=recurse),
+                    obj_exit_point=conn.get_entry_point(),
+                    obj_entry_point=conn.get_exit_point(),
                     source_id=source_id,
                     dest_id=dest_id,
                     source_unit_id=source_unit_id,
                     dest_unit_id=dest_unit_id,
+                    exit_point_id=exit_point_id,
+                    entry_point_id=entry_point_id,
                     source_node_type=source_node_type,
                     dest_node_type=dest_node_type,
+                    exit_point_type=exit_point_type,
+                    entry_point_type=entry_point_type,
                     tag_type=tag_type,
                 ):
                     selected_objs.append(conn)
         for node in self.get_all_nodes(recurse=recurse):
             if utils.select_objs_helper(
                 node,
-                obj_source_id=node.id,
                 obj_source_node=node,
                 source_id=source_id,
                 dest_id=dest_id,
                 source_unit_id=source_unit_id,
                 dest_unit_id=dest_unit_id,
+                exit_point_id=exit_point_id,
+                entry_point_id=entry_point_id,
                 source_node_type=source_node_type,
                 dest_node_type=dest_node_type,
+                exit_point_type=exit_point_type,
+                entry_point_type=entry_point_type,
                 tag_type=tag_type,
             ):
                 selected_objs.append(node)

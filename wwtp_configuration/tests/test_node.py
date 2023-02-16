@@ -271,12 +271,17 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, source_id, dest_id, source_unit_id, dest_unit_id, source_node_type, "
-    "dest_node_type, contents_type, tag_type, obj_type, recurse, expected_ids",
+    "json_path, source_id, dest_id, source_unit_id, dest_unit_id, exit_point_id, "
+    "entry_point_id, source_node_type, dest_node_type, exit_point_type, "
+    "entry_point_type, contents_type, tag_type, obj_type, recurse, expected_ids",
     [
         # Case 0: all objects without recursion
         (
             "data/node.json",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -301,6 +306,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 1: all objects with recursion
         (
             "data/node.json",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -344,6 +353,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             True,
             []
         ),
@@ -351,6 +364,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         (
             "data/node.json",
             "RawSewagePump",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -373,6 +390,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             Pipe,
             False,
             ["SewerIntake"]
@@ -381,6 +402,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         (
             "data/node.json",
             "RawSewagePump",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -403,6 +428,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             Pump,
             False,
             ["RawSewagePump"]
@@ -414,7 +443,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
             Pump,
+            None,
+            None,
             None,
             None,
             None,
@@ -430,7 +463,11 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
             Cogeneration,
+            None,
+            None,
             None,
             None,
             None,
@@ -443,6 +480,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             2,
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -464,6 +505,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             False,
             ["InfluentFlow"]
         ),
@@ -472,6 +517,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             "data/node.json",
             None,
             "WWTP",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -494,8 +543,12 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             True,
-            ["ElectricityToWWTP", "SewerIntake", "ElectricityPurchases", "InfluentFlow"]
+            ["ElectricityToWWTP", "SewerIntake", "ElectricityPurchases"]
         ),
         # Case 13: return objects by exit point
         (
@@ -508,15 +561,23 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             Pipe,
             True,
             ["GasToGrid", "GasToCogen"]
         ),
-        # Case 14: return objects by entry point
+        # Case 14: return objects by dest_id as entry_point_id with recurse set to True
         (
             "data/node.json",
             None,
             "Digester",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -539,6 +600,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             True,
             ["BatteryToFacility"]
         ),
@@ -553,6 +618,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             Wire,
             True,
             ["BatteryToFacility"]
@@ -560,6 +629,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         # Case 17: all flow tags
         (
             "data/node.json",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -589,6 +662,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             None,
             None,
             None,
+            None,
+            None,
+            None,
+            None,
             Cogeneration,
             True,
             ["Cogenerator"]
@@ -597,6 +674,10 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         (
             "data/node.json",
             "Digester",
+            None,
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -618,7 +699,26 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
                 "Digester2Level",
                 "GasToGrid"
             ]
-        )
+        ),
+        # Case 20: return objects by entry point
+        (
+            "data/node.json",
+            None,
+            None,
+            None,
+            None,
+            None,
+            "Digester",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            ["SewerIntake"]
+        ),
     ],
 )
 def test_select_objs(
@@ -627,8 +727,12 @@ def test_select_objs(
     dest_id,
     source_unit_id,
     dest_unit_id,
+    exit_point_id,
+    entry_point_id,
     source_node_type,
     dest_node_type,
+    exit_point_type,
+    entry_point_type,
     contents_type,
     tag_type,
     obj_type,
@@ -643,8 +747,12 @@ def test_select_objs(
         dest_id=dest_id,
         source_unit_id=source_unit_id,
         dest_unit_id=dest_unit_id,
+        exit_point_id=exit_point_id,
+        entry_point_id=entry_point_id,
         source_node_type=source_node_type,
         dest_node_type=dest_node_type,
+        exit_point_type=exit_point_type,
+        entry_point_type=entry_point_type,
         contents_type=contents_type,
         tag_type=tag_type,
         obj_type=obj_type,

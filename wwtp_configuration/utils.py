@@ -387,20 +387,22 @@ class DigesterType(Enum):
 
 def select_objs_helper(
     obj,
-    obj_source_id=None,
-    obj_dest_id=None,
-    obj_exit_point_id=None,
-    obj_entry_point_id=None,
-    obj_source_unit_id=None,
-    obj_dest_unit_id=None,
     obj_source_node=None,
     obj_dest_node=None,
+    obj_source_unit_id=None,
+    obj_dest_unit_id=None,
+    obj_exit_point=None,
+    obj_entry_point=None,
     source_id=None,
     dest_id=None,
     source_unit_id=None,
     dest_unit_id=None,
+    exit_point_id=None,
+    entry_point_id=None,
     source_node_type=None,
     dest_node_type=None,
+    exit_point_type=None,
+    entry_point_type=None,
     tag_type=None,
     recurse=False
 ):
@@ -411,17 +413,11 @@ def select_objs_helper(
     obj : [Node, Connection, Tag]
         Object to check if it meets the specified filtering criteria
 
-    obj_source_id : str
-        Object's source ID to match against. None by default
+    obj_source_node : Node
+        Optional source `Node` to check the type and id of. None by default
 
-    obj_dest_id : str
-        Object's destination ID to match against. None by default
-
-    obj_exit_point_id : str
-        Object's exit point ID to match against. None by default
-
-    obj_entry_point_id : str
-        Object's entry point ID to match against. None by default
+    obj_dest_node : Node
+        Optional destination `Node` to check the type and id of. None by default
 
     obj_source_unit_id : int, str
         Object's source unit ID to match against. None by default
@@ -429,11 +425,11 @@ def select_objs_helper(
     obj_dest_unit_id : int, str
         Object's destination unit ID to match against. None by default
 
-    obj_source_node : Node
-        Optional source `Node` to check the type of. None by default
+    obj_exit_point : Node
+        Optional `exit_point` `Node` to check the type and id of. None by default
 
-    obj_dest_node : Node
-        Optional destination `Node` to check the type of. None by default
+    obj_entry_point : Node
+        Optional `entry_point` `Node` to check the type and id of. None by default
 
     source_id : str
         Optional id of the source node to filter by. None by default
@@ -472,11 +468,13 @@ def select_objs_helper(
     bool
         True if `obj` fits the filter criteria; False otherwise.
     """
-    if source_id is not None and source_id not in [obj_source_id, obj_exit_point_id]:
-        return False
+    if source_id is not None and (not hasattr(obj_source_node, "id") or obj_source_node.id != source_id):
+        if not recurse or not hasattr(obj_exit_point, "id") or obj_exit_point.id != source_id:
+            return False
 
-    if dest_id is not None and dest_id not in [obj_dest_id, obj_entry_point_id]:
-        return False
+    if dest_id is not None and (not hasattr(obj_dest_node, "id") or obj_dest_node.id != dest_id):
+        if not recurse or not hasattr(obj_entry_point, "id") or obj_entry_point.id != dest_id:
+            return False
 
     if source_unit_id is not None and source_unit_id != obj_source_unit_id:
         return False
@@ -484,10 +482,22 @@ def select_objs_helper(
     if dest_unit_id is not None and dest_unit_id != obj_dest_unit_id:
         return False
 
+    if exit_point_id is not None and (not hasattr(exit_point_id, "id") or obj_exit_point.id != entry_point_id):
+        return False
+
+    if entry_point_id is not None and (not hasattr(entry_point_id, "id") or obj_entry_point.id != entry_point_id):
+        return False
+
     if source_node_type is not None and not isinstance(obj_source_node, source_node_type):
         return False
 
     if dest_node_type is not None and not isinstance(obj_dest_node, dest_node_type):
+        return False
+
+    if exit_point_type is not None and not isinstance(obj_exit_point, exit_point_type):
+        return False
+
+    if entry_point_type is not None and isinstance(obj_entry_point, exit_point_type):
         return False
 
     if tag_type is not None and (not hasattr(obj, "tag_type") or obj.tag_type != tag_type):
