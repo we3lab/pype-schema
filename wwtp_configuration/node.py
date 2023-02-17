@@ -1736,7 +1736,7 @@ class Battery(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Reservoir id:{self.id} "
+            f"<wwtp_configuration.node.Battery id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} capacity:{self.capacity} "
             f"discharge_rate:{self.discharge_rate} tags:{self.tags}>\n"
