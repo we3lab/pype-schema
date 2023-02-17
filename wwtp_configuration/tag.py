@@ -21,6 +21,7 @@ class TagType(Enum):
     pH = auto()
     Rotation = auto()
     Efficiency = auto()
+    StateOfCharge = auto()
 
 
 CONTENTLESS_TYPES = [
