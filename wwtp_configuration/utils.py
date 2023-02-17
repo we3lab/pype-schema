@@ -513,17 +513,11 @@ def select_objs_helper(
     if source_node_type is not None and not isinstance(
         obj_source_node, source_node_type
     ):
-        if (
-            not recurse
-            or not isinstance(obj_exit_point, source_node_type)
-        ):
+        if not recurse or not isinstance(obj_exit_point, source_node_type):
             return False
 
     if dest_node_type is not None and not isinstance(obj_dest_node, dest_node_type):
-        if (
-            not recurse
-            or not isinstance(obj_entry_point, dest_node_type)
-        ):
+        if not recurse or not isinstance(obj_entry_point, dest_node_type):
             return False
 
     if exit_point_type is not None and not isinstance(obj_exit_point, exit_point_type):
