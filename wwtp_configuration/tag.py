@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from pandas import DataFrame
-from numpy import ndarray
+from numpy import ndarray, array
 from .utils import operation_helper, parse_units
 
 
@@ -408,16 +408,21 @@ class VirtualTag:
                     )
                 )
             else:
+                arr = array(data)
                 result = data[0]
-                for i in range(len(data) - 1):
+                for i in range(arr.shape[0] - 1):
                     if self.operations[i] == "+":
-                        result += data[i + 1]
+                        for j in range(arr.shape[1]):
+                            result[j] = result[j] + data[i + 1][j]
                     elif self.operations[i] == "-":
-                        result -= data[i + 1]
+                        for j in range(arr.shape[1]):
+                            result[j] = result[j] - data[i + 1][j]
                     elif self.operations[i] == "*":
-                        result *= data[i + 1]
+                        for j in range(arr.shape[1]):
+                            result[j] = result[j] * data[i + 1][j]
                     elif self.operations[i] == "/":
-                        result /= data[i + 1]
+                        for j in range(arr.shape[1]):
+                            result[j] = result[j] / data[i + 1][j]
         elif isinstance(data, DataFrame):
             result = None
             for i, tag_obj in enumerate(self.tags):
