@@ -253,6 +253,7 @@ def test_tag_less_than(
 
     assert expected == (tags[0] < tags[1])
 
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, tag_0_id, tag_1_id, expected",
@@ -261,15 +262,10 @@ def test_tag_less_than(
             "../data/sample.json",
             "GrossGasProduction",
             "ElectricityProductionByGasVolume",
-            True
+            True,
         ),
-        (
-            "../data/sample.json",
-            "GrossGasProduction",
-            "CombinedDigesterGasFlow",
-            False
-        )
-    ]
+        ("../data/sample.json", "GrossGasProduction", "CombinedDigesterGasFlow", False),
+    ],
 )
 def test_v_tag_less_than(json_path, tag_0_id, tag_1_id, expected):
     network = JSONParser(json_path).initialize_network()
