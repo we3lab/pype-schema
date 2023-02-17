@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from pint import UndefinedUnitError
+from pint import UndefinedUnitError, DimensionalityError
 from .units import u
 
 
@@ -406,7 +406,8 @@ def select_objs_helper(
     tag_type=None,
     recurse=False,
 ):
-    """Helper to select from objects which match source/destination node class, unit ID, and contents
+    """Helper to select from objects which match source/destination node class,
+    unit ID, and contents
 
     Parameters
     ----------
@@ -461,7 +462,8 @@ def select_objs_helper(
         When a source/destination node type is provided to subset tags
 
     TypeError
-        When the objects to select among are not of type {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
+        When the objects to select among are not of type
+        {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
 
     Returns
     -------
@@ -552,13 +554,14 @@ def operation_helper(operation, unit, prev_unit):
     Returns
     -------
     Unit
-        Resulting Pint Unit from combining the `unit` and `prev_unit` according to `operation`
+        Resulting Pint Unit from combining the `unit` and `prev_unit`
+        according to `operation`
     """
     if operation == "+" or operation == "-":
         if unit != prev_unit:
             try:
                 unit.to(prev_unit)
-            except:
+            except DimensionalityError:
                 raise ValueError("Units for addition and subtraction must be identical")
     elif operation == "*" or operation == "/":
         if operation == "/":

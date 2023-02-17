@@ -1,7 +1,7 @@
 from enum import Enum, auto
 from pandas import DataFrame
 from numpy import ndarray
-from .utils import operation_helper
+from .utils import operation_helper, parse_units
 
 
 class TagType(Enum):
@@ -187,9 +187,9 @@ class Tag:
 
 
 class VirtualTag:
-    """Representation for data that is not in the SCADA system,
-    but is instead a combination of existing tags. Tags are combined according
-    to `operations`, with the current supported operations limited to "+", "-", "*", and "/"
+    """Representation for data that is not in the SCADA system, but is instead
+     a combination of existing tags. Tags are combined according to `operations`,
+     with the current supported operations limited to "+", "-", "*", and "/"
 
     Parameters
     ----------
@@ -217,7 +217,7 @@ class VirtualTag:
     Raises
     ------
     ValueError
-        When the `operations` includes unsupported operations or is not the correct length.
+        When the `operations` includes unsupported operations or is the wrong length.
         When `tag_type` is not specified and constituent tags have different types.
         When `contents` of the constituent tags are different types.
 
@@ -329,8 +329,9 @@ class VirtualTag:
     def __repr__(self):
         return (
             f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
-            f"tag_type:{self.tag_type} totalized:{self.totalized} contents:{self.contents} "
-            f"tags:{[tag.id for tag in self.tags]} operations:{self.operations}>\n"
+            f"tag_type:{self.tag_type} totalized:{self.totalized} "
+            f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
+            "operations:{self.operations}>\n"
         )
 
     def __eq__(self, other):
@@ -365,7 +366,7 @@ class VirtualTag:
         if isinstance(other, Tag):
             return False
         elif not isinstance(other, self.__class__):
-            raise NotImplemented
+            raise NotImplementedError
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -400,7 +401,8 @@ class VirtualTag:
         if isinstance(data, list):
             if len(self.operations) != len(data) - 1:
                 raise ValueError(
-                    "Data must have the correct dimensions (one more element than operations). "
+                    "Data must have the correct dimensions "
+                    "(one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
                         len(self.operations), len(data)
                     )
@@ -438,7 +440,8 @@ class VirtualTag:
         elif isinstance(data, ndarray):
             if len(self.operations) != data.shape[1] - 1:
                 raise ValueError(
-                    "Data must have the correct dimensions (one more element than operations). "
+                    "Data must have the correct dimensions "
+                    "(one more element than operations). "
                     "Currently there are {} operations and {} data tags".format(
                         len(self.operations), data.shape[1]
                     )

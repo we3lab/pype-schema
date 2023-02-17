@@ -7,7 +7,7 @@ from wwtp_configuration.units import u
 from wwtp_configuration.utils import ContentsType
 from wwtp_configuration.tag import Tag, TagType
 from wwtp_configuration.parse_json import JSONParser
-from wwtp_configuration.node import Cogeneration, Digestion, Pump
+from wwtp_configuration.node import Cogeneration, Pump
 from wwtp_configuration.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

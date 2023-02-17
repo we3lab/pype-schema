@@ -4,7 +4,6 @@ import pytest
 import pandas as pd
 from wwtp_configuration.units import u
 from wwtp_configuration.utils import parse_units
-from wwtp_configuration.tag import VirtualTag
 from wwtp_configuration.parse_json import JSONParser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

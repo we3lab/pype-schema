@@ -188,7 +188,8 @@ class Connection(ABC):
         return node_obj
 
     def get_dest_node(self, recurse=False):
-        """Gets a connection's destination node, returning its entry point if `recurse` is True
+        """Gets a connection's destination node,
+        returning its entry point if `recurse` is True
 
         Parameters
         ----------

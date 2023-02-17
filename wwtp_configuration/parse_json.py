@@ -1,5 +1,4 @@
 import json
-import copy
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -68,8 +67,8 @@ class JSONParser:
         return self.network_obj
 
     def merge_network(self, old_network, inplace=False):
-        """Incorporates nodes/connections (i.e. the `new_network`) into a network (i.e. `old_newtwork`)
-        modifying it in place and returning the modified network
+        """Incorporates nodes/connections (i.e. the `new_network`) into a network
+        (i.e. `old_newtwork`) modifying it in place and returning the modified network
 
         Parameters
         ----------
@@ -379,13 +378,6 @@ class JSONParser:
                         and len(tag_source_unit_ids) > 1
                     ):
                         tag_obj = tags_by_contents[0]
-                        tag_list = [
-                            connection_obj.tags[tag_obj.id]
-                            for tag_obj in tags_by_contents
-                            if tag_obj.contents == contents
-                            and tag_obj.dest_unit_id == id
-                        ]
-
                         tag_id = "_".join(
                             [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
                         )
@@ -524,7 +516,8 @@ class JSONParser:
                         and len(tag_source_unit_ids) > 1
                     ):
                         tag_obj = tags_by_contents[0]
-                        # create a separate virtual total for each destination unit. If none exist then just use total
+                        # create a separate virtual total for each destination unit.
+                        # If none exist then just use total
                         if tag_dest_unit_ids:
                             for id in tag_dest_unit_ids:
                                 tag_list = [
@@ -566,7 +559,8 @@ class JSONParser:
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_obj = tags_by_contents[0]
-                        # create a separate virtual total for each source unit. If none exist then just use total
+                        # create a separate virtual total for each source unit.
+                        # If none exist then just use total
                         if tag_source_unit_ids:
                             for id in tag_source_unit_ids:
                                 tag_list = [
