@@ -359,8 +359,12 @@ class JSONParser:
                 tag_info["dest_unit_id"] = None
                 tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
+                contents_type = tag_info.get("contents")
 
-                if utils.ContentsType[tag_info["contents"]] not in contents_list:
+                if (
+                    contents_type is not None
+                    and utils.ContentsType[contents_type] not in contents_list
+                ):
                     contents_list.append(utils.ContentsType[tag_info["contents"]])
 
             for contents in contents_list:
@@ -791,10 +795,11 @@ class JSONParser:
             try:
                 contents = obj.contents
             except AttributeError:
-                if obj.input_contents == obj.output_contents and not isinstance(
-                    obj.input_contents, list
+                if (
+                    obj.input_contents == obj.output_contents
+                    and len(obj.input_contents) == 1
                 ):
-                    contents = obj.input_contents
+                    contents = obj.input_contents[0]
                 else:
                     raise ValueError("Ambiguous contents definition for tag " + tag_id)
 
