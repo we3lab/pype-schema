@@ -364,11 +364,9 @@ class Node(ABC):
         Node or Connection
             parent object of the Tag
         """
-        # this logic relies on the guarantee from parse_json that
-        # only tags associated with connections will have a valid destination unit ID
-        if tag.dest_unit_id:
-            parent_obj = self.get_connection(tag.parent_id, recurse=True)
-        else:
+        parent_obj = self.get_connection(tag.parent_id, recurse=True)
+        
+        if parent_obj is None:
             parent_obj = self.get_node(tag.parent_id, recurse=True)
 
         return parent_obj
