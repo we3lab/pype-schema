@@ -356,18 +356,24 @@ class Node(ABC):
 
         Parameters
         ----------
-        tag : Tag
-            wwtp_configuration `Node` object for which we want the parent object
+        tag : Tag or VirtualTag
+            object for which we want the parent object
 
         Returns
         -------
         Node or Connection
             parent object of the Tag
         """
-        parent_obj = self.get_connection(tag.parent_id, recurse=True)
-        
-        if parent_obj is None:
-            parent_obj = self.get_node(tag.parent_id, recurse=True)
+        if isinstance(tag, VirtualTag):
+            if tag.id in self.tags.keys():
+                return self
+            else:
+                children = self.get_all_connections(recurse=True) + self.get_all_nodes(recurse=True) 
+                for child in children:
+                    if tag.id in child.tags.keys():
+                        return child
+        else:
+            parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
 
         return parent_obj
 
@@ -900,60 +906,6 @@ class Network(Node):
             and self.connections == other.connections
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if len(self.nodes) < len(other.nodes):
-    #         return True
-    #     elif len(self.nodes) > len(other.nodes):
-    #         return False
-    #     elif len(self.connections) < len(other.connections):
-    #         return True
-    #     elif len(self.connections) > len(other.connections):
-    #         return False
-    #     elif len(self.tags) < len(other.tags):
-    #         return True
-    #     elif len(self.tags) > len(other.tags):
-    #         return False
-    #     elif self.tags == other.tags:
-    #         if len(self.output_contents) < len(other.output_contents):
-    #             return True
-    #         elif len(self.output_contents) > len(other.output_contents):
-    #             return False
-    #         elif self.output_contents == other.output_contents:
-    #             if len(self.input_contents) < len(other.input_contents):
-    #                 return True
-    #             elif len(self.input_contents) > len(other.input_contents):
-    #                 return False
-    #             elif self.input_contents == other.input_contents:
-    #                 # if all else fails, compare ID
-    #                 return self.id < other.id
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.input_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.input_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         else:
-    #             other_vals = sorted(
-    #                 [contents.value for contents in other.output_contents]
-    #             )
-    #             for i, contents in enumerate(
-    #                 sorted([contents.value for contents in self.output_contents])
-    #             ):
-    #                 if contents not in other_vals:
-    #                     return contents < other_vals[i]
-    #     # case with same number of tags, so we compare tags in order
-    #     else:
-    #         other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #         for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #             if tag != other_tags[i]:
-    #                 return tag < other_tags[i]
 
     def add_node(self, node):
         """Adds a node to the network
@@ -1143,67 +1095,6 @@ class Facility(Network):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if len(self.nodes) < len(other.nodes):
-    #         return True
-    #     elif len(self.nodes) > len(other.nodes):
-    #         return False
-    #     elif len(self.connections) < len(other.connections):
-    #         return True
-    #     elif len(self.connections) > len(other.connections):
-    #         return False
-    #     elif len(self.tags) < len(other.tags):
-    #         return True
-    #     elif len(self.tags) > len(other.tags):
-    #         return False
-    #     elif self.tags == other.tags:
-    #         if len(self.output_contents) < len(other.output_contents):
-    #             return True
-    #         elif len(self.output_contents) > len(other.output_contents):
-    #             return False
-    #         elif self.output_contents == other.output_contents:
-    #             if len(self.input_contents) < len(other.input_contents):
-    #                 return True
-    #             elif len(self.input_contents) > len(other.input_contents):
-    #                 return False
-    #             elif self.input_contents == other.input_contents:
-    #                 # if all else fails, compare elevation, flow rates, and ID
-    #                 if self.elevation == other.elevation:
-    #                     if self.flow_rate == other.flow_rate:
-    #                         return self.id < other.id
-    #                     else:
-    #                         return self.flow_rate < other.flow_rate
-    #                 else:
-    #                     return self.elevation < other.elevation
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.input_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.input_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         else:
-    #             other_vals = sorted(
-    #                 [contents.value for contents in other.output_contents]
-    #             )
-    #             for i, contents in enumerate(
-    #                 sorted([contents.value for contents in self.output_contents])
-    #             ):
-    #                 if contents not in other_vals:
-    #                     return contents < other_vals[i]
-    #     # case with same number of tags, so we compare tags in order
-    #     else:
-    #         other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #         for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #             if tag != other_tags[i]:
-    #                 return tag < other_tags[i]
-
 
 class Pump(Node):
     """
@@ -1325,72 +1216,6 @@ class Pump(Node):
             and self.flow_rate == other.flow_rate
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     elif self.horsepower != other.horsepower:
-    #         return self.horsepower < other.horsepower
-    #     elif self.pump_type != other.pump_type:
-    #         return self.pump_type.value < other.pump_type.value
-    #     elif self.elevation != other.elevation:
-    #         return self.elevation < other.elevation
-    #     elif self.energy_efficiency != other.energy_efficiency:
-    #         if self.energy_efficiency is not None:
-    #             if other.energy_efficiency is not None:
-    #                 return self.energy_efficiency(
-    #                     self.flow_rate[2]
-    #                 ) < other.energy_efficiency(other.flow_rate[2])
-    #             else:
-    #                 return False
-    #         else:
-    #             return True
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
 
     def set_pump_type(self, pump_type):
         """Set the pump curve to the given function
@@ -1496,57 +1321,6 @@ class Tank(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.elevation != other.elevation:
-    #         return self.elevation < other.elevation
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Reservoir(Node):
     """
@@ -1629,57 +1403,6 @@ class Reservoir(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.elevation != other.elevation:
-    #         return self.elevation < other.elevation
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Battery(Node):
     """
@@ -1753,57 +1476,6 @@ class Battery(Node):
             and self.discharge_rate == other.discharge_rate
             and self.tags == other.tags
         )
-
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.capacity != other.capacity:
-    #         return self.capacity < other.capacity
-    #     elif self.discharge_rate != other.discharge_rate:
-    #         return self.elevation < other.elevation
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
 
 
 class Digestion(Node):
@@ -1914,61 +1586,6 @@ class Digestion(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     elif self.digester_type != other.digester_type:
-    #         return self.digester_type.value < other.digester_type.value
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Cogeneration(Node):
     """
@@ -2054,67 +1671,6 @@ class Cogeneration(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.gen_capacity != other.gen_capacity:
-    #         return self.gen_capacity < other.gen_capacity
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     elif self.energy_efficiency != other.energy_efficiency:
-    #         if self.energy_efficiency is not None:
-    #             if other.energy_efficiency is not None:
-    #                 return self.energy_efficiency(
-    #                     self.gen_capacity[2]
-    #                 ) < other.energy_efficiency(other.gen_capacity[2])
-    #             else:
-    #                 return False
-    #         else:
-    #             return True
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
 
     def set_gen_capacity(self, min, max, avg):
         """Set the minimum, maximum, and average generation capacity
@@ -2242,59 +1798,6 @@ class Clarification(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Filtration(Node):
     """
@@ -2394,59 +1897,6 @@ class Filtration(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Screening(Node):
     """
@@ -2537,57 +1987,6 @@ class Screening(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Conditioning(Node):
     """
@@ -2677,57 +2076,6 @@ class Conditioning(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
 
 
 class Thickening(Node):
@@ -2828,59 +2176,6 @@ class Thickening(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Aeration(Node):
     """
@@ -2979,59 +2274,6 @@ class Aeration(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
 
 
 class Chlorination(Node):
@@ -3132,59 +2374,6 @@ class Chlorination(Node):
             and self.tags == other.tags
         )
 
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.volume != other.volume:
-    #         return self.volume < other.volume
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     else:
-    #         if len(self.tags) < len(other.tags):
-    #             return True
-    #         elif len(self.tags) > len(other.tags):
-    #             return False
-    #         elif self.tags == other.tags:
-    #             if len(self.output_contents) < len(other.output_contents):
-    #                 return True
-    #             elif len(self.output_contents) > len(other.output_contents):
-    #                 return False
-    #             elif self.output_contents == other.output_contents:
-    #                 if len(self.input_contents) < len(other.input_contents):
-    #                     return True
-    #                 elif len(self.input_contents) > len(other.input_contents):
-    #                     return False
-    #                 elif self.input_contents == other.input_contents:
-    #                     return self.id < other.id
-    #                 else:
-    #                     other_vals = sorted(
-    #                         [contents.value for contents in other.input_contents]
-    #                     )
-    #                     for i, contents in enumerate(
-    #                         sorted([contents.value for contents in self.input_contents])
-    #                     ):
-    #                         if contents not in other_vals:
-    #                             return contents < other_vals[i]
-    #             else:
-    #                 other_vals = sorted(
-    #                     [contents.value for contents in other.output_contents]
-    #                 )
-    #                 for i, contents in enumerate(
-    #                     sorted([contents.value for contents in self.output_contents])
-    #                 ):
-    #                     if contents not in other_vals:
-    #                         return contents < other_vals[i]
-    #         # case with same number of different tags, so we compare tags in order
-    #         else:
-    #             other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #                 if tag != other_tags[i]:
-    #                     return tag < other_tags[i]
-
 
 class Flaring(Node):
     """
@@ -3252,39 +2441,3 @@ class Flaring(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
-    # def __lt__(self, other):
-    #     # don't attempt to compare against unrelated types
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #
-    #     if self.flow_rate != other.flow_rate:
-    #         return self.flow_rate < other.flow_rate
-    #     elif self.num_units != other.num_units:
-    #         return self.num_units < other.num_units
-    #     elif len(self.tags) < len(other.tags):
-    #         return True
-    #     elif len(self.tags) > len(other.tags):
-    #         return False
-    #     elif self.tags == other.tags:
-    #         if len(self.input_contents) < len(other.input_contents):
-    #             return True
-    #         elif len(self.input_contents) > len(other.input_contents):
-    #             return False
-    #         elif self.input_contents == other.input_contents:
-    #             return self.id < other.id
-    #         else:
-    #             other_vals = sorted(
-    #                 [contents.value for contents in other.input_contents]
-    #             )
-    #             for i, contents in enumerate(
-    #                 sorted([contents.value for contents in self.input_contents])
-    #             ):
-    #                 if contents not in other_vals:
-    #                     return contents < other_vals[i]
-    #     # case with same number of different tags, so we compare tags in order
-    #     else:
-    #         other_tags = [tag for _, tag in sorted(other.tags.items())]
-    #         for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
-    #             if tag != other_tags[i]:
-    #                 return tag < other_tags[i]
