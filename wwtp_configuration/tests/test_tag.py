@@ -41,6 +41,22 @@ pint.set_application_registry(u)
             "../data/sample.json",
             "data/sample_data.csv",
             "GrossGasProduction",
+            "Dict",
+            "data/gross_gas.csv",
+            "SCFM",
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "ElectricityProductionByGasVolume",
+            "Dict",
+            "data/electrical_efficiency.csv",
+            "kilowatt * hour * minute / (feet ** 3)",
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "GrossGasProduction",
             "Array",
             "ValueError",
             "SCFM",
@@ -90,6 +106,11 @@ def test_calculate_values(
             data = data.values.T.tolist()
             assert np.allclose(
                 np.array(tag.calculate_values(data)), expected.values.flatten()
+            )
+        elif data_type == "Dict":
+            data = data.to_dict(orient="series")
+            pd.testing.assert_series_equal(
+                tag.calculate_values(data), expected[tag_name]
             )
     except Exception as err:
         result = type(err).__name__

@@ -1,6 +1,6 @@
 from enum import Enum, auto
-from pandas import DataFrame
 from numpy import ndarray, array
+from pandas import DataFrame, Series
 from .utils import operation_helper, parse_units
 
 
@@ -384,14 +384,18 @@ class VirtualTag:
         else:
             return str(self.units) < str(other.units)
 
-    def calculate_values(self, data):
+    def calculate_values(self, data, tag_to_var_map={}):
         """Combine the given data according to the VirtualTag's operations
 
         Parameters
         ----------
-        data : list, array, or DataFrame
+        data : list, array, dict, or DataFrame
             a list, numpy array, or pandas DataFrame of data that has the
             correct dimensions. I.e., the number of columns is one more than operations
+
+        tag_to_var_map : dict
+            dictionary of the form { tag.id : variable_name } for using data files which differ
+            from the original SCADA tag naming system
 
         Returns
         -------
@@ -428,6 +432,8 @@ class VirtualTag:
             for i, tag_obj in enumerate(self.tags):
                 if isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
+                elif tag_to_var_map:
+                    relevant_data = data[tag_to_var_map[tag_obj.id]]
                 else:
                     relevant_data = data[tag_obj.id]
 
@@ -462,7 +468,32 @@ class VirtualTag:
                         result *= data[:, i + 1]
                     elif self.operations[i] == "/":
                         result /= data[:, i + 1]
+        elif isinstance(data, dict):
+            result = None
+            for i, tag_obj in enumerate(self.tags):
+                if isinstance(tag_obj, self.__class__):
+                    relevant_data = tag_obj.calculate_values(data)
+                elif tag_to_var_map:
+                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                else:
+                    relevant_data = data[tag_obj.id]
+
+                if result is None:
+                    result = relevant_data
+                else:
+                    if self.operations[i - 1] == "+":
+                        result += relevant_data
+                    elif self.operations[i - 1] == "-":
+                        result -= relevant_data
+                    elif self.operations[i - 1] == "*":
+                        result *= relevant_data
+                    elif self.operations[i - 1] == "/":
+                        result /= relevant_data
+
+            if isinstance(result, Series):
+                result.rename(self.id, inplace=True)
+
         else:
-            raise TypeError("Data must be either a list, array, or DataFrame")
+            raise TypeError("Data must be either a list, array, dict, or DataFrame")
 
         return result
