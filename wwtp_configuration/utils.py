@@ -369,6 +369,7 @@ class ContentsType(Enum):
     Seawater = auto()
     SurfaceWater = auto()
     Groundwater = auto()
+    Stormwater = auto()
 
 
 class PumpType(Enum):
