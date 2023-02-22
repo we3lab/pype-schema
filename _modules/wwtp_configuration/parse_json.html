@@ -33,13 +33,14 @@
             
   <h1>Source code for wwtp_configuration.parse_json</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">connection</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
 
 
 <div class="viewcode-block" id="JSONParser"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser">[docs]</a><span class="k">class</span> <span class="nc">JSONParser</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A parser to convert a JSON file into a `Network` object</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A parser to convert a JSON file into a `Network` object</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -68,7 +69,7 @@
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="JSONParser.initialize_network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.initialize_network">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Network` object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Network` object</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -90,12 +91,67 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">connection_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="p">)</span>
             <span class="p">)</span>
+        <span class="n">v_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;virtual_tags&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v_tags</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="ow">in</span> <span class="n">v_tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">v_tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_virtual_tag</span><span class="p">(</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
 
         <span class="c1"># TODO: check for unused fields and throw a warning for each</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span></div>
 
+<div class="viewcode-block" id="JSONParser.merge_network"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.merge_network">[docs]</a>    <span class="k">def</span> <span class="nf">merge_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_network</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Incorporates nodes/connections (i.e. the `new_network`) into a network</span>
+<span class="sd">        (i.e. `old_newtwork`) modifying it in place and returning the modified network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        old_network: str or wwtp_configuration.Network</span>
+<span class="sd">            JSON file path or Network objet to merge with `self`</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            When user does not provide a valid path or Network object for `old_network`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wwtp_configuration.node.Network:</span>
+<span class="sd">            Modified network object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_network</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">old_network</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+            <span class="n">old_network</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="n">old_network</span><span class="p">)</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">old_network</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Please provide a valid json path or object for network to merge with&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">node_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="c1"># delete existing node before creating the new one if necessary</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">old_network</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="n">old_network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">old_network</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
+            <span class="n">old_network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">connection_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">connection_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
+                    <span class="s2">&quot;Connection &quot;</span> <span class="o">+</span> <span class="n">connection_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span>
+                <span class="p">)</span>
+            <span class="c1"># delete existing connection before creating the new one if necessary</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">old_network</span><span class="p">,</span> <span class="s2">&quot;connections&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">connection_id</span> <span class="ow">in</span> <span class="n">old_network</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">old_network</span><span class="o">.</span><span class="n">remove_connection</span><span class="p">(</span><span class="n">connection_id</span><span class="p">)</span>
+            <span class="n">old_network</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">connection_id</span><span class="p">,</span> <span class="n">old_network</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span> <span class="o">=</span> <span class="n">old_network</span>
+        <span class="k">return</span> <span class="n">old_network</span></div>
+
 <div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Node` object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Node` object</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -117,7 +173,7 @@
         <span class="p">)</span>
 
         <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flowrate (MGD)&quot;</span><span class="p">),</span> <span class="s2">&quot;MGD&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flowrate&quot;</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="c1"># create correct type of node class</span>
@@ -183,6 +239,18 @@
                 <span class="n">pump_type</span><span class="o">=</span><span class="n">pump_type</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
+
+            <span class="n">efficiency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efficiency&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">efficiency</span><span class="p">:</span>
+
+                <span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+                    <span class="c1"># TODO: fix this so that it interpolates between dictionary values</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">efficiency</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">efficiency</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">efficiency</span><span class="p">)</span>
+
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">set_energy_efficiency</span><span class="p">(</span><span class="n">efficiency_curve</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Reservoir&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Reservoir</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
@@ -217,17 +285,20 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Cogeneration&quot;</span><span class="p">:</span>
             <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation_capacity (kW)&quot;</span><span class="p">),</span> <span class="s2">&quot;kW&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation_capacity&quot;</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Cogeneration</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
             <span class="p">)</span>
-            <span class="c1"># TODO: support non-constant efficiency curve</span>
             <span class="n">efficiency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efficiency&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">efficiency</span><span class="p">:</span>
 
                 <span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">efficiency</span><span class="p">)</span>
+                    <span class="c1"># TODO: fix this so that it interpolates between dictionary values</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">efficiency</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">efficiency</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">efficiency</span><span class="p">)</span>
 
                 <span class="n">node_obj</span><span class="o">.</span><span class="n">set_energy_efficiency</span><span class="p">(</span><span class="n">efficiency_curve</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Digestion&quot;</span><span class="p">:</span>
@@ -269,7 +340,14 @@
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Flaring&quot;</span><span class="p">:</span>
-            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Flaring</span><span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">num_units</span><span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Flaring</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Thickening&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Thickening</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
@@ -309,16 +387,51 @@
 
         <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="n">contents_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="c1"># ensure that the destination ID for Node-associated Tags is null</span>
                 <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;dest_unit_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">)</span>
                 <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+                <span class="n">contents_type</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contents&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">contents_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="p">[</span><span class="n">contents_type</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contents_list</span>
+                <span class="p">):</span>
+                    <span class="n">contents_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]])</span>
+
+            <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">contents_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tags_by_contents</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">tag_obj</span>
+                        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                    <span class="p">]</span>
+                    <span class="n">tag_source_unit_ids</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">tag</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                    <span class="p">]</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="s2">&quot;total&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag_source_unit_ids</span>
+                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">tag_source_unit_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                    <span class="p">):</span>
+                        <span class="n">tag_obj</span> <span class="o">=</span> <span class="n">tags_by_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">tag_id</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="p">[</span><span class="n">node_id</span><span class="p">,</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">tag_type</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tags_by_contents</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">)</span>
+                        <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+
+        <span class="n">v_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;virtual_tags&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v_tags</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="ow">in</span> <span class="n">v_tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">v_tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_virtual_tag</span><span class="p">(</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">)</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">node_obj</span></div>
 
 <div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Connection` object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Connection` object</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -358,13 +471,13 @@
             <span class="n">entry_point</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">entry_point</span><span class="p">)</span>
 
         <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flowrate (MGD)&quot;</span><span class="p">),</span> <span class="s2">&quot;MGD&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flowrate&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">min_pres</span><span class="p">,</span> <span class="n">max_pres</span><span class="p">,</span> <span class="n">avg_pres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pressure (PSI)&quot;</span><span class="p">),</span> <span class="s2">&quot;PSI&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pressure&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_heating_values</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;heating_values (BTU/scf)&quot;</span><span class="p">),</span> <span class="s2">&quot;BTU/scf&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;heating_values&quot;</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">:</span>
@@ -403,15 +516,137 @@
             <span class="p">)</span>
 
         <span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
+        <span class="n">exit_point_id</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_exit_point</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_exit_point</span><span class="p">()</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
+        <span class="n">entry_point_id</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_entry_point</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_entry_point</span><span class="p">()</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span> <span class="ow">in</span> <span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">connection_obj</span><span class="p">)</span>
                 <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
 
+            <span class="c1"># create virtual &quot;total&quot; tag if it was missing</span>
+            <span class="n">contents_list</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">connection_obj</span><span class="o">.</span><span class="n">contents</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">contents</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">)</span>
+                <span class="k">else</span> <span class="p">[</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">contents</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">contents_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tags_by_contents</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">tag_obj</span>
+                        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                    <span class="p">]</span>
+                    <span class="n">tag_source_unit_ids</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">tag</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                    <span class="p">]</span>
+                    <span class="n">tag_dest_unit_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_by_contents</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="s2">&quot;total&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag_source_unit_ids</span>
+                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">tag_source_unit_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                    <span class="p">):</span>
+                        <span class="n">tag_obj</span> <span class="o">=</span> <span class="n">tags_by_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="c1"># create a separate virtual total for each destination unit.</span>
+                        <span class="c1"># If none exist then just use total</span>
+                        <span class="k">if</span> <span class="n">tag_dest_unit_ids</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">tag_dest_unit_ids</span><span class="p">:</span>
+                                <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                                    <span class="k">for</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                                    <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                                    <span class="ow">and</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="nb">id</span>
+                                <span class="p">]</span>
+                                <span class="n">dest_unit_id</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span> <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+                                <span class="n">tag_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}{}{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_source_id</span><span class="p">(),</span>
+                                    <span class="n">exit_point_id</span><span class="p">,</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_dest_id</span><span class="p">(),</span>
+                                    <span class="n">entry_point_id</span><span class="p">,</span>
+                                    <span class="n">dest_unit_id</span><span class="p">,</span>
+                                    <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_list</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">)</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                                <span class="k">for</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                                <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                            <span class="p">]</span>
+
+                            <span class="n">tag_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_source_id</span><span class="p">(),</span>
+                                <span class="n">exit_point_id</span><span class="p">,</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_dest_id</span><span class="p">(),</span>
+                                <span class="n">entry_point_id</span><span class="p">,</span>
+                                <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_list</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">)</span>
+                            <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s2">&quot;total&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tag_dest_unit_ids</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">tag_dest_unit_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">tag_obj</span> <span class="o">=</span> <span class="n">tags_by_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="c1"># create a separate virtual total for each source unit.</span>
+                        <span class="c1"># If none exist then just use total</span>
+                        <span class="k">if</span> <span class="n">tag_source_unit_ids</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">tag_source_unit_ids</span><span class="p">:</span>
+                                <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                                    <span class="k">for</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                                    <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                                    <span class="ow">and</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="nb">id</span>
+                                <span class="p">]</span>
+                                <span class="n">source_unit_id</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span> <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+                                <span class="n">tag_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">_</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_source_id</span><span class="p">(),</span>
+                                    <span class="n">exit_point_id</span><span class="p">,</span>
+                                    <span class="n">source_unit_id</span><span class="p">,</span>
+                                    <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_dest_id</span><span class="p">(),</span>
+                                    <span class="n">entry_point_id</span><span class="p">,</span>
+                                    <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_list</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">)</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                                <span class="k">for</span> <span class="n">tag_obj</span> <span class="ow">in</span> <span class="n">tags_by_contents</span>
+                                <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">contents</span>
+                            <span class="p">]</span>
+
+                            <span class="n">tag_id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_source_id</span><span class="p">(),</span>
+                                <span class="n">exit_point_id</span><span class="p">,</span>
+                                <span class="n">connection_obj</span><span class="o">.</span><span class="n">get_dest_id</span><span class="p">(),</span>
+                                <span class="n">entry_point_id</span><span class="p">,</span>
+                                <span class="n">tag_obj</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_list</span><span class="p">,</span> <span class="s2">&quot;+&quot;</span><span class="p">)</span>
+                            <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+
+        <span class="n">v_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;virtual_tags&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v_tags</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="ow">in</span> <span class="n">v_tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">v_tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_virtual_tag</span><span class="p">(</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">,</span> <span class="n">connection_obj</span><span class="p">)</span>
+                <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">connection_obj</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_contents"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.parse_contents">[docs]</a>    <span class="k">def</span> <span class="nf">parse_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of input and output contents</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of input and output contents</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -454,9 +689,57 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="JSONParser.parse_virtual_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.parse_virtual_tag">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_virtual_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary information into VirtualTag object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tag_id : str</span>
+<span class="sd">            name of the tag</span>
+
+<span class="sd">        tag_info : dict</span>
+<span class="sd">            dictionary of the form {</span>
+<span class="sd">                &#39;tags&#39;: dict of Tag,</span>
+<span class="sd">                &#39;operations&#39;: list of str,</span>
+<span class="sd">                &#39;type&#39;: TagType,</span>
+<span class="sd">                &#39;contents&#39;: str</span>
+<span class="sd">            }</span>
+
+<span class="sd">        obj : Node or Connection</span>
+<span class="sd">            parent object that contains all constituent tags,</span>
+<span class="sd">            which is used to gather the tag list for combining data correctly</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        VirtualTag</span>
+<span class="sd">            a Python object with the given ID and the values from `tag_info`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subtag_id</span> <span class="ow">in</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]:</span>
+            <span class="n">subtag</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">subtag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid Tag id </span><span class="si">{}</span><span class="s2"> in VirtualTag </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">tag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subtag</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tag_type</span> <span class="o">=</span> <span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">tag_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">contents_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">contents_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
+            <span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_list</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;operations&quot;</span><span class="p">],</span> <span class="n">tag_type</span><span class="p">,</span> <span class="n">contents_type</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">v_tag</span></div>
+
 <div class="viewcode-block" id="JSONParser.parse_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.parse_tag">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -483,12 +766,12 @@
 <span class="sd">            a Python object with the given ID and the values from `tag_info`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">contents</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">get_tag_contents</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
-        <span class="n">tag_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
+        <span class="n">tag_type</span> <span class="o">=</span> <span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
         <span class="n">totalized</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;totalized&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">pint_unit</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_units</span><span class="p">(</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">source_unit_id</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_unit_id&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span>
         <span class="n">dest_unit_id</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dest_unit_id&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span>
-        <span class="n">tag</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">Tag</span><span class="p">(</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span>
             <span class="n">tag_id</span><span class="p">,</span>
             <span class="n">pint_unit</span><span class="p">,</span>
             <span class="n">tag_type</span><span class="p">,</span>
@@ -503,7 +786,7 @@
 
 <div class="viewcode-block" id="JSONParser.get_tag_contents"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.get_tag_contents">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_tag_contents</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -540,38 +823,30 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="n">contents</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">tag_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
-        <span class="c1"># these TagType do not have any contents</span>
-        <span class="n">contentless_types</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">RunTime</span><span class="p">,</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">RunStatus</span><span class="p">,</span>
-            <span class="n">utils</span><span class="o">.</span><span class="n">TagType</span><span class="o">.</span><span class="n">Rotation</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tag_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contentless_types</span><span class="p">:</span>
+        <span class="n">tag_type</span> <span class="o">=</span> <span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tag_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">CONTENTLESS_TYPES</span><span class="p">:</span>
             <span class="c1"># will work if obj is of type Connection, otherwise exception occurs</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">contents</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">contents</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">obj</span><span class="o">.</span><span class="n">output_contents</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-                    <span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span><span class="p">,</span> <span class="nb">list</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">obj</span><span class="o">.</span><span class="n">output_contents</span>
+                    <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
                 <span class="p">):</span>
-                    <span class="n">contents</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span>
+                    <span class="n">contents</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">input_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Ambiguous contents definition for tag &quot;</span> <span class="o">+</span> <span class="n">tag_id</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">contents</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_min_max_avg"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.parse_min_max_avg">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_min_max_avg</span><span class="p">(</span><span class="n">min_max_avg</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
+    <span class="k">def</span> <span class="nf">parse_min_max_avg</span><span class="p">(</span><span class="n">min_max_avg</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        min_max_avg : dict</span>
 <span class="sd">            dictionary of the form {&#39;min&#39;: int, &#39;max&#39;: int, &#39;avg&#39;: int}</span>
-
-<span class="sd">        units : str</span>
-<span class="sd">            units to be parsed into a Pint Quantity</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -582,6 +857,7 @@
         <span class="k">if</span> <span class="n">min_max_avg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">units</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span>
                     <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
@@ -596,8 +872,8 @@
                 <span class="p">)</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_heating_values"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.parse_json.JSONParser.parse_heating_values">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
+    <span class="k">def</span> <span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -609,11 +885,11 @@
 <span class="sd">        (Quantity, Quantity) or (float, float)</span>
 <span class="sd">            (lower, higher) heating values as a tuple, with units applied.</span>
 <span class="sd">            Given as a float if no units are specified</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">heating_vals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">units</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span>
                     <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
@@ -649,6 +925,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -699,7 +976,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

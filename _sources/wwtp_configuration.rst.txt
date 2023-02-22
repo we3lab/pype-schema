@@ -36,6 +36,14 @@ wwtp\_configuration.parse\_json module
    :undoc-members:
    :show-inheritance:
 
+wwtp\_configuration.tag module
+------------------------------
+
+.. automodule:: wwtp_configuration.tag
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 wwtp\_configuration.units module
 --------------------------------
 

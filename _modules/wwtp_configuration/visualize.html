@@ -40,16 +40,25 @@
 <span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;Electricity&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
     <span class="s2">&quot;UntreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PrimaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SecondaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TertiaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
     <span class="s2">&quot;TreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
     <span class="s2">&quot;WasteActivatedSludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="s2">&quot;PrimarySludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TWAS&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TPS&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Scum&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="s2">&quot;SludgeBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ThickenedSludgeBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Biogas&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GasBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
     <span class="s2">&quot;NaturalGas&quot;</span><span class="p">:</span> <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Seawater&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Brine&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SurfaceWater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Groundwater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Stormwater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
     <span class="s2">&quot;NonpotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
     <span class="s2">&quot;DrinkingWater&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
     <span class="s2">&quot;PotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
@@ -59,7 +68,7 @@
 
 
 <div class="viewcode-block" id="draw_graph"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.visualize.draw_graph">[docs]</a><span class="k">def</span> <span class="nf">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Draw all of the nodes and connections in the given network</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw all of the nodes and connections in the given network</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -97,6 +106,7 @@
         <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
         <span class="s2">&quot;red&quot;</span><span class="p">,</span>
         <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
         <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
         <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
         <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
@@ -109,6 +119,7 @@
         <span class="s2">&quot;Electricity&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Biogas&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Natural Gas&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Freshwater&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Saline Water&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Non-potable Reuse&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Drinking Water&quot;</span><span class="p">,</span>
@@ -117,6 +128,7 @@
     <span class="n">font_colors</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;white&quot;</span><span class="p">,</span>
         <span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="s2">&quot;black&quot;</span><span class="p">,</span>
@@ -145,7 +157,7 @@
                     <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
                     <span class="s2">&quot;physics&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
-                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y</span> <span class="o">+</span> <span class="n">legend_node</span><span class="o">*</span><span class="n">step</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">legend_node</span><span class="o">*</span><span class="n">step</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;box&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;font&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">font_colors</span><span class="p">[</span><span class="n">legend_node</span><span class="p">]},</span>
                 <span class="p">},</span>
@@ -208,6 +220,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -258,7 +271,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

@@ -33,12 +33,12 @@
             
   <h1>Source code for wwtp_configuration.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span><span class="p">,</span> <span class="n">DimensionalityError</span>
 <span class="kn">from</span> <span class="nn">.units</span> <span class="kn">import</span> <span class="n">u</span>
 
 
 <div class="viewcode-block" id="parse_quantity"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.parse_quantity">[docs]</a><span class="k">def</span> <span class="nf">parse_quantity</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a value and unit string to a Pint quantity</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a value and unit string to a Pint quantity</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -61,7 +61,7 @@
 
 
 <div class="viewcode-block" id="parse_units"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.parse_units">[docs]</a><span class="k">def</span> <span class="nf">parse_units</span><span class="p">(</span><span class="n">units</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a unit string to a Pint Unit object</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a unit string to a Pint Unit object</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -375,10 +375,13 @@
 
 
 <div class="viewcode-block" id="ContentsType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.ContentsType">[docs]</a><span class="k">class</span> <span class="nc">ContentsType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class to represent any possible contents,</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to represent any possible contents,</span>
 <span class="sd">    whether they are sludge, water, or gas&quot;&quot;&quot;</span>
 
     <span class="n">UntreatedSewage</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">PrimaryEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SecondaryEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">TertiaryEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">TreatedSewage</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">DrinkingWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">PotableReuse</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -399,161 +402,211 @@
     <span class="n">Brine</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Seawater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">SurfaceWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Groundwater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">Groundwater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Stormwater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.PumpType">[docs]</a><span class="k">class</span> <span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Enum to represent constant vs. variable drive pumps&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent constant vs. variable drive pumps&quot;&quot;&quot;</span>
 
     <span class="n">Constant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">VFD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="DigesterType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.DigesterType">[docs]</a><span class="k">class</span> <span class="nc">DigesterType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Enum to represent types of digesters&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of digesters&quot;&quot;&quot;</span>
 
     <span class="n">Aerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Anaerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="TagType"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.TagType">[docs]</a><span class="k">class</span> <span class="nc">TagType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Enum to represent types of SCADA tags&quot;&quot;&quot;</span>
-
-    <span class="n">Flow</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Volume</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Level</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Pressure</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">RunTime</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">RunStatus</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">VSS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">TSS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># total suspended solids</span>
-    <span class="n">TDS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># total dissolved solids</span>
-    <span class="n">COD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># chemical oxygen demand</span>
-    <span class="n">BOD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># biochemical oxygen demand</span>
-    <span class="n">pH</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Rotation</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.Tag">[docs]</a><span class="k">class</span> <span class="nc">Tag</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to represent a SCADA or other data tag</span>
+<div class="viewcode-block" id="select_objs_helper"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.select_objs_helper">[docs]</a><span class="k">def</span> <span class="nf">select_objs_helper</span><span class="p">(</span>
+    <span class="n">obj</span><span class="p">,</span>
+    <span class="n">obj_source_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">obj_dest_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">obj_source_unit_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">obj_dest_unit_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">obj_exit_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">obj_entry_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_unit_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dest_unit_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">exit_point_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">entry_point_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_node_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dest_node_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">exit_point_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">entry_point_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">tag_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper to select from objects which match source/destination node class,</span>
+<span class="sd">    unit ID, and contents</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    id : str</span>
-<span class="sd">        Tag ID</span>
+<span class="sd">    obj : [Node, Connection, Tag]</span>
+<span class="sd">        Object to check if it meets the specified filtering criteria</span>
 
-<span class="sd">    units : str or Unit</span>
-<span class="sd">        Units represented as a string Pint unit.</span>
-<span class="sd">        E.g., &#39;MGD&#39; or &#39;cubic meters&#39; or &lt;Unit(&#39;MGD&#39;)&gt;</span>
+<span class="sd">    obj_source_node : Node</span>
+<span class="sd">        Optional source `Node` to check the type and id of. None by default</span>
+
+<span class="sd">    obj_dest_node : Node</span>
+<span class="sd">        Optional destination `Node` to check the type and id of. None by default</span>
+
+<span class="sd">    obj_source_unit_id : int, str</span>
+<span class="sd">        Object&#39;s source unit ID to match against. None by default</span>
+
+<span class="sd">    obj_dest_unit_id : int, str</span>
+<span class="sd">        Object&#39;s destination unit ID to match against. None by default</span>
+
+<span class="sd">    obj_exit_point : Node</span>
+<span class="sd">        Optional `exit_point` `Node` to check the type and id of. None by default</span>
+
+<span class="sd">    obj_entry_point : Node</span>
+<span class="sd">        Optional `entry_point` `Node` to check the type and id of. None by default</span>
+
+<span class="sd">    source_id : str</span>
+<span class="sd">        Optional id of the source node to filter by. None by default</span>
+
+<span class="sd">    dest_id : str</span>
+<span class="sd">        Optional id of the destination node to filter by. None by default</span>
+
+<span class="sd">    source_unit_id : int, str</span>
+<span class="sd">        Optional unit id of the source to filter by. None by default</span>
+
+<span class="sd">    dest_unit_id : int, str</span>
+<span class="sd">        Optional unit id of the destination to filter by. None by default</span>
+
+<span class="sd">    source_node_type : class</span>
+<span class="sd">        Optional source `Node` subclass to filter by. None by default</span>
+
+<span class="sd">    dest_node_type : class</span>
+<span class="sd">        Optional destination `Node` subclass to filter by. None by default</span>
 
 <span class="sd">    tag_type : TagType</span>
-<span class="sd">        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`</span>
+<span class="sd">        Optional tag type to filter by. None by default</span>
 
-<span class="sd">    source_unit_id : int or str</span>
-<span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the source node</span>
+<span class="sd">    recurse : bool</span>
+<span class="sd">        Whether to search for objects within nodes. False by default</span>
 
-<span class="sd">    dest_unit_id : int or str</span>
-<span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the destination node.</span>
-<span class="sd">        None if the Tag is associated with a Node object instead of a Connection</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        When a source/destination node type is provided to subset tags</span>
 
-<span class="sd">    parent_id : str</span>
-<span class="sd">        ID for the parent object (either a Node or Connection)</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        When the objects to select among are not of type</span>
+<span class="sd">        {&#39;wwtp_configuration.Tag&#39; or `wwtp_configuration.Connection`}</span>
 
-<span class="sd">    totalized : bool</span>
-<span class="sd">        True if data is totalized. False otherwise</span>
-
-<span class="sd">    contents : ContentsType</span>
-<span class="sd">        Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    id : str</span>
-<span class="sd">        Tag ID</span>
-
-<span class="sd">    units : str or Unit</span>
-<span class="sd">        Units represented as a string Pint unit.</span>
-<span class="sd">        E.g., &#39;MGD&#39; or &#39;cubic meters&#39; or &lt;Unit(&#39;MGD&#39;)&gt;</span>
-
-<span class="sd">    tag_type : TagType</span>
-<span class="sd">        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`</span>
-
-<span class="sd">    source_unit_id : int or str</span>
-<span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the sources node</span>
-
-<span class="sd">    dest_unit_id : int or str</span>
-<span class="sd">        integer representing unit number, or `total` if a combined data point</span>
-<span class="sd">        across all units of the destination node</span>
-
-<span class="sd">    parent_id : str</span>
-<span class="sd">        ID for the parent object (either a Node or Connection)</span>
-
-<span class="sd">    totalized : bool</span>
-<span class="sd">        True if data is totalized. False otherwise</span>
-
-<span class="sd">    contents : ContentsType</span>
-<span class="sd">        Contents moving through the node</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if `obj` fits the filter criteria; False otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># convert string source and destination unit IDs to integers</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source_unit_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">source_unit_id</span> <span class="o">!=</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+        <span class="n">source_unit_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">source_unit_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dest_unit_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dest_unit_id</span> <span class="o">!=</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+        <span class="n">dest_unit_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dest_unit_id</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="nb">id</span><span class="p">,</span>
-        <span class="n">units</span><span class="p">,</span>
-        <span class="n">tag_type</span><span class="p">,</span>
-        <span class="n">source_unit_id</span><span class="p">,</span>
-        <span class="n">dest_unit_id</span><span class="p">,</span>
-        <span class="n">parent_id</span><span class="p">,</span>
-        <span class="n">totalized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">contents</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">if</span> <span class="n">source_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_source_node</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj_source_node</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">source_id</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span> <span class="o">=</span> <span class="n">tag_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">totalized</span> <span class="o">=</span> <span class="n">totalized</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">=</span> <span class="n">source_unit_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">=</span> <span class="n">dest_unit_id</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="n">parent_id</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">recurse</span>
+            <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_exit_point</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">obj_exit_point</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">source_id</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;wwtp_configuration.utils.Tag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> source_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;dest_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="si">}</span><span class="s2"> parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dest_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_dest_node</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj_dest_node</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">dest_id</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">recurse</span>
+            <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_entry_point</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">obj_entry_point</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">dest_id</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">NotImplemented</span>
+    <span class="k">if</span> <span class="n">source_unit_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">source_unit_id</span> <span class="o">!=</span> <span class="n">obj_source_unit_id</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tag_type</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalized</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">totalized</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">source_unit_id</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
-        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dest_unit_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dest_unit_id</span> <span class="o">!=</span> <span class="n">obj_dest_unit_id</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">exit_point_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_exit_point</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj_exit_point</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">exit_point_id</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">entry_point_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj_entry_point</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj_entry_point</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">entry_point_id</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">source_node_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">obj_source_node</span><span class="p">,</span> <span class="n">source_node_type</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recurse</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_exit_point</span><span class="p">,</span> <span class="n">source_node_type</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">dest_node_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_dest_node</span><span class="p">,</span> <span class="n">dest_node_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recurse</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_entry_point</span><span class="p">,</span> <span class="n">dest_node_type</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">exit_point_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_exit_point</span><span class="p">,</span> <span class="n">exit_point_type</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">entry_point_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_entry_point</span><span class="p">,</span> <span class="n">exit_point_type</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">tag_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;tag_type&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="n">tag_type</span> <span class="o">!=</span> <span class="n">tag_type</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="operation_helper"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.operation_helper">[docs]</a><span class="k">def</span> <span class="nf">operation_helper</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">prev_unit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper for parsing operations and checking units</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    operation : [&quot;+&quot;, &quot;-&quot;, &quot;*&quot;, &quot;/&quot;]</span>
+<span class="sd">        Function to apply when combining tags.</span>
+<span class="sd">        Supported functions are &quot;+&quot;, &quot;-&quot;, &quot;*&quot;, and &quot;/&quot;.</span>
+
+<span class="sd">    unit : Unit</span>
+<span class="sd">        Units for the right side of the operation, represented as a Pint unit.</span>
+
+<span class="sd">    prev_unit : Unit</span>
+<span class="sd">        Units for the left side of the operation, represented as a Pint unit.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Unit</span>
+<span class="sd">        Resulting Pint Unit from combining the `unit` and `prev_unit`</span>
+<span class="sd">        according to `operation`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span> <span class="ow">or</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="n">prev_unit</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">unit</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">prev_unit</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">DimensionalityError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Units for addition and subtraction must be identical&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span> <span class="ow">or</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="n">prev_unit</span> <span class="o">=</span> <span class="n">prev_unit</span> <span class="o">/</span> <span class="n">unit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prev_unit</span> <span class="o">=</span> <span class="n">prev_unit</span> <span class="o">*</span> <span class="n">unit</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported operation &quot;</span> <span class="o">+</span> <span class="n">operation</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prev_unit</span></div>
 </pre></div>
 
           </div>
@@ -582,6 +635,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -632,7 +686,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

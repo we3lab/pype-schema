@@ -56,14 +56,14 @@
 <p>A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout main
-git pull
-bumpversion <span class="o">[</span>part<span class="o">]</span>
-git push
-git branch -D stable
-git checkout -b stable
-git push --set-upstream origin stable -f
-git push --tags
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
+git<span class="w"> </span>pull
+bumpversion<span class="w"> </span><span class="o">[</span>part<span class="o">]</span>
+git<span class="w"> </span>push
+git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>stable
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>stable
+git<span class="w"> </span>push<span class="w"> </span>--set-upstream<span class="w"> </span>origin<span class="w"> </span>stable<span class="w"> </span>-f
+git<span class="w"> </span>push<span class="w"> </span>--tags
 </pre></div>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">[part]</span></code> is <code class="docutils literal notranslate"><span class="pre">major</span></code>, <code class="docutils literal notranslate"><span class="pre">minor</span></code>, or <code class="docutils literal notranslate"><span class="pre">patch</span></code>.
@@ -98,6 +98,7 @@ This will release a new package version on Git + GitHub and publish to PyPI.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -146,7 +147,7 @@ This will release a new package version on Git + GitHub and publish to PyPI.</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/CONTRIBUTING.rst.txt"

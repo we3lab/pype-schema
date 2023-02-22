@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>tag &#8212; WWTP Configuration 0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="parse_json" href="parse_json.html" />
+    <link rel="prev" title="node" href="node.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#tag" id="id2">tag</a></p></li>
+</ul>
+</div>
+<section id="tag">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">tag</a><a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h1>
+<p>This module consists of two classes, <code class="docutils literal notranslate"><span class="pre">Tag</span></code> and <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code>, which are used to represent data streams at a treatment facility.</p>
+<span class="target" id="module-wwtp_configuration.tag"></span><dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.Tag">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.tag.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.Tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to represent a SCADA or other data tag</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Tag ID</p></li>
+<li><p><strong>units</strong> (<em>str or Unit</em>) – Units represented as a string or Pint unit.
+E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
+<li><p><strong>source_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
+across all units of the source node</p></li>
+<li><p><strong>dest_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
+across all units of the destination node.
+None if the Tag is associated with a Node object instead of a Connection</p></li>
+<li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
+<li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Tag ID</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
+E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
+<li><p><strong>tag_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.TagType" title="wwtp_configuration.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
+<li><p><strong>source_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
+across all units of the sources node</p></li>
+<li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
+across all units of the destination node</p></li>
+<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.TagType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.tag.</span></span><span class="sig-name descname"><span class="pre">TagType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#TagType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.TagType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum to represent types of SCADA tags</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.VirtualTag">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.tag.</span></span><span class="sig-name descname"><span class="pre">VirtualTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Representation for data that is not in the SCADA system, but is instead</dt><dd><p>a combination of existing tags. Tags are combined according to <cite>operations</cite>,
+with the current supported operations limited to “+”, “-”, “*”, and “/”</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – VirtualTag ID</p></li>
+<li><p><strong>tags</strong> (<em>list of Tag</em>) – List of Tag objects to combine</p></li>
+<li><p><strong>operations</strong> (<em>function or list</em>) – Function to apply when combining tags.
+If a single function it will be applied to all Tags.
+Otherwise, the <cite>operations</cite> must be one shorter than <cite>tags</cite>, and
+functions will be applied in order</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite>.
+Default is None, and it will be automatically determined from constituent
+Tags if they all have the same type.</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the node. Default is None, and it will be automatically
+determined from consituent Tag contents</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
+    When <cite>tag_type</cite> is not specified and constituent tags have different types.
+    When <cite>contents</cite> of the constituent tags are different types.</p>
+</dd>
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Tag ID</p></li>
+<li><p><strong>tags</strong> (<em>list of Tag</em>) – List of Tag objects to combine</p></li>
+<li><p><strong>operations</strong> (<em>[</em><em>&quot;+&quot;</em><em>, </em><em>&quot;-&quot;</em><em>, </em><em>&quot;*&quot;</em><em>, </em><em>&quot;/&quot;</em><em>]</em>) – Function to apply when combining tags.
+Supported functions are “+”, “-”, “*”, and “/”.
+If a single string is passed, it will be applied to all Tags.
+Otherwise, the <cite>operations</cite> list must be one shorter than <cite>tags</cite>, and
+functions will be applied in order from left to right</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
+E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
+<li><p><strong>tag_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.TagType" title="wwtp_configuration.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.VirtualTag.calculate_values">
+<span class="sig-name descname"><span class="pre">calculate_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag.calculate_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag.calculate_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine the given data according to the VirtualTag’s operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
+correct dimensions. I.e., the number of columns is one more than operations</p></li>
+<li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
+that differ from the original SCADA tag naming system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array of combined dataset</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">WWTP Configuration</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">tag</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="node.html" title="previous chapter">node</a></li>
+      <li>Next: <a href="parse_json.html" title="next chapter">parse_json</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, WE3 Lab.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/tag.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -16,7 +16,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="parse_json" href="parse_json.html" />
+    <link rel="next" title="tag" href="tag.html" />
     <link rel="prev" title="connection" href="connection.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -63,12 +63,12 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Aerator ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the aeration basin</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the aeration basin</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of aeration basins running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single aeration basin in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Aerator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the aeration basin</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the aeration basin</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of aeration basins running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of a single aeration basin in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this aerator</p></li>
 </ul>
 </dd>
@@ -89,12 +89,12 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Battery ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the reservoir.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the reservoir.</p></li>
-<li><p><strong>capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Storage capacity of the battery in kWh</p></li>
-<li><p><strong>discharge_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Maximum discharge rate of the battery in kW</p></li>
-<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this reservoir</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Battery ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the battery.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the battery.</p></li>
+<li><p><strong>capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Storage capacity of the battery in kWh</p></li>
+<li><p><strong>discharge_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum discharge rate of the battery in kW</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this battery</p></li>
 </ul>
 </dd>
 </dl>
@@ -119,12 +119,12 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Chlorinator ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the chlorinator</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the chlorinator</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of chlorinators running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single chlorinator in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Chlorinator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the chlorinator</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the chlorinator</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of chlorinators running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of a single chlorinator in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this chlorinator</p></li>
 </ul>
 </dd>
@@ -150,12 +150,12 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Clarifier ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the clarifier</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the clarifier</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of clarifiers running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single clarifier in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Clarifier ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the clarifier</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the clarifier</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of clarifiers running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of a single clarifier in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this clarifier</p></li>
 </ul>
 </dd>
@@ -179,15 +179,15 @@ e.g. <code class="docutils literal notranslate"><span class="pre">Facility</span
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Cogenerator ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the cogenerator
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Cogenerator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the cogenerator
 (biogas, natural gas, or a blend of the two)</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the cogenerator (Electricity)</p></li>
-<li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of cogenerator units running in parallel</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the cogenerator (Electricity)</p></li>
+<li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of cogenerator units running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this cogenerator</p></li>
-<li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current heat produced in BTU and returns
-the energy produced in kWh</p></li>
+<li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
+the efficiency as a fraction</p></li>
 </ul>
 </dd>
 </dl>
@@ -197,8 +197,7 @@ the energy produced in kWh</p></li>
 <dd><p>Set the cogeneration efficiency to the given function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current heat produced in BTU and returns
-the energy produced in kWh</p>
+<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current kWh and returns the fractional efficency</p>
 </dd>
 </dl>
 </dd></dl>
@@ -238,11 +237,11 @@ the energy produced in kWh</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Conditioner ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the biogas conditioner</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the biogas conditioner</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of biogas conditioners running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Conditioner ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the biogas conditioner</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the biogas conditioner</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of biogas conditioners running in parallel</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this screen</p></li>
 </ul>
 </dd>
@@ -269,12 +268,12 @@ the energy produced in kWh</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Digester ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the digester (e.g. biogas or wastewater)</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the digester (e.g. biogas or wastewater)</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of digesters running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of the digester in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Digester ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the digester (e.g. biogas or wastewater)</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the digester (e.g. biogas or wastewater)</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of digesters running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of the digester in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
 <li><p><strong>digester_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.DigesterType" title="wwtp_configuration.utils.DigesterType"><em>DigesterType</em></a>) – Type of digestion (aerobic or anaerobic)</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this digester</p></li>
 </ul>
@@ -289,8 +288,8 @@ the energy produced in kWh</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Facility ID</p></li>
-<li><p><strong>input_contents</strong> (<em>ContentsType</em>) – Contents entering the facility.</p></li>
-<li><p><strong>output_contents</strong> (<em>ContentsType</em>) – Contents leaving the facility.</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the network.</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the network.</p></li>
 <li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the facility</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate through the facility</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate through the facility</p></li>
@@ -302,12 +301,12 @@ the energy produced in kWh</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Facility ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the facility.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the facility.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Elevation of the facility in meters above sea level</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Facility ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the facility.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the facility.</p></li>
+<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Elevation of the facility in meters above sea level</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this facility</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average facility flow rate</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average facility flow rate</p></li>
 <li><p><strong>nodes</strong> (<em>dict of Node</em>) – nodes in the facility, e.g. pumps, tanks, or processes</p></li>
 <li><p><strong>connections</strong> (<em>dict of Connections</em>) – connections in the facility, e.g. pipes</p></li>
 </ul>
@@ -334,12 +333,12 @@ the energy produced in kWh</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Filter ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the filter</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the filter</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of filters running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single filter in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Filter ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the filter</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the filter</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of filters running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of a single filter in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this filter</p></li>
 </ul>
 </dd>
@@ -348,20 +347,24 @@ the energy produced in kWh</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Flaring">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.node.</span></span><span class="sig-name descname"><span class="pre">Flaring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Flaring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Flaring" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.node.</span></span><span class="sig-name descname"><span class="pre">Flaring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Flaring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Flaring" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Flare ID</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of flares running in parallel</p></li>
+<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single flare</p></li>
+<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single flare</p></li>
+<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single flare</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this flare</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Flare ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the flare</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of flares running in parallel</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Flare ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the flare</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of flares running in parallel</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this flare</p></li>
 </ul>
 </dd>
@@ -376,8 +379,8 @@ the energy produced in kWh</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Network ID</p></li>
-<li><p><strong>input_contents</strong> (<em>ContentsType</em>) – Contents entering the network.</p></li>
-<li><p><strong>output_contents</strong> (<em>ContentsType</em>) – Contents leaving the network.</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the network.</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the network.</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this network</p></li>
 <li><p><strong>nodes</strong> (<em>dict of Node</em>) – nodes in the network, e.g. pumps, tanks, or facilities</p></li>
 <li><p><strong>connections</strong> (<em>dict of Connections</em>) – connections in the network, e.g. pipes</p></li>
@@ -385,9 +388,9 @@ the energy produced in kWh</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Network ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the network.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the network.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Network ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the network.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the network.</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this network</p></li>
 <li><p><strong>nodes</strong> (<em>dict of Node</em>) – nodes in the network, e.g. pumps, tanks, or facilities</p></li>
 <li><p><strong>connections</strong> (<em>dict of Connections</em>) – connections in the network, e.g. pipes</p></li>
@@ -446,7 +449,7 @@ If False, only direct children are returned.</p>
 :Parameters: <strong>connection_name</strong> (<em>str</em>) – name of connection to remove</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.10)"><strong>KeyError</strong></a> – if <cite>connection_name</cite> is not found</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.11)"><strong>KeyError</strong></a> – if <cite>connection_name</cite> is not found</p>
 </dd>
 </dl>
 </dd></dl>
@@ -460,7 +463,7 @@ If False, only direct children are returned.</p>
 <dd class="field-odd"><p><strong>node_name</strong> (<em>str</em>) – name of node to remove</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.10)"><strong>KeyError</strong></a> – if <cite>node_name</cite> is not found</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.11)"><strong>KeyError</strong></a> – if <cite>node_name</cite> is not found</p>
 </dd>
 </dl>
 </dd></dl>
@@ -474,9 +477,9 @@ If False, only direct children are returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Node ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the node.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the node.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Node ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the node.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the node.</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this node</p></li>
 </ul>
 </dd>
@@ -572,13 +575,17 @@ If False, only direct children are returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.node.Node.get_all_tags">
-<span class="sig-name descname"><span class="pre">get_all_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_tags" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_all_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">virtual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.get_all_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.get_all_tags" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all Tag objects associated with this Node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get tags recursively.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>virtual</strong> (<em>bool</em>) – Whether to include VirtualTag objects or just regular Tag.
+True by default.</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether or not to get tags recursively.
 Default is False, meaning that only tags involving direct children
-(and this Node itself) will be returned.</p>
+(and this Node itself) will be returned.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Tag objects inside this Node.
@@ -586,7 +593,7 @@ If <cite>recurse</cite> is True, all children, grandchildren, etc. are returned.
 If False, only direct children are returned.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Tag</p>
+<dd class="field-odd"><p>list of Tag and VirtualTag</p>
 </dd>
 </dl>
 </dd></dl>
@@ -607,7 +614,7 @@ Default is False, meaning that only direct children will be returned.</p></li>
 <dd class="field-odd"><p>Connection object if node is found. None otherwise</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.connection.Connection" title="wwtp_configuration.connection.Connection">Connection</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></p>
+<dd class="field-even"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.connection.Connection" title="wwtp_configuration.connection.Connection">Connection</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -628,7 +635,7 @@ Default is False, meaning that only direct children will be returned.</p></li>
 <dd class="field-even"><p>Node object if node is found. None otherwise</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node">Node</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node">Node</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -661,7 +668,7 @@ Default is False, meaning that only direct children will be returned.</p></li>
 parent object are children of <cite>self</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tag</strong> (<em>Tag</em>) – wwtp_configuration <cite>Node</cite> object for which we want the parent object</p>
+<dd class="field-odd"><p><strong>tag</strong> (<em>Tag or VirtualTag</em>) – object for which we want the parent object</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>parent object of the Tag</p>
@@ -690,7 +697,7 @@ Default is False, meaning that only tags involving direct children
 Returns None if the <cite>tag_name</cite> is not found</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.Tag" title="wwtp_configuration.utils.Tag">Tag</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.Tag" title="wwtp_configuration.tag.Tag">Tag</a> or <a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.VirtualTag" title="wwtp_configuration.tag.VirtualTag">VirtualTag</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -702,6 +709,127 @@ Returns None if the <cite>tag_name</cite> is not found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tag_name</strong> (<em>str</em>) – name of tag to remove</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.select_objs">
+<span class="sig-name descname"><span class="pre">select_objs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.select_objs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.select_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects from this Node all Connection or Tag objects
+which match source/destination node class, unit ID, and contents.
+(If none given, returns all objects in the Node.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_id</strong> (<em>str</em>) – Optional id of the source node to filter by. None by default</p></li>
+<li><p><strong>dest_id</strong> (<em>str</em>) – Optional id of the destination node to filter by. None by default</p></li>
+<li><p><strong>source_unit_id</strong> (<em>int, str</em>) – Optional unit id of the source to filter by. None by default</p></li>
+<li><p><strong>dest_unit_id</strong> (<em>int, str</em>) – Optional unit id of the destination to filter by. None by default</p></li>
+<li><p><strong>exit_point_id</strong> (<em>str</em>) – Optional id of the <cite>exit_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>entry_point_id</strong> (<em>str</em>) – Optional id of the <cite>entry_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>source_node_type</strong> (<em>class</em>) – Optional source <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>dest_node_type</strong> (<em>class</em>) – Optional destination <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>exit_point_type</strong> (<em>class</em>) – Optional <cite>exit_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>entry_point_type</strong> (<em>class</em>) – Optional <cite>entry_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>contents_type</strong> (<em>ContentsType</em>) – Optional contents to filter by. None by default</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Optional tag type to filter by. None by default</p></li>
+<li><p><strong>obj_type</strong> (<em>[Node, Connection, Tag]</em>) – The type of object to filter by. None by default</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether to search for objects within nodes. False by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When a source/destination node type is provided to subset tags</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – When the objects to select among are not of
+    type {‘wwtp_configuration.Tag’ or <cite>wwtp_configuration.Connection</cite>}</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of <cite>Tag</cite> or <cite>Connection</cite> objects subset according to source/destination
+id and <cite>contents_type</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.select_tags">
+<span class="sig-name descname"><span class="pre">select_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">virtual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.select_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.select_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function for selecting <cite>Tag</cite> objects from inside a <cite>Node</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> (<em>Tag</em>) – Tag object to check against the search criteria</p></li>
+<li><p><strong>source_id</strong> (<em>str</em>) – Optional id of the source node to filter by. None by default</p></li>
+<li><p><strong>dest_id</strong> (<em>str</em>) – Optional id of the destination node to filter by. None by default</p></li>
+<li><p><strong>source_unit_id</strong> (<em>int, str</em>) – Optional unit id of the source to filter by. None by default</p></li>
+<li><p><strong>dest_unit_id</strong> (<em>int, str</em>) – Optional unit id of the destination to filter by. None by default</p></li>
+<li><p><strong>exit_point_id</strong> (<em>str</em>) – Optional id of the <cite>exit_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>entry_point_id</strong> (<em>str</em>) – Optional id of the <cite>entry_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>source_node_type</strong> (<em>class</em>) – Optional source <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>dest_node_type</strong> (<em>class</em>) – Optional destination <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>exit_point_type</strong> (<em>class</em>) – Optional <cite>exit_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>entry_point_type</strong> (<em>class</em>) – Optional <cite>entry_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>contents_type</strong> (<em>ContentsType</em>) – Optional contents to filter by. None by default</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Optional tag type to filter by. None by default</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether to search for objects within nodes. False by default</p></li>
+<li><p><strong>virtual</strong> (<em>bool</em>) – True if <cite>tag</cite> is being queried as part of a <cite>VirtualTag</cite>. False by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if <cite>tag</cite> meets the filtering criteria</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.select_virtual_tags">
+<span class="sig-name descname"><span class="pre">select_virtual_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">virtual_tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.select_virtual_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.select_virtual_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function for selecting <cite>VirtualTag</cite> objects from inside a <cite>Node</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>virtual_tag</strong> (<em>VirtualTag</em>) – VirtualTag object to check against the search criteria</p></li>
+<li><p><strong>source_id</strong> (<em>str</em>) – Optional id of the source node to filter by. None by default</p></li>
+<li><p><strong>dest_id</strong> (<em>str</em>) – Optional id of the destination node to filter by. None by default</p></li>
+<li><p><strong>source_unit_id</strong> (<em>int, str</em>) – Optional unit id of the source to filter by. None by default</p></li>
+<li><p><strong>dest_unit_id</strong> (<em>int, str</em>) – Optional unit id of the destination to filter by. None by default</p></li>
+<li><p><strong>exit_point_id</strong> (<em>str</em>) – Optional id of the <cite>exit_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>entry_point_id</strong> (<em>str</em>) – Optional id of the <cite>entry_point</cite> node to filter by. None by default</p></li>
+<li><p><strong>source_node_type</strong> (<em>class</em>) – Optional source <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>dest_node_type</strong> (<em>class</em>) – Optional destination <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>exit_point_type</strong> (<em>class</em>) – Optional <cite>exit_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>entry_point_type</strong> (<em>class</em>) – Optional <cite>entry_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>contents_type</strong> (<em>ContentsType</em>) – Optional contents to filter by. None by default</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Optional tag type to filter by. None by default</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether to search for objects within nodes. False by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if <cite>virtual_tag</cite> meets the filtering criteria</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.node.Node.set_contents">
+<span class="sig-name descname"><span class="pre">set_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'input_contents'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/node.html#Node.set_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.node.Node.set_contents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the input or output contents of a node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contents</strong> (<em>ContentsType or list of ContentsType</em>) – Single value or list of ContentsType entering/exiting the node.</p></li>
+<li><p><strong>attribute</strong> (<em>[“input_contents”, “output_contents”]</em>) – Attribute to set (either <cite>input_contents</cite> or <cite>output_contents</cite>)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -730,8 +858,8 @@ Returns None if the <cite>tag_name</cite> is not found</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Pump ID</p></li>
-<li><p><strong>input_contents</strong> (<em>ContentsType</em>) – Contents entering the pump</p></li>
-<li><p><strong>output_contents</strong> (<em>ContentsType</em>) – Contents leaving the pump</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the pump</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the pump</p></li>
 <li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the pump in meters above sea level</p></li>
 <li><p><strong>horsepower</strong> (<em>int</em>) – Horsepower of a single pump</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of pumps running in parallel</p></li>
@@ -744,13 +872,13 @@ Returns None if the <cite>tag_name</cite> is not found</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Pump ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the pump</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the pump</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Elevation of the pump in meters above sea level</p></li>
-<li><p><strong>horsepower</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Horsepower of a single pump</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of pumps running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average pump flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Pump ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the pump</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the pump</p></li>
+<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Elevation of the pump in meters above sea level</p></li>
+<li><p><strong>horsepower</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Horsepower of a single pump</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of pumps running in parallel</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average pump flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pump</p></li>
 <li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current flow rate and returns the energy
 required to pump at that rate</p></li>
@@ -789,8 +917,8 @@ required to pump at that rate</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Reservoir ID</p></li>
-<li><p><strong>input_contents</strong> (<em>ContentsType</em>) – Contents entering the reservoir.</p></li>
-<li><p><strong>output_contents</strong> (<em>ContentsType</em>) – Contents leaving the reservoir.</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the reservoir.</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the reservoir.</p></li>
 <li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the reservoir in meters above sea level</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of the reservoir in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this reservoir</p></li>
@@ -798,11 +926,11 @@ required to pump at that rate</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Reservoir ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the reservoir.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the reservoir.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Elevation of the reservoir in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of the reservoir in cubic meters</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Reservoir ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the reservoir.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the reservoir.</p></li>
+<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Elevation of the reservoir in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of the reservoir in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this reservoir</p></li>
 </ul>
 </dd>
@@ -827,11 +955,11 @@ required to pump at that rate</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Screen ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the screen</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the screen</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of screens running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Screen ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the screen</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the screen</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of screens running in parallel</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this screen</p></li>
 </ul>
 </dd>
@@ -845,8 +973,8 @@ required to pump at that rate</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Tank ID</p></li>
-<li><p><strong>input_contents</strong> (<em>ContentsType</em>) – Contents entering the tank.</p></li>
-<li><p><strong>output_contents</strong> (<em>ContentsType</em>) – Contents leaving the tank.</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the tank.</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the tank.</p></li>
 <li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the tank in meters above sea level</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of the tank in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this tank</p></li>
@@ -854,11 +982,11 @@ required to pump at that rate</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tank ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the tank.</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the tank.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Elevation of the tank in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of the tank in cubic meters</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Tank ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the tank.</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the tank.</p></li>
+<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Elevation of the tank in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of the tank in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this tank</p></li>
 </ul>
 </dd>
@@ -884,12 +1012,12 @@ required to pump at that rate</p>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Thickener ID</p></li>
-<li><p><strong>input_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents entering the thickener</p></li>
-<li><p><strong>output_contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a><em> or </em><em>list of ContentsType</em>) – Contents leaving the thickener</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of thickeners running in parallel</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Volume of a single thickener in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Thickener ID</p></li>
+<li><p><strong>input_contents</strong> (<em>list of ContentsType</em>) – Contents entering the thickener</p></li>
+<li><p><strong>output_contents</strong> (<em>list of ContentsType</em>) – Contents leaving the thickener</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of thickeners running in parallel</p></li>
+<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Volume of a single thickener in cubic meters</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this thickener</p></li>
 </ul>
 </dd>
@@ -925,6 +1053,7 @@ required to pump at that rate</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -942,7 +1071,7 @@ required to pump at that rate</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="connection.html" title="previous chapter">connection</a></li>
-      <li>Next: <a href="parse_json.html" title="next chapter">parse_json</a></li>
+      <li>Next: <a href="tag.html" title="next chapter">tag</a></li>
   </ul></li>
 </ul>
 </div>
@@ -973,7 +1102,7 @@ required to pump at that rate</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/node.rst.txt"

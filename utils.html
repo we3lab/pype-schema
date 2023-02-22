@@ -42,7 +42,7 @@
 </div>
 <section id="utils">
 <span id="id1"></span><h1><a class="toc-backref" href="#id2">utils</a><a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
-<p>This module consists of a number of utils classes</p>
+<p>This module consists of a number of utils classes and functions</p>
 <span class="target" id="module-wwtp_configuration.utils"></span><dl class="py class">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.ContentsType">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">ContentsType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#ContentsType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.ContentsType" title="Permalink to this definition">¶</a></dt>
@@ -62,49 +62,27 @@ whether they are sludge, water, or gas</p>
 <dd><p>Enum to represent constant vs. variable drive pumps</p>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="wwtp_configuration.utils.Tag">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.Tag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to represent a SCADA or other data tag</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.operation_helper">
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for parsing operations and checking units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>str</em>) – Tag ID</p></li>
-<li><p><strong>units</strong> (<em>str or Unit</em>) – Units represented as a string Pint unit.
-E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
-<li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
-<li><p><strong>source_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the source node</p></li>
-<li><p><strong>dest_unit_id</strong> (<em>int or str</em>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the destination node.
-None if the Tag is associated with a Node object instead of a Connection</p></li>
-<li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
-<li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
-<li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
+<li><p><strong>operation</strong> (<em>[“+”, “-”, “</em>”, “/”]*) – Function to apply when combining tags.
+Supported functions are “+”, “-”, “*”, and “/”.</p></li>
+<li><p><strong>unit</strong> (<em>Unit</em>) – Units for the right side of the operation, represented as a Pint unit.</p></li>
+<li><p><strong>prev_unit</strong> (<em>Unit</em>) – Units for the left side of the operation, represented as a Pint unit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Variables</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Tag ID</p></li>
-<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string Pint unit.
-E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
-<li><p><strong>tag_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.TagType" title="wwtp_configuration.utils.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
-<li><p><strong>source_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the sources node</p></li>
-<li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
-across all units of the destination node</p></li>
-<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
-<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
-<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
-</ul>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
+according to <cite>operation</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Unit</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="wwtp_configuration.utils.TagType">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">TagType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#TagType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.TagType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum to represent types of SCADA tags</p>
 </dd></dl>
 
 <dl class="py function">
@@ -144,6 +122,47 @@ across all units of the destination node</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.select_objs_helper">
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">select_objs_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_source_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_dest_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_source_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_dest_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_node_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#select_objs_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.select_objs_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper to select from objects which match source/destination node class,
+unit ID, and contents</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>[Node, Connection, Tag]</em>) – Object to check if it meets the specified filtering criteria</p></li>
+<li><p><strong>obj_source_node</strong> (<em>Node</em>) – Optional source <cite>Node</cite> to check the type and id of. None by default</p></li>
+<li><p><strong>obj_dest_node</strong> (<em>Node</em>) – Optional destination <cite>Node</cite> to check the type and id of. None by default</p></li>
+<li><p><strong>obj_source_unit_id</strong> (<em>int, str</em>) – Object’s source unit ID to match against. None by default</p></li>
+<li><p><strong>obj_dest_unit_id</strong> (<em>int, str</em>) – Object’s destination unit ID to match against. None by default</p></li>
+<li><p><strong>obj_exit_point</strong> (<em>Node</em>) – Optional <cite>exit_point</cite> <cite>Node</cite> to check the type and id of. None by default</p></li>
+<li><p><strong>obj_entry_point</strong> (<em>Node</em>) – Optional <cite>entry_point</cite> <cite>Node</cite> to check the type and id of. None by default</p></li>
+<li><p><strong>source_id</strong> (<em>str</em>) – Optional id of the source node to filter by. None by default</p></li>
+<li><p><strong>dest_id</strong> (<em>str</em>) – Optional id of the destination node to filter by. None by default</p></li>
+<li><p><strong>source_unit_id</strong> (<em>int, str</em>) – Optional unit id of the source to filter by. None by default</p></li>
+<li><p><strong>dest_unit_id</strong> (<em>int, str</em>) – Optional unit id of the destination to filter by. None by default</p></li>
+<li><p><strong>source_node_type</strong> (<em>class</em>) – Optional source <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>dest_node_type</strong> (<em>class</em>) – Optional destination <cite>Node</cite> subclass to filter by. None by default</p></li>
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Optional tag type to filter by. None by default</p></li>
+<li><p><strong>recurse</strong> (<em>bool</em>) – Whether to search for objects within nodes. False by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When a source/destination node type is provided to subset tags</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – When the objects to select among are not of type
+    {‘wwtp_configuration.Tag’ or <cite>wwtp_configuration.Connection</cite>}</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if <cite>obj</cite> fits the filter criteria; False otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -173,6 +192,7 @@ across all units of the destination node</p></li>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -221,7 +241,7 @@ across all units of the destination node</p></li>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/utils.rst.txt"

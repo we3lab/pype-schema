@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="units" href="units.html" />
-    <link rel="prev" title="node" href="node.html" />
+    <link rel="prev" title="tag" href="tag.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -53,8 +53,8 @@
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – path to the JSON file to load</p></li>
-<li><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – dictionary with the contents the JSON file</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to the JSON file to load</p></li>
+<li><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – dictionary with the contents the JSON file</p></li>
 <li><p><strong>network_obj</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Network" title="wwtp_configuration.node.Network"><em>Network</em></a>) – Python representation of the JSON file</p></li>
 </ul>
 </dd>
@@ -128,7 +128,7 @@ which is used to gather relevant metadata</p></li>
 <dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType">ContentsType</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – If contents are ambiguously defined in JSON.
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If contents are ambiguously defined in JSON.
     E.g., contents not defined in tag and parent object has a list of contents</p>
 </dd>
 </dl>
@@ -150,6 +150,27 @@ stored hierarchically</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.merge_network">
+<span class="sig-name descname"><span class="pre">merge_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.merge_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.merge_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Incorporates nodes/connections (i.e. the <cite>new_network</cite>) into a network
+(i.e. <cite>old_newtwork</cite>) modifying it in place and returning the modified network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>old_network</strong> (<em>str or wwtp_configuration.Network</em>) – JSON file path or Network objet to merge with <cite>self</cite></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>TypeError:</strong> – When user does not provide a valid path or Network object for <cite>old_network</cite></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Modified network object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Network" title="wwtp_configuration.node.Network">wwtp_configuration.node.Network</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_contents">
 <span class="sig-name descname"><span class="pre">parse_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a dictionary into a tuple of input and output contents</p>
@@ -161,14 +182,14 @@ stored hierarchically</p>
 <dd class="field-even"><p>(input_contents, output_contents)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_heating_values">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heating_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_heating_values" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heating_vals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_heating_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -179,28 +200,25 @@ stored hierarchically</p>
 Given as a float if no units are specified</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>)</p>
+<dd class="field-odd"><p>(Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_min_max_avg">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_min_max_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_avg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_min_max_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_min_max_avg" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_min_max_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_min_max_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_min_max_avg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>min_max_avg</strong> (<em>dict</em>) – dictionary of the form {‘min’: int, ‘max’: int, ‘avg’: int}</p></li>
-<li><p><strong>units</strong> (<em>str</em>) – units to be parsed into a Pint Quantity</p></li>
-</ul>
+<dd class="field-odd"><p><strong>min_max_avg</strong> (<em>dict</em>) – dictionary of the form {‘min’: int, ‘max’: int, ‘avg’: int}</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>(min, max, and average) with the given Pint units as a tuple.
 If no units given, then returns a tuple of floats.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>(Quantity, Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)">float</a>)</p>
+<dd class="field-odd"><p>(Quantity, Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -233,7 +251,38 @@ which is used to gather relevant metadata</p></li>
 <dd class="field-even"><p>a Python object with the given ID and the values from <cite>tag_info</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.Tag" title="wwtp_configuration.utils.Tag">Tag</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.Tag" title="wwtp_configuration.tag.Tag">Tag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.parse_virtual_tag">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">parse_virtual_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.parse_virtual_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.parse_virtual_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse tag ID and dictionary information into VirtualTag object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>tag_id</strong> (<em>str</em>) – name of the tag</p></li>
+<li><p><strong>tag_info</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>dictionary of the form {</dt><dd><p>‘tags’: dict of Tag,
+‘operations’: list of str,
+‘type’: TagType,
+‘contents’: str</p>
+</dd>
+</dl>
+<p>}</p>
+</li>
+<li><p><strong>obj</strong> (<em>Node or Connection</em>) – parent object that contains all constituent tags,
+which is used to gather the tag list for combining data correctly</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a Python object with the given ID and the values from <cite>tag_info</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.VirtualTag" title="wwtp_configuration.tag.VirtualTag">VirtualTag</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -269,6 +318,7 @@ which is used to gather relevant metadata</p></li>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul class="current">
@@ -285,7 +335,7 @@ which is used to gather relevant metadata</p></li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="node.html" title="previous chapter">node</a></li>
+      <li>Previous: <a href="tag.html" title="previous chapter">tag</a></li>
       <li>Next: <a href="units.html" title="next chapter">units</a></li>
   </ul></li>
 </ul>
@@ -317,7 +367,7 @@ which is used to gather relevant metadata</p></li>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/parse_json.rst.txt"

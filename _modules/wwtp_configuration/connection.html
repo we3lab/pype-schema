@@ -38,7 +38,7 @@
 
 
 <div class="viewcode-block" id="Connection"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection">[docs]</a><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Abstract class for all connections</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract class for all connections</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -98,7 +98,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Connection.add_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.add_tag">[docs]</a>    <span class="k">def</span> <span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -108,7 +108,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span></div>
 
 <div class="viewcode-block" id="Connection.remove_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.remove_tag">[docs]</a>    <span class="k">def</span> <span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Removes a tag from the node</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a tag from the node</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -118,7 +118,7 @@
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Connection.get_source_id"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_source_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_source_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
@@ -131,8 +131,22 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
+<div class="viewcode-block" id="Connection.get_exit_point"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_exit_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_exit_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            name of the exit point Node (if it exists - None otherwise)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="nb">id</span></div>
+
 <div class="viewcode-block" id="Connection.get_dest_id"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_dest_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_dest_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
@@ -145,8 +159,22 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
+<div class="viewcode-block" id="Connection.get_entry_point"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_entry_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_entry_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            name of the entry point Node (if it exists - None otherwise)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="nb">id</span></div>
+
 <div class="viewcode-block" id="Connection.get_num_source_units"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_num_source_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_source_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
@@ -160,7 +188,7 @@
         <span class="k">return</span> <span class="n">num_units</span></div>
 
 <div class="viewcode-block" id="Connection.get_num_dest_units"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_num_dest_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_dest_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
@@ -171,11 +199,52 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="n">num_units</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">num_units</span></div></div>
+        <span class="k">return</span> <span class="n">num_units</span></div>
+
+<div class="viewcode-block" id="Connection.get_source_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_source_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_source_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a connection&#39;s source node returning its exit point if `recurse` is True</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Return `exit_point` if True. Otherwise just return `source`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wwtp_configuration.Node</span>
+<span class="sd">            The source node corresponding to `connection`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+            <span class="k">if</span> <span class="n">node_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+        <span class="k">return</span> <span class="n">node_obj</span></div>
+
+<div class="viewcode-block" id="Connection.get_dest_node"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.get_dest_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_dest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a connection&#39;s destination node,</span>
+<span class="sd">        returning its entry point if `recurse` is True</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Return `entry_point` if True. Otherwise just return `destination`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wwtp_configuration.Node</span>
+<span class="sd">            The destination node corresponding to `connection`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span>
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+            <span class="k">if</span> <span class="n">node_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span>
+        <span class="k">return</span> <span class="n">node_obj</span></div></div>
 
 
 <div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------</span>
 <span class="sd">    id : str</span>
@@ -337,9 +406,9 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Pipe</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
-            <span class="k">return</span> <span class="bp">NotImplemented</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
@@ -357,8 +426,55 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
         <span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">friction_coeff</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">friction_coeff</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">heating_values</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">heating_values</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+        <span class="c1"># case with same number of different tags, so we compare tags in order</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">other_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]):</span>
+                <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
 <div class="viewcode-block" id="Pipe.set_flow_rate"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Pipe.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate through the connection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate through the connection</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -374,7 +490,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Pipe.set_pressure"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Pipe.set_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average pressure inside the connection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average pressure inside the connection</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -390,7 +506,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Pipe.set_heating_values"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Pipe.set_heating_values">[docs]</a>    <span class="k">def</span> <span class="nf">set_heating_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the lower and higher heating values for gas in the connection</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the lower and higher heating values for gas in the connection</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -404,7 +520,7 @@
 
 
 <div class="viewcode-block" id="Wire"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Wire">[docs]</a><span class="k">class</span> <span class="nc">Wire</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------</span>
 <span class="sd">    id : str</span>
@@ -482,9 +598,9 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Wire</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
-            <span class="k">return</span> <span class="bp">NotImplemented</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
@@ -495,7 +611,44 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">exit_point</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+        <span class="c1"># case with same number of different tags, so we compare tags in order</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">other_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]):</span>
+                <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
 </pre></div>
 
           </div>
@@ -524,6 +677,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tag.html">tag</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
 <ul>
@@ -574,7 +728,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 
