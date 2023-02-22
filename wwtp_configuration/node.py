@@ -368,7 +368,9 @@ class Node(ABC):
             if tag.id in self.tags.keys():
                 return self
             else:
-                children = self.get_all_connections(recurse=True) + self.get_all_nodes(recurse=True) 
+                children = self.get_all_connections(recurse=True) + self.get_all_nodes(
+                    recurse=True
+                )
                 for child in children:
                     if tag.id in child.tags.keys():
                         return child
@@ -906,7 +908,6 @@ class Network(Node):
             and self.connections == other.connections
         )
 
-
     def add_node(self, node):
         """Adds a node to the network
 
@@ -1215,7 +1216,6 @@ class Pump(Node):
             and self.tags == other.tags
             and self.flow_rate == other.flow_rate
         )
-
 
     def set_pump_type(self, pump_type):
         """Set the pump curve to the given function
@@ -1670,7 +1670,6 @@ class Cogeneration(Node):
             and self.gen_capacity == other.gen_capacity
             and self.tags == other.tags
         )
-
 
     def set_gen_capacity(self, min, max, avg):
         """Set the minimum, maximum, and average generation capacity

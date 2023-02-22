@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from wwtp_configuration.units import u
-from wwtp_configuration.tag import Tag, TagType, VirtualTag
+from wwtp_configuration.tag import Tag, TagType
 from wwtp_configuration.utils import parse_units, ContentsType
 from wwtp_configuration.parse_json import JSONParser
 

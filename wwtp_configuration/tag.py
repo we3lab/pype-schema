@@ -394,8 +394,8 @@ class VirtualTag:
             correct dimensions. I.e., the number of columns is one more than operations
 
         tag_to_var_map : dict
-            dictionary of the form { tag.id : variable_name } for using data files which differ
-            from the original SCADA tag naming system
+            dictionary of the form { tag.id : variable_name } for using data files
+            that differ from the original SCADA tag naming system
 
         Returns
         -------
