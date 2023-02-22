@@ -25,7 +25,9 @@ requirements = [
     "pint==0.19.2",
     "networkx==2.8.5",
     "pyvis==0.2.1",
-    "matplotlib==3.5.2"
+    "matplotlib==3.5.2",
+    "pandas==1.4.0",
+    "numpy==1.22.1"
 ]
 
 extra_requirements = {

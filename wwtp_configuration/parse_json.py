@@ -1,4 +1,5 @@
 import json
+from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
 from . import utils
@@ -56,9 +57,64 @@ class JSONParser:
             self.network_obj.add_connection(
                 self.create_connection(connection_id, self.network_obj)
             )
+        v_tags = self.config.get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, self.network_obj)
+                self.network_obj.add_tag(v_tag)
 
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
+
+    def merge_network(self, old_network, inplace=False):
+        """Incorporates nodes/connections (i.e. the `new_network`) into a network
+        (i.e. `old_newtwork`) modifying it in place and returning the modified network
+
+        Parameters
+        ----------
+        old_network: str or wwtp_configuration.Network
+            JSON file path or Network objet to merge with `self`
+
+        Raises
+        ------
+        TypeError:
+            When user does not provide a valid path or Network object for `old_network`
+
+        Returns
+        -------
+        wwtp_configuration.node.Network:
+            Modified network object
+        """
+        if isinstance(old_network, str) and old_network.endswith("json"):
+            old_network = JSONParser(old_network).initialize_network()
+        if not isinstance(old_network, node.Network):
+            raise TypeError(
+                "Please provide a valid json path or object for network to merge with"
+            )
+        for node_id in self.config["nodes"]:
+            if node_id not in self.config:
+                raise NameError("Node " + node_id + " not found in " + self.path)
+            # delete existing node before creating the new one if necessary
+            elif hasattr(old_network, "nodes") and node_id in old_network.nodes.keys():
+                old_network.remove_node(node_id)
+            old_network.add_node(self.create_node(node_id))
+        for connection_id in self.config["connections"]:
+            if connection_id not in self.config:
+                raise NameError(
+                    "Connection " + connection_id + " not found in " + self.path
+                )
+            # delete existing connection before creating the new one if necessary
+            if (
+                hasattr(old_network, "connections")
+                and connection_id in old_network.connections.keys()
+            ):
+                old_network.remove_connection(connection_id)
+            old_network.add_connection(
+                self.create_connection(connection_id, old_network)
+            )
+        if inplace:
+            self.network_obj = old_network
+        return old_network
 
     def create_node(self, node_id):
         """Converts a dictionary into a `Node` object
@@ -83,7 +139,7 @@ class JSONParser:
         )
 
         min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[node_id].get("flowrate (MGD)"), "MGD"
+            self.config[node_id].get("flowrate")
         )
 
         # create correct type of node class
@@ -149,6 +205,18 @@ class JSONParser:
                 pump_type=pump_type,
                 tags={},
             )
+
+            efficiency = self.config[node_id].get("efficiency")
+            if efficiency:
+
+                def efficiency_curve(arg):
+                    # TODO: fix this so that it interpolates between dictionary values
+                    if type(efficiency) is dict:
+                        return efficiency[arg]
+                    else:
+                        return float(efficiency)
+
+                node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id, input_contents, output_contents, elevation, volume, tags={}
@@ -183,17 +251,20 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Cogeneration":
             min, max, avg = self.parse_min_max_avg(
-                self.config[node_id].get("generation_capacity (kW)"), "kW"
+                self.config[node_id].get("generation_capacity")
             )
             node_obj = node.Cogeneration(
                 node_id, input_contents, min, max, avg, num_units, tags={}
             )
-            # TODO: support non-constant efficiency curve
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
 
                 def efficiency_curve(arg):
-                    return float(efficiency)
+                    # TODO: fix this so that it interpolates between dictionary values
+                    if type(efficiency) is dict:
+                        return efficiency[arg]
+                    else:
+                        return float(efficiency)
 
                 node_obj.set_energy_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
@@ -235,7 +306,14 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "Flaring":
-            node_obj = node.Flaring(node_id, num_units)
+            node_obj = node.Flaring(
+                node_id,
+                num_units,
+                min_flow,
+                max_flow,
+                avg_flow,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Thickening":
             node_obj = node.Thickening(
                 node_id,
@@ -275,11 +353,46 @@ class JSONParser:
 
         tags = self.config[node_id].get("tags")
         if tags:
+            contents_list = []
             for tag_id, tag_info in tags.items():
                 # ensure that the destination ID for Node-associated Tags is null
                 tag_info["dest_unit_id"] = None
                 tag = self.parse_tag(tag_id, tag_info, node_obj)
                 node_obj.add_tag(tag)
+                contents_type = tag_info.get("contents")
+
+                if (
+                    contents_type is not None
+                    and utils.ContentsType[contents_type] not in contents_list
+                ):
+                    contents_list.append(utils.ContentsType[tag_info["contents"]])
+
+            for contents in contents_list:
+                if contents is not None:
+                    tags_by_contents = [
+                        tag_obj
+                        for _, tag_obj in node_obj.tags.items()
+                        if tag_obj.contents == contents
+                    ]
+                    tag_source_unit_ids = [
+                        tag.source_unit_id for tag in tags_by_contents
+                    ]
+                    if (
+                        "total" not in tag_source_unit_ids
+                        and len(tag_source_unit_ids) > 1
+                    ):
+                        tag_obj = tags_by_contents[0]
+                        tag_id = "_".join(
+                            [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
+                        )
+                        v_tag = VirtualTag(tag_id, tags_by_contents, "+")
+                        node_obj.add_tag(v_tag)
+
+        v_tags = self.config[node_id].get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                node_obj.add_tag(v_tag)
 
         return node_obj
 
@@ -324,13 +437,13 @@ class JSONParser:
             entry_point = destination.get_node(entry_point)
 
         min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[connection_id].get("flowrate (MGD)"), "MGD"
+            self.config[connection_id].get("flowrate")
         )
         min_pres, max_pres, avg_pres = self.parse_min_max_avg(
-            self.config[connection_id].get("pressure (PSI)"), "PSI"
+            self.config[connection_id].get("pressure")
         )
         lower, higher = self.parse_heating_values(
-            self.config[connection_id].get("heating_values (BTU/scf)"), "BTU/scf"
+            self.config[connection_id].get("heating_values")
         )
 
         if self.config[connection_id]["type"] == "Pipe":
@@ -369,10 +482,132 @@ class JSONParser:
             )
 
         tags = self.config[connection_id].get("tags")
+        exit_point_id = (
+            ""
+            if connection_obj.get_exit_point() is None
+            else "_" + connection_obj.get_exit_point().id
+        )
+        entry_point_id = (
+            ""
+            if connection_obj.get_entry_point() is None
+            else "_" + connection_obj.get_entry_point().id
+        )
         if tags:
             for tag_id, tag_info in tags.items():
                 tag = self.parse_tag(tag_id, tag_info, connection_obj)
                 connection_obj.add_tag(tag)
+
+            # create virtual "total" tag if it was missing
+            contents_list = (
+                connection_obj.contents
+                if (type(connection_obj.contents) is list)
+                else [connection_obj.contents]
+            )
+
+            for contents in contents_list:
+                if contents is not None:
+                    tags_by_contents = [
+                        tag_obj
+                        for _, tag_obj in connection_obj.tags.items()
+                        if tag_obj.contents == contents
+                    ]
+                    tag_source_unit_ids = [
+                        tag.source_unit_id for tag in tags_by_contents
+                    ]
+                    tag_dest_unit_ids = [tag.dest_unit_id for tag in tags_by_contents]
+                    if (
+                        "total" not in tag_source_unit_ids
+                        and len(tag_source_unit_ids) > 1
+                    ):
+                        tag_obj = tags_by_contents[0]
+                        # create a separate virtual total for each destination unit.
+                        # If none exist then just use total
+                        if tag_dest_unit_ids:
+                            for id in tag_dest_unit_ids:
+                                tag_list = [
+                                    connection_obj.tags[tag_obj.id]
+                                    for tag_obj in tags_by_contents
+                                    if tag_obj.contents == contents
+                                    and tag_obj.dest_unit_id == id
+                                ]
+                                dest_unit_id = "" if id == "total" else "_" + str(id)
+
+                                tag_id = "{}{}_{}{}{}_{}_{}".format(
+                                    connection_obj.get_source_id(),
+                                    exit_point_id,
+                                    connection_obj.get_dest_id(),
+                                    entry_point_id,
+                                    dest_unit_id,
+                                    tag_obj.contents.name,
+                                    tag.tag_type.name,
+                                )
+                                v_tag = VirtualTag(tag_id, tag_list, "+")
+                                connection_obj.add_tag(v_tag)
+
+                        else:
+                            tag_list = [
+                                connection_obj.tags[tag_obj.id]
+                                for tag_obj in tags_by_contents
+                                if tag_obj.contents == contents
+                            ]
+
+                            tag_id = "{}{}_{}{}_{}_{}".format(
+                                connection_obj.get_source_id(),
+                                exit_point_id,
+                                connection_obj.get_dest_id(),
+                                entry_point_id,
+                                tag_obj.contents.name,
+                                tag.tag_type.name,
+                            )
+                            v_tag = VirtualTag(tag_id, tag_list, "+")
+                            connection_obj.add_tag(v_tag)
+                    if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
+                        tag_obj = tags_by_contents[0]
+                        # create a separate virtual total for each source unit.
+                        # If none exist then just use total
+                        if tag_source_unit_ids:
+                            for id in tag_source_unit_ids:
+                                tag_list = [
+                                    connection_obj.tags[tag_obj.id]
+                                    for tag_obj in tags_by_contents
+                                    if tag_obj.contents == contents
+                                    and tag_obj.source_unit_id == id
+                                ]
+                                source_unit_id = "" if id == "total" else "_" + str(id)
+                                tag_id = "{}{}{}_{}{}_{}_{}".format(
+                                    connection_obj.get_source_id(),
+                                    exit_point_id,
+                                    source_unit_id,
+                                    connection_obj.get_dest_id(),
+                                    entry_point_id,
+                                    tag_obj.contents.name,
+                                    tag.tag_type.name,
+                                )
+                                v_tag = VirtualTag(tag_id, tag_list, "+")
+                                connection_obj.add_tag(v_tag)
+                        else:
+                            tag_list = [
+                                connection_obj.tags[tag_obj.id]
+                                for tag_obj in tags_by_contents
+                                if tag_obj.contents == contents
+                            ]
+
+                            tag_id = "{}{}_{}{}_{}_{}".format(
+                                connection_obj.get_source_id(),
+                                exit_point_id,
+                                connection_obj.get_dest_id(),
+                                entry_point_id,
+                                tag_obj.contents.name,
+                                tag.tag_type.name,
+                            )
+                            v_tag = VirtualTag(tag_id, tag_list, "+")
+                            connection_obj.add_tag(v_tag)
+
+        v_tags = self.config[connection_id].get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, connection_obj)
+                connection_obj.add_tag(v_tag)
 
         return connection_obj
 
@@ -421,6 +656,54 @@ class JSONParser:
         return (input_contents, output_contents)
 
     @staticmethod
+    def parse_virtual_tag(tag_id, tag_info, obj):
+        """Parse tag ID and dictionary information into VirtualTag object
+
+        Parameters
+        ----------
+        tag_id : str
+            name of the tag
+
+        tag_info : dict
+            dictionary of the form {
+                'tags': dict of Tag,
+                'operations': list of str,
+                'type': TagType,
+                'contents': str
+            }
+
+        obj : Node or Connection
+            parent object that contains all constituent tags,
+            which is used to gather the tag list for combining data correctly
+
+        Returns
+        -------
+        VirtualTag
+            a Python object with the given ID and the values from `tag_info`
+        """
+        tag_list = []
+        for subtag_id in tag_info["tags"]:
+            subtag = obj.get_tag(subtag_id, recurse=True)
+            if subtag is None:
+                raise ValueError(
+                    "Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
+                )
+            tag_list.append(subtag)
+
+        try:
+            tag_type = TagType[tag_info["type"]]
+        except KeyError:
+            tag_type = None
+        try:
+            contents_type = utils.ContentsType[tag_info["contents"]]
+        except KeyError:
+            contents_type = None
+        v_tag = VirtualTag(
+            tag_id, tag_list, tag_info["operations"], tag_type, contents_type
+        )
+        return v_tag
+
+    @staticmethod
     def parse_tag(tag_id, tag_info, obj):
         """Parse tag ID and dictionary of information into Tag object
 
@@ -449,12 +732,12 @@ class JSONParser:
             a Python object with the given ID and the values from `tag_info`
         """
         contents = JSONParser.get_tag_contents(tag_id, tag_info, obj)
-        tag_type = utils.TagType[tag_info["type"]]
+        tag_type = TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
         pint_unit = utils.parse_units(tag_info["units"]) if tag_info["units"] else None
         source_unit_id = tag_info.get("source_unit_id", "total")
         dest_unit_id = tag_info.get("dest_unit_id", "total")
-        tag = utils.Tag(
+        tag = Tag(
             tag_id,
             pint_unit,
             tag_type,
@@ -506,38 +789,30 @@ class JSONParser:
         except KeyError:
             contents = None
 
-        tag_type = utils.TagType[tag_info["type"]]
-        # these TagType do not have any contents
-        contentless_types = [
-            utils.TagType.RunTime,
-            utils.TagType.RunStatus,
-            utils.TagType.Rotation,
-        ]
-        if contents is None and tag_type not in contentless_types:
+        tag_type = TagType[tag_info["type"]]
+        if contents is None and tag_type not in CONTENTLESS_TYPES:
             # will work if obj is of type Connection, otherwise exception occurs
             try:
                 contents = obj.contents
             except AttributeError:
-                if obj.input_contents == obj.output_contents and not isinstance(
-                    obj.input_contents, list
+                if (
+                    obj.input_contents == obj.output_contents
+                    and len(obj.input_contents) == 1
                 ):
-                    contents = obj.input_contents
+                    contents = obj.input_contents[0]
                 else:
                     raise ValueError("Ambiguous contents definition for tag " + tag_id)
 
         return contents
 
     @staticmethod
-    def parse_min_max_avg(min_max_avg, units=None):
+    def parse_min_max_avg(min_max_avg):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
         ----------
         min_max_avg : dict
             dictionary of the form {'min': int, 'max': int, 'avg': int}
-
-        units : str
-            units to be parsed into a Pint Quantity
 
         Returns
         -------
@@ -548,6 +823,7 @@ class JSONParser:
         if min_max_avg is None:
             return (None, None, None)
         else:
+            units = min_max_avg.get("units")
             if units:
                 return (
                     utils.parse_quantity(min_max_avg.get("min"), units),
@@ -562,7 +838,7 @@ class JSONParser:
                 )
 
     @staticmethod
-    def parse_heating_values(heating_vals, units=None):
+    def parse_heating_values(heating_vals):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
@@ -575,11 +851,11 @@ class JSONParser:
         (Quantity, Quantity) or (float, float)
             (lower, higher) heating values as a tuple, with units applied.
             Given as a float if no units are specified
-
         """
         if heating_vals is None:
             return (None, None)
         else:
+            units = heating_vals.get("units")
             if units:
                 return (
                     utils.parse_quantity(heating_vals.get("lower"), units),

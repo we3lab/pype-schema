@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from pint import UndefinedUnitError
+from pint import UndefinedUnitError, DimensionalityError
 from .units import u
 
 
@@ -345,6 +345,9 @@ class ContentsType(Enum):
     whether they are sludge, water, or gas"""
 
     UntreatedSewage = auto()
+    PrimaryEffluent = auto()
+    SecondaryEffluent = auto()
+    TertiaryEffluent = auto()
     TreatedSewage = auto()
     DrinkingWater = auto()
     PotableReuse = auto()
@@ -366,6 +369,7 @@ class ContentsType(Enum):
     Seawater = auto()
     SurfaceWater = auto()
     Groundwater = auto()
+    Stormwater = auto()
 
 
 class PumpType(Enum):
@@ -382,141 +386,190 @@ class DigesterType(Enum):
     Anaerobic = auto()
 
 
-class TagType(Enum):
-    """Enum to represent types of SCADA tags"""
-
-    Flow = auto()
-    Volume = auto()
-    Level = auto()
-    Pressure = auto()
-    RunTime = auto()
-    RunStatus = auto()
-    VSS = auto()
-    TSS = auto()  # total suspended solids
-    TDS = auto()  # total dissolved solids
-    COD = auto()  # chemical oxygen demand
-    BOD = auto()  # biochemical oxygen demand
-    pH = auto()
-    Rotation = auto()
-
-
-class Tag:
-    """Class to represent a SCADA or other data tag
+def select_objs_helper(
+    obj,
+    obj_source_node=None,
+    obj_dest_node=None,
+    obj_source_unit_id=None,
+    obj_dest_unit_id=None,
+    obj_exit_point=None,
+    obj_entry_point=None,
+    source_id=None,
+    dest_id=None,
+    source_unit_id=None,
+    dest_unit_id=None,
+    exit_point_id=None,
+    entry_point_id=None,
+    source_node_type=None,
+    dest_node_type=None,
+    exit_point_type=None,
+    entry_point_type=None,
+    tag_type=None,
+    recurse=False,
+):
+    """Helper to select from objects which match source/destination node class,
+    unit ID, and contents
 
     Parameters
     ----------
-    id : str
-        Tag ID
+    obj : [Node, Connection, Tag]
+        Object to check if it meets the specified filtering criteria
 
-    units : str or Unit
-        Units represented as a string Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
+    obj_source_node : Node
+        Optional source `Node` to check the type and id of. None by default
+
+    obj_dest_node : Node
+        Optional destination `Node` to check the type and id of. None by default
+
+    obj_source_unit_id : int, str
+        Object's source unit ID to match against. None by default
+
+    obj_dest_unit_id : int, str
+        Object's destination unit ID to match against. None by default
+
+    obj_exit_point : Node
+        Optional `exit_point` `Node` to check the type and id of. None by default
+
+    obj_entry_point : Node
+        Optional `entry_point` `Node` to check the type and id of. None by default
+
+    source_id : str
+        Optional id of the source node to filter by. None by default
+
+    dest_id : str
+        Optional id of the destination node to filter by. None by default
+
+    source_unit_id : int, str
+        Optional unit id of the source to filter by. None by default
+
+    dest_unit_id : int, str
+        Optional unit id of the destination to filter by. None by default
+
+    source_node_type : class
+        Optional source `Node` subclass to filter by. None by default
+
+    dest_node_type : class
+        Optional destination `Node` subclass to filter by. None by default
 
     tag_type : TagType
-        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
+        Optional tag type to filter by. None by default
 
-    source_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the source node
+    recurse : bool
+        Whether to search for objects within nodes. False by default
 
-    dest_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the destination node.
-        None if the Tag is associated with a Node object instead of a Connection
+    Raises
+    ------
+    ValueError
+        When a source/destination node type is provided to subset tags
 
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
+    TypeError
+        When the objects to select among are not of type
+        {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
 
-    totalized : bool
-        True if data is totalized. False otherwise
-
-    contents : ContentsType
-        Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
-
-    Attributes
-    ----------
-    id : str
-        Tag ID
-
-    units : str or Unit
-        Units represented as a string Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
-
-    tag_type : TagType
-        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
-
-    source_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the sources node
-
-    dest_unit_id : int or str
-        integer representing unit number, or `total` if a combined data point
-        across all units of the destination node
-
-    parent_id : str
-        ID for the parent object (either a Node or Connection)
-
-    totalized : bool
-        True if data is totalized. False otherwise
-
-    contents : ContentsType
-        Contents moving through the node
+    Returns
+    -------
+    bool
+        True if `obj` fits the filter criteria; False otherwise.
     """
+    # convert string source and destination unit IDs to integers
+    if isinstance(source_unit_id, str) and source_unit_id != "total":
+        source_unit_id = int(source_unit_id)
+    if isinstance(dest_unit_id, str) and dest_unit_id != "total":
+        dest_unit_id = int(dest_unit_id)
 
-    def __init__(
-        self,
-        id,
-        units,
-        tag_type,
-        source_unit_id,
-        dest_unit_id,
-        parent_id,
-        totalized=False,
-        contents=None,
+    if source_id is not None and (
+        not hasattr(obj_source_node, "id") or obj_source_node.id != source_id
     ):
-        self.id = id
-        self.units = units
-        self.contents = contents
-        self.tag_type = tag_type
-        self.totalized = totalized
-        self.source_unit_id = source_unit_id
-        self.dest_unit_id = dest_unit_id
-        self.parent_id = parent_id
+        if (
+            not recurse
+            or not hasattr(obj_exit_point, "id")
+            or obj_exit_point.id != source_id
+        ):
+            return False
 
-    def __repr__(self):
-        return (
-            f"<wwtp_configuration.utils.Tag id:{self.id} units:{self.units} "
-            f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
-            f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>\n"
-        )
+    if dest_id is not None and (
+        not hasattr(obj_dest_node, "id") or obj_dest_node.id != dest_id
+    ):
+        if (
+            not recurse
+            or not hasattr(obj_entry_point, "id")
+            or obj_entry_point.id != dest_id
+        ):
+            return False
 
-    def __eq__(self, other):
-        # don't attempt to compare against unrelated types
-        if not isinstance(other, self.__class__):
-            return NotImplemented
+    if source_unit_id is not None and source_unit_id != obj_source_unit_id:
+        return False
 
-        return (
-            self.id == other.id
-            and self.contents == other.contents
-            and self.tag_type == other.tag_type
-            and self.totalized == other.totalized
-            and self.source_unit_id == other.source_unit_id
-            and self.dest_unit_id == other.dest_unit_id
-            and self.units == other.units
-            and self.parent_id == other.parent_id
-        )
+    if dest_unit_id is not None and dest_unit_id != obj_dest_unit_id:
+        return False
 
-    def __hash__(self):
-        return hash(
-            (
-                self.id,
-                self.contents,
-                self.tag_type,
-                self.totalized,
-                self.source_unit_id,
-                self.dest_unit_id,
-                self.units,
-                self.parent_id,
-            )
-        )
+    if exit_point_id is not None and (
+        not hasattr(obj_exit_point, "id") or obj_exit_point.id != exit_point_id
+    ):
+        return False
+
+    if entry_point_id is not None and (
+        not hasattr(obj_entry_point, "id") or obj_entry_point.id != entry_point_id
+    ):
+        return False
+
+    if source_node_type is not None and not isinstance(
+        obj_source_node, source_node_type
+    ):
+        if not recurse or not isinstance(obj_exit_point, source_node_type):
+            return False
+
+    if dest_node_type is not None and not isinstance(obj_dest_node, dest_node_type):
+        if not recurse or not isinstance(obj_entry_point, dest_node_type):
+            return False
+
+    if exit_point_type is not None and not isinstance(obj_exit_point, exit_point_type):
+        return False
+
+    if entry_point_type is not None and isinstance(obj_entry_point, exit_point_type):
+        return False
+
+    if tag_type is not None and (
+        not hasattr(obj, "tag_type") or obj.tag_type != tag_type
+    ):
+        return False
+
+    return True
+
+
+def operation_helper(operation, unit, prev_unit):
+    """Helper for parsing operations and checking units
+
+    Parameters
+    ----------
+    operation : ["+", "-", "*", "/"]
+        Function to apply when combining tags.
+        Supported functions are "+", "-", "*", and "/".
+
+    unit : Unit
+        Units for the right side of the operation, represented as a Pint unit.
+
+    prev_unit : Unit
+        Units for the left side of the operation, represented as a Pint unit.
+
+    Returns
+    -------
+    Unit
+        Resulting Pint Unit from combining the `unit` and `prev_unit`
+        according to `operation`
+    """
+    if operation == "+" or operation == "-":
+        if unit != prev_unit:
+            try:
+                unit.to(prev_unit)
+            except DimensionalityError:
+                raise ValueError("Units for addition and subtraction must be identical")
+    elif operation == "*" or operation == "/":
+        if operation == "/":
+            prev_unit = prev_unit / unit
+        else:
+            prev_unit = prev_unit * unit
+    else:
+        raise ValueError("Unsupported operation " + operation)
+
+    return prev_unit

@@ -6,10 +6,11 @@
     "elevation (meters)": 1,
     "input_contents": "UntreatedSewage",
     "output_contents": "TreatedSewage",
-    "flowrate (MGD)": {
+    "flowrate": {
       "min": null,
       "max": 68,
-      "avg": 24
+      "avg": 24,
+      "units": "MGD"
     },
     "nodes": ["Digester", "Cogenerator"],
     "connections": ["GasToCogen"],
@@ -48,10 +49,11 @@
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
     "output_contents": "Electricity",
-    "generation_capacity (kW)": {
+    "generation_capacity": {
       "min": 400,
       "max": 750,
-      "avg": 600
+      "avg": 600,
+      "units": "kW"
     },
     "tags": {}
   },
@@ -60,17 +62,30 @@
     "source": "Digester",
     "destination": "Cogenerator",
     "contents": "Biogas",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
       "avg": null
     },
     "tags": {
-      "CombinedDigesterGasFlow": {
+      "Digester1GasFlow": {
         "type": "Flow",
         "units": "SCFM",
-        "source_unit_id": "total",
-        "dest_unit_id": "total",
+        "source_unit_id": 1,
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "Digester2GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 2,
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "Digester3GasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": 3,
         "contents": "Biogas",
         "totalized": false
       }
@@ -110,7 +125,7 @@
     "pump_type": null,
     "contents": "UntreatedSewage",
     "horsepower": null,
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
       "avg": null
@@ -131,7 +146,7 @@
     "destination": "PowerGrid",
     "contents": "Biogas",
     "exit_point": "Digester",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
       "avg": null

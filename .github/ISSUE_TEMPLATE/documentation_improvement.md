@@ -12,7 +12,7 @@ labels: "documentation, needs triage"
 ---
 
 ## Location of Documentation
-*This should provide the location of the documentation, e.g. "wwtp_configuration.utils.TagType" or the URL of the documentation, e.g. "https://we3lab.github.io/wwtp-configuration/utils.html"*
+*This should provide the location of the documentation, e.g. "wwtp_configuration.tag.TagType" or the URL of the documentation, e.g. "https://we3lab.github.io/wwtp-configuration/utils.html"*
 
 ## Documentation Problem
 *This should provide a description of what documentation you believe needs to be fixed/improved*

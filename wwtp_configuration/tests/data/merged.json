@@ -8,7 +8,8 @@
     "RecycledWaterFacility",
     "PurplePipeSystem",
     "DesalPlant",
-    "Ocean"
+    "Ocean",
+    "PumpStation"
   ],
   "connections": [
     "SewerIntake",
@@ -21,7 +22,8 @@
     "DesalOutlet",
     "RecycledWaterOutlet",
     "DrinkingWaterToDistribution",
-    "GasToFacility"
+    "GasToFacility",
+    "MainSewerLine"
   ],
   "virtual_tags": {
     "GrossGasProduction": {
@@ -43,8 +45,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "nodes": [],
     "connections": [],
@@ -109,8 +110,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     }
   },
   "Cogenerator": {
@@ -225,8 +225,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -246,8 +245,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     }
   },
   "SewerNetwork": {
@@ -296,8 +294,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "nodes": [],
     "connections": []
@@ -310,8 +307,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "nodes": ["Ultrafiltration", "RWFContactChamber", "ReclaimedReservoir"],
     "connections": ["UFToDisinfection", "ChlorinatorToReservoir"]
@@ -324,8 +320,7 @@
     "flowrate": {
       "min": null,
       "max": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     }
   },
   "RWFContactChamber": {
@@ -343,8 +338,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -371,8 +365,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -383,17 +376,41 @@
     "contents": "NonpotableReuse",
     "tags": {}
   },
-  "SewerIntake": {
+  "PumpStation": {
+    "type": "Facility",
+    "elevation (meters)": null,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "UntreatedSewage",
+    "flowrate": {
+      "min": 5,
+      "max": 25,
+      "avg": 15,
+      "units": "MGD"
+    },
+    "nodes": [],
+    "connections": []
+  },
+  "MainSewerLine": {
     "type": "Pipe",
     "source": "SewerNetwork",
+    "destination": "PumpStation",
+    "contents": "UntreatedSewage",
+    "flowrate": {
+      "max": null,
+      "min": null,
+      "avg": null
+    }
+  },
+  "SewerIntake": {
+    "type": "Pipe",
+    "source": "PumpStation",
     "destination": "WWTP",
     "contents": "UntreatedSewage",
     "entry_point": "BarScreen",
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {
       "InfluentFlow": {
@@ -414,8 +431,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -427,8 +443,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -440,8 +455,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -460,8 +474,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -484,8 +497,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "heating_values": {
       "lower": 600,
@@ -535,8 +547,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {
       "TotalizedFlaredGas": {
@@ -579,8 +590,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -600,8 +610,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -613,8 +622,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -628,8 +636,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -642,8 +649,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -655,8 +661,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -682,8 +687,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -696,8 +700,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },
@@ -709,8 +712,7 @@
     "flowrate": {
       "max": null,
       "min": null,
-      "avg": null,
-      "units": "MGD"
+      "avg": null
     },
     "tags": {}
   },

@@ -19,10 +19,11 @@
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
     "output_contents": "Electricity",
-    "generation_capacity (kW)": {
+    "generation_capacity": {
       "min": 400,
       "max": 750,
-      "avg": 600
+      "avg": 600,
+      "units": "kW"
     },
     "efficiency": 0.32,
     "tags": {}
@@ -32,14 +33,16 @@
     "source": "Digester",
     "destination": "Cogenerator",
     "contents": "Biogas",
-    "flowrate (MGD)": {
+    "flowrate": {
       "max": null,
       "min": null,
-      "avg": null
+      "avg": null,
+      "units": "MGD"
     },
-    "heating_values (BTU/scf)": {
+    "heating_values": {
       "lower": 600,
-      "higher": 700
+      "higher": 700,
+      "units": "BTU/scf"
     },
     "tags": {}
   }

@@ -97,6 +97,20 @@ class Connection(ABC):
 
         return id
 
+    def get_exit_point(self):
+        """
+        Returns
+        -------
+        str
+            name of the exit point Node (if it exists - None otherwise)
+        """
+        try:
+            id = self.exit_point
+        except AttributeError:
+            id = None
+
+        return id
+
     def get_dest_id(self):
         """
         Returns
@@ -106,6 +120,20 @@ class Connection(ABC):
         """
         try:
             id = self.destination.id
+        except AttributeError:
+            id = None
+
+        return id
+
+    def get_entry_point(self):
+        """
+        Returns
+        -------
+        str
+            name of the entry point Node (if it exists - None otherwise)
+        """
+        try:
+            id = self.entry_point
         except AttributeError:
             id = None
 
@@ -138,6 +166,47 @@ class Connection(ABC):
             num_units = None
 
         return num_units
+
+    def get_source_node(self, recurse=False):
+        """Gets a connection's source node returning its exit point if `recurse` is True
+
+        Parameters
+        ----------
+        recurse : bool
+            Return `exit_point` if True. Otherwise just return `source`
+
+        Returns
+        -------
+        wwtp_configuration.Node
+            The source node corresponding to `connection`
+        """
+        node_obj = self.source
+        if recurse:
+            node_obj = self.exit_point
+            if node_obj is None:
+                node_obj = self.source
+        return node_obj
+
+    def get_dest_node(self, recurse=False):
+        """Gets a connection's destination node,
+        returning its entry point if `recurse` is True
+
+        Parameters
+        ----------
+        recurse : bool
+            Return `entry_point` if True. Otherwise just return `destination`
+
+        Returns
+        -------
+        wwtp_configuration.Node
+            The destination node corresponding to `connection`
+        """
+        node_obj = self.destination
+        if recurse:
+            node_obj = self.entry_point
+            if node_obj is None:
+                node_obj = self.destination
+        return node_obj
 
 
 class Pipe(Connection):
@@ -303,9 +372,9 @@ class Pipe(Connection):
         )
 
     def __eq__(self, other):
-        if not isinstance(other, Pipe):
+        if not isinstance(other, self.__class__):
             # don't attempt to compare against unrelated types
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -322,6 +391,53 @@ class Pipe(Connection):
             and self.exit_point == other.exit_point
             and self.entry_point == other.entry_point
         )
+
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.diameter != other.diameter:
+            return self.diameter < other.diameter
+        elif self.flow_rate != other.flow_rate:
+            return self.flow_rate < other.flow_rate
+        elif self.friction_coeff != other.friction_coeff:
+            return self.friction_coeff < other.friction_coeff
+        elif self.pressure != other.pressure:
+            return self.pressure < other.pressure
+        elif self.heating_values != other.heating_values:
+            return self.heating_values < other.heating_values
+        elif self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.bidirectional != other.bidirectional:
+            return not self.bidirectional
+        elif self.exit_point != self.exit_point:
+            return self.exit_point < self.exit_point
+        elif self.entry_point != self.entry_point:
+            return self.entry_point < self.entry_point
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            if self.source != other.source:
+                if isinstance(self.source, type(other.source)):
+                    return self.source < other.source
+                else:
+                    return self.source.id < other.source.id
+            elif self.destination != other.destination:
+                if isinstance(self.destination, type(other.destination)):
+                    return self.destination < other.destination
+                else:
+                    return self.destination.id < other.destination.id
+            else:
+                return self.id < other.id
+        # case with same number of different tags, so we compare tags in order
+        else:
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]
 
     def set_flow_rate(self, min, max, avg):
         """Set the minimum, maximum, and average flow rate through the connection
@@ -448,9 +564,9 @@ class Wire(Connection):
         )
 
     def __eq__(self, other):
-        if not isinstance(other, Wire):
+        if not isinstance(other, self.__class__):
             # don't attempt to compare against unrelated types
-            return NotImplemented
+            return False
 
         return (
             self.id == other.id
@@ -462,3 +578,40 @@ class Wire(Connection):
             and self.exit_point == other.exit_point
             and self.entry_point == other.entry_point
         )
+
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.bidirectional != other.bidirectional:
+            return not self.bidirectional
+        elif self.exit_point != self.exit_point:
+            return self.exit_point < self.exit_point
+        elif self.entry_point != self.entry_point:
+            return self.entry_point < self.entry_point
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            if self.source != other.source:
+                if isinstance(self.source, type(other.source)):
+                    return self.source < other.source
+                else:
+                    return self.source.id < other.source.id
+            elif self.destination != other.destination:
+                if isinstance(self.destination, type(other.destination)):
+                    return self.destination < other.destination
+                else:
+                    return self.destination.id < other.destination.id
+            else:
+                return self.id < other.id
+        # case with same number of different tags, so we compare tags in order
+        else:
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]
