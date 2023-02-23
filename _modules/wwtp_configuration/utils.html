@@ -595,7 +595,7 @@
     <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span> <span class="ow">or</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="n">prev_unit</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">factor</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">prev_unit</span><span class="p">)</span>
+                <span class="n">unit</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">prev_unit</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">DimensionalityError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Units for addition and subtraction must be identical&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span> <span class="ow">or</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
