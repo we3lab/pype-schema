@@ -561,7 +561,7 @@ def operation_helper(operation, unit, prev_unit):
     if operation == "+" or operation == "-":
         if unit != prev_unit:
             try:
-                factor = u.convert(1, unit, prev_unit)
+                u.convert(1, unit, prev_unit)
             except DimensionalityError:
                 raise ValueError("Units for addition and subtraction must be identical")
     elif operation == "*" or operation == "/":
