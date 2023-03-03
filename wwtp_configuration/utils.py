@@ -527,7 +527,7 @@ def select_objs_helper(
     if exit_point_type is not None and not isinstance(obj_exit_point, exit_point_type):
         return False
 
-    if entry_point_type is not None and isinstance(obj_entry_point, exit_point_type):
+    if entry_point_type is not None and isinstance(obj_entry_point, entry_point_type):
         return False
 
     if tag_type is not None and (
