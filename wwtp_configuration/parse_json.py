@@ -863,3 +863,58 @@ class JSONParser:
                 )
             else:
                 return (heating_vals.get("lower"), heating_vals.get("higher"))
+
+    
+    @staticmethod
+    def to_json(network, file_path):
+        """Converts a Network object to a JSON file
+
+        Parameters
+        ----------
+        network : Network
+            dictionary of the form {'lower': float, 'higher': float}
+
+        file_path : str
+            path to write the configuration in JSON format
+
+        Raises
+        ------
+        TypeError
+            If `network` is not of type `Network`
+
+        Returns
+        -------
+        str
+            json in string format
+        """
+        if not isinstnace(network, node.Network):
+            raise TypeError("Only Network objects can be converted to JSON format")
+
+        result = {
+            "nodes": [],
+            "connections": [],
+            "virtual_tags": {}
+        }
+
+        for v_tag_obj in network.get_all_tags(recurse=False):
+            # TODO: parse virtual tags
+            # v_tag_json = ...
+            result[v_tag_obj.id] = v_tag_json
+
+        for conn_obj in network.get_all_connections(recurse=False):
+            result["connections"].append(conn_obj.id)
+            # TODO: parse conn and add it
+            # conn_json = ...
+            result[conn_obj.id] = conn_json
+
+        for node_obj in network.get_all_nodes(recurse=False):
+            result["nodes"].append(node_obj.id)
+            # TODO: parse node and add it - if it's a network this will be recursive
+            # node_json = ...
+            result[node_obj.id] = node_json
+
+        with open(file_path, 'w') as file: 
+            json_str = json.dump(result, file)
+            
+        return json_str
+	
