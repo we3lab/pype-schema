@@ -864,6 +864,122 @@ class JSONParser:
             else:
                 return (heating_vals.get("lower"), heating_vals.get("higher"))
 
+    @staticmethod
+    def tag_to_dict(tag_obj):
+        """Converts a Tag or VirtualTag object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        tag_obj : Tag or VirtualTag
+            object to be converted into a dictionary
+
+        Raises
+        ------
+        TypeError
+            If `tag_obj` is not of type Tag or VirtualTag
+
+        Returns
+        -------
+        dict
+            `tag_obj` in dictionary form
+        """
+        tag_dict = {}
+        if isinstance(tag_obj, VirtualTag):
+            tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
+            tag_dict["operations"] = tag_obj.operations
+        elif isinstance(tag_obj, Tag):
+            # TODO: parse normal Tag object
+        else:
+            raise TypeError("'tag_obj' must be of type Tag or VirtualTag")
+
+        tag_dict["type"] = tag_obj.tag_type.name
+        if tag_obj.tag_type not in CONTENTLESS_TYPES:
+            tag_dict["contents"] = tag_obj.contents.name
+
+        return tag_dict
+
+    @staticmethod
+    def conn_to_dict(conn_obj):
+        """Converts a Connection object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        conn_obj : Connection
+            object to be converted into a dictionary
+
+        Returns
+        -------
+        dict
+            `conn_obj` in dictionary form
+        """
+        conn_dict = {}
+        conn_dict["type"] = type(conn_obj).__name__
+        conn_dict["source"] = conn_obj.source.id
+        conn_dict["destination"] = conn_obj.destination.id
+        conn_dict["contents"] = conn_obj.contents.name
+        conn_dict["bidirectional"] = conn_obj.bidirectional
+
+        if conn_obj.exit_point is not None:
+            conn_dict["exit_point"] = conn_obj.exit_point.id
+
+        if conn_obj.entry_point is not None:
+            conn_dict["entry_point"] = conn_obj.entry_point.id
+
+        if isinstance(conn_obj, connection.Pipe)
+            flow_dict = {"min": None, "max": None, "avg": None, "units": "MGD"}
+            if conn_obj.flow_rate[0] is not None:
+                flow_dict["min"] = conn_obj.flow_rate[0].magnitude
+                flow_dict["units"] = conn_obj.flow_rate[0].units
+
+            if conn_obj.heating_values[1] is not None:
+                flow_dict["min"] = conn_obj.flow_rate[1].magnitude
+                flow_dict["units"] = conn_obj.flow_rate[1].units
+            
+            if conn_obj.heating_values[2] is not None:
+                flow_dict["avg"] = conn_obj.flow_rate[2].magnitude
+                flow_dict["units"] = conn_obj.flow_rate[2].units
+                
+            conn_dict["flowrate"] = flow_dict
+            
+            heat_dict = {"lower": None, "higher": None, "units": "BTU/scf"}
+            if conn_obj.heating_values[0] is not None:
+                heat_dict["lower"] = conn_obj.heating_values[0].magnitude
+                heat_dict["units"] = conn_obj.heating_values[0].units
+
+            if conn_obj.heating_values[1] is not None:
+                heat_dict["higher"] = conn_obj.heating_values[1].magnitude,
+                heat_dict["units"] = conn_obj.heating_values[1].units
+
+            conn_dict["heating_values"] = heat_dict
+
+        # TODO: unused fields (diameter, pressure, friction_coeff)
+
+        tag_dict = {}
+        for tag in conn_obj.tags:
+            tag_dict[tag.id] = tag_to_dict(tag)
+
+        conn_dict["tags"] = tag_dict
+
+        return conn_dict
+
+    @staticmethod
+    def node_to_dict(node_obj):
+        """Converts a Node object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        node_obj : Node
+            object to be converted into a dictionary
+
+        Returns
+        -------
+        dict
+            `node_obj` in dictionary form
+        """
+        # TODO: contents is a list
     
     @staticmethod
     def to_json(network, file_path):
@@ -897,15 +1013,13 @@ class JSONParser:
         }
 
         for v_tag_obj in network.get_all_tags(recurse=False):
-            # TODO: parse virtual tags
-            # v_tag_json = ...
-            result[v_tag_obj.id] = v_tag_json
+            v_tag_dict = tag_to_json(v_tag_obj)
+            result[v_tag_obj.id] = v_tag_dict
 
         for conn_obj in network.get_all_connections(recurse=False):
             result["connections"].append(conn_obj.id)
-            # TODO: parse conn and add it
-            # conn_json = ...
-            result[conn_obj.id] = conn_json
+            conn_dict = conn_to_dict(conn_obj)
+            result[conn_obj.id] = conn_dict
 
         for node_obj in network.get_all_nodes(recurse=False):
             result["nodes"].append(node_obj.id)
