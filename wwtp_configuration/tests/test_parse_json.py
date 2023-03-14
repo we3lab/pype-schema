@@ -80,3 +80,13 @@ def test_merge_network(
 
     assert result == expected
     assert inplace == (expected == parser.network_obj)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize("json_path", [("../data/sample.json")])
+def test_to_json(json_path,):
+    expected = JSONParser(json_path).initialize_network()
+    JSONParser.to_json(expected, "data/test_to_json.json")
+    result = JSONParser("data/test_to_json.json").initialize_network()
+
+    assert result == expected
