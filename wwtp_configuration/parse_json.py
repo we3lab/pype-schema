@@ -931,6 +931,7 @@ class JSONParser:
             conn_dict["entry_point"] = conn_obj.entry_point.id
 
         if isinstance(conn_obj, connection.Pipe)
+            # TODO: make flowrate helper function
             flow_dict = {"min": None, "max": None, "avg": None, "units": "MGD"}
             if conn_obj.flow_rate[0] is not None:
                 flow_dict["min"] = conn_obj.flow_rate[0].magnitude
@@ -982,10 +983,54 @@ class JSONParser:
         dict
             `node_obj` in dictionary form
         """
-        # TODO: contents is a list
+        node_dict = {}
+
+        node_dict["type"] = type(node_obj).__name__
+        node_dict["input_contents"] = [contents.name for contents in node_obj.input_contents]
+        # TODO: Flare has no output_contents
+        node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
+
+        tag_dict = {}
+        for tag in node_obj.tags:
+            tag_dict[tag.id] = tag_to_dict(tag)
+
+        node_dict["tags"] = tag_dict
+       
+        # TODO: bug where elevation is missing from some unit processes
+        if isinstance(node_obj, [node.Tank, node.Reservoir]):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+        elif isinstance(node_obj, node.Pump):
+            # TODO: elevation, num_units, flowrate, pump_type, horsepower
+
+        elif isinstance(node_obj, node.Digestion):
+            # TODO: num_units, flowrate, digestion_type, volume
+
+        elif isinstance(node_obj, node.Cogeneration):
+            # TODO: num_units, generation capacity
+            
+        elif isinstance(node_obj, [
+            node.Chlorination, 
+            node.Thickening, 
+            node.Aeration,
+            node.Filtration,
+            node.Clarification,
+        ]):
+            # TODO: num_units, flowrate, volume
+
+        elif isinstance(node_obj, [node.Screening, node.Conditioning, node.Flaring]):
+            # TODO: flowrate, num_units
+
+        elif isinstance(node_obj, node.Battery):
+            # TODO: discharge_rate, capacity
+
+        return node_dict
     
     @staticmethod
-    def to_json(network, file_path):
+    def to_json(network, file_path=None):
         """Converts a Network object to a JSON file
 
         Parameters
@@ -1003,8 +1048,8 @@ class JSONParser:
 
         Returns
         -------
-        str
-            json in string format
+        dict
+            json in dictionary format
         """
         if not isinstnace(network, node.Network):
             raise TypeError("Only Network objects can be converted to JSON format")
@@ -1026,12 +1071,16 @@ class JSONParser:
 
         for node_obj in network.get_all_nodes(recurse=False):
             result["nodes"].append(node_obj.id)
-            # TODO: parse node and add it - if it's a network this will be recursive
-            # node_json = ...
-            result[node_obj.id] = node_json
+            if isinstance(node_obj, node.Network):
+                # TODO: facility will still have elevation, flowrate, etc.
+                node_dict = node_to_dict(node_obj)
+            else:
+               node_dict = to_json(node_obj)
+            result[node_obj.id] = node_dict
 
-        with open(file_path, 'w') as file: 
-            json_str = json.dump(result, file)
+        if file_path is not None:
+            with open(file_path, 'w') as file: 
+                json_str = json.dump(result, file)
             
-        return json_str
+        return result
 	
