@@ -889,7 +889,10 @@ class JSONParser:
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
             tag_dict["operations"] = tag_obj.operations
         elif isinstance(tag_obj, Tag):
-            # TODO: parse normal Tag object
+            tag_dict["units"] = tag_obj.units
+            tag_dict["source_unit_id"] = tag_obj.source_unit_id
+            tag_dict["dest_unit_id"] = tag_obj.dest_unit_id
+            tag_dict["totalized"] = tag_obj.totalized
         else:
             raise TypeError("'tag_obj' must be of type Tag or VirtualTag")
 
