@@ -188,7 +188,11 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Pump":
-            pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
+            pump_type = self.config[node_id].get("pump_type")
+            if pump_type is None:
+                pump_type = utils.PumpType.Constant
+            else:
+                pump_type = utils.PumpType[pump_type]
             horsepower = utils.parse_quantity(
                 self.config[node_id].get("horsepower"), "hp"
             )
