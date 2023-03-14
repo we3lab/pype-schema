@@ -903,6 +903,45 @@ class JSONParser:
         return tag_dict
 
     @staticmethod
+    def min_max_avg_to_dict(obj, atrribute):
+        """Converts the flow rate tuple of a `Node` or `Connection` into a
+        dictionary object
+
+        Parameters
+        ----------
+        obj : Node or Connection
+            object to get `attribute` of and convert it to a dictionary
+
+        attribute : str
+            Either "flow_rate", "gen_capacity", or "pressure"
+
+        Returns
+        -------
+        dict
+            flow rate in the form {
+                ``min``: [(float), (int)],
+                ``max``: [(float), (int)],
+                ``avg``: [(float), (int)],
+                ``units``: (str)
+            }
+        """
+        min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
+        values = getattr(obj, attribute)
+        if obj.values[0] is not None:
+            min_max_avg_dict["min"] = obj.values[0].magnitude
+            min_max_avg_dict["units"] = obj.values[0].units
+
+        if obj.flow_rate[1] is not None:
+            min_max_avg_dict["min"] = obj.values[1].magnitude
+            min_max_avg_dict["units"] = obj.values[1].units
+        
+        if obj.flow_rate[2] is not None:
+            min_max_avg_dict["avg"] = obj.values[2].magnitude
+            min_max_avg_dict["units"] = obj.values[2].units
+
+        return min_max_avg_dict
+
+    @staticmethod
     def conn_to_dict(conn_obj):
         """Converts a Connection object to a dictionary that can be
         parsed into JSON format
@@ -930,22 +969,9 @@ class JSONParser:
         if conn_obj.entry_point is not None:
             conn_dict["entry_point"] = conn_obj.entry_point.id
 
-        if isinstance(conn_obj, connection.Pipe)
-            # TODO: make flowrate helper function
-            flow_dict = {"min": None, "max": None, "avg": None, "units": "MGD"}
-            if conn_obj.flow_rate[0] is not None:
-                flow_dict["min"] = conn_obj.flow_rate[0].magnitude
-                flow_dict["units"] = conn_obj.flow_rate[0].units
-
-            if conn_obj.heating_values[1] is not None:
-                flow_dict["min"] = conn_obj.flow_rate[1].magnitude
-                flow_dict["units"] = conn_obj.flow_rate[1].units
-            
-            if conn_obj.heating_values[2] is not None:
-                flow_dict["avg"] = conn_obj.flow_rate[2].magnitude
-                flow_dict["units"] = conn_obj.flow_rate[2].units
-                
-            conn_dict["flowrate"] = flow_dict
+        if isinstance(conn_obj, connection.Pipe)    
+            conn_dict["flowrate"] = min_max_avg_to_dict(conn_obj, "flow_rate")
+            conn_dict["pressure"] = min_max_avg_to_dict(conn_obj, "pressure")
             
             heat_dict = {"lower": None, "higher": None, "units": "BTU/scf"}
             if conn_obj.heating_values[0] is not None:
@@ -957,8 +983,11 @@ class JSONParser:
                 heat_dict["units"] = conn_obj.heating_values[1].units
 
             conn_dict["heating_values"] = heat_dict
+            
+            if conn_obj.diameter is not None:
+                conn_dict["diameter (inches)"] = conn_obj.diameter.magnitude
 
-        # TODO: unused fields (diameter, pressure, friction_coeff)
+        # TODO: unsupported attribute: friction_coeff
 
         tag_dict = {}
         for tag in conn_obj.tags:
@@ -987,8 +1016,8 @@ class JSONParser:
 
         node_dict["type"] = type(node_obj).__name__
         node_dict["input_contents"] = [contents.name for contents in node_obj.input_contents]
-        # TODO: Flare has no output_contents
-        node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
+        if not isinstance(node_obj, node.Flaring):
+            node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
 
         tag_dict = {}
         for tag in node_obj.tags:
@@ -1004,14 +1033,29 @@ class JSONParser:
             if node_obj.volume is not None:
                 node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
         elif isinstance(node_obj, node.Pump):
-            # TODO: elevation, num_units, flowrate, pump_type, horsepower
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
 
+            if node_obj.horsepower is not None:
+                node_dict["horsepower"] = node_obj.horsepower.magnitude
+
+            if node_obj.pump_type is not None:
+                node_dict["pump_type"] = node_obj.pump_type.name
+
+            node_dict["flowrate"] = min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Digestion):
-            # TODO: num_units, flowrate, digestion_type, volume
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
 
+            if node_obj.digester_type is not None:
+                node_dict["pump_type"] = node_obj.digester_type.name
+
+            node_dict["flowrate"] = min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Cogeneration):
-            # TODO: num_units, generation capacity
-            
+            node_dict["generation_capacity"] = min_max_avg_to_dict(node_obj, "gen_capacity")
+            node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, [
             node.Chlorination, 
             node.Thickening, 
@@ -1019,13 +1063,17 @@ class JSONParser:
             node.Filtration,
             node.Clarification,
         ]):
-            # TODO: num_units, flowrate, volume
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
 
+            node_dict["flowrate"] = min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, [node.Screening, node.Conditioning, node.Flaring]):
-            # TODO: flowrate, num_units
-
+            node_dict["flowrate"] = min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Battery):
-            # TODO: discharge_rate, capacity
+            node_dict["capacity (kWh)"] = node_obj.capacity.magnitude
+            node_dict["discharge_rate (kW)"] = node_obj.discharge_rate.magnitude
 
         return node_dict
     
@@ -1060,9 +1108,10 @@ class JSONParser:
             "virtual_tags": {}
         }
 
-        for v_tag_obj in network.get_all_tags(recurse=False):
-            v_tag_dict = tag_to_json(v_tag_obj)
-            result[v_tag_obj.id] = v_tag_dict
+        for tag_obj in network.tags:
+            if isinstance(tag_obj, VirtualTag):
+                v_tag_dict = tag_to_json(v_tag_obj)
+                result["virtual_tags"][v_tag_obj.id] = v_tag_dict
 
         for conn_obj in network.get_all_connections(recurse=False):
             result["connections"].append(conn_obj.id)
@@ -1072,8 +1121,20 @@ class JSONParser:
         for node_obj in network.get_all_nodes(recurse=False):
             result["nodes"].append(node_obj.id)
             if isinstance(node_obj, node.Network):
-                # TODO: facility will still have elevation, flowrate, etc.
                 node_dict = node_to_dict(node_obj)
+                if isinstance(node_obj, node.Facility):
+                    if node_obj.elevation is not None:
+                        node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+                    tag_dict = {}
+                    for tag_obj in node_obj.tags:
+                        if isinstance(tag_obj, Tag):
+                            tag_dict[tag_obj.id] = tag_to_dict(tag)
+
+                    node_dict["tags"] = tag_dict
+                    node_dict["input_contents"] = [contents.name for contents in node_obj.input_contents]
+                    node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
+                    node_dict["flowrate"] = min_max_avg_dict(node_obj, "flow_rate")
             else:
                node_dict = to_json(node_obj)
             result[node_obj.id] = node_dict
