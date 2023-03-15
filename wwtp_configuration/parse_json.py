@@ -1189,6 +1189,6 @@ class JSONParser:
 
         if file_path is not None:
             with open(file_path, "w") as file:
-                json_str = json.dump(result, file)
+                json.dump(result, file)
 
         return result
