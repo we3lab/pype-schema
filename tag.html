@@ -113,9 +113,12 @@ determined from consituent Tag contents</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
     When <cite>tag_type</cite> is not specified and constituent tags have different types.
-    When <cite>contents</cite> of the constituent tags are different types.</p>
+    When <cite>contents</cite> of the constituent tags are different types.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.11)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized tags are combined</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">

@@ -1412,6 +1412,24 @@ required to pump at that rate</p>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.conn_to_dict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">conn_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.conn_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.conn_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a Connection object to a dictionary that can be
+parsed into JSON format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>conn_obj</strong> (<em>Connection</em>) – object to be converted into a dictionary</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>conn_obj</cite> in dictionary form</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.create_connection">
 <span class="sig-name descname"><span class="pre">create_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.create_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.create_connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a dictionary into a <cite>Connection</cite> object</p>
@@ -1518,6 +1536,56 @@ stored hierarchically</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#wwtp_configuration.node.Network" title="wwtp_configuration.node.Network">wwtp_configuration.node.Network</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.min_max_avg_to_dict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">min_max_avg_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.min_max_avg_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.min_max_avg_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the flow rate tuple of a <cite>Node</cite> or <cite>Connection</cite> into a
+dictionary object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>Node or Connection</em>) – object to get <cite>attribute</cite> of and convert it to a dictionary</p></li>
+<li><p><strong>attribute</strong> (<em>str</em>) – Either “flow_rate”, “gen_capacity”, or “pressure”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>flow rate in the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: [(float), (int)],
+<code class="docutils literal notranslate"><span class="pre">max</span></code>: [(float), (int)],
+<code class="docutils literal notranslate"><span class="pre">avg</span></code>: [(float), (int)],
+<code class="docutils literal notranslate"><span class="pre">units</span></code>: (str)</p>
+</dd>
+</dl>
+<p>}</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.node_to_dict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">node_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.node_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.node_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a Node object to a dictionary that can be
+parsed into JSON format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node_obj</strong> (<em>Node</em>) – object to be converted into a dictionary</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – if <cite>node_obj</cite> is not a subclass of <cite>Node</cite></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>node_obj</cite> in dictionary form</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1635,6 +1703,50 @@ which is used to gather the tag list for combining data correctly</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#wwtp_configuration.tag.VirtualTag" title="wwtp_configuration.tag.VirtualTag">VirtualTag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.tag_to_dict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">tag_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.tag_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.tag_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a Tag or VirtualTag object to a dictionary that can be
+parsed into JSON format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag_obj</strong> (<em>Tag or VirtualTag</em>) – object to be converted into a dictionary</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – If <cite>tag_obj</cite> is not of type Tag or VirtualTag</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>tag_obj</cite> in dictionary form</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.parse_json.JSONParser.to_json">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/parse_json.html#JSONParser.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.parse_json.JSONParser.to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a Network object to a JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network</strong> (<em>Network</em>) – dictionary of the form {‘lower’: float, ‘higher’: float}</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.11)"><strong>TypeError</strong></a> – If <cite>network</cite> is not of type <cite>Network</cite></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>json in dictionary format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1792,9 +1904,12 @@ determined from consituent Tag contents</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
     When <cite>tag_type</cite> is not specified and constituent tags have different types.
-    When <cite>contents</cite> of the constituent tags are different types.</p>
+    When <cite>contents</cite> of the constituent tags are different types.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.11)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized tags are combined</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2180,7 +2295,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.operation_helper">
-<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized_mix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper for parsing operations and checking units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2191,12 +2306,20 @@ Supported functions are “+”, “-”, “*”, and “/”.</p></li>
 <li><p><strong>prev_unit</strong> (<em>Unit</em>) – Units for the left side of the operation, represented as a Pint unit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When units are incompatible for addition or subtraction.
+    When <cite>operation</cite> is unsupported.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.11)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized variables makes it impossible
+    to verify unit compatibility</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
 according to <cite>operation</cite></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Unit</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Unit</p>
 </dd>
 </dl>
 </dd></dl>

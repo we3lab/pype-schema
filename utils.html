@@ -64,7 +64,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wwtp_configuration.utils.operation_helper">
-<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized_mix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper for parsing operations and checking units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -75,12 +75,20 @@ Supported functions are “+”, “-”, “*”, and “/”.</p></li>
 <li><p><strong>prev_unit</strong> (<em>Unit</em>) – Units for the left side of the operation, represented as a Pint unit.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When units are incompatible for addition or subtraction.
+    When <cite>operation</cite> is unsupported.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.11)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized variables makes it impossible
+    to verify unit compatibility</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
 according to <cite>operation</cite></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Unit</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Unit</p>
 </dd>
 </dl>
 </dd></dl>
