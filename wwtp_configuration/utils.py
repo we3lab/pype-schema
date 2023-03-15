@@ -575,7 +575,9 @@ def operation_helper(operation, unit, prev_unit, totalized_mix=False):
                 u.convert(1, unit, prev_unit)
             except DimensionalityError:
                 if totalized_mix:
-                    warnings.warn("Unable to verify units since there is a mix of totalized and detotalized variables")
+                    warnings.warn(
+                        "Unable to verify units since there is a mix of totalized and detotalized variables"
+                    )
                 else:
                     raise ValueError(
                         "Units for addition and subtraction must be compatible"

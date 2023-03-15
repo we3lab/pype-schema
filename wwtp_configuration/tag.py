@@ -317,7 +317,12 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = operation_helper(operations[i - 1], unit, prev_unit, totalized_mix=totalized_mix)
+                        prev_unit = operation_helper(
+                            operations[i - 1],
+                            unit,
+                            prev_unit,
+                            totalized_mix=totalized_mix,
+                        )
                     else:
                         prev_unit = unit
         else:
@@ -327,7 +332,9 @@ class VirtualTag:
                     unit = parse_units(unit)
 
                 if prev_unit is not None:
-                    prev_unit = operation_helper(operations, unit, prev_unit, totalized_mix=totalized_mix)
+                    prev_unit = operation_helper(
+                        operations, unit, prev_unit, totalized_mix=totalized_mix
+                    )
                 else:
                     prev_unit = unit
 
