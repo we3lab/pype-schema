@@ -1,3 +1,4 @@
+import warnings
 from enum import Enum, auto
 from numpy import ndarray, array
 from pandas import DataFrame, Series
@@ -221,6 +222,9 @@ class VirtualTag:
         When `tag_type` is not specified and constituent tags have different types.
         When `contents` of the constituent tags are different types.
 
+    UserWarning
+        When a mix of totalized and detotalized tags are combined
+
     Attributes
     ----------
     id : str
@@ -260,13 +264,18 @@ class VirtualTag:
         determine_type = True if tag_type is None else False
         determine_contents = True if contents is None else False
 
+        totalized_mix = False
         for tag in tags:
             units.append(tag.units)
-            if totalized is not None:
+            if totalized is not None and not totalized_mix:
                 if totalized != tag.totalized:
-                    raise ValueError(
-                        "All Tags must have the same value for 'totalized'"
+                    warnings.warn(
+                        "Tags should have the same value for 'totalized'. "
+                        "Setting `totalized` to false under the assumption "
+                        "that data has been cleaned and detotalized already."
                     )
+                    totalized = False
+                    totalized_mix = True
             else:
                 totalized = tag.totalized
 
@@ -308,7 +317,12 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = operation_helper(operations[i - 1], unit, prev_unit)
+                        prev_unit = operation_helper(
+                            operations[i - 1],
+                            unit,
+                            prev_unit,
+                            totalized_mix=totalized_mix,
+                        )
                     else:
                         prev_unit = unit
         else:
@@ -318,7 +332,9 @@ class VirtualTag:
                     unit = parse_units(unit)
 
                 if prev_unit is not None:
-                    prev_unit = operation_helper(operations, unit, prev_unit)
+                    prev_unit = operation_helper(
+                        operations, unit, prev_unit, totalized_mix=totalized_mix
+                    )
                 else:
                     prev_unit = unit
 

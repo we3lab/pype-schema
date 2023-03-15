@@ -1,3 +1,4 @@
+import warnings
 from enum import Enum, auto
 from pint import UndefinedUnitError, DimensionalityError
 from .units import u
@@ -526,7 +527,7 @@ def select_objs_helper(
     if exit_point_type is not None and not isinstance(obj_exit_point, exit_point_type):
         return False
 
-    if entry_point_type is not None and isinstance(obj_entry_point, exit_point_type):
+    if entry_point_type is not None and isinstance(obj_entry_point, entry_point_type):
         return False
 
     if tag_type is not None and (
@@ -537,7 +538,7 @@ def select_objs_helper(
     return True
 
 
-def operation_helper(operation, unit, prev_unit):
+def operation_helper(operation, unit, prev_unit, totalized_mix=False):
     """Helper for parsing operations and checking units
 
     Parameters
@@ -552,6 +553,16 @@ def operation_helper(operation, unit, prev_unit):
     prev_unit : Unit
         Units for the left side of the operation, represented as a Pint unit.
 
+    Raises
+    ------
+    ValueError
+        When units are incompatible for addition or subtraction.
+        When `operation` is unsupported.
+
+    UserWarning
+        When a mix of totalized and detotalized variables makes it impossible
+        to verify unit compatibility
+
     Returns
     -------
     Unit
@@ -561,9 +572,17 @@ def operation_helper(operation, unit, prev_unit):
     if operation == "+" or operation == "-":
         if unit != prev_unit:
             try:
-                unit.to(prev_unit)
+                u.convert(1, unit, prev_unit)
             except DimensionalityError:
-                raise ValueError("Units for addition and subtraction must be identical")
+                if totalized_mix:
+                    warnings.warn(
+                        "Unable to verify units since there is a mix of "
+                        "totalized and detotalized variables"
+                    )
+                else:
+                    raise ValueError(
+                        "Units for addition and subtraction must be compatible"
+                    )
     elif operation == "*" or operation == "/":
         if operation == "/":
             prev_unit = prev_unit / unit
