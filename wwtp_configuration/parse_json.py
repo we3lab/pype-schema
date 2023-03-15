@@ -188,7 +188,11 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Pump":
-            pump_type = self.config[node_id].get("pump_type", utils.PumpType.Constant)
+            pump_type = self.config[node_id].get("pump_type")
+            if pump_type is None:
+                pump_type = utils.PumpType.Constant
+            else:
+                pump_type = utils.PumpType[pump_type]
             horsepower = utils.parse_quantity(
                 self.config[node_id].get("horsepower"), "hp"
             )
@@ -863,3 +867,306 @@ class JSONParser:
                 )
             else:
                 return (heating_vals.get("lower"), heating_vals.get("higher"))
+
+    @staticmethod
+    def tag_to_dict(tag_obj):
+        """Converts a Tag or VirtualTag object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        tag_obj : Tag or VirtualTag
+            object to be converted into a dictionary
+
+        Raises
+        ------
+        TypeError
+            If `tag_obj` is not of type Tag or VirtualTag
+
+        Returns
+        -------
+        dict
+            `tag_obj` in dictionary form
+        """
+        tag_dict = {}
+        if isinstance(tag_obj, VirtualTag):
+            tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
+            tag_dict["operations"] = tag_obj.operations
+        elif isinstance(tag_obj, Tag):
+            tag_dict["units"] = "{!s}".format(tag_obj.units)
+            tag_dict["source_unit_id"] = tag_obj.source_unit_id
+            tag_dict["dest_unit_id"] = tag_obj.dest_unit_id
+            tag_dict["totalized"] = tag_obj.totalized
+        else:
+            raise TypeError("'tag_obj' must be of type Tag or VirtualTag")
+
+        tag_dict["type"] = tag_obj.tag_type.name
+        if tag_obj.tag_type not in CONTENTLESS_TYPES:
+            tag_dict["contents"] = tag_obj.contents.name
+
+        return tag_dict
+
+    @staticmethod
+    def min_max_avg_to_dict(obj, attribute):
+        """Converts the flow rate tuple of a `Node` or `Connection` into a
+        dictionary object
+
+        Parameters
+        ----------
+        obj : Node or Connection
+            object to get `attribute` of and convert it to a dictionary
+
+        attribute : str
+            Either "flow_rate", "gen_capacity", or "pressure"
+
+        Returns
+        -------
+        dict
+            flow rate in the form {
+                ``min``: [(float), (int)],
+                ``max``: [(float), (int)],
+                ``avg``: [(float), (int)],
+                ``units``: (str)
+            }
+        """
+        min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
+        values = getattr(obj, attribute)
+        if values[0] is not None:
+            min_max_avg_dict["min"] = values[0].magnitude
+            min_max_avg_dict["units"] = "{!s}".format(values[0].units)
+
+        if values[1] is not None:
+            min_max_avg_dict["max"] = values[1].magnitude
+            min_max_avg_dict["units"] = "{!s}".format(values[1].units)
+        
+        if values[2] is not None:
+            min_max_avg_dict["avg"] = values[2].magnitude
+            min_max_avg_dict["units"] = "{!s}".format(values[2].units)
+
+        return min_max_avg_dict
+
+    @staticmethod
+    def conn_to_dict(conn_obj):
+        """Converts a Connection object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        conn_obj : Connection
+            object to be converted into a dictionary
+
+        Returns
+        -------
+        dict
+            `conn_obj` in dictionary form
+        """
+        conn_dict = {}
+        conn_dict["type"] = type(conn_obj).__name__
+        conn_dict["source"] = conn_obj.source.id
+        conn_dict["destination"] = conn_obj.destination.id
+        conn_dict["contents"] = conn_obj.contents.name
+        conn_dict["bidirectional"] = conn_obj.bidirectional
+
+        if conn_obj.exit_point is not None:
+            conn_dict["exit_point"] = conn_obj.exit_point.id
+
+        if conn_obj.entry_point is not None:
+            conn_dict["entry_point"] = conn_obj.entry_point.id
+
+        if isinstance(conn_obj, connection.Pipe):
+            conn_dict["flowrate"] = JSONParser.min_max_avg_to_dict(conn_obj, "flow_rate")
+            conn_dict["pressure"] = JSONParser.min_max_avg_to_dict(conn_obj, "pressure")
+            
+            heat_dict = {"lower": None, "higher": None, "units": "BTU/scf"}
+            if conn_obj.heating_values[0] is not None:
+                heat_dict["lower"] = conn_obj.heating_values[0].magnitude
+                heat_dict["units"] = "{!s}".format(conn_obj.heating_values[0].units)
+
+            if conn_obj.heating_values[1] is not None:
+                heat_dict["higher"] = conn_obj.heating_values[1].magnitude
+                heat_dict["units"] = "{!s}".format(conn_obj.heating_values[1].units)
+
+            conn_dict["heating_values"] = heat_dict
+            
+            if conn_obj.diameter is not None:
+                conn_dict["diameter (inches)"] = conn_obj.diameter.magnitude
+
+        # TODO: unsupported attribute: friction_coeff
+
+        tag_dict = {}
+        v_tag_dict = {}
+        for tag_id, tag_obj in conn_obj.tags.items():
+            if isinstance(tag_obj, Tag):
+                tag_dict[tag_id] = JSONParser.tag_to_dict(tag_obj)
+            elif isinstance(tag_obj, VirtualTag):
+                v_tag_dict[tag_id] = JSONParser.tag_to_dict(tag_obj)
+
+        conn_dict["tags"] = tag_dict
+        conn_dict["virtual_tags"] = v_tag_dict
+
+        return conn_dict
+
+    @staticmethod
+    def node_to_dict(node_obj):
+        """Converts a Node object to a dictionary that can be
+        parsed into JSON format
+
+        Parameters
+        ----------
+        node_obj : Node
+            object to be converted into a dictionary
+
+        Raises
+        ------
+        TypeError
+            if `node_obj` is not a subclass of `Node`
+
+        Returns
+        -------
+        dict
+            `node_obj` in dictionary form
+        """
+        node_dict = {}
+
+        node_dict["type"] = type(node_obj).__name__
+        if not isinstance(node_obj, node.Flaring):
+            node_dict["input_contents"] = [contents.name for contents in node_obj.input_contents]
+            node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
+        else:
+            node_dict["contents"] = [contents.name for contents in node_obj.input_contents]
+
+        tag_dict = {}
+        v_tag_dict = {}
+        for tag_id, tag_obj in node_obj.tags.items():
+            if isinstance(tag_obj, Tag):
+                tag_dict[tag_id] = JSONParser.tag_to_dict(tag_obj)
+            elif isinstance(tag_obj, VirtualTag):
+                v_tag_dict[tag_id] = JSONParser.tag_to_dict(tag_obj)
+
+        node_dict["tags"] = tag_dict
+        node_dict["virtual_tags"] = v_tag_dict
+
+        if isinstance(node_obj, (node.Tank, node.Reservoir)):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+        elif isinstance(node_obj, node.Pump):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.horsepower is not None:
+                node_dict["horsepower"] = node_obj.horsepower.magnitude
+
+            if node_obj.pump_type is not None:
+                node_dict["pump_type"] = node_obj.pump_type.name
+
+            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Digestion):
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+
+            if node_obj.digester_type is not None:
+                node_dict["digester_type"] = node_obj.digester_type.name
+
+            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Cogeneration):
+            node_dict["generation_capacity"] = JSONParser.min_max_avg_to_dict(node_obj, "gen_capacity")
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, (
+            node.Chlorination, 
+            node.Thickening, 
+            node.Aeration,
+            node.Filtration,
+            node.Clarification,
+        )):
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+
+            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, (node.Screening, node.Conditioning, node.Flaring)):
+            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(node_obj, "flow_rate")
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Battery):
+            node_dict["capacity (kWh)"] = node_obj.capacity.magnitude
+            node_dict["discharge_rate (kW)"] = node_obj.discharge_rate.magnitude
+        elif isinstance(node_obj, node.Network):
+            node_dict["type"] = type(node_obj).__name__
+            node_dict["input_contents"] = [contents.name for contents in node_obj.input_contents]
+            node_dict["output_contents"] = [contents.name for contents in node_obj.output_contents]
+            node_dict["nodes"] = []
+            node_dict["connections"] = []
+            for subnode in node_obj.get_all_nodes(recurse=False):
+                node_dict["nodes"].append(subnode.id)
+            for conn in node_obj.get_all_connections(recurse=False):
+                node_dict["connections"].append(conn.id)
+            if isinstance(node_obj, node.Facility):
+                if node_obj.elevation is not None:
+                    node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+                node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(node_obj, "flow_rate")
+        else:
+            raise TypeError("Unsupported type:", type(node_obj))
+
+        return node_dict
+    
+    @staticmethod
+    def to_json(network, file_path=None):
+        """Converts a Network object to a JSON file
+
+        Parameters
+        ----------
+        network : Network
+            dictionary of the form {'lower': float, 'higher': float}
+
+        file_path : str
+            path to write the configuration in JSON format
+
+        Raises
+        ------
+        TypeError
+            If `network` is not of type `Network`
+
+        Returns
+        -------
+        dict
+            json in dictionary format
+        """
+        if not isinstance(network, node.Network):
+            raise TypeError("Only Network objects can be converted to JSON format")
+
+        result = {
+            "nodes": [],
+            "connections": [],
+            "virtual_tags": {}
+        }
+
+        for tag_id, tag_obj in network.tags.items():
+            if isinstance(tag_obj, VirtualTag):
+                v_tag_dict = JSONParser.tag_to_dict(tag_obj)
+                result["virtual_tags"][tag_id] = v_tag_dict
+
+        for conn_obj in network.get_all_connections(recurse=False):
+            result["connections"].append(conn_obj.id)
+            
+        for conn_obj in network.get_all_connections(recurse=True):
+            conn_dict = JSONParser.conn_to_dict(conn_obj)
+            result[conn_obj.id] = conn_dict
+
+        for node_obj in network.get_all_nodes(recurse=False):
+            result["nodes"].append(node_obj.id)
+
+        for node_obj in network.get_all_nodes(recurse=True):
+            node_dict = JSONParser.node_to_dict(node_obj)
+            result[node_obj.id] = node_dict
+
+        if file_path is not None:
+            with open(file_path, 'w') as file: 
+                json_str = json.dump(result, file)
+            
+        return result
+	
