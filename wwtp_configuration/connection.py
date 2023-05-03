@@ -83,6 +83,16 @@ class Connection(ABC):
         """
         del self.tags[tag_name]
 
+    def get_tag(self, tag_name):
+        """Adds a tag to the node
+
+        Parameters
+        ----------
+        tag_name : str
+            Name of the tag to receive
+        """
+        return self.tags[tag_name]
+
     def get_source_id(self):
         """
         Returns
