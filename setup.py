@@ -24,7 +24,7 @@ dev_requirements = [
 requirements = [
     "pint==0.19.2",
     "networkx==2.8.5",
-    "pyvis==0.2.1",
+    "pyvis==0.2.2",
     "matplotlib==3.5.2",
     "pandas==1.4.0",
     "numpy==1.22.1"
@@ -67,6 +67,6 @@ setup(
     extras_require=extra_requirements,
     test_suite="tests",
     url="https://github.com/we3lab/wwtp-configuration",
-    version="0.2.1",
+    version="0.2.2",
     zip_safe=False,
 )
