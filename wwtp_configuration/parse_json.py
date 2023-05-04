@@ -687,7 +687,10 @@ class JSONParser:
         """
         tag_list = []
         for subtag_id in tag_info["tags"]:
-            subtag = obj.get_tag(subtag_id, recurse=True)
+            if isinstance(obj, connection.Connection):
+                subtag = obj.get_tag(subtag_id)
+            else:
+                subtag = obj.get_tag(subtag_id, recurse=True)
             if subtag is None:
                 raise ValueError(
                     "Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
