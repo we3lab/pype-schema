@@ -688,7 +688,7 @@ class JSONParser:
         tag_list = []
         for subtag_id in tag_info["tags"]:
             if isinstance(obj, Connection):
-                subtag = obj,get_tag(subtag_id)
+                subtag = obj.get_tag(subtag_id)
             else:
                 subtag = obj.get_tag(subtag_id, recurse=True)
             if subtag is None:
