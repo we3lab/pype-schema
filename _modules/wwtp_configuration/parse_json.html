@@ -721,7 +721,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">subtag_id</span> <span class="ow">in</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]:</span>
-            <span class="n">subtag</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">Connection</span><span class="p">):</span>
+                <span class="n">subtag</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">subtag</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">subtag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Invalid Tag id </span><span class="si">{}</span><span class="s2"> in VirtualTag </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">)</span>
