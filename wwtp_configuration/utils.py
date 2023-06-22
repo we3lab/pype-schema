@@ -166,6 +166,31 @@ def parse_units(units):
         ):
             return u.m / u.s
         elif (
+            clean_units == "cubicmeters/day"
+            or clean_units == "cubicmeter/day"
+            or clean_units == "m**3/day"
+            or clean_units == "m^3/day"
+            or clean_units == "m3/day"
+            or clean_units == "meter3/day"
+            or clean_units == "meter**3/day"
+            or clean_units == "meter^3/day"
+            or clean_units == "meters3/day"
+            or clean_units == "meters**3/day"
+            or clean_units == "meters^3/day"
+            or clean_units == "cubicmeters/d"
+            or clean_units == "cubicmeter/d"
+            or clean_units == "m**3/d"
+            or clean_units == "m^3/d"
+            or clean_units == "m3/d"
+            or clean_units == "meter3/d"
+            or clean_units == "meter**3/d"
+            or clean_units == "meter^3/d"
+            or clean_units == "meters3/d"
+            or clean_units == "meters**3/d"
+            or clean_units == "meters^3/d"
+        ):
+            return u.m ** 3 / u.day
+        elif (
             clean_units == "psi"
             or clean_units == "poundspersquareinch"
             or clean_units == "poundpersquareinch"

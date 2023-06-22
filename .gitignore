@@ -15,6 +15,7 @@ Icon?
 Pipfile
 Pipfile.lock
 .vscode
+.DS_Store
 
 # Test outputs
 .coverage
