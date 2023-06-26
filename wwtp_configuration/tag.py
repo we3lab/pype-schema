@@ -20,6 +20,7 @@ class TagType(Enum):
     COD = auto()  # chemical oxygen demand
     BOD = auto()  # biochemical oxygen demand
     pH = auto()
+    Conductivity = auto()
     Rotation = auto()
     Efficiency = auto()
     StateOfCharge = auto()
