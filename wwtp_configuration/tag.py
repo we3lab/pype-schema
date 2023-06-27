@@ -12,6 +12,7 @@ class TagType(Enum):
     Volume = auto()
     Level = auto()
     Pressure = auto()
+    Temperature = auto()
     RunTime = auto()
     RunStatus = auto()
     VSS = auto()
@@ -21,6 +22,9 @@ class TagType(Enum):
     BOD = auto()  # biochemical oxygen demand
     pH = auto()
     Conductivity = auto()
+    Turbidity = auto()
+    PowerConsumption = auto()
+    Recovery = auto()
     Rotation = auto()
     Efficiency = auto()
     StateOfCharge = auto()
