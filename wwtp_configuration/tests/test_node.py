@@ -267,6 +267,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
+            # pickle.dump(result, pickle_file)
 
     assert result == expected
 
