@@ -193,7 +193,7 @@ class Tag:
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
     a combination of existing tags. First `unary_operations` 
-    ("noop", "delta", "l_shift", "r_shift", "-", and "~") are applied, 
+    ("noop", "delta", "<<", ">>", "-", and "~") are applied, 
     then tags are combined according to `binary_operations`,
     with the current supported operations limited to "+", "-", "*", and "/"
 
@@ -247,18 +247,19 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    unary_operations : ["noop", "delta", "l_shift", "r_shift", "~", "-"]
+    unary_operations : ["noop", "delta", "<<", ">>", "~", "-"]
         Unary operations to apply before combining tags.
             "noop" : null operator, useful when skipping tags in a list of unary operations.
             "delta" : calculate the difference between the current timestep and previous timestep
-            "l_shift" : shift all data left one timestep, so that the last time step will be NaN
-            "r_shift" : shift all data right one timestep, so that the first time step will be NaN
+            "<<" : shift all data left one timestep, so that the last time step will be NaN
+            ">>" : shift all data right one timestep, so that the first time step will be NaN
             "-" : unary negation
             "~" : Boolean not
-        Note that "delta", "l_shift", and "r_shift" return a timeseries one shorter than the input data
+        Note that "delta", "<<", and ">>" return a timeseries padded with NaN 
+        so that it is the same length as input data
 
     binary_operations : ["+", "-", "*", "/"]
-        Functions to apply when combining tags.
+        Binary operaitons to apply when combining tags.
         Supported functions are "+", "-", "*", and "/".
         If a single string is passed, it will be applied to all Tags.
         Otherwise, the `binary_operations` list must be one shorter than `tags`, 
@@ -451,8 +452,122 @@ class VirtualTag:
         else:
             return str(self.units) < str(other.units)
 
-    def calculate_values(self, data, tag_to_var_map={}):
-        """Combine the given data according to the VirtualTag's operations
+    @staticmethod
+    def unary_helper(data, un_op):
+        """Transform the given data according to the VirtualTag's unary operator
+
+        Parameters
+        ----------
+        data : list, array, or Series
+            a list, numpy array, or pandas Series of data to apply a unary operation to
+
+        un_op : ["noop", "delta", "<<", ">>", "~", "-"]
+            Supported operations are:
+                "noop" : null operator, useful when skipping tags in a list of unary operations.
+                "delta" : calculate the difference between the current timestep and previous timestep
+                "<<" : shift all data left one timestep, so that the last time step will be NaN
+                ">>" : shift all data right one timestep, so that the first time step will be NaN
+                "-" : unary negation
+                "~" : Boolean not
+            Note that "delta", "<<", and ">>" return a timeseries padded with NaN 
+            so that it is the same length as input data
+
+        Returns
+        -------
+        list, array, or Series
+            numpy array of dataset trannsformed by unary operation
+        """
+        # allow for multiple unary operations to be performed sequentially
+        if isinstance(un_op, list):
+            for op in un_op:
+                data = unary_helper(data, op)
+        else:
+            if isinstance(data, list):
+                pass
+            if isinstance(data, ndarray):
+                pass
+            if isinstance(data, Series):
+                pass
+        
+        return data
+
+    def process_unary_ops(self, data, un_op, tag_to_var_map={}):
+        """Transform the given data according to the VirtualTag's unary operator
+
+        Parameters
+        ----------
+        data : list, array, dict, or DataFrame
+            a list, numpy array, or pandas DataFrame of data that has the
+            correct dimensions. I.e., the number of columns is one more than 
+            binary operations and same length as unary operations
+
+        un_op : ["noop", "delta", "<<", ">>", "~", "-"]
+            Supported operations are:
+                "noop" : null operator, useful when skipping tags in a list of unary operations.
+                "delta" : calculate the difference between the current timestep and previous timestep
+                "<<" : shift all data left one timestep, so that the last time step will be NaN
+                ">>" : shift all data right one timestep, so that the first time step will be NaN
+                "-" : unary negation
+                "~" : Boolean not
+            Note that "delta", "<<", and ">>" return a timeseries padded with NaN 
+            so that it is the same length as input data
+
+        tag_to_var_map : dict
+            dictionary of the form { tag.id : variable_name } for using data files
+            that differ from the original SCADA tag naming system
+
+        Returns
+        -------
+        list, array, or Series
+            numpy array of combined dataset
+        """
+        num_ops = len(self.unary_operations)
+        if isinstance(data, list):
+            if len(self.unary_operations) != len(data):
+                raise ValueError(
+                    "Data must have the correct dimensions "
+                    "(same length as unary operations). "
+                    "Currently there are {} unary operations and {} data tags".format(
+                        num_ops, len(data)
+                    )
+                )
+            else:
+                for i in range(num_ops):
+                    data[i] = unary_helper(data[i], self.unary_operations[i])
+        elif isinstance(data, ndarray):
+            if len(self.unary_operations) != data.shape[1]:
+                raise ValueError(
+                    "Data must have the correct dimensions "
+                    "(same length as unary operations). "
+                    "Currently there are {} unary operations and {} data tags".format(
+                        len(self.unary_operations), data.shape[1]
+                    )
+                )
+            else:
+                for i in range(num_ops):
+                    data[:, i] = unary_helper(data[:, i], self.unary_operations[i])
+        elif isinstance(data, (dict, DataFrame)):
+            for i, tag_obj in enumerate(self.tags):
+                if isinstance(tag_obj, self.__class__):
+                    relevant_data = tag_obj.calculate_values(data)
+                elif tag_to_var_map:
+                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                else:
+                    relevant_data = data[tag_obj.id]
+
+                relevant_data = unary_helper(relevant_data, self.unary_operations[i])
+                
+                if tag_to_var_map:
+                    data[tag_to_var_map[tag_obj.id]] = relevant_data
+                else:
+                    data[tag_obj.id] = relevant_data
+        else:
+            raise TypeError("Data must be either a list, array, dict, or DataFrame")
+        
+        return data
+
+    def process_binary_ops(self, data, tag_to_var_map={}):
+        """Combine the given data according to the VirtualTag's binary operations
 
         Parameters
         ----------
@@ -565,3 +680,30 @@ class VirtualTag:
             raise TypeError("Data must be either a list, array, dict, or DataFrame")
 
         return result
+
+    def calculate_values(self, data, tag_to_var_map={}):
+        """Combine the given data according to the VirtualTag's operations
+
+        Parameters
+        ----------
+        data : list, array, dict, or DataFrame
+            a list, numpy array, or pandas DataFrame of data that has the
+            correct dimensions. I.e., the number of columns is one more than 
+            binary operations and same length as unary operations
+
+        tag_to_var_map : dict
+            dictionary of the form { tag.id : variable_name } for using data files
+            that differ from the original SCADA tag naming system
+
+        Returns
+        -------
+        list, array, or Series
+            numpy array of combined dataset
+        """
+        if self.unary_operations is not None:
+            data = self.process_unary_ops(data, tag_to_var_map=tag_to_var_map)
+        
+        if self.binary_operations is not None:
+            data = self.process_binary_ops(data, tag_to_var_map=tag_to_var_map)
+        
+        return data
