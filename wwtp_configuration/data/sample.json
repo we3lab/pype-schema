@@ -26,12 +26,12 @@
   "virtual_tags": {
     "GrossGasProduction": {
       "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-      "operations": "+",
+      "binary_operations": "+",
       "contents": "GasBlend"
     },
     "ElectricityProductionByGasVolume": {
       "tags": ["ElectricityGeneration", "GrossGasProduction"],
-      "operations": ["/"],
+      "binary_operations": ["/"],
       "type": "Efficiency"
     }
   },

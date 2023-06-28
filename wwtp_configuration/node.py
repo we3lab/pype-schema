@@ -78,6 +78,7 @@ class Node(ABC):
         tag : Tag
             Tag object to add to the node
         """
+        tag.parent_id = self.id
         self.tags[tag.id] = tag
 
     def remove_tag(self, tag_name):
@@ -364,7 +365,7 @@ class Node(ABC):
         Node or Connection
             parent object of the Tag
         """
-        if isinstance(tag, VirtualTag):
+        if isinstance(tag, VirtualTag) and tag.parent_id is None:
             if tag.id in self.tags.keys():
                 return self
             else:
