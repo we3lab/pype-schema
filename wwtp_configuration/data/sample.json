@@ -326,13 +326,14 @@
       "max": null,
       "avg": null,
       "units": "MGD",
-    "tags": {
-      "InletTemperature": {
-        "type": "Temperature",
-        "units": "C",
-        "contents": "SecondaryEffluent",
-        "totalized": false
+      "tags": {
+        "InletTemperature": {
+          "type": "Temperature",
+          "units": "C",
+          "contents": "SecondaryEffluent",
+          "totalized": false
         }
+      }
     }
   },
   "RWFContactChamber": {
