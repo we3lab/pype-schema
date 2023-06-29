@@ -189,7 +189,7 @@ def parse_units(units):
             or clean_units == "meters**3/d"
             or clean_units == "meters^3/d"
         ):
-            return u.m ** 3 / u.day
+            return u.m**3 / u.day
         elif (
             clean_units == "psi"
             or clean_units == "poundspersquareinch"

@@ -389,7 +389,9 @@ class JSONParser:
                         tag_id = "_".join(
                             [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
                         )
-                        v_tag = VirtualTag(tag_id, tags_by_contents, binary_operations="+")
+                        v_tag = VirtualTag(
+                            tag_id, tags_by_contents, binary_operations="+"
+                        )
                         node_obj.add_tag(v_tag)
 
         v_tags = self.config[node_id].get("virtual_tags")
@@ -545,7 +547,9 @@ class JSONParser:
                                     tag_obj.contents.name,
                                     tag.tag_type.name,
                                 )
-                                v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
+                                v_tag = VirtualTag(
+                                    tag_id, tag_list, binary_operations="+"
+                                )
                                 connection_obj.add_tag(v_tag)
 
                         else:
@@ -587,7 +591,9 @@ class JSONParser:
                                     tag_obj.contents.name,
                                     tag.tag_type.name,
                                 )
-                                v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
+                                v_tag = VirtualTag(
+                                    tag_id, tag_list, binary_operations="+"
+                                )
                                 connection_obj.add_tag(v_tag)
                         else:
                             tag_list = [
@@ -707,12 +713,12 @@ class JSONParser:
         except KeyError:
             contents_type = None
         v_tag = VirtualTag(
-            tag_id, 
-            tag_list, 
+            tag_id,
+            tag_list,
             unary_operations=tag_info.get("unary_operations"),
-            binary_operations=tag_info.get("binary_operations"), 
-            tag_type=tag_type, 
-            contents=contents_type
+            binary_operations=tag_info.get("binary_operations"),
+            tag_type=tag_type,
+            contents=contents_type,
         )
         return v_tag
 
