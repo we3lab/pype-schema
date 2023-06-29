@@ -78,7 +78,8 @@ class Node(ABC):
         tag : Tag
             Tag object to add to the node
         """
-        tag.parent_id = self.id
+        if not tag.parent_id:
+            tag.parent_id = self.id
         self.tags[tag.id] = tag
 
     def remove_tag(self, tag_name):

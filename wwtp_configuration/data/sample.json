@@ -32,7 +32,8 @@
     "ElectricityProductionByGasVolume": {
       "tags": ["ElectricityGeneration", "GrossGasProduction"],
       "binary_operations": ["/"],
-      "type": "Efficiency"
+      "type": "Efficiency",
+      "parent_id": "Cogenerator"
     }
   },
   "DrinkingWaterFacility": {

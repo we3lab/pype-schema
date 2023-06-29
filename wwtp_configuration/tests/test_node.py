@@ -199,7 +199,7 @@ def test_get_all_connections_to(json_path, node_id, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-
+    
     assert result == expected
 
 
@@ -267,7 +267,6 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-            # pickle.dump(result, pickle_file)
 
     assert result == expected
 

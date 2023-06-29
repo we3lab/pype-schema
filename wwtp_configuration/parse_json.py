@@ -719,6 +719,7 @@ class JSONParser:
             binary_operations=tag_info.get("binary_operations"),
             tag_type=tag_type,
             contents=contents_type,
+            parent_id=tag_info.get("parent_id")
         )
         return v_tag
 

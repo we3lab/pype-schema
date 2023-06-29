@@ -19,7 +19,7 @@ class TagType(Enum):
     Temperature = auto()
     RunTime = auto()
     RunStatus = auto()
-    VSS = auto()
+    VSS = auto()  # volatile suspended solids
     TSS = auto()  # total suspended solids
     TDS = auto()  # total dissolved solids
     COD = auto()  # chemical oxygen demand
@@ -358,10 +358,12 @@ class VirtualTag:
                             "Unsupported unary operator:", unary_operations
                         )
                 self.unary_operations = unary_operations
-        else:
+        elif unary_operations is not None:
             if unary_operations not in UNARY_OPS:
                 raise ValueError("Unsupported unary operator:", unary_operations)
             self.unary_operations = [unary_operations] * (len(self.tags))
+        else:
+            self.unary_operations = None
 
         if isinstance(binary_operations, list):
             if len(binary_operations) != len(tags) - 1:
@@ -389,7 +391,7 @@ class VirtualTag:
                         )
                     else:
                         prev_unit = unit
-        else:
+        elif binary_operations is not None:
             if binary_operations not in BINARY_OPS:
                 raise ValueError("Unsupported binary operator:", binary_operations)
             prev_unit = None
@@ -405,6 +407,8 @@ class VirtualTag:
                     prev_unit = unit
 
             self.binary_operations = [binary_operations] * (len(self.tags) - 1)
+        else:
+            self.binary_operations = None
 
         self.units = prev_unit
 
