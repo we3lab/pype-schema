@@ -651,8 +651,9 @@ def unary_helper(data, un_op):
         """
         # allow for multiple unary operations to be performed sequentially
         if isinstance(un_op, list):
+            result = data.copy()
             for op in un_op:
-                data = unary_helper(data, op)
+                result = unary_helper(result, op)
         elif un_op == "noop":
             result = data.copy()
         elif un_op == "delta":

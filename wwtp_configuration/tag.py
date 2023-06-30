@@ -353,16 +353,29 @@ class VirtualTag:
                 )
             else:
                 for i, unit in enumerate(units):
-                    if unary_operations[i] not in UNARY_OPS:
-                        raise ValueError(
-                            "Unsupported unary operator:", unary_operations[i]
-                        )
-                    elif unary_operations[i] == "~":
-                        units[i] = None
-                    elif unary_operations[i] == "delta":
-                        # TODO: once resolution argument exists, convert from volume to flow rate
-                        unit = parse_units(unit)
-                        pass
+                    if isinstance(unary_operations[i], list):
+                        for j in range(len(unary_operations[i])):
+                            if unary_operations[i][j] not in UNARY_OPS:
+                                raise ValueError(
+                                    "Unsupported unary operator:", unary_operations[i]
+                                )
+                            elif unary_operations[i][j] == "~":
+                                units[i] = None
+                            elif unary_operations[i][j] == "delta":
+                                # TODO: once resolution argument exists, convert from volume to flow rate
+                                unit = parse_units(unit)
+                                pass
+                    else:
+                        if unary_operations[i] not in UNARY_OPS:
+                            raise ValueError(
+                                "Unsupported unary operator:", unary_operations[i]
+                            )
+                        elif unary_operations[i] == "~":
+                            units[i] = None
+                        elif unary_operations[i] == "delta":
+                            # TODO: once resolution argument exists, convert from volume to flow rate
+                            unit = parse_units(unit)
+                            pass
                 self.unary_operations = unary_operations
         elif unary_operations is not None:
             if unary_operations not in UNARY_OPS:
@@ -702,5 +715,8 @@ class VirtualTag:
         elif isinstance(data, (dict, DataFrame)):
             # if no binary ops, get appropriate column from unary ops and rename
             data = data[self.tags[0].id].rename(self.id)
+        elif isinstance(data, ndarray):
+            # flatten array since binary operations do that automatically
+            data = data[:, 0]
 
         return data

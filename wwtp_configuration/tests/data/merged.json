@@ -786,6 +786,12 @@
         "contents": "Electricity",
         "totalized": false
       }
+    },
+    "virtual_tags": {
+      "ElectricityGeneration_RShift2": {
+        "tags": ["ElectricityGeneration"],
+        "unary_operations": [[">>", ">>"]]
+      }
     }
   }
 }

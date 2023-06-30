@@ -93,6 +93,30 @@ pint.set_application_registry(u)
             "data/no_gas_bool.csv",
             None,
         ),
+        (
+            "../data/sample.json",
+            "data/gas_purchases.csv",
+            "NoGasPurchases",
+            "Array",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/gas_purchases.csv",
+            "NoGasPurchases",
+            "List",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "ElectricityGeneration_RShift2",
+            "DataFrame",
+            "data/gen_shift2.csv",
+            "kWh",
+        ),
     ],
 )
 def test_calculate_values(
