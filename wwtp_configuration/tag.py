@@ -2,7 +2,7 @@ import warnings
 from enum import Enum, auto
 from numpy import ndarray, array, nan
 from pandas import DataFrame, Series
-from .utils import operation_helper, parse_units
+from .utils import binary_helper, unary_helper, parse_units
 
 
 UNARY_OPS = ["noop", "delta", "<<", ">>", "~", "-"]
@@ -352,11 +352,17 @@ class VirtualTag:
                     "Unary operations list must be same length as the Tag list"
                 )
             else:
-                for op in unary_operations:
-                    if op not in UNARY_OPS:
+                for i, unit in enumerate(units):
+                    if unary_operations[i] not in UNARY_OPS:
                         raise ValueError(
-                            "Unsupported unary operator:", unary_operations
+                            "Unsupported unary operator:", unary_operations[i]
                         )
+                    elif unary_operations[i] == "~":
+                        units[i] = None
+                    elif unary_operations[i] == "delta":
+                        # TODO: once resolution argument exists, convert from volume to flow rate
+                        unit = parse_units(unit)
+                        pass
                 self.unary_operations = unary_operations
         elif unary_operations is not None:
             if unary_operations not in UNARY_OPS:
@@ -383,7 +389,7 @@ class VirtualTag:
                             raise ValueError(
                                 "Unsupported binary operator:", binary_operations[i - 1]
                             )
-                        prev_unit = operation_helper(
+                        prev_unit = binary_helper(
                             binary_operations[i - 1],
                             unit,
                             prev_unit,
@@ -400,7 +406,7 @@ class VirtualTag:
                     unit = parse_units(unit)
 
                 if prev_unit is not None:
-                    prev_unit = operation_helper(
+                    prev_unit = binary_helper(
                         binary_operations, unit, prev_unit, totalized_mix=totalized_mix
                     )
                 else:
@@ -408,7 +414,10 @@ class VirtualTag:
 
             self.binary_operations = [binary_operations] * (len(self.tags) - 1)
         else:
+            if len(self.tags) != 1:
+                raise ValueError("Binary operations must be specified when more than one tag is given.")
             self.binary_operations = None
+            prev_unit = units[0]
 
         self.units = prev_unit
 
@@ -475,86 +484,7 @@ class VirtualTag:
         else:
             return str(self.units) < str(other.units)
 
-    @staticmethod
-    def unary_helper(data, un_op):
-        """Transform the given data according to the VirtualTag's unary operator
-
-        Parameters
-        ----------
-        data : list, array, or Series
-            a list, numpy array, or pandas Series of data to apply a unary operation to
-
-        un_op : ["noop", "delta", "<<", ">>", "~", "-"]
-            Supported operations are:
-                "noop" : null operator, useful when skipping tags in a list of unary operations.
-                "delta" : calculate the difference between the current timestep and previous timestep
-                "<<" : shift all data left one timestep, so that the last time step will be NaN
-                ">>" : shift all data right one timestep, so that the first time step will be NaN
-                "~" : Boolean not
-                "-" : unary negation
-            Note that "delta", "<<", and ">>" return a timeseries padded with NaN
-            so that it is the same length as input data
-
-        Returns
-        -------
-        list, array, or Series
-            numpy array of dataset trannsformed by unary operation
-        """
-        # allow for multiple unary operations to be performed sequentially
-        if isinstance(un_op, list):
-            for op in un_op:
-                data = unary_helper(data, op)
-        elif un_op == "noop":
-            result = data.copy()
-        elif un_op == "delta":
-            r_shift = unary_helper(data, ">>")
-            result = data - r_shift
-        elif un_op == "-":
-            if isinstance(data, list):
-                result = [not -x for x in data]
-            elif isinstance(data, (ndarray, Series)):
-                result = -data
-            else:
-                raise TypeError("Data must be either a list, array, or Series")
-        elif un_op == "~":
-            if isinstance(data, list):
-                result = result = [not bool(x) for x in data]
-            elif isinstance(data, (ndarray, Series)):
-                result = data == 0
-            else:
-                raise TypeError("Data must be either a list, array, or Series")
-        else:
-            if isinstance(data, list):
-                result = data.copy()
-                if un_op == "<<":
-                    for i in range(len(data) - 1):
-                        result[i] = data[i + 1]
-                    result[len(data) - 1] = float("nan")
-                elif un_op == ">>":
-                    for i in range(1, len(data)):
-                        result[i] = data[i - 1]
-                    result[0] = float("nan")
-            elif isinstance(data, ndarray):
-                result = data.copy()
-                if un_op == "<<":
-                    for i in range(len(data) - 1):
-                        result[i] = data[i + 1]
-                    result[len(data) - 1] = nan
-                elif un_op == ">>":
-                    for i in range(1, len(data)):
-                        result[i] = data[i - 1]
-                    result[0] = nan
-            elif isinstance(data, Series):
-                if un_op == "<<":
-                    result = data.shift(-1)
-                elif un_op == ">>":
-                    result = data.shift(1)
-            else:
-                raise TypeError("Data must be either a list, array, or Series")
-
-        return result
-
-    def process_unary_ops(self, data, un_op, tag_to_var_map={}):
+    def process_unary_ops(self, data, tag_to_var_map={}):
         """Transform the given data according to the VirtualTag's unary operator
 
         Parameters
@@ -584,6 +514,7 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
+        result = data.copy()
         num_ops = len(self.unary_operations)
         if isinstance(data, list):
             if len(self.unary_operations) != len(data):
@@ -596,7 +527,7 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    data[i] = unary_helper(data[i], self.unary_operations[i])
+                    result[i] = unary_helper(data[i], self.unary_operations[i])
         elif isinstance(data, ndarray):
             if len(self.unary_operations) != data.shape[1]:
                 raise ValueError(
@@ -608,26 +539,26 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    data[:, i] = unary_helper(data[:, i], self.unary_operations[i])
+                    result[:, i] = unary_helper(data[:, i], self.unary_operations[i])
         elif isinstance(data, (dict, DataFrame)):
             for i, tag_obj in enumerate(self.tags):
                 if isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
-                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                    relevant_data = result[tag_to_var_map[tag_obj.id]]
                 else:
-                    relevant_data = data[tag_obj.id]
+                    relevant_data = result[tag_obj.id]
 
                 relevant_data = unary_helper(relevant_data, self.unary_operations[i])
 
                 if tag_to_var_map:
-                    data[tag_to_var_map[tag_obj.id]] = relevant_data
+                    result[tag_to_var_map[tag_obj.id]] = relevant_data
                 else:
-                    data[tag_obj.id] = relevant_data
+                    result[tag_obj.id] = relevant_data
         else:
             raise TypeError("Data must be either a list, array, dict, or DataFrame")
 
-        return data
+        return result
 
     def process_binary_ops(self, data, tag_to_var_map={}):
         """Combine the given data according to the VirtualTag's binary operations
@@ -768,5 +699,8 @@ class VirtualTag:
 
         if self.binary_operations is not None:
             data = self.process_binary_ops(data, tag_to_var_map=tag_to_var_map)
+        elif isinstance(data, (dict, DataFrame)):
+            # if no binary ops, get appropriate column from unary ops and rename
+            data = data[self.tags[0].id].rename(self.id)
 
         return data

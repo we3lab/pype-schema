@@ -763,6 +763,13 @@
         "contents": "NaturalGas",
         "totalized": false
       }
+    },
+    "virtual_tags": {
+      "NoGasPurchases": {
+        "tags": ["GasPurchases"],
+        "unary_operations": ["~"],
+        "type": "RunStatus"
+      }
     }
   },
   "GTToDigester": {

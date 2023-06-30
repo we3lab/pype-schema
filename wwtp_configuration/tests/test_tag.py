@@ -77,6 +77,22 @@ pint.set_application_registry(u)
             "data/gross_gas.csv",
             "SCFM",
         ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "NoGasPurchases",
+            "DataFrame",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "NoGasPurchases",
+            "Dict",
+            "data/no_gas_bool.csv",
+            None,
+        ),
     ],
 )
 def test_calculate_values(
@@ -116,7 +132,10 @@ def test_calculate_values(
         result = type(err).__name__
         assert result == expected
 
-    assert parse_units(expected_units) == tag.units
+    if expected_units is not None:
+        assert parse_units(expected_units) == tag.units
+    else:
+        assert tag.units is None
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
