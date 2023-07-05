@@ -1,7 +1,7 @@
 import warnings
 from enum import Enum, auto
-from numpy import ndarray, array, nan
 from pandas import DataFrame, Series
+from numpy import ndarray, array, issubdtype
 from .utils import binary_helper, unary_helper, parse_units
 
 
@@ -542,6 +542,8 @@ class VirtualTag:
                 for i in range(num_ops):
                     result[i] = unary_helper(data[i], self.unary_operations[i])
         elif isinstance(data, ndarray):
+            if issubdtype(data.dtype, (int)):
+                result = result.astype("float")
             if len(self.unary_operations) != data.shape[1]:
                 raise ValueError(
                     "Data must have the correct dimensions "

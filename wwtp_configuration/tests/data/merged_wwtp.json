@@ -705,6 +705,10 @@
         "ElectricityGeneration_RShift2": {
           "tags": ["ElectricityGeneration"],
           "unary_operations": [[">>", ">>"]]
+        },
+        "ElectricityGeneration_LShift1": {
+          "tags": ["ElectricityGeneration"],
+          "unary_operations": "<<"
         }
       }
     },

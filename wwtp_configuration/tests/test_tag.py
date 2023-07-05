@@ -114,7 +114,31 @@ pint.set_application_registry(u)
             "data/sample_data.csv",
             "ElectricityGeneration_RShift2",
             "DataFrame",
-            "data/gen_shift2.csv",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_RShift2",
+            "Array",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_RShift2",
+            "List",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Dict",
+            "data/gen_lshift1.csv",
             "kWh",
         ),
     ],
@@ -140,12 +164,12 @@ def test_calculate_values(
         elif data_type == "Array":
             data = data.to_numpy()
             assert np.allclose(
-                tag.calculate_values(data), expected.to_numpy().flatten()
+                tag.calculate_values(data), expected.to_numpy().flatten(), equal_nan=True
             )
         elif data_type == "List":
             data = data.values.T.tolist()
             assert np.allclose(
-                np.array(tag.calculate_values(data)), expected.values.flatten()
+                np.array(tag.calculate_values(data)), expected.values.flatten(), equal_nan=True
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")

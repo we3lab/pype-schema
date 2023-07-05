@@ -685,7 +685,7 @@ def unary_helper(data, un_op):
                         result[i] = data[i - 1]
                     result[0] = float("nan")
             elif isinstance(data, ndarray):
-                result = data.copy()
+                result = data.copy().astype("float")
                 if un_op == "<<":
                     for i in range(len(data) - 1):
                         result[i] = data[i + 1]
