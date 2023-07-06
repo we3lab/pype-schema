@@ -76,7 +76,7 @@ def test_set_heating_values(json_path, connection_name, expected):
         ("../data/sample.json", "ElectricToRecycledWater", "ElectricToDesal", False),
         ("../data/sample.json", "CogenToFacility", "ElectricToDesal", False),
         ("../data/sample.json", "GasToFacility", "CogenToFacility", "TypeError"),
-    ]
+    ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
     network = JSONParser(json_path).initialize_network()
