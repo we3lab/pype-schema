@@ -635,14 +635,24 @@ def unary_helper(data, un_op):
 
     un_op : ["noop", "delta", "<<", ">>", "~", "-"]
         Supported operations are:
-            "noop" : null operator, useful when skipping tags in a list of unary operations.
-            "delta" : calculate the difference between the current timestep and previous timestep
-            "<<" : shift all data left one timestep, so that the last time step will be NaN
-            ">>" : shift all data right one timestep, so that the first time step will be NaN
+            "noop" : null operator, useful when
+            skipping tags in a list of unary operations.
+
+            "delta" : calculate the difference between
+            the current timestep and previous timestep
+
+            "<<" : shift all data left one timestep,
+            so that the last time step will be NaN
+
+            ">>" : shift all data right one timestep,
+            so that the first time step will be NaN
+
             "~" : Boolean not
+
             "-" : unary negation
-        Note that "delta", "<<", and ">>" return a timeseries padded with NaN
-        so that it is the same length as input data
+
+        Note that "delta", "<<", and ">>" return a timeseries padded
+        with NaN so that it is the same length as input data
 
     Returns
     -------

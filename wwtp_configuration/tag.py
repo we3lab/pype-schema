@@ -236,7 +236,8 @@ class VirtualTag:
     Raises
     ------
     ValueError
-        When `unary_operations` or `binary_operations` includes unsupported operations or is the wrong length.
+        When `unary_operations` or `binary_operations` includes
+        unsupported operations or is the wrong length.
         When `tag_type` is not specified and constituent tags have different types.
         When `contents` of the constituent tags are different types.
 
@@ -253,14 +254,25 @@ class VirtualTag:
 
     unary_operations : ["noop", "delta", "<<", ">>", "~", "-"]
         Unary operations to apply before combining tags.
-            "noop" : null operator, useful when skipping tags in a list of unary operations.
-            "delta" : calculate the difference between the current timestep and previous timestep
-            "<<" : shift all data left one timestep, so that the last time step will be NaN
-            ">>" : shift all data right one timestep, so that the first time step will be NaN
+
+            "noop" : null operator, useful when
+            skipping tags in a list of unary operations.
+
+            "delta" : calculate the difference between
+            the current timestep and previous timestep
+
+            "<<" : shift all data left one timestep,
+            so that the last time step will be NaN
+
+            ">>" : shift all data right one timestep,
+            so that the first time step will be NaN
+
             "~" : Boolean not
+
             "-" : unary negation
-        Note that "delta", "<<", and ">>" return a timeseries padded with NaN
-        so that it is the same length as input data
+
+        Note that "delta", "<<", and ">>" return a timeseries padded
+        with NaN so that it is the same length as input data
 
     binary_operations : ["+", "-", "*", "/"]
         Binary operaitons to apply when combining tags.
@@ -349,7 +361,7 @@ class VirtualTag:
         if isinstance(unary_operations, list):
             if len(unary_operations) != len(tags):
                 raise ValueError(
-                    "Unary operations list must be same length as the Tag list"
+                    "Unary operations list must be same length as Tag list"
                 )
             else:
                 for i, unit in enumerate(units):
@@ -362,7 +374,8 @@ class VirtualTag:
                             elif unary_operations[i][j] == "~":
                                 units[i] = None
                             elif unary_operations[i][j] == "delta":
-                                # TODO: once resolution argument exists, convert from volume to flow rate
+                                # TODO: convert from volume to flow rate
+                                # once resolution argument exists
                                 unit = parse_units(unit)
                                 pass
                     else:
@@ -373,7 +386,8 @@ class VirtualTag:
                         elif unary_operations[i] == "~":
                             units[i] = None
                         elif unary_operations[i] == "delta":
-                            # TODO: once resolution argument exists, convert from volume to flow rate
+                            # TODO: convert from volume to flow rate
+                            # once resolution argument exists
                             unit = parse_units(unit)
                             pass
                 self.unary_operations = unary_operations
@@ -387,7 +401,7 @@ class VirtualTag:
         if isinstance(binary_operations, list):
             if len(binary_operations) != len(tags) - 1:
                 raise ValueError(
-                    "Binary operations list must be of length one less than the Tag list"
+                    "Binary operations list must be of length one less than Tag list"
                 )
             else:
                 self.binary_operations = binary_operations
@@ -429,7 +443,8 @@ class VirtualTag:
         else:
             if len(self.tags) != 1:
                 raise ValueError(
-                    "Binary operations must be specified when more than one tag is given."
+                    "Binary operations must be specified"
+                    "when more than one tag is given."
                 )
             self.binary_operations = None
             prev_unit = units[0]
@@ -441,7 +456,8 @@ class VirtualTag:
             f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
-            f"unary_operations:{self.unary_operations} binary_operations:{self.binary_operations} "
+            f"unary_operations:{self.unary_operations} "
+            f"binary_operations:{self.binary_operations} "
             f"parent_id:{self.parent_id}>\n"
         )
 
@@ -511,14 +527,25 @@ class VirtualTag:
 
         un_op : ["noop", "delta", "<<", ">>", "~", "-"]
             Supported operations are:
-                "noop" : null operator, useful when skipping tags in a list of unary operations.
-                "delta" : calculate the difference between the current timestep and previous timestep
-                "<<" : shift all data left one timestep, so that the last time step will be NaN
-                ">>" : shift all data right one timestep, so that the first time step will be NaN
+
+                "noop" : null operator, useful when
+                skipping tags in a list of unary operations.
+
+                "delta" : calculate the difference between
+                the current timestep and previous timestep
+
+                "<<" : shift all data left one timestep,
+                so that the last time step will be NaN
+
+                ">>" : shift all data right one timestep,
+                so that the first time step will be NaN
+
                 "~" : Boolean not
+
                 "-" : unary negation
-            Note that "delta", "<<", and ">>" return a timeseries padded with NaN
-            so that it is the same length as input data
+
+            Note that "delta", "<<", and ">>" return a timeseries padded
+            with NaN so that it is the same length as input data
 
         tag_to_var_map : dict
             dictionary of the form { tag.id : variable_name } for using data files
