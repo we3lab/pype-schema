@@ -30,14 +30,14 @@ pint.set_application_registry(u)
         ("data/invalid_un_op_list.json", "ValueError"),
         ("data/invalid_un_op_nested_list.json", "ValueError"),
         ("data/wrong_un_len.json", "ValueError"),
-    ]
+    ],
 )
 def test_init_errors(json_path, expected):
     try:
         JSONParser(json_path).initialize_network()
     except Exception as err:
         result = type(err).__name__
-    
+
     assert result == expected
 
 
@@ -220,12 +220,16 @@ def test_calculate_values(
         elif data_type == "Array":
             data = data.to_numpy()
             assert np.allclose(
-                tag.calculate_values(data), expected.to_numpy().flatten(), equal_nan=True
+                tag.calculate_values(data),
+                expected.to_numpy().flatten(),
+                equal_nan=True,
             )
         elif data_type == "List":
             data = data.values.T.tolist()
             assert np.allclose(
-                np.array(tag.calculate_values(data)), expected.values.flatten(), equal_nan=True
+                np.array(tag.calculate_values(data)),
+                expected.values.flatten(),
+                equal_nan=True,
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")

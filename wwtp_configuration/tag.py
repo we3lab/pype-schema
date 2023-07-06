@@ -428,7 +428,9 @@ class VirtualTag:
             self.binary_operations = [binary_operations] * (len(self.tags) - 1)
         else:
             if len(self.tags) != 1:
-                raise ValueError("Binary operations must be specified when more than one tag is given.")
+                raise ValueError(
+                    "Binary operations must be specified when more than one tag is given."
+                )
             self.binary_operations = None
             prev_unit = units[0]
 
