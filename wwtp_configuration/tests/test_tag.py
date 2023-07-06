@@ -19,6 +19,30 @@ pint.set_application_registry(u)
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
+    "json_path, expected",
+    [
+        ("data/no_bin_op.json", "ValueError"),
+        ("data/invalid_tag.json", "ValueError"),
+        ("data/invalid_bin_op.json", "ValueError"),
+        ("data/invalid_bin_op_list.json", "ValueError"),
+        ("data/wrong_bin_len.json", "ValueError"),
+        ("data/invalid_un_op.json", "ValueError"),
+        ("data/invalid_un_op_list.json", "ValueError"),
+        ("data/invalid_un_op_nested_list.json", "ValueError"),
+        ("data/wrong_un_len.json", "ValueError"),
+    ]
+)
+def test_init_errors(json_path, expected):
+    try:
+        JSONParser(json_path).initialize_network()
+    except Exception as err:
+        result = type(err).__name__
+    
+    assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
     "json_path, csv_path, tag_name, data_type, expected_path, expected_units",
     [
         (
@@ -75,6 +99,14 @@ pint.set_application_registry(u)
             "GrossGasProduction",
             "List",
             "data/gross_gas.csv",
+            "SCFM",
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_array.csv",
+            "GrossGasProduction",
+            "Invalid",
+            "TypeError",
             "SCFM",
         ),
         (
@@ -141,6 +173,30 @@ pint.set_application_registry(u)
             "data/gen_lshift1.csv",
             "kWh",
         ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "List",
+            "data/gen_lshift1.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Array",
+            "data/gen_lshift1.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Invalid",
+            "TypeError",
+            "kWh",
+        ),
     ],
 )
 def test_calculate_values(
@@ -176,6 +232,9 @@ def test_calculate_values(
             pd.testing.assert_series_equal(
                 tag.calculate_values(data), expected[tag_name]
             )
+        elif data_type == "Invalid":
+            data = pd.Series([])
+            tag.calculate_values(data)
     except Exception as err:
         result = type(err).__name__
         assert result == expected
