@@ -63,8 +63,8 @@ whether they are sludge, water, or gas</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="wwtp_configuration.utils.operation_helper">
-<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">operation_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized_mix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#operation_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.operation_helper" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wwtp_configuration.utils.binary_helper">
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">binary_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized_mix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#binary_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.binary_helper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper for parsing operations and checking units</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -73,6 +73,8 @@ whether they are sludge, water, or gas</p>
 Supported functions are “+”, “-”, “*”, and “/”.</p></li>
 <li><p><strong>unit</strong> (<em>Unit</em>) – Units for the right side of the operation, represented as a Pint unit.</p></li>
 <li><p><strong>prev_unit</strong> (<em>Unit</em>) – Units for the left side of the operation, represented as a Pint unit.</p></li>
+<li><p><strong>totalized_mix</strong> (<em>bool</em>) – Skip unit checking when there is a mix of totalized and detotalized variables.
+Default is False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -167,6 +169,42 @@ unit ID, and contents</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wwtp_configuration.utils.unary_helper">
+<span class="sig-prename descclassname"><span class="pre">wwtp_configuration.utils.</span></span><span class="sig-name descname"><span class="pre">unary_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">un_op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/utils.html#unary_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.utils.unary_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the given data according to the VirtualTag’s unary operator</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>data</strong> (<em>list, array, or Series</em>) – a list, numpy array, or pandas Series of data to apply a unary operation to</p></li>
+<li><p><strong>un_op</strong> (<em>[“noop”, “delta”, “&lt;&lt;”, “&gt;&gt;”, “~”, “-“]</em>) –</p>
+<dl>
+<dt>Supported operations are:</dt><dd><p>“noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>“delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>“&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>“&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>“~” : Boolean not</p>
+<p>“-” : unary negation</p>
+</dd>
+</dl>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array of dataset trannsformed by unary operation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>

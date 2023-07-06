@@ -90,31 +90,37 @@ across all units of the destination node</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wwtp_configuration.tag.VirtualTag">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.tag.</span></span><span class="sig-name descname"><span class="pre">VirtualTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Representation for data that is not in the SCADA system, but is instead</dt><dd><p>a combination of existing tags. Tags are combined according to <cite>operations</cite>,
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.tag.</span></span><span class="sig-name descname"><span class="pre">VirtualTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unary_operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary_operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation for data that is not in the SCADA system, but is instead
+a combination of existing tags. First <cite>unary_operations</cite>
+(“noop”, “delta”, “&lt;&lt;”, “&gt;&gt;”, “~”, and “-”) are applied,
+then tags are combined according to <cite>binary_operations</cite>,
 with the current supported operations limited to “+”, “-”, “*”, and “/”</p>
-</dd>
-</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – VirtualTag ID</p></li>
 <li><p><strong>tags</strong> (<em>list of Tag</em>) – List of Tag objects to combine</p></li>
-<li><p><strong>operations</strong> (<em>function or list</em>) – Function to apply when combining tags.
-If a single function it will be applied to all Tags.
-Otherwise, the <cite>operations</cite> must be one shorter than <cite>tags</cite>, and
-functions will be applied in order</p></li>
+<li><p><strong>unary_operations</strong> (<em>str or list</em>) – Function to apply when combining tags.
+If a single string it will be applied to all Tags.
+Otherwise, the <cite>unary_operations</cite> must be same length as <cite>tags</cite>,
+and functions will be applied in order</p></li>
+<li><p><strong>binary_operations</strong> (<em>str or list</em>) – Function to apply when combining tags.
+If a single string it will be applied to all Tags.
+Otherwise, the <cite>binary_operations</cite> must be one shorter than <cite>tags</cite>,
+and functions will be applied in order</p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite>.
 Default is None, and it will be automatically determined from constituent
 Tags if they all have the same type.</p></li>
+<li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the node. Default is None, and it will be automatically
 determined from consituent Tag contents</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When the <cite>operations</cite> includes unsupported operations or is the wrong length.
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – When <cite>unary_operations</cite> or <cite>binary_operations</cite> includes
+    unsupported operations or is the wrong length.
     When <cite>tag_type</cite> is not specified and constituent tags have different types.
     When <cite>contents</cite> of the constituent tags are different types.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.11)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized tags are combined</p></li>
@@ -124,15 +130,32 @@ determined from consituent Tag contents</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Tag ID</p></li>
 <li><p><strong>tags</strong> (<em>list of Tag</em>) – List of Tag objects to combine</p></li>
-<li><p><strong>operations</strong> (<em>[</em><em>&quot;+&quot;</em><em>, </em><em>&quot;-&quot;</em><em>, </em><em>&quot;*&quot;</em><em>, </em><em>&quot;/&quot;</em><em>]</em>) – Function to apply when combining tags.
+<li><p><strong>unary_operations</strong> (<em>[</em><em>&quot;noop&quot;</em><em>, </em><em>&quot;delta&quot;</em><em>, </em><em>&quot;&lt;&lt;&quot;</em><em>, </em><em>&quot;&gt;&gt;&quot;</em><em>, </em><em>&quot;~&quot;</em><em>, </em><em>&quot;-&quot;</em><em>]</em>) – <p>Unary operations to apply before combining tags.</p>
+<blockquote>
+<div><p>”noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>”delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>”&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>”&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>”~” : Boolean not</p>
+<p>”-” : unary negation</p>
+</div></blockquote>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</p></li>
+<li><p><strong>binary_operations</strong> (<em>[</em><em>&quot;+&quot;</em><em>, </em><em>&quot;-&quot;</em><em>, </em><em>&quot;*&quot;</em><em>, </em><em>&quot;/&quot;</em><em>]</em>) – Binary operaitons to apply when combining tags.
 Supported functions are “+”, “-”, “*”, and “/”.
 If a single string is passed, it will be applied to all Tags.
-Otherwise, the <cite>operations</cite> list must be one shorter than <cite>tags</cite>, and
-functions will be applied in order from left to right</p></li>
+Otherwise, the <cite>binary_operations</cite> list must be one shorter than <cite>tags</cite>,
+and functions will be applied in order from left to right</p></li>
 <li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
 E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.tag.TagType" title="wwtp_configuration.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
 </ul>
 </dd>
@@ -145,7 +168,71 @@ E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
-correct dimensions. I.e., the number of columns is one more than operations</p></li>
+correct dimensions. I.e., the number of columns is one more than
+binary operations and same length as unary operations</p></li>
+<li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
+that differ from the original SCADA tag naming system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array of combined dataset</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.VirtualTag.process_binary_ops">
+<span class="sig-name descname"><span class="pre">process_binary_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag.process_binary_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag.process_binary_ops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine the given data according to the VirtualTag’s binary operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
+correct dimensions. I.e., the number of columns is one more than
+binary operations and same length as unary operations</p></li>
+<li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
+that differ from the original SCADA tag naming system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array of combined dataset</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wwtp_configuration.tag.VirtualTag.process_unary_ops">
+<span class="sig-name descname"><span class="pre">process_unary_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/tag.html#VirtualTag.process_unary_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.tag.VirtualTag.process_unary_ops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the given data according to the VirtualTag’s unary operator</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
+correct dimensions. I.e., the number of columns is one more than
+binary operations and same length as unary operations</p></li>
+<li><p><strong>un_op</strong> (<em>[“noop”, “delta”, “&lt;&lt;”, “&gt;&gt;”, “~”, “-“]</em>) –</p>
+<p>Supported operations are:</p>
+<blockquote>
+<div><p>“noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>“delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>“&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>“&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>“~” : Boolean not</p>
+<p>“-” : unary negation</p>
+</div></blockquote>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</li>
 <li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
 that differ from the original SCADA tag naming system</p></li>
 </ul>

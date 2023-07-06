@@ -33,7 +33,9 @@
             
   <h1>Source code for wwtp_configuration.utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">Series</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">nan</span>
 <span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span><span class="p">,</span> <span class="n">DimensionalityError</span>
 <span class="kn">from</span> <span class="nn">.units</span> <span class="kn">import</span> <span class="n">u</span>
 
@@ -199,6 +201,31 @@
             <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters/second&quot;</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">s</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeters/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeter/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m**3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m^3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter**3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter^3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters**3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters^3/day&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeters/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;cubicmeter/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m**3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m^3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;m3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter**3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meter^3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters**3/d&quot;</span>
+            <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;meters^3/d&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">day</span>
         <span class="k">elif</span> <span class="p">(</span>
             <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;psi&quot;</span>
             <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;poundspersquareinch&quot;</span>
@@ -572,7 +599,7 @@
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="operation_helper"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.operation_helper">[docs]</a><span class="k">def</span> <span class="nf">operation_helper</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">prev_unit</span><span class="p">,</span> <span class="n">totalized_mix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="binary_helper"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.binary_helper">[docs]</a><span class="k">def</span> <span class="nf">binary_helper</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">prev_unit</span><span class="p">,</span> <span class="n">totalized_mix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper for parsing operations and checking units</span>
 
 <span class="sd">    Parameters</span>
@@ -586,6 +613,10 @@
 
 <span class="sd">    prev_unit : Unit</span>
 <span class="sd">        Units for the left side of the operation, represented as a Pint unit.</span>
+
+<span class="sd">    totalized_mix : bool</span>
+<span class="sd">        Skip unit checking when there is a mix of totalized and detotalized variables.</span>
+<span class="sd">        Default is False</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -626,6 +657,96 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported operation &quot;</span> <span class="o">+</span> <span class="n">operation</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">prev_unit</span></div>
+
+
+<div class="viewcode-block" id="unary_helper"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.utils.unary_helper">[docs]</a><span class="k">def</span> <span class="nf">unary_helper</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">un_op</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform the given data according to the VirtualTag&#39;s unary operator</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : list, array, or Series</span>
+<span class="sd">        a list, numpy array, or pandas Series of data to apply a unary operation to</span>
+
+<span class="sd">    un_op : [&quot;noop&quot;, &quot;delta&quot;, &quot;&lt;&lt;&quot;, &quot;&gt;&gt;&quot;, &quot;~&quot;, &quot;-&quot;]</span>
+<span class="sd">        Supported operations are:</span>
+<span class="sd">            &quot;noop&quot; : null operator, useful when</span>
+<span class="sd">            skipping tags in a list of unary operations.</span>
+
+<span class="sd">            &quot;delta&quot; : calculate the difference between</span>
+<span class="sd">            the current timestep and previous timestep</span>
+
+<span class="sd">            &quot;&lt;&lt;&quot; : shift all data left one timestep,</span>
+<span class="sd">            so that the last time step will be NaN</span>
+
+<span class="sd">            &quot;&gt;&gt;&quot; : shift all data right one timestep,</span>
+<span class="sd">            so that the first time step will be NaN</span>
+
+<span class="sd">            &quot;~&quot; : Boolean not</span>
+
+<span class="sd">            &quot;-&quot; : unary negation</span>
+
+<span class="sd">        Note that &quot;delta&quot;, &quot;&lt;&lt;&quot;, and &quot;&gt;&gt;&quot; return a timeseries padded</span>
+<span class="sd">        with NaN so that it is the same length as input data</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list, array, or Series</span>
+<span class="sd">        numpy array of dataset trannsformed by unary operation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># allow for multiple unary operations to be performed sequentially</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">un_op</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">un_op</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">unary_helper</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;noop&quot;</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;delta&quot;</span><span class="p">:</span>
+        <span class="n">r_shift</span> <span class="o">=</span> <span class="n">unary_helper</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">r_shift</span>
+    <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="ow">not</span> <span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Series</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, or Series&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Series</span><span class="p">)):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">data</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, or Series&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan</span>
+            <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Series</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">un_op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, or Series&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
 </pre></div>
 
           </div>

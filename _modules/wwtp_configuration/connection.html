@@ -105,6 +105,8 @@
 <span class="sd">        tag : Tag</span>
 <span class="sd">            Tag object to add to the node</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
+            <span class="n">tag</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span></div>
 
 <div class="viewcode-block" id="Connection.remove_tag"><a class="viewcode-back" href="../../wwtp_configuration.html#wwtp_configuration.connection.Connection.remove_tag">[docs]</a>    <span class="k">def</span> <span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
@@ -465,15 +467,16 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">)):</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+                <span class="c1"># TODO: uncomment when node comparison are supported</span>
+                <span class="c1"># if isinstance(self.source, type(other.source)):</span>
+                <span class="c1">#     return self.source &lt; other.source</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">)):</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+                <span class="c1"># if isinstance(self.destination, type(other.destination)):</span>
+                <span class="c1">#     return self.destination &lt; other.destination</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
         <span class="c1"># case with same number of different tags, so we compare tags in order</span>
@@ -642,15 +645,16 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">)):</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+                <span class="c1"># TODO: uncomment when node comparison are supported</span>
+                <span class="c1"># if isinstance(self.source, type(other.source)):</span>
+                <span class="c1">#     return self.source &lt; other.source</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">)):</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+                <span class="c1"># if isinstance(self.destination, type(other.destination)):</span>
+                <span class="c1">#     return self.destination &lt; other.destination</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
         <span class="c1"># case with same number of different tags, so we compare tags in order</span>
