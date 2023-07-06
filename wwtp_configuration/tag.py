@@ -376,7 +376,6 @@ class VirtualTag:
                             elif unary_operations[i][j] == "delta":
                                 # TODO: convert from volume to flow rate
                                 # once resolution argument exists
-                                unit = parse_units(unit)
                                 pass
                     else:
                         if unary_operations[i] not in UNARY_OPS:
@@ -388,7 +387,6 @@ class VirtualTag:
                         elif unary_operations[i] == "delta":
                             # TODO: convert from volume to flow rate
                             # once resolution argument exists
-                            unit = parse_units(unit)
                             pass
                 self.unary_operations = unary_operations
         elif unary_operations is not None:

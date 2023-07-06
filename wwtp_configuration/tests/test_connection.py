@@ -65,3 +65,27 @@ def test_set_heating_values(json_path, connection_name, expected):
     connection = result.get_connection(connection_name)
 
     assert connection.heating_values == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, conn_id_0, conn_id_1, expected",
+    [
+        ("../data/sample.json", "GasToFacility", "DesalInlet", True),
+        ("../data/sample.json", "DesalOutlet", "DesalInlet", True),
+        ("../data/sample.json", "ElectricToRecycledWater", "ElectricToDesal", False),
+        ("../data/sample.json", "CogenToFacility", "ElectricToDesal", False),
+        ("../data/sample.json", "GasToFacility", "CogenToFacility", "TypeError"),
+    ]
+)
+def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
+    network = JSONParser(json_path).initialize_network()
+    conn0 = network.get_connection(conn_id_0, recurse=True)
+    conn1 = network.get_connection(conn_id_1, recurse=True)
+
+    try:
+        result = conn0 < conn1
+    except Exception as err:
+        result = type(err).__name__
+
+    assert result == expected

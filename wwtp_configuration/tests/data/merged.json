@@ -695,7 +695,6 @@
   },
   "DesalInlet": {
     "type": "Pipe",
-    "pump_type": null,
     "source": "Ocean",
     "destination": "DesalPlant",
     "contents": "Seawater",
@@ -795,6 +794,10 @@
       "ElectricityGeneration_LShift1": {
         "tags": ["ElectricityGeneration"],
         "unary_operations": "<<"
+      },
+      "ElectricityGenDelta": {
+        "tags": ["ElectricityGeneration"],
+        "unary_operations": "delta"
       }
     }
   }

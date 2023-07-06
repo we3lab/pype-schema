@@ -197,6 +197,14 @@ def test_init_errors(json_path, expected):
             "TypeError",
             "kWh",
         ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGenDelta",
+            "Dict",
+            "data/gen_delta.csv",
+            "kWh",
+        ),
     ],
 )
 def test_calculate_values(
