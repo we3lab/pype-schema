@@ -28,13 +28,14 @@
   "virtual_tags": {
     "GrossGasProduction": {
       "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-      "operations": "+",
+      "binary_operations": "+",
       "contents": "GasBlend"
     },
     "ElectricityProductionByGasVolume": {
       "tags": ["ElectricityGeneration", "GrossGasProduction"],
-      "operations": ["/"],
-      "type": "Efficiency"
+      "binary_operations": ["/"],
+      "type": "Efficiency",
+      "parent_id": "Cogenerator"
     }
   },
   "DrinkingWaterFacility": {
@@ -694,7 +695,6 @@
   },
   "DesalInlet": {
     "type": "Pipe",
-    "pump_type": null,
     "source": "Ocean",
     "destination": "DesalPlant",
     "contents": "Seawater",
@@ -756,6 +756,13 @@
         "contents": "NaturalGas",
         "totalized": false
       }
+    },
+    "virtual_tags": {
+      "NoGasPurchases": {
+        "tags": ["GasPurchases"],
+        "unary_operations": ["~"],
+        "type": "RunStatus"
+      }
     }
   },
   "GTToDigester": {
@@ -777,6 +784,20 @@
         "units": "kWh",
         "contents": "Electricity",
         "totalized": false
+      }
+    },
+    "virtual_tags": {
+      "ElectricityGeneration_RShift2": {
+        "tags": ["ElectricityGeneration"],
+        "unary_operations": [[">>", ">>"]]
+      },
+      "ElectricityGeneration_LShift1": {
+        "tags": ["ElectricityGeneration"],
+        "unary_operations": "<<"
+      },
+      "ElectricityGenDelta": {
+        "tags": ["ElectricityGeneration"],
+        "unary_operations": "delta"
       }
     }
   }

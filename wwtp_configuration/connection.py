@@ -71,6 +71,8 @@ class Connection(ABC):
         tag : Tag
             Tag object to add to the node
         """
+        if not tag.parent_id:
+            tag.parent_id = self.id
         self.tags[tag.id] = tag
 
     def remove_tag(self, tag_name):
@@ -431,15 +433,16 @@ class Pipe(Connection):
             return False
         elif self.tags == other.tags:
             if self.source != other.source:
-                if isinstance(self.source, type(other.source)):
-                    return self.source < other.source
-                else:
-                    return self.source.id < other.source.id
+                # TODO: uncomment when node comparison are supported
+                # if isinstance(self.source, type(other.source)):
+                #     return self.source < other.source
+                # else:
+                return self.source.id < other.source.id
             elif self.destination != other.destination:
-                if isinstance(self.destination, type(other.destination)):
-                    return self.destination < other.destination
-                else:
-                    return self.destination.id < other.destination.id
+                # if isinstance(self.destination, type(other.destination)):
+                #     return self.destination < other.destination
+                # else:
+                return self.destination.id < other.destination.id
             else:
                 return self.id < other.id
         # case with same number of different tags, so we compare tags in order
@@ -608,15 +611,16 @@ class Wire(Connection):
             return False
         elif self.tags == other.tags:
             if self.source != other.source:
-                if isinstance(self.source, type(other.source)):
-                    return self.source < other.source
-                else:
-                    return self.source.id < other.source.id
+                # TODO: uncomment when node comparison are supported
+                # if isinstance(self.source, type(other.source)):
+                #     return self.source < other.source
+                # else:
+                return self.source.id < other.source.id
             elif self.destination != other.destination:
-                if isinstance(self.destination, type(other.destination)):
-                    return self.destination < other.destination
-                else:
-                    return self.destination.id < other.destination.id
+                # if isinstance(self.destination, type(other.destination)):
+                #     return self.destination < other.destination
+                # else:
+                return self.destination.id < other.destination.id
             else:
                 return self.id < other.id
         # case with same number of different tags, so we compare tags in order

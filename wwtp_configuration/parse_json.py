@@ -389,7 +389,9 @@ class JSONParser:
                         tag_id = "_".join(
                             [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
                         )
-                        v_tag = VirtualTag(tag_id, tags_by_contents, "+")
+                        v_tag = VirtualTag(
+                            tag_id, tags_by_contents, binary_operations="+"
+                        )
                         node_obj.add_tag(v_tag)
 
         v_tags = self.config[node_id].get("virtual_tags")
@@ -545,7 +547,9 @@ class JSONParser:
                                     tag_obj.contents.name,
                                     tag.tag_type.name,
                                 )
-                                v_tag = VirtualTag(tag_id, tag_list, "+")
+                                v_tag = VirtualTag(
+                                    tag_id, tag_list, binary_operations="+"
+                                )
                                 connection_obj.add_tag(v_tag)
 
                         else:
@@ -563,7 +567,7 @@ class JSONParser:
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, "+")
+                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_obj = tags_by_contents[0]
@@ -587,7 +591,9 @@ class JSONParser:
                                     tag_obj.contents.name,
                                     tag.tag_type.name,
                                 )
-                                v_tag = VirtualTag(tag_id, tag_list, "+")
+                                v_tag = VirtualTag(
+                                    tag_id, tag_list, binary_operations="+"
+                                )
                                 connection_obj.add_tag(v_tag)
                         else:
                             tag_list = [
@@ -604,7 +610,7 @@ class JSONParser:
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, "+")
+                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
                             connection_obj.add_tag(v_tag)
 
         v_tags = self.config[connection_id].get("virtual_tags")
@@ -671,7 +677,8 @@ class JSONParser:
         tag_info : dict
             dictionary of the form {
                 'tags': dict of Tag,
-                'operations': list of str,
+                'unary_operations': list of str,
+                'binary_operations': list of str,
                 'type': TagType,
                 'contents': str
             }
@@ -706,7 +713,13 @@ class JSONParser:
         except KeyError:
             contents_type = None
         v_tag = VirtualTag(
-            tag_id, tag_list, tag_info["operations"], tag_type, contents_type
+            tag_id,
+            tag_list,
+            unary_operations=tag_info.get("unary_operations"),
+            binary_operations=tag_info.get("binary_operations"),
+            tag_type=tag_type,
+            contents=contents_type,
+            parent_id=tag_info.get("parent_id"),
         )
         return v_tag
 
@@ -894,7 +907,8 @@ class JSONParser:
         tag_dict = {}
         if isinstance(tag_obj, VirtualTag):
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
-            tag_dict["operations"] = tag_obj.operations
+            tag_dict["unary_operations"] = tag_obj.unary_operations
+            tag_dict["binary_operations"] = tag_obj.binary_operations
         elif isinstance(tag_obj, Tag):
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["source_unit_id"] = tag_obj.source_unit_id

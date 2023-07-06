@@ -19,6 +19,30 @@ pint.set_application_registry(u)
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
+    "json_path, expected",
+    [
+        ("data/no_bin_op.json", "ValueError"),
+        ("data/invalid_tag.json", "ValueError"),
+        ("data/invalid_bin_op.json", "ValueError"),
+        ("data/invalid_bin_op_list.json", "ValueError"),
+        ("data/wrong_bin_len.json", "ValueError"),
+        ("data/invalid_un_op.json", "ValueError"),
+        ("data/invalid_un_op_list.json", "ValueError"),
+        ("data/invalid_un_op_nested_list.json", "ValueError"),
+        ("data/wrong_un_len.json", "ValueError"),
+    ],
+)
+def test_init_errors(json_path, expected):
+    try:
+        JSONParser(json_path).initialize_network()
+    except Exception as err:
+        result = type(err).__name__
+
+    assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
     "json_path, csv_path, tag_name, data_type, expected_path, expected_units",
     [
         (
@@ -77,6 +101,110 @@ pint.set_application_registry(u)
             "data/gross_gas.csv",
             "SCFM",
         ),
+        (
+            "../data/sample.json",
+            "data/sample_array.csv",
+            "GrossGasProduction",
+            "Invalid",
+            "TypeError",
+            "SCFM",
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "NoGasPurchases",
+            "DataFrame",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "NoGasPurchases",
+            "Dict",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/gas_purchases.csv",
+            "NoGasPurchases",
+            "Array",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/gas_purchases.csv",
+            "NoGasPurchases",
+            "List",
+            "data/no_gas_bool.csv",
+            None,
+        ),
+        (
+            "../data/sample.json",
+            "data/sample_data.csv",
+            "ElectricityGeneration_RShift2",
+            "DataFrame",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_RShift2",
+            "Array",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_RShift2",
+            "List",
+            "data/gen_rshift2.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Dict",
+            "data/gen_lshift1.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "List",
+            "data/gen_lshift1.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Array",
+            "data/gen_lshift1.csv",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_LShift1",
+            "Invalid",
+            "TypeError",
+            "kWh",
+        ),
+        (
+            "../data/sample.json",
+            "data/elec_gen.csv",
+            "ElectricityGenDelta",
+            "Dict",
+            "data/gen_delta.csv",
+            "kWh",
+        ),
     ],
 )
 def test_calculate_values(
@@ -100,23 +228,33 @@ def test_calculate_values(
         elif data_type == "Array":
             data = data.to_numpy()
             assert np.allclose(
-                tag.calculate_values(data), expected.to_numpy().flatten()
+                tag.calculate_values(data),
+                expected.to_numpy().flatten(),
+                equal_nan=True,
             )
         elif data_type == "List":
             data = data.values.T.tolist()
             assert np.allclose(
-                np.array(tag.calculate_values(data)), expected.values.flatten()
+                np.array(tag.calculate_values(data)),
+                expected.values.flatten(),
+                equal_nan=True,
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")
             pd.testing.assert_series_equal(
                 tag.calculate_values(data), expected[tag_name]
             )
+        elif data_type == "Invalid":
+            data = pd.Series([])
+            tag.calculate_values(data)
     except Exception as err:
         result = type(err).__name__
         assert result == expected
 
-    assert parse_units(expected_units) == tag.units
+    if expected_units is not None:
+        assert parse_units(expected_units) == tag.units
+    else:
+        assert tag.units is None
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")

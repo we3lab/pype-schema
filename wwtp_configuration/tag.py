@@ -1,8 +1,12 @@
 import warnings
 from enum import Enum, auto
-from numpy import ndarray, array
 from pandas import DataFrame, Series
-from .utils import operation_helper, parse_units
+from numpy import ndarray, array, issubdtype
+from .utils import binary_helper, unary_helper, parse_units
+
+
+UNARY_OPS = ["noop", "delta", "<<", ">>", "~", "-"]
+BINARY_OPS = ["+", "-", "*", "/"]
 
 
 class TagType(Enum):
@@ -12,14 +16,17 @@ class TagType(Enum):
     Volume = auto()
     Level = auto()
     Pressure = auto()
+    Temperature = auto()
     RunTime = auto()
     RunStatus = auto()
-    VSS = auto()
+    VSS = auto()  # volatile suspended solids
     TSS = auto()  # total suspended solids
     TDS = auto()  # total dissolved solids
     COD = auto()  # chemical oxygen demand
     BOD = auto()  # biochemical oxygen demand
     pH = auto()
+    Conductivity = auto()
+    Turbidity = auto()
     Rotation = auto()
     Efficiency = auto()
     StateOfCharge = auto()
@@ -189,8 +196,10 @@ class Tag:
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
-     a combination of existing tags. Tags are combined according to `operations`,
-     with the current supported operations limited to "+", "-", "*", and "/"
+    a combination of existing tags. First `unary_operations`
+    ("noop", "delta", "<<", ">>", "~", and "-") are applied,
+    then tags are combined according to `binary_operations`,
+    with the current supported operations limited to "+", "-", "*", and "/"
 
     Parameters
     ----------
@@ -200,16 +209,25 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : function or list
+    unary_operations : str or list
         Function to apply when combining tags.
-        If a single function it will be applied to all Tags.
-        Otherwise, the `operations` must be one shorter than `tags`, and
-        functions will be applied in order
+        If a single string it will be applied to all Tags.
+        Otherwise, the `unary_operations` must be same length as `tags`,
+        and functions will be applied in order
+
+    binary_operations : str or list
+        Function to apply when combining tags.
+        If a single string it will be applied to all Tags.
+        Otherwise, the `binary_operations` must be one shorter than `tags`,
+        and functions will be applied in order
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`.
         Default is None, and it will be automatically determined from constituent
         Tags if they all have the same type.
+
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
 
     contents : ContentsType
         Contents moving through the node. Default is None, and it will be automatically
@@ -218,7 +236,8 @@ class VirtualTag:
     Raises
     ------
     ValueError
-        When the `operations` includes unsupported operations or is the wrong length.
+        When `unary_operations` or `binary_operations` includes
+        unsupported operations or is the wrong length.
         When `tag_type` is not specified and constituent tags have different types.
         When `contents` of the constituent tags are different types.
 
@@ -233,12 +252,34 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : ["+", "-", "*", "/"]
-        Function to apply when combining tags.
+    unary_operations : ["noop", "delta", "<<", ">>", "~", "-"]
+        Unary operations to apply before combining tags.
+
+            "noop" : null operator, useful when
+            skipping tags in a list of unary operations.
+
+            "delta" : calculate the difference between
+            the current timestep and previous timestep
+
+            "<<" : shift all data left one timestep,
+            so that the last time step will be NaN
+
+            ">>" : shift all data right one timestep,
+            so that the first time step will be NaN
+
+            "~" : Boolean not
+
+            "-" : unary negation
+
+        Note that "delta", "<<", and ">>" return a timeseries padded
+        with NaN so that it is the same length as input data
+
+    binary_operations : ["+", "-", "*", "/"]
+        Binary operaitons to apply when combining tags.
         Supported functions are "+", "-", "*", and "/".
         If a single string is passed, it will be applied to all Tags.
-        Otherwise, the `operations` list must be one shorter than `tags`, and
-        functions will be applied in order from left to right
+        Otherwise, the `binary_operations` list must be one shorter than `tags`,
+        and functions will be applied in order from left to right
 
     units : str or Unit
         Units represented as a string or Pint unit.
@@ -250,12 +291,25 @@ class VirtualTag:
     totalized : bool
         True if data is totalized. False otherwise
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     contents : ContentsType
         Contents moving through the node
     """
 
-    def __init__(self, id, tags, operations="+", tag_type=None, contents=None):
+    def __init__(
+        self,
+        id,
+        tags,
+        unary_operations=None,
+        binary_operations=None,
+        tag_type=None,
+        parent_id=None,
+        contents=None,
+    ):
         self.id = id
+        self.parent_id = parent_id
         self.tags = tags
 
         units = []
@@ -304,41 +358,94 @@ class VirtualTag:
         self.tag_type = tag_type
         self.totalized = totalized
 
-        if isinstance(operations, list):
-            if len(operations) != len(tags) - 1:
+        if isinstance(unary_operations, list):
+            if len(unary_operations) != len(tags):
                 raise ValueError(
-                    "Operations list must be of length one less than the Tag list"
+                    "Unary operations list must be same length as Tag list"
                 )
             else:
-                self.operations = operations
+                for i, unit in enumerate(units):
+                    if isinstance(unary_operations[i], list):
+                        for j in range(len(unary_operations[i])):
+                            if unary_operations[i][j] not in UNARY_OPS:
+                                raise ValueError(
+                                    "Unsupported unary operator:", unary_operations[i]
+                                )
+                            elif unary_operations[i][j] == "~":
+                                units[i] = None
+                            elif unary_operations[i][j] == "delta":
+                                # TODO: convert from volume to flow rate
+                                # once resolution argument exists
+                                pass
+                    else:
+                        if unary_operations[i] not in UNARY_OPS:
+                            raise ValueError(
+                                "Unsupported unary operator:", unary_operations[i]
+                            )
+                        elif unary_operations[i] == "~":
+                            units[i] = None
+                        elif unary_operations[i] == "delta":
+                            # TODO: convert from volume to flow rate
+                            # once resolution argument exists
+                            pass
+                self.unary_operations = unary_operations
+        elif unary_operations is not None:
+            if unary_operations not in UNARY_OPS:
+                raise ValueError("Unsupported unary operator:", unary_operations)
+            self.unary_operations = [unary_operations] * (len(self.tags))
+        else:
+            self.unary_operations = None
+
+        if isinstance(binary_operations, list):
+            if len(binary_operations) != len(tags) - 1:
+                raise ValueError(
+                    "Binary operations list must be of length one less than Tag list"
+                )
+            else:
+                self.binary_operations = binary_operations
                 prev_unit = None
                 for i, unit in enumerate(units):
                     if isinstance(unit, str):
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = operation_helper(
-                            operations[i - 1],
+                        # check that operation is supported
+                        if binary_operations[i - 1] not in BINARY_OPS:
+                            raise ValueError(
+                                "Unsupported binary operator:", binary_operations[i - 1]
+                            )
+                        prev_unit = binary_helper(
+                            binary_operations[i - 1],
                             unit,
                             prev_unit,
                             totalized_mix=totalized_mix,
                         )
                     else:
                         prev_unit = unit
-        else:
+        elif binary_operations is not None:
+            if binary_operations not in BINARY_OPS:
+                raise ValueError("Unsupported binary operator:", binary_operations)
             prev_unit = None
             for unit in units:
                 if isinstance(unit, str):
                     unit = parse_units(unit)
 
                 if prev_unit is not None:
-                    prev_unit = operation_helper(
-                        operations, unit, prev_unit, totalized_mix=totalized_mix
+                    prev_unit = binary_helper(
+                        binary_operations, unit, prev_unit, totalized_mix=totalized_mix
                     )
                 else:
                     prev_unit = unit
 
-            self.operations = [operations] * (len(self.tags) - 1)
+            self.binary_operations = [binary_operations] * (len(self.tags) - 1)
+        else:
+            if len(self.tags) != 1:
+                raise ValueError(
+                    "Binary operations must be specified"
+                    "when more than one tag is given."
+                )
+            self.binary_operations = None
+            prev_unit = units[0]
 
         self.units = prev_unit
 
@@ -347,7 +454,9 @@ class VirtualTag:
             f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
-            "operations:{self.operations}>\n"
+            f"unary_operations:{self.unary_operations} "
+            f"binary_operations:{self.binary_operations} "
+            f"parent_id:{self.parent_id}>\n"
         )
 
     def __eq__(self, other):
@@ -362,7 +471,8 @@ class VirtualTag:
             and self.totalized == other.totalized
             and self.units == other.units
             and self.tags == other.tags
-            and self.operations == other.operations
+            and self.unary_operations == other.unary_operations
+            and self.binary_operations == other.binary_operations
         )
 
     def __hash__(self):
@@ -370,7 +480,8 @@ class VirtualTag:
             (
                 self.id,
                 str(self.tags),
-                str(self.operations),
+                str(self.unary_operations),
+                str(self.binary_operations),
                 self.contents,
                 self.tag_type,
                 self.totalized,
@@ -387,8 +498,10 @@ class VirtualTag:
             return True
         elif len(self.tags) > len(other.tags):
             return False
-        elif self.operations != other.operations:
-            return self.operations < other.operations
+        elif self.unary_operations != other.unary_operations:
+            return self.unary_operations < other.unary_operations
+        elif self.binary_operations != other.binary_operations:
+            return self.binary_operations < other.binary_operations
         elif self.id != other.id:
             return self.id < other.id
         elif self.contents != other.contents:
@@ -400,14 +513,104 @@ class VirtualTag:
         else:
             return str(self.units) < str(other.units)
 
-    def calculate_values(self, data, tag_to_var_map={}):
-        """Combine the given data according to the VirtualTag's operations
+    def process_unary_ops(self, data, tag_to_var_map={}):
+        """Transform the given data according to the VirtualTag's unary operator
 
         Parameters
         ----------
         data : list, array, dict, or DataFrame
             a list, numpy array, or pandas DataFrame of data that has the
-            correct dimensions. I.e., the number of columns is one more than operations
+            correct dimensions. I.e., the number of columns is one more than
+            binary operations and same length as unary operations
+
+        un_op : ["noop", "delta", "<<", ">>", "~", "-"]
+            Supported operations are:
+
+                "noop" : null operator, useful when
+                skipping tags in a list of unary operations.
+
+                "delta" : calculate the difference between
+                the current timestep and previous timestep
+
+                "<<" : shift all data left one timestep,
+                so that the last time step will be NaN
+
+                ">>" : shift all data right one timestep,
+                so that the first time step will be NaN
+
+                "~" : Boolean not
+
+                "-" : unary negation
+
+            Note that "delta", "<<", and ">>" return a timeseries padded
+            with NaN so that it is the same length as input data
+
+        tag_to_var_map : dict
+            dictionary of the form { tag.id : variable_name } for using data files
+            that differ from the original SCADA tag naming system
+
+        Returns
+        -------
+        list, array, or Series
+            numpy array of combined dataset
+        """
+        result = data.copy()
+        num_ops = len(self.unary_operations)
+        if isinstance(data, list):
+            if len(self.unary_operations) != len(data):
+                raise ValueError(
+                    "Data must have the correct dimensions "
+                    "(same length as unary operations). "
+                    "Currently there are {} unary operations and {} data tags".format(
+                        num_ops, len(data)
+                    )
+                )
+            else:
+                for i in range(num_ops):
+                    result[i] = unary_helper(data[i], self.unary_operations[i])
+        elif isinstance(data, ndarray):
+            if issubdtype(data.dtype, (int)):
+                result = result.astype("float")
+            if len(self.unary_operations) != data.shape[1]:
+                raise ValueError(
+                    "Data must have the correct dimensions "
+                    "(same length as unary operations). "
+                    "Currently there are {} unary operations and {} data tags".format(
+                        len(self.unary_operations), data.shape[1]
+                    )
+                )
+            else:
+                for i in range(num_ops):
+                    result[:, i] = unary_helper(data[:, i], self.unary_operations[i])
+        elif isinstance(data, (dict, DataFrame)):
+            for i, tag_obj in enumerate(self.tags):
+                if isinstance(tag_obj, self.__class__):
+                    relevant_data = tag_obj.calculate_values(data)
+                elif tag_to_var_map:
+                    relevant_data = result[tag_to_var_map[tag_obj.id]]
+                else:
+                    relevant_data = result[tag_obj.id]
+
+                relevant_data = unary_helper(relevant_data, self.unary_operations[i])
+
+                if tag_to_var_map:
+                    result[tag_to_var_map[tag_obj.id]] = relevant_data
+                else:
+                    result[tag_obj.id] = relevant_data
+        else:
+            raise TypeError("Data must be either a list, array, dict, or DataFrame")
+
+        return result
+
+    def process_binary_ops(self, data, tag_to_var_map={}):
+        """Combine the given data according to the VirtualTag's binary operations
+
+        Parameters
+        ----------
+        data : list, array, dict, or DataFrame
+            a list, numpy array, or pandas DataFrame of data that has the
+            correct dimensions. I.e., the number of columns is one more than
+            binary operations and same length as unary operations
 
         tag_to_var_map : dict
             dictionary of the form { tag.id : variable_name } for using data files
@@ -419,28 +622,28 @@ class VirtualTag:
             numpy array of combined dataset
         """
         if isinstance(data, list):
-            if len(self.operations) != len(data) - 1:
+            if len(self.binary_operations) != len(data) - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
-                    "(one more element than operations). "
-                    "Currently there are {} operations and {} data tags".format(
-                        len(self.operations), len(data)
+                    "(one more element than binary operations). "
+                    "Currently there are {} binary operations and {} data tags".format(
+                        len(self.binary_operations), len(data)
                     )
                 )
             else:
                 arr = array(data)
                 result = data[0]
                 for i in range(arr.shape[0] - 1):
-                    if self.operations[i] == "+":
+                    if self.binary_operations[i] == "+":
                         for j in range(arr.shape[1]):
                             result[j] = result[j] + data[i + 1][j]
-                    elif self.operations[i] == "-":
+                    elif self.binary_operations[i] == "-":
                         for j in range(arr.shape[1]):
                             result[j] = result[j] - data[i + 1][j]
-                    elif self.operations[i] == "*":
+                    elif self.binary_operations[i] == "*":
                         for j in range(arr.shape[1]):
                             result[j] = result[j] * data[i + 1][j]
-                    elif self.operations[i] == "/":
+                    elif self.binary_operations[i] == "/":
                         for j in range(arr.shape[1]):
                             result[j] = result[j] / data[i + 1][j]
         elif isinstance(data, DataFrame):
@@ -456,33 +659,33 @@ class VirtualTag:
                 if result is None:
                     result = relevant_data.rename(self.id, inplace=False)
                 else:
-                    if self.operations[i - 1] == "+":
+                    if self.binary_operations[i - 1] == "+":
                         result += relevant_data
-                    elif self.operations[i - 1] == "-":
+                    elif self.binary_operations[i - 1] == "-":
                         result -= relevant_data
-                    elif self.operations[i - 1] == "*":
+                    elif self.binary_operations[i - 1] == "*":
                         result *= relevant_data
-                    elif self.operations[i - 1] == "/":
+                    elif self.binary_operations[i - 1] == "/":
                         result /= relevant_data
         elif isinstance(data, ndarray):
-            if len(self.operations) != data.shape[1] - 1:
+            if len(self.binary_operations) != data.shape[1] - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
-                    "(one more element than operations). "
-                    "Currently there are {} operations and {} data tags".format(
-                        len(self.operations), data.shape[1]
+                    "(one more element than binary operations). "
+                    "Currently there are {} binary operations and {} data tags".format(
+                        len(self.binary_operations), data.shape[1]
                     )
                 )
             else:
                 result = data[:, 0]
                 for i in range(data.shape[1] - 1):
-                    if self.operations[i] == "+":
+                    if self.binary_operations[i] == "+":
                         result += data[:, i + 1]
-                    elif self.operations[i] == "-":
+                    elif self.binary_operations[i] == "-":
                         result -= data[:, i + 1]
-                    elif self.operations[i] == "*":
+                    elif self.binary_operations[i] == "*":
                         result *= data[:, i + 1]
-                    elif self.operations[i] == "/":
+                    elif self.binary_operations[i] == "/":
                         result /= data[:, i + 1]
         elif isinstance(data, dict):
             result = None
@@ -497,13 +700,13 @@ class VirtualTag:
                 if result is None:
                     result = relevant_data
                 else:
-                    if self.operations[i - 1] == "+":
+                    if self.binary_operations[i - 1] == "+":
                         result += relevant_data
-                    elif self.operations[i - 1] == "-":
+                    elif self.binary_operations[i - 1] == "-":
                         result -= relevant_data
-                    elif self.operations[i - 1] == "*":
+                    elif self.binary_operations[i - 1] == "*":
                         result *= relevant_data
-                    elif self.operations[i - 1] == "/":
+                    elif self.binary_operations[i - 1] == "/":
                         result /= relevant_data
 
             if isinstance(result, Series):
@@ -513,3 +716,36 @@ class VirtualTag:
             raise TypeError("Data must be either a list, array, dict, or DataFrame")
 
         return result
+
+    def calculate_values(self, data, tag_to_var_map={}):
+        """Combine the given data according to the VirtualTag's operations
+
+        Parameters
+        ----------
+        data : list, array, dict, or DataFrame
+            a list, numpy array, or pandas DataFrame of data that has the
+            correct dimensions. I.e., the number of columns is one more than
+            binary operations and same length as unary operations
+
+        tag_to_var_map : dict
+            dictionary of the form { tag.id : variable_name } for using data files
+            that differ from the original SCADA tag naming system
+
+        Returns
+        -------
+        list, array, or Series
+            numpy array of combined dataset
+        """
+        if self.unary_operations is not None:
+            data = self.process_unary_ops(data, tag_to_var_map=tag_to_var_map)
+
+        if self.binary_operations is not None:
+            data = self.process_binary_ops(data, tag_to_var_map=tag_to_var_map)
+        elif isinstance(data, (dict, DataFrame)):
+            # if no binary ops, get appropriate column from unary ops and rename
+            data = data[self.tags[0].id].rename(self.id)
+        elif isinstance(data, ndarray):
+            # flatten array since binary operations do that automatically
+            data = data[:, 0]
+
+        return data

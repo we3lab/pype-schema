@@ -1,5 +1,7 @@
 import warnings
+from pandas import Series
 from enum import Enum, auto
+from numpy import ndarray, nan
 from pint import UndefinedUnitError, DimensionalityError
 from .units import u
 
@@ -165,6 +167,31 @@ def parse_units(units):
             or clean_units == "meters/second"
         ):
             return u.m / u.s
+        elif (
+            clean_units == "cubicmeters/day"
+            or clean_units == "cubicmeter/day"
+            or clean_units == "m**3/day"
+            or clean_units == "m^3/day"
+            or clean_units == "m3/day"
+            or clean_units == "meter3/day"
+            or clean_units == "meter**3/day"
+            or clean_units == "meter^3/day"
+            or clean_units == "meters3/day"
+            or clean_units == "meters**3/day"
+            or clean_units == "meters^3/day"
+            or clean_units == "cubicmeters/d"
+            or clean_units == "cubicmeter/d"
+            or clean_units == "m**3/d"
+            or clean_units == "m^3/d"
+            or clean_units == "m3/d"
+            or clean_units == "meter3/d"
+            or clean_units == "meter**3/d"
+            or clean_units == "meter^3/d"
+            or clean_units == "meters3/d"
+            or clean_units == "meters**3/d"
+            or clean_units == "meters^3/d"
+        ):
+            return u.m**3 / u.day
         elif (
             clean_units == "psi"
             or clean_units == "poundspersquareinch"
@@ -538,7 +565,7 @@ def select_objs_helper(
     return True
 
 
-def operation_helper(operation, unit, prev_unit, totalized_mix=False):
+def binary_helper(operation, unit, prev_unit, totalized_mix=False):
     """Helper for parsing operations and checking units
 
     Parameters
@@ -552,6 +579,10 @@ def operation_helper(operation, unit, prev_unit, totalized_mix=False):
 
     prev_unit : Unit
         Units for the left side of the operation, represented as a Pint unit.
+
+    totalized_mix : bool
+        Skip unit checking when there is a mix of totalized and detotalized variables.
+        Default is False
 
     Raises
     ------
@@ -592,3 +623,93 @@ def operation_helper(operation, unit, prev_unit, totalized_mix=False):
         raise ValueError("Unsupported operation " + operation)
 
     return prev_unit
+
+
+def unary_helper(data, un_op):
+    """Transform the given data according to the VirtualTag's unary operator
+
+    Parameters
+    ----------
+    data : list, array, or Series
+        a list, numpy array, or pandas Series of data to apply a unary operation to
+
+    un_op : ["noop", "delta", "<<", ">>", "~", "-"]
+        Supported operations are:
+            "noop" : null operator, useful when
+            skipping tags in a list of unary operations.
+
+            "delta" : calculate the difference between
+            the current timestep and previous timestep
+
+            "<<" : shift all data left one timestep,
+            so that the last time step will be NaN
+
+            ">>" : shift all data right one timestep,
+            so that the first time step will be NaN
+
+            "~" : Boolean not
+
+            "-" : unary negation
+
+        Note that "delta", "<<", and ">>" return a timeseries padded
+        with NaN so that it is the same length as input data
+
+    Returns
+    -------
+    list, array, or Series
+        numpy array of dataset trannsformed by unary operation
+    """
+    # allow for multiple unary operations to be performed sequentially
+    if isinstance(un_op, list):
+        result = data.copy()
+        for op in un_op:
+            result = unary_helper(result, op)
+    elif un_op == "noop":
+        result = data.copy()
+    elif un_op == "delta":
+        r_shift = unary_helper(data, ">>")
+        result = data - r_shift
+    elif un_op == "-":
+        if isinstance(data, list):
+            result = [not -x for x in data]
+        elif isinstance(data, (ndarray, Series)):
+            result = -data
+        else:
+            raise TypeError("Data must be either a list, array, or Series")
+    elif un_op == "~":
+        if isinstance(data, list):
+            result = result = [not bool(x) for x in data]
+        elif isinstance(data, (ndarray, Series)):
+            result = data == 0
+        else:
+            raise TypeError("Data must be either a list, array, or Series")
+    else:
+        if isinstance(data, list):
+            result = data.copy()
+            if un_op == "<<":
+                for i in range(len(data) - 1):
+                    result[i] = data[i + 1]
+                result[len(data) - 1] = float("nan")
+            elif un_op == ">>":
+                for i in range(1, len(data)):
+                    result[i] = data[i - 1]
+                result[0] = float("nan")
+        elif isinstance(data, ndarray):
+            result = data.copy().astype("float")
+            if un_op == "<<":
+                for i in range(len(data) - 1):
+                    result[i] = data[i + 1]
+                result[len(data) - 1] = nan
+            elif un_op == ">>":
+                for i in range(1, len(data)):
+                    result[i] = data[i - 1]
+                result[0] = nan
+        elif isinstance(data, Series):
+            if un_op == "<<":
+                result = data.shift(-1)
+            elif un_op == ">>":
+                result = data.shift(1)
+        else:
+            raise TypeError("Data must be either a list, array, or Series")
+
+    return result
