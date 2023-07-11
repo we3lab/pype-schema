@@ -395,6 +395,8 @@ class ContentsType(Enum):
     Electricity = auto()
     Brine = auto()
     Seawater = auto()
+    ReverseOsmosisFeed = auto() # differentate from seawater (pre-treated)
+    ReverseOsmosisPermeate = auto() # differentate from drinking water (post-treated)
     SurfaceWater = auto()
     Groundwater = auto()
     Stormwater = auto()
