@@ -441,7 +441,7 @@ class VirtualTag:
         else:
             if len(self.tags) != 1:
                 raise ValueError(
-                    "Binary operations must be specified"
+                    "Binary operations must be specified "
                     "when more than one tag is given."
                 )
             self.binary_operations = None
@@ -473,6 +473,7 @@ class VirtualTag:
             and self.tags == other.tags
             and self.unary_operations == other.unary_operations
             and self.binary_operations == other.binary_operations
+            and self.parent_id == other.parent_id
         )
 
     def __hash__(self):
