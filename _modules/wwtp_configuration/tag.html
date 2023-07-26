@@ -475,7 +475,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Binary operations must be specified&quot;</span>
+                    <span class="s2">&quot;Binary operations must be specified &quot;</span>
                     <span class="s2">&quot;when more than one tag is given.&quot;</span>
                 <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span> <span class="o">=</span> <span class="kc">None</span>
@@ -507,6 +507,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">unary_operations</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">binary_operations</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
