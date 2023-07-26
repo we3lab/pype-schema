@@ -473,6 +473,7 @@ class VirtualTag:
             and self.tags == other.tags
             and self.unary_operations == other.unary_operations
             and self.binary_operations == other.binary_operations
+            and self.parent_id == other.parent_id
         )
 
     def __hash__(self):
