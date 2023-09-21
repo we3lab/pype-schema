@@ -130,7 +130,7 @@ class Node(ABC):
 
         return tag
 
-    def get_all_tags(self, virtual=True, recurse=False):
+    def get_all_tags(self, virtual=True, recurse=False, parent_id=""):
         """Gets all Tag objects associated with this Node
 
         Parameters
@@ -143,6 +143,10 @@ class Node(ABC):
             Whether or not to get tags recursively.
             Default is False, meaning that only tags involving direct children
             (and this Node itself) will be returned.
+
+        parent_id : str
+            Optional string identifier for the parent object to limit results.
+            Useful for getting VirtualTag objects at the network level along with lower level Tag objects.
 
         Returns
         ------
@@ -168,6 +172,9 @@ class Node(ABC):
 
         if not virtual:
             tags = [tag for tag in tags if isinstance(tag, Tag)]
+
+        if parent_id:
+            tags = [tag for tag in tags if tag.parent_id == parent_id]
 
         return tags
 

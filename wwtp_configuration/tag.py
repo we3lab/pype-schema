@@ -438,6 +438,10 @@ class VirtualTag:
                     prev_unit = unit
 
             self.binary_operations = [binary_operations] * (len(self.tags) - 1)
+            if (len(self.tags) == 1):
+                warnings.warn(
+                    "Binary operations were specified, but only one Tag was given so none were applied."
+                ) 
         else:
             if len(self.tags) != 1:
                 raise ValueError(
