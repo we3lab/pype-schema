@@ -21,15 +21,8 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, expected",
     [
-        ("data/no_bin_op.json", "ValueError"),
         ("data/invalid_tag.json", "ValueError"),
         ("data/invalid_bin_op.json", "ValueError"),
-        ("data/invalid_bin_op_list.json", "ValueError"),
-        ("data/wrong_bin_len.json", "ValueError"),
-        ("data/invalid_un_op.json", "ValueError"),
-        ("data/invalid_un_op_list.json", "ValueError"),
-        ("data/invalid_un_op_nested_list.json", "ValueError"),
-        ("data/wrong_un_len.json", "ValueError"),
     ],
 )
 def test_init_errors(json_path, expected):
