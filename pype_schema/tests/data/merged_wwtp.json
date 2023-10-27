@@ -703,15 +703,18 @@
       "virtual_tags": {
         "ElectricityGeneration_RShift2": {
           "tags": ["ElectricityGeneration"],
-          "unary_operations": [[">>", ">>"]]
+          "operations": "lambda x: x.shift(-2)",
+          "units": "kilowatt * hour"
         },
         "ElectricityGeneration_LShift1": {
           "tags": ["ElectricityGeneration"],
-          "unary_operations": "<<"
+          "operations": "lambda x: x.shift(1)",
+          "units": "kilowatt * hour"          
         },
         "ElectricityGenDelta": {
           "tags": ["ElectricityGeneration"],
-          "unary_operations": "delta"
+          "operations": "lambda x: x.diff(",
+          "units": "kilowatt * hour"          
         } 
       }
     },

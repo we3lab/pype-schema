@@ -394,8 +394,9 @@ class JSONParser:
                         tag_id = "_".join(
                             [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
                         )
+                        operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         v_tag = VirtualTag(
-                            tag_id, tags_by_contents, binary_operations="+"
+                            tag_id, tags_by_contents, operations=operations
                         )
                         node_obj.add_tag(v_tag)
 
@@ -531,6 +532,7 @@ class JSONParser:
                         and len(tag_source_unit_ids) > 1
                     ):
                         tag_obj = tags_by_contents[0]
+                        operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         # create a separate virtual total for each destination unit.
                         # If none exist then just use total
                         if tag_dest_unit_ids:
@@ -553,7 +555,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, tag_list, binary_operations="+"
+                                    tag_id, 
+                                    tag_list, 
+                                    operations=operations,
+                                    units=tag_obj.units
                                 )
                                 connection_obj.add_tag(v_tag)
 
@@ -571,11 +576,17 @@ class JSONParser:
                                 entry_point_id,
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
+                            )                       
+                            v_tag = VirtualTag(
+                                tag_id, 
+                                tag_list, 
+                                operations=operations,
+                                units=tag_obj.units
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_obj = tags_by_contents[0]
+                        operations = utils.get_tag_sum_lambda_func(tag_dest_unit_ids)
                         # create a separate virtual total for each source unit.
                         # If none exist then just use total
                         if tag_source_unit_ids:
@@ -597,7 +608,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, tag_list, binary_operations="+"
+                                    tag_id, 
+                                    tag_list, 
+                                    operations=operations,
+                                    units=tag_obj.units
                                 )
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -615,7 +629,12 @@ class JSONParser:
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
+                            v_tag = VirtualTag(
+                                tag_id, 
+                                tag_list, 
+                                operations=operations,
+                                units=tag_obj.units
+                            )
                             connection_obj.add_tag(v_tag)
 
         v_tags = self.config[connection_id].get("virtual_tags")
@@ -682,8 +701,7 @@ class JSONParser:
         tag_info : dict
             dictionary of the form {
                 'tags': dict of Tag,
-                'unary_operations': list of str,
-                'binary_operations': list of str,
+                'operations': str,
                 'type': TagType,
                 'contents': str
             }
@@ -709,6 +727,11 @@ class JSONParser:
                 )
             tag_list.append(subtag)
 
+        
+        try: 
+            pint_unit = utils.parse_units(tag_info["units"]) 
+        except:
+            pint_unit = None
         try:
             tag_type = TagType[tag_info["type"]]
         except KeyError:
@@ -720,11 +743,11 @@ class JSONParser:
         v_tag = VirtualTag(
             tag_id,
             tag_list,
-            unary_operations=tag_info.get("unary_operations"),
-            binary_operations=tag_info.get("binary_operations"),
+            operations=tag_info.get("operations"),
             tag_type=tag_type,
             contents=contents_type,
             parent_id=tag_info.get("parent_id"),
+            units=pint_unit
         )
         return v_tag
 
@@ -912,9 +935,8 @@ class JSONParser:
         tag_dict = {}
         if isinstance(tag_obj, VirtualTag):
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
-            tag_dict["unary_operations"] = tag_obj.unary_operations
-            tag_dict["binary_operations"] = tag_obj.binary_operations
-            tag_dict["parent_id"] = tag_obj.parent_id
+            tag_dict["operations"] = tag_obj.operations
+            tag_dict["units"] = "{!s}".format(tag_obj.units)
         elif isinstance(tag_obj, Tag):
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["source_unit_id"] = tag_obj.source_unit_id
@@ -1165,7 +1187,7 @@ class JSONParser:
         return node_dict
 
     @staticmethod
-    def to_json(network, file_path=None):
+    def to_json(network, file_path=None, indent=3):
         """Converts a Network object to a JSON file
 
         Parameters
@@ -1212,6 +1234,6 @@ class JSONParser:
 
         if file_path is not None:
             with open(file_path, "w") as file:
-                json.dump(result, file)
+                json.dump(result, file, indent=indent)
 
         return result

@@ -26,14 +26,22 @@
   "virtual_tags": {
     "GrossGasProduction": {
       "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-      "binary_operations": "+",
-      "contents": "GasBlend"
+      "operations": "lambda x,y: x + y",
+      "contents": "GasBlend",
+      "units": "SCFM"
     },
+    "GrossGasProductionList": {
+      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
+      "contents": "GasBlend",
+      "units": "SCFM"
+    },    
     "ElectricityProductionByGasVolume": {
       "tags": ["ElectricityGeneration", "GrossGasProduction"],
-      "binary_operations": ["/"],
+      "operations": "lambda x,y: x / y",
       "type": "Efficiency",
-      "parent_id": "Cogenerator"
+      "parent_id": "Cogenerator",
+      "units": "kilowatt * hour / SCFM"
     }
   },
   "DrinkingWaterFacility": {
@@ -766,8 +774,15 @@
     "virtual_tags": {
       "NoGasPurchases": {
         "tags": ["GasPurchases"],
-        "unary_operations": ["~"],
-        "type": "RunStatus"
+        "operations": "lambda x: x==0",
+        "type": "RunStatus",
+        "units": null
+      },
+      "NoGasPurchasesList": {
+        "tags": ["GasPurchases"],
+        "operations": "lambda x: [x_==0 for x_ in x]",
+        "type": "RunStatus",
+        "units": null
       }
     }
   },
@@ -795,15 +810,28 @@
     "virtual_tags": {
       "ElectricityGeneration_RShift2": {
         "tags": ["ElectricityGeneration"],
-        "unary_operations": [[">>", ">>"]]
+        "operations": "lambda x: x.shift(2)",
+        "units": "kilowatt * hour"
       },
+      "ElectricityGeneration_RShift2_List": {
+        "tags": ["ElectricityGeneration"],
+        "operations": "lambda x: ['nan', 'nan'] + x[:-2]",
+        "units": "kilowatt * hour"
+      },      
       "ElectricityGeneration_LShift1": {
         "tags": ["ElectricityGeneration"],
-        "unary_operations": "<<"
+        "operations": "lambda x: x.shift(-1)",
+        "units": "kilowatt * hour"
       },
+      "ElectricityGeneration_LShift1_List": {
+        "tags": ["ElectricityGeneration"],
+        "operations": "lambda x: x[1:] + ['nan']",
+        "units": "kilowatt * hour"
+      },      
       "ElectricityGenDelta": {
         "tags": ["ElectricityGeneration"],
-        "unary_operations": "delta"
+        "operations": "lambda x: x.diff()",
+        "units": "kilowatt * hour"
       }
     }
   }
