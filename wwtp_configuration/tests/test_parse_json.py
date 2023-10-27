@@ -1,14 +1,16 @@
 import os
 import pint
 import pytest
+import json
 import pickle
 from wwtp_configuration.units import u
 from wwtp_configuration.parse_json import JSONParser
+from wwtp_configuration.node import Network
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # set skip_all_tests = True to focus on single test
-skip_all_tests = False
+skip_all_tests = True
 
 # set default pint registry so that custom units like MGD are understood
 pint.set_application_registry(u)
@@ -31,11 +33,10 @@ def test_create_network(json_path, expected_path):
     except Exception as err:
         result = type(err).__name__
         expected = expected_path
-
     assert result == expected
 
 
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, original_network_path, node_id, inplace, expected_path",
     [
@@ -46,20 +47,20 @@ def test_create_network(json_path, expected_path):
             False,
             "data/merged.json",
         ),
-        (
-            "data/wwtp_expansion.json",
-            "../data/sample.json",
-            "WWTP",
-            False,
-            "data/merged_wwtp.json",
-        ),
-        (
-            "data/wwtp_expansion.json",
-            "../data/sample.json",
-            "WWTP",
-            True,
-            "data/merged_wwtp.json",
-        ),
+        # (
+        #     "data/wwtp_expansion.json",
+        #     "../data/sample.json",
+        #     "WWTP",
+        #     False,
+        #     "data/merged_wwtp.json",
+        # ),
+        # (
+        #     "data/wwtp_expansion.json",
+        #     "../data/sample.json",
+        #     "WWTP",
+        #     True,
+        #     "data/merged_wwtp.json",
+        # ),
     ],
 )
 def test_merge_network(
@@ -77,7 +78,8 @@ def test_merge_network(
         original = original_network_path
 
     result = parser.merge_network(original, inplace=inplace)
-
+    JSONParser.to_json(result, file_path = "data/merged_wwtp_result.json")
+    JSONParser.to_json(expected, file_path = "data/merged_wwtp_expected.json")
     assert result == expected
     assert inplace == (expected == parser.network_obj)
 

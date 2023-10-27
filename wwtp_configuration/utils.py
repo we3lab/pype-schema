@@ -6,6 +6,54 @@ from pint import UndefinedUnitError, DimensionalityError
 from .units import u
 
 
+def count_args(func_str):
+    """ Count the arguments for a lambda function string
+
+    Parameters
+    ----------
+    func_str : str
+        A string representation of a lambda function
+
+    Returns
+    -------
+    int : 
+        The lambda function's number of arguments
+    
+    """
+    func = eval(func_str)
+    nargs = 0
+    if func.__code__.co_argcount is not None:
+        nargs += func.__code__.co_argcount
+    if func.__defaults__ is not None:
+        nargs -= len(func.__defaults__)
+    if func.__code__.co_kwonlyargcount is not None:
+        nargs += func.__code__.co_kwonlyargcount
+    if func.__kwdefaults__ is not None:
+        nargs -= len(func.__kwdefaults__)
+    return nargs
+
+def get_tag_sum_lambda_func(unit_ids):
+    """ Generate a lambda function string to sum tags
+
+    Parameters
+    ----------
+    unit_ids : list
+        A list of unit IDs to sum
+    
+    Returns
+    -------
+    str :
+        A string representation of a lambda function that sums tags
+    
+    """
+    arguments = ",".join(
+        ["tag" + str(unit) for unit in unit_ids]
+    )
+    ops = "+".join(
+        ["tag" + str(unit) for unit in unit_ids]
+    )
+    return f"lambda {arguments}: {ops}"
+
 def parse_quantity(value, units):
     """Convert a value and unit string to a Pint quantity
 
@@ -280,6 +328,21 @@ def parse_units(units):
             or clean_units == "britishthermalunits/feet^3"
         ):
             return u.BTU / (u.ft**3)
+        elif (
+            clean_units == "kw*hour/scfm"
+            or clean_units=="kwhr/scfm"
+            or clean_units=="kwh/scfm"
+            or clean_units=="kilowatthr/scfm"
+            or clean_units=="kilowatthour/scfm"
+            or clean_units=="kilowatt*hour/scfm"
+            or clean_units == "kw*hour/ft**3*min"
+            or clean_units=="kwhr/ft**3*min"
+            or clean_units=="kwh/ft**3*min"
+            or clean_units=="kilowatthr/ft**3*min"
+            or clean_units=="kilowatthour/ft**3*min"
+            or clean_units=="kilowatt*hour/ft**3*min"
+        ):
+            return u.kW * u.hr / u.ft**3 * u.min
         elif (
             clean_units == "kwh"
             or clean_units == "kwhr"
