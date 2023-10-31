@@ -194,10 +194,7 @@ class Tag:
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
-    a combination of existing tags. First `unary_operations`
-    ("noop", "delta", "<<", ">>", "~", and "-") are applied,
-    then tags are combined according to `binary_operations`,
-    with the current supported operations limited to "+", "-", "*", and "/"
+    a combination of existing tags combined via the `operations` lambda function string
 
     Parameters
     ----------
