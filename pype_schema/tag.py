@@ -193,7 +193,7 @@ class Tag:
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
-    a combination of existing tags using a lambda function
+    a combination of existing tags combined via the `operations` lambda function string
 
     Parameters
     ----------
