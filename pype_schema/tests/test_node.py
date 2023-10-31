@@ -75,11 +75,10 @@ def test_get_node_or_connection(json_path, obj_id, recurse, expected):
         .initialize_network()
         .get_node_or_connection(obj_id, recurse=recurse)
     )
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-
+    
     assert result == expected
 
 
@@ -168,9 +167,10 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         parser = JSONParser(json_path)
         result = parser.initialize_network().get_list_of_type(desired_type, recurse)
 
-        if isinstance(expected, str) and os.path.isfile(expected):
+        if isinstance(expected, str) and os.path.isfile(expected):         
             with open(expected, "rb") as pickle_file:
                 expected = pickle.load(pickle_file)
+    
     except Exception as err:
         result = type(err).__name__
 
@@ -187,7 +187,7 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         ("data/node.json", "RawSewagePump", []),
         # Case 3: only normal connections
         ("data/node.json", "Cogenerator", "data/connection_to_cogen.pkl"),
-        # Case 4: normal connections and entry_point
+        # Case  4: normal connections and entry_point
         ("data/node.json", "Digester", "data/connection_to_digester.pkl"),
     ],
 )
@@ -195,11 +195,9 @@ def test_get_all_connections_to(json_path, node_id, expected):
     parser = JSONParser(json_path)
     config = parser.initialize_network()
     result = config.get_all_connections_to(config.get_node(node_id, recurse=True))
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-
     assert result == expected
 
 
@@ -207,9 +205,9 @@ def test_get_all_connections_to(json_path, node_id, expected):
 @pytest.mark.parametrize(
     "json_path, node_id, expected",
     [
-        # Case 1: node does not exist
+        # # Case 1: node does not exist
         ("data/node.json", "InvalidNode", []),
-        # Case 2: no outgoing connections but node exists
+        # # Case 2: no outgoing connections but node exists
         ("data/node.json", "Cogenerator", []),
         # Case 3: only normal connections
         ("data/node.json", "RawSewagePump", "data/connection_from_sewer.pkl"),
@@ -225,7 +223,7 @@ def test_get_all_connections_from(json_path, node_id, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-
+    
     assert result == expected
 
 
@@ -263,7 +261,6 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     parser = JSONParser(json_path)
     config = parser.initialize_network()
     result = config.get_parent_from_tag(tag)
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)

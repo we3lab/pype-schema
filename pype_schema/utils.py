@@ -626,4 +626,3 @@ def select_objs_helper(
         return False
 
     return True
-

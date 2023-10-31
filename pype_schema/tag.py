@@ -321,6 +321,10 @@ class VirtualTag:
                 raise ValueError(
                     "Operations lambda function must have the same number of arguments as the Tag list"
                 ) 
+        elif len(tags) > 1:
+            raise ValueError(
+                "Operations lambda function must be specified if multiple tags are given"
+            )
 
         self.operations = operations
         
