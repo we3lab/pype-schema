@@ -776,3 +776,27 @@ def unary_helper(data, un_op):
             raise TypeError("Data must be either a list, array, or Series")
 
     return result
+
+def recursive_get(key, dict_):
+    """ Recursively search a nested dictionary for a key
+
+    Parameters
+    ----------
+    key : str
+        Key to search for
+
+    dict_ : dict
+        (nested) dictionary to search
+    
+    Returns : any, None
+        Value of the key if found, None otherwise
+    
+    """
+    if key in dict_:
+        return dict_[key]
+    elif isinstance(dict_, dict):
+        for k, v in dict_.items():
+            if isinstance(v, dict):
+                item = recursive_get(key, v)
+                if item is not None:
+                    return item

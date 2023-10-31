@@ -327,6 +327,10 @@ class VirtualTag:
                 raise ValueError(
                     "Operations lambda function must have the same number of arguments as the Tag list"
                 ) 
+        elif len(tags) > 1:
+            raise ValueError(
+                "Operations lambda function must be specified if multiple tags are given"
+            )
 
         self.operations = operations
         
@@ -336,7 +340,7 @@ class VirtualTag:
             f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
-            f"unary_operations:{self.operations} "
+            f"operations:{self.operations} "
             f"parent_id:{self.parent_id}>\n"
         )
 

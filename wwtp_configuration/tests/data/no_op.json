@@ -19,7 +19,7 @@
     "virtual_tags": {
       "GrossGasProduction": {
         "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
-        "unary_operations": "",
+        "operations": "",
         "contents": "GasBlend"
       }
     },

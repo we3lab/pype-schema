@@ -10,7 +10,7 @@ from wwtp_configuration.node import Network
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # set skip_all_tests = True to focus on single test
-skip_all_tests = True
+skip_all_tests = False
 
 # set default pint registry so that custom units like MGD are understood
 pint.set_application_registry(u)
@@ -22,6 +22,7 @@ pint.set_application_registry(u)
     [
         ("../data/sample.json", "data/sample.pkl"),
         ("data/key_error.json", "KeyError"),
+        ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
     ],
 )
 def test_create_network(json_path, expected_path):
@@ -36,7 +37,7 @@ def test_create_network(json_path, expected_path):
     assert result == expected
 
 
-# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, original_network_path, node_id, inplace, expected_path",
     [
@@ -47,20 +48,20 @@ def test_create_network(json_path, expected_path):
             False,
             "data/merged.json",
         ),
-        # (
-        #     "data/wwtp_expansion.json",
-        #     "../data/sample.json",
-        #     "WWTP",
-        #     False,
-        #     "data/merged_wwtp.json",
-        # ),
-        # (
-        #     "data/wwtp_expansion.json",
-        #     "../data/sample.json",
-        #     "WWTP",
-        #     True,
-        #     "data/merged_wwtp.json",
-        # ),
+        (
+            "data/wwtp_expansion.json",
+            "../data/sample.json",
+            "WWTP",
+            False,
+            "data/merged_wwtp.json",
+        ),
+        (
+            "data/wwtp_expansion.json",
+            "../data/sample.json",
+            "WWTP",
+            True,
+            "data/merged_wwtp.json",
+        ),
     ],
 )
 def test_merge_network(
@@ -68,7 +69,6 @@ def test_merge_network(
 ):
     parser = JSONParser(json_path)
     expected = JSONParser(expected_path).initialize_network()
-
     if node_id:
         original = (
             JSONParser(original_network_path).initialize_network().get_node(node_id)
@@ -78,8 +78,6 @@ def test_merge_network(
         original = original_network_path
 
     result = parser.merge_network(original, inplace=inplace)
-    JSONParser.to_json(result, file_path = "data/merged_wwtp_result.json")
-    JSONParser.to_json(expected, file_path = "data/merged_wwtp_expected.json")
     assert result == expected
     assert inplace == (expected == parser.network_obj)
 
