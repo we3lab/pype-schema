@@ -58,12 +58,44 @@ class JSONParser:
                 self.create_connection(connection_id, self.network_obj)
             )
         # Add all virtual tags
-        self.add_virtual_tags(self.network_obj, self.config)
+        self.add_virtual_tags()
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
+    
+    def collect_virtual_tags(self, config, obj_id=None, virtual_tags=None):
+        """ Recursively collects all virtual tags in a network's dictionary 
+        representation (i.e. config)
 
-    def add_virtual_tags(self, obj, config, obj_id=None):
-        """ Recursively adds all virtual tags in an object
+        Parameters
+        ----------
+        config: dict
+            Dictionary representation of the network
+
+        obj_id : str
+            Optional "id" of config whose virtual tags are being collected
+            (if `None` will use "ParentNetwork")
+
+        virtual_tags : dict
+            dictionary to store virtual tags in
+        
+        """
+        if virtual_tags is None:
+            virtual_tags = {}
+        obj_id = "ParentNetwork" if obj_id is None else obj_id
+        v_tags = config.get("virtual_tags")
+        if v_tags:
+            # Make sure obj_id is specified for all virtual tags as `parent_id`
+            for v_tag in v_tags.values():
+                v_tag["parent_id"] = obj_id
+            virtual_tags.update(v_tags)
+        for key, value in config.items():
+            if key not in ["tags","virtual_tags"] and isinstance(value, dict):
+                self.collect_virtual_tags(value, obj_id=key, virtual_tags=virtual_tags)
+        return virtual_tags
+    
+
+    def add_virtual_tags(self):
+        """ Adds all virtual tags in an object
         NOTE: assumes the objects tags have already been added
 
         Parameters
@@ -78,24 +110,49 @@ class JSONParser:
             optional node_id to look for virtual tags in
         
         """
-        if obj_id is None:
-            v_tags = config.get("virtual_tags")
-        else:
-            v_tags = config.get(obj_id).get("virtual_tags")
-        if v_tags:
-            for v_tag_id, v_tag_info in v_tags.items():
-                v_tag = self.parse_virtual_tag(
-                    v_tag_id,
-                    v_tag_info, 
-                    obj,
-                    parent_network=self.network_obj
+        config_v_tags = self.collect_virtual_tags(self.config)
+        network_v_tags = {} 
+        if config_v_tags:
+            # Create a queue of virtual tags to add
+            v_tag_queue = [(v_tag_id, v_tag_info) for v_tag_id, v_tag_info in config_v_tags.items()]
+            counter = 0
+            while v_tag_queue:
+                v_tag_id, v_tag_info = v_tag_queue.pop(0)
+                # Try parsing the virtual tag
+                try:
+                    obj_id = v_tag_info.get("parent_id")
+                    obj = (
+                        self.network_obj
+                        if obj_id == "ParentNetwork"
+                        else self.network_obj.get_node_or_connection(obj_id, recurse=True)
+                    )
+                    v_tag = self.parse_virtual_tag(
+                        v_tag_id,
+                        v_tag_info, 
+                        obj,
+                        parent_network=self.network_obj
+                    )
+                    obj.add_tag(v_tag)
+                # If there is an error skip and add other tags
+                except ValueError:
+                    v_tag_queue.append((v_tag_id, v_tag_info))
+                counter += 1
+                # Note that 2 * N is theoretical limit on number of tries to add virtual tags
+                # (max 1/2 of all virtual tags must point to actual tags)
+                if counter == 2 * len(config_v_tags):
+                    break
+            if v_tag_queue:
+                vtag_ids = [v_tag_id for v_tag_id, _ in v_tag_queue]
+                subtag_ids = [tag_info["tags"] for _, tag_info in v_tag_queue]
+                raise ValueError(
+                    f"""
+                        Invalid Tag ids {subtag_ids} in VirtualTags {vtag_ids}"
+                    """
                 )
-                obj.add_tag(v_tag)
-        if isinstance(obj, node.Network):
-            for node_id, node_obj in obj.nodes.items():
-                self.add_virtual_tags(node_obj, config, obj_id=node_id)
-            for connection_id, connection_obj in obj.connections.items():
-                self.add_virtual_tags(connection_obj, config, obj_id=connection_id)
+        for v_tag in network_v_tags.values():
+            obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
+            obj.add_tag(v_tag)
+
 
     def merge_network(self, old_network, inplace=False):
         """Incorporates nodes/connections (i.e. the `new_network`) into a network
