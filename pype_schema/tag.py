@@ -1,11 +1,12 @@
 import warnings
 from enum import Enum, auto
 from pandas import DataFrame, Series
+import pandas as pd
+import numpy as np
+import scipy as sp
 from numpy import ndarray, array, issubdtype
 from .utils import count_args
-
-
-
+from .operations import *
 
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
