@@ -12,6 +12,9 @@ class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
     Flow = auto()
+    InFlow = auto()
+    OutFlow = auto()
+    NetFlow = auto()
     Volume = auto()
     Level = auto()
     Pressure = auto()
