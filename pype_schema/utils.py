@@ -466,6 +466,7 @@ class ContentsType(Enum):
     SurfaceWater = auto()
     Groundwater = auto()
     Stormwater = auto()
+    Heat = auto()
     Oil = auto()
     Grease = auto()
 
