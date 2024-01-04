@@ -253,13 +253,18 @@ class JSONParser:
                 volume,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Cogeneration":
+        elif self.config[node_id]["type"] in ["Cogeneration", "Boiler"]:
             min, max, avg = self.parse_min_max_avg(
                 self.config[node_id].get("generation_capacity")
             )
-            node_obj = node.Cogeneration(
-                node_id, input_contents, min, max, avg, num_units, tags={}
-            )
+            if self.config[node_id]["type"] == "Cogeneration":
+                node_obj = node.Cogeneration(
+                    node_id, input_contents, min, max, avg, num_units, tags={}
+                )
+            else:
+                node_obj = node.Boiler(
+                    node_id, input_contents, min, max, avg, num_units, tags={}
+                )
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
 
@@ -1103,7 +1108,7 @@ class JSONParser:
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
-        elif isinstance(node_obj, node.Cogeneration):
+        elif isinstance(node_obj, (node.Cogeneration, node.Boiler)):
             node_dict["generation_capacity"] = JSONParser.min_max_avg_to_dict(
                 node_obj, "gen_capacity"
             )

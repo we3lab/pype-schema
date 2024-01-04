@@ -1704,6 +1704,118 @@ class Cogeneration(Node):
         self.energy_efficiency = efficiency_curve
 
 
+class Boiler(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Boiler ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the boiler
+
+    min_gen : int
+        Minimum generation capacity of a single boiler
+
+    max_gen : int
+        Maximum generation capacity of a single boiler
+
+    avg_gen : int
+        Average generation capacity of a single boiler
+
+    num_units : int
+        Number of boiler units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this boiler
+
+    Attributes
+    ----------
+    id : str
+        Boiler ID
+
+    input_contents : list of ContentsType
+        Contents entering the boiler
+        (biogas, natural gas, or a blend of the two)
+
+    output_contents : list of ContentsType
+        Contents leaving the boiler (Electricity)
+
+    gen_capacity : tuple
+        Minimum, maximum, and average generation capacity
+
+    num_units : int
+        Number of boiler units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this boiler
+
+    energy_efficiency : function
+        Function which takes in the current kWh and returns
+        the efficiency as a fraction
+    """
+
+    def __init__(
+        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.output_contents = [utils.ContentsType.Electricity]
+        self.num_units = num_units
+        self.tags = tags
+        self.set_gen_capacity(min_gen, max_gen, avg_gen)
+        self.set_energy_efficiency(None)
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Cogeneration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.gen_capacity == other.gen_capacity
+            and self.tags == other.tags
+        )
+
+    def set_gen_capacity(self, min, max, avg):
+        """Set the minimum, maximum, and average generation capacity
+
+        Parameters
+        ----------
+        min : int
+            Minimum generation by a single cogenerator
+
+        max : int
+            Maximum generation by a single cogenerator
+
+        avg : int
+            Average generation by a single cogenerator
+        """
+        self.gen_capacity = (min, max, avg)
+
+    def set_energy_efficiency(self, efficiency_curve):
+        """Set the cogeneration efficiency to the given function
+
+        Parameters
+        ----------
+        efficiency_curve : function
+            function takes in the current kWh and returns the fractional efficency
+        """
+        # TODO: type check that efficiency_curve is a function
+        self.energy_efficiency = efficiency_curve
+
+
 class Clarification(Node):
     """
     Parameters
