@@ -1,0 +1,77 @@
+pype\_schema package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pype_schema.data
+
+Submodules
+----------
+
+pype\_schema.connection module
+------------------------------
+
+.. automodule:: pype_schema.connection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.node module
+------------------------
+
+.. automodule:: pype_schema.node
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.parse\_json module
+-------------------------------
+
+.. automodule:: pype_schema.parse_json
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.tag module
+-----------------------
+
+.. automodule:: pype_schema.tag
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.units module
+-------------------------
+
+.. automodule:: pype_schema.units
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.utils module
+-------------------------
+
+.. automodule:: pype_schema.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.visualize module
+-----------------------------
+
+.. automodule:: pype_schema.visualize
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pype_schema
+   :members:
+   :undoc-members:
+   :show-inheritance:

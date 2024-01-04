@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>connection &#8212; WWTP Configuration 0.0 documentation</title>
+    <title>connection &#8212; PyPES 0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -45,28 +45,28 @@
 <p>This module consists of an abstract parent class, <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, and three child classes,
 <code class="docutils literal notranslate"><span class="pre">Pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">Pump</span></code>, and <code class="docutils literal notranslate"><span class="pre">Wire</span></code>.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.connection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract class for all connections</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Connection ID</p></li>
-<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
-<li><p><strong>source</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
-<li><p><strong>destination</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Connection ID</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this connection</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – whether flow can go from destination to source. False by default</p></li>
-<li><p><strong>exit_point</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
-<li><p><strong>entry_point</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
+<li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
 Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.add_tag">
-<span class="sig-name descname"><span class="pre">add_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.add_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.add_tag" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.add_tag">
+<span class="sig-name descname"><span class="pre">add_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.add_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.add_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a tag to the node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -76,21 +76,21 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_dest_id">
-<span class="sig-name descname"><span class="pre">get_dest_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_dest_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_dest_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_dest_id">
+<span class="sig-name descname"><span class="pre">get_dest_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_dest_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_dest_id" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>name of the destination node</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_dest_node">
-<span class="sig-name descname"><span class="pre">get_dest_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_dest_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_dest_node" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_dest_node">
+<span class="sig-name descname"><span class="pre">get_dest_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_dest_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_dest_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a connection’s destination node,
 returning its entry point if <cite>recurse</cite> is True</p>
 <dl class="field-list simple">
@@ -101,79 +101,79 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-even"><p>The destination node corresponding to <cite>connection</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>wwtp_configuration.Node</p>
+<dd class="field-odd"><p>pype_schema.Node</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_entry_point">
-<span class="sig-name descname"><span class="pre">get_entry_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_entry_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_entry_point" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_entry_point">
+<span class="sig-name descname"><span class="pre">get_entry_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_entry_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_entry_point" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>name of the entry point Node (if it exists - None otherwise)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_exit_point">
-<span class="sig-name descname"><span class="pre">get_exit_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_exit_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_exit_point" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_exit_point">
+<span class="sig-name descname"><span class="pre">get_exit_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_exit_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_exit_point" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>name of the exit point Node (if it exists - None otherwise)</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_num_dest_units">
-<span class="sig-name descname"><span class="pre">get_num_dest_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_num_dest_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_num_dest_units" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_num_dest_units">
+<span class="sig-name descname"><span class="pre">get_num_dest_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_num_dest_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_num_dest_units" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>number of units in the destination node</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_num_source_units">
-<span class="sig-name descname"><span class="pre">get_num_source_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_num_source_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_num_source_units" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_num_source_units">
+<span class="sig-name descname"><span class="pre">get_num_source_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_num_source_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_num_source_units" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>number of units in the source node</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_source_id">
-<span class="sig-name descname"><span class="pre">get_source_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_source_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_source_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_source_id">
+<span class="sig-name descname"><span class="pre">get_source_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_source_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_source_id" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>name of the source node</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_source_node">
-<span class="sig-name descname"><span class="pre">get_source_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_source_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_source_node" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_source_node">
+<span class="sig-name descname"><span class="pre">get_source_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_source_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_source_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a connection’s source node returning its exit point if <cite>recurse</cite> is True</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -183,14 +183,14 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-even"><p>The source node corresponding to <cite>connection</cite></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>wwtp_configuration.Node</p>
+<dd class="field-odd"><p>pype_schema.Node</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.get_tag">
-<span class="sig-name descname"><span class="pre">get_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.get_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.get_tag" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.get_tag">
+<span class="sig-name descname"><span class="pre">get_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.get_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.get_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a tag to the node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -200,8 +200,8 @@ returning its entry point if <cite>recurse</cite> is True</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Connection.remove_tag">
-<span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Connection.remove_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Connection.remove_tag" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Connection.remove_tag">
+<span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection.remove_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection.remove_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a tag from the node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -213,8 +213,8 @@ returning its entry point if <cite>recurse</cite> is True</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Pipe">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Pipe" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -242,28 +242,28 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Pipe ID</p></li>
-<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection</p></li>
-<li><p><strong>source</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
-<li><p><strong>destination</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate through the pipe</p></li>
-<li><p><strong>diameter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Pipe diameter in meters</p></li>
-<li><p><strong>friction_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Friction coefficient for the pipe</p></li>
-<li><p><strong>pressure</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – Minimum, maximum, and average pressure in the pipe</p></li>
-<li><p><strong>heating_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – The lower and higher heating values of the gas in the pipe.
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
+<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate through the pipe</p></li>
+<li><p><strong>diameter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Pipe diameter in meters</p></li>
+<li><p><strong>friction_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Friction coefficient for the pipe</p></li>
+<li><p><strong>pressure</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average pressure in the pipe</p></li>
+<li><p><strong>heating_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – The lower and higher heating values of the gas in the pipe.
 None if the pipe is not transporting gas</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
-<li><p><strong>exit_point</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
-<li><p><strong>entry_point</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
+<li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
 Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Pipe.set_flow_rate">
-<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Pipe.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Pipe.set_flow_rate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_flow_rate">
+<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_flow_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the minimum, maximum, and average flow rate through the connection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -277,8 +277,8 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Pipe.set_heating_values">
-<span class="sig-name descname"><span class="pre">set_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Pipe.set_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Pipe.set_heating_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_heating_values">
+<span class="sig-name descname"><span class="pre">set_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_heating_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the lower and higher heating values for gas in the connection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -291,8 +291,8 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Pipe.set_pressure">
-<span class="sig-name descname"><span class="pre">set_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Pipe.set_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Pipe.set_pressure" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_pressure">
+<span class="sig-name descname"><span class="pre">set_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_pressure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the minimum, maximum, and average pressure inside the connection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -308,8 +308,8 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="wwtp_configuration.connection.Wire">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wwtp_configuration.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/wwtp_configuration/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wwtp_configuration.connection.Wire" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.connection.Wire">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -318,16 +318,24 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pump</p></li>
 <li><p><strong>bidirectional</strong> (<em>bool</em>) – whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<em>Node</em>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<em>Node</em>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Pipe ID</p></li>
-<li><p><strong>contents</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.utils.ContentsType" title="wwtp_configuration.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
-<li><p><strong>source</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
-<li><p><strong>destination</strong> (<a class="reference internal" href="wwtp_configuration.html#wwtp_configuration.node.Node" title="wwtp_configuration.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 </dl>
@@ -342,7 +350,7 @@ Default is None, indicating the destination does not have any children</p></li>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">WWTP Configuration</a></h1>
+<h1 class="logo"><a href="index.html">PyPES</a></h1>
 
 
 

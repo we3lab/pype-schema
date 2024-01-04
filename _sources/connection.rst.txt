@@ -8,14 +8,14 @@ connection
 This module consists of an abstract parent class, ``Connection``, and three child classes, 
 ``Pipe``, ``Pump``, and ``Wire``.
 
-.. autoclass:: wwtp_configuration.connection.Connection
+.. autoclass:: pype_schema.connection.Connection
    :members:
 
-.. autoclass:: wwtp_configuration.connection.Pipe
+.. autoclass:: pype_schema.connection.Pipe
    :members:
 
-.. autoclass:: wwtp_configuration.connection.Pump
+.. autoclass:: pype_schema.connection.Pump
    :members:
 
-.. autoclass:: wwtp_configuration.connection.Wire
+.. autoclass:: pype_schema.connection.Wire
   :members:

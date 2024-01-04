@@ -1,0 +1,10 @@
+pype\_schema.data package
+=========================
+
+Module contents
+---------------
+
+.. automodule:: pype_schema.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
