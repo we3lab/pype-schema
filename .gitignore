@@ -23,7 +23,7 @@ htmlcov
 .pytest-cache
 *.png
 *.html
-wwtp_configuration/tests/data/test_to_json.json
+pype_schema/tests/data/test_to_json.json
 
 # Executables
 *.swf
