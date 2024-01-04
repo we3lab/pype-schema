@@ -1638,9 +1638,13 @@ class Cogeneration(Node):
     tags : dict of Tag
         Data tags associated with this cogenerator
 
-    energy_efficiency : function
+    electrical_efficiency : function
         Function which takes in the current kWh and returns
-        the efficiency as a fraction
+        the electrical efficiency as a fraction
+
+    thermal_efficiency : function
+        Function which takes in the current kWh and returns
+        the thermal efficiency as a fraction
     """
 
     def __init__(
@@ -1692,7 +1696,7 @@ class Cogeneration(Node):
         """
         self.gen_capacity = (min, max, avg)
 
-    def set_energy_efficiency(self, efficiency_curve):
+    def set_electrical_efficiency(self, efficiency_curve):
         """Set the cogeneration efficiency to the given function
 
         Parameters
@@ -1701,7 +1705,18 @@ class Cogeneration(Node):
             function takes in the current kWh and returns the fractional efficency
         """
         # TODO: type check that efficiency_curve is a function
-        self.energy_efficiency = efficiency_curve
+        self.electrical_efficiency = efficiency_curve
+
+    def set_thermal_efficiency(self, efficiency_curve):
+        """Set the cogeneration efficiency to the given function
+
+        Parameters
+        ----------
+        efficiency_curve : function
+            function takes in the current kWh and returns the fractional efficency
+        """
+        # TODO: type check that efficiency_curve is a function
+        self.thermal_efficiency = efficiency_curve
 
 
 class Boiler(Node):
@@ -1750,7 +1765,7 @@ class Boiler(Node):
     tags : dict of Tag
         Data tags associated with this boiler
 
-    energy_efficiency : function
+    thermal_efficiency : function
         Function which takes in the current kWh and returns
         the efficiency as a fraction
     """
@@ -1764,11 +1779,11 @@ class Boiler(Node):
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
-        self.set_energy_efficiency(None)
+        self.set_thermal_efficiency(None)
 
     def __repr__(self):
         return (
-            f"<pype_schema.node.Cogeneration id:{self.id} "
+            f"<pype_schema.node.Boiler id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
@@ -1804,7 +1819,7 @@ class Boiler(Node):
         """
         self.gen_capacity = (min, max, avg)
 
-    def set_energy_efficiency(self, efficiency_curve):
+    def set_thermal_efficiency(self, efficiency_curve):
         """Set the cogeneration efficiency to the given function
 
         Parameters
@@ -1813,7 +1828,7 @@ class Boiler(Node):
             function takes in the current kWh and returns the fractional efficency
         """
         # TODO: type check that efficiency_curve is a function
-        self.energy_efficiency = efficiency_curve
+        self.thermal_efficiency = efficiency_curve
 
 
 class Clarification(Node):
