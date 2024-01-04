@@ -1,26 +1,26 @@
-******************
-WWTP Configuration
-******************
+*********************************************
+Python for Process Engineering Schema (PyPES)
+*********************************************
 
 .. image::
-   https://github.com/we3lab/wwtp-configuration/workflows/Build%20Main/badge.svg
+   https://github.com/we3lab/pype-schema/workflows/Build%20Main/badge.svg
    :height: 30
-   :target: https://github.com/we3lab/wwtp-configuration/actions
+   :target: https://github.com/we3lab/pype-schema/actions
    :alt: Build Status
 
 .. image::
-   https://github.com/we3lab/wwtp-configuration/workflows/Documentation/badge.svg
+   https://github.com/we3lab/pype-schema/workflows/Documentation/badge.svg
    :height: 30
-   :target: https://we3lab.github.io/wwtp-configuration
+   :target: https://we3lab.github.io/pype-schema
    :alt: Documentation
 
 .. image::
-   https://codecov.io/gh/we3lab/wwtp-configuration/branch/main/graph/badge.svg
+   https://codecov.io/gh/we3lab/pype-schema/branch/main/graph/badge.svg
    :height: 30
-   :target: https://codecov.io/gh/we3lab/wwtp-configuration
+   :target: https://codecov.io/gh/we3lab/pype-schema
    :alt: Code Coverage
 
-A class hierarchy designed to represent a wastewater treatment plant's configuration.
+A class hierarchy designed to represent configurations of process engineering systems, such as wastewater treatment or desalination plants.
 
 Useful Commands
 ===============

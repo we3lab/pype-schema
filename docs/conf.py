@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = u"WWTP Configuration"
+project = u"PyPES"
 copyright = u"2022, WE3 Lab"
 author = u"WE3 Lab"
 
@@ -119,7 +119,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "WWTPConfigurationdoc"
+htmlhelp_basename = "PyPESdoc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -145,8 +145,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "WWTPConfiguration.tex",
-        u"WWTPConfiguration Documentation",
+        "PyPES.tex",
+        u"PyPES Documentation",
         u"StanfordUniversity",
         "manual",
     ),
@@ -158,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, "wwtp configuration", u"WWTP Configuration Documentation", [author], 1)
+    (master_doc, "pypes", u"PyPES Documentation", [author], 1)
 ]
 
 
@@ -170,11 +170,11 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "WWTP Configuration",
-        u"WWTP Configuration Documentation",
+        "PyPES",
+        u"PyPES Documentation",
         author,
-        "WWTP Configuration",
-        "Class hierarchy to represent a wastewater treatment plant's configuration.",
+        "PyPES",
+        "Class hierarchy to represent configurations of process engineering systems.",
         "Miscellaneous",
     ),
 ]

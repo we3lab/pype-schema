@@ -72,7 +72,7 @@ class JSONParser:
 
         Parameters
         ----------
-        old_network: str or wwtp_configuration.Network
+        old_network: str or pype_schema.Network
             JSON file path or Network objet to merge with `self`
 
         Raises
@@ -82,7 +82,7 @@ class JSONParser:
 
         Returns
         -------
-        wwtp_configuration.node.Network:
+        pype_schema.node.Network:
             Modified network object
         """
         if isinstance(old_network, str) and old_network.endswith("json"):

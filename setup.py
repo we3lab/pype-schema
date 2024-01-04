@@ -51,7 +51,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
     ],
-    description="Class hierarchy to represent a wastewater treatment plant's configuration.",
+    description="Class hierarchy to represent configurations of process engineering systems.",
     entry_points={},
     long_description=readme,
     long_description_content_type="text/x-rst",

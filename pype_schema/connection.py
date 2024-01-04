@@ -56,7 +56,7 @@ class Connection(ABC):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Connection id:{self.id} "
+            f"<pype_schema.connection.Connection id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -189,7 +189,7 @@ class Connection(ABC):
 
         Returns
         -------
-        wwtp_configuration.Node
+        pype_schema.Node
             The source node corresponding to `connection`
         """
         node_obj = self.source
@@ -210,7 +210,7 @@ class Connection(ABC):
 
         Returns
         -------
-        wwtp_configuration.Node
+        pype_schema.Node
             The destination node corresponding to `connection`
         """
         node_obj = self.destination
@@ -373,7 +373,7 @@ class Pipe(Connection):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Pipe id:{self.id} "
+            f"<pype_schema.connection.Pipe id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
@@ -585,7 +585,7 @@ class Wire(Connection):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Wire id:{self.id} "
+            f"<pype_schema.connection.Wire id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "

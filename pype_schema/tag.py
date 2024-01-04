@@ -124,7 +124,7 @@ class Tag:
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.tag.Tag id:{self.id} units:{self.units} "
+            f"<pype_schema.tag.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
             f"totalized:{self.totalized} contents:{self.contents}>\n"
@@ -450,7 +450,7 @@ class VirtualTag:
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
+            f"<pype_schema.tag.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
             f"unary_operations:{self.unary_operations} "

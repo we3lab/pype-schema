@@ -3,12 +3,12 @@ import pint
 import pickle
 import pytest
 from collections import Counter
-from wwtp_configuration.units import u
-from wwtp_configuration.utils import ContentsType
-from wwtp_configuration.tag import Tag, TagType
-from wwtp_configuration.parse_json import JSONParser
-from wwtp_configuration.node import Cogeneration, Pump
-from wwtp_configuration.connection import Pipe, Wire
+from pype_schema.units import u
+from pype_schema.utils import ContentsType
+from pype_schema.tag import Tag, TagType
+from pype_schema.parse_json import JSONParser
+from pype_schema.node import Cogeneration, Pump
+from pype_schema.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

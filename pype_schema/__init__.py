@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Main package for WWTP Configuration."""
+"""Main package for PyPES."""
 
 __author__ = "Fletcher Chapin"
 __email__ = "fchapin@stanford.edu"

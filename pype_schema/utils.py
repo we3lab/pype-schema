@@ -492,7 +492,7 @@ def select_objs_helper(
 
     TypeError
         When the objects to select among are not of type
-        {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
+        {'pype_schema.Tag' or `pype_schema.Connection`}
 
     Returns
     -------
