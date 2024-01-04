@@ -78,9 +78,8 @@ class Tag:
     id : str
         Tag ID
 
-    units : str or Unit
-        Units represented as a string or Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
+    units : Unit
+        Units represented as a Pint unit. E.g., <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`

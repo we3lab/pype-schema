@@ -1159,6 +1159,9 @@ class Pump(Node):
     flow_rate : tuple
         Tuple of minimum, maximum, and average pump flow rate
 
+    pump_type : PumpType
+        Type of pump (either VFD or constant)
+
     tags : dict of Tag
         Data tags associated with this pump
 

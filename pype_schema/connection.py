@@ -514,8 +514,16 @@ class Wire(Connection):
     tags : dict of Tag
         Data tags associated with this pump
 
-    bidirectional
+    bidirectional : bool
         whether electricity can flow from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
 
     Attributes
     ----------
@@ -534,8 +542,16 @@ class Wire(Connection):
     tags : dict of Tag
         Data tags associated with this pipe
 
-    bidirectional
+    bidirectional : bool
         Whether electricity can flow from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
     """
 
     def __init__(
