@@ -361,12 +361,16 @@ class JSONParser:
                 node_obj = node.Cogeneration(
                     node_id, input_contents, min, max, avg, num_units, tags={}
                 )
+                electrical_efficiency = self.config[node_id].get("electrical efficiency")
+                thermal_efficiency = self.config[node_id].get("thermal efficiency")
             else:
                 node_obj = node.Boiler(
                     node_id, input_contents, min, max, avg, num_units, tags={}
                 )
-            efficiency = self.config[node_id].get("efficiency")
-            if efficiency:
+                electrical_efficiency = None
+                thermal_efficiency = self.config[node_id].get("thermal efficiency")
+            
+            if electrical_efficiency:
 
                 def efficiency_curve(arg):
                     # TODO: fix this so that it interpolates between dictionary values
@@ -375,7 +379,18 @@ class JSONParser:
                     else:
                         return float(efficiency)
 
-                node_obj.set_energy_efficiency(efficiency_curve)
+                node_obj.set_electrical_efficiency(efficiency_curve)
+
+            if thermal_efficiency:
+
+                def efficiency_curve(arg):
+                    # TODO: fix this so that it interpolates between dictionary values
+                    if type(efficiency) is dict:
+                        return efficiency[arg]
+                    else:
+                        return float(efficiency)
+
+                node_obj.set_thermal_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
             digester_type = self.config[node_id].get("digester_type")
             node_obj = node.Digestion(
