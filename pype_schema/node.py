@@ -1671,7 +1671,8 @@ class Cogeneration(Node):
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
-        self.set_energy_efficiency(None)
+        self.set_electrical_efficiency(None)
+        self.set_thermal_efficiency(None)
 
     def __repr__(self):
         return (
