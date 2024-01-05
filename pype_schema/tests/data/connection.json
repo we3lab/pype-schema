@@ -25,7 +25,7 @@
       "avg": 600,
       "units": "kW"
     },
-    "efficiency": 0.32,
+    "electrical efficiency": 0.32,
     "tags": {}
   },
   "GasToCogen": {
