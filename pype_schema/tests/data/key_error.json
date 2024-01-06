@@ -1,0 +1,38 @@
+{
+  "nodes": [
+    "Facility1",
+    "Facility2"
+  ],
+  "connections": ["Pipe1"],
+  "Facility1": {
+    "type": "Facility",
+    "elevation (meters)": 10,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "TreatedSewage",
+    "flowrate": {
+      "min": 5,
+      "max": 25,
+      "avg": 15
+    },
+    "nodes": ["AnaerobicDigestion"],
+    "connections": []
+  },
+  "Facility2": {
+    "type": "Facility",
+    "input_contents": "TreatedSewage",
+    "output_contents": "PotableReuse",
+    "nodes": [],
+    "connections": []
+  },
+  "Digester": {
+    "type": "Digestion",
+    "volume": 100,
+    "contents": "SludgeBlend",
+    "digester_type": "Anaerobic"
+  },
+  "Pipe1": {
+    "diameter (inches)": 10,
+    "source": "Facility1",
+    "destination": "Facility2"
+  }
+}

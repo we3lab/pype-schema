@@ -1,0 +1,95 @@
+{
+    "nodes": [
+      "Facility1"
+    ],
+    "connections": [],
+    "Facility1": {
+      "type": "Facility",
+      "elevation (meters)": 10,
+      "input_contents": "UntreatedSewage",
+      "output_contents": "TreatedSewage",
+      "flowrate": {
+        "min": 5,
+        "max": 25,
+        "avg": 15
+      },
+      "nodes": ["Conditioner", "Cogenerator"],
+      "connections": ["ConditionerToCogen"]
+    },
+    "virtual_tags": {
+      "GrossGasProduction": {
+        "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
+        "operations": "",
+        "contents": "GasBlend"
+      }
+    },
+    "ConditionerToCogen": {
+      "type": "Pipe",
+      "source": "Conditioner",
+      "destination": "Cogenerator",
+      "contents": "Biogas",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "heating_values": {
+        "lower": 600,
+        "higher": 700,
+        "units": "BTU/scf"
+      },
+      "tags": {
+        "Digester1GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 1,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        },
+        "Digester2GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 2,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        },
+        "Digester3GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 3,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        }
+      }
+    },
+    "Conditioner": {
+      "type": "Conditioning",
+      "input_contents": "Biogas",
+      "output_contents": "Biogas",
+      "num_units": 5,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": 100,
+        "units": "SCFM"
+      }
+    },
+    "Cogenerator": {
+      "type": "Cogeneration",
+      "num_units": 1,
+      "input_contents": ["Biogas", "NaturalGas"],
+      "output_contents": "Electricity",
+      "generation_capacity": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "kW"
+      },
+      "tags": {}
+    }
+  }
+  

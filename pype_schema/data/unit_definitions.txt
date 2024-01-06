@@ -1,0 +1,7 @@
+NTU = 1.47 * (mg / L)
+dollar = [money] = USD
+lempira = dollar * 0.0427 = HNL
+equivalent = mole = eq
+rev = revolution
+MGD = 1000000 * (gallon / day)
+british_thermal_unit = 1055.056 * joule = Btu = BTU
