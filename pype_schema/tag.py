@@ -216,6 +216,9 @@ class VirtualTag:
         Default is None, and it will be automatically determined from constituent
         Tags if they all have the same type.
 
+    parent_id : str
+        ID for the parent object (either a Node or Connection)
+
     contents : ContentsType
         Contents moving through the node. Default is None, and it will be automatically
         determined from consituent Tag contents
