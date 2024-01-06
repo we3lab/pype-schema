@@ -456,7 +456,7 @@ class Node(ABC):
             parent_obj = self
         else:
             parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
-
+        print(parent_obj)
         bidirectional = False
         if isinstance(parent_obj, Node):
             obj_source_node = parent_obj
