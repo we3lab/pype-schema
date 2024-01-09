@@ -1,7 +1,7 @@
 import os
 import pytest
-from wwtp_configuration.parse_json import JSONParser
-from wwtp_configuration.visualize import draw_graph
+from pype_schema.parse_json import JSONParser
+from pype_schema.visualize import draw_graph
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

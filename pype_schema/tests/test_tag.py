@@ -3,10 +3,10 @@ import pint
 import pytest
 import numpy as np
 import pandas as pd
-from wwtp_configuration.units import u
-from wwtp_configuration.tag import Tag, TagType
-from wwtp_configuration.utils import parse_units, ContentsType
-from wwtp_configuration.parse_json import JSONParser
+from pype_schema.units import u
+from pype_schema.tag import Tag, TagType
+from pype_schema.utils import parse_units, ContentsType
+from pype_schema.parse_json import JSONParser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

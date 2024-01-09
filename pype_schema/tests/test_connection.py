@@ -1,8 +1,8 @@
 import os
 import pint
 import pytest
-from wwtp_configuration.units import u
-from wwtp_configuration.parse_json import JSONParser
+from pype_schema.units import u
+from pype_schema.parse_json import JSONParser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
