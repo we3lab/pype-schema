@@ -95,7 +95,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/gross_gas.csv",
             "SCFM",
-        ),    
+        ),
         (
             "../data/sample.json",
             "data/sample_array.csv",

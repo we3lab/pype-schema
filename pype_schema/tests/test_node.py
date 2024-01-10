@@ -78,7 +78,7 @@ def test_get_node_or_connection(json_path, obj_id, recurse, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-    
+
     assert result == expected
 
 
@@ -167,10 +167,10 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         parser = JSONParser(json_path)
         result = parser.initialize_network().get_list_of_type(desired_type, recurse)
 
-        if isinstance(expected, str) and os.path.isfile(expected):         
+        if isinstance(expected, str) and os.path.isfile(expected):
             with open(expected, "rb") as pickle_file:
                 expected = pickle.load(pickle_file)
-    
+
     except Exception as err:
         result = type(err).__name__
 
@@ -223,7 +223,7 @@ def test_get_all_connections_from(json_path, node_id, expected):
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-    
+
     assert result == expected
 
 

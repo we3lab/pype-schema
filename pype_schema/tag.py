@@ -8,6 +8,7 @@ from numpy import ndarray, array, issubdtype
 from .utils import count_args
 from .operations import *
 
+
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
@@ -207,8 +208,8 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : str 
-        String a lambda function to apply to all tags, 
+    operations : str
+        String a lambda function to apply to all tags,
         must have number of args equal to number of tags
 
     tag_type : TagType
@@ -242,7 +243,7 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : 
+    operations :
         String giving a lambda function to apply to constituent tags
 
     units : str or Unit
@@ -323,18 +324,17 @@ class VirtualTag:
         self.tag_type = tag_type
         self.totalized = totalized
 
-        if operations is not None and operations: 
+        if operations is not None and operations:
             if count_args(operations) != len(tags):
                 raise ValueError(
                     "Operations lambda function must have the same number of arguments as the Tag list"
-                ) 
+                )
         elif len(tags) > 1:
             raise ValueError(
                 "Operations lambda function must be specified if multiple tags are given"
             )
 
         self.operations = operations
-        
 
     def __repr__(self):
         return (
@@ -432,7 +432,7 @@ class VirtualTag:
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
             if num_ops == data.shape[1]:
-                result = func_(*[data[:,i] for i in range(data.shape[1])])
+                result = func_(*[data[:, i] for i in range(data.shape[1])])
             else:
                 raise ValueError(
                     "Data must have the correct dimensions "
@@ -450,7 +450,7 @@ class VirtualTag:
                     data[varname] = tag_obj.calculate_values(data)
             result = func_(*[data[varname] for varname in varnames])
             if isinstance(result, Series):
-                result.rename(self.id, inplace=True)   
+                result.rename(self.id, inplace=True)
 
         else:
             raise TypeError("Data must be either a list, array, dict, or DataFrame")

@@ -3,7 +3,7 @@ import pint
 import pytest
 import json
 import pickle
-from pype_schema.units import u
+from pype_schema.units import ug
 from pype_schema.parse_json import JSONParser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -24,10 +24,10 @@ pint.set_application_registry(u)
         ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
     ],
 )
-def test_create_json_path, expected_path):
+def test_create_json_path(json_path, expected_path):
     parser = JSONParser(json_path)
     try:
-        result = parser.initialize_)
+        result = parser.initialize()
         with open(expected_path, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
     except Exception as err:
@@ -63,20 +63,16 @@ def test_create_json_path, expected_path):
         ),
     ],
 )
-def test_merge_
-    json_path, original_network_path, node_id, inplace, expected_path
-):
+def test_merge(json_path, original_network_path, node_id, inplace, expected_path):
     parser = JSONParser(json_path)
-    expected = JSONParser(expected_path).initialize_)
+    expected = JSONParser(expected_path).initialize()
     if node_id:
-        original = (
-            JSONParser(original_network_path).initialize_).get_node(node_id)
-        )
+        original = JSONParser(original_network_path).initialize().get_node(node_id)
         expected = expected.get_node(node_id)
     else:
         original = original_network_path
 
-    result = parser.merge_original, inplace=inplace)
+    result = parser.merge(original, inplace=inplace)
     assert result == expected
     assert inplace == (expected == parser.network_obj)
 
@@ -86,7 +82,7 @@ def test_merge_
 def test_to_json(
     json_path,
 ):
-    expected = JSONParser(json_path).initialize_)
+    expected = JSONParser(json_path).initialize()
     JSONParser.to_json(expected, "data/test_to_json.json")
-    result = JSONParser("data/test_to_json.json").initialize_)
+    result = JSONParser("data/test_to_json.json").initialize()
     assert result == expected
