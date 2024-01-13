@@ -274,10 +274,10 @@ class JSONParser:
 
                 def efficiency_curve(arg):
                     # TODO: fix this so that it interpolates between dictionary values
-                    if type(efficiency) is dict:
-                        return efficiency[arg]
+                    if type(electrical_efficiency) is dict:
+                        return electrical_efficiency[arg]
                     else:
-                        return float(efficiency)
+                        return float(electrical_efficiency)
 
                 node_obj.set_electrical_efficiency(efficiency_curve)
 
@@ -285,10 +285,10 @@ class JSONParser:
 
                 def efficiency_curve(arg):
                     # TODO: fix this so that it interpolates between dictionary values
-                    if type(efficiency) is dict:
-                        return efficiency[arg]
+                    if type(thermal_efficiency) is dict:
+                        return thermal_efficiency[arg]
                     else:
-                        return float(efficiency)
+                        return float(thermal_efficiency)
 
                 node_obj.set_thermal_efficiency(efficiency_curve)
         elif self.config[node_id]["type"] == "Digestion":
