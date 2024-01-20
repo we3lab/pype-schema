@@ -570,6 +570,7 @@ class JSONParser:
             )
 
         tags = self.config[connection_id].get("tags")
+        print("connection_id: ", connection_id)
         print("connection_ob: ", connection_obj)
         print("type(connection_obj): ", type(connection_obj))
         exit_point_id = (
