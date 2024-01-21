@@ -56,10 +56,10 @@ class JSONParser:
                 print("Adding node " + node_id)
             self.network_obj.add_node(self.create_node(node_id))
         for connection_id in self.config["connections"]:
+            if verbose:
+                print("Adding connection " + connection_id)
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
-                if verbose:
-                    print("Adding connection " + connection_id)
                 raise NameError(
                     f"Connection {connection_id} not found in {self.path}"
                 )
