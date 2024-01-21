@@ -34,8 +34,13 @@ class JSONParser:
         )
         f.close()
 
-    def initialize_network(self):
+    def initialize_network(self, verbose=False):
         """Converts a dictionary into a `Network` object
+
+        Parameters
+        ----------
+        verbose : bool
+            If `True` will print informative statements while initializing the network
 
         Returns
         -------
@@ -47,18 +52,22 @@ class JSONParser:
             # check that node exists in dictionary (NameError)
             if node_id not in self.config:
                 raise NameError("Node " + node_id + " not found in " + self.path)
+            if verbose:
+                print("Adding node " + node_id)
             self.network_obj.add_node(self.create_node(node_id))
         for connection_id in self.config["connections"]:
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
+                if verbose:
+                    print("Adding connection " + connection_id)
                 raise NameError(
-                    "Connection " + connection_id + " not found in " + self.path
+                    f"Connection {connection_id} not found in {self.path}"
                 )
             self.network_obj.add_connection(
                 self.create_connection(connection_id, self.network_obj)
             )
         # Add all virtual tags
-        self.add_virtual_tags()
+        self.add_virtual_tags(verbose=verbose)
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
     
@@ -94,7 +103,7 @@ class JSONParser:
         return virtual_tags
     
 
-    def add_virtual_tags(self):
+    def add_virtual_tags(self, verbose=False):
         """ Adds all virtual tags in an object
         NOTE: assumes the objects tags have already been added
 
@@ -102,6 +111,8 @@ class JSONParser:
         ----------
         obj : Node or Connection
             object to add virtual tags to
+        verbose : bool
+            If `True` will print informative statements while adding virtual tags
 
         config : dict
             dictionary to search for virtual tags
@@ -120,6 +131,8 @@ class JSONParser:
                 v_tag_id, v_tag_info = v_tag_queue.pop(0)
                 # Try parsing the virtual tag
                 try:
+                    if verbose:
+                        print("Parsing virtual tag" + v_tag_id)
                     obj_id = v_tag_info.get("parent_id")
                     obj = (
                         self.network_obj
@@ -132,6 +145,8 @@ class JSONParser:
                         obj,
                         parent_network=self.network_obj
                     )
+                    if verbose:
+                        print(f"Adding virtual tag {v_tag_id} to {obj.id} ")
                     obj.add_tag(v_tag)
                 # If there is an error skip and add other tags
                 except ValueError:
@@ -620,7 +635,6 @@ class JSONParser:
                                     and tag_obj.dest_unit_id == id
                                 ]
                                 dest_unit_id = "" if id == "total" else "_" + str(id)
-
                                 tag_id = "{}{}_{}{}{}_{}_{}".format(
                                     connection_obj.get_source_id(),
                                     exit_point_id,
