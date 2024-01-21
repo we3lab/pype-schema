@@ -53,11 +53,11 @@ class JSONParser:
             if node_id not in self.config:
                 raise NameError("Node " + node_id + " not found in " + self.path)
             if verbose:
-                print("Adding node " + node_id)
+                print(f"Adding node {node_id}...")
             self.network_obj.add_node(self.create_node(node_id))
         for connection_id in self.config["connections"]:
             if verbose:
-                print("Adding connection " + connection_id)
+                print(f"Adding connection {connection_id}...")
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
                 raise NameError(
@@ -132,7 +132,7 @@ class JSONParser:
                 # Try parsing the virtual tag
                 try:
                     if verbose:
-                        print("Parsing virtual tag" + v_tag_id)
+                        print(f"Parsing virtual tag {v_tag_id}...")
                     obj_id = v_tag_info.get("parent_id")
                     obj = (
                         self.network_obj
@@ -146,7 +146,7 @@ class JSONParser:
                         parent_network=self.network_obj
                     )
                     if verbose:
-                        print(f"Adding virtual tag {v_tag_id} to {obj.id} ")
+                        print(f"Adding virtual tag {v_tag_id} to {obj.id}...")
                     obj.add_tag(v_tag)
                 # If there is an error skip and add other tags
                 except ValueError:
@@ -1271,7 +1271,7 @@ class JSONParser:
         return node_dict
 
     @staticmethod
-    def to_json(network, file_path=None, indent=3):
+    def to_json(network, file_path=None, indent=3, verbose=False):
         """Converts a Network object to a JSON file
 
         Parameters
@@ -1281,6 +1281,12 @@ class JSONParser:
 
         file_path : str
             path to write the configuration in JSON format
+        
+        indent : int
+            number of spaces to indent the JSON file
+        
+        verbose : bool
+            Whether to print informative messages for debugging
 
         Raises
         ------
@@ -1299,6 +1305,8 @@ class JSONParser:
 
         for tag_id, tag_obj in network.tags.items():
             if isinstance(tag_obj, VirtualTag):
+                if verbose:
+                    print(f"Converting {tag_id} to a dictionary...")
                 v_tag_dict = JSONParser.tag_to_dict(tag_obj)
                 result["virtual_tags"][tag_id] = v_tag_dict
 
@@ -1306,6 +1314,8 @@ class JSONParser:
             result["connections"].append(conn_obj.id)
 
         for conn_obj in network.get_all_connections(recurse=True):
+            if verbose:
+                print(f"Converting {conn_obj.id} to a dictionary...")
             conn_dict = JSONParser.conn_to_dict(conn_obj)
             result[conn_obj.id] = conn_dict
 
@@ -1313,6 +1323,8 @@ class JSONParser:
             result["nodes"].append(node_obj.id)
 
         for node_obj in network.get_all_nodes(recurse=True):
+            if verbose:
+                print(f"Converting {node_obj.id} to a dictionary...")
             node_dict = JSONParser.node_to_dict(node_obj)
             result[node_obj.id] = node_dict
 
