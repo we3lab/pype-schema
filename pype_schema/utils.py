@@ -461,7 +461,8 @@ class ContentsType(Enum):
     SurfaceWater = auto()
     Groundwater = auto()
     Stormwater = auto()
-
+    Oil = auto()
+    Grease = auto()
 
 class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""
