@@ -22,8 +22,8 @@ class Node(ABC):
     """
 
     id: str = NotImplemented
-    input_contents: list[utils.ContentsType] = NotImplemented
-    output_contents: list[utils.ContentsType] = NotImplemented
+    input_contents: list(utils.ContentsType) = NotImplemented
+    output_contents: list(utils.ContentsType) = NotImplemented
     tags: dict = NotImplemented
 
     def __repr__(self):
@@ -122,9 +122,8 @@ class Node(ABC):
                 for node in self.nodes.values():
                     if recurse:
                         tag = node.get_tag(tag_name, recurse=True)
-                    else:
+                    elif tag_name in node.tags.keys():
                         tag = node.tags[tag_name]
-
                     if tag:
                         break
 
