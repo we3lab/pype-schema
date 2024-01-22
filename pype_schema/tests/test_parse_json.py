@@ -63,11 +63,15 @@ def test_create_network(json_path, expected_path):
         ),
     ],
 )
-def test_merge_network(json_path, original_network_path, node_id, inplace, expected_path):
+def test_merge_network(
+    json_path, original_network_path, node_id, inplace, expected_path
+):
     parser = JSONParser(json_path)
     expected = JSONParser(expected_path).initialize_network()
     if node_id:
-        original = JSONParser(original_network_path).initialize_network().get_node(node_id)
+        original = (
+            JSONParser(original_network_path).initialize_network().get_node(node_id)
+        )
         expected = expected.get_node(node_id)
     else:
         original = original_network_path

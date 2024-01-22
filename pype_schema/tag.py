@@ -12,10 +12,7 @@ from .operations import *
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
-    Flow = auto()
-    InFlow = auto()
-    OutFlow = auto()
-    NetFlow = auto()
+    Flow = auto()  # flow through a connection
     Volume = auto()
     Level = auto()
     Pressure = auto()
@@ -33,6 +30,9 @@ class TagType(Enum):
     Rotation = auto()
     Efficiency = auto()
     StateOfCharge = auto()
+    InFlow = auto()  # flow into a node
+    OutFlow = auto()  # flow out of a node
+    NetFlow = auto()  # net flow through a node
 
 
 CONTENTLESS_TYPES = [
