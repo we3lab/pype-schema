@@ -451,14 +451,17 @@ class Node(ABC):
         bool
             True if `tag` meets the filtering criteria
         """
-        print("self.id", self.id)
-        print("tag", tag)
+
         if tag.parent_id == self.id:
             parent_obj = self
         else:
             parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
-        print("parent_obj", parent_obj)
         bidirectional = False
+
+        # parent_obj not found, tag does not meet selection criteria by default
+        if parent_obj is None:
+            return False
+        
         if isinstance(parent_obj, Node):
             obj_source_node = parent_obj
             obj_source_unit_id = tag.source_unit_id
