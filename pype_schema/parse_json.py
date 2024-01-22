@@ -806,7 +806,7 @@ class JSONParser:
             tag_list.append(subtag)
         try:
             pint_unit = utils.parse_units(tag_info["units"])
-        except UndefinedUnitError:
+        except (UndefinedUnitError, AttributeError, KeyError):
             pint_unit = None
         try:
             tag_type = TagType[tag_info["type"]]
