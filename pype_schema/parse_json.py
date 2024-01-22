@@ -775,10 +775,14 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'tags': dict of Tag,
-                'operations': str,
-                'type': TagType,
-                'contents': str
+                ``tags``: `dict` of `Tag`
+                
+                ``operations``: `str`
+                
+                ``type``: `TagType`
+                
+                ``contents``: `str`
+            
             }
 
         obj : Node or Connection
@@ -838,12 +842,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+                
+                ``units``: `str`
+                
+                ``contents``: `str`
+                
+                ``source_unit_id``: `int` or `str`
+                
+                ``dest_unit_id``: `int` or `str`
+                
+                ``totalized``: `bool`
+                
             }
 
         obj : Node or Connection
@@ -885,12 +895,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+                
+                ``units``: `str`
+                
+                ``contents``: `str`
+                
+                ``source_unit_id``: `int` or `str`
+                
+                ``dest_unit_id``: `int` or `str`
+                
+                ``totalized``: `bool`
+                
             }
 
         obj : Node or Connection
@@ -936,7 +952,14 @@ class JSONParser:
         Parameters
         ----------
         min_max_avg : dict
-            dictionary of the form {'min': int, 'max': int, 'avg': int}
+            dictionary of the form {
+                ``min``: `int`
+                
+                ``max``: `int`
+                
+                ``avg``: `int`
+
+            }
 
         Returns
         -------
@@ -968,7 +991,12 @@ class JSONParser:
         Parameters
         ----------
         heating_vals : dict
-            dictionary of the form {'lower': float, 'higher': float}
+            dictionary of the form {
+                ``lower``: `float`
+                
+                ``higher``: `float`
+                
+            }
 
         Returns
         -------
@@ -1044,10 +1072,14 @@ class JSONParser:
         -------
         dict
             flow rate in the form {
-                ``min``: [(float), (int)],
-                ``max``: [(float), (int)],
-                ``avg``: [(float), (int)],
-                ``units``: (str)
+                ``min``: `float` or `int`
+
+                ``max``: `float` or `int`
+
+                ``avg``: `float` or `int`
+
+                ``units``: `str`
+
             }
         """
         min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
@@ -1268,8 +1300,8 @@ class JSONParser:
 
         Parameters
         ----------
-        network : Network
-            dictionary of the form {'lower': float, 'higher': float}
+        network : node.Network
+            Network object to export to JSON
 
         file_path : str
             path to write the configuration in JSON format

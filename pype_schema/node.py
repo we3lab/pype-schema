@@ -228,6 +228,7 @@ class Node(ABC):
 
     def get_connection(self, connection_name, recurse=False):
         """Get a connection from the network
+        
         Parameters
         ----------
         connection_name : str
