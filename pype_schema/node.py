@@ -457,10 +457,6 @@ class Node(ABC):
         else:
             parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
         bidirectional = False
-
-        # parent_obj not found, tag does not meet selection criteria by default
-        if parent_obj is None:
-            return False
         
         if isinstance(parent_obj, Node):
             obj_source_node = parent_obj
@@ -471,7 +467,7 @@ class Node(ABC):
                 obj_entry_point,
                 obj_exit_point,
             ) = (None, None, None, None)
-        else:  # the parent must be a Connection if it is not a Node
+        elif isinstance(parent_obj, Connection):  # the parent must be a Connection if it is not a Node
             obj_source_node = parent_obj.get_source_node()
             obj_source_unit_id = tag.source_unit_id
             obj_dest_node = parent_obj.get_dest_node()
@@ -481,6 +477,15 @@ class Node(ABC):
 
             if parent_obj.bidirectional:
                 bidirectional = True
+        # If the parent is None, then it's parent object is outside the network
+        # and we can't filter by source/destination/entry/exit-point node and node type
+        elif parent_obj is None:
+            obj_source_node = None
+            obj_source_unit_id = tag.source_unit_id
+            obj_dest_node = None
+            obj_dest_unit_id = tag.dest_unit_id
+            obj_exit_point = None
+            obj_entry_point = None
 
         if virtual:
             obj_source_unit_id = None
