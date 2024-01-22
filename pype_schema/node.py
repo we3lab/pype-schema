@@ -451,6 +451,7 @@ class Node(ABC):
         bool
             True if `tag` meets the filtering criteria
         """
+        print("self.id", self.id)
         print("tag", tag)
         if tag.parent_id == self.id:
             parent_obj = self
