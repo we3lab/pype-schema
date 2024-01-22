@@ -53,11 +53,11 @@ class JSONParser:
             if node_id not in self.config:
                 raise NameError("Node " + node_id + " not found in " + self.path)
             if verbose:
-                print(f"Adding node {node_id}...")
+                print(f"Initializing network, adding node {node_id}...")
             self.network_obj.add_node(self.create_node(node_id))
         for connection_id in self.config["connections"]:
             if verbose:
-                print(f"Adding connection {connection_id}...")
+                print(f"Initializing network, adding connection {connection_id}...")
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
                 raise NameError(
@@ -132,7 +132,7 @@ class JSONParser:
                 # Try parsing the virtual tag
                 try:
                     if verbose:
-                        print(f"Parsing virtual tag {v_tag_id}...")
+                        print(f"Initializing network, parsing virtual tag {v_tag_id}...")
                     obj_id = v_tag_info.get("parent_id")
                     obj = (
                         self.network_obj
@@ -146,7 +146,7 @@ class JSONParser:
                         parent_network=self.network_obj
                     )
                     if verbose:
-                        print(f"Adding virtual tag {v_tag_id} to {obj.id}...")
+                        print(f"Initializing network, adding virtual tag {v_tag_id} to {obj.id}...")
                     obj.add_tag(v_tag)
                 # If there is an error skip and add other tags
                 except ValueError:
@@ -1306,7 +1306,7 @@ class JSONParser:
         for tag_id, tag_obj in network.tags.items():
             if isinstance(tag_obj, VirtualTag):
                 if verbose:
-                    print(f"Converting {tag_id} to a dictionary...")
+                    print(f"Outputting json file, converting {tag_id} to a dictionary...")
                 v_tag_dict = JSONParser.tag_to_dict(tag_obj)
                 result["virtual_tags"][tag_id] = v_tag_dict
 
@@ -1315,7 +1315,7 @@ class JSONParser:
 
         for conn_obj in network.get_all_connections(recurse=True):
             if verbose:
-                print(f"Converting {conn_obj.id} to a dictionary...")
+                print(f"Outputting json file, converting {conn_obj.id} to a dictionary...")
             conn_dict = JSONParser.conn_to_dict(conn_obj)
             result[conn_obj.id] = conn_dict
 
@@ -1324,7 +1324,7 @@ class JSONParser:
 
         for node_obj in network.get_all_nodes(recurse=True):
             if verbose:
-                print(f"Converting {node_obj.id} to a dictionary...")
+                print(f"Outputting json file, converting {node_obj.id} to a dictionary...")
             node_dict = JSONParser.node_to_dict(node_obj)
             result[node_obj.id] = node_dict
 
