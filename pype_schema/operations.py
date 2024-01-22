@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
-import scipy as sp
+import scipy as sp  # noqa: F401
 import warnings
 
 
 def get_change(variable, delta_t=1, split=False, pos_change=True, neg_change=True):
     """Converts cumulative value to rate-of-change value using finite differences
-    Note: assumes rate of change at time t is equal to the difference between the value at time
-    t+1 and t
+    Note: assumes rate of change at time t is equal to the difference between
+    the value at time t+1 and t
 
     Parameters
     ----------
@@ -43,10 +43,8 @@ def get_change(variable, delta_t=1, split=False, pos_change=True, neg_change=Tru
             return change_pos
         else:
             warnings.warn(
-                """
-                    Split is `True` but both pos_change and neg_change are `False` 
-                    so no variable is returned
-                """
+                """Split is `True` but both pos_change and neg_change are `False`
+                    so no variable is returned"""
             )
     else:
         return change

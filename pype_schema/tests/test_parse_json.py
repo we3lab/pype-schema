@@ -1,7 +1,6 @@
 import os
 import pint
 import pytest
-import json
 import pickle
 from pype_schema.units import u
 from pype_schema.parse_json import JSONParser

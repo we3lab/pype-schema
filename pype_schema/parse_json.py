@@ -1,4 +1,5 @@
 import json
+from pint import UndefinedUnitError
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -137,7 +138,7 @@ class JSONParser:
                 except ValueError:
                     v_tag_queue.append((v_tag_id, v_tag_info))
                 counter += 1
-                # Note that 2 * N is theoretical limit on number of tries to add virtual tags
+                # Note: 2N is theoretical limit on number of tries to add virtual tags
                 # (max 1/2 of all virtual tags must point to actual tags)
                 if counter == 2 * len(config_v_tags):
                     break
@@ -786,7 +787,8 @@ class JSONParser:
 
         parent_network : None, Network
             Optional network object the tag is a part of
-            If `None` will assume `obj` is the parent network and all tags are in `obj.tags`
+            If `None` will assume `obj` is the parent network
+            and all tags are in `obj.tags`
 
         Returns
         -------
@@ -804,7 +806,7 @@ class JSONParser:
             tag_list.append(subtag)
         try:
             pint_unit = utils.parse_units(tag_info["units"])
-        except:
+        except UndefinedUnitError:
             pint_unit = None
         try:
             tag_type = TagType[tag_info["type"]]

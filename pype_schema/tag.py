@@ -1,12 +1,12 @@
 import warnings
 from enum import Enum, auto
 from pandas import DataFrame, Series
-import pandas as pd
-import numpy as np
-import scipy as sp
-from numpy import ndarray, array, issubdtype
+import pandas as pd  # noqa: F401
+import numpy as np  # noqa: F401
+import scipy as sp  # noqa: F401
+from numpy import ndarray, issubdtype
 from .utils import count_args
-from .operations import *
+from .operations import *  # noqa: F401, F403
 
 
 class TagType(Enum):
@@ -327,11 +327,13 @@ class VirtualTag:
         if operations is not None and operations:
             if count_args(operations) != len(tags):
                 raise ValueError(
-                    "Operations lambda function must have the same number of arguments as the Tag list"
+                    "Operations lambda function must have the same "
+                    "number of arguments as the Tag list"
                 )
         elif len(tags) > 1:
             raise ValueError(
-                "Operations lambda function must be specified if multiple tags are given"
+                "Operations lambda function must be specified "
+                "if multiple tags are given"
             )
 
         self.operations = operations
@@ -436,8 +438,8 @@ class VirtualTag:
             else:
                 raise ValueError(
                     "Data must have the correct dimensions "
-                    "(same length as number of arguments in operations lambda function). "
-                    "Currently there are {} arguments and {} data tags".format(
+                    "(same length as number of args in operations lambda function). "
+                    "Currently there are {} args and {} data tags".format(
                         num_ops, data.shape[1]
                     )
                 )
