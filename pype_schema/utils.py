@@ -47,10 +47,10 @@ def get_tag_sum_lambda_func(unit_ids):
     
     """
     arguments = ",".join(
-        ["tag" + str(unit) for unit in unit_ids]
+        ["tag" + str(unit+1) for unit,_ in enumerate(unit_ids)]
     )
     ops = "+".join(
-        ["tag" + str(unit) for unit in unit_ids]
+        ["tag" + str(unit+1) for unit,_ in enumerate(unit_ids)]
     )
     return f"lambda {arguments}: {ops}"
 
@@ -342,7 +342,7 @@ def parse_units(units):
             or clean_units=="kilowatthour/ft**3*min"
             or clean_units=="kilowatt*hour/ft**3*min"
         ):
-            return u.kW * u.hr / u.ft**3 * u.min
+            return u.kW * u.hr / (u.ft**3 * u.min)
         elif (
             clean_units == "kwh"
             or clean_units == "kwhr"
