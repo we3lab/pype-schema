@@ -22,8 +22,8 @@ class Node(ABC):
     """
 
     id: str = NotImplemented
-    input_contents: list(utils.ContentsType) = NotImplemented
-    output_contents: list(utils.ContentsType) = NotImplemented
+    input_contents: list[utils.ContentsType] = NotImplemented
+    output_contents: list[utils.ContentsType] = NotImplemented
     tags: dict = NotImplemented
 
     def __repr__(self):
@@ -467,7 +467,7 @@ class Node(ABC):
                 obj_entry_point,
                 obj_exit_point,
             ) = (None, None, None, None)
-        elif isinstance(parent_obj, Connection):  # the parent must be a Connection if it is not a Node
+        elif parent_obj is not None:  # the parent must be a Connection if it is not a Node
             obj_source_node = parent_obj.get_source_node()
             obj_source_unit_id = tag.source_unit_id
             obj_dest_node = parent_obj.get_dest_node()
@@ -479,7 +479,7 @@ class Node(ABC):
                 bidirectional = True
         # If the parent is None, then it's parent object is outside the network
         # and we can't filter by source/destination/entry/exit-point node and node type
-        elif parent_obj is None:
+        else:
             obj_source_node = None
             obj_source_unit_id = tag.source_unit_id
             obj_dest_node = None
