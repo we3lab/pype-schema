@@ -103,7 +103,7 @@ class JSONParser:
         return virtual_tags
     
 
-    def add_virtual_tags(self, verbose=False, max_recursion_limit=5):
+    def add_virtual_tags(self, verbose=False, max_recursion_limit=50):
         """ Adds all virtual tags in an object
         NOTE: assumes the objects tags have already been added
 
