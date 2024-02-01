@@ -282,7 +282,6 @@ class VirtualTag:
 
         determine_type = True if tag_type is None else False
         determine_contents = True if contents is None else False
-
         totalized_mix = False
         for tag in tags:
             units.append(tag.units)
@@ -322,7 +321,6 @@ class VirtualTag:
             self.contents = contents
         self.tag_type = tag_type
         self.totalized = totalized
-
         if operations is not None and operations: 
             if count_args(operations) != len(tags):
                 raise ValueError(
@@ -332,7 +330,6 @@ class VirtualTag:
             raise ValueError(
                 "Operations lambda function must be specified if multiple tags are given"
             )
-
         self.operations = operations
         
 

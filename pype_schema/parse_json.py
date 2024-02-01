@@ -154,8 +154,8 @@ class JSONParser:
                     if verbose:
                         print(f"Initializing network, adding virtual tag {v_tag_id} to {obj.id}...")
                     obj.add_tag(v_tag)
-                # If there is an error skip and add other tags
-                except ValueError:
+                # If there is a Key error (i.e. the virtual tag wasn't found) skip and add other tags
+                except KeyError:
                     v_tag_queue.append((v_tag_id, v_tag_info))
                 counter += 1
                 if counter == max_recursion_limit * len(config_v_tags):
@@ -812,8 +812,8 @@ class JSONParser:
         for subtag_id in tag_info["tags"]:
             subtag = parent_network.get_tag(subtag_id, recurse=True)
             if subtag is None:
-                raise ValueError(
-                    "Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
+                raise KeyError(
+                    "Could not find Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
                 )
             tag_list.append(subtag)
         try: 
