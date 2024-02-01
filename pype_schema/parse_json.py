@@ -103,7 +103,7 @@ class JSONParser:
         return virtual_tags
     
 
-    def add_virtual_tags(self, verbose=False):
+    def add_virtual_tags(self, verbose=False, max_recursion_limit=5):
         """ Adds all virtual tags in an object
         NOTE: assumes the objects tags have already been added
 
@@ -111,6 +111,7 @@ class JSONParser:
         ----------
         obj : Node or Connection
             object to add virtual tags to
+
         verbose : bool
             If `True` will print informative statements while adding virtual tags
 
@@ -119,6 +120,11 @@ class JSONParser:
 
         node_id : str
             optional node_id to look for virtual tags in
+        
+        max_recursion_limit : int
+            maximum number cycles through all the virtual tags when initializing
+            (sometimes a vtag points to another vtag that hasn't been initialized yet
+            so we need to cycle through all the vtags multiple times to make sure)
         
         """
         config_v_tags = self.collect_virtual_tags(self.config)
@@ -152,9 +158,7 @@ class JSONParser:
                 except ValueError:
                     v_tag_queue.append((v_tag_id, v_tag_info))
                 counter += 1
-                # Note that 2 * N is theoretical limit on number of tries to add virtual tags
-                # (max 1/2 of all virtual tags must point to actual tags)
-                if counter == 2 * len(config_v_tags):
+                if counter == max_recursion_limit * len(config_v_tags):
                     break
             if v_tag_queue:
                 vtag_ids = [v_tag_id for v_tag_id, _ in v_tag_queue]
@@ -497,6 +501,13 @@ class JSONParser:
                             tag_id, tags_by_contents, operations=operations
                         )
                         node_obj.add_tag(v_tag)
+        
+        v_tags = self.config[node_id].get("virtual_tags")
+        if v_tags:
+            for v_tag_id, v_tag_info in v_tags.items():
+                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
+                node_obj.add_tag(v_tag)
+                                
         return node_obj
 
     def create_connection(self, connection_id, node_obj):
@@ -805,6 +816,7 @@ class JSONParser:
         """
         tag_list = []
         parent_network = obj if parent_network is None else parent_network
+        print("parent_network.id", parent_network.id)
         for subtag_id in tag_info["tags"]:
             subtag = parent_network.get_tag(subtag_id, recurse=True)
             if subtag is None:
