@@ -158,6 +158,7 @@ class JSONParser:
                 except ValueError:
                     v_tag_queue.append((v_tag_id, v_tag_info))
                 counter += 1
+                print("counter: ", counter)
                 if counter == max_recursion_limit * len(config_v_tags):
                     break
             if v_tag_queue:
