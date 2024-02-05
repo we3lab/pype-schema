@@ -45,7 +45,7 @@
          "contents": "GasBlend"
       },
       "ElectricityProductionByGasVolume": {
-         "units": "hour * kilowatt * minute / foot ** 3",
+         "units": "hour * kilowatt / foot ** 3 / minute",
          "tags": [
             "ElectricityGeneration",
             "GrossGasProduction"
