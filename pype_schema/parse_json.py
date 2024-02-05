@@ -103,7 +103,7 @@ class JSONParser:
         return virtual_tags
     
 
-    def add_virtual_tags(self, verbose=False, max_recursion_limit=5):
+    def add_virtual_tags(self, verbose=False):
         """ Adds all virtual tags in an object
         NOTE: assumes the objects tags have already been added
 
@@ -114,17 +114,6 @@ class JSONParser:
 
         verbose : bool
             If `True` will print informative statements while adding virtual tags
-
-        config : dict
-            dictionary to search for virtual tags
-
-        node_id : str
-            optional node_id to look for virtual tags in
-        
-        max_recursion_limit : int
-            maximum number cycles through all the virtual tags when initializing
-            (sometimes a vtag points to another vtag that hasn't been initialized yet
-            so we need to cycle through all the vtags multiple times to make sure)
         
         """
         config_v_tags = self.collect_virtual_tags(self.config)
@@ -132,7 +121,6 @@ class JSONParser:
         if config_v_tags:
             # Create a queue of virtual tags to add
             v_tag_queue = [(v_tag_id, v_tag_info) for v_tag_id, v_tag_info in config_v_tags.copy().items()]
-            counter = 0
             while v_tag_queue:
                 v_tag_id, v_tag_info = v_tag_queue.pop(0)
                 # Try parsing the virtual tag
@@ -154,20 +142,17 @@ class JSONParser:
                     if verbose:
                         print(f"Initializing network, adding virtual tag {v_tag_id} to {obj.id}...")
                     obj.add_tag(v_tag)
-                # If there is a Key error (i.e. the virtual tag wasn't found) skip and add other tags
+                # If there is a Key error, it may be because a virtual tag is pointing to another virtual 
+                # tag that hasn't been added yet.
                 except KeyError:
+                    for tag_pointer in v_tag_info["tags"]:
+                        if tag_pointer not in config_v_tags:
+                            raise KeyError(
+                                f"""
+                                    Invalid Tag id {tag_pointer} in VirtualTag {v_tag_id}"
+                                """
+                            )
                     v_tag_queue.append((v_tag_id, v_tag_info))
-                counter += 1
-                if counter == max_recursion_limit * len(config_v_tags):
-                    break
-            if v_tag_queue:
-                vtag_ids = [v_tag_id for v_tag_id, _ in v_tag_queue]
-                subtag_ids = [tag_info["tags"] for _, tag_info in v_tag_queue]
-                raise ValueError(
-                    f"""
-                        Invalid Tag ids {subtag_ids} in VirtualTags {vtag_ids}"
-                    """
-                )
         for v_tag in network_v_tags.values():
             obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
             obj.add_tag(v_tag)
