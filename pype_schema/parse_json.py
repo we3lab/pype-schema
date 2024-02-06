@@ -186,6 +186,8 @@ class JSONParser:
                 v_tag["parent_id"] = obj_id
             virtual_tags.update(v_tags)
         for key, value in config.items():
+            # Parse any subdictionaries in the JSON 
+            # (e.g. a network within a network or a node/connection within a network)
             if key not in ["tags", "virtual_tags"] and isinstance(value, dict):
                 self.collect_virtual_tags(value, obj_id=key, virtual_tags=virtual_tags)
         return virtual_tags
@@ -913,10 +915,7 @@ class JSONParser:
                     "Could not find Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
                 )
             tag_list.append(subtag)
-        try:
-            pint_unit = utils.parse_units(tag_info["units"])
-        except (UndefinedUnitError, AttributeError, KeyError):
-            pint_unit = None
+        pint_unit = utils.parse_units(tag_info["units"])
         try:
             tag_type = TagType[tag_info["type"]]
         except KeyError:
@@ -1400,7 +1399,7 @@ class JSONParser:
         return node_dict
 
     @staticmethod
-    def to_json(network, file_path=None, indent=3, verbose=False):
+    def to_json(network, file_path=None, indent=4, verbose=False):
         """Converts a Network object to a JSON file
 
         Parameters
