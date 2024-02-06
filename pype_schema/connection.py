@@ -56,7 +56,7 @@ class Connection(ABC):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Connection id:{self.id} "
+            f"<pype_schema.connection.Connection id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -189,7 +189,7 @@ class Connection(ABC):
 
         Returns
         -------
-        wwtp_configuration.Node
+        pype_schema.Node
             The source node corresponding to `connection`
         """
         node_obj = self.source
@@ -210,7 +210,7 @@ class Connection(ABC):
 
         Returns
         -------
-        wwtp_configuration.Node
+        pype_schema.Node
             The destination node corresponding to `connection`
         """
         node_obj = self.destination
@@ -373,7 +373,7 @@ class Pipe(Connection):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Pipe id:{self.id} "
+            f"<pype_schema.connection.Pipe id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
@@ -514,8 +514,16 @@ class Wire(Connection):
     tags : dict of Tag
         Data tags associated with this pump
 
-    bidirectional
+    bidirectional : bool
         whether electricity can flow from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
 
     Attributes
     ----------
@@ -534,8 +542,16 @@ class Wire(Connection):
     tags : dict of Tag
         Data tags associated with this pipe
 
-    bidirectional
+    bidirectional : bool
         Whether electricity can flow from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
     """
 
     def __init__(
@@ -569,7 +585,7 @@ class Wire(Connection):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<wwtp_configuration.connection.Wire id:{self.id} "
+            f"<pype_schema.connection.Wire id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "

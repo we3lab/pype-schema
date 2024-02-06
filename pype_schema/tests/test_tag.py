@@ -17,10 +17,12 @@ skip_all_tests = False
 pint.set_application_registry(u)
 
 
-# @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, expected",
     [
+        ("data/invalid_tag.json", "ValueError"),
+        ("data/invalid_bin_op.json", "ValueError"),
         ("data/no_op.json", "ValueError"),
         ("data/wrong_op_len.json", "ValueError"),
     ],

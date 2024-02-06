@@ -1,4 +1,5 @@
 import json
+from pint import UndefinedUnitError
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -158,13 +159,104 @@ class JSONParser:
             obj.add_tag(v_tag)
 
 
+    def collect_virtual_tags(self, config, obj_id=None, virtual_tags=None):
+        """Recursively collects all virtual tags in a network's dictionary
+        representation (i.e. config)
+
+        Parameters
+        ----------
+        config: dict
+            Dictionary representation of the network
+
+        obj_id : str
+            Optional "id" of config whose virtual tags are being collected
+            (if `None` will use "ParentNetwork")
+
+        virtual_tags : dict
+            dictionary to store virtual tags in
+
+        """
+        if virtual_tags is None:
+            virtual_tags = {}
+        obj_id = "ParentNetwork" if obj_id is None else obj_id
+        v_tags = config.get("virtual_tags")
+        if v_tags:
+            # Make sure obj_id is specified for all virtual tags as `parent_id`
+            for v_tag in v_tags.values():
+                v_tag["parent_id"] = obj_id
+            virtual_tags.update(v_tags)
+        for key, value in config.items():
+            if key not in ["tags", "virtual_tags"] and isinstance(value, dict):
+                self.collect_virtual_tags(value, obj_id=key, virtual_tags=virtual_tags)
+        return virtual_tags
+
+    def add_virtual_tags(self):
+        """Adds all virtual tags in an object
+        NOTE: assumes the objects tags have already been added
+
+        Parameters
+        ----------
+        obj : Node or Connection
+            object to add virtual tags to
+
+        config : dict
+            dictionary to search for virtual tags
+
+        node_id : str
+            optional node_id to look for virtual tags in
+
+        """
+        config_v_tags = self.collect_virtual_tags(self.config)
+        network_v_tags = {}
+        if config_v_tags:
+            # Create a queue of virtual tags to add
+            v_tag_queue = [
+                (v_tag_id, v_tag_info) for v_tag_id, v_tag_info in config_v_tags.items()
+            ]
+            counter = 0
+            while v_tag_queue:
+                v_tag_id, v_tag_info = v_tag_queue.pop(0)
+                # Try parsing the virtual tag
+                try:
+                    obj_id = v_tag_info.get("parent_id")
+                    obj = (
+                        self.network_obj
+                        if obj_id == "ParentNetwork"
+                        else self.network_obj.get_node_or_connection(
+                            obj_id, recurse=True
+                        )
+                    )
+                    v_tag = self.parse_virtual_tag(
+                        v_tag_id, v_tag_info, obj, parent_network=self.network_obj
+                    )
+                    obj.add_tag(v_tag)
+                # If there is an error skip and add other tags
+                except ValueError:
+                    v_tag_queue.append((v_tag_id, v_tag_info))
+                counter += 1
+                # Note: 2N is theoretical limit on number of tries to add virtual tags
+                # (max 1/2 of all virtual tags must point to actual tags)
+                if counter == 2 * len(config_v_tags):
+                    break
+            if v_tag_queue:
+                vtag_ids = [v_tag_id for v_tag_id, _ in v_tag_queue]
+                subtag_ids = [tag_info["tags"] for _, tag_info in v_tag_queue]
+                raise ValueError(
+                    f"""
+                        Invalid Tag ids {subtag_ids} in VirtualTags {vtag_ids}"
+                    """
+                )
+        for v_tag in network_v_tags.values():
+            obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
+            obj.add_tag(v_tag)
+
     def merge_network(self, old_network, inplace=False):
         """Incorporates nodes/connections (i.e. the `new_network`) into a network
         (i.e. `old_newtwork`) modifying it in place and returning the modified network
 
         Parameters
         ----------
-        old_network: str or wwtp_configuration.Network
+        old_network: str or pype_schema.Network
             JSON file path or Network objet to merge with `self`
 
         Raises
@@ -174,7 +266,7 @@ class JSONParser:
 
         Returns
         -------
-        wwtp_configuration.node.Network:
+        pype_schema.node.Network:
             Modified network object
         """
         if isinstance(old_network, str) and old_network.endswith("json"):
@@ -345,13 +437,18 @@ class JSONParser:
                 volume,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Cogeneration":
+        elif self.config[node_id]["type"] in ["Cogeneration", "Boiler"]:
             min, max, avg = self.parse_min_max_avg(
                 self.config[node_id].get("generation_capacity")
             )
-            node_obj = node.Cogeneration(
-                node_id, input_contents, min, max, avg, num_units, tags={}
-            )
+            if self.config[node_id]["type"] == "Cogeneration":
+                node_obj = node.Cogeneration(
+                    node_id, input_contents, min, max, avg, num_units, tags={}
+                )
+            else:
+                node_obj = node.Boiler(
+                    node_id, input_contents, min, max, avg, num_units, tags={}
+                )
             efficiency = self.config[node_id].get("efficiency")
             if efficiency:
 
@@ -634,10 +731,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, 
-                                    tag_list, 
+                                    tag_id,
+                                    tag_list,
                                     operations=operations,
-                                    units=tag_obj.units
+                                    units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
 
@@ -661,6 +758,12 @@ class JSONParser:
                                 tag_list, 
                                 operations=operations,
                                 units=tag_obj.units
+                            )
+                            v_tag = VirtualTag(
+                                tag_id,
+                                tag_list,
+                                operations=operations,
+                                units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
@@ -687,10 +790,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, 
-                                    tag_list, 
+                                    tag_id,
+                                    tag_list,
                                     operations=operations,
-                                    units=tag_obj.units
+                                    units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -709,10 +812,10 @@ class JSONParser:
                                 tag.tag_type.name,
                             )
                             v_tag = VirtualTag(
-                                tag_id, 
-                                tag_list, 
+                                tag_id,
+                                tag_list,
                                 operations=operations,
-                                units=tag_obj.units
+                                units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
 
@@ -773,10 +876,14 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'tags': dict of Tag,
-                'operations': str,
-                'type': TagType,
-                'contents': str
+                ``tags``: `dict` of `Tag`
+                
+                ``operations``: `str`
+                
+                ``type``: `TagType`
+                
+                ``contents``: `str`
+            
             }
         
         obj : Node or Connection
@@ -786,6 +893,11 @@ class JSONParser:
         parent_network : None, Network
             Optional network object the tag is a part of
             If `None` will assume `obj` is the parent network and all tags are in `obj.tags`
+
+        parent_network : None, Network
+            Optional network object the tag is a part of
+            If `None` will assume `obj` is the parent network
+            and all tags are in `obj.tags`
 
         Returns
         -------
@@ -801,9 +913,9 @@ class JSONParser:
                     "Could not find Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
                 )
             tag_list.append(subtag)
-        try: 
-            pint_unit = utils.parse_units(tag_info["units"]) 
-        except:
+        try:
+            pint_unit = utils.parse_units(tag_info["units"])
+        except (UndefinedUnitError, AttributeError, KeyError):
             pint_unit = None
         try:
             tag_type = TagType[tag_info["type"]]
@@ -820,7 +932,7 @@ class JSONParser:
             tag_type=tag_type,
             contents=contents_type,
             parent_id=tag_info.get("parent_id"),
-            units=pint_unit
+            units=pint_unit,
         )
         return v_tag
 
@@ -835,12 +947,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+                
+                ``units``: `str`
+                
+                ``contents``: `str`
+                
+                ``source_unit_id``: `int` or `str`
+                
+                ``dest_unit_id``: `int` or `str`
+                
+                ``totalized``: `bool`
+                
             }
 
         obj : Node or Connection
@@ -882,12 +1000,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+                
+                ``units``: `str`
+                
+                ``contents``: `str`
+                
+                ``source_unit_id``: `int` or `str`
+                
+                ``dest_unit_id``: `int` or `str`
+                
+                ``totalized``: `bool`
+                
             }
 
         obj : Node or Connection
@@ -933,7 +1057,14 @@ class JSONParser:
         Parameters
         ----------
         min_max_avg : dict
-            dictionary of the form {'min': int, 'max': int, 'avg': int}
+            dictionary of the form {
+                ``min``: `int`
+                
+                ``max``: `int`
+                
+                ``avg``: `int`
+
+            }
 
         Returns
         -------
@@ -965,7 +1096,12 @@ class JSONParser:
         Parameters
         ----------
         heating_vals : dict
-            dictionary of the form {'lower': float, 'higher': float}
+            dictionary of the form {
+                ``lower``: `float`
+                
+                ``higher``: `float`
+                
+            }
 
         Returns
         -------
@@ -1041,10 +1177,14 @@ class JSONParser:
         -------
         dict
             flow rate in the form {
-                ``min``: [(float), (int)],
-                ``max``: [(float), (int)],
-                ``avg``: [(float), (int)],
-                ``units``: (str)
+                ``min``: `float` or `int`
+
+                ``max``: `float` or `int`
+
+                ``avg``: `float` or `int`
+
+                ``units``: `str`
+
             }
         """
         min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
@@ -1203,7 +1343,7 @@ class JSONParser:
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
-        elif isinstance(node_obj, node.Cogeneration):
+        elif isinstance(node_obj, (node.Cogeneration, node.Boiler)):
             node_dict["generation_capacity"] = JSONParser.min_max_avg_to_dict(
                 node_obj, "gen_capacity"
             )
@@ -1265,8 +1405,8 @@ class JSONParser:
 
         Parameters
         ----------
-        network : Network
-            dictionary of the form {'lower': float, 'higher': float}
+        network : node.Network
+            Network object to export to JSON
 
         file_path : str
             path to write the configuration in JSON format

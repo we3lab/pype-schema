@@ -1,7 +1,7 @@
 .. contents::
 
-Welcome to the WWTP Configuration package documentation!
-========================================================
+Welcome to the Python for Process Engineering Schema (PyPES) documentation!
+===========================================================================
 
 .. toctree::
    :maxdepth: 1
@@ -30,6 +30,7 @@ Welcome to the WWTP Configuration package documentation!
    :maxdepth: 1
    :caption: Miscellaneous
 
+   operations
    utils
    visualize
 

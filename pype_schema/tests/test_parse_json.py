@@ -5,7 +5,10 @@ import json
 import pickle
 from pype_schema.units import u
 from pype_schema.parse_json import JSONParser
+<<<<<<< HEAD
 from pype_schema.node import Network
+=======
+>>>>>>> rebase/lambda-ops
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

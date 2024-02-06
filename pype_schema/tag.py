@@ -1,20 +1,18 @@
 import warnings
 from enum import Enum, auto
 from pandas import DataFrame, Series
-import pandas as pd
-import numpy as np
-import scipy as sp
-from numpy import ndarray, array, issubdtype
-from .utils import binary_helper, unary_helper, parse_units, count_args
-from .operations import *
+import pandas as pd  # noqa: F401
+import numpy as np  # noqa: F401
+import scipy as sp  # noqa: F401
+from numpy import ndarray, issubdtype
+from .utils import count_args
+from .operations import *  # noqa: F401, F403
+
 
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
-    Flow = auto()
-    InFlow = auto()
-    OutFlow = auto()
-    NetFlow = auto()
+    Flow = auto()  # flow through a connection
     Volume = auto()
     Level = auto()
     Pressure = auto()
@@ -32,6 +30,9 @@ class TagType(Enum):
     Rotation = auto()
     Efficiency = auto()
     StateOfCharge = auto()
+    InFlow = auto()  # flow into a node
+    OutFlow = auto()  # flow out of a node
+    NetFlow = auto()  # net flow through a node
 
 
 CONTENTLESS_TYPES = [
@@ -80,9 +81,8 @@ class Tag:
     id : str
         Tag ID
 
-    units : str or Unit
-        Units represented as a string or Pint unit.
-        E.g., 'MGD' or 'cubic meters' or <Unit('MGD')>
+    units : Unit
+        Units represented as a Pint unit. E.g., <Unit('MGD')>
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`
@@ -127,7 +127,7 @@ class Tag:
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.tag.Tag id:{self.id} units:{self.units} "
+            f"<pype_schema.tag.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
             f"totalized:{self.totalized} contents:{self.contents}>\n"
@@ -208,8 +208,9 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : str 
-        String a lambda function to apply to all tags, must have # args equal to # tags
+    operations : str
+        String a lambda function to apply to all tags,
+        must have number of args equal to number of tags
 
     tag_type : TagType
         Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`.
@@ -242,7 +243,7 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : 
+    operations :
         String giving a lambda function to apply to constituent tags
 
     units : str or Unit
@@ -321,21 +322,24 @@ class VirtualTag:
             self.contents = contents
         self.tag_type = tag_type
         self.totalized = totalized
-        if operations is not None and operations: 
+
+        if operations is not None and operations:
             if count_args(operations) != len(tags):
                 raise ValueError(
-                    "Operations lambda function must have the same number of arguments as the Tag list"
-                ) 
+                    "Operations lambda function must have the same "
+                    "number of arguments as the Tag list"
+                )
         elif len(tags) > 1:
             raise ValueError(
-                "Operations lambda function must be specified if multiple tags are given"
+                "Operations lambda function must be specified "
+                "if multiple tags are given"
             )
+
         self.operations = operations
-        
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.utils.VirtualTag id:{self.id} units:{self.units} "
+            f"<pype_schema.tag.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
             f"operations:{self.operations} "
@@ -393,7 +397,7 @@ class VirtualTag:
             return str(self.units) < str(other.units)
 
     def process_ops(self, data, tag_to_var_map={}):
-        """Transform the given data according to the VirtualTag's unary operator
+        """Transform the given data according to the VirtualTag's lambda string
 
         Parameters
         ----------
@@ -429,12 +433,12 @@ class VirtualTag:
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
             if num_ops == data.shape[1]:
-                result = func_(*[data[:,i] for i in range(data.shape[1])])
+                result = func_(*[data[:, i] for i in range(data.shape[1])])
             else:
                 raise ValueError(
                     "Data must have the correct dimensions "
-                    "(same length as number of arguments in operations lambda function). "
-                    "Currently there are {} arguments and {} data tags".format(
+                    "(same length as number of args in operations lambda function). "
+                    "Currently there are {} args and {} data tags".format(
                         num_ops, data.shape[1]
                     )
                 )
@@ -447,7 +451,7 @@ class VirtualTag:
                     data[varname] = tag_obj.calculate_values(data)
             result = func_(*[data[varname] for varname in varnames])
             if isinstance(result, Series):
-                result.rename(self.id, inplace=True)   
+                result.rename(self.id, inplace=True)
 
         else:
             raise TypeError("Data must be either a list, array, dict, or DataFrame")

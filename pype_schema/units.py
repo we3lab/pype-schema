@@ -20,6 +20,7 @@ Prefixes for Metric Units
 * mega- =  1e6   = M-
 * giga- =  1e9   = G-
 * tera- =  1e12  = T-
+
 Units of Length
 ---------------
 * ``u.meter`` = ``u.metre`` = ``u.m``
@@ -27,6 +28,7 @@ Units of Length
 * ``u.foot`` = ``u.ft``
 * ``u.yard`` = ``u.yd``
 * ``u.mile`` = ``u.mi``
+
 Units of Mass
 -------------
 * ``u.gram`` = ``u.g``
@@ -35,6 +37,7 @@ Units of Mass
 * ``u.pound`` = ``u.lb``
 * ``u.ton``
 * ``u.atomic_mass_unit`` = ``u.amu``
+
 Units of Time
 -------------
 * ``u.second`` = ``u.sec`` = ``u.s``
@@ -43,16 +46,19 @@ Units of Time
 * ``u.day``
 * ``u.week``
 * ``u.year``
+
 Units of Temperature
 --------------------
 * ``u.kelvin`` = ``u.degK``
 * ``u.celsius`` = ``u.degC``
 * ``u.fahrenheit`` = ``u.degF``
+
 Units of Angle
 --------------
 * ``u.revolution`` = ``u.rev``
 * ``u.radian`` = ``u.rad``
 * ``u.degree`` = ``u.deg``
+
 Units of Force
 --------------
 * ``u.newton`` = ``u.N``
@@ -61,18 +67,22 @@ Units of Force
 * ``u.pound_force`` = ``u.lbf``
 * ``u.ton_force``
 * ``u.kip``
+
 Units of Frequency
 ------------------
 * ``u.hertz`` = ``u.Hz``
 * ``u.revolutions_per_minute`` = ``u.rpm``
+
 Units of Money
 --------------
 * ``u.dollar`` = ``u.USD``
 * ``u.lempira`` = ``u.HNL``
+
 Units of Power
 --------------
 * ``u.watt`` = ``u.W``
 * ``u.horsepower`` = ``u.hp``
+
 Units of Pressure
 -----------------
 * ``u.pascal`` = ``u.Pa``
@@ -80,6 +90,7 @@ Units of Pressure
 * ``u.atmosphere`` = ``u.atm``
 * ``u.torr``
 * ``u.millimeter_Hg`` = ``u.mmHg``
+
 Units of Volume
 ---------------
 * ``u.liter`` = ``u.litre`` = ``u.L``
@@ -91,14 +102,17 @@ Units of Volume
 * ``u.fluid_ounce`` = ``u.floz``
 * ``u.tablespoon`` = ``u.tbsp``
 * ``u.teaspoon`` = ``tsp``
+
 Other Units
 -----------
 * ``u.joule`` = ``u.J``
 * ``u.mole`` = ``u.mol`` = ``u.equivalent`` = ``u.eq``
 * ``u.NTU`` = 1.47 * (``u.mg`` / ``u.L``)
+
   * This turbidity-concentration relation applies to kaolinite clay and is
     obtained from `Coagulation behavior of polyaluminum chloride (Wei et al.,
     2015) <https://doi.org/10.1016/j.cjche.2015.02.003>`_.
+
 Constants
 ---------
 * ``u.gravity``

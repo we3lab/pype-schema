@@ -106,7 +106,7 @@ def draw_graph(network, pyvis=False):
     ]
 
     if pyvis:
-        nt = Network("500px", "500px", directed=True)
+        nt = Network("500px", "500px", directed=True, notebook=False)
 
         # create legend based on https://github.com/WestHealth/pyvis/issues/50
         num_legend_nodes = len(colors)
@@ -133,7 +133,7 @@ def draw_graph(network, pyvis=False):
         g.add_nodes_from(legend_nodes)
 
         nt.from_nx(g)
-        nt.show(network.id + ".html")
+        nt.show(network.id + ".html", notebook=False)
     else:
         # create legend
         custom_lines = []

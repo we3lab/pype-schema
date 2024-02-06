@@ -170,7 +170,6 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         if isinstance(expected, str) and os.path.isfile(expected):         
             with open(expected, "rb") as pickle_file:
                 expected = pickle.load(pickle_file)
-    
     except Exception as err:
         result = type(err).__name__
 

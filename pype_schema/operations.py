@@ -1,18 +1,19 @@
 import numpy as np
 import pandas as pd
-import scipy as sp
+import scipy as sp  # noqa: F401
 import warnings
+
 
 def get_change(variable, delta_t=1, split=False, pos_change=True, neg_change=True):
     """Converts cumulative value to rate-of-change value using finite differences
-    Note: assumes rate of change at time t is equal to the difference between the value at time 
-    t+1 and t
+    Note: assumes rate of change at time t is equal to the difference between
+    the value at time t+1 and t
 
     Parameters
     ----------
     variable : pandas.Series, numpy.ndarray
         variable to convert
-    delta_t : int 
+    delta_t : int
         Time difference between two consecutive values of the variable (default is 1)
     split: bool
         Whether to split the variable into a negative change and a positive change
@@ -32,22 +33,18 @@ def get_change(variable, delta_t=1, split=False, pos_change=True, neg_change=Tru
     if split:
         change_neg, change_pos = change.copy(), change.copy()
         change_neg[change_neg > 0] = 0
-        change_neg = - change_neg
+        change_neg = -change_neg
         change_pos[change_pos < 0] = 0
         if pos_change and neg_change:
             return change_neg, change_pos
         elif neg_change:
-            return change_neg 
+            return change_neg
         elif pos_change:
             return change_pos
         else:
             warnings.warn(
-                """
-                    Split is `True` but both pos_change and neg_change are `False` 
-                    so no variable is returned
-                """
+                """Split is `True` but both pos_change and neg_change are `False`
+                    so no variable is returned"""
             )
     else:
-        return change 
-    
-
+        return change

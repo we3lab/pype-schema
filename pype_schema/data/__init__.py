@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-"""Sample data for WWTP Configuration testing."""
+"""Sample data for PyPES testing."""

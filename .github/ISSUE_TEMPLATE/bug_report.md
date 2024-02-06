@@ -9,7 +9,7 @@ labels: 'bug, needs triage'
 
 - [ ] I have checked that this issue has not already been reported.
 
-- [ ] I have confirmed this bug exists on the latest version of wwtp_configuration.
+- [ ] I have confirmed this bug exists on the latest version of pype_schema.
 
 ---
 

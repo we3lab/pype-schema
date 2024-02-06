@@ -28,7 +28,7 @@ class Node(ABC):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Node id:{self.id} "
+            f"<pype_schema.node.Node id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"tags:{self.tags}>\n"
@@ -107,7 +107,7 @@ class Node(ABC):
         Returns
         ------
         Tag or VirtualTag
-            wwtp_configuration Tag object associated with the variable name.
+            pype_schema Tag object associated with the variable name.
             Returns None if the `tag_name` is not found
         """
         tag = None
@@ -227,6 +227,7 @@ class Node(ABC):
 
     def get_connection(self, connection_name, recurse=False):
         """Get a connection from the network
+        
         Parameters
         ----------
         connection_name : str
@@ -287,7 +288,7 @@ class Node(ABC):
         Paremeters
         ----------
         node : Node
-            wwtp_configuration `Node` object for which we want to get connections
+            pype_schema `Node` object for which we want to get connections
 
         Returns
         -------
@@ -311,7 +312,7 @@ class Node(ABC):
         Paremeters
         ----------
         node : Node
-            wwtp_configuration `Node` object for which we want to get connections
+            pype_schema `Node` object for which we want to get connections
 
         Returns
         -------
@@ -716,7 +717,7 @@ class Node(ABC):
 
         TypeError
             When the objects to select among are not of
-            type {'wwtp_configuration.Tag' or `wwtp_configuration.Connection`}
+            type {'pype_schema.Tag' or `pype_schema.Connection`}
 
         Returns
         -------
@@ -904,7 +905,7 @@ class Network(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Network id:{self.id} "
+            f"<pype_schema.node.Network id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} tags:{self.tags} "
             f"nodes:{self.nodes} connections:{self.connections}>\n"
@@ -1091,7 +1092,7 @@ class Facility(Network):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Facility id:{self.id} "
+            f"<pype_schema.node.Facility id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"flow_rate:{self.flow_rate} tags:{self.tags} "
@@ -1175,6 +1176,9 @@ class Pump(Node):
     flow_rate : tuple
         Tuple of minimum, maximum, and average pump flow rate
 
+    pump_type : PumpType
+        Type of pump (either VFD or constant)
+
     tags : dict of Tag
         Data tags associated with this pump
 
@@ -1210,7 +1214,7 @@ class Pump(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Pump id:{self.id} "
+            f"<pype_schema.node.Pump id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
@@ -1319,7 +1323,7 @@ class Tank(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Tank id:{self.id} "
+            f"<pype_schema.node.Tank id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"volume:{self.volume} tags:{self.tags}>\n"
@@ -1401,7 +1405,7 @@ class Reservoir(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Reservoir id:{self.id} "
+            f"<pype_schema.node.Reservoir id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"volume:{self.volume} tags:{self.tags}>\n"
@@ -1475,7 +1479,7 @@ class Battery(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Battery id:{self.id} "
+            f"<pype_schema.node.Battery id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} capacity:{self.capacity} "
             f"discharge_rate:{self.discharge_rate} tags:{self.tags}>\n"
@@ -1581,7 +1585,7 @@ class Digestion(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Digestion id:{self.id} "
+            f"<pype_schema.node.Digestion id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} "
@@ -1669,7 +1673,119 @@ class Cogeneration(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Cogeneration id:{self.id} "
+            f"<pype_schema.node.Cogeneration id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.gen_capacity == other.gen_capacity
+            and self.tags == other.tags
+        )
+
+    def set_gen_capacity(self, min, max, avg):
+        """Set the minimum, maximum, and average generation capacity
+
+        Parameters
+        ----------
+        min : int
+            Minimum generation by a single cogenerator
+
+        max : int
+            Maximum generation by a single cogenerator
+
+        avg : int
+            Average generation by a single cogenerator
+        """
+        self.gen_capacity = (min, max, avg)
+
+    def set_energy_efficiency(self, efficiency_curve):
+        """Set the cogeneration efficiency to the given function
+
+        Parameters
+        ----------
+        efficiency_curve : function
+            function takes in the current kWh and returns the fractional efficency
+        """
+        # TODO: type check that efficiency_curve is a function
+        self.energy_efficiency = efficiency_curve
+
+
+class Boiler(Node):
+    """
+    Parameters
+    ----------
+    id : str
+        Boiler ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the boiler
+
+    min_gen : int
+        Minimum generation capacity of a single boiler
+
+    max_gen : int
+        Maximum generation capacity of a single boiler
+
+    avg_gen : int
+        Average generation capacity of a single boiler
+
+    num_units : int
+        Number of boiler units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this boiler
+
+    Attributes
+    ----------
+    id : str
+        Boiler ID
+
+    input_contents : list of ContentsType
+        Contents entering the boiler
+        (biogas, natural gas, or a blend of the two)
+
+    output_contents : list of ContentsType
+        Contents leaving the boiler (Electricity)
+
+    gen_capacity : tuple
+        Minimum, maximum, and average generation capacity
+
+    num_units : int
+        Number of boiler units running in parallel
+
+    tags : dict of Tag
+        Data tags associated with this boiler
+
+    energy_efficiency : function
+        Function which takes in the current kWh and returns
+        the efficiency as a fraction
+    """
+
+    def __init__(
+        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.output_contents = [utils.ContentsType.Electricity]
+        self.num_units = num_units
+        self.tags = tags
+        self.set_gen_capacity(min_gen, max_gen, avg_gen)
+        self.set_energy_efficiency(None)
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Cogeneration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
@@ -1794,7 +1910,7 @@ class Clarification(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Clarification id:{self.id} "
+            f"<pype_schema.node.Clarification id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -1893,7 +2009,7 @@ class Filtration(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Filtration id:{self.id} "
+            f"<pype_schema.node.Filtration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -1984,7 +2100,7 @@ class Screening(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Screening id:{self.id} "
+            f"<pype_schema.node.Screening id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -2074,7 +2190,7 @@ class Conditioning(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Conditioning id:{self.id} "
+            f"<pype_schema.node.Conditioning id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -2172,7 +2288,7 @@ class Thickening(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Thickening id:{self.id} "
+            f"<pype_schema.node.Thickening id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -2271,7 +2387,7 @@ class Aeration(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Aeration id:{self.id} "
+            f"<pype_schema.node.Aeration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -2370,7 +2486,7 @@ class Chlorination(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Chlorination id:{self.id} "
+            f"<pype_schema.node.Chlorination id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
@@ -2441,7 +2557,7 @@ class Flaring(Node):
 
     def __repr__(self):
         return (
-            f"<wwtp_configuration.node.Flaring id:{self.id} "
+            f"<pype_schema.node.Flaring id:{self.id} "
             f"input_contents:{self.input_contents} num_units:{self.num_units} "
             f"flow_rate:{self.flow_rate} tags:{self.tags}>\n"
         )
