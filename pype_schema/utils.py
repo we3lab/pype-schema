@@ -29,27 +29,25 @@ def count_args(func_str):
         nargs -= len(func.__kwdefaults__)
     return nargs
 
+
 def get_tag_sum_lambda_func(unit_ids):
-    """ Generate a lambda function string to sum tags
+    """Generate a lambda function string to sum tags
 
     Parameters
     ----------
     unit_ids : list
         A list of unit IDs to sum
-    
+
     Returns
     -------
     str :
         A string representation of a lambda function that sums tags
-    
+
     """
-    arguments = ",".join(
-        ["tag" + str(unit+1) for unit,_ in enumerate(unit_ids)]
-    )
-    ops = "+".join(
-        ["tag" + str(unit+1) for unit,_ in enumerate(unit_ids)]
-    )
+    arguments = ",".join(["tag" + str(unit + 1) for unit, _ in enumerate(unit_ids)])
+    ops = "+".join(["tag" + str(unit + 1) for unit, _ in enumerate(unit_ids)])
     return f"lambda {arguments}: {ops}"
+
 
 def parse_quantity(value, units):
     """Convert a value and unit string to a Pint quantity
@@ -86,346 +84,355 @@ def parse_units(units):
     Unit
         a Pint Unit for the given string
     """
-    clean_units = units.lower().replace(" ", "")
-    try:
-        return u(clean_units).units
-    except UndefinedUnitError:
-        if (
-            clean_units == "mgd"
-            or clean_units == "milliongalperday"
-            or clean_units == "milliongal/day"
-            or clean_units == "10**6gal/day"
-            or clean_units == "milliongallonperday"
-            or clean_units == "milliongallon/day"
-            or clean_units == "10**6gallon/day"
-            or clean_units == "milliongallonsperday"
-            or clean_units == "milliongallons/day"
-            or clean_units == "10**6gallons/day"
-            or clean_units == "milliongalperd"
-            or clean_units == "milliongal/d"
-            or clean_units == "10**6gal/d"
-            or clean_units == "milliongallonperd"
-            or clean_units == "milliongallon/d"
-            or clean_units == "10**6gallon/d"
-            or clean_units == "milliongallonsperd"
-            or clean_units == "milliongallons/d"
-            or clean_units == "10**6gallons/d"
-        ):
-            return u.MGD
-        elif (
-            clean_units == "cubicmeters"
-            or clean_units == "cubicmeter"
-            or clean_units == "m**3"
-            or clean_units == "m^3"
-            or clean_units == "m3"
-            or clean_units == "meter3"
-            or clean_units == "meter**3"
-            or clean_units == "meter^3"
-            or clean_units == "meters3"
-            or clean_units == "meters**3"
-            or clean_units == "meters^3"
-        ):
-            return u.m**3
-        elif clean_units == "horsepower" or clean_units == "hp":
-            return u.hp
-        elif (
-            clean_units == "scfm"
-            or clean_units == "cfm"
-            or clean_units == "cubicfeet/min"
-            or clean_units == "cubicfoot/min"
-            or clean_units == "ft3/min"
-            or clean_units == "ft**3/min"
-            or clean_units == "ft^3/min"
-            or clean_units == "foot3/min"
-            or clean_units == "foot^3/min"
-            or clean_units == "foot**3/min"
-            or clean_units == "feet3/min"
-            or clean_units == "feet**3/min"
-            or clean_units == "feet^3/min"
-            or clean_units == "cubicfeet/minute"
-            or clean_units == "cubicfoot/minute"
-            or clean_units == "ft3/minute"
-            or clean_units == "ft**3/minute"
-            or clean_units == "ft^3/minute"
-            or clean_units == "foot3/minute"
-            or clean_units == "foot^3/minute"
-            or clean_units == "foot**3/minute"
-            or clean_units == "feet3/minute"
-            or clean_units == "feet**3/minute"
-            or clean_units == "feet^3/minute"
-        ):
-            return u.ft**3 / u.min
-        elif (
-            clean_units == "scf"
-            or clean_units == "cubicfeet"
-            or clean_units == "cubicfoot"
-            or clean_units == "ft3"
-            or clean_units == "ft**3"
-            or clean_units == "ft^3"
-            or clean_units == "foot3"
-            or clean_units == "foot**3"
-            or clean_units == "foot^3"
-            or clean_units == "feet3"
-            or clean_units == "feet**3"
-            or clean_units == "feet^3"
-        ):
-            return u.ft**3
-        elif (
-            clean_units == "gpm"
-            or clean_units == "galpermin"
-            or clean_units == "gallonpermin"
-            or clean_units == "gallonspermin"
-            or clean_units == "galperminute"
-            or clean_units == "gallonperminute"
-            or clean_units == "gallonsperminute"
-            or clean_units == "gal/min"
-            or clean_units == "gal/minute"
-            or clean_units == "gallon/min"
-            or clean_units == "gallon/minute"
-            or clean_units == "gallons/min"
-            or clean_units == "gallons/minute"
-        ):
-            return u.gal / u.min
-        elif (
-            clean_units == "gal" or clean_units == "gallon" or clean_units == "gallons"
-        ):
-            return u.gal
-        elif (
-            clean_units == "gpd"
-            or clean_units == "galperday"
-            or clean_units == "gallonperday"
-            or clean_units == "gallonsperday"
-            or clean_units == "gal/d"
-            or clean_units == "gal/day"
-            or clean_units == "gallon/d"
-            or clean_units == "gallon/day"
-            or clean_units == "gallons/d"
-            or clean_units == "gallons/day"
-        ):
-            return u.gal / u.day
-        elif (
-            clean_units == "m/s"
-            or clean_units == "meter/s"
-            or clean_units == "meters/s"
-            or clean_units == "m/second"
-            or clean_units == "meter/second"
-            or clean_units == "meters/second"
-        ):
-            return u.m / u.s
-        elif (
-            clean_units == "cubicmeters/day"
-            or clean_units == "cubicmeter/day"
-            or clean_units == "m**3/day"
-            or clean_units == "m^3/day"
-            or clean_units == "m3/day"
-            or clean_units == "meter3/day"
-            or clean_units == "meter**3/day"
-            or clean_units == "meter^3/day"
-            or clean_units == "meters3/day"
-            or clean_units == "meters**3/day"
-            or clean_units == "meters^3/day"
-            or clean_units == "cubicmeters/d"
-            or clean_units == "cubicmeter/d"
-            or clean_units == "m**3/d"
-            or clean_units == "m^3/d"
-            or clean_units == "m3/d"
-            or clean_units == "meter3/d"
-            or clean_units == "meter**3/d"
-            or clean_units == "meter^3/d"
-            or clean_units == "meters3/d"
-            or clean_units == "meters**3/d"
-            or clean_units == "meters^3/d"
-        ):
-            return u.m**3 / u.day
-        elif (
-            clean_units == "psi"
-            or clean_units == "poundspersquareinch"
-            or clean_units == "poundpersquareinch"
-            or clean_units == "poundspersquarein"
-            or clean_units == "poundpersquarein"
-            or clean_units == "poundspersqin"
-            or clean_units == "poundpersqin"
-            or clean_units == "pound/inch**2"
-            or clean_units == "pounds/inch**2"
-            or clean_units == "lbs/inch**2"
-            or clean_units == "lb/inch**2"
-            or clean_units == "pound/inch^2"
-            or clean_units == "pounds/inch^2"
-            or clean_units == "lbs/inch^2"
-            or clean_units == "lb/inch^2"
-            or clean_units == "pound/squareinch"
-            or clean_units == "pounds/squareinch"
-            or clean_units == "lbs/squareinch"
-            or clean_units == "lb/squareinch"
-            or clean_units == "pound/in**2"
-            or clean_units == "pounds/in**2"
-            or clean_units == "lbs/in**2"
-            or clean_units == "lb/in**2"
-            or clean_units == "pound/in^2"
-            or clean_units == "pounds/in^2"
-            or clean_units == "lbs/in^2"
-            or clean_units == "lb/in^2"
-        ):
-            return u.lb / (u.inch**2)
-        elif (
-            clean_units == "btu"
-            or clean_units == "btus"
-            or clean_units == "britishthermalunit"
-            or clean_units == "britishthermalunits"
-        ):
-            return u.BTU
-        elif (
-            clean_units == "btu/scf"
-            or clean_units == "btus/scf"
-            or clean_units == "britishthermalunit/scf"
-            or clean_units == "britishthermalunits/scf"
-            or clean_units == "btu/cubicfeet"
-            or clean_units == "btus/cubicfeet"
-            or clean_units == "britishthermalunit/cubicfeet"
-            or clean_units == "britishthermalunits/cubicfeet"
-            or clean_units == "btu/cubicfoot"
-            or clean_units == "btus/cubicfoot"
-            or clean_units == "britishthermalunit/cubicfoot"
-            or clean_units == "britishthermalunits/cubicfoot"
-            or clean_units == "btu/ft3"
-            or clean_units == "btus/ft3"
-            or clean_units == "britishthermalunit/ft3"
-            or clean_units == "britishthermalunits/ft3"
-            or clean_units == "btu/ft**3"
-            or clean_units == "btus/ft**3"
-            or clean_units == "britishthermalunit/ft**3"
-            or clean_units == "britishthermalunits/ft**3"
-            or clean_units == "btu/ft^3"
-            or clean_units == "btus/ft^3"
-            or clean_units == "britishthermalunit/ft^3"
-            or clean_units == "britishthermalunits/ft^3"
-            or clean_units == "btu/foot3"
-            or clean_units == "btus/foot3"
-            or clean_units == "britishthermalunit/foot3"
-            or clean_units == "britishthermalunits/foot3"
-            or clean_units == "btu/foot**3"
-            or clean_units == "btus/foot**3"
-            or clean_units == "britishthermalunit/foot**3"
-            or clean_units == "britishthermalunits/foot**3"
-            or clean_units == "btu/feet3"
-            or clean_units == "btus/feet3"
-            or clean_units == "britishthermalunit/feet3"
-            or clean_units == "britishthermalunits/feet3"
-            or clean_units == "btu/foot^3"
-            or clean_units == "btus/foot^3"
-            or clean_units == "britishthermalunit/foot^3"
-            or clean_units == "britishthermalunits/foot^3"
-            or clean_units == "btu/feet**3"
-            or clean_units == "btus/feet**3"
-            or clean_units == "britishthermalunit/feet**3"
-            or clean_units == "britishthermalunits/feet**3"
-            or clean_units == "btu/feet^3"
-            or clean_units == "btus/feet^3"
-            or clean_units == "britishthermalunit/feet^3"
-            or clean_units == "britishthermalunits/feet^3"
-        ):
-            return u.BTU / (u.ft**3)
-        elif (
-            clean_units == "kw*hour/scfm"
-            or clean_units == "kwhr/scfm"
-            or clean_units == "kwh/scfm"
-            or clean_units == "kilowatthr/scfm"
-            or clean_units == "kilowatthour/scfm"
-            or clean_units == "kilowatt*hour/scfm"
-            or clean_units == "kw*hour/ft**3*min"
-            or clean_units == "kwhr/ft**3*min"
-            or clean_units == "kwh/ft**3*min"
-            or clean_units == "kilowatthr/ft**3*min"
-            or clean_units == "kilowatthour/ft**3*min"
-            or clean_units == "kilowatt*hour/ft**3*min"
-        ):
-            return u.kW * u.hr / u.ft**3 * u.min
-        elif (
-            clean_units == "kwh"
-            or clean_units == "kwhr"
-            or clean_units == "kilowatthr"
-            or clean_units == "hour*kilowatt"
-            or clean_units == "kilowatt*hour"
-            or clean_units == "kilowatthour"
-        ):
-            return u.kW * u.hr
-        elif (
-            clean_units == "kilowatt*hour/meter**3"
-            or clean_units == "hour*kilowatt/meter**3"
-            or clean_units == "kwh/meter**3"
-            or clean_units == "kwhr/meter**3"
-            or clean_units == "kilowatthr/meter**3"
-            or clean_units == "kilowatthour/meter**3"
-            or clean_units == "kilowatt*hour/m^3"
-            or clean_units == "hour*kilowatt/m^3"
-            or clean_units == "kwh/m^3"
-            or clean_units == "kwhr/m^3"
-            or clean_units == "kilowatthr/m^3"
-            or clean_units == "kilowatthour/m^3"
-            or clean_units == "kilowatt*hour/cubicmeters"
-            or clean_units == "hour*kilowatt/cubicmeters"
-            or clean_units == "kwh/cubicmeters"
-            or clean_units == "kwhr/cubicmeters"
-            or clean_units == "kilowatthr/cubicmeters"
-            or clean_units == "kilowatthour/cubicmeters"
-            or clean_units == "kilowatt*hour/cubicmeter"
-            or clean_units == "hour*kilowatt/cubicmeter"
-            or clean_units == "kwh/cubicmeter"
-            or clean_units == "kwhr/cubicmeter"
-            or clean_units == "kilowatthr/cubicmeter"
-            or clean_units == "kilowatthour/cubicmeter"
-            or clean_units == "kilowatt*hour/m**3"
-            or clean_units == "hour*kilowatt/m**3"
-            or clean_units == "kwh/m**3"
-            or clean_units == "kwhr/m**3"
-            or clean_units == "kilowatthr/m**3"
-            or clean_units == "kilowatthour/m**3"
-            or clean_units == "kilowatt*hour/m3"
-            or clean_units == "hour*kilowatt/m3"
-            or clean_units == "kwh/m3"
-            or clean_units == "kwhr/m3"
-            or clean_units == "kilowatthr/m3"
-            or clean_units == "kilowatthour/m3"
-            or clean_units == "kilowatt*hour/meter3"
-            or clean_units == "hour*kilowatt/meter3"
-            or clean_units == "kwh/meter3"
-            or clean_units == "kwhr/meter3"
-            or clean_units == "kilowatthr/meter3"
-            or clean_units == "kilowatthour/meter3"
-            or clean_units == "kilowatt*hour/meter^3"
-            or clean_units == "hour*kilowatt/meter^3"
-            or clean_units == "kwh/meter^3"
-            or clean_units == "kwhr/meter^3"
-            or clean_units == "kilowatthr/meter^3"
-            or clean_units == "kilowatthour/meter^3"
-            or clean_units == "kilowatt*hour/meters3"
-            or clean_units == "hour*kilowatt/meters3"
-            or clean_units == "kwh/meters3"
-            or clean_units == "kwhr/meters3"
-            or clean_units == "kilowatthr/meters3"
-            or clean_units == "kilowatthour/meters3"
-            or clean_units == "kilowatt*hour/meters**3"
-            or clean_units == "hour*kilowatt/meters**3"
-            or clean_units == "kwh/meters**3"
-            or clean_units == "kwhr/meters**3"
-            or clean_units == "kilowatthr/meters**3"
-            or clean_units == "kilowatthour/meters**3"
-            or clean_units == "kilowatt*hour/meters^3"
-            or clean_units == "hour*kilowatt/meters^3"
-            or clean_units == "kwh/meters^3"
-            or clean_units == "kwhr/meters^3"
-            or clean_units == "kilowatthr/meters^3"
-            or clean_units == "kilowatthour/meters^3"
-        ):
-            return u.kW * u.hr / (u.m**3)
-        elif clean_units == "kw" or clean_units == "kilowatt":
-            return u.kW
-        elif clean_units == "meters" or clean_units == "m" or clean_units == "meter":
-            return u.m
-        elif clean_units == "inches" or clean_units == "in" or clean_units == "inch":
-            return u.inch
-        else:
-            raise UndefinedUnitError("Unsupported unit: " + units)
+    if units is None or units == "" or units.lower() == "none":
+        return
+    else:
+        clean_units = units.lower().replace(" ", "")
+        try:
+            return u(clean_units).units
+        except UndefinedUnitError:
+            if (
+                clean_units == "mgd"
+                or clean_units == "milliongalperday"
+                or clean_units == "milliongal/day"
+                or clean_units == "10**6gal/day"
+                or clean_units == "milliongallonperday"
+                or clean_units == "milliongallon/day"
+                or clean_units == "10**6gallon/day"
+                or clean_units == "milliongallonsperday"
+                or clean_units == "milliongallons/day"
+                or clean_units == "10**6gallons/day"
+                or clean_units == "milliongalperd"
+                or clean_units == "milliongal/d"
+                or clean_units == "10**6gal/d"
+                or clean_units == "milliongallonperd"
+                or clean_units == "milliongallon/d"
+                or clean_units == "10**6gallon/d"
+                or clean_units == "milliongallonsperd"
+                or clean_units == "milliongallons/d"
+                or clean_units == "10**6gallons/d"
+            ):
+                return u.MGD
+            elif (
+                clean_units == "cubicmeters"
+                or clean_units == "cubicmeter"
+                or clean_units == "m**3"
+                or clean_units == "m^3"
+                or clean_units == "m3"
+                or clean_units == "meter3"
+                or clean_units == "meter**3"
+                or clean_units == "meter^3"
+                or clean_units == "meters3"
+                or clean_units == "meters**3"
+                or clean_units == "meters^3"
+            ):
+                return u.m**3
+            elif clean_units == "horsepower" or clean_units == "hp":
+                return u.hp
+            elif (
+                clean_units == "scfm"
+                or clean_units == "cfm"
+                or clean_units == "cubicfeet/min"
+                or clean_units == "cubicfoot/min"
+                or clean_units == "ft3/min"
+                or clean_units == "ft**3/min"
+                or clean_units == "ft^3/min"
+                or clean_units == "foot3/min"
+                or clean_units == "foot^3/min"
+                or clean_units == "foot**3/min"
+                or clean_units == "feet3/min"
+                or clean_units == "feet**3/min"
+                or clean_units == "feet^3/min"
+                or clean_units == "cubicfeet/minute"
+                or clean_units == "cubicfoot/minute"
+                or clean_units == "ft3/minute"
+                or clean_units == "ft**3/minute"
+                or clean_units == "ft^3/minute"
+                or clean_units == "foot3/minute"
+                or clean_units == "foot^3/minute"
+                or clean_units == "foot**3/minute"
+                or clean_units == "feet3/minute"
+                or clean_units == "feet**3/minute"
+                or clean_units == "feet^3/minute"
+            ):
+                return u.ft**3 / u.min
+            elif (
+                clean_units == "scf"
+                or clean_units == "cubicfeet"
+                or clean_units == "cubicfoot"
+                or clean_units == "ft3"
+                or clean_units == "ft**3"
+                or clean_units == "ft^3"
+                or clean_units == "foot3"
+                or clean_units == "foot**3"
+                or clean_units == "foot^3"
+                or clean_units == "feet3"
+                or clean_units == "feet**3"
+                or clean_units == "feet^3"
+            ):
+                return u.ft**3
+            elif (
+                clean_units == "gpm"
+                or clean_units == "galpermin"
+                or clean_units == "gallonpermin"
+                or clean_units == "gallonspermin"
+                or clean_units == "galperminute"
+                or clean_units == "gallonperminute"
+                or clean_units == "gallonsperminute"
+                or clean_units == "gal/min"
+                or clean_units == "gal/minute"
+                or clean_units == "gallon/min"
+                or clean_units == "gallon/minute"
+                or clean_units == "gallons/min"
+                or clean_units == "gallons/minute"
+            ):
+                return u.gal / u.min
+            elif (
+                clean_units == "gal"
+                or clean_units == "gallon"
+                or clean_units == "gallons"
+            ):
+                return u.gal
+            elif (
+                clean_units == "gpd"
+                or clean_units == "galperday"
+                or clean_units == "gallonperday"
+                or clean_units == "gallonsperday"
+                or clean_units == "gal/d"
+                or clean_units == "gal/day"
+                or clean_units == "gallon/d"
+                or clean_units == "gallon/day"
+                or clean_units == "gallons/d"
+                or clean_units == "gallons/day"
+            ):
+                return u.gal / u.day
+            elif (
+                clean_units == "m/s"
+                or clean_units == "meter/s"
+                or clean_units == "meters/s"
+                or clean_units == "m/second"
+                or clean_units == "meter/second"
+                or clean_units == "meters/second"
+            ):
+                return u.m / u.s
+            elif (
+                clean_units == "cubicmeters/day"
+                or clean_units == "cubicmeter/day"
+                or clean_units == "m**3/day"
+                or clean_units == "m^3/day"
+                or clean_units == "m3/day"
+                or clean_units == "meter3/day"
+                or clean_units == "meter**3/day"
+                or clean_units == "meter^3/day"
+                or clean_units == "meters3/day"
+                or clean_units == "meters**3/day"
+                or clean_units == "meters^3/day"
+                or clean_units == "cubicmeters/d"
+                or clean_units == "cubicmeter/d"
+                or clean_units == "m**3/d"
+                or clean_units == "m^3/d"
+                or clean_units == "m3/d"
+                or clean_units == "meter3/d"
+                or clean_units == "meter**3/d"
+                or clean_units == "meter^3/d"
+                or clean_units == "meters3/d"
+                or clean_units == "meters**3/d"
+                or clean_units == "meters^3/d"
+            ):
+                return u.m**3 / u.day
+            elif (
+                clean_units == "psi"
+                or clean_units == "poundspersquareinch"
+                or clean_units == "poundpersquareinch"
+                or clean_units == "poundspersquarein"
+                or clean_units == "poundpersquarein"
+                or clean_units == "poundspersqin"
+                or clean_units == "poundpersqin"
+                or clean_units == "pound/inch**2"
+                or clean_units == "pounds/inch**2"
+                or clean_units == "lbs/inch**2"
+                or clean_units == "lb/inch**2"
+                or clean_units == "pound/inch^2"
+                or clean_units == "pounds/inch^2"
+                or clean_units == "lbs/inch^2"
+                or clean_units == "lb/inch^2"
+                or clean_units == "pound/squareinch"
+                or clean_units == "pounds/squareinch"
+                or clean_units == "lbs/squareinch"
+                or clean_units == "lb/squareinch"
+                or clean_units == "pound/in**2"
+                or clean_units == "pounds/in**2"
+                or clean_units == "lbs/in**2"
+                or clean_units == "lb/in**2"
+                or clean_units == "pound/in^2"
+                or clean_units == "pounds/in^2"
+                or clean_units == "lbs/in^2"
+                or clean_units == "lb/in^2"
+            ):
+                return u.lb / (u.inch**2)
+            elif (
+                clean_units == "btu"
+                or clean_units == "btus"
+                or clean_units == "britishthermalunit"
+                or clean_units == "britishthermalunits"
+            ):
+                return u.BTU
+            elif (
+                clean_units == "btu/scf"
+                or clean_units == "btus/scf"
+                or clean_units == "britishthermalunit/scf"
+                or clean_units == "britishthermalunits/scf"
+                or clean_units == "btu/cubicfeet"
+                or clean_units == "btus/cubicfeet"
+                or clean_units == "britishthermalunit/cubicfeet"
+                or clean_units == "britishthermalunits/cubicfeet"
+                or clean_units == "btu/cubicfoot"
+                or clean_units == "btus/cubicfoot"
+                or clean_units == "britishthermalunit/cubicfoot"
+                or clean_units == "britishthermalunits/cubicfoot"
+                or clean_units == "btu/ft3"
+                or clean_units == "btus/ft3"
+                or clean_units == "britishthermalunit/ft3"
+                or clean_units == "britishthermalunits/ft3"
+                or clean_units == "btu/ft**3"
+                or clean_units == "btus/ft**3"
+                or clean_units == "britishthermalunit/ft**3"
+                or clean_units == "britishthermalunits/ft**3"
+                or clean_units == "btu/ft^3"
+                or clean_units == "btus/ft^3"
+                or clean_units == "britishthermalunit/ft^3"
+                or clean_units == "britishthermalunits/ft^3"
+                or clean_units == "btu/foot3"
+                or clean_units == "btus/foot3"
+                or clean_units == "britishthermalunit/foot3"
+                or clean_units == "britishthermalunits/foot3"
+                or clean_units == "btu/foot**3"
+                or clean_units == "btus/foot**3"
+                or clean_units == "britishthermalunit/foot**3"
+                or clean_units == "britishthermalunits/foot**3"
+                or clean_units == "btu/feet3"
+                or clean_units == "btus/feet3"
+                or clean_units == "britishthermalunit/feet3"
+                or clean_units == "britishthermalunits/feet3"
+                or clean_units == "btu/foot^3"
+                or clean_units == "btus/foot^3"
+                or clean_units == "britishthermalunit/foot^3"
+                or clean_units == "britishthermalunits/foot^3"
+                or clean_units == "btu/feet**3"
+                or clean_units == "btus/feet**3"
+                or clean_units == "britishthermalunit/feet**3"
+                or clean_units == "britishthermalunits/feet**3"
+                or clean_units == "btu/feet^3"
+                or clean_units == "btus/feet^3"
+                or clean_units == "britishthermalunit/feet^3"
+                or clean_units == "britishthermalunits/feet^3"
+            ):
+                return u.BTU / (u.ft**3)
+            elif (
+                clean_units == "kw*hour/scfm"
+                or clean_units == "kwhr/scfm"
+                or clean_units == "kwh/scfm"
+                or clean_units == "kilowatthr/scfm"
+                or clean_units == "kilowatthour/scfm"
+                or clean_units == "kilowatt*hour/scfm"
+                or clean_units == "kw*hour/ft**3*min"
+                or clean_units == "kwhr/ft**3*min"
+                or clean_units == "kwh/ft**3*min"
+                or clean_units == "kilowatthr/ft**3*min"
+                or clean_units == "kilowatthour/ft**3*min"
+                or clean_units == "kilowatt*hour/ft**3*min"
+            ):
+                return u.kW * u.hr / u.ft**3 * u.min
+            elif (
+                clean_units == "kwh"
+                or clean_units == "kwhr"
+                or clean_units == "kilowatthr"
+                or clean_units == "hour*kilowatt"
+                or clean_units == "kilowatt*hour"
+                or clean_units == "kilowatthour"
+            ):
+                return u.kW * u.hr
+            elif (
+                clean_units == "kilowatt*hour/meter**3"
+                or clean_units == "hour*kilowatt/meter**3"
+                or clean_units == "kwh/meter**3"
+                or clean_units == "kwhr/meter**3"
+                or clean_units == "kilowatthr/meter**3"
+                or clean_units == "kilowatthour/meter**3"
+                or clean_units == "kilowatt*hour/m^3"
+                or clean_units == "hour*kilowatt/m^3"
+                or clean_units == "kwh/m^3"
+                or clean_units == "kwhr/m^3"
+                or clean_units == "kilowatthr/m^3"
+                or clean_units == "kilowatthour/m^3"
+                or clean_units == "kilowatt*hour/cubicmeters"
+                or clean_units == "hour*kilowatt/cubicmeters"
+                or clean_units == "kwh/cubicmeters"
+                or clean_units == "kwhr/cubicmeters"
+                or clean_units == "kilowatthr/cubicmeters"
+                or clean_units == "kilowatthour/cubicmeters"
+                or clean_units == "kilowatt*hour/cubicmeter"
+                or clean_units == "hour*kilowatt/cubicmeter"
+                or clean_units == "kwh/cubicmeter"
+                or clean_units == "kwhr/cubicmeter"
+                or clean_units == "kilowatthr/cubicmeter"
+                or clean_units == "kilowatthour/cubicmeter"
+                or clean_units == "kilowatt*hour/m**3"
+                or clean_units == "hour*kilowatt/m**3"
+                or clean_units == "kwh/m**3"
+                or clean_units == "kwhr/m**3"
+                or clean_units == "kilowatthr/m**3"
+                or clean_units == "kilowatthour/m**3"
+                or clean_units == "kilowatt*hour/m3"
+                or clean_units == "hour*kilowatt/m3"
+                or clean_units == "kwh/m3"
+                or clean_units == "kwhr/m3"
+                or clean_units == "kilowatthr/m3"
+                or clean_units == "kilowatthour/m3"
+                or clean_units == "kilowatt*hour/meter3"
+                or clean_units == "hour*kilowatt/meter3"
+                or clean_units == "kwh/meter3"
+                or clean_units == "kwhr/meter3"
+                or clean_units == "kilowatthr/meter3"
+                or clean_units == "kilowatthour/meter3"
+                or clean_units == "kilowatt*hour/meter^3"
+                or clean_units == "hour*kilowatt/meter^3"
+                or clean_units == "kwh/meter^3"
+                or clean_units == "kwhr/meter^3"
+                or clean_units == "kilowatthr/meter^3"
+                or clean_units == "kilowatthour/meter^3"
+                or clean_units == "kilowatt*hour/meters3"
+                or clean_units == "hour*kilowatt/meters3"
+                or clean_units == "kwh/meters3"
+                or clean_units == "kwhr/meters3"
+                or clean_units == "kilowatthr/meters3"
+                or clean_units == "kilowatthour/meters3"
+                or clean_units == "kilowatt*hour/meters**3"
+                or clean_units == "hour*kilowatt/meters**3"
+                or clean_units == "kwh/meters**3"
+                or clean_units == "kwhr/meters**3"
+                or clean_units == "kilowatthr/meters**3"
+                or clean_units == "kilowatthour/meters**3"
+                or clean_units == "kilowatt*hour/meters^3"
+                or clean_units == "hour*kilowatt/meters^3"
+                or clean_units == "kwh/meters^3"
+                or clean_units == "kwhr/meters^3"
+                or clean_units == "kilowatthr/meters^3"
+                or clean_units == "kilowatthour/meters^3"
+            ):
+                return u.kW * u.hr / (u.m**3)
+            elif clean_units == "kw" or clean_units == "kilowatt":
+                return u.kW
+            elif (
+                clean_units == "meters" or clean_units == "m" or clean_units == "meter"
+            ):
+                return u.m
+            elif (
+                clean_units == "inches" or clean_units == "in" or clean_units == "inch"
+            ):
+                return u.inch
+            else:
+                raise UndefinedUnitError("Unsupported unit: " + units)
 
 
 class ContentsType(Enum):
@@ -460,6 +467,7 @@ class ContentsType(Enum):
     Stormwater = auto()
     Oil = auto()
     Grease = auto()
+
 
 class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""
@@ -627,19 +635,19 @@ def select_objs_helper(
 
 
 def recursive_get(key, dict_):
-    """ Recursively search a nested dictionary for a key
+    """Recursively search a nested dictionary for a key
 
     Parameters
     ----------
     key : str
-        Key to search for
+        Key to search
 
     dict_ : dict
         (nested) dictionary to search
-    
+
     Returns : any, None
         Value of the key if found, None otherwise
-    
+
     """
     if key in dict_:
         return dict_[key]

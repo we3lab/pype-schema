@@ -19,7 +19,7 @@
     "virtual_tags": {
         "GrossGasProduction": {
             "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-            "binary_operations": ["+"],
+            "binary_operations": "lambda tag1,tag2: tag1+tag2",
             "contents": "GasBlend"
           }
     }

@@ -17,18 +17,9 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "unit_ids, expected",
     [
-        (
-            ["1"],
-            "lambda tag1: tag1"
-        ),
-        (
-            ["1","2","3"],
-            "lambda tag1,tag2,tag3: tag1+tag2+tag3"
-        ),  
-        (
-            ["total","total","total"],
-            "lambda tag1,tag2,tag3: tag1+tag2+tag3"
-        )                 
+        (["1"], "lambda tag1: tag1"),
+        (["1", "2", "3"], "lambda tag1,tag2,tag3: tag1+tag2+tag3"),
+        (["total", "total", "total"], "lambda tag1,tag2,tag3: tag1+tag2+tag3"),
     ],
 )
 def test_get_tag_sum_lambda_func(unit_ids, expected):

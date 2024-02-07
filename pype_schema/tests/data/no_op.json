@@ -20,7 +20,8 @@
       "GrossGasProduction": {
         "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
         "operations": "",
-        "contents": "GasBlend"
+        "contents": "GasBlend",
+        "units": ""
       }
     },
     "ConditionerToCogen": {

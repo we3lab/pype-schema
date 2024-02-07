@@ -36,4 +36,3 @@ def get_change(variable, delta_t=1, split=False):
         return change_neg, change_pos
     else:
         return change
-

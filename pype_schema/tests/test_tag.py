@@ -21,7 +21,7 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, expected",
     [
-        ("data/invalid_tag.json", "ValueError"),
+        ("data/invalid_tag.json", "KeyError"),
         ("data/invalid_bin_op.json", "ValueError"),
         ("data/no_op.json", "ValueError"),
         ("data/wrong_op_len.json", "ValueError"),
@@ -32,7 +32,6 @@ def test_init_errors(json_path, expected):
         result = JSONParser(json_path).initialize_network()
     except Exception as err:
         result = type(err).__name__
-
     assert result == expected
 
 
@@ -95,7 +94,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/gross_gas.csv",
             "SCFM",
-        ),    
+        ),
         (
             "../data/sample.json",
             "data/sample_array.csv",
