@@ -217,6 +217,7 @@ def parse_units(units):
                 return u.m / u.s
             elif (
                 clean_units == "cubicmeters/day"
+                or clean_units == "m3pd"
                 or clean_units == "cubicmeter/day"
                 or clean_units == "m**3/day"
                 or clean_units == "m^3/day"
@@ -269,7 +270,7 @@ def parse_units(units):
                 or clean_units == "lbs/in^2"
                 or clean_units == "lb/in^2"
             ):
-                return u.lb / (u.inch**2)
+                return u.force_pound / (u.inch**2)
             elif (
                 clean_units == "btu"
                 or clean_units == "btus"

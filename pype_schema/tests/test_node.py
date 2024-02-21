@@ -852,19 +852,13 @@ def test_select_objs(
 @pytest.mark.parametrize(
     "json_path, facility_id, tag_id, tag_type, expected",
     [
-        (
-            "../data/sample.json",
-            "WWTP",
-            "GrossGasProduction",
-            TagType.Flow,
-            True
-        ),
+        ("../data/sample.json", "WWTP", "GrossGasProduction", TagType.Flow, True),
         (
             "../data/sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Flow,
-            False
+            False,
         ),
     ],
 )
