@@ -742,7 +742,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             False,
             ["SewerIntake"],
         ),
-        # Case 22: return objects by contents
+        # Case 22: return objects by contents (recurse=False)
         (
             "data/node.json",
             None,
@@ -761,6 +761,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             False,
             ["GasToGrid"],
         ),
+        # Case 23: return objects by contents (recurse=True)
         (
             "data/node.json",
             None,
@@ -845,3 +846,38 @@ def test_select_objs(
             obj for obj in result + expected if obj not in result or obj not in expected
         ]
         assert not res  # confirm that list is empty
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, facility_id, tag_id, tag_type, expected",
+    [
+        (
+            "../data/sample.json",
+            "WWTP",
+            "GrossGasProduction",
+            TagType.Flow,
+            True
+        ),
+        (
+            "../data/sample.json",
+            "WWTP",
+            "ElectricityProductionByGasVolume",
+            TagType.Flow,
+            False
+        ),
+    ],
+)
+def test_select_tags_no_parent(
+    json_path,
+    facility_id, 
+    tag_id,
+    tag_type,
+    expected,
+):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+    tag = config.get_tag(tag_id)
+    # facility = config.get_node(facility_id)
+
+    result = config.select_virtual_tags(tag, tag_type=tag_type)
+    assert result == expected

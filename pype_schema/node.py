@@ -435,9 +435,6 @@ class Node(ABC):
         entry_point_type : class
             Optional `entry_point` `Node` subclass to filter by. None by default
 
-        contents_type : ContentsType
-            Optional contents to filter by. None by default
-
         tag_type : TagType
             Optional tag type to filter by. None by default
 
@@ -452,7 +449,6 @@ class Node(ABC):
         bool
             True if `tag` meets the filtering criteria
         """
-
         if tag.parent_id == self.id:
             parent_obj = self
         else:
@@ -608,42 +604,43 @@ class Node(ABC):
         bool
             True if `virtual_tag` meets the filtering criteria
         """
-        for subtag in virtual_tag.tags:
-            if isinstance(subtag, VirtualTag):
-                if self.select_virtual_tags(
-                    subtag,
-                    source_id=source_id,
-                    dest_id=dest_id,
-                    source_unit_id=source_unit_id,
-                    dest_unit_id=dest_unit_id,
-                    exit_point_id=exit_point_id,
-                    entry_point_id=entry_point_id,
-                    source_node_type=source_node_type,
-                    dest_node_type=dest_node_type,
-                    exit_point_type=exit_point_type,
-                    entry_point_type=entry_point_type,
-                    tag_type=tag_type,
-                    recurse=recurse,
-                ):
-                    return True
-            else:
-                if self.select_tags(
-                    subtag,
-                    source_id=source_id,
-                    dest_id=dest_id,
-                    source_unit_id=source_unit_id,
-                    dest_unit_id=dest_unit_id,
-                    exit_point_id=exit_point_id,
-                    entry_point_id=entry_point_id,
-                    source_node_type=source_node_type,
-                    dest_node_type=dest_node_type,
-                    exit_point_type=exit_point_type,
-                    entry_point_type=entry_point_type,
-                    tag_type=tag_type,
-                    recurse=recurse,
-                    virtual=True,
-                ):
-                    return True
+        if tag_type is None or virtual_tag.tag_type == tag_type:
+            for subtag in virtual_tag.tags:
+                if isinstance(subtag, VirtualTag):
+                    if self.select_virtual_tags(
+                        subtag,
+                        source_id=source_id,
+                        dest_id=dest_id,
+                        source_unit_id=source_unit_id,
+                        dest_unit_id=dest_unit_id,
+                        exit_point_id=exit_point_id,
+                        entry_point_id=entry_point_id,
+                        source_node_type=source_node_type,
+                        dest_node_type=dest_node_type,
+                        exit_point_type=exit_point_type,
+                        entry_point_type=entry_point_type,
+                        tag_type=None,
+                        recurse=recurse,
+                    ):
+                        return True
+                else:
+                    if self.select_tags(
+                        subtag,
+                        source_id=source_id,
+                        dest_id=dest_id,
+                        source_unit_id=source_unit_id,
+                        dest_unit_id=dest_unit_id,
+                        exit_point_id=exit_point_id,
+                        entry_point_id=entry_point_id,
+                        source_node_type=source_node_type,
+                        dest_node_type=dest_node_type,
+                        exit_point_type=exit_point_type,
+                        entry_point_type=entry_point_type,
+                        tag_type=None,
+                        recurse=recurse,
+                        virtual=True,
+                    ):
+                        return True
 
         return False
 
