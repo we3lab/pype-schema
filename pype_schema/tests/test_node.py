@@ -850,29 +850,58 @@ def test_select_objs(
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, facility_id, tag_id, tag_type, expected",
+    "json_path, network_id, tag_id, tag_type, exit_point_id, expected",
     [
-        ("../data/sample.json", "WWTP", "GrossGasProduction", TagType.Flow, True),
+        (
+            "../data/sample.json",
+            "WWTP",
+            "ElectricityProductionByGasVolume",
+            TagType.Efficiency,
+            None,
+            True,
+        ),
+        (
+            "../data/sample.json",
+            "WWTP",
+            "ElectricityProductionByGasVolume",
+            None,
+            None,
+            True,
+        ),
         (
             "../data/sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Flow,
+            None,
+            False,
+        ),
+        (
+            "../data/sample.json",
+            "PowerGrid",
+            "ElectricityProductionByGasVolume",
+            None,
+            "Substation",
             False,
         ),
     ],
 )
 def test_select_tags_no_parent(
     json_path,
-    facility_id,
+    network_id,
     tag_id,
     tag_type,
+    exit_point_id,
     expected,
 ):
     parser = JSONParser(json_path)
     config = parser.initialize_network()
     tag = config.get_tag(tag_id)
-    # facility = config.get_node(facility_id)
+    network = config.get_node(network_id)
 
-    result = config.select_virtual_tags(tag, tag_type=tag_type)
+    result = network.select_virtual_tags(
+        tag, 
+        exit_point_id=exit_point_id, 
+        tag_type=tag_type
+    )
     assert result == expected
