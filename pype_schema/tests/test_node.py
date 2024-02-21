@@ -900,8 +900,6 @@ def test_select_tags_no_parent(
     network = config.get_node(network_id)
 
     result = network.select_virtual_tags(
-        tag,
-        exit_point_id=exit_point_id,
-        tag_type=tag_type
+        tag, exit_point_id=exit_point_id, tag_type=tag_type
     )
     assert result == expected
