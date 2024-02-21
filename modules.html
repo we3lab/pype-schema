@@ -1,26 +1,25 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>pype_schema &#8212; PyPES 0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -33,7 +32,7 @@
           <div class="body" role="main">
             
   <section id="pype-schema">
-<h1>pype_schema<a class="headerlink" href="#pype-schema" title="Permalink to this headline">¶</a></h1>
+<h1>pype_schema<a class="headerlink" href="#pype-schema" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pype_schema.html">pype_schema package</a><ul>
@@ -45,10 +44,161 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pype_schema.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.connection">pype_schema.connection module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.node">pype_schema.node module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.parse_json">pype_schema.parse_json module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.tag">pype_schema.tag module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.connection">pype_schema.connection module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.add_tag"><code class="docutils literal notranslate"><span class="pre">Connection.add_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.bidirectional"><code class="docutils literal notranslate"><span class="pre">Connection.bidirectional</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.contents"><code class="docutils literal notranslate"><span class="pre">Connection.contents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.destination"><code class="docutils literal notranslate"><span class="pre">Connection.destination</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.entry_point"><code class="docutils literal notranslate"><span class="pre">Connection.entry_point</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.exit_point"><code class="docutils literal notranslate"><span class="pre">Connection.exit_point</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_dest_id"><code class="docutils literal notranslate"><span class="pre">Connection.get_dest_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_dest_node"><code class="docutils literal notranslate"><span class="pre">Connection.get_dest_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_entry_point"><code class="docutils literal notranslate"><span class="pre">Connection.get_entry_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_exit_point"><code class="docutils literal notranslate"><span class="pre">Connection.get_exit_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_num_dest_units"><code class="docutils literal notranslate"><span class="pre">Connection.get_num_dest_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_num_source_units"><code class="docutils literal notranslate"><span class="pre">Connection.get_num_source_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_source_id"><code class="docutils literal notranslate"><span class="pre">Connection.get_source_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_source_node"><code class="docutils literal notranslate"><span class="pre">Connection.get_source_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.get_tag"><code class="docutils literal notranslate"><span class="pre">Connection.get_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.id"><code class="docutils literal notranslate"><span class="pre">Connection.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.remove_tag"><code class="docutils literal notranslate"><span class="pre">Connection.remove_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.source"><code class="docutils literal notranslate"><span class="pre">Connection.source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Connection.tags"><code class="docutils literal notranslate"><span class="pre">Connection.tags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Pipe"><code class="docutils literal notranslate"><span class="pre">Pipe</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Pipe.set_flow_rate"><code class="docutils literal notranslate"><span class="pre">Pipe.set_flow_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Pipe.set_heating_values"><code class="docutils literal notranslate"><span class="pre">Pipe.set_heating_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Pipe.set_pressure"><code class="docutils literal notranslate"><span class="pre">Pipe.set_pressure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.connection.Wire"><code class="docutils literal notranslate"><span class="pre">Wire</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.node">pype_schema.node module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Aeration"><code class="docutils literal notranslate"><span class="pre">Aeration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Battery"><code class="docutils literal notranslate"><span class="pre">Battery</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Boiler"><code class="docutils literal notranslate"><span class="pre">Boiler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Boiler.set_energy_efficiency"><code class="docutils literal notranslate"><span class="pre">Boiler.set_energy_efficiency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Boiler.set_gen_capacity"><code class="docutils literal notranslate"><span class="pre">Boiler.set_gen_capacity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Chlorination"><code class="docutils literal notranslate"><span class="pre">Chlorination</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Clarification"><code class="docutils literal notranslate"><span class="pre">Clarification</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Cogeneration"><code class="docutils literal notranslate"><span class="pre">Cogeneration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Cogeneration.set_energy_efficiency"><code class="docutils literal notranslate"><span class="pre">Cogeneration.set_energy_efficiency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Cogeneration.set_gen_capacity"><code class="docutils literal notranslate"><span class="pre">Cogeneration.set_gen_capacity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Conditioning"><code class="docutils literal notranslate"><span class="pre">Conditioning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Digestion"><code class="docutils literal notranslate"><span class="pre">Digestion</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Facility"><code class="docutils literal notranslate"><span class="pre">Facility</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Filtration"><code class="docutils literal notranslate"><span class="pre">Filtration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Flaring"><code class="docutils literal notranslate"><span class="pre">Flaring</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.add_connection"><code class="docutils literal notranslate"><span class="pre">Network.add_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.add_node"><code class="docutils literal notranslate"><span class="pre">Network.add_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.get_list_of_type"><code class="docutils literal notranslate"><span class="pre">Network.get_list_of_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.remove_connection"><code class="docutils literal notranslate"><span class="pre">Network.remove_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.remove_node"><code class="docutils literal notranslate"><span class="pre">Network.remove_node()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.add_tag"><code class="docutils literal notranslate"><span class="pre">Node.add_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_all_connections"><code class="docutils literal notranslate"><span class="pre">Node.get_all_connections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_all_connections_from"><code class="docutils literal notranslate"><span class="pre">Node.get_all_connections_from()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_all_connections_to"><code class="docutils literal notranslate"><span class="pre">Node.get_all_connections_to()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_all_nodes"><code class="docutils literal notranslate"><span class="pre">Node.get_all_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_all_tags"><code class="docutils literal notranslate"><span class="pre">Node.get_all_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_connection"><code class="docutils literal notranslate"><span class="pre">Node.get_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_node"><code class="docutils literal notranslate"><span class="pre">Node.get_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_node_or_connection"><code class="docutils literal notranslate"><span class="pre">Node.get_node_or_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_parent_from_tag"><code class="docutils literal notranslate"><span class="pre">Node.get_parent_from_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.get_tag"><code class="docutils literal notranslate"><span class="pre">Node.get_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.id"><code class="docutils literal notranslate"><span class="pre">Node.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.input_contents"><code class="docutils literal notranslate"><span class="pre">Node.input_contents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.output_contents"><code class="docutils literal notranslate"><span class="pre">Node.output_contents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.remove_tag"><code class="docutils literal notranslate"><span class="pre">Node.remove_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.select_objs"><code class="docutils literal notranslate"><span class="pre">Node.select_objs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.select_tags"><code class="docutils literal notranslate"><span class="pre">Node.select_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.select_virtual_tags"><code class="docutils literal notranslate"><span class="pre">Node.select_virtual_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.set_contents"><code class="docutils literal notranslate"><span class="pre">Node.set_contents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.set_flow_rate"><code class="docutils literal notranslate"><span class="pre">Node.set_flow_rate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.tags"><code class="docutils literal notranslate"><span class="pre">Node.tags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump"><code class="docutils literal notranslate"><span class="pre">Pump</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump.set_energy_efficiency"><code class="docutils literal notranslate"><span class="pre">Pump.set_energy_efficiency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump.set_pump_type"><code class="docutils literal notranslate"><span class="pre">Pump.set_pump_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Reservoir"><code class="docutils literal notranslate"><span class="pre">Reservoir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Screening"><code class="docutils literal notranslate"><span class="pre">Screening</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Tank"><code class="docutils literal notranslate"><span class="pre">Tank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Thickening"><code class="docutils literal notranslate"><span class="pre">Thickening</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.operations">pype_schema.operations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.operations.get_change"><code class="docutils literal notranslate"><span class="pre">get_change()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.parse_json">pype_schema.parse_json module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser"><code class="docutils literal notranslate"><span class="pre">JSONParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.add_virtual_tags"><code class="docutils literal notranslate"><span class="pre">JSONParser.add_virtual_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.collect_virtual_tags"><code class="docutils literal notranslate"><span class="pre">JSONParser.collect_virtual_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.conn_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.conn_to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.create_connection"><code class="docutils literal notranslate"><span class="pre">JSONParser.create_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.create_node"><code class="docutils literal notranslate"><span class="pre">JSONParser.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.get_tag_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.get_tag_contents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.initialize_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.initialize_network()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.merge_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.merge_network()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.min_max_avg_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.min_max_avg_to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.node_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.node_to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.parse_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_contents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.parse_heating_values"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_heating_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_avg"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_min_max_avg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.parse_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.parse_virtual_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_virtual_tag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.tag_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.tag_to_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.parse_json.JSONParser.to_json"><code class="docutils literal notranslate"><span class="pre">JSONParser.to_json()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.tag">pype_schema.tag module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType"><code class="docutils literal notranslate"><span class="pre">TagType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.BOD"><code class="docutils literal notranslate"><span class="pre">TagType.BOD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.COD"><code class="docutils literal notranslate"><span class="pre">TagType.COD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Conductivity"><code class="docutils literal notranslate"><span class="pre">TagType.Conductivity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Efficiency"><code class="docutils literal notranslate"><span class="pre">TagType.Efficiency</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Flow"><code class="docutils literal notranslate"><span class="pre">TagType.Flow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.InFlow"><code class="docutils literal notranslate"><span class="pre">TagType.InFlow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Level"><code class="docutils literal notranslate"><span class="pre">TagType.Level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.NetFlow"><code class="docutils literal notranslate"><span class="pre">TagType.NetFlow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.OutFlow"><code class="docutils literal notranslate"><span class="pre">TagType.OutFlow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Pressure"><code class="docutils literal notranslate"><span class="pre">TagType.Pressure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Rotation"><code class="docutils literal notranslate"><span class="pre">TagType.Rotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.RunStatus"><code class="docutils literal notranslate"><span class="pre">TagType.RunStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.RunTime"><code class="docutils literal notranslate"><span class="pre">TagType.RunTime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.StateOfCharge"><code class="docutils literal notranslate"><span class="pre">TagType.StateOfCharge</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.TDS"><code class="docutils literal notranslate"><span class="pre">TagType.TDS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.TSS"><code class="docutils literal notranslate"><span class="pre">TagType.TSS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Temperature"><code class="docutils literal notranslate"><span class="pre">TagType.Temperature</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Turbidity"><code class="docutils literal notranslate"><span class="pre">TagType.Turbidity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.VSS"><code class="docutils literal notranslate"><span class="pre">TagType.VSS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.Volume"><code class="docutils literal notranslate"><span class="pre">TagType.Volume</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.TagType.pH"><code class="docutils literal notranslate"><span class="pre">TagType.pH</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.calculate_values"><code class="docutils literal notranslate"><span class="pre">VirtualTag.calculate_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.process_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_ops()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.units">pype_schema.units module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#prefixes-for-metric-units">Prefixes for Metric Units</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#units-of-length">Units of Length</a></li>
@@ -64,11 +214,67 @@
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#units-of-volume">Units of Volume</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#other-units">Other Units</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.units.set_sig_figs"><code class="docutils literal notranslate"><span class="pre">set_sig_figs()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.utils">pype_schema.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.visualize">pype_schema.visualize module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.utils">pype_schema.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType"><code class="docutils literal notranslate"><span class="pre">ContentsType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Biogas"><code class="docutils literal notranslate"><span class="pre">ContentsType.Biogas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Brine"><code class="docutils literal notranslate"><span class="pre">ContentsType.Brine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.DrinkingWater"><code class="docutils literal notranslate"><span class="pre">ContentsType.DrinkingWater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Electricity"><code class="docutils literal notranslate"><span class="pre">ContentsType.Electricity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.FatOilGrease"><code class="docutils literal notranslate"><span class="pre">ContentsType.FatOilGrease</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.FoodWaste"><code class="docutils literal notranslate"><span class="pre">ContentsType.FoodWaste</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.GasBlend"><code class="docutils literal notranslate"><span class="pre">ContentsType.GasBlend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Grease"><code class="docutils literal notranslate"><span class="pre">ContentsType.Grease</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Groundwater"><code class="docutils literal notranslate"><span class="pre">ContentsType.Groundwater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.NaturalGas"><code class="docutils literal notranslate"><span class="pre">ContentsType.NaturalGas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.NonpotableReuse"><code class="docutils literal notranslate"><span class="pre">ContentsType.NonpotableReuse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Oil"><code class="docutils literal notranslate"><span class="pre">ContentsType.Oil</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.PotableReuse"><code class="docutils literal notranslate"><span class="pre">ContentsType.PotableReuse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.PrimaryEffluent"><code class="docutils literal notranslate"><span class="pre">ContentsType.PrimaryEffluent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.PrimarySludge"><code class="docutils literal notranslate"><span class="pre">ContentsType.PrimarySludge</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Scum"><code class="docutils literal notranslate"><span class="pre">ContentsType.Scum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Seawater"><code class="docutils literal notranslate"><span class="pre">ContentsType.Seawater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.SecondaryEffluent"><code class="docutils literal notranslate"><span class="pre">ContentsType.SecondaryEffluent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.SludgeBlend"><code class="docutils literal notranslate"><span class="pre">ContentsType.SludgeBlend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.Stormwater"><code class="docutils literal notranslate"><span class="pre">ContentsType.Stormwater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.SurfaceWater"><code class="docutils literal notranslate"><span class="pre">ContentsType.SurfaceWater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.TPS"><code class="docutils literal notranslate"><span class="pre">ContentsType.TPS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.TWAS"><code class="docutils literal notranslate"><span class="pre">ContentsType.TWAS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.TertiaryEffluent"><code class="docutils literal notranslate"><span class="pre">ContentsType.TertiaryEffluent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.ThickenedSludgeBlend"><code class="docutils literal notranslate"><span class="pre">ContentsType.ThickenedSludgeBlend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.TreatedSewage"><code class="docutils literal notranslate"><span class="pre">ContentsType.TreatedSewage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.UntreatedSewage"><code class="docutils literal notranslate"><span class="pre">ContentsType.UntreatedSewage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.ContentsType.WasteActivatedSludge"><code class="docutils literal notranslate"><span class="pre">ContentsType.WasteActivatedSludge</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.DigesterType"><code class="docutils literal notranslate"><span class="pre">DigesterType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.DigesterType.Aerobic"><code class="docutils literal notranslate"><span class="pre">DigesterType.Aerobic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.DigesterType.Anaerobic"><code class="docutils literal notranslate"><span class="pre">DigesterType.Anaerobic</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.PumpType"><code class="docutils literal notranslate"><span class="pre">PumpType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.PumpType.Constant"><code class="docutils literal notranslate"><span class="pre">PumpType.Constant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.utils.PumpType.VFD"><code class="docutils literal notranslate"><span class="pre">PumpType.VFD</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.count_args"><code class="docutils literal notranslate"><span class="pre">count_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.get_tag_sum_lambda_func"><code class="docutils literal notranslate"><span class="pre">get_tag_sum_lambda_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.parse_quantity"><code class="docutils literal notranslate"><span class="pre">parse_quantity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.parse_units"><code class="docutils literal notranslate"><span class="pre">parse_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.recursive_get"><code class="docutils literal notranslate"><span class="pre">recursive_get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.utils.select_objs_helper"><code class="docutils literal notranslate"><span class="pre">select_objs_helper()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.visualize">pype_schema.visualize module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.visualize.draw_graph"><code class="docutils literal notranslate"><span class="pre">draw_graph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.get_module_version"><code class="docutils literal notranslate"><span class="pre">get_module_version()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -111,6 +317,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
 </ul>
@@ -131,7 +338,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -145,11 +352,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, WE3 Lab.
+      &#169;2022, WE3 Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/modules.rst.txt"

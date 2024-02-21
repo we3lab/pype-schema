@@ -28,6 +28,14 @@ pype\_schema.node module
    :undoc-members:
    :show-inheritance:
 
+pype\_schema.operations module
+------------------------------
+
+.. automodule:: pype_schema.operations
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pype\_schema.parse\_json module
 -------------------------------
 

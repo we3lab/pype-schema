@@ -1,28 +1,27 @@
-
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>units &#8212; PyPES 0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="utils" href="utils.html" />
+    <link rel="next" title="operations" href="operations.html" />
     <link rel="prev" title="parse_json" href="parse_json.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -34,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="contents topic" id="contents">
+  <nav class="contents" id="contents" role="doc-toc">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#units" id="id2">units</a></p>
@@ -56,9 +55,9 @@
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="units">
-<span id="id1"></span><h1><a class="toc-backref" href="#id2">units</a><a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1><a class="toc-backref" href="#id2" role="doc-backlink">units</a><a class="headerlink" href="#units" title="Permalink to this heading">¶</a></h1>
 <p>This module consists of a Pint unit registry, which helps to process and apply units to data.</p>
 <span class="target" id="module-pype_schema.units"></span><p>Module containing global unit registry.
 The <a class="reference external" href="https://pint.readthedocs.io/en/latest/">Pint package</a> supports arithmetic
@@ -68,7 +67,7 @@ module contains a unit registry, named <code class="docutils literal notranslate
 It also defines a few additional units.
 Frequently Used Units and Constants in <code class="docutils literal notranslate"><span class="pre">u</span></code></p>
 <section id="prefixes-for-metric-units">
-<h2><a class="toc-backref" href="#id3">Prefixes for Metric Units</a><a class="headerlink" href="#prefixes-for-metric-units" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Prefixes for Metric Units</a><a class="headerlink" href="#prefixes-for-metric-units" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>pico- =  1e-12 = p-</p></li>
 <li><p>nano- =  1e-9  = n-</p></li>
@@ -85,7 +84,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-length">
-<h2><a class="toc-backref" href="#id4">Units of Length</a><a class="headerlink" href="#units-of-length" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Units of Length</a><a class="headerlink" href="#units-of-length" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.meter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.metre</span></code> = <code class="docutils literal notranslate"><span class="pre">u.m</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.inch</span></code></p></li>
@@ -95,7 +94,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-mass">
-<h2><a class="toc-backref" href="#id5">Units of Mass</a><a class="headerlink" href="#units-of-mass" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Units of Mass</a><a class="headerlink" href="#units-of-mass" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.gram</span></code> = <code class="docutils literal notranslate"><span class="pre">u.g</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.metric_ton</span></code> = <code class="docutils literal notranslate"><span class="pre">u.tonne</span></code> = <code class="docutils literal notranslate"><span class="pre">u.t</span></code></p></li>
@@ -106,7 +105,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-time">
-<h2><a class="toc-backref" href="#id6">Units of Time</a><a class="headerlink" href="#units-of-time" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Units of Time</a><a class="headerlink" href="#units-of-time" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.second</span></code> = <code class="docutils literal notranslate"><span class="pre">u.sec</span></code> = <code class="docutils literal notranslate"><span class="pre">u.s</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.minute</span></code> = <code class="docutils literal notranslate"><span class="pre">u.min</span></code></p></li>
@@ -117,7 +116,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-temperature">
-<h2><a class="toc-backref" href="#id7">Units of Temperature</a><a class="headerlink" href="#units-of-temperature" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Units of Temperature</a><a class="headerlink" href="#units-of-temperature" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.kelvin</span></code> = <code class="docutils literal notranslate"><span class="pre">u.degK</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.celsius</span></code> = <code class="docutils literal notranslate"><span class="pre">u.degC</span></code></p></li>
@@ -125,7 +124,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-angle">
-<h2><a class="toc-backref" href="#id8">Units of Angle</a><a class="headerlink" href="#units-of-angle" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Units of Angle</a><a class="headerlink" href="#units-of-angle" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.revolution</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rev</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.radian</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rad</span></code></p></li>
@@ -133,7 +132,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-force">
-<h2><a class="toc-backref" href="#id9">Units of Force</a><a class="headerlink" href="#units-of-force" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Units of Force</a><a class="headerlink" href="#units-of-force" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.newton</span></code> = <code class="docutils literal notranslate"><span class="pre">u.N</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.gram_force</span></code> = <code class="docutils literal notranslate"><span class="pre">u.gf</span></code></p></li>
@@ -144,28 +143,28 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-frequency">
-<h2><a class="toc-backref" href="#id10">Units of Frequency</a><a class="headerlink" href="#units-of-frequency" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Units of Frequency</a><a class="headerlink" href="#units-of-frequency" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.hertz</span></code> = <code class="docutils literal notranslate"><span class="pre">u.Hz</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.revolutions_per_minute</span></code> = <code class="docutils literal notranslate"><span class="pre">u.rpm</span></code></p></li>
 </ul>
 </section>
 <section id="units-of-money">
-<h2><a class="toc-backref" href="#id11">Units of Money</a><a class="headerlink" href="#units-of-money" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Units of Money</a><a class="headerlink" href="#units-of-money" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.dollar</span></code> = <code class="docutils literal notranslate"><span class="pre">u.USD</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.lempira</span></code> = <code class="docutils literal notranslate"><span class="pre">u.HNL</span></code></p></li>
 </ul>
 </section>
 <section id="units-of-power">
-<h2><a class="toc-backref" href="#id12">Units of Power</a><a class="headerlink" href="#units-of-power" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Units of Power</a><a class="headerlink" href="#units-of-power" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.watt</span></code> = <code class="docutils literal notranslate"><span class="pre">u.W</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.horsepower</span></code> = <code class="docutils literal notranslate"><span class="pre">u.hp</span></code></p></li>
 </ul>
 </section>
 <section id="units-of-pressure">
-<h2><a class="toc-backref" href="#id13">Units of Pressure</a><a class="headerlink" href="#units-of-pressure" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Units of Pressure</a><a class="headerlink" href="#units-of-pressure" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.pascal</span></code> = <code class="docutils literal notranslate"><span class="pre">u.Pa</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.bar</span></code></p></li>
@@ -175,7 +174,7 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="units-of-volume">
-<h2><a class="toc-backref" href="#id14">Units of Volume</a><a class="headerlink" href="#units-of-volume" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Units of Volume</a><a class="headerlink" href="#units-of-volume" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.liter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.litre</span></code> = <code class="docutils literal notranslate"><span class="pre">u.L</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.cubic_centimeter</span></code> = <code class="docutils literal notranslate"><span class="pre">u.cc</span></code></p></li>
@@ -189,40 +188,40 @@ Frequently Used Units and Constants in <code class="docutils literal notranslate
 </ul>
 </section>
 <section id="other-units">
-<h2><a class="toc-backref" href="#id15">Other Units</a><a class="headerlink" href="#other-units" title="Permalink to this headline">¶</a></h2>
-<ul>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Other Units</a><a class="headerlink" href="#other-units" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.joule</span></code> = <code class="docutils literal notranslate"><span class="pre">u.J</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.mole</span></code> = <code class="docutils literal notranslate"><span class="pre">u.mol</span></code> = <code class="docutils literal notranslate"><span class="pre">u.equivalent</span></code> = <code class="docutils literal notranslate"><span class="pre">u.eq</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">u.NTU</span></code> = 1.47 * (<code class="docutils literal notranslate"><span class="pre">u.mg</span></code> / <code class="docutils literal notranslate"><span class="pre">u.L</span></code>)
-* This turbidity-concentration relation applies to kaolinite clay and is</p>
-<blockquote>
-<div><p>obtained from <a class="reference external" href="https://doi.org/10.1016/j.cjche.2015.02.003">Coagulation behavior of polyaluminum chloride (Wei et al.,
-2015)</a>.</p>
-</div></blockquote>
+<li><p><code class="docutils literal notranslate"><span class="pre">u.NTU</span></code> = 1.47 * (<code class="docutils literal notranslate"><span class="pre">u.mg</span></code> / <code class="docutils literal notranslate"><span class="pre">u.L</span></code>)</p>
+<ul>
+<li><p>This turbidity-concentration relation applies to kaolinite clay and is
+obtained from <a class="reference external" href="https://doi.org/10.1016/j.cjche.2015.02.003">Coagulation behavior of polyaluminum chloride (Wei et al.,
+2015)</a>.</p></li>
+</ul>
 </li>
 </ul>
 </section>
 <section id="constants">
-<h2><a class="toc-backref" href="#id16">Constants</a><a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">Constants</a><a class="headerlink" href="#constants" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">u.gravity</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.molar_gas_constant</span></code> = <code class="docutils literal notranslate"><span class="pre">u.R</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.avogadro_number</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">u.boltzmann_constant</span></code></p></li>
 </ul>
+</section>
 <dl class="py function">
 <dt class="sig sig-object py" id="pype_schema.units.set_sig_figs">
 <span class="sig-prename descclassname"><span class="pre">pype_schema.units.</span></span><span class="sig-name descname"><span class="pre">set_sig_figs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/units.html#set_sig_figs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.units.set_sig_figs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default number of significant figures used to print Pint,
 Pandas and NumPy value quantities.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – number of significant figures to display. Defaults to 4.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
 </section>
 
 
@@ -261,6 +260,7 @@ Pandas and NumPy value quantities.</p>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
 </ul>
@@ -270,7 +270,7 @@ Pandas and NumPy value quantities.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="parse_json.html" title="previous chapter">parse_json</a></li>
-      <li>Next: <a href="utils.html" title="next chapter">utils</a></li>
+      <li>Next: <a href="operations.html" title="next chapter">operations</a></li>
   </ul></li>
 </ul>
 </div>
@@ -283,7 +283,7 @@ Pandas and NumPy value quantities.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -297,11 +297,11 @@ Pandas and NumPy value quantities.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2022, WE3 Lab.
+      &#169;2022, WE3 Lab.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/units.rst.txt"

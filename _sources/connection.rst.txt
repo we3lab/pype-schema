@@ -14,8 +14,5 @@ This module consists of an abstract parent class, ``Connection``, and three chil
 .. autoclass:: pype_schema.connection.Pipe
    :members:
 
-.. autoclass:: pype_schema.connection.Pump
-   :members:
-
 .. autoclass:: pype_schema.connection.Wire
   :members:
