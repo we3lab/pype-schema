@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import scipy as sp  # noqa: F401
-import warnings
 
 
 def get_change(variable, delta_t=1, split=False):

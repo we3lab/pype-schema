@@ -1,11 +1,9 @@
 import os
 import pint
 import pytest
-import json
 import pickle
 from pype_schema.units import u
 from pype_schema.parse_json import JSONParser
-from pype_schema.node import Network
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
