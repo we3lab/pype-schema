@@ -23,7 +23,7 @@ dev_requirements = [
 
 requirements = [
     "pint>=0.19.2",
-    "networkx>=2.8.5",
+    "networkx>=3.0",
     "pyvis>=0.2.1",
     "matplotlib>=3.5.2",
     "pandas>=1.4.0",

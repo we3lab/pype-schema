@@ -133,7 +133,7 @@ def draw_graph(network, pyvis=False):
         g.add_nodes_from(legend_nodes)
 
         nt.from_nx(g)
-        nt.show(network.id + ".html")
+        nt.show(network.id + ".html", notebook=False)
     else:
         # create legend
         custom_lines = []
