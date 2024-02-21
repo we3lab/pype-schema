@@ -24,6 +24,7 @@ htmlcov
 *.png
 *.html
 pype_schema/tests/data/test_to_json.json
+pype_schema/tests/lib/
 
 # Executables
 *.swf
