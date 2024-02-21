@@ -512,7 +512,7 @@ class Wire(Connection):
         Endpoint of the connection
 
     tags : dict of Tag
-        Data tags associated with this pump
+        Data tags associated with this wire
 
     bidirectional : bool
         whether electricity can flow from destination to source. False by default
