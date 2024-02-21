@@ -19,8 +19,9 @@
     "virtual_tags": {
       "GrossGasProduction": {
         "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
-        "binary_operations": ["invalid", "invalid"],
-        "contents": "GasBlend"
+        "operations": "",
+        "contents": "GasBlend",
+        "units": ""
       }
     },
     "ConditionerToCogen": {

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Main package for PyPES."""
 
 __author__ = "Fletcher Chapin"

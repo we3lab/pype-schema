@@ -21,23 +21,17 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, expected",
     [
-        ("data/no_bin_op.json", "ValueError"),
-        ("data/invalid_tag.json", "ValueError"),
+        ("data/invalid_tag.json", "KeyError"),
         ("data/invalid_bin_op.json", "ValueError"),
-        ("data/invalid_bin_op_list.json", "ValueError"),
-        ("data/wrong_bin_len.json", "ValueError"),
-        ("data/invalid_un_op.json", "ValueError"),
-        ("data/invalid_un_op_list.json", "ValueError"),
-        ("data/invalid_un_op_nested_list.json", "ValueError"),
-        ("data/wrong_un_len.json", "ValueError"),
+        ("data/no_op.json", "ValueError"),
+        ("data/wrong_op_len.json", "ValueError"),
     ],
 )
 def test_init_errors(json_path, expected):
     try:
-        JSONParser(json_path).initialize_network()
+        result = JSONParser(json_path).initialize_network()
     except Exception as err:
         result = type(err).__name__
-
     assert result == expected
 
 
@@ -96,7 +90,7 @@ def test_init_errors(json_path, expected):
         (
             "../data/sample.json",
             "data/sample_array.csv",
-            "GrossGasProduction",
+            "GrossGasProductionList",
             "List",
             "data/gross_gas.csv",
             "SCFM",
@@ -136,7 +130,7 @@ def test_init_errors(json_path, expected):
         (
             "../data/sample.json",
             "data/gas_purchases.csv",
-            "NoGasPurchases",
+            "NoGasPurchasesList",
             "List",
             "data/no_gas_bool.csv",
             None,
@@ -152,15 +146,7 @@ def test_init_errors(json_path, expected):
         (
             "../data/sample.json",
             "data/elec_gen.csv",
-            "ElectricityGeneration_RShift2",
-            "Array",
-            "data/gen_rshift2.csv",
-            "kWh",
-        ),
-        (
-            "../data/sample.json",
-            "data/elec_gen.csv",
-            "ElectricityGeneration_RShift2",
+            "ElectricityGeneration_RShift2_List",
             "List",
             "data/gen_rshift2.csv",
             "kWh",
@@ -176,16 +162,8 @@ def test_init_errors(json_path, expected):
         (
             "../data/sample.json",
             "data/elec_gen.csv",
-            "ElectricityGeneration_LShift1",
+            "ElectricityGeneration_LShift1_List",
             "List",
-            "data/gen_lshift1.csv",
-            "kWh",
-        ),
-        (
-            "../data/sample.json",
-            "data/elec_gen.csv",
-            "ElectricityGeneration_LShift1",
-            "Array",
             "data/gen_lshift1.csv",
             "kWh",
         ),
@@ -234,8 +212,9 @@ def test_calculate_values(
             )
         elif data_type == "List":
             data = data.values.T.tolist()
+            tag.calculate_values(data)
             assert np.allclose(
-                np.array(tag.calculate_values(data)),
+                np.array(tag.calculate_values(data), dtype=np.float64),
                 expected.values.flatten(),
                 equal_nan=True,
             )

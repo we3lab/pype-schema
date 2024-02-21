@@ -19,8 +19,9 @@
   "virtual_tags": {
     "GrossGasProduction": {
         "tags": ["CombinedDigesterGasFlow"],
-        "unary_operations": [["invalid", "invalid"]],
-        "contents": "GasBlend"
+        "operations": "lambda x,y: x+y",
+        "contents": "GasBlend",
+        "units": null
       }
   },
   "ConditionerToCogen": {

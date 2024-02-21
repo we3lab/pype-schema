@@ -122,9 +122,8 @@ class Node(ABC):
                 for node in self.nodes.values():
                     if recurse:
                         tag = node.get_tag(tag_name, recurse=True)
-                    else:
+                    elif tag_name in node.tags.keys():
                         tag = node.tags[tag_name]
-
                     if tag:
                         break
 
@@ -228,6 +227,7 @@ class Node(ABC):
 
     def get_connection(self, connection_name, recurse=False):
         """Get a connection from the network
+
         Parameters
         ----------
         connection_name : str
@@ -435,9 +435,6 @@ class Node(ABC):
         entry_point_type : class
             Optional `entry_point` `Node` subclass to filter by. None by default
 
-        contents_type : ContentsType
-            Optional contents to filter by. None by default
-
         tag_type : TagType
             Optional tag type to filter by. None by default
 
@@ -456,8 +453,8 @@ class Node(ABC):
             parent_obj = self
         else:
             parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
-
         bidirectional = False
+
         if isinstance(parent_obj, Node):
             obj_source_node = parent_obj
             obj_source_unit_id = tag.source_unit_id
@@ -467,7 +464,9 @@ class Node(ABC):
                 obj_entry_point,
                 obj_exit_point,
             ) = (None, None, None, None)
-        else:  # the parent must be a Connection if it is not a Node
+        elif (
+            parent_obj is not None
+        ):  # the parent must be a Connection if it is not a Node
             obj_source_node = parent_obj.get_source_node()
             obj_source_unit_id = tag.source_unit_id
             obj_dest_node = parent_obj.get_dest_node()
@@ -477,6 +476,15 @@ class Node(ABC):
 
             if parent_obj.bidirectional:
                 bidirectional = True
+        # If the parent is None, then it's parent object is outside the network
+        # and we can't filter by source/destination/entry/exit-point node and node type
+        else:
+            obj_source_node = None
+            obj_source_unit_id = tag.source_unit_id
+            obj_dest_node = None
+            obj_dest_unit_id = tag.dest_unit_id
+            obj_exit_point = None
+            obj_entry_point = None
 
         if virtual:
             obj_source_unit_id = None
@@ -596,42 +604,43 @@ class Node(ABC):
         bool
             True if `virtual_tag` meets the filtering criteria
         """
-        for subtag in virtual_tag.tags:
-            if isinstance(subtag, VirtualTag):
-                if self.select_virtual_tags(
-                    subtag,
-                    source_id=source_id,
-                    dest_id=dest_id,
-                    source_unit_id=source_unit_id,
-                    dest_unit_id=dest_unit_id,
-                    exit_point_id=exit_point_id,
-                    entry_point_id=entry_point_id,
-                    source_node_type=source_node_type,
-                    dest_node_type=dest_node_type,
-                    exit_point_type=exit_point_type,
-                    entry_point_type=entry_point_type,
-                    tag_type=tag_type,
-                    recurse=recurse,
-                ):
-                    return True
-            else:
-                if self.select_tags(
-                    subtag,
-                    source_id=source_id,
-                    dest_id=dest_id,
-                    source_unit_id=source_unit_id,
-                    dest_unit_id=dest_unit_id,
-                    exit_point_id=exit_point_id,
-                    entry_point_id=entry_point_id,
-                    source_node_type=source_node_type,
-                    dest_node_type=dest_node_type,
-                    exit_point_type=exit_point_type,
-                    entry_point_type=entry_point_type,
-                    tag_type=tag_type,
-                    recurse=recurse,
-                    virtual=True,
-                ):
-                    return True
+        if tag_type is None or virtual_tag.tag_type == tag_type:
+            for subtag in virtual_tag.tags:
+                if isinstance(subtag, VirtualTag):
+                    if self.select_virtual_tags(
+                        subtag,
+                        source_id=source_id,
+                        dest_id=dest_id,
+                        source_unit_id=source_unit_id,
+                        dest_unit_id=dest_unit_id,
+                        exit_point_id=exit_point_id,
+                        entry_point_id=entry_point_id,
+                        source_node_type=source_node_type,
+                        dest_node_type=dest_node_type,
+                        exit_point_type=exit_point_type,
+                        entry_point_type=entry_point_type,
+                        tag_type=None,
+                        recurse=recurse,
+                    ):
+                        return True
+                else:
+                    if self.select_tags(
+                        subtag,
+                        source_id=source_id,
+                        dest_id=dest_id,
+                        source_unit_id=source_unit_id,
+                        dest_unit_id=dest_unit_id,
+                        exit_point_id=exit_point_id,
+                        entry_point_id=entry_point_id,
+                        source_node_type=source_node_type,
+                        dest_node_type=dest_node_type,
+                        exit_point_type=exit_point_type,
+                        entry_point_type=entry_point_type,
+                        tag_type=None,
+                        recurse=recurse,
+                        virtual=True,
+                    ):
+                        return True
 
         return False
 
@@ -851,6 +860,9 @@ class Network(Node):
     connections : dict of Connections
         connections in the network, e.g. pipes
 
+    units: int, default 1
+        Number of units in the network
+
     Attributes
     ----------
     id : str
@@ -880,6 +892,7 @@ class Network(Node):
         tags={},
         nodes={},
         connections={},
+        units=1,
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
@@ -887,6 +900,7 @@ class Network(Node):
         self.tags = tags
         self.nodes = nodes
         self.connections = connections
+        self.units = units
 
     def __repr__(self):
         return (
@@ -894,6 +908,7 @@ class Network(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} tags:{self.tags} "
             f"nodes:{self.nodes} connections:{self.connections}>\n"
+            f"units:{self.units}>\n"
         )
 
     def __eq__(self, other):

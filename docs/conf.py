@@ -20,14 +20,14 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = u"PyPES"
-copyright = u"2022, WE3 Lab"
-author = u"WE3 Lab"
+project = "PyPES"
+copyright = "2022, WE3 Lab"
+author = "WE3 Lab"
 
 # The short X.Y version
-version = u""
+version = ""
 # The full version, including alpha/beta/rc tags
-release = u"0.0"
+release = "0.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -103,7 +103,7 @@ html_theme = "alabaster"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -146,8 +146,8 @@ latex_documents = [
     (
         master_doc,
         "PyPES.tex",
-        u"PyPES Documentation",
-        u"StanfordUniversity",
+        "PyPES Documentation",
+        "StanfordUniversity",
         "manual",
     ),
 ]
@@ -157,9 +157,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "pypes", u"PyPES Documentation", [author], 1)
-]
+man_pages = [(master_doc, "pypes", "PyPES Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -171,7 +169,7 @@ texinfo_documents = [
     (
         master_doc,
         "PyPES",
-        u"PyPES Documentation",
+        "PyPES Documentation",
         author,
         "PyPES",
         "Class hierarchy to represent configurations of process engineering systems.",
@@ -203,7 +201,13 @@ epub_exclude_files = ["search.html"]
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {"https://docs.python.org/": None}
+# from https://gist.github.com/bskinn/0e164963428d4b51017cebdb6cda5209
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/", None),
+    "scipy": ('https://docs.scipy.org/doc/scipy/', None),
+    "pandas": ('https://pandas.pydata.org/docs/', None),
+    "numpy": ('https://numpy.org/doc/stable/', None)
+}
 
 # -- Options for todo extension ----------------------------------------------
 
@@ -213,4 +217,4 @@ todo_include_todos = True
 
 # fix page width, from https://stackoverflow.com/questions/23211695/modifying-content-width-of-the-sphinx-theme-read-the-docs
 def setup(app):
-    app.add_css_file('css/custom.css')
+    app.add_css_file("css/custom.css")

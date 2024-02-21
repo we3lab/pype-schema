@@ -34,8 +34,13 @@ class JSONParser:
         )
         f.close()
 
-    def initialize_network(self):
+    def initialize_network(self, verbose=False):
         """Converts a dictionary into a `Network` object
+
+        Parameters
+        ----------
+        verbose : bool
+            If `True` will print informative statements while initializing the network
 
         Returns
         -------
@@ -47,24 +52,119 @@ class JSONParser:
             # check that node exists in dictionary (NameError)
             if node_id not in self.config:
                 raise NameError("Node " + node_id + " not found in " + self.path)
+            if verbose:
+                print(f"Initializing network, adding node {node_id}...")
             self.network_obj.add_node(self.create_node(node_id))
         for connection_id in self.config["connections"]:
+            if verbose:
+                print(f"Initializing network, adding connection {connection_id}...")
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
-                raise NameError(
-                    "Connection " + connection_id + " not found in " + self.path
-                )
+                raise NameError(f"Connection {connection_id} not found in {self.path}")
             self.network_obj.add_connection(
                 self.create_connection(connection_id, self.network_obj)
             )
-        v_tags = self.config.get("virtual_tags")
-        if v_tags:
-            for v_tag_id, v_tag_info in v_tags.items():
-                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, self.network_obj)
-                self.network_obj.add_tag(v_tag)
-
+        # Add all virtual tags
+        self.add_virtual_tags(verbose=verbose)
         # TODO: check for unused fields and throw a warning for each
         return self.network_obj
+
+    def collect_virtual_tags(self, config, obj_id=None, virtual_tags=None):
+        """Recursively collects all virtual tags in a network's dictionary
+        representation (i.e. config)
+
+        Parameters
+        ----------
+        config : dict
+            Dictionary representation of the network
+
+        obj_id : str
+            Optional "id" of config whose virtual tags are being collected
+            (if `None` will use "ParentNetwork")
+
+        virtual_tags : dict
+            dictionary to store virtual tags in
+
+        Returns
+        -------
+        dict
+            dictionary of all VirtualTag in network
+        """
+        if virtual_tags is None:
+            virtual_tags = {}
+        obj_id = "ParentNetwork" if obj_id is None else obj_id
+        v_tags = config.get("virtual_tags")
+        if v_tags:
+            # Make sure obj_id is specified for all virtual tags as `parent_id`
+            for v_tag in v_tags.values():
+                v_tag["parent_id"] = obj_id
+            virtual_tags.update(v_tags)
+        for key, value in config.items():
+            # Parse any subdictionaries in the JSON
+            # (e.g. a network within a network or a node/connection within a network)
+            if key not in ["tags", "virtual_tags"] and isinstance(value, dict):
+                self.collect_virtual_tags(value, obj_id=key, virtual_tags=virtual_tags)
+        return virtual_tags
+
+    def add_virtual_tags(self, verbose=False):
+        """Adds all virtual tags in an object
+        NOTE: assumes the objects tags have already been added
+
+        Parameters
+        ----------
+        obj : Node or Connection
+            object to add virtual tags to
+
+        verbose : bool
+            If `True` will print informative statements while adding virtual tags
+
+        """
+        config_v_tags = self.collect_virtual_tags(self.config)
+        network_v_tags = {}
+        if config_v_tags:
+            # Create a queue of virtual tags to add
+            v_tag_queue = [
+                (v_tag_id, v_tag_info)
+                for v_tag_id, v_tag_info in config_v_tags.copy().items()
+            ]
+            while v_tag_queue:
+                v_tag_id, v_tag_info = v_tag_queue.pop(0)
+                # Try parsing the virtual tag
+                try:
+                    if verbose:
+                        print(f"Parsing virtual tag {v_tag_id}...")
+                    obj_id = v_tag_info.get("parent_id")
+                    obj = (
+                        self.network_obj
+                        if obj_id == "ParentNetwork"
+                        else self.network_obj.get_node_or_connection(
+                            obj_id, recurse=True
+                        )
+                    )
+                    v_tag = self.parse_virtual_tag(
+                        v_tag_id, v_tag_info, obj, parent_network=self.network_obj
+                    )
+                    if verbose:
+                        print(
+                            "Initializing network, adding virtual "
+                            "tag {} to {}...".format(v_tag_id, obj.id)
+                        )
+                    obj.add_tag(v_tag)
+                # If there is a Key error, it may be because a virtual tag
+                # is pointing to another virtual tag that hasn't been added yet.
+                except KeyError:
+                    self.parse_virtual_tag(
+                        v_tag_id, v_tag_info, obj, parent_network=self.network_obj
+                    )
+                    for tag_pointer in v_tag_info["tags"]:
+                        if tag_pointer not in config_v_tags:
+                            raise KeyError(
+                                f"Invalid Tag id {tag_pointer} in VirtualTag {v_tag_id}"
+                            )
+                    v_tag_queue.append((v_tag_id, v_tag_info))
+        for v_tag in network_v_tags.values():
+            obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
+            obj.add_tag(v_tag)
 
     def merge_network(self, old_network, inplace=False):
         """Incorporates nodes/connections (i.e. the `new_network`) into a network
@@ -394,17 +494,11 @@ class JSONParser:
                         tag_id = "_".join(
                             [node_id, tag_obj.contents.name, tag_obj.tag_type.name]
                         )
+                        operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         v_tag = VirtualTag(
-                            tag_id, tags_by_contents, binary_operations="+"
+                            tag_id, tags_by_contents, operations=operations
                         )
                         node_obj.add_tag(v_tag)
-
-        v_tags = self.config[node_id].get("virtual_tags")
-        if v_tags:
-            for v_tag_id, v_tag_info in v_tags.items():
-                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, node_obj)
-                node_obj.add_tag(v_tag)
-
         return node_obj
 
     def create_connection(self, connection_id, node_obj):
@@ -531,6 +625,7 @@ class JSONParser:
                         and len(tag_source_unit_ids) > 1
                     ):
                         tag_obj = tags_by_contents[0]
+                        operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         # create a separate virtual total for each destination unit.
                         # If none exist then just use total
                         if tag_dest_unit_ids:
@@ -542,7 +637,6 @@ class JSONParser:
                                     and tag_obj.dest_unit_id == id
                                 ]
                                 dest_unit_id = "" if id == "total" else "_" + str(id)
-
                                 tag_id = "{}{}_{}{}{}_{}_{}".format(
                                     connection_obj.get_source_id(),
                                     exit_point_id,
@@ -553,7 +647,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, tag_list, binary_operations="+"
+                                    tag_id,
+                                    tag_list,
+                                    operations=operations,
+                                    units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
 
@@ -572,10 +669,22 @@ class JSONParser:
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
+                            v_tag = VirtualTag(
+                                tag_id,
+                                tag_list,
+                                operations=operations,
+                                units=tag_obj.units,
+                            )
+                            v_tag = VirtualTag(
+                                tag_id,
+                                tag_list,
+                                operations=operations,
+                                units=tag_obj.units,
+                            )
                             connection_obj.add_tag(v_tag)
                     if "total" not in tag_dest_unit_ids and len(tag_dest_unit_ids) > 1:
                         tag_obj = tags_by_contents[0]
+                        operations = utils.get_tag_sum_lambda_func(tag_dest_unit_ids)
                         # create a separate virtual total for each source unit.
                         # If none exist then just use total
                         if tag_source_unit_ids:
@@ -597,7 +706,10 @@ class JSONParser:
                                     tag.tag_type.name,
                                 )
                                 v_tag = VirtualTag(
-                                    tag_id, tag_list, binary_operations="+"
+                                    tag_id,
+                                    tag_list,
+                                    operations=operations,
+                                    units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
                         else:
@@ -615,14 +727,13 @@ class JSONParser:
                                 tag_obj.contents.name,
                                 tag.tag_type.name,
                             )
-                            v_tag = VirtualTag(tag_id, tag_list, binary_operations="+")
+                            v_tag = VirtualTag(
+                                tag_id,
+                                tag_list,
+                                operations=operations,
+                                units=tag_obj.units,
+                            )
                             connection_obj.add_tag(v_tag)
-
-        v_tags = self.config[connection_id].get("virtual_tags")
-        if v_tags:
-            for v_tag_id, v_tag_info in v_tags.items():
-                v_tag = self.parse_virtual_tag(v_tag_id, v_tag_info, connection_obj)
-                connection_obj.add_tag(v_tag)
 
         return connection_obj
 
@@ -671,7 +782,7 @@ class JSONParser:
         return (input_contents, output_contents)
 
     @staticmethod
-    def parse_virtual_tag(tag_id, tag_info, obj):
+    def parse_virtual_tag(tag_id, tag_info, obj, parent_network=None):
         """Parse tag ID and dictionary information into VirtualTag object
 
         Parameters
@@ -681,16 +792,28 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'tags': dict of Tag,
-                'unary_operations': list of str,
-                'binary_operations': list of str,
-                'type': TagType,
-                'contents': str
+                ``tags``: `dict` of `Tag`
+
+                ``operations``: `str`
+
+                ``type``: `TagType`
+
+                ``contents``: `str`
+
             }
 
         obj : Node or Connection
             parent object that contains all constituent tags,
             which is used to gather the tag list for combining data correctly
+
+        parent_network : None, Network
+            Optional network object the tag is a part of
+            If `None` will assume `obj` is parent network and all tags are in `obj.tags`
+
+        parent_network : None, Network
+            Optional network object the tag is a part of
+            If `None` will assume `obj` is the parent network
+            and all tags are in `obj.tags`
 
         Returns
         -------
@@ -698,17 +821,17 @@ class JSONParser:
             a Python object with the given ID and the values from `tag_info`
         """
         tag_list = []
+        parent_network = obj if parent_network is None else parent_network
         for subtag_id in tag_info["tags"]:
-            if isinstance(obj, connection.Connection):
-                subtag = obj.get_tag(subtag_id)
-            else:
-                subtag = obj.get_tag(subtag_id, recurse=True)
+            subtag = parent_network.get_tag(subtag_id, recurse=True)
             if subtag is None:
-                raise ValueError(
-                    "Invalid Tag id {} in VirtualTag {}".format(subtag_id, tag_id)
+                raise KeyError(
+                    "Could not find Tag id {} in VirtualTag {}".format(
+                        subtag_id, tag_id
+                    )
                 )
             tag_list.append(subtag)
-
+        pint_unit = utils.parse_units(tag_info["units"])
         try:
             tag_type = TagType[tag_info["type"]]
         except KeyError:
@@ -720,11 +843,11 @@ class JSONParser:
         v_tag = VirtualTag(
             tag_id,
             tag_list,
-            unary_operations=tag_info.get("unary_operations"),
-            binary_operations=tag_info.get("binary_operations"),
+            operations=tag_info.get("operations"),
             tag_type=tag_type,
             contents=contents_type,
             parent_id=tag_info.get("parent_id"),
+            units=pint_unit,
         )
         return v_tag
 
@@ -739,12 +862,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+
+                ``units``: `str`
+
+                ``contents``: `str`
+
+                ``source_unit_id``: `int` or `str`
+
+                ``dest_unit_id``: `int` or `str`
+
+                ``totalized``: `bool`
+
             }
 
         obj : Node or Connection
@@ -786,12 +915,18 @@ class JSONParser:
 
         tag_info : dict
             dictionary of the form {
-                'type': TagType,
-                'units': str,
-                'contents': str,
-                'source_unit_id': int or str,
-                'dest_unit_id': int or str,
-                'totalized': bool
+                ``type``: `TagType`
+
+                ``units``: `str`
+
+                ``contents``: `str`
+
+                ``source_unit_id``: `int` or `str`
+
+                ``dest_unit_id``: `int` or `str`
+
+                ``totalized``: `bool`
+
             }
 
         obj : Node or Connection
@@ -837,7 +972,14 @@ class JSONParser:
         Parameters
         ----------
         min_max_avg : dict
-            dictionary of the form {'min': int, 'max': int, 'avg': int}
+            dictionary of the form {
+                ``min``: `int`
+
+                ``max``: `int`
+
+                ``avg``: `int`
+
+            }
 
         Returns
         -------
@@ -869,7 +1011,12 @@ class JSONParser:
         Parameters
         ----------
         heating_vals : dict
-            dictionary of the form {'lower': float, 'higher': float}
+            dictionary of the form {
+                ``lower``: `float`
+
+                ``higher``: `float`
+
+            }
 
         Returns
         -------
@@ -911,10 +1058,9 @@ class JSONParser:
         """
         tag_dict = {}
         if isinstance(tag_obj, VirtualTag):
+            tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
-            tag_dict["unary_operations"] = tag_obj.unary_operations
-            tag_dict["binary_operations"] = tag_obj.binary_operations
-            tag_dict["parent_id"] = tag_obj.parent_id
+            tag_dict["operations"] = tag_obj.operations
         elif isinstance(tag_obj, Tag):
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["source_unit_id"] = tag_obj.source_unit_id
@@ -946,10 +1092,14 @@ class JSONParser:
         -------
         dict
             flow rate in the form {
-                ``min``: [(float), (int)],
-                ``max``: [(float), (int)],
-                ``avg``: [(float), (int)],
-                ``units``: (str)
+                ``min``: `float` or `int`
+
+                ``max``: `float` or `int`
+
+                ``avg``: `float` or `int`
+
+                ``units``: `str`
+
             }
         """
         min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
@@ -1165,16 +1315,22 @@ class JSONParser:
         return node_dict
 
     @staticmethod
-    def to_json(network, file_path=None):
+    def to_json(network, file_path=None, indent=4, verbose=False):
         """Converts a Network object to a JSON file
 
         Parameters
         ----------
-        network : Network
-            dictionary of the form {'lower': float, 'higher': float}
+        network : node.Network
+            Network object to export to JSON
 
         file_path : str
             path to write the configuration in JSON format
+
+        indent : int
+            number of spaces to indent the JSON file
+
+        verbose : bool
+            Whether to print informative messages for debugging
 
         Raises
         ------
@@ -1193,6 +1349,10 @@ class JSONParser:
 
         for tag_id, tag_obj in network.tags.items():
             if isinstance(tag_obj, VirtualTag):
+                if verbose:
+                    print(
+                        f"Outputting json file, converting {tag_id} to a dictionary..."
+                    )
                 v_tag_dict = JSONParser.tag_to_dict(tag_obj)
                 result["virtual_tags"][tag_id] = v_tag_dict
 
@@ -1200,6 +1360,10 @@ class JSONParser:
             result["connections"].append(conn_obj.id)
 
         for conn_obj in network.get_all_connections(recurse=True):
+            if verbose:
+                print(
+                    f"Outputting json file, converting {conn_obj.id} to a dictionary..."
+                )
             conn_dict = JSONParser.conn_to_dict(conn_obj)
             result[conn_obj.id] = conn_dict
 
@@ -1207,11 +1371,15 @@ class JSONParser:
             result["nodes"].append(node_obj.id)
 
         for node_obj in network.get_all_nodes(recurse=True):
+            if verbose:
+                print(
+                    f"Outputting json file, converting {node_obj.id} to a dictionary..."
+                )
             node_dict = JSONParser.node_to_dict(node_obj)
             result[node_obj.id] = node_dict
 
         if file_path is not None:
             with open(file_path, "w") as file:
-                json.dump(result, file)
+                json.dump(result, file, indent=indent)
 
         return result

@@ -20,18 +20,18 @@ pint.set_application_registry(u)
     [
         ("../data/sample.json", "data/sample.pkl"),
         ("data/key_error.json", "KeyError"),
+        ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
     ],
 )
 def test_create_network(json_path, expected_path):
     parser = JSONParser(json_path)
     try:
-        result = parser.initialize_network()
+        result = parser.initialize_network(verbose=True)
         with open(expected_path, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
     except Exception as err:
         result = type(err).__name__
         expected = expected_path
-
     assert result == expected
 
 
@@ -67,7 +67,6 @@ def test_merge_network(
 ):
     parser = JSONParser(json_path)
     expected = JSONParser(expected_path).initialize_network()
-
     if node_id:
         original = (
             JSONParser(original_network_path).initialize_network().get_node(node_id)
@@ -77,7 +76,6 @@ def test_merge_network(
         original = original_network_path
 
     result = parser.merge_network(original, inplace=inplace)
-
     assert result == expected
     assert inplace == (expected == parser.network_obj)
 
@@ -88,6 +86,6 @@ def test_to_json(
     json_path,
 ):
     expected = JSONParser(json_path).initialize_network()
-    JSONParser.to_json(expected, "data/test_to_json.json")
+    JSONParser.to_json(expected, "data/test_to_json.json", verbose=True)
     result = JSONParser("data/test_to_json.json").initialize_network()
     assert result == expected

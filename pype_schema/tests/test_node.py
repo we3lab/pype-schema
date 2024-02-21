@@ -75,7 +75,6 @@ def test_get_node_or_connection(json_path, obj_id, recurse, expected):
         .initialize_network()
         .get_node_or_connection(obj_id, recurse=recurse)
     )
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
@@ -187,7 +186,7 @@ def test_get_list_of_type(json_path, desired_type, recurse, expected):
         ("data/node.json", "RawSewagePump", []),
         # Case 3: only normal connections
         ("data/node.json", "Cogenerator", "data/connection_to_cogen.pkl"),
-        # Case 4: normal connections and entry_point
+        # Case  4: normal connections and entry_point
         ("data/node.json", "Digester", "data/connection_to_digester.pkl"),
     ],
 )
@@ -195,11 +194,9 @@ def test_get_all_connections_to(json_path, node_id, expected):
     parser = JSONParser(json_path)
     config = parser.initialize_network()
     result = config.get_all_connections_to(config.get_node(node_id, recurse=True))
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
-
     assert result == expected
 
 
@@ -207,9 +204,9 @@ def test_get_all_connections_to(json_path, node_id, expected):
 @pytest.mark.parametrize(
     "json_path, node_id, expected",
     [
-        # Case 1: node does not exist
+        # # Case 1: node does not exist
         ("data/node.json", "InvalidNode", []),
-        # Case 2: no outgoing connections but node exists
+        # # Case 2: no outgoing connections but node exists
         ("data/node.json", "Cogenerator", []),
         # Case 3: only normal connections
         ("data/node.json", "RawSewagePump", "data/connection_from_sewer.pkl"),
@@ -263,7 +260,6 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
     parser = JSONParser(json_path)
     config = parser.initialize_network()
     result = config.get_parent_from_tag(tag)
-
     if isinstance(expected, str) and os.path.isfile(expected):
         with open(expected, "rb") as pickle_file:
             expected = pickle.load(pickle_file)
@@ -746,7 +742,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             False,
             ["SewerIntake"],
         ),
-        # Case 22: return objects by contents
+        # Case 22: return objects by contents (recurse=False)
         (
             "data/node.json",
             None,
@@ -765,6 +761,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
             False,
             ["GasToGrid"],
         ),
+        # Case 23: return objects by contents (recurse=True)
         (
             "data/node.json",
             None,
@@ -849,3 +846,33 @@ def test_select_objs(
             obj for obj in result + expected if obj not in result or obj not in expected
         ]
         assert not res  # confirm that list is empty
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, facility_id, tag_id, tag_type, expected",
+    [
+        ("../data/sample.json", "WWTP", "GrossGasProduction", TagType.Flow, True),
+        (
+            "../data/sample.json",
+            "WWTP",
+            "ElectricityProductionByGasVolume",
+            TagType.Flow,
+            False,
+        ),
+    ],
+)
+def test_select_tags_no_parent(
+    json_path,
+    facility_id,
+    tag_id,
+    tag_type,
+    expected,
+):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+    tag = config.get_tag(tag_id)
+    # facility = config.get_node(facility_id)
+
+    result = config.select_virtual_tags(tag, tag_type=tag_type)
+    assert result == expected

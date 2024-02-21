@@ -23,27 +23,7 @@
     "DrinkingWaterToDistribution",
     "GasToFacility"
   ],
-  "virtual_tags": {
-    "GrossGasProduction": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-      "operations": "lambda x,y: x + y",
-      "contents": "GasBlend",
-      "units": "SCFM"
-    },
-    "GrossGasProductionList": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
-      "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
-      "contents": "GasBlend",
-      "units": "SCFM"
-    },    
-    "ElectricityProductionByGasVolume": {
-      "tags": ["ElectricityGeneration", "GrossGasProduction"],
-      "operations": "lambda x,y: x / y",
-      "type": "Efficiency",
-      "parent_id": "Cogenerator",
-      "units": "kilowatt * hour / SCFM"
-    }
-  },
+  "virtual_tags": {},
   "DrinkingWaterFacility": {
     "type": "Facility",
     "elevation (meters)": null,
@@ -492,6 +472,14 @@
       "max": null,
       "avg": 100,
       "units": "SCFM"
+    },
+    "virtual_tags": {
+        "Conditioner_Biogas_OutFlow": {
+            "tags": ["CombinedDigesterGasFlow", "TotalizedFlaredGas"],
+            "operations": "lambda x,y: x + y",
+            "contents": "Biogas",
+            "units": "SCFM"
+        }
     }
   },
   "ConditionerToCogen": {
