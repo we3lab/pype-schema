@@ -847,6 +847,7 @@ def test_select_objs(
         ]
         assert not res  # confirm that list is empty
 
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, facility_id, tag_id, tag_type, expected",
@@ -869,7 +870,7 @@ def test_select_objs(
 )
 def test_select_tags_no_parent(
     json_path,
-    facility_id, 
+    facility_id,
     tag_id,
     tag_type,
     expected,
