@@ -18,7 +18,7 @@ dev_requirements = [
     *setup_requirements,
     *test_requirements,
     "tox>=3.24.5",
-    "Sphinx==4.2.0",
+    "Sphinx==7.0.1",
 ]
 
 requirements = [
