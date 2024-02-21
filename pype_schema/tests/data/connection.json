@@ -26,6 +26,7 @@
       "units": "kW"
     },
     "electrical efficiency": 0.32,
+    "thermal efficiency": 0.8,
     "tags": {}
   },
   "GasToCogen": {

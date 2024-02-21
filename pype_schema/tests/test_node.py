@@ -143,11 +143,26 @@ def test_get_all(json_path, virtual, recurse, connection_path, node_path, tag_pa
         ("data/connection.json", "Cogenerator", 2000, 0.32),
     ],
 )
-def test_set_energy_efficiency(json_path, cogen_id, efficiency_arg, expected):
+def test_set_electrical_efficiency(json_path, cogen_id, efficiency_arg, expected):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
     cogen = result.get_node(cogen_id)
-    assert cogen.energy_efficiency(efficiency_arg) == expected
+    assert cogen.electrical_efficiency(efficiency_arg) == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, cogen_id, efficiency_arg, expected",
+    [
+        ("data/connection.json", "Cogenerator", None, 0.8),
+        ("data/connection.json", "Cogenerator", 2000, 0.8),
+    ],
+)
+def test_set_thermal_efficiency(json_path, cogen_id, efficiency_arg, expected):
+    parser = JSONParser(json_path)
+    result = parser.initialize_network()
+    cogen = result.get_node(cogen_id)
+    assert cogen.thermal_efficiency(efficiency_arg) == expected
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
