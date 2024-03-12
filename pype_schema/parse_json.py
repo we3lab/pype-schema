@@ -361,7 +361,9 @@ class JSONParser:
                 node_obj = node.Cogeneration(
                     node_id, input_contents, min, max, avg, num_units, tags={}
                 )
-                electrical_efficiency = self.config[node_id].get("electrical efficiency")
+                electrical_efficiency = self.config[node_id].get(
+                    "electrical efficiency"
+                )
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
             else:
                 node_obj = node.Boiler(
@@ -369,7 +371,7 @@ class JSONParser:
                 )
                 electrical_efficiency = None
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
-            
+
             if electrical_efficiency:
 
                 def efficiency_curve(arg):

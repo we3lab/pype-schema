@@ -122,6 +122,20 @@
       "units": "MGD"
     }
   },
+  "Boiler": {
+    "type": "Boiler",
+    "num_units": 1,
+    "input_contents": ["NaturalGas"],
+    "output_contents": "Heat",
+    "generation_capacity": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "kW"
+    },
+    "thermal efficiency": 0.8,
+    "tags": {}
+  },
   "Cogenerator": {
     "type": "Cogeneration",
     "num_units": 1,
