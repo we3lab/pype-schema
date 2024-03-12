@@ -1667,7 +1667,7 @@ class Cogeneration(Node):
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
-        self.output_contents = [utils.ContentsType.Electricity]
+        self.output_contents = [utils.ContentsType.Electricity, utils.ContentsType.Heat]
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)
@@ -1791,7 +1791,7 @@ class Boiler(Node):
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
-        self.output_contents = [utils.ContentsType.Electricity]
+        self.output_contents = [utils.ContentsType.Heat]
         self.num_units = num_units
         self.tags = tags
         self.set_gen_capacity(min_gen, max_gen, avg_gen)

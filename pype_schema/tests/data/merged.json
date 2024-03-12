@@ -591,8 +591,16 @@
             }
         },
         "virtual_tags": {}
+    }, 
+    "CogenHeatToFacility": {
+        "type": "Pipe",
+        "source": "Cogenerator",
+        "destination": "VirtualDemand",
+        "contents": "Heat",
+        "bidirectional": false,
+        "tags": {}
     },
-    "CogenToFacility": {
+    "CogenElecToFacility": {
         "type": "Wire",
         "source": "Cogenerator",
         "destination": "VirtualDemand",
@@ -989,7 +997,8 @@
             "DigesterToConditioner",
             "ConditionerToCogen",
             "ConditionerToFlare",
-            "CogenToFacility",
+            "CogenElecToFacility",
+            "CogenHeatToFacility",
             "BoilerToFacility",
             "PrimaryToGT",
             "SecondaryToGT",
@@ -1357,7 +1366,8 @@
             "NaturalGas"
         ],
         "output_contents": [
-            "Electricity"
+            "Electricity",
+            "Heat"
         ],
         "tags": {},
         "virtual_tags": {},
@@ -1391,7 +1401,8 @@
             "Heat"
         ],
         "output_contents": [
-            "Electricity"
+            "Electricity",
+            "Heat"
         ],
         "tags": {},
         "virtual_tags": {},
