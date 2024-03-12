@@ -1686,9 +1686,13 @@
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this cogenerator</span>
 
-<span class="sd">    energy_efficiency : function</span>
+<span class="sd">    electrical_efficiency : function</span>
 <span class="sd">        Function which takes in the current kWh and returns</span>
-<span class="sd">        the efficiency as a fraction</span>
+<span class="sd">        the electrical efficiency as a fraction</span>
+
+<span class="sd">    thermal_efficiency : function</span>
+<span class="sd">        Function which takes in the current kWh and returns</span>
+<span class="sd">        the thermal efficiency as a fraction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -1696,11 +1700,12 @@
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Heat</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_gen_capacity</span><span class="p">(</span><span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_energy_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_electrical_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_thermal_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -1740,7 +1745,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Cogeneration.set_energy_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_energy_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_energy_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
+<div class="viewcode-block" id="Cogeneration.set_electrical_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_electrical_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_electrical_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the cogeneration efficiency to the given function</span>
 
 <span class="sd">        Parameters</span>
@@ -1749,7 +1754,18 @@
 <span class="sd">            function takes in the current kWh and returns the fractional efficency</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: type check that efficiency_curve is a function</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">electrical_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div>
+
+<div class="viewcode-block" id="Cogeneration.set_thermal_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_thermal_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_thermal_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the cogeneration efficiency to the given function</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        efficiency_curve : function</span>
+<span class="sd">            function takes in the current kWh and returns the fractional efficency</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: type check that efficiency_curve is a function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thermal_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div></div>
 
 
 <div class="viewcode-block" id="Boiler"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler">[docs]</a><span class="k">class</span> <span class="nc">Boiler</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -1798,7 +1814,7 @@
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this boiler</span>
 
-<span class="sd">    energy_efficiency : function</span>
+<span class="sd">    thermal_efficiency : function</span>
 <span class="sd">        Function which takes in the current kWh and returns</span>
 <span class="sd">        the efficiency as a fraction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1808,15 +1824,15 @@
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Heat</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_gen_capacity</span><span class="p">(</span><span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_energy_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_thermal_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Cogeneration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Boiler id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;gen_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1852,7 +1868,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Boiler.set_energy_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_energy_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_energy_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
+<div class="viewcode-block" id="Boiler.set_thermal_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_thermal_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_thermal_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the cogeneration efficiency to the given function</span>
 
 <span class="sd">        Parameters</span>
@@ -1861,7 +1877,7 @@
 <span class="sd">            function takes in the current kWh and returns the fractional efficency</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: type check that efficiency_curve is a function</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thermal_efficiency</span> <span class="o">=</span> <span class="n">efficiency_curve</span></div></div>
 
 
 <div class="viewcode-block" id="Clarification"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Clarification">[docs]</a><span class="k">class</span> <span class="nc">Clarification</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>

@@ -475,22 +475,11 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of boiler units running in parallel</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this boiler</p></li>
-<li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
+<li><p><strong>thermal_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
 the efficiency as a fraction</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.node.Boiler.set_energy_efficiency">
-<span class="sig-name descname"><span class="pre">set_energy_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_energy_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_energy_efficiency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the cogeneration efficiency to the given function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current kWh and returns the fractional efficency</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Boiler.set_gen_capacity">
 <span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_gen_capacity" title="Permalink to this definition">¶</a></dt>
@@ -502,6 +491,17 @@ the efficiency as a fraction</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum generation by a single cogenerator</p></li>
 <li><p><strong>avg</strong> (<em>int</em>) – Average generation by a single cogenerator</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.set_thermal_efficiency">
+<span class="sig-name descname"><span class="pre">set_thermal_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_thermal_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_thermal_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cogeneration efficiency to the given function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current kWh and returns the fractional efficency</p>
 </dd>
 </dl>
 </dd></dl>
@@ -597,14 +597,16 @@ the efficiency as a fraction</p></li>
 <li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of cogenerator units running in parallel</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this cogenerator</p></li>
-<li><p><strong>energy_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
-the efficiency as a fraction</p></li>
+<li><p><strong>electrical_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
+the electrical efficiency as a fraction</p></li>
+<li><p><strong>thermal_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
+the thermal efficiency as a fraction</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_energy_efficiency">
-<span class="sig-name descname"><span class="pre">set_energy_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_energy_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_energy_efficiency" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_electrical_efficiency">
+<span class="sig-name descname"><span class="pre">set_electrical_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_electrical_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_electrical_efficiency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the cogeneration efficiency to the given function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -624,6 +626,17 @@ the efficiency as a fraction</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum generation by a single cogenerator</p></li>
 <li><p><strong>avg</strong> (<em>int</em>) – Average generation by a single cogenerator</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_thermal_efficiency">
+<span class="sig-name descname"><span class="pre">set_thermal_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_thermal_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_thermal_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cogeneration efficiency to the given function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>efficiency_curve</strong> (<em>function</em>) – function takes in the current kWh and returns the fractional efficency</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1495,7 +1508,7 @@ the value at time t+1 and t</p>
 <dd class="field-even"><p>Rate of change variable or tuple of netative, positive rate of change variable</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.2.0)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.2.1)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2381,12 +2394,17 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Grease">
-<span class="sig-name descname"><span class="pre">Grease</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Grease" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">Grease</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Grease" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Groundwater">
 <span class="sig-name descname"><span class="pre">Groundwater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Groundwater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Heat">
+<span class="sig-name descname"><span class="pre">Heat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Heat" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2401,7 +2419,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Oil">
-<span class="sig-name descname"><span class="pre">Oil</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Oil" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">Oil</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Oil" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
