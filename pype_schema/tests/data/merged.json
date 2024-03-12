@@ -21,7 +21,8 @@
         "DesalOutlet",
         "RecycledWaterOutlet",
         "DrinkingWaterToDistribution",
-        "GasToFacility",
+        "GasToCogen",
+        "GasToBoiler",
         "SewerIntake",
         "MainSewerLine"
     ],
@@ -243,7 +244,16 @@
         "tags": {},
         "virtual_tags": {}
     },
-    "GasToFacility": {
+    "GasToBoiler": {
+        "type": "Pipe",
+        "source": "PowerGrid",
+        "destination": "WWTP",
+        "contents": "NaturalGas",
+        "entry_point": "Boiler",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "GasToCogen": {
         "type": "Pipe",
         "source": "PowerGrid",
         "destination": "WWTP",
@@ -962,6 +972,7 @@
             "AnaerobicDigester",
             "Conditioner",
             "Cogenerator",
+            "Boiler",
             "Flare",
             "VirtualDemand",
             "FOGTank",
@@ -979,6 +990,7 @@
             "ConditionerToCogen",
             "ConditionerToFlare",
             "CogenToFacility",
+            "BoilerToFacility",
             "PrimaryToGT",
             "SecondaryToGT",
             "SecondaryToRAS",
@@ -1315,6 +1327,28 @@
             "units": "foot ** 3 / minute"
         },
         "num_units": 5
+    },
+    "Boiler": {
+        "type": "Boiler",
+        "num_units": 1,
+        "input_contents": ["NaturalGas"],
+        "output_contents": "Heat",
+        "generation_capacity": {
+          "min": null,
+          "max": null,
+          "avg": null,
+          "units": "kW"
+        },
+        "thermal efficiency": 0.8,
+        "tags": {}
+    },
+    "BoilerToFacility": {
+        "type": "Pipe",
+        "source": "Boiler",
+        "destination": "VirtualDemand",
+        "contents": "Heat",
+        "bidirectional": false,
+        "tags": {}
     },
     "Cogenerator": {
         "type": "Cogeneration",

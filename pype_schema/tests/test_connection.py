@@ -71,11 +71,11 @@ def test_set_heating_values(json_path, connection_name, expected):
 @pytest.mark.parametrize(
     "json_path, conn_id_0, conn_id_1, expected",
     [
-        ("../data/sample.json", "GasToFacility", "DesalInlet", True),
+        ("../data/sample.json", "GasToCogen", "DesalInlet", True),
         ("../data/sample.json", "DesalOutlet", "DesalInlet", True),
         ("../data/sample.json", "ElectricToRecycledWater", "ElectricToDesal", False),
         ("../data/sample.json", "CogenToFacility", "ElectricToDesal", False),
-        ("../data/sample.json", "GasToFacility", "CogenToFacility", "TypeError"),
+        ("../data/sample.json", "GasToCogen", "CogenToFacility", "TypeError"),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
