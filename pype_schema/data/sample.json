@@ -21,7 +21,8 @@
     "DesalOutlet",
     "RecycledWaterOutlet",
     "DrinkingWaterToDistribution",
-    "GasToFacility"
+    "GasToCogen",
+    "GasToBoiler"
   ],
   "virtual_tags": {
     "GrossGasProduction": {
@@ -81,6 +82,7 @@
       "AnaerobicDigester",
       "Conditioner",
       "Cogenerator",
+      "Boiler",
       "Flare",
       "VirtualDemand",
       "FOGTank",
@@ -97,7 +99,8 @@
       "DigesterToConditioner",
       "ConditionerToCogen",
       "ConditionerToFlare",
-      "CogenToFacility",
+      "CogenHeatToFacility",
+      "CogenElecToFacility",
       "PrimaryToGT",
       "SecondaryToGT",
       "SecondaryToRAS",
@@ -107,7 +110,8 @@
       "LiftToGrit",
       "FOGToPump",
       "FOGToDigester",
-      "BatteryToFacility"
+      "BatteryToFacility",
+      "BoilerToFacility"
     ]
   },
   "BarScreen": {
@@ -122,11 +126,33 @@
       "units": "MGD"
     }
   },
+  "Boiler": {
+    "type": "Boiler",
+    "num_units": 1,
+    "input_contents": ["NaturalGas"],
+    "output_contents": "Heat",
+    "generation_capacity": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "kW"
+    },
+    "thermal efficiency": 0.8,
+    "tags": {}
+  },
+  "BoilerToFacility": {
+    "type": "Pipe",
+    "source": "Boiler",
+    "destination": "VirtualDemand",
+    "contents": "Heat",
+    "bidirectional": false,
+    "tags": {}
+  },
   "Cogenerator": {
     "type": "Cogeneration",
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
-    "output_contents": "Electricity",
+    "output_contents": ["Electricity", "Heat"],
     "generation_capacity": {
       "min": null,
       "max": null,
@@ -143,7 +169,7 @@
   },
   "VirtualDemand": {
     "type": "Network",
-    "contents": "Electricity",
+    "contents": ["Electricity", "Heat"],
     "tags": {},
     "nodes": [],
     "connections": []
@@ -756,7 +782,16 @@
     "bidirectional": false,
     "tags": {}
   },
-  "GasToFacility": {
+  "GasToBoiler": {
+    "type": "Pipe",
+    "source": "PowerGrid",
+    "destination": "WWTP",
+    "contents": "NaturalGas",
+    "entry_point": "Boiler",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "GasToCogen": {
     "type": "Pipe",
     "source": "PowerGrid",
     "destination": "WWTP",
@@ -793,7 +828,15 @@
     "contents": "ThickenedSludgeBlend",
     "tags": {}
   },
-  "CogenToFacility": {
+  "CogenHeatToFacility": {
+    "type": "Pipe",
+    "source": "Cogenerator",
+    "destination": "VirtualDemand",
+    "contents": "Heat",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "CogenElecToFacility": {
     "type": "Wire",
     "source": "Cogenerator",
     "destination": "VirtualDemand",

@@ -77,7 +77,8 @@
       "DigesterToConditioner",
       "ConditionerToCogen",
       "ConditionerToFlare",
-      "CogenToFacility",
+      "CogenElecToFacility",
+      "CogenHeatToFacility",
       "PrimaryToGT",
       "SecondaryToGT",
       "SecondaryToRAS",
@@ -106,7 +107,7 @@
     "type": "Cogeneration",
     "num_units": 1,
     "input_contents": ["Biogas", "NaturalGas"],
-    "output_contents": "Electricity",
+    "output_contents": ["Electricity", "Heat"],
     "generation_capacity": {
       "min": null,
       "max": null,
@@ -139,7 +140,7 @@
     "type": "Wire",
     "source": "TeslaBattery",
     "destination": "VirtualDemand",
-    "contents": "Electricity",
+    "contents": ["Electricity", "Heat"],
     "bidirectional": true,
     "tags": {}
   },
@@ -781,7 +782,15 @@
     "contents": "ThickenedSludgeBlend",
     "tags": {}
   },
-  "CogenToFacility": {
+  "CogenHeatToFacility": {
+    "type": "Pipe",
+    "source": "Cogenerator",
+    "destination": "VirtualDemand",
+    "contents": "Heat",
+    "bidirectional": false,
+    "tags": {}
+  },
+  "CogenElecToFacility": {
     "type": "Wire",
     "source": "Cogenerator",
     "destination": "VirtualDemand",
