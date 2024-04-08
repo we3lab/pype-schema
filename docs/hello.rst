@@ -41,19 +41,21 @@ The :ref:`visualize` module can be used to view the loaded PyPES representation 
 
 Running the above code should produce the following HTML visualization:
 
-TODO: insert image
+.. image:: _static/utility-graph.png
+  :width: 600
+  :alt: Example directed graph representation of a city's water and energy infrastructure
 
-PyPES models can have nodes nested within nodes. See :
+PyPES models can have nodes nested within nodes. 
+For example, the `WWTP` node nested inside the top-level network can be visualized as follows:
 
 .. code-block:: python
-    
-    from pype_schema.visualize import draw_graph
-    
-    pyvis = True
+        
     node_id = "WWTP"
     draw_graph(network.get_node(node_id), pyvis)
 
-TODO: insert image
+.. image:: _static/wwtp-graph.png
+  :width: 600
+  :alt: Example directed graph representation of a city's wastewater treatment plant (WWTP)
 
 Now, let's discuss some of the components of the graph.
 
@@ -98,8 +100,8 @@ For example, to add a 10,000 gallon storage tank at 1,000 meters elevation to th
     from pype_schema.node import Tank
     from pype_schema.utils import parse_quantity, ContentsType
 
-    volume = utils.parse_quantity(10000, "gal")
-    elevation = utils.parse_quantity(1000, "m")
+    volume = parse_quantity(10000, "gal")
+    elevation = parse_quantity(1000, "m")
 
     # create the battery node
     tank = Tank("StorageTank", ContentsType.DrinkingWater, ContentsType.DrinkingWater, elevation, volume)
@@ -109,7 +111,23 @@ For example, to add a 10,000 gallon storage tank at 1,000 meters elevation to th
     wds.add_node(tank)
 
 Now that there is a node inside the water distribution network, the connection can be modified to have an 
-``entry_point``. The ``entry_point`` and ``exit_point`` attributes allow 
+``entry_point``. The ``entry_point`` and ``exit_point`` attributes allow a user to specify the subnode to which 
+a connection is starting or ending at when the connection goes between levels in the graph. For example, in this
+case we want to specify that the drinking water treatment plant effluent goes not only to the water distribution
+network, but to a specific storage tank within the distribution network:
+
+.. code-block:: python
+
+    from pype_schema.connection import Connection
+
+    wds_conn = network.select_objs(
+        source_id="DrinkingWaterFacility",
+        dest_id="WaterDistribution",
+        obj_type=Connection
+    )
+    wds_conn.entry_point = tank
+
+The next section, :ref:`query_model`, explains querying using ``select_objs`` in further detail.
 
 Rather than adding components to the model one-by-one in Python, 
 a user can edit the JSON file directly and then re-load the model (see :ref:`json_rep`) 
@@ -128,8 +146,6 @@ could query for all connections with ``ContentsType`` are ``NaturalGas`` enterin
 
 .. code-block:: python
 
-    from pype_schema.connection import Connection
-
     ng_conns = network.select_objs(
         dest_id="WWTP",
         contents_type=contents_type.NaturalGas,
@@ -140,12 +156,12 @@ could query for all connections with ``ContentsType`` are ``NaturalGas`` enterin
 Its often more convenient to get all the tags directly. Then, if the data is in CSV format the tags correspond to
 column names that can be operated on:
 
-.. code_block:: python
+.. code-block:: python
 
     from pype_schema.tag import Tag
     import pandas as pd
 
-    pd.read_csv()
+    df = pd.read_csv("../tests/data/sample_array.csv")
 
     ng_tags = network.select_objs(
         dest_id="WWTP",
@@ -153,6 +169,26 @@ column names that can be operated on:
         obj_type=Tag,
         recurse=True
     )
+
+    ng_tag_ids = [tag.id for tag in ng_tags]
+    ng_import_timeseries = df[ng_tag_ids].sum(axis=1)
+
+Then, ``ng_import_timeseries`` could be used for whatever application the user desires. 
+For example, to plot the natural gas imports over time:
+
+.. code-block:: python
+
+    import matplotlib.pyplot as plt
+
+    for tag in ng_tags:
+        plt.plot(df["DateTime"], df[tag.id], label=tag.id)
+
+    plt.plot(df["DateTime"], ng_import_timeseries, label="Total")
+    plt.xlabel("DateTime")
+    plt.ylabel("Natural Gas Imports (m$^3$ / day")
+    plt.show()
+
+TODO: INSERT RESULTING GRAPH
 
 Unit IDs are used to specify identical parallel processes. 
 For example, a cogenerator may have two engines. 

@@ -11,16 +11,16 @@ than a single efficiency value. To define an efficiency curve, first define a fu
 ``set_energy_efficiency()`` to set the ``energy_efficiency`` attribute to that function. ``thermal_efficiency``
 and ``electrical_efficiency`` of ``Cogenerator`` and ``Boiler`` objects can be similarly defined.
 
-.. code_block:: python
+.. code-block:: python
 
     from pype_schema.node import Pump
     from utils import parse_quantity, PumpType, ContentsType
 
-    min_flow = utils.parse_quantity(0, "gpm")
-    max_flow = utils.parse_quantity(1000, "gpm")
-    avg_flow = utils.parse_quantity(750, "gpm")
-    elevation = utils.parse_quantity(10, "m")
-    horsepower = utils.parse_quantity(100, "hp")
+    min_flow = parse_quantity(0, "gpm")
+    max_flow = parse_quantity(1000, "gpm")
+    avg_flow = parse_quantity(750, "gpm")
+    elevation = parse_quantity(10, "m")
+    horsepower = parse_quantity(100, "hp")
 
     def efficiency_curve(flowrate):
         return - (flowrate ** 2)
