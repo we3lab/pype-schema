@@ -26,13 +26,13 @@
   ],
   "virtual_tags": {
     "GrossGasProduction": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
       "operations": "lambda x,y: x + y",
       "contents": "GasBlend",
       "units": "SCFM"
     },
     "GrossGasProductionList": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
       "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
       "contents": "GasBlend",
       "units": "SCFM"
@@ -790,14 +790,12 @@
     "entry_point": "Boiler",
     "bidirectional": false,
     "tags": {
-      "tags": {
         "BoilerGasPurchases": {
           "type": "Flow",
           "units": "SCFM",
           "contents": "NaturalGas",
           "totalized": false
         }
-      }
     }
   },
   "GasToCogen": {
