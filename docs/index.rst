@@ -10,6 +10,7 @@ Welcome to the Python for Process Engineering Schema (PyPES) documentation!
    README <self>
    hello
    json_rep
+   advanced
    CONTRIBUTING
    LICENSE
 

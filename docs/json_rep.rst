@@ -174,6 +174,9 @@ Putting all the above together, we have the following valid PyPES JSON represent
         }
     }
 
+A more complex example is avaiable at 
+`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
+
 .. _node_rep:
 
 Representing Nodes
@@ -183,7 +186,7 @@ The most generic structure of a node is outlined above in :ref:`json_rep`, but t
 There are numerous types of nodes, and each one has a number attributes.
 
 For example, a ``Digestion`` object must have ``id``, ``tags``, ``input_contents``, ``output_contents``, 
-``flowrate``, ``num_units``, and ``digester_type``
+``flowrate``, ``num_units``, and ``digester_type``.
 
 And a complete JSON representation of a digester might be:
 
@@ -291,8 +294,8 @@ Below are two tables: first is all the ``Node`` subclasses and the second the at
     +---------------+--------------------+----------------------+---------------------------------+----------------------------------+-----------------------+-----------------------------+---------------------------+----------------------------+----------------------------+------------------------+----------------------------+----------------------------+------------------------------------+--------------------------------+-------------------------------+--------------------------+---------------------------------+
 
     
-Besides ``id``, ``nodes``, ``connections``, and ``tags`` attributes (which are discussed above in :ref:`json_rep`),
-the JSON format is outlined attribute-by-attribute in the proceeding sections.
+An example of how to define all the potential attributes is available in 
+`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
 
 .. _conn_rep:
 
@@ -301,8 +304,6 @@ Representing Connections
 
 The most generic structure of a node is outlined above in :ref:`json_rep`, but that just scratches the surface. 
 There are numerous types of connections, and each one has a number attributes.
-
-INCLUDE INFORMATION ON ENTRY/EXIT POINTS
 
 .. table:: Description of all potential attributes of ``Connection`` class and subclasses 
 
@@ -348,6 +349,8 @@ INCLUDE INFORMATION ON ENTRY/EXIT POINTS
     | Pipe       | |check|            | |check|              | |check|                  | |check|                | |check|                     | |check|                       | |check|                     | |check|                      | |check|                    | |check|                  | |check|                         | |check|                  | |check|                         |
     +------------+--------------------+----------------------+--------------------------+------------------------+-----------------------------+-------------------------------+-----------------------------+------------------------------+----------------------------+--------------------------+---------------------------------+--------------------------+---------------------------------+
 
+An example of how to define all the potential attributes is available in 
+`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
 
 .. _tag_rep:
 
