@@ -82,8 +82,8 @@ For example we could fill in the wastewater treatment facility with some basic p
 .. code-block:: json
     
     "WWTP": {
-        "nodes": ["ProcessA", "ProcessB", ...],
-        "connections": ["AtoB", ...],
+        "nodes": ["ProcessA", "ProcessB"],
+        "connections": ["AtoB"],
         "ProcessA": {
             "type": "Clarification",
             "input_contents": "UntreatedSewage",
@@ -99,7 +99,6 @@ For example we could fill in the wastewater treatment facility with some basic p
             "destination": "ProcessB",
             "contents": "Electricity"
         }
-        ...
     }
 
 The following sections will detail how to represent different types of nodes (:ref:`node_rep`), 
@@ -407,6 +406,8 @@ Multiple tags can be attached to a node. For example:
         }
     }
 
+.. _vtag_rep:
+
 ``VirtualTag``
 **************
 
@@ -524,12 +525,20 @@ at the lowest level:
                 "dest_unit_id": "total",
                 "contents": "Biogas",
                 "totalized": false
+            },
+            "Digester3GasFlow": {
+                "type": "Flow",
+                "units": "SCFM",
+                "source_unit_id": 3,
+                "dest_unit_id": "total",
+                "contents": "Biogas",
+                "totalized": false
             }
         },
         "virtual_tags": {
             "BiogasProductionCombined": {
-                "tags": ["Digester1GasFlow", "ElectricityGeneration"],
-                "operations": "lambda x, y: x / y",
+                "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
+                "operations": "lambda x, y, z: x + y + z",
                 "units": "SCFM"
             }
         }
@@ -545,12 +554,11 @@ This tag would be located at the facility level since it is combining data from 
         "connections": ["CogenElecToFacility", "DigesterToCogenerator"],
         "virtual_tags": {
             "ElectricalEfficiency": {
-                "tags": ["BiogasProductionCombined", "Digester2GasFlow"],
-                "operations": "lambda x, y: x + y",
+                "tags": ["BiogasProductionCombined", "ElectricityGeneration"],
+                "operations": "lambda x, y: x / y",
                 "units": "SCFM / kW"
             }
-        },
-        ...
+        }
     }
 
 .. table:: Members of ``VirtualTag`` class
@@ -584,52 +592,51 @@ This tag would be located at the facility level since it is combining data from 
 
 .. table:: Members of ``TagType`` enum
 
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Member        | Description                                                                                         | Default Units                                      |
-    +===============+=====================================================================================================+====================================================+
-    | Flow          | flow of any contents (electricity, water, gas, sludge)                                              | kW (electricity) `or` m:sup`3` d:sup:`-1` (fluids) |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Volume        | volume of fluid in a tank                                                                           | m:sup:`3`                                          |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Level         | height of fluid in a tank                                                                           | m                                                  |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Pressure      | force per unit area                                                                                 | Pa                                                 |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Temperature   | average kinetic energy of particles                                                                 | K                                                  |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | RunTime       | binary variable indicating if equipment is on (1) or off (0)                                        | unitless                                           |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | RunStatus     | fraction of time equipment is on                                                                    | unitless                                           |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | VSS           | concentration of volatile suspended solids                                                          | mg L:sup:`-1`                                      |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | TSS           | concentration of total suspended solids                                                             | mg L:sup:`-1`                                      |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | TDS           | concentration of total dissolved solids                                                             | mg L:sup:`-1`                                      |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | COD           | chemical oxygen demand                                                                              | mg L:sup:`-1`                                      |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | BOD           | biochemical oxygen demand                                                                           | mg L:sup:`-1`                                      |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | pH            | measure of acidity                                                                                  | unitless                                           |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Conductivity  | ease with which an electric charge moves                                                            | Siemens m:sup:`-1`                                 |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Turbidity     | the opaqueness of a fluid                                                                           | NTU                                                |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Rotation      | number of revolutions (useful for motors/pumps)                                                     | RPM                                                |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | Efficiency    | fraction of a quantity retained during a process \newline (e.g., conversion of heat to electricity) | unitless                                           |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | StateOfCharge | fraction of max capacity currently available in a battery                                           | unitless                                           |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | InFlow        | flow into a node                                                                                    | kW (electricity) `or` m:sup`3` d:sup:`-1` (fluids) |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | OutFlow       | flow out of a node                                                                                  | kW (electricity) `or` m:sup`3` d:sup:`-1` (fluids) |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-    | NetFlow       | net flow (i.e., flow in minus flow out) of a node                                                   | kW (electricity) `or` m:sup`3` d:sup:`-1` (fluids) |
-    +---------------+-----------------------------------------------------------------------------------------------------+----------------------------------------------------+
-
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Member        | Description                                                                                         | Default Units                                           |
+    +===============+=====================================================================================================+=========================================================+
+    | Flow          | flow of any contents (electricity, water, gas, sludge)                                              | kW (electricity) `or` m\ :sup:`3` d\ :sup:`-1` (fluids) |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Volume        | volume of fluid in a tank                                                                           | m\ :sup:`3`                                             |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Level         | height of fluid in a tank                                                                           | m                                                       |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Pressure      | force per unit area                                                                                 | Pa                                                      |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Temperature   | average kinetic energy of particles                                                                 | K                                                       |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | RunTime       | binary variable indicating if equipment is on (1) or off (0)                                        | unitless                                                |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | RunStatus     | fraction of time equipment is on                                                                    | unitless                                                |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | VSS           | concentration of volatile suspended solids                                                          | mg L\ :sup:`-1`                                         |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | TSS           | concentration of total suspended solids                                                             | mg L\ :sup:`-1`                                         |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | TDS           | concentration of total dissolved solids                                                             | mg L\ :sup:`-1`                                         |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | COD           | chemical oxygen demand                                                                              | mg L\ :sup:`-1`                                         |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | BOD           | biochemical oxygen demand                                                                           | mg L\ :sup:`-1`                                         |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | pH            | measure of acidity                                                                                  | unitless                                                |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Conductivity  | ease with which an electric charge moves                                                            | Siemens m\ :sup:`-1`                                    |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Turbidity     | the opaqueness of a fluid                                                                           | NTU                                                     |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Rotation      | number of revolutions (useful for motors/pumps)                                                     | RPM                                                     |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | Efficiency    | fraction of a quantity retained during a process (e.g., conversion of heat to electricity)          | unitless                                                |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | StateOfCharge | fraction of max capacity currently available in a battery                                           | unitless                                                |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | InFlow        | flow into a node                                                                                    | kW (electricity) `or` m\ :sup:`3` d\ :sup:`-1` (fluids) |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | OutFlow       | flow out of a node                                                                                  | kW (electricity) `or` m\ :sup:`3` d\ :sup:`-1` (fluids) |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
+    | NetFlow       | net flow (i.e., flow in minus flow out) of a node                                                   | kW (electricity) `or` m\ :sup:`3` d\ :sup:`-1` (fluids) |
+    +---------------+-----------------------------------------------------------------------------------------------------+---------------------------------------------------------+
 
 .. _contents_type:
 
@@ -692,9 +699,9 @@ Supported ``ContentsType`` values are shown in the table below.
     +----------------------+-------------------------------------------------------------+
     | NonpotableReuse      | water recovered at non-potable standards                    |
     +----------------------+-------------------------------------------------------------+
-    | Biogas               | mixture of CH:sub:`4` and CO:sub:`2` produced by digesters  |
+    | Biogas               | mix of CH\ :sub:`4` and CO\ :sub:`2` produced by digesters  |
     +----------------------+-------------------------------------------------------------+
-    | NaturalGas           | fossil CH:sub:`4` purchased from the grid                   |
+    | NaturalGas           | fossil CH\ :sub:`4` purchased from the grid                 |
     +----------------------+-------------------------------------------------------------+
     | GasBlend             | a blend of fossil natural gas and biogas                    |
     +----------------------+-------------------------------------------------------------+
@@ -735,6 +742,24 @@ Supported ``ContentsType`` values are shown in the table below.
     | Grease               | grease for any purpose (e.g., digestion or lubrication)     |
     +----------------------+-------------------------------------------------------------+
 
+.. _num_units:
+
+``num_units`` Attribute
+=======================
+
+There are often identical parallel processes in a treatment train. 
+The ``num_units`` attribute exists to ease the effort needed to represent these identical objects.
+
+For example, the anaerobic digester from :ref:`vtag_rep` was specified with three digesters in parallel.
+That example shows how flow from the three digesters can be tracked separately by specifying a 
+``source_unit_id`` or ``dest_unit_id`` for each ``Tag``.
+
+.. code-block:: json
+
+    "num_units": 3
+
+By default ``num_units`` is set to 1, meaning there is only a single instance and no parallel processes.
+
 .. _elevation:
 
 ``elevation`` Attribute
@@ -751,7 +776,7 @@ By default the ``elevation`` attribute is null. To assign an elevation to a node
     "elevation (meters)": 10
 
 Currently, the units are hardcoded as meters, but this will soon be modified to match the dictionary-style unit-parsing
-from ``flowrate`` and ``gen_capacity``.
+from :ref:`flowrate` and :ref:`gen_capacity`.
 
 .. _volume:
 
@@ -769,7 +794,103 @@ By default the ``volume`` attribute is null. To assign a volume to a node, simpl
     "volume (cubic meters)": 10
 
 Currently, the units are hardcoded as cubic meters, but this will soon be modified to match the dictionary-style unit-parsing
-from ``flowrate`` and ``gen_capacity``.
+from :ref:`flowrate` and :ref:`gen_capacity`.
+
+.. _flowrate:
+
+``flow_rate`` Attribute
+=======================
+
+Flow rates in PyPES are defined as tuples of the form ``(min, max, avg)``.
+Any member of the tuple can be left as ``None``. For example, if there is only a minimum of maximum flow rate.
+Units must be specified (e.g., m\ :sup:`3` / day or ft\ :sup:`3` / min) as text strings.
+The average flow rate can also be used to keep track of design flow, which will be between min and max. 
+Note that this is the flow rate for a **single** unit in a parallel process, 
+so the combined flow rate would require multiplying by ``num_units``.
+
+Both `"flowrate"` and `"flow_rate"` are acceptable keys to use in the JSON representation. 
+So the following two represent the same ``flow_rate`` attribute:
+
+.. code-block:: json
+
+    "flowrate": {
+        "min": 0,
+        "max": 1000,
+        "avg": 100,
+        "units": "m3pd"
+    }
+
+.. code-block:: json
+
+    "flowrate": {
+        "min": 0,
+        "max": 1000,
+        "avg": 100,
+        "units": "m3pd"
+    }
+
+Outside of JSON, `node.Node.set_flow_rate <https://we3lab.github.io/pype-schema/node.html#pype_schema.node.Node.select_objs>`_
+can be used to change a ``Node`` or ``Connection`` objects ``flow_rate`` attribute.
+
+.. _gen_capacity:
+
+``gen_capacity`` Attribute
+==========================
+
+Generation capacity of a boiler or cogenerator is represented as a ``(min, max, avg)`` tuple just like the :ref:`flowrate`:.
+Note that this is the generation capacity for a **single** engine if there are multiple, 
+so the combined flow rate would require multiplying by ``num_units``.
+
+Both `"generation_capacity"` and `"gen_capacity"` are acceptable keys to use in the JSON representation.
+
+.. code-block:: json
+
+    "generation_capacity": {
+        "min": 200,
+        "max": 650,
+        "avg": 450,
+        "units": "kW"
+    }
+
+Since both heat and electricity are forms of energy, the generation capacity for the ``Cogenerator`` is tied to the electricity generation
+and for the ``Boiler`` to heat generation. Then, for the ``Cogenerator`` the heat generation capacity can be calculated by converting from
+electricity to heat using ``electrical_efficiency`` and ``thermal_efficiency``.
+
+.. _heat_val:
+
+``heating_values`` Attribute
+============================
+
+.. _capacity:
+
+``capacity`` Attribute
+======================
+
+The ``capacity`` attribute provides the maximum storage capacity for a ``Battery`` object. 
+To assign a value to the ``capacity`` in JSON:
+
+.. code-block:: json
+
+    "capacity (kWh)": 2000
+
+Currently, the units are hardcoded as kilowatt-hours, but this will soon be modified to match the dictionary-style unit-parsing
+from :ref:`flowrate` and :ref:`gen_capacity`.
+
+.. _discharge_rate:
+
+``discharge_rate`` Attribute
+============================
+
+The ``discharge_rate`` attribute provides the maximum rate of discharge 
+(and at the moment charge, but these will be separated in the future) for a ``Battery`` object.
+To assign a value to the ``discharge_rate`` in JSON:
+
+.. code-block:: json
+
+    "discharge_rate (kW)": 10
+
+Currently, the units are hardcoded as kilowatts, but this will soon be modified to match the dictionary-style unit-parsing
+from :ref:`flowrate` and :ref:`gen_capacity`.
 
 .. [1] from `Pint <https://pint.readthedocs.io/en/stable/>`_
 .. [2] ``PumpType`` is an enum that contains two members: ``Constant`` or ``VFD``

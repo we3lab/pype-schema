@@ -10,3 +10,7 @@ td {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.wy-nav-content {
+    max-width: none;
+}

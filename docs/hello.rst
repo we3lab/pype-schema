@@ -176,8 +176,8 @@ column names that can be operated on:
         recurse=True
     )
 
-ng_tag_ids = [tag.id for tag in ng_tags]
-ng_import_timeseries = df[ng_tag_ids].sum(axis=1)
+    ng_tag_ids = [tag.id for tag in ng_tags]
+    ng_import_timeseries = df[ng_tag_ids].sum(axis=1)
 
 Then, ``ng_import_timeseries`` could be used for whatever application the user desires. 
 For example, to plot the natural gas imports over time:
@@ -189,7 +189,7 @@ For example, to plot the natural gas imports over time:
     for tag in ng_tags:
         plt.plot(df[tag.id], label=tag.id)
 
-    plt.plot(ng_import_timeseries, label="Total")
+    plt.plot(ng_import_timeseries, label="TotalGasPurchases")
     plt.xlabel("Hour")
     plt.ylabel("Natural Gas Imports (m$^3$ / day)")
     plt.legend(loc='upper right', bbox_to_anchor=(1.45, 1.0))
