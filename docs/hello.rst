@@ -205,4 +205,4 @@ Therefore, ``dest_unit_id`` was specified as `"total"` because there may be unit
 and summing both unit-level and total tags would lead to overcounting.
 
 There are a number of optional arguments to ``select_objs``, most of which default to ``None``. The function is 
-fully documented in :ref:`node`.
+fully documented in `node.Node.select_objs <https://we3lab.github.io/pype-schema/node.html#pype_schema.node.Node.select_objs>`_.
