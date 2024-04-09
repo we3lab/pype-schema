@@ -104,7 +104,13 @@ For example, to add a 10,000 gallon storage tank at 1,000 meters elevation to th
     elevation = parse_quantity(1000, "m")
 
     # create the battery node
-    tank = Tank("StorageTank", ContentsType.DrinkingWater, ContentsType.DrinkingWater, elevation, volume)
+    tank = Tank(
+        "StorageTank", 
+        ContentsType.DrinkingWater, 
+        ContentsType.DrinkingWater, 
+        elevation, 
+        volume
+    )
 
     # add the node to the facility
     wds = network.get_node("WaterDistribution")
@@ -124,7 +130,7 @@ network, but to a specific storage tank within the distribution network:
         source_id="DrinkingWaterFacility",
         dest_id="WaterDistribution",
         obj_type=Connection
-    )
+    )[0]
     wds_conn.entry_point = tank
 
 The next section, :ref:`query_model`, explains querying using ``select_objs`` in further detail.
@@ -148,7 +154,7 @@ could query for all connections with ``ContentsType`` are ``NaturalGas`` enterin
 
     ng_conns = network.select_objs(
         dest_id="WWTP",
-        contents_type=contents_type.NaturalGas,
+        contents_type=ContentsType.NaturalGas,
         obj_type=Connection,
         recurse=True
     )
@@ -161,17 +167,17 @@ column names that can be operated on:
     from pype_schema.tag import Tag
     import pandas as pd
 
-    df = pd.read_csv("../tests/data/sample_array.csv")
+    df = pd.read_csv("sample_data.csv")
 
     ng_tags = network.select_objs(
         dest_id="WWTP",
-        contents_type=contents_type.NaturalGas,
+        contents_type=ContentsType.NaturalGas,
         obj_type=Tag,
         recurse=True
     )
 
-    ng_tag_ids = [tag.id for tag in ng_tags]
-    ng_import_timeseries = df[ng_tag_ids].sum(axis=1)
+ng_tag_ids = [tag.id for tag in ng_tags]
+ng_import_timeseries = df[ng_tag_ids].sum(axis=1)
 
 Then, ``ng_import_timeseries`` could be used for whatever application the user desires. 
 For example, to plot the natural gas imports over time:
@@ -181,14 +187,17 @@ For example, to plot the natural gas imports over time:
     import matplotlib.pyplot as plt
 
     for tag in ng_tags:
-        plt.plot(df["DateTime"], df[tag.id], label=tag.id)
+        plt.plot(df[tag.id], label=tag.id)
 
-    plt.plot(df["DateTime"], ng_import_timeseries, label="Total")
-    plt.xlabel("DateTime")
-    plt.ylabel("Natural Gas Imports (m$^3$ / day")
-    plt.show()
+    plt.plot(ng_import_timeseries, label="Total")
+    plt.xlabel("Hour")
+    plt.ylabel("Natural Gas Imports (m$^3$ / day)")
+    plt.legend(loc='upper right', bbox_to_anchor=(1.45, 1.0))
+    plt.savefig("ng-imports.png", bbox_inches="tight")
 
-TODO: INSERT RESULTING GRAPH
+.. image:: _static/ng-imports.png
+  :width: 600
+  :alt: Timeseries of natural gas imports to the cogenerator and boiler combined to calculate total imports using PyPES
 
 Unit IDs are used to specify identical parallel processes. 
 For example, a cogenerator may have two engines. 
