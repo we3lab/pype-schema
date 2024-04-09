@@ -1,0 +1,40 @@
+{
+    "connections": [
+        "SuckbackTank2UVSystem", 
+        "ProductPumps2Client", 
+        "LimeDilutionPumps2BrineManagement", 
+        "ProductTanks2BrineManagement"
+    ], 
+    "SuckbackTank2UVSystem": {
+        "type": "Pipe",
+        "source": "SuckbackTank",
+        "destination": "UVSystem",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "ProductPumps2Client": {
+        "type": "Pipe",
+        "source": "ProductPumps",
+        "destination": "Client",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "LimeDilutionPumps2BrineManagement": {
+        "type": "Pipe",
+        "source": "LimeDilutionPumps",
+        "destination": "BrineManagement",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "ProductTanks2BrineManagement": {
+        "type": "Pipe",
+        "source": "ProductTanks",
+        "destination": "BrineManagement",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    }
+}

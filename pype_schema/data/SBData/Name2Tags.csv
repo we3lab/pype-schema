@@ -1,0 +1,96 @@
+name,tag
+MPDA_kW,MPDA_kW
+Train A Product Conductivity (AIT-400-001A),AIT_400_001A_P.PV
+PT Feed Flow (FIT-200-001A),FIT_200_001A_P.PV
+BW Pump P-200-002A  Discharge Flow (FIT-200-002A),FIT_200_002A_P.PV
+BW Tank T-200-003A Feed Flow (FIT-200-004A),FIT_200_004A_P.PV
+Train A  Brine Flow (FIT-400-001A),FIT_400_001A_P.PV
+Train A  Product Flow (FIT-400-002A),FIT_400_002A_P.PV
+BW Tank T-200-003A Level (LIT-200-002A),LT_200_002A_P.PV
+RO Feed Pump P-200-001A  Actual Speed,P_200_001A_P.RPM_MV
+BW Pump P-200-002A  Actual Speed,P_200_002A_P.RPM_MV
+P-400-001A  Actual Speed,P_400_001A_P.RPM_MV
+P-400-002A  Actual Speed,P_400_002A_P.RPM_MV
+Micronic Filters Diff. Pressure (PDIT-200-001A),PDIT_200_001A_P.PV
+Train A  Feed-Brine Diff. Pressure (PDIT-400-001A),PDIT_400_001A_P.PV
+P-400-002A Diff. Pressure (PDIT-400-002A),PDIT_400_002A_P.PV
+P-400-002A Discharge Pressure (PIT-400-003A),PIT_400_003A_P.PV
+Blower Discharge Pressure (PT-200-005A),PT_200_005A_P.PV
+RO Feed Pump P-200-001A  Suction Pressure (PT-200-006A),PT_200_006A_P.PV
+RO Feed Pump P-200-001A  Discharge Flow (Calc.),PT_200A_Tags.Q_Filtrate_PV
+Train A  Feed Flow (Calc.),Q_400_002A
+P-400-002A Suction Pressure (PT-400-002A),PT_400_002A_P.PV
+P-400-002A  Flow (Calc.),Q_400_001A_P.PV
+Train A Recovery PV,RO_300A_Tags.RO.Recovery
+MPDB_kW,MPDB_kW
+Train B Product Conductivity (AIT-400-001B),AIT_400_001B_P.PV
+PT Feed Flow (FIT-200-001B),FIT_200_001B_P.PV
+BW Pump P-200-002B  Discharge Flow (FIT-200-002B),FIT_200_002B_P.PV
+BW Tank T-200-003B Feed Flow (FIT-200-004B),FIT_200_004B_P.PV
+Train B  Brine Flow (FIT-400-001B),FIT_400_001B_P.PV
+Train B  Product Flow (FIT-400-002B),FIT_400_002B_P.PV
+BW Tank T-200-003B Level (LIT-200-002B),LT_200_002B_P.PV
+RO Feed Pump P-200-001B  Actual Speed,P_200_001B_P.RPM_MV
+BW Pump P-200-002B  Actual Speed,P_200_002B_P.RPM_MV
+P-400-001B  Actual Speed,P_400_001B_P.RPM_MV
+P-400-002B  Actual Speed,P_400_002B_P.RPM_MV
+Micronic Filters Diff. Pressure (PDIT-200-001B),PDIT_200_001B_P.PV
+Train B  Feed-Brine Diff. Pressure (PDIT-400-001B),PDIT_400_001B_P.PV
+P-400-002B Diff. Pressure (PDIT-400-002B),PDIT_400_002B_P.PV
+P-400-002B Discharge Pressure (PIT-400-003B),PIT_400_003B_P.PV
+Blower Discharge Pressure (PT-200-005B),PT_200_005B_P.PV
+RO Feed Pump P-200-001B  Suction Pressure (PT-200-006B),PT_200_006B_P.PV
+RO Feed Pump P-200-001B  Discharge Flow (Calc.),PT_200B_Tags.Q_Filtrate_PV
+Train B  Feed Flow (Calc.),Q_400_002B
+P-400-002B Suction Pressure (PT-400-002B),PT_400_002B_P.PV
+P-400-002B  Flow (Calc.),Q_400_001B_P.PV
+Train B Recovery PV,RO_300B_Tags.RO.Recovery
+MPDC_kW,MPDC_kW
+Train C Product Conductivity (AIT-400-001C),AIT_400_001C_P.PV
+PT Feed Flow (FIT-200-001C),FIT_200_001C_P.PV
+BW Pump P-200-002C  Discharge Flow (FIT-200-002C),FIT_200_002C_P.PV
+BW Tank T-200-003C Feed Flow (FIT-200-004C),FIT_200_004C_P.PV
+Train C  Brine Flow (FIT-400-001C),FIT_400_001C_P.PV
+Train C  Product Flow (FIT-400-002C),FIT_400_002C_P.PV
+BW Tank T-200-003C Level (LIT-200-002C),LT_200_002C_P.PV
+RO Feed Pump P-200-001C  Actual Speed,P_200_001C_P.RPM_MV
+BW Pump P-200-002C  Actual Speed,P_200_002C_P.RPM_MV
+P-400-001C  Actual Speed,P_400_001C_P.RPM_MV
+P-400-002C  Actual Speed,P_400_002C_P.RPM_MV
+Micronic Filters Diff. Pressure (PDIT-200-001C),PDIT_200_001C_P.PV
+Train C  Feed-Brine Diff. Pressure (PDIT-400-001C),PDIT_400_001C_P.PV
+P-400-002C Diff. Pressure (PDIT-400-002C),PDIT_400_002C_P.PV
+P-400-002C Discharge Pressure (PIT-400-003C),PIT_400_003C_P.PV
+Blower Discharge Pressure (PT-200-005C),PT_200_005C_P.PV
+RO Feed Pump P-200-001C  Suction Pressure (PT-200-006C),PT_200_006C_P.PV
+RO Feed Pump P-200-001C  Discharge Flow (Calc.),PT_200C_Tags.Q_Filtrate_PV
+Train C  Feed Flow (Calc.),PT_200C_Tags.Q_RO_Feed_PV
+P-400-002C Suction Pressure (PT-400-002C),PT_400_002C_P.PV
+P-400-002C  Flow (Calc.),Q_400_001C_P.PV
+Train C Recovery PV,RO_300C_Tags.RO.Recovery
+Final Product Flow (FIT-900-002),FIT_900_002_P.PV
+Final Product Pressure (PIT-900-003),PIT_900_003_P.PV
+P-900-001/1 Actual Speed,Added by Frits for calc Power
+P-900-001/2 Actual Speed,Added by Frits for calc Power
+Final Product Conductivity (AIT-900-003),AIT_100_003_P.PV
+Lime Water Conductivity (AIT-900-006),AIT_900_006_P.PV
+Intake Discharge Pressure (PIT-100-001),PIT_100_001_P.PV
+Intake Discharge Pressure (PIT-100-002),PT_100_002_P.PV
+Intake Temperature (TIT-100-002),TIT_100_002_P.PV
+Intake Conductivity (AIT-100-001),AIT_100_001_P.PV
+Intake pH (AIT-100-002),AIT_100_002_P.PV
+Intake Flow (FIT-100-001),FIT_100_001_P.PV
+P100-001/1 HoursLast without Interval,P_100_001_1_P.HOURS
+P100-001/2 HoursLast without Interval,P_100_001_2_P.HOURS
+Product Off-Spec Valve CMND (XV-900-008),CV_900_004_P.CV
+Flow Rejected Effluent,FIT_1000_001_P.PV
+UV System Effluent Flow (FIT-900-004)LastSampleDate,FIT_900_004_P.PV
+Dilution Water Flow (FIT-900-005),FIT_900_005_P.PV
+Slurry Preparation Water Flow (FIT-900-006)LastSampleDate,FIT_900_006_P.PV
+P-900-001/1 Suction Pressure (PIT-900-002/1),PIT_900_002_1_P.PV
+P-900-001/2 Suction Pressure (PIT-900-002/2),PIT_900_002_2_P.PV
+CIP Micronic Filter (PDIT-700-001),PDIT_700_001_P.PV
+Calc Rejected Effluent,Q_Brine_Pumps
+PSCA_kW,PSCA_kW
+PowerDesal_pf,PowerDesal_pf
+PowerDesal_kVA,PowerDesal_kVA

@@ -1,0 +1,906 @@
+~/repos/WE3_SB_Desal
+============================= test session starts ==============================
+platform darwin -- Python 3.9.18, pytest-7.4.4, pluggy-1.3.0
+rootdir: /Users/liuyingli/repos/pype-schema
+configfile: setup.cfg
+plugins: cov-5.0.0, anyio-4.2.0
+collected 135 items
+
+pype_schema/tests/test_connection.py ........                            [  5%]
+pype_schema/tests/test_node.py FFFF...F.FFF......FFFF..FF..FF.FFFF...... [ 36%]
+......................                                                   [ 52%]
+pype_schema/tests/test_operations.py .....                               [ 56%]
+pype_schema/tests/test_parse_json.py F.F....                             [ 61%]
+pype_schema/tests/test_tag.py ..................................         [ 86%]
+pype_schema/tests/test_utils.py ............                             [ 95%]
+pype_schema/tests/test_visualize.py ......                               [100%]
+
+=================================== FAILURES ===================================
+_____ test_get_tag[data/node.json-PumpRuntime-data/top_level_node_tag.pkl] _____
+
+json_path = 'data/node.json', tag_name = 'PumpRuntime'
+expected_path = 'data/top_level_node_tag.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_name, expected_path",
+        [
+            ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
+            ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
+            ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
+            (
+                "data/node.json",
+                "Digester1GasFlow",
+                "data/lower_level_connection_tag.pkl",
+            ),
+            ("data/node.json", "NonexistentTag", None),
+        ],
+    )
+    def test_get_tag(json_path, tag_name, expected_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+        tag = result.get_tag(tag_name, recurse=True)
+    
+        expected = None
+        if expected_path:
+            with open(expected_path, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:45: ModuleNotFoundError
+_ test_get_tag[data/node.json-ElectricityPurchases-data/top_level_connection_tag.pkl] _
+
+json_path = 'data/node.json', tag_name = 'ElectricityPurchases'
+expected_path = 'data/top_level_connection_tag.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_name, expected_path",
+        [
+            ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
+            ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
+            ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
+            (
+                "data/node.json",
+                "Digester1GasFlow",
+                "data/lower_level_connection_tag.pkl",
+            ),
+            ("data/node.json", "NonexistentTag", None),
+        ],
+    )
+    def test_get_tag(json_path, tag_name, expected_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+        tag = result.get_tag(tag_name, recurse=True)
+    
+        expected = None
+        if expected_path:
+            with open(expected_path, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:45: ModuleNotFoundError
+__ test_get_tag[data/node.json-Digester1Level-data/lower_level_node_tag.pkl] ___
+
+json_path = 'data/node.json', tag_name = 'Digester1Level'
+expected_path = 'data/lower_level_node_tag.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_name, expected_path",
+        [
+            ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
+            ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
+            ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
+            (
+                "data/node.json",
+                "Digester1GasFlow",
+                "data/lower_level_connection_tag.pkl",
+            ),
+            ("data/node.json", "NonexistentTag", None),
+        ],
+    )
+    def test_get_tag(json_path, tag_name, expected_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+        tag = result.get_tag(tag_name, recurse=True)
+    
+        expected = None
+        if expected_path:
+            with open(expected_path, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:45: ModuleNotFoundError
+_ test_get_tag[data/node.json-Digester1GasFlow-data/lower_level_connection_tag.pkl] _
+
+json_path = 'data/node.json', tag_name = 'Digester1GasFlow'
+expected_path = 'data/lower_level_connection_tag.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_name, expected_path",
+        [
+            ("data/node.json", "PumpRuntime", "data/top_level_node_tag.pkl"),
+            ("data/node.json", "ElectricityPurchases", "data/top_level_connection_tag.pkl"),
+            ("data/node.json", "Digester1Level", "data/lower_level_node_tag.pkl"),
+            (
+                "data/node.json",
+                "Digester1GasFlow",
+                "data/lower_level_connection_tag.pkl",
+            ),
+            ("data/node.json", "NonexistentTag", None),
+        ],
+    )
+    def test_get_tag(json_path, tag_name, expected_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+        tag = result.get_tag(tag_name, recurse=True)
+    
+        expected = None
+        if expected_path:
+            with open(expected_path, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:45: ModuleNotFoundError
+_ test_get_node_or_connection[data/node.json-SewerIntake-False-data/sewer_intake.pkl] _
+
+json_path = 'data/node.json', obj_id = 'SewerIntake', recurse = False
+expected = 'data/sewer_intake.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, obj_id, recurse, expected",
+        [
+            ("data/node.json", "Cogenerator", False, None),
+            (
+                "data/node.json",
+                "Cogenerator",
+                True,
+                Cogeneration(
+                    "Cogenerator",
+                    [ContentsType.Biogas, ContentsType.NaturalGas],
+                    400 * u.kW,
+                    750 * u.kW,
+                    600 * u.kW,
+                    1,
+                ),
+            ),
+            ("data/node.json", "SewerIntake", False, "data/sewer_intake.pkl"),
+            ("data/node.json", "InvalidID", True, None),
+        ],
+    )
+    def test_get_node_or_connection(json_path, obj_id, recurse, expected):
+        result = (
+            JSONParser(json_path)
+            .initialize_network()
+            .get_node_or_connection(obj_id, recurse=recurse)
+        )
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:80: ModuleNotFoundError
+_ test_get_all[data/node.json-False-False-data/top_level_connections.pkl-data/top_level_nodes.pkl-data/top_level_tags.pkl] _
+
+json_path = 'data/node.json', virtual = False, recurse = False
+connection_path = 'data/top_level_connections.pkl'
+node_path = 'data/top_level_nodes.pkl', tag_path = 'data/top_level_tags.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, virtual, recurse, connection_path, node_path, tag_path",
+        [
+            (
+                "data/node.json",
+                False,
+                False,
+                "data/top_level_connections.pkl",
+                "data/top_level_nodes.pkl",
+                "data/top_level_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                False,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                True,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags_virtual.pkl",
+            ),
+        ],
+    )
+    def test_get_all(json_path, virtual, recurse, connection_path, node_path, tag_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+    
+        with open(connection_path, "rb") as pickle_file:
+>           connections = pickle.load(pickle_file)
+E           ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:120: ModuleNotFoundError
+_ test_get_all[data/node.json-False-True-data/all_connections.pkl-data/all_nodes.pkl-data/all_tags.pkl] _
+
+json_path = 'data/node.json', virtual = False, recurse = True
+connection_path = 'data/all_connections.pkl', node_path = 'data/all_nodes.pkl'
+tag_path = 'data/all_tags.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, virtual, recurse, connection_path, node_path, tag_path",
+        [
+            (
+                "data/node.json",
+                False,
+                False,
+                "data/top_level_connections.pkl",
+                "data/top_level_nodes.pkl",
+                "data/top_level_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                False,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                True,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags_virtual.pkl",
+            ),
+        ],
+    )
+    def test_get_all(json_path, virtual, recurse, connection_path, node_path, tag_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+    
+        with open(connection_path, "rb") as pickle_file:
+>           connections = pickle.load(pickle_file)
+E           ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:120: ModuleNotFoundError
+_ test_get_all[data/node.json-True-True-data/all_connections.pkl-data/all_nodes.pkl-data/all_tags_virtual.pkl] _
+
+json_path = 'data/node.json', virtual = True, recurse = True
+connection_path = 'data/all_connections.pkl', node_path = 'data/all_nodes.pkl'
+tag_path = 'data/all_tags_virtual.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, virtual, recurse, connection_path, node_path, tag_path",
+        [
+            (
+                "data/node.json",
+                False,
+                False,
+                "data/top_level_connections.pkl",
+                "data/top_level_nodes.pkl",
+                "data/top_level_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                False,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags.pkl",
+            ),
+            (
+                "data/node.json",
+                True,
+                True,
+                "data/all_connections.pkl",
+                "data/all_nodes.pkl",
+                "data/all_tags_virtual.pkl",
+            ),
+        ],
+    )
+    def test_get_all(json_path, virtual, recurse, connection_path, node_path, tag_path):
+        parser = JSONParser(json_path)
+        result = parser.initialize_network()
+    
+        with open(connection_path, "rb") as pickle_file:
+>           connections = pickle.load(pickle_file)
+E           ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:120: ModuleNotFoundError
+_ test_get_list_of_type[data/node.json-Pipe-False-data/get_pipe_no_recurse.pkl] _
+
+json_path = 'data/node.json'
+desired_type = <class 'pype_schema.connection.Pipe'>, recurse = False
+expected = 'data/get_pipe_no_recurse.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, desired_type, recurse, expected",
+        [
+            ("data/node.json", None, False, "TypeError"),
+            ("data/node.json", Cogeneration, False, []),
+            ("data/node.json", Pipe, False, "data/get_pipe_no_recurse.pkl"),
+            ("data/connection.json", Cogeneration, False, "data/get_cogen.pkl"),
+            ("data/node.json", Cogeneration, True, "data/get_cogen.pkl"),
+            ("data/node.json", Pipe, True, "data/get_pipe_recurse.pkl"),
+        ],
+    )
+    def test_get_list_of_type(json_path, desired_type, recurse, expected):
+        try:
+            parser = JSONParser(json_path)
+            result = parser.initialize_network().get_list_of_type(desired_type, recurse)
+    
+            if isinstance(expected, str) and os.path.isfile(expected):
+                with open(expected, "rb") as pickle_file:
+                    expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+    
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/get_pipe_no_recurse.pkl'
+E         - data/get_pipe_no_recurse.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:191: AssertionError
+_ test_get_list_of_type[data/connection.json-Cogeneration-False-data/get_cogen.pkl] _
+
+json_path = 'data/connection.json'
+desired_type = <class 'pype_schema.node.Cogeneration'>, recurse = False
+expected = 'data/get_cogen.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, desired_type, recurse, expected",
+        [
+            ("data/node.json", None, False, "TypeError"),
+            ("data/node.json", Cogeneration, False, []),
+            ("data/node.json", Pipe, False, "data/get_pipe_no_recurse.pkl"),
+            ("data/connection.json", Cogeneration, False, "data/get_cogen.pkl"),
+            ("data/node.json", Cogeneration, True, "data/get_cogen.pkl"),
+            ("data/node.json", Pipe, True, "data/get_pipe_recurse.pkl"),
+        ],
+    )
+    def test_get_list_of_type(json_path, desired_type, recurse, expected):
+        try:
+            parser = JSONParser(json_path)
+            result = parser.initialize_network().get_list_of_type(desired_type, recurse)
+    
+            if isinstance(expected, str) and os.path.isfile(expected):
+                with open(expected, "rb") as pickle_file:
+                    expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+    
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/get_cogen.pkl'
+E         - data/get_cogen.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:191: AssertionError
+__ test_get_list_of_type[data/node.json-Cogeneration-True-data/get_cogen.pkl] __
+
+json_path = 'data/node.json'
+desired_type = <class 'pype_schema.node.Cogeneration'>, recurse = True
+expected = 'data/get_cogen.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, desired_type, recurse, expected",
+        [
+            ("data/node.json", None, False, "TypeError"),
+            ("data/node.json", Cogeneration, False, []),
+            ("data/node.json", Pipe, False, "data/get_pipe_no_recurse.pkl"),
+            ("data/connection.json", Cogeneration, False, "data/get_cogen.pkl"),
+            ("data/node.json", Cogeneration, True, "data/get_cogen.pkl"),
+            ("data/node.json", Pipe, True, "data/get_pipe_recurse.pkl"),
+        ],
+    )
+    def test_get_list_of_type(json_path, desired_type, recurse, expected):
+        try:
+            parser = JSONParser(json_path)
+            result = parser.initialize_network().get_list_of_type(desired_type, recurse)
+    
+            if isinstance(expected, str) and os.path.isfile(expected):
+                with open(expected, "rb") as pickle_file:
+                    expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+    
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/get_cogen.pkl'
+E         - data/get_cogen.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:191: AssertionError
+__ test_get_list_of_type[data/node.json-Pipe-True-data/get_pipe_recurse.pkl] ___
+
+json_path = 'data/node.json'
+desired_type = <class 'pype_schema.connection.Pipe'>, recurse = True
+expected = 'data/get_pipe_recurse.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, desired_type, recurse, expected",
+        [
+            ("data/node.json", None, False, "TypeError"),
+            ("data/node.json", Cogeneration, False, []),
+            ("data/node.json", Pipe, False, "data/get_pipe_no_recurse.pkl"),
+            ("data/connection.json", Cogeneration, False, "data/get_cogen.pkl"),
+            ("data/node.json", Cogeneration, True, "data/get_cogen.pkl"),
+            ("data/node.json", Pipe, True, "data/get_pipe_recurse.pkl"),
+        ],
+    )
+    def test_get_list_of_type(json_path, desired_type, recurse, expected):
+        try:
+            parser = JSONParser(json_path)
+            result = parser.initialize_network().get_list_of_type(desired_type, recurse)
+    
+            if isinstance(expected, str) and os.path.isfile(expected):
+                with open(expected, "rb") as pickle_file:
+                    expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+    
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/get_pipe_recurse.pkl'
+E         - data/get_pipe_recurse.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:191: AssertionError
+_ test_get_all_connections_to[data/node.json-Cogenerator-data/connection_to_cogen.pkl] _
+
+json_path = 'data/node.json', node_id = 'Cogenerator'
+expected = 'data/connection_to_cogen.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, node_id, expected",
+        [
+            # Case 1: node does not exist
+            ("data/node.json", "InvalidNode", []),
+            # Case 2: no incoming connections but node exists
+            ("data/node.json", "RawSewagePump", []),
+            # Case 3: only normal connections
+            ("data/node.json", "Cogenerator", "data/connection_to_cogen.pkl"),
+            # Case  4: normal connections and entry_point
+            ("data/node.json", "Digester", "data/connection_to_digester.pkl"),
+        ],
+    )
+    def test_get_all_connections_to(json_path, node_id, expected):
+        parser = JSONParser(json_path)
+        config = parser.initialize_network()
+        result = config.get_all_connections_to(config.get_node(node_id, recurse=True))
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:214: ModuleNotFoundError
+_ test_get_all_connections_to[data/node.json-Digester-data/connection_to_digester.pkl] _
+
+json_path = 'data/node.json', node_id = 'Digester'
+expected = 'data/connection_to_digester.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, node_id, expected",
+        [
+            # Case 1: node does not exist
+            ("data/node.json", "InvalidNode", []),
+            # Case 2: no incoming connections but node exists
+            ("data/node.json", "RawSewagePump", []),
+            # Case 3: only normal connections
+            ("data/node.json", "Cogenerator", "data/connection_to_cogen.pkl"),
+            # Case  4: normal connections and entry_point
+            ("data/node.json", "Digester", "data/connection_to_digester.pkl"),
+        ],
+    )
+    def test_get_all_connections_to(json_path, node_id, expected):
+        parser = JSONParser(json_path)
+        config = parser.initialize_network()
+        result = config.get_all_connections_to(config.get_node(node_id, recurse=True))
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:214: ModuleNotFoundError
+_ test_get_all_connections_from[data/node.json-RawSewagePump-data/connection_from_sewer.pkl] _
+
+json_path = 'data/node.json', node_id = 'RawSewagePump'
+expected = 'data/connection_from_sewer.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, node_id, expected",
+        [
+            # # Case 1: node does not exist
+            ("data/node.json", "InvalidNode", []),
+            # # Case 2: no outgoing connections but node exists
+            ("data/node.json", "Cogenerator", []),
+            # Case 3: only normal connections
+            ("data/node.json", "RawSewagePump", "data/connection_from_sewer.pkl"),
+            # Case 4: normal connections and exit_point
+            ("data/node.json", "Digester", "data/connection_from_digester.pkl"),
+        ],
+    )
+    def test_get_all_connections_from(json_path, node_id, expected):
+        parser = JSONParser(json_path)
+        config = parser.initialize_network()
+        result = config.get_all_connections_from(config.get_node(node_id, recurse=True))
+    
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:239: ModuleNotFoundError
+_ test_get_all_connections_from[data/node.json-Digester-data/connection_from_digester.pkl] _
+
+json_path = 'data/node.json', node_id = 'Digester'
+expected = 'data/connection_from_digester.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, node_id, expected",
+        [
+            # # Case 1: node does not exist
+            ("data/node.json", "InvalidNode", []),
+            # # Case 2: no outgoing connections but node exists
+            ("data/node.json", "Cogenerator", []),
+            # Case 3: only normal connections
+            ("data/node.json", "RawSewagePump", "data/connection_from_sewer.pkl"),
+            # Case 4: normal connections and exit_point
+            ("data/node.json", "Digester", "data/connection_from_digester.pkl"),
+        ],
+    )
+    def test_get_all_connections_from(json_path, node_id, expected):
+        parser = JSONParser(json_path)
+        config = parser.initialize_network()
+        result = config.get_all_connections_from(config.get_node(node_id, recurse=True))
+    
+        if isinstance(expected, str) and os.path.isfile(expected):
+            with open(expected, "rb") as pickle_file:
+>               expected = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:239: ModuleNotFoundError
+_ test_get_parent_from_tag[data/node.json-data/top_level_connection_tag.pkl-data/electricty_to_wwtp.pkl] _
+
+json_path = 'data/node.json', tag_path = 'data/top_level_connection_tag.pkl'
+expected = 'data/electricty_to_wwtp.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_path, expected",
+        [
+            # Case 1: tag does not exist
+            ("data/node.json", "NonexistentTag", None),
+            # Case 2: tag exists at a top level connection
+            (
+                "data/node.json",
+                "data/top_level_connection_tag.pkl",
+                "data/electricty_to_wwtp.pkl",
+            ),
+            # Case 3: tag exists at a lower level connection
+            (
+                "data/node.json",
+                "data/lower_level_connection_tag.pkl",
+                "data/gas_to_cogen.pkl",
+            ),
+            # Case 4: tag exists at a top level node
+            ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
+            # Case 5: tag exists at a lower level node
+            ("data/node.json", "data/lower_level_node_tag.pkl", "data/digester.pkl"),
+        ],
+    )
+    def test_get_parent_from_tag(json_path, tag_path, expected):
+        if isinstance(tag_path, str) and os.path.isfile(tag_path):
+            with open(tag_path, "rb") as pickle_file:
+>               tag = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:271: ModuleNotFoundError
+_ test_get_parent_from_tag[data/node.json-data/lower_level_connection_tag.pkl-data/gas_to_cogen.pkl] _
+
+json_path = 'data/node.json', tag_path = 'data/lower_level_connection_tag.pkl'
+expected = 'data/gas_to_cogen.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_path, expected",
+        [
+            # Case 1: tag does not exist
+            ("data/node.json", "NonexistentTag", None),
+            # Case 2: tag exists at a top level connection
+            (
+                "data/node.json",
+                "data/top_level_connection_tag.pkl",
+                "data/electricty_to_wwtp.pkl",
+            ),
+            # Case 3: tag exists at a lower level connection
+            (
+                "data/node.json",
+                "data/lower_level_connection_tag.pkl",
+                "data/gas_to_cogen.pkl",
+            ),
+            # Case 4: tag exists at a top level node
+            ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
+            # Case 5: tag exists at a lower level node
+            ("data/node.json", "data/lower_level_node_tag.pkl", "data/digester.pkl"),
+        ],
+    )
+    def test_get_parent_from_tag(json_path, tag_path, expected):
+        if isinstance(tag_path, str) and os.path.isfile(tag_path):
+            with open(tag_path, "rb") as pickle_file:
+>               tag = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:271: ModuleNotFoundError
+_ test_get_parent_from_tag[data/node.json-data/top_level_node_tag.pkl-data/sewage_pump.pkl] _
+
+json_path = 'data/node.json', tag_path = 'data/top_level_node_tag.pkl'
+expected = 'data/sewage_pump.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_path, expected",
+        [
+            # Case 1: tag does not exist
+            ("data/node.json", "NonexistentTag", None),
+            # Case 2: tag exists at a top level connection
+            (
+                "data/node.json",
+                "data/top_level_connection_tag.pkl",
+                "data/electricty_to_wwtp.pkl",
+            ),
+            # Case 3: tag exists at a lower level connection
+            (
+                "data/node.json",
+                "data/lower_level_connection_tag.pkl",
+                "data/gas_to_cogen.pkl",
+            ),
+            # Case 4: tag exists at a top level node
+            ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
+            # Case 5: tag exists at a lower level node
+            ("data/node.json", "data/lower_level_node_tag.pkl", "data/digester.pkl"),
+        ],
+    )
+    def test_get_parent_from_tag(json_path, tag_path, expected):
+        if isinstance(tag_path, str) and os.path.isfile(tag_path):
+            with open(tag_path, "rb") as pickle_file:
+>               tag = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:271: ModuleNotFoundError
+_ test_get_parent_from_tag[data/node.json-data/lower_level_node_tag.pkl-data/digester.pkl] _
+
+json_path = 'data/node.json', tag_path = 'data/lower_level_node_tag.pkl'
+expected = 'data/digester.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, tag_path, expected",
+        [
+            # Case 1: tag does not exist
+            ("data/node.json", "NonexistentTag", None),
+            # Case 2: tag exists at a top level connection
+            (
+                "data/node.json",
+                "data/top_level_connection_tag.pkl",
+                "data/electricty_to_wwtp.pkl",
+            ),
+            # Case 3: tag exists at a lower level connection
+            (
+                "data/node.json",
+                "data/lower_level_connection_tag.pkl",
+                "data/gas_to_cogen.pkl",
+            ),
+            # Case 4: tag exists at a top level node
+            ("data/node.json", "data/top_level_node_tag.pkl", "data/sewage_pump.pkl"),
+            # Case 5: tag exists at a lower level node
+            ("data/node.json", "data/lower_level_node_tag.pkl", "data/digester.pkl"),
+        ],
+    )
+    def test_get_parent_from_tag(json_path, tag_path, expected):
+        if isinstance(tag_path, str) and os.path.isfile(tag_path):
+            with open(tag_path, "rb") as pickle_file:
+>               tag = pickle.load(pickle_file)
+E               ModuleNotFoundError: No module named 'pint.facets'
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_node.py:271: ModuleNotFoundError
+___________ test_create_network[../data/sample.json-data/sample.pkl] ___________
+
+json_path = '../data/sample.json', expected_path = 'data/sample.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, expected_path",
+        [
+            ("../data/sample.json", "data/sample.pkl"),
+            ("data/key_error.json", "KeyError"),
+            ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
+        ],
+    )
+    def test_create_network(json_path, expected_path):
+        parser = JSONParser(json_path)
+        try:
+            result = parser.initialize_network(verbose=True)
+            with open(expected_path, "rb") as pickle_file:
+                expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+            expected = expected_path
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/sample.pkl'
+E         - data/sample.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_parse_json.py:35: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Initializing network, adding node WWTP...
+Initializing network, adding node DrinkingWaterFacility...
+Initializing network, adding node PowerGrid...
+Initializing network, adding node WaterDistribution...
+Initializing network, adding node SewerNetwork...
+Initializing network, adding node RecycledWaterFacility...
+Initializing network, adding node PurplePipeSystem...
+Initializing network, adding node DesalPlant...
+Initializing network, adding node Ocean...
+Initializing network, adding connection SewerIntake...
+Initializing network, adding connection WWTPToRecycledWater...
+Initializing network, adding connection ElectricToWWTP...
+Initializing network, adding connection ElectricToRecycledWater...
+Initializing network, adding connection ElectricToDesal...
+Initializing network, adding connection DesalWaste...
+Initializing network, adding connection DesalInlet...
+Initializing network, adding connection DesalOutlet...
+Initializing network, adding connection RecycledWaterOutlet...
+Initializing network, adding connection DrinkingWaterToDistribution...
+Initializing network, adding connection GasToCogen...
+Initializing network, adding connection GasToBoiler...
+Parsing virtual tag GrossGasProduction...
+Initializing network, adding virtual tag GrossGasProduction to ParentNetwork...
+Parsing virtual tag GrossGasProductionList...
+Initializing network, adding virtual tag GrossGasProductionList to ParentNetwork...
+Parsing virtual tag ElectricityProductionByGasVolume...
+Initializing network, adding virtual tag ElectricityProductionByGasVolume to ParentNetwork...
+Parsing virtual tag NoGasPurchases...
+Initializing network, adding virtual tag NoGasPurchases to GasToCogen...
+Parsing virtual tag NoGasPurchasesList...
+Initializing network, adding virtual tag NoGasPurchasesList to GasToCogen...
+Parsing virtual tag ElectricityGeneration_RShift2...
+Initializing network, adding virtual tag ElectricityGeneration_RShift2 to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_RShift2_List...
+Initializing network, adding virtual tag ElectricityGeneration_RShift2_List to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_LShift1...
+Initializing network, adding virtual tag ElectricityGeneration_LShift1 to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_LShift1_List...
+Initializing network, adding virtual tag ElectricityGeneration_LShift1_List to CogenElecToFacility...
+Parsing virtual tag ElectricityGenDelta...
+Initializing network, adding virtual tag ElectricityGenDelta to CogenElecToFacility...
+_ test_create_network[data/sample_nested_vtag.json-data/sample_nested_vtag.pkl] _
+
+json_path = 'data/sample_nested_vtag.json'
+expected_path = 'data/sample_nested_vtag.pkl'
+
+    @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+    @pytest.mark.parametrize(
+        "json_path, expected_path",
+        [
+            ("../data/sample.json", "data/sample.pkl"),
+            ("data/key_error.json", "KeyError"),
+            ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
+        ],
+    )
+    def test_create_network(json_path, expected_path):
+        parser = JSONParser(json_path)
+        try:
+            result = parser.initialize_network(verbose=True)
+            with open(expected_path, "rb") as pickle_file:
+                expected = pickle.load(pickle_file)
+        except Exception as err:
+            result = type(err).__name__
+            expected = expected_path
+>       assert result == expected
+E       AssertionError: assert 'ModuleNotFoundError' == 'data/sample_nested_vtag.pkl'
+E         - data/sample_nested_vtag.pkl
+E         + ModuleNotFoundError
+
+/Users/liuyingli/repos/pype-schema/pype_schema/tests/test_parse_json.py:35: AssertionError
+----------------------------- Captured stdout call -----------------------------
+Initializing network, adding node WWTP...
+Initializing network, adding node DrinkingWaterFacility...
+Initializing network, adding node PowerGrid...
+Initializing network, adding node WaterDistribution...
+Initializing network, adding node SewerNetwork...
+Initializing network, adding node RecycledWaterFacility...
+Initializing network, adding node PurplePipeSystem...
+Initializing network, adding node DesalPlant...
+Initializing network, adding node Ocean...
+Initializing network, adding connection SewerIntake...
+Initializing network, adding connection WWTPToRecycledWater...
+Initializing network, adding connection ElectricToWWTP...
+Initializing network, adding connection ElectricToRecycledWater...
+Initializing network, adding connection ElectricToDesal...
+Initializing network, adding connection DesalWaste...
+Initializing network, adding connection DesalInlet...
+Initializing network, adding connection DesalOutlet...
+Initializing network, adding connection RecycledWaterOutlet...
+Initializing network, adding connection DrinkingWaterToDistribution...
+Initializing network, adding connection GasToFacility...
+Parsing virtual tag Conditioner_Biogas_OutFlow...
+Initializing network, adding virtual tag Conditioner_Biogas_OutFlow to Conditioner...
+Parsing virtual tag NoGasPurchases...
+Initializing network, adding virtual tag NoGasPurchases to GasToFacility...
+Parsing virtual tag NoGasPurchasesList...
+Initializing network, adding virtual tag NoGasPurchasesList to GasToFacility...
+Parsing virtual tag ElectricityGeneration_RShift2...
+Initializing network, adding virtual tag ElectricityGeneration_RShift2 to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_RShift2_List...
+Initializing network, adding virtual tag ElectricityGeneration_RShift2_List to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_LShift1...
+Initializing network, adding virtual tag ElectricityGeneration_LShift1 to CogenElecToFacility...
+Parsing virtual tag ElectricityGeneration_LShift1_List...
+Initializing network, adding virtual tag ElectricityGeneration_LShift1_List to CogenElecToFacility...
+Parsing virtual tag ElectricityGenDelta...
+Initializing network, adding virtual tag ElectricityGenDelta to CogenElecToFacility...
+=============================== warnings summary ===============================
+pype_schema/tests/test_parse_json.py::test_create_network[data/sample_nested_vtag.json-data/sample_nested_vtag.pkl]
+  /Users/liuyingli/repos/pype-schema/pype_schema/tag.py:291: UserWarning: Tags should have the same value for 'totalized'. Setting `totalized` to false under the assumption that data has been cleaned and detotalized already.
+    warnings.warn(
+
+pype_schema/tests/test_tag.py::test_calculate_values[../data/sample.json-data/sample_data.csv-GrossGasProduction-Array-ValueError-SCFM]
+  /Users/liuyingli/miniconda3/envs/WE3/lib/python3.9/site-packages/pandas/core/dtypes/cast.py:1841: DeprecationWarning: np.find_common_type is deprecated.  Please use `np.result_type` or `np.promote_types`.
+  See https://numpy.org/devdocs/release/1.25.0-notes.html and the docs for more information.  (Deprecated NumPy 1.25)
+    return np.find_common_type(types, [])
+
+pype_schema/tests/test_tag.py::test_calculate_values[../data/sample.json-data/sample_array.csv-GrossGasProduction-Invalid-TypeError-SCFM]
+pype_schema/tests/test_tag.py::test_calculate_values[../data/sample.json-data/elec_gen.csv-ElectricityGeneration_LShift1-Invalid-TypeError-kWh]
+  /Users/liuyingli/repos/pype-schema/pype_schema/tests/test_tag.py:227: FutureWarning: The default dtype for empty Series will be 'object' instead of 'float64' in a future version. Specify a dtype explicitly to silence this warning.
+    data = pd.Series([])
+
+pype_schema/tests/test_visualize.py::test_create_network[../data/sample.json-RecycledWaterFacility-False]
+  /Users/liuyingli/miniconda3/envs/WE3/lib/python3.9/site-packages/networkx/drawing/nx_pylab.py:304: DeprecationWarning: `alltrue` is deprecated as of NumPy 1.25.0, and will be removed in NumPy 2.0. Please use `all` instead.
+    draw_networkx_edges(G, pos, arrows=arrows, **edge_kwds)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform darwin, python 3.9.18-final-0 ----------
+Coverage HTML written to dir htmlcov
+
+=========================== short test summary info ============================
+FAILED pype_schema/tests/test_node.py::test_get_tag[data/node.json-PumpRuntime-data/top_level_node_tag.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_tag[data/node.json-ElectricityPurchases-data/top_level_connection_tag.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_tag[data/node.json-Digester1Level-data/lower_level_node_tag.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_tag[data/node.json-Digester1GasFlow-data/lower_level_connection_tag.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_node_or_connection[data/node.json-SewerIntake-False-data/sewer_intake.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all[data/node.json-False-False-data/top_level_connections.pkl-data/top_level_nodes.pkl-data/top_level_tags.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all[data/node.json-False-True-data/all_connections.pkl-data/all_nodes.pkl-data/all_tags.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all[data/node.json-True-True-data/all_connections.pkl-data/all_nodes.pkl-data/all_tags_virtual.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_list_of_type[data/node.json-Pipe-False-data/get_pipe_no_recurse.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_list_of_type[data/connection.json-Cogeneration-False-data/get_cogen.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_list_of_type[data/node.json-Cogeneration-True-data/get_cogen.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_list_of_type[data/node.json-Pipe-True-data/get_pipe_recurse.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all_connections_to[data/node.json-Cogenerator-data/connection_to_cogen.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all_connections_to[data/node.json-Digester-data/connection_to_digester.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all_connections_from[data/node.json-RawSewagePump-data/connection_from_sewer.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_all_connections_from[data/node.json-Digester-data/connection_from_digester.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_parent_from_tag[data/node.json-data/top_level_connection_tag.pkl-data/electricty_to_wwtp.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_parent_from_tag[data/node.json-data/lower_level_connection_tag.pkl-data/gas_to_cogen.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_parent_from_tag[data/node.json-data/top_level_node_tag.pkl-data/sewage_pump.pkl]
+FAILED pype_schema/tests/test_node.py::test_get_parent_from_tag[data/node.json-data/lower_level_node_tag.pkl-data/digester.pkl]
+FAILED pype_schema/tests/test_parse_json.py::test_create_network[../data/sample.json-data/sample.pkl]
+FAILED pype_schema/tests/test_parse_json.py::test_create_network[data/sample_nested_vtag.json-data/sample_nested_vtag.pkl]
+================== 22 failed, 113 passed, 5 warnings in 3.75s ==================

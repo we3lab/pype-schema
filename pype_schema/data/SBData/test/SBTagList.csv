@@ -1,0 +1,24 @@
+description,tag,units,type,contents
+MPDA_kW,MPD A power Consumption,kW
+AIT_400_001A_P.PV,Conductivity Product MPD,uS/cm
+FIT_200_001A_P.PV,Seawater Inlet Flow MPD,Process Value in GPM
+FIT_200_002A_P.PV,PT Backwash Flow MPD,Process Value in GPM
+FIT_200_004A_P.PV,BW Tank Filling Flow,Process Value in GPM
+FIT_400_001A_P.PV,Low Pressure Brine Flow MPD,Process Value in GPM
+FIT_400_002A_P.PV,Product Flow MPD,Process Value in GPM
+LT_200_002A_P.PV,Level Backwash Tank MPD,Level in Feet
+P_200_001A_P.RPM_MV,RO Feed Pump- MPD A,Speed reference
+P_200_002A_P.RPM_MV,BW Pump- MPD A,Speed reference
+P_400_001A_P.RPM_MV,ERS Circulation Pump - MPD A,Speed reference
+P_400_002A_P.RPM_MV,HP Pump - MPD A,Speed reference
+PDIT_200_001A_P.PV,Differential Pressure MF - MPD A,Process Value in PSI
+PDIT_400_001A_P.PV,Differential Pressure RO Train - MPD A,Process Value in PSI
+PDIT_400_002A_P.PV,Differential Pressure ERS Cir. Pump - MPD A,Process Value in PSI
+PIT_400_003A_P.PV,Feed Pressure RO Train - MPD A,Process Value in PSI
+PT_200_005A_P.PV,Pressure air discharge Blower MPD - MPD A,Process Value in PSI
+PT_200_006A_P.PV,Suction Pressure RO Feed Pump MPD - MPD A,Process Value in PSI
+PT_200A_Tags.Q_Filtrate_PV,Total Filtration Flow - MPD A,Process Value in GPM
+Q_400_002A,Feed Flow RO Train - MPD A,Process Value in GPM
+PT_400_002A_P.PV,Suction Pressure HP Pump MPD - MPD A,Process Value in PSI
+Q_400_001A_P.PV,HP discharge flow ERS Cir Pump - MPD A,Process Value in GPM
+RO_300A_Tags.RO.Recovery,Recovery RO Train - MPD A,Process Value in %

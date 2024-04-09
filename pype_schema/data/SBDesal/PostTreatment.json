@@ -1,0 +1,127 @@
+{
+    "nodes": [
+      "UVSystem",
+      "StaticMixerPost", 
+      "LimeDilutionPumps", 
+      "ProductTanks", 
+      "ProductPumps"
+    ],
+    "connections": [
+      "UVSystem2StaticMixerPost",
+      "UVSystem2LimeDilutionPumps",
+      "StaticMixerPost2ProductTanks",
+      "ProductTanks2ProductPumps"
+    ],
+    "virtual_tags": {
+    },
+    "UVSystem": {
+      "type": "UVSystem",
+      "num_units": 1,
+      "residence_time": 0,
+      "intensity": 0,
+      "area": 0,
+      "contents": "Brine",
+      "tags": {
+        "FIT_900_004_P.PV": {
+            "type": "OutFlow",
+            "contents": "Brine",
+            "units": "GPM"
+        }
+      }
+    },
+    "StaticMixerPost": {
+        "type": "StaticMixer",
+        "elevation (meters)": null,
+        "volume (cubic meters)": null,
+        "contents": "Seawater",
+        "residence_time": null,
+        "dosing_rate:": {
+          "CO2": null,
+          "CaOH2": null, 
+          "OtthoPolyPhosphate": null, 
+          "NaOCl": null
+        },
+        "pH": 7, 
+        "tags": {}
+    },
+    "LimeDilutionPumps": {
+        "type": "Pump",
+        "pump_type": null,
+        "contents": "Brine",
+        "num_units": 2,
+        "horsepower": null,
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "ProductTanks": {
+        "type": "Tank",
+        "elevation (meters)": null,
+        "volume (cubic meters)": null,
+        "contents": "Brine",
+        "num_units": 2,
+        "tags": {}
+    },
+    "ProductPumps": {
+        "type": "Pump",
+        "pump_type": null,
+        "contents": "Brine",
+        "num_units": 3,
+        "horsepower": null,
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    }, 
+    "UVSystem2StaticMixerPost": {
+        "type": "Pipe",
+        "source": "UVSystem",
+        "destination": "StaticMixerPost",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {
+            "FIT_900_005_P.PV": {
+                "type": "Flow",
+                "contents": "Brine",
+                "units": "GPM"
+            }
+        }
+    }, 
+    "UVSystem2LimeDilutionPumps": {
+        "type": "Pipe",
+        "source": "UVSystem",
+        "destination": "LimeDilutionPumps",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {
+            "FIT_900_006_P.PV": {
+                "type": "Flow",
+                "contents": "Brine",
+                "units": "GPM"
+            }
+        }
+    },
+    "StaticMixerPost2ProductTanks": {
+        "type": "Pipe",
+        "source": "StaticMixerPost",
+        "destination": "ProductTanks",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "ProductTanks2ProductPumps": {
+        "type": "Pipe",
+        "source": "ProductTanks",
+        "destination": "ProductPumps",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    }
+}

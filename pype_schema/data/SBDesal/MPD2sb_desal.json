@@ -1,0 +1,55 @@
+{
+    "connections": [
+        "StaticMixerPre2IntermediateTanks", 
+        "SWRO2SuckbackTank", 
+        "SWRO2BrineManagement", 
+        "GravitySandFilter2BrineManagement",
+        "ERI2OutfallMixingBox"
+    ], 
+    "StaticMixerPre2IntermediateTanks": {
+        "type": "Pipe",
+        "source": "StaticMixerPre",
+        "destination": "IntermediateTanks",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "SWRO2SuckbackTank": {
+        "type": "Pipe",
+        "source": "SWRO",
+        "destination": "SuckbackTank",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "SWRO2BrineManagement": {
+        "type": "Pipe",
+        "source": "SWRO",
+        "destination": "BrineManagement",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "GravitySandFilter2BrineManagement": {
+        "type": "Pipe",
+        "source": "GravitySandFilter",
+        "destination": "BrineManagement",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "ERI2OutfallMixingBox": {
+        "type": "Pipe",
+        "source": "ERI",
+        "destination": "OutfallMixingBox",
+        "contents": "Brine",
+        "bidirectional": false,
+        "tags": {
+            "FIT_400_001A_P.PV": {
+                "type": "Flow",
+                "contents": "Brine",
+                "units": "GPM"
+            }
+        }
+    }
+}

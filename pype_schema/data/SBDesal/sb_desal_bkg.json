@@ -1,0 +1,304 @@
+{
+    "nodes": [
+      "IntakePumps",
+      "StaticMixerPre",
+      "MPDA",
+      "MPDB",
+      "MPDC",
+      "SuckbackTank", 
+      "PostTreatment",
+      "BrineManagement", 
+      "Client", 
+      "OutfallMixingBox"
+    ],
+    "connections": [
+      "IntakePumps2StaticMixerPre",
+      "StaticMixerPre2MPDA",
+      "StaticMixerPre2MPDB",
+      "StaticMixerPre2MPDC",
+      "StaticMixerPre2BrineManagement",
+      "MPDA2BrineManagement",
+      "MPDB2BrineManagement",
+      "MPDB2BrineManagement",
+      "MPDA2SuckbackTank",
+      "MPDB2SuckbackTank",
+      "MPDC2SuckbackTank",
+      "SuckbackTank2PostTreatment",
+      "SuckbackTank2BrineManagement",
+      "PostTreatment2BrineManagement", 
+      "PostTreatment2Client",
+      "BrineManagement2OutfallMixingBox"
+    ],
+    "virtual_tags": {
+    },
+    "IntakePumps": {
+      "type": "Pump",
+      "pump_type": null,
+      "contents": "Seawater",
+      "num_units": 2,
+      "horsepower": null,
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {
+        "FIT_100_001_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "StaticMixerPre": {
+      "type": "StaticMixer",
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Seawater",
+      "residence_time": null,
+      "dosing_rate:": {
+        "NaOCl": null,
+        "FeCl3": null
+      },
+      "pH": 7, 
+      "tags": {}
+    },
+    "MPDA": {
+      "type": "ModularUnit",
+      "contents": ["Seawater", "Brine"],
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+        "FIT_400_001A_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }, 
+        "FIT_400_002A_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "MPDB": {
+      "type": "ModularUnit",
+      "contents": ["Seawater", "Brine"],
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+        "FIT_400_001B_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "MPDC": {
+      "type": "ModularUnit",
+      "contents": ["Seawater", "Brine"],
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+        "FIT_400_001C_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "SuckbackTank": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": 12152,
+      "contents": "Brine",
+      "tags": {
+        "FIT_900_004_P.PV": {
+          "type": "OutFlow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "PostTreatment": {
+      "type": "Network",
+      "contents": "Brine",
+      "tags": {
+        "FIT_900_004_P.PV":{ 
+          "type": "InFlow", 
+          "contents": "Brine", 
+          "units": "GPM"}
+      },
+      "nodes": [],
+      "connections": []
+    },
+    "BrineManagement": {
+      "type": "Network",
+      "contents": "Brine",
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "Client": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Brine",
+      "tags": {}
+    },
+    "OutfallMixingBox": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Brine",
+      "tags": {
+        "FIT_1000_001_P.PV": {
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "IntakePumps2StaticMixerPre": {
+      "type": "Pipe",
+      "source": "IntakePumps",
+      "destination": "StaticMixerPre",
+      "contents": "Brine",
+      "bidirectional": true,
+      "tags": {}
+    },
+    "StaticMixerPre2MPDA": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDA",
+      "contents": "Seawater",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "StaticMixerPre2MPDB": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDB",
+      "contents": "Seawater",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "StaticMixerPre2MPDC": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDC",
+      "contents": "Seawater",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "StaticMixerPre2BrineManagement": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDA2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDA",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDB2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDB",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDC2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDC",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDA2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDA",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDB2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDB",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDC2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDC",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "SuckbackTank2PostTreatment": {
+      "type": "Pipe",
+      "source": "SuckbackTank",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_900_004_P.PV":{ 
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "SuckbackTank2BrineManagement": {
+      "type": "Pipe",
+      "source": "SuckbackTank",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "PostTreatment2BrineManagement": {
+      "type": "Pipe",
+      "source": "PostTreatment",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    }, 
+    "PostTreatment2Client": {
+      "type": "Pipe",
+      "source": "PostTreatment",
+      "destination": "Client", 
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "BrineManagement2OutfallMixingBox": {
+      "type": "Pipe",
+      "source": "BrineManagement",
+      "destination": "OutfallMixingBox",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    }
+  }
+  

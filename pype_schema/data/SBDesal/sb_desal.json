@@ -1,0 +1,332 @@
+{
+    "nodes": [
+      "IntakePumps",
+      "StaticMixerPre",
+      "MPDA",
+      "MPDB",
+      "MPDC",
+      "SuckbackTank", 
+      "PostTreatment",
+      "BrineManagement", 
+      "Client", 
+      "OutfallMixingBox"
+    ],
+    "connections": [
+      "IntakePumps2StaticMixerPre",
+      "StaticMixerPre2MPDA",
+      "StaticMixerPre2MPDB",
+      "StaticMixerPre2MPDC",
+      "StaticMixerPre2BrineManagement",
+      "MPDA2BrineManagement",
+      "MPDB2BrineManagement",
+      "MPDC2BrineManagement",
+      "MPDA2OutfallMixingBox", 
+      "MPDB2OutfallMixingBox", 
+      "MPDC2OutfallMixingBox", 
+      "MPDA2SuckbackTank",
+      "MPDB2SuckbackTank",
+      "MPDC2SuckbackTank",
+      "SuckbackTank2PostTreatment",
+      "SuckbackTank2BrineManagement",
+      "PostTreatment2BrineManagement", 
+      "PostTreatment2Client",
+      "BrineManagement2OutfallMixingBox"
+    ],
+    "virtual_tags": {
+    },
+    "IntakePumps": {
+      "type": "Pump",
+      "pump_type": null,
+      "contents": "Brine",
+      "num_units": 2,
+      "horsepower": null,
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {
+      }
+    },
+    "StaticMixerPre": {
+      "type": "StaticMixer",
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Brine",
+      "residence_time": null,
+      "dosing_rate:": {
+        "NaOCl": null,
+        "FeCl3": null
+      },
+      "pH": 7, 
+      "tags": {}
+    },
+    "MPDA": {
+      "type": "ModularUnit",
+      "contents": "Brine",
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+      }
+    },
+    "MPDB": {
+      "type": "ModularUnit",
+      "contents": "Brine", 
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+      }
+    },
+    "MPDC": {
+      "type": "ModularUnit",
+      "contents": "Brine",
+      "nodes": [],
+      "connections": [],
+      "units": 3, 
+      "tags": {
+      }
+    },
+    "SuckbackTank": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": 12152,
+      "contents": "Brine",
+      "tags": {
+      }
+    },
+    "PostTreatment": {
+      "type": "Network",
+      "contents": "Brine",
+      "tags": {
+        "FIT_900_004_P.PV":{ 
+          "type": "InFlow", 
+          "contents": "Brine", 
+          "units": "GPM"}
+      },
+      "nodes": [],
+      "connections": []
+    },
+    "BrineManagement": {
+      "type": "Network",
+      "contents": "Brine",
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "Client": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Brine",
+      "tags": {}
+    },
+    "OutfallMixingBox": {
+      "type": "Tank",
+      "num_units": 1,
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "Brine",
+      "tags": {
+        "FIT_1000_001_P.PV": {
+          "type": "InFlow",
+          "contents": "Brine",
+          "units": "GPM"
+        }
+      }
+    },
+    "IntakePumps2StaticMixerPre": {
+      "type": "Pipe",
+      "source": "IntakePumps",
+      "destination": "StaticMixerPre",
+      "contents": "Brine",
+      "bidirectional": true,
+      "tags": {
+        "FIT_100_001_P.PV": {
+          "type": "Flow",
+          "contents": "Brine",
+          "units": "MGD"
+        }
+      }
+    },
+    "StaticMixerPre2MPDA": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDA",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_200_001A_P.PV": {
+          "type": "Flow",
+          "contents": "Brine",
+          "units": "MGD"
+        }
+      }
+    },
+    "StaticMixerPre2MPDB": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDB",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "StaticMixerPre2MPDC": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "MPDC",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "StaticMixerPre2BrineManagement": {
+      "type": "Pipe",
+      "source": "StaticMixerPre",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDA2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDA",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+      }
+    },
+    "MPDB2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDB",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDC2BrineManagement": {
+      "type": "Pipe",
+      "source": "MPDC",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDA2OutfallMixingBox": {
+      "type": "Pipe",
+      "source": "MPDA",
+      "destination": "OutfallMixingBox",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDB2OutfallMixingBox": {
+      "type": "Pipe",
+      "source": "MPDB",
+      "destination": "OutfallMixingBox",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_400_001A_P.PV": {
+          "type": "Flow",
+          "contents": "Brine",
+          "units": "GPM"
+        }
+      }
+    },
+    "MPDC2OutfallMixingBox": {
+      "type": "Pipe",
+      "source": "MPDC",
+      "destination": "OutfallMixingBox",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    }, 
+    "MPDA2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDA",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_400_002A_P.PV": {
+          "type": "Flow",
+          "contents": "Brine",
+          "units": "GPM"
+        }
+      }
+    },
+    "MPDB2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDB",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "MPDC2SuckbackTank": {
+      "type": "Pipe",
+      "source": "MPDC",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "SuckbackTank2PostTreatment": {
+      "type": "Pipe",
+      "source": "SuckbackTank",
+      "destination": "PostTreatment",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_900_004_P.PV":{ 
+          "type": "Flow", 
+          "contents": "Brine", 
+          "units": "GPM"
+        }
+      }
+    },
+    "SuckbackTank2BrineManagement": {
+      "type": "Pipe",
+      "source": "SuckbackTank",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "PostTreatment2BrineManagement": {
+      "type": "Pipe",
+      "source": "PostTreatment",
+      "destination": "BrineManagement",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    }, 
+    "PostTreatment2Client": {
+      "type": "Pipe",
+      "source": "PostTreatment",
+      "destination": "Client", 
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {
+        "FIT_900_002_P.PV": {
+          "type": "Flow",
+          "contents": "Brine",
+          "units": "GPM"
+        }
+      }
+    },
+    "BrineManagement2OutfallMixingBox": {
+      "type": "Pipe",
+      "source": "BrineManagement",
+      "destination": "OutfallMixingBox",
+      "contents": "Brine",
+      "bidirectional": false,
+      "tags": {}
+    }
+  }
+  
