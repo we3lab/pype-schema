@@ -251,7 +251,14 @@
         "contents": "NaturalGas",
         "entry_point": "Boiler",
         "bidirectional": false,
-        "tags": {}
+        "tags": {
+            "BoilerGasPurchases": {
+              "type": "Flow",
+              "units": "SCFM",
+              "contents": "NaturalGas",
+              "totalized": false
+            }
+        }
     },
     "GasToCogen": {
         "type": "Pipe",
