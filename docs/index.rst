@@ -8,6 +8,9 @@ Welcome to the Python for Process Engineering Schema (PyPES) documentation!
    :caption: Overview
 
    README <self>
+   hello
+   json_rep
+   advanced
    CONTRIBUTING
    LICENSE
 

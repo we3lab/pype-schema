@@ -21,7 +21,7 @@ skip_all_tests = False
         ("../data/sample.json", "RecycledWaterFacility", True),
     ],
 )
-def test_create_network(json_path, node_id, pyvis):
+def test_draw_graph(json_path, node_id, pyvis):
     parser = JSONParser(json_path)
     graph = parser.initialize_network()
     if node_id is None:

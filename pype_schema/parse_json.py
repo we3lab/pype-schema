@@ -238,9 +238,11 @@ class JSONParser:
             self.config[node_id].get("volume (cubic meters)"), "m3"
         )
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[node_id].get("flowrate")
-        )
+        flowrate = self.config[node_id].get("flowrate")
+        if flowrate is None:
+            flowrate = self.config[node_id].get("flow_rate")
+
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -311,16 +313,20 @@ class JSONParser:
             )
 
             efficiency = self.config[node_id].get("efficiency")
-            if efficiency:
+            if efficiency is None:
+                pump_curve = self.config[node_id].get("pump_curve")
+            else:
+                pump_curve = efficiency
+            if pump_curve:
 
                 def efficiency_curve(arg):
                     # TODO: fix this so that it interpolates between dictionary values
-                    if type(efficiency) is dict:
-                        return efficiency[arg]
+                    if type(pump_curve) is dict:
+                        return pump_curve[arg]
                     else:
-                        return float(efficiency)
+                        return float(pump_curve)
 
-                node_obj.set_energy_efficiency(efficiency_curve)
+                node_obj.set_pump_curve(efficiency_curve)
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id, input_contents, output_contents, elevation, volume, tags={}
@@ -354,9 +360,10 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] in ["Cogeneration", "Boiler"]:
-            min, max, avg = self.parse_min_max_avg(
-                self.config[node_id].get("generation_capacity")
-            )
+            gen_capacity = self.config[node_id].get("generation_capacity")
+            if gen_capacity is None:
+                self.config[node_id].get("gen_capacity")
+            min, max, avg = self.parse_min_max_avg(gen_capacity)
             if self.config[node_id]["type"] == "Cogeneration":
                 node_obj = node.Cogeneration(
                     node_id, input_contents, min, max, avg, num_units, tags={}
@@ -364,7 +371,13 @@ class JSONParser:
                 electrical_efficiency = self.config[node_id].get(
                     "electrical efficiency"
                 )
+                if electrical_efficiency is None:
+                    electrical_efficiency = self.config[node_id].get(
+                        "electrical_efficiency"
+                    )
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
+                if thermal_efficiency is None:
+                    thermal_efficiency = self.config[node_id].get("thermal_efficiency")
             else:
                 node_obj = node.Boiler(
                     node_id, input_contents, min, max, avg, num_units, tags={}
@@ -558,9 +571,11 @@ class JSONParser:
         if entry_point:
             entry_point = destination.get_node(entry_point)
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(
-            self.config[connection_id].get("flowrate")
-        )
+        flowrate = self.config[connection_id].get("flowrate")
+        if flowrate is None:
+            flowrate = self.config[connection_id].get("flow_rate")
+
+        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
         min_pres, max_pres, avg_pres = self.parse_min_max_avg(
             self.config[connection_id].get("pressure")
         )
