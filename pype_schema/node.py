@@ -926,6 +926,7 @@ class Network(Node):
             and self.tags == other.tags
             and self.nodes == other.nodes
             and self.connections == other.connections
+            and self.num_units == other.num_units
         )
 
     def add_node(self, node):
