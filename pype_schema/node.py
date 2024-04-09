@@ -721,8 +721,8 @@ class Node(ABC):
         Returns
         -------
         list
-            List of `Tag`, `Connection`, or `Node` objects subset according to source/destination
-            id and `contents_type`
+            List of `Tag`, `Connection`, or `Node` objects subset according to
+            source/destination `id` and `contents_type`
         """
         selected_objs = []
         # Select according to source/destination node type/id
