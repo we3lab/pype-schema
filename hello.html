@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; PyPES 0.4.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="JSON Representation" href="json_rep.html" />
+    <link rel="prev" title="Welcome to the Python for Process Engineering Schema (PyPES) documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PyPES
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#loading-a-pypes-model">Loading a PyPES Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-structure">Model Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#connection">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#node">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tag">Tag</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-the-model">Modifying the Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-the-model">Querying the Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="json_rep.html">JSON Representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyPES</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hello.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <nav class="contents" id="contents" role="doc-toc">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#getting-started" id="id1">Getting Started</a></p>
+<ul>
+<li><p><a class="reference internal" href="#loading-a-pypes-model" id="id2">Loading a PyPES Model</a></p></li>
+<li><p><a class="reference internal" href="#model-structure" id="id3">Model Structure</a></p>
+<ul>
+<li><p><a class="reference internal" href="#connection" id="id4">Connection</a></p></li>
+<li><p><a class="reference internal" href="#node" id="id5">Node</a></p></li>
+<li><p><a class="reference internal" href="#tag" id="id6">Tag</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#modifying-the-model" id="id7">Modifying the Model</a></p></li>
+<li><p><a class="reference internal" href="#querying-the-model" id="id8">Querying the Model</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="getting-started">
+<span id="helloworld"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">Getting Started</a><a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<section id="loading-a-pypes-model">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Loading a PyPES Model</a><a class="headerlink" href="#loading-a-pypes-model" title="Permalink to this heading"></a></h2>
+<p>For most users, the first step to using PyPES will be to pip install the Python package:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pype</span><span class="o">-</span><span class="n">schema</span>
+</pre></div>
+</div>
+<p>This installation should come with a sample facility configuration represented by <cite>sample.json</cite>.
+To load this facility, run the following code from the <cite>pype_schema/data</cite> folder:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.parse_json</span> <span class="kn">import</span> <span class="n">JSONParser</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">&quot;sample.json&quot;</span><span class="p">)</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="model-structure">
+<span id="model-struct"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Model Structure</a><a class="headerlink" href="#model-structure" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="visualize.html#visualize"><span class="std std-ref">visualize</span></a> module can be used to view the loaded PyPES representation with either of the <code class="docutils literal notranslate"><span class="pre">pyvis</span></code> or <code class="docutils literal notranslate"><span class="pre">networkx</span></code> packages.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.visualize</span> <span class="kn">import</span> <span class="n">draw_graph</span>
+
+<span class="n">pyvis</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Running the above code should produce the following HTML visualization:</p>
+<a class="reference internal image-reference" href="_images/utility-graph.png"><img alt="Example directed graph representation of a city's water and energy infrastructure" src="_images/utility-graph.png" style="width: 600px;" /></a>
+<p>PyPES models can have nodes nested within nodes.
+For example, the <cite>WWTP</cite> node nested inside the top-level network can be visualized as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_id</span> <span class="o">=</span> <span class="s2">&quot;WWTP&quot;</span>
+<span class="n">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">),</span> <span class="n">pyvis</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/wwtp-graph.png"><img alt="Example directed graph representation of a city's wastewater treatment plant (WWTP)" src="_images/wwtp-graph.png" style="width: 600px;" /></a>
+<p>Now, let’s discuss some of the components of the graph.</p>
+<section id="connection">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Connection</a><a class="headerlink" href="#connection" title="Permalink to this heading"></a></h3>
+<p>Conceptually, connections are objects in a WRRF that act as a vector to transport contents from a source to a destination.</p>
+<p>In practice, there will be an abstract Python class <code class="docutils literal notranslate"><span class="pre">Connection</span></code> with two subclasses: <code class="docutils literal notranslate"><span class="pre">Pipe</span></code> and <code class="docutils literal notranslate"><span class="pre">Wire</span></code>. <a class="reference internal" href="json_rep.html#conn-rep"><span class="std std-ref">Representing Connections</span></a> contains tables with
+required attributes (e.g., source, destination) and optional attributes of those classes (e.g., diameter, contents).
+All <code class="docutils literal notranslate"><span class="pre">Connection</span></code> objects have a dictionary of tags with the tag IDs as keys and <code class="docutils literal notranslate"><span class="pre">Tag</span></code> or <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects as values.</p>
+</section>
+<section id="node">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Node</a><a class="headerlink" href="#node" title="Permalink to this heading"></a></h3>
+<p>Conceptually, nodes are objects that represent a wide variety of entities, from clarifiers, aerators, and filters for treatment to batteries, pumps, and cogenerators for energy modeling.</p>
+<p>In practice, there will be an abstract Python class <code class="docutils literal notranslate"><span class="pre">Node</span></code> with many subclasses. <a class="reference internal" href="json_rep.html#node-rep"><span class="std std-ref">Representing Nodes</span></a> contains tables with all the potential node classes (e..g, <code class="docutils literal notranslate"><span class="pre">Tank</span></code>, <code class="docutils literal notranslate"><span class="pre">Filtration</span></code>, <code class="docutils literal notranslate"><span class="pre">Battery</span></code>, etc.), r
+equired attributes of those classes (e.g., id, contents), and optional attributes of those classes (e.g., volume, contents).
+All <code class="docutils literal notranslate"><span class="pre">Node</span></code> objects have a dictionary of tags with the tag IDs as keys and <code class="docutils literal notranslate"><span class="pre">Tag</span></code> or <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects as values.</p>
+</section>
+<section id="tag">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Tag</a><a class="headerlink" href="#tag" title="Permalink to this heading"></a></h3>
+<p>Conceptually, tags are sensors that collect WRRF data, such as flow rate or temperature.
+They are not a part of the graph like nodes or connections, but are associated with nodes and connections along with other attributes.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">Tag</span></code> object contains attributes related to data being collected, such as the string ID, type of measurement, and units
+(see <a class="reference internal" href="json_rep.html#tag-rep"><span class="std std-ref">Representing Tags</span></a> for more details).</p>
+</section>
+</section>
+<section id="modifying-the-model">
+<span id="mod-model"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Modifying the Model</a><a class="headerlink" href="#modifying-the-model" title="Permalink to this heading"></a></h2>
+<p>The graphical representation of the facility can be modified programmatically.
+This can be useful for modeling upgrades to existing infrastructure by seamlessly comparing two configurations side-by-side.</p>
+<p>For example, to add a 10,000 gallon storage tank at 1,000 meters elevation to the water distribution network:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.node</span> <span class="kn">import</span> <span class="n">Tank</span>
+<span class="kn">from</span> <span class="nn">pype_schema.utils</span> <span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">ContentsType</span>
+
+<span class="n">volume</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;gal&quot;</span><span class="p">)</span>
+<span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
+
+<span class="c1"># create the battery node</span>
+<span class="n">tank</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span>
+    <span class="s2">&quot;StorageTank&quot;</span><span class="p">,</span>
+    <span class="n">ContentsType</span><span class="o">.</span><span class="n">DrinkingWater</span><span class="p">,</span>
+    <span class="n">ContentsType</span><span class="o">.</span><span class="n">DrinkingWater</span><span class="p">,</span>
+    <span class="n">elevation</span><span class="p">,</span>
+    <span class="n">volume</span>
+<span class="p">)</span>
+
+<span class="c1"># add the node to the facility</span>
+<span class="n">wds</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="s2">&quot;WaterDistribution&quot;</span><span class="p">)</span>
+<span class="n">wds</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">tank</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that there is a node inside the water distribution network, the connection can be modified to have an
+<code class="docutils literal notranslate"><span class="pre">entry_point</span></code>. The <code class="docutils literal notranslate"><span class="pre">entry_point</span></code> and <code class="docutils literal notranslate"><span class="pre">exit_point</span></code> attributes allow a user to specify the subnode to which
+a connection is starting or ending at when the connection goes between levels in the graph. For example, in this
+case we want to specify that the drinking water treatment plant effluent goes not only to the water distribution
+network, but to a specific storage tank within the distribution network:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+
+<span class="n">wds_conn</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
+    <span class="n">source_id</span><span class="o">=</span><span class="s2">&quot;DrinkingWaterFacility&quot;</span><span class="p">,</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WaterDistribution&quot;</span><span class="p">,</span>
+    <span class="n">obj_type</span><span class="o">=</span><span class="n">Connection</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">wds_conn</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">tank</span>
+</pre></div>
+</div>
+<p>The next section, <a class="reference internal" href="#query-model"><span class="std std-ref">Querying the Model</span></a>, explains querying using <code class="docutils literal notranslate"><span class="pre">select_objs</span></code> in further detail.</p>
+<p>Rather than adding components to the model one-by-one in Python,
+a user can edit the JSON file directly and then re-load the model (see <a class="reference internal" href="json_rep.html#json-rep"><span class="std std-ref">JSON Representation</span></a>)</p>
+</section>
+<section id="querying-the-model">
+<span id="query-model"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Querying the Model</a><a class="headerlink" href="#querying-the-model" title="Permalink to this heading"></a></h2>
+<p>PyPES offers built-in search capabilities that allow users to find nodes, connections, and tags
+matching desired characteristics.</p>
+<p>Modeling applications can be generalized through the use of these queries. For example, to calculate the
+natural gas purchases at a facility without knowing how many boilers or cogenerators (if any) exist, a user
+could query for all connections with <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> are <code class="docutils literal notranslate"><span class="pre">NaturalGas</span></code> entering the <code class="docutils literal notranslate"><span class="pre">WWTP</span></code> node:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ng_conns</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WWTP&quot;</span><span class="p">,</span>
+    <span class="n">contents_type</span><span class="o">=</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">NaturalGas</span><span class="p">,</span>
+    <span class="n">obj_type</span><span class="o">=</span><span class="n">Connection</span><span class="p">,</span>
+    <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Its often more convenient to get all the tags directly. Then, if the data is in CSV format the tags correspond to
+column names that can be operated on:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.tag</span> <span class="kn">import</span> <span class="n">Tag</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;sample_data.csv&quot;</span><span class="p">)</span>
+
+<span class="n">ng_tags</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WWTP&quot;</span><span class="p">,</span>
+    <span class="n">contents_type</span><span class="o">=</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">NaturalGas</span><span class="p">,</span>
+    <span class="n">obj_type</span><span class="o">=</span><span class="n">Tag</span><span class="p">,</span>
+    <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">ng_tag_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">ng_tags</span><span class="p">]</span>
+<span class="n">ng_import_timeseries</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">ng_tag_ids</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">ng_import_timeseries</span></code> could be used for whatever application the user desires.
+For example, to plot the natural gas imports over time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">ng_tags</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ng_import_timeseries</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;TotalGasPurchases&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Hour&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Natural Gas Imports (m$^3$ / day)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.45</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ng-imports.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/ng-imports.png"><img alt="Timeseries of natural gas imports to the cogenerator and boiler combined to calculate total imports using PyPES" src="_images/ng-imports.png" style="width: 600px;" /></a>
+<p>Unit IDs are used to specify identical parallel processes.
+For example, a cogenerator may have two engines.
+Therefore, <code class="docutils literal notranslate"><span class="pre">dest_unit_id</span></code> was specified as <cite>“total”</cite> because there may be unit-level tags,
+and summing both unit-level and total tags would lead to overcounting.</p>
+<p>There are a number of optional arguments to <code class="docutils literal notranslate"><span class="pre">select_objs</span></code>, most of which default to <code class="docutils literal notranslate"><span class="pre">None</span></code>. The function is
+fully documented in <a class="reference external" href="https://we3lab.github.io/pype-schema/node.html#pype_schema.node.Node.select_objs">node.Node.select_objs</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to the Python for Process Engineering Schema (PyPES) documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="json_rep.html" class="btn btn-neutral float-right" title="JSON Representation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, WE3 Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
