@@ -198,37 +198,37 @@ def test_calculate_values(
     else:
         expected = expected_path
 
-    # try:
-    if data_type == "DataFrame":
-        pd.testing.assert_series_equal(
-            tag.calculate_values(data), expected[tag_name]
-        )
-    elif data_type == "Array":
-        data = data.to_numpy()
-        assert np.allclose(
-            tag.calculate_values(data),
-            expected.to_numpy().flatten(),
-            equal_nan=True,
-        )
-    elif data_type == "List":
-        data = data.values.T.tolist()
-        tag.calculate_values(data)
-        assert np.allclose(
-            np.array(tag.calculate_values(data), dtype=np.float64),
-            expected.values.flatten(),
-            equal_nan=True,
-        )
-    elif data_type == "Dict":
-        data = data.to_dict(orient="series")
-        pd.testing.assert_series_equal(
-            tag.calculate_values(data), expected[tag_name]
-        )
-    elif data_type == "Invalid":
-        data = pd.Series([])
-        tag.calculate_values(data)
-    # except Exception as err:
-    #     result = type(err).__name__
-    #     assert result == expected
+    try:
+        if data_type == "DataFrame":
+            pd.testing.assert_series_equal(
+                tag.calculate_values(data), expected[tag_name]
+            )
+        elif data_type == "Array":
+            data = data.to_numpy()
+            assert np.allclose(
+                tag.calculate_values(data),
+                expected.to_numpy().flatten(),
+                equal_nan=True,
+            )
+        elif data_type == "List":
+            data = data.values.T.tolist()
+            tag.calculate_values(data)
+            assert np.allclose(
+                np.array(tag.calculate_values(data), dtype=np.float64),
+                expected.values.flatten(),
+                equal_nan=True,
+            )
+        elif data_type == "Dict":
+            data = data.to_dict(orient="series")
+            pd.testing.assert_series_equal(
+                tag.calculate_values(data), expected[tag_name]
+            )
+        elif data_type == "Invalid":
+            data = pd.Series([])
+            tag.calculate_values(data)
+    except Exception as err:
+        result = type(err).__name__
+        assert result == expected
 
     if expected_units is not None:
         assert parse_units(expected_units) == tag.units
