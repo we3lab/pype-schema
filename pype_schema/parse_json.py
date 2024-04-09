@@ -311,16 +311,20 @@ class JSONParser:
             )
 
             efficiency = self.config[node_id].get("efficiency")
-            if efficiency:
+            if efficiency is None:
+                pump_curve = self.config[node_id].get("pump_curve")
+            else:
+                pump_curve = efficiency
+            if pump_curve:
 
                 def efficiency_curve(arg):
                     # TODO: fix this so that it interpolates between dictionary values
-                    if type(efficiency) is dict:
-                        return efficiency[arg]
+                    if type(pump_curve) is dict:
+                        return pump_curve[arg]
                     else:
-                        return float(efficiency)
+                        return float(pump_curve)
 
-                node_obj.set_energy_efficiency(efficiency_curve)
+                node_obj.set_pump_curve(efficiency_curve)
         elif self.config[node_id]["type"] == "Reservoir":
             node_obj = node.Reservoir(
                 node_id, input_contents, output_contents, elevation, volume, tags={}

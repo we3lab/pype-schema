@@ -661,9 +661,9 @@ class Node(ABC):
         obj_type=None,
         recurse=False,
     ):
-        """Selects from this Node all Connection or Tag objects
+        """Selects from this Node all Node, Connection, or Tag objects
         which match source/destination node class, unit ID, and contents.
-        (If none given, returns all objects in the Node.)
+        (If none given, returns all objects in `self`)
 
         Parameters
         ----------
@@ -716,12 +716,12 @@ class Node(ABC):
 
         TypeError
             When the objects to select among are not of
-            type {'pype_schema.Tag' or `pype_schema.Connection`}
+            type {`pype_schema.Tag`, `pype_schema.Connection`, `pype_schema.Node`}
 
         Returns
         -------
         list
-            List of `Tag` or `Connection` objects subset according to source/destination
+            List of `Tag`, `Connection`, or `Node` objects subset according to source/destination
             id and `contents_type`
         """
         selected_objs = []
@@ -1180,7 +1180,7 @@ class Pump(Node):
     tags : dict of Tag
         Data tags associated with this pump
 
-    energy_efficiency : function
+    pump_curve : function
         Function which takes in the current flow rate and returns the energy
         required to pump at that rate
     """
@@ -1208,7 +1208,7 @@ class Pump(Node):
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
-        self.set_energy_efficiency(None)
+        self.set_pump_curve(None)
 
     def __repr__(self):
         return (
@@ -1247,7 +1247,7 @@ class Pump(Node):
         # TODO: check that pump_type is a valid enum
         self.pump_type = pump_type
 
-    def set_energy_efficiency(self, pump_curve):
+    def set_pump_curve(self, pump_curve):
         """Set the pump curve to the given function
 
         Parameters
@@ -1257,7 +1257,7 @@ class Pump(Node):
             required to pump at that rate
         """
         # TODO: type check that pump_curve is a function
-        self.energy_efficiency = pump_curve
+        self.pump_curve = pump_curve
 
 
 class Tank(Node):

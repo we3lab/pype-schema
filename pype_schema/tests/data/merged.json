@@ -31,7 +31,7 @@
             "units": "foot ** 3 / minute",
             "tags": [
                 "CombinedDigesterGasFlow",
-                "GasPurchases"
+                "CogenGasPurchases"
             ],
             "operations": "lambda x,y: x + y",
             "type": "Flow",
@@ -41,7 +41,7 @@
             "units": "foot ** 3 / minute",
             "tags": [
                 "CombinedDigesterGasFlow",
-                "GasPurchases"
+                "CogenGasPurchases"
             ],
             "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
             "type": "Flow",
@@ -278,7 +278,7 @@
             "units": "BTU/scf"
         },
         "tags": {
-            "GasPurchases": {
+            "CogenGasPurchases": {
                 "units": "foot ** 3 / minute",
                 "source_unit_id": "total",
                 "dest_unit_id": "total",
@@ -291,7 +291,7 @@
             "NoGasPurchases": {
                 "units": "None",
                 "tags": [
-                    "GasPurchases"
+                    "CogenGasPurchases"
                 ],
                 "operations": "lambda x: x==0",
                 "type": "RunStatus"
@@ -299,7 +299,7 @@
             "NoGasPurchasesList": {
                 "units": "None",
                 "tags": [
-                    "GasPurchases"
+                    "CogenGasPurchases"
                 ],
                 "operations": "lambda x: [x_==0 for x_ in x]",
                 "type": "RunStatus"
