@@ -248,7 +248,7 @@ class JSONParser:
         if self.config[node_id]["type"] == "Network":
             if num_units is None:
                 num_units = 1
-            
+
             node_obj = node.Network(
                 node_id,
                 input_contents,
