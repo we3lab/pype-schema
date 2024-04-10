@@ -883,7 +883,7 @@ class Network(Node):
     connections : dict of Connections
         connections in the network, e.g. pipes
 
-    units: int, default 1
+    num_units: int, default 1
         Number of units in the network
 
     Attributes
@@ -905,6 +905,9 @@ class Network(Node):
 
     connections : dict of Connections
         connections in the network, e.g. pipes
+
+    num_units : int
+        Number of networks running in parallel
     """
 
     def __init__(
@@ -915,7 +918,7 @@ class Network(Node):
         tags={},
         nodes={},
         connections={},
-        units=1,
+        num_units=1,
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
@@ -923,7 +926,7 @@ class Network(Node):
         self.tags = tags
         self.nodes = nodes
         self.connections = connections
-        self.units = units
+        self.num_units = num_units
 
     def __repr__(self):
         return (
@@ -931,7 +934,7 @@ class Network(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} tags:{self.tags} "
             f"nodes:{self.nodes} connections:{self.connections}>\n"
-            f"units:{self.units}>\n"
+            f"num_units:{self.num_units}>\n"
         )
 
     def __eq__(self, other):
@@ -946,6 +949,7 @@ class Network(Node):
             and self.tags == other.tags
             and self.nodes == other.nodes
             and self.connections == other.connections
+            and self.num_units == other.num_units
         )
 
     def add_node(self, node):
