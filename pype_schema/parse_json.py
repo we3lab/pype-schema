@@ -256,7 +256,7 @@ class JSONParser:
                 tags={},
                 nodes={},
                 connections={},
-                num_units=num_units
+                num_units=num_units,
             )
 
             for new_node in self.config[node_id]["nodes"]:
