@@ -246,6 +246,9 @@ class JSONParser:
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
+            if num_units is None:
+                num_units = 1
+
             node_obj = node.Network(
                 node_id,
                 input_contents,
@@ -253,6 +256,7 @@ class JSONParser:
                 tags={},
                 nodes={},
                 connections={},
+                num_units=num_units,
             )
 
             for new_node in self.config[node_id]["nodes"]:
