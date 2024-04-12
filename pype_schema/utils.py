@@ -476,7 +476,8 @@ class PumpType(Enum):
 
     Constant = auto()
     VFD = auto()
-
+    ERI = auto()
+    AirBlower = auto()
 
 class DigesterType(Enum):
     """Enum to represent types of digesters"""

@@ -836,7 +836,6 @@ class Node(ABC):
 
         return selected_objs
 
-
 class Network(Node):
     """A water utility represented as a set of connections and nodes
 
@@ -1004,7 +1003,6 @@ class Network(Node):
 
         return desired_objs
 
-
 class Facility(Network):
     """
     Parameters
@@ -1113,7 +1111,6 @@ class Facility(Network):
             and self.tags == other.tags
         )
 
-
 class Pump(Node):
     """
     Parameters
@@ -1146,7 +1143,10 @@ class Pump(Node):
         Average flow rate supplied by the pump
 
     pump_type : PumpType
-        Type of pump (either VFD or constant)
+        Type of pump (either VFD, ERI, AirBlower or constant)
+    
+    efficiency : float
+        efficiency of the pump
 
     tags : dict of Tag
         Data tags associated with this pump
@@ -1175,7 +1175,10 @@ class Pump(Node):
         Tuple of minimum, maximum, and average pump flow rate
 
     pump_type : PumpType
-        Type of pump (either VFD or constant)
+        Type of pump (either VFD, ERI, AirBlower or constant)
+
+    efficiency : float
+        efficiency of the pump
 
     tags : dict of Tag
         Data tags associated with this pump
@@ -1197,6 +1200,7 @@ class Pump(Node):
         horsepower,
         num_units,
         pump_type=utils.PumpType.Constant,
+        efficiency=None,
         tags={},
     ):
         self.id = id
@@ -1206,6 +1210,7 @@ class Pump(Node):
         self.pump_type = pump_type
         self.horsepower = horsepower
         self.num_units = num_units
+        self.efficiency = efficiency
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
         self.set_energy_efficiency(None)
@@ -1217,6 +1222,7 @@ class Pump(Node):
             f"output_contents:{self.output_contents} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
             f"horsepower:{self.horsepower} num_units:{self.num_units} "
+            f"pump_type:{self.pump_type} efficiency:{self.efficiency}" if self.pump_type == utils.PumpType.ERI else ""
             f"tags:{self.tags}>\n"
         )
 
@@ -1224,8 +1230,9 @@ class Pump(Node):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
             return False
-
+        
         return (
+        (
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
@@ -1235,6 +1242,9 @@ class Pump(Node):
             and self.num_units == other.num_units
             and self.tags == other.tags
             and self.flow_rate == other.flow_rate
+        ) and (
+            self.efficiency == other.efficiency if self.pump_type == utils.PumpType.ERI else True
+        )
         )
 
     def set_pump_type(self, pump_type):
@@ -1258,7 +1268,6 @@ class Pump(Node):
         """
         # TODO: type check that pump_curve is a function
         self.energy_efficiency = pump_curve
-
 
 class Tank(Node):
     """
@@ -1341,6 +1350,106 @@ class Tank(Node):
             and self.tags == other.tags
         )
 
+class StaticMixer(Tank):
+    """
+    Parameters
+    ----------
+    id : str
+        StaticMixer ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the mixer
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the mixer
+
+    elevation : int
+        Elevation of the mixer in meters above sea level
+
+    volume : int
+        Volume of the mixer in cubic meters
+            
+    dosing : dict of Dosing
+        Dosing information for the mixer
+    
+    pH : float
+        pH value for the mixer
+
+    tags : dict of Tag
+        Data tags associated with this mixer
+
+    Attributes
+    ----------
+    id : str
+        StaticMixer ID
+
+    input_contents : list of ContentsType
+        Contents entering the mixer
+
+    output_contents : list of ContentsType
+        Contents leaving the mixer
+
+    elevation : int
+        Elevation of the mixer in meters above sea level
+
+    volume : int
+        Volume of the mixer in cubic meters
+    
+    dosing : dict of Dosing
+        Dosing information for the mixer
+    
+    pH : float 
+        pH value for the mixer
+
+    tags : dict of Tag
+        Data tags associated with this mixer
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        elevation,
+        volume,
+        dosing,
+        pH,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.elevation = elevation
+        self.volume = volume
+        self.dosing = dosing
+        self.pH = pH
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.StaticMixer id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"dosing:{self.dosing} pH:{self.pH} "
+            f"volume:{self.volume} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.elevation == other.elevation
+            and self.volume == other.volume
+            and self.dosing == other.dosing
+            and self.pH == other.pH
+            and self.tags == other.tags
+        )
 
 class Reservoir(Node):
     """
@@ -1423,7 +1532,6 @@ class Reservoir(Node):
             and self.tags == other.tags
         )
 
-
 class Battery(Node):
     """
     Parameters
@@ -1496,7 +1604,6 @@ class Battery(Node):
             and self.discharge_rate == other.discharge_rate
             and self.tags == other.tags
         )
-
 
 class Digestion(Node):
     """
@@ -1605,7 +1712,6 @@ class Digestion(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
 
 class Cogeneration(Node):
     """
@@ -1734,7 +1840,6 @@ class Cogeneration(Node):
         # TODO: type check that efficiency_curve is a function
         self.thermal_efficiency = efficiency_curve
 
-
 class Boiler(Node):
     """
     Parameters
@@ -1846,7 +1951,6 @@ class Boiler(Node):
         # TODO: type check that efficiency_curve is a function
         self.thermal_efficiency = efficiency_curve
 
-
 class Clarification(Node):
     """
     Parameters
@@ -1945,7 +2049,6 @@ class Clarification(Node):
             and self.tags == other.tags
         )
 
-
 class Filtration(Node):
     """
     Parameters
@@ -1970,10 +2073,13 @@ class Filtration(Node):
 
     num_units : int
         Number of filters running in parallel
-
+    
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode in seconds
+        
     volume : int
         Volume of a single filter in cubic meters
-
+    
     tags : dict of Tag
         Data tags associated with this filter
 
@@ -1997,6 +2103,9 @@ class Filtration(Node):
     flow_rate : tuple
         Minimum, maximum, and average flow rate
 
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode
+
     tags : dict of Tag
         Data tags associated with this filter
     """
@@ -2011,6 +2120,7 @@ class Filtration(Node):
         avg_flow,
         num_units,
         volume,
+        settling_time=0.0,
         tags={},
     ):
         self.id = id
@@ -2018,6 +2128,7 @@ class Filtration(Node):
         self.set_contents(output_contents, "output_contents")
         self.num_units = num_units
         self.volume = volume
+        self.settling_time = settling_time
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
 
@@ -2044,6 +2155,122 @@ class Filtration(Node):
             and self.tags == other.tags
         )
 
+class ROMembrane(Filtration):
+    """
+    Parameters
+    ----------
+    id : str
+        ROMembrane ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the RO membrane
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the RO membrane
+
+    min_flow : int
+        Minimum flow rate of the RO membrane
+
+    max_flow : int
+        Maximum flow rate of the RO membrane
+
+    avg_flow : int
+        Average flow rate of the RO membrane
+
+    num_units : int
+        Number of RO membranes running in parallel
+
+    volume : int
+        Volume of the RO membrane in cubic meters
+    
+    area : float
+        Area of the RO membrane in square meters
+    
+    permeability : float
+        Permeability of the RO membrane
+    
+    selectivity : float
+        Selectivity of the RO membrane
+    
+    tags : dict of Tag
+        Data tags associated with the RO membrane
+
+    Attributes
+    ----------
+    id : str
+        ROMembrane ID
+
+    input_contents : list of ContentsType
+        Contents entering the RO membrane
+
+    output_contents : list of ContentsType
+        Contents leaving the RO membrane
+
+    num_units : int
+        Number of RO membranes running in parallel
+
+    volume : int
+        Volume of a single filter in cubic meters
+
+    flow_rate : tuple
+        Minimum, maximum, and average flow rate
+
+    tags : dict of Tag
+        Data tags associated with the RO membrane
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        avg_flow,
+        num_units,
+        volume,
+        area,
+        permeability,
+        selectivity,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.num_units = num_units
+        self.volume = volume
+        self.area = area
+        self.permeability = permeability
+        self.selectivity = selectivity
+        self.tags = tags
+        self.set_flow_rate(min_flow, max_flow, avg_flow)
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Filtration.ROMembrane id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"area:{self.area} permeability:{self.permeability} selectivity:{self.selectivity} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.area == other.area
+            and self.permeability == other.permeability
+            and self.selectivity == other.selectivity
+            and self.tags == other.tags
+        )
 
 class Screening(Node):
     """
@@ -2134,7 +2361,6 @@ class Screening(Node):
             and self.tags == other.tags
         )
 
-
 class Conditioning(Node):
     """
     Parameters
@@ -2223,7 +2449,6 @@ class Conditioning(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
 
 class Thickening(Node):
     """
@@ -2323,7 +2548,6 @@ class Thickening(Node):
             and self.tags == other.tags
         )
 
-
 class Aeration(Node):
     """
     Parameters
@@ -2421,7 +2645,6 @@ class Aeration(Node):
             and self.flow_rate == other.flow_rate
             and self.tags == other.tags
         )
-
 
 class Chlorination(Node):
     """
@@ -2521,6 +2744,90 @@ class Chlorination(Node):
             and self.tags == other.tags
         )
 
+class UVSystem(Chlorination):
+    """
+    Parameters
+    ----------
+    id : str
+        UVSystem ID
+
+    num_units : int
+        Number of chlorinators running in parallel
+    
+    residence_time : float
+        Time in seconds that the water is exposed to UV light
+
+    intensity : float
+        Intensity of the UV light in W/m^2
+
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+
+    Attributes
+    ----------
+    id : str
+        UVSystem ID
+
+    num_units : int
+        Number of chlorinators running in parallel
+
+    residence_time : float
+        Time in seconds that the water is exposed to UV light
+    
+    intensity : float
+        Intensity of the UV light in W/m^2
+    
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+    """
+
+    def __init__(
+        self,
+        id,
+        residence_time,
+        intensity,
+        num_units,
+        input_contents=[],
+        output_contents=[],
+        min_flow=0,
+        max_flow=0,
+        avg_flow=0,
+        volume=0,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.num_units = num_units
+        self.volume = volume
+        self.residence_time = residence_time
+        self.intensity = intensity
+        self.tags = tags
+        self.set_flow_rate(0, 0, 0)
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.UVSystem id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} residence_time:{self.residence_time} "
+            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.flow_rate == other.flow_rate
+            and self.tags == other.tags
+        )
 
 class Flaring(Node):
     """
