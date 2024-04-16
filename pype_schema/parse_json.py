@@ -1,4 +1,5 @@
 import json
+import warnings
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -272,7 +273,18 @@ class JSONParser:
             discharge_rate = utils.parse_quantity(
                 self.config[node_id].get("discharge_rate (kW)"), "kw"
             )
-            node_obj = node.Battery(node_id, capacity, discharge_rate, tags={})
+            charge_rate = utils.parse_quantity(
+                self.config[node_id].get("discharge_rate (kW)"), "kw"
+            )
+            # if either discharge or charge rate are null assume they are the same
+            if discharge_rate is None and charge_rate is None:
+                warnings.warn("Battery object {} has no charge or discharge rate defined".format(node_id))
+            elif charge_rate is None:
+                charge_rate = discharge_rate
+            elif discharge_rate is None:
+                discharge_rate = charge_rate
+            rte = self.config[node_id].get("rte")
+            node_obj = node.Battery(node_id, capacity, charge_rate, discharge_rate, rte, tags={})
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
@@ -1324,6 +1336,8 @@ class JSONParser:
         elif isinstance(node_obj, node.Battery):
             node_dict["capacity (kWh)"] = node_obj.capacity.magnitude
             node_dict["discharge_rate (kW)"] = node_obj.discharge_rate.magnitude
+            node_dict["charge_rate (kW)"] = node_obj.charge_rate.magnitude
+            node_dict["rte"] = node_obj.rte
         elif isinstance(node_obj, node.Network):
             node_dict["type"] = type(node_obj).__name__
             node_dict["input_contents"] = [

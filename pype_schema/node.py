@@ -1438,8 +1438,14 @@ class Battery(Node):
     capacity : int
         Storage capacity of the battery in kWh
 
+    charge_rate : int
+        Maximum discharge rate of the battery in kW
+
     discharge_rate : int
         Maximum discharge rate of the battery in kW
+
+    rte : float
+        Round trip efficiency of the battery
 
     tags : dict of Tag
         Data tags associated with this battery
@@ -1458,8 +1464,14 @@ class Battery(Node):
     capacity : int
         Storage capacity of the battery in kWh
 
+    charge_rate : int
+        Maximum discharge rate of the battery in kW
+
     discharge_rate : int
         Maximum discharge rate of the battery in kW
+
+    rte : float
+        Round trip efficiency of the battery
 
     tags : dict of Tag
         Data tags associated with this battery
@@ -1469,14 +1481,18 @@ class Battery(Node):
         self,
         id,
         capacity,
+        charge_rate,
         discharge_rate,
+        rte,
         tags={},
     ):
         self.id = id
         self.input_contents = [utils.ContentsType.Electricity]
         self.output_contents = [utils.ContentsType.Electricity]
         self.capacity = capacity
+        self.charge_rate = charge_rate
         self.discharge_rate = discharge_rate
+        self.rte = rte
         self.tags = tags
 
     def __repr__(self):
@@ -1484,7 +1500,8 @@ class Battery(Node):
             f"<pype_schema.node.Battery id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} capacity:{self.capacity} "
-            f"discharge_rate:{self.discharge_rate} tags:{self.tags}>\n"
+            f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
+            f"rte:{self.rte} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1497,7 +1514,9 @@ class Battery(Node):
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
             and self.capacity == other.capacity
+            and self.charge_rate == other.charge_rate
             and self.discharge_rate == other.discharge_rate
+            and self.rte == other.rte
             and self.tags == other.tags
         )
 
