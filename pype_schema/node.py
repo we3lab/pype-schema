@@ -1266,6 +1266,98 @@ class Facility(Network):
             and self.design_flow == other.design_flow
         )
 
+class ModularUnit(Network):
+    """Modular Unit in network
+
+    Parameters
+    ----------
+    id : str
+        ModularUnit ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the ModularUnit.
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the ModularUnit.
+
+    tags : dict of Tag
+        Data tags associated with this ModularUnit
+
+    nodes : dict of Node
+        nodes in the ModularUnit, e.g. pumps, tanks, or facilities
+
+    connections : dict of Connections
+        connections in the ModularUnit, e.g. pipes
+
+    num_units: int
+         Number of MDPs running in parallel
+
+    Attributes
+    ----------
+    id : str
+        ModularUnit ID
+
+    input_contents : list of ContentsType
+        Contents entering the ModularUnit.
+
+    output_contents : list of ContentsType
+        Contents leaving the ModularUnit.
+
+    tags : dict of Tag
+        Data tags associated with this ModularUnit
+
+    nodes : dict of Node
+        nodes in the ModularUnit, e.g. pumps, tanks, or facilities
+    
+    num_units: int
+        Number of MDPs running in parallel
+
+    connections : dict of Connections
+        connections in the ModularUnit, e.g. pipes
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        num_units,
+        tags={},
+        nodes={},
+        connections={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.tags = tags
+        self.nodes = nodes
+        self.connections = connections
+        self.num_units = num_units
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Network id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} tags:{self.tags} "
+            f"nodes:{self.nodes} connections:{self.connections}>\n"
+            f"num_units:{self.num_units}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+            and self.nodes == other.nodes
+            and self.connections == other.connections
+        )
+
 class Pump(Node):
     """
     Parameters
@@ -1516,6 +1608,7 @@ class Tank(Node):
         elevation,
         volume,
         num_units=1,
+        num_units,
         tags={},
     ):
         self.id = id
