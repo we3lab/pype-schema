@@ -2,6 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from pyvis.network import Network
 from matplotlib.lines import Line2D
+from collections import defaultdict
 
 color_map = {
     "Electricity": "yellow",
@@ -33,7 +34,7 @@ color_map = {
 }
 
 
-def draw_graph(network, pyvis=False):
+def draw_graph(network, pyvis=False, output_file=None):
     """Draw all of the nodes and connections in the given network
 
     Parameters
@@ -50,12 +51,13 @@ def draw_graph(network, pyvis=False):
 
     # add list of nodes and edges to graph
     g.add_nodes_from(network.nodes.__iter__())
+    color_maps = defaultdict(str)
     for id, connection in network.connections.items():
         try:
             color = color_map[connection.contents.name]
         except KeyError:
             color = "red"
-
+        color_maps[connection.contents.name]=color
         g.add_edge(
             connection.source.id, connection.destination.id, color=color, label=id
         )
@@ -64,52 +66,53 @@ def draw_graph(network, pyvis=False):
             g.add_edge(
                 connection.destination.id, connection.source.id, color=color, label=id
             )
-
-    colors = [
-        "black",
-        "saddlebrown",
-        "green",
-        "yellow",
-        "red",
-        "gray",
-        "cornflowerblue",
-        "aqua",
-        "purple",
-        "blue",
-        "orange",
-    ]
-    labels = [
-        "Sludge/Scum",
-        "Untreated Sewage",
-        "Treated Sewage",
-        "Electricity",
-        "Biogas",
-        "Natural Gas",
-        "Freshwater",
-        "Saline Water",
-        "Non-potable Reuse",
-        "Drinking Water",
-        "FOG/Food Waste",
-    ]
-    font_colors = [
-        "white",
-        "white",
-        "black",
-        "black",
-        "black",
-        "black",
-        "black",
-        "black",
-        "black",
-        "white",
-        "black",
-    ]
-
+    font_colors = ["black" for _ in range(len(color_maps))]
+    # colors = [
+    #     "black",
+    #     "saddlebrown",
+    #     "green",
+    #     "yellow",
+    #     "red",
+    #     "gray",
+    #     "cornflowerblue",
+    #     "aqua",
+    #     "purple",
+    #     "blue",
+    #     "orange",
+    # ]
+    # labels = [
+    #     "Sludge/Scum",
+    #     "Untreated Sewage",
+    #     "Treated Sewage",
+    #     "Electricity",
+    #     "Biogas",
+    #     "Natural Gas",
+    #     "Freshwater",
+    #     "Saline Water",
+    #     "Non-potable Reuse",
+    #     "Drinking Water",
+    #     "FOG/Food Waste",
+    # ]
+    # font_colors = [
+    #     "white",
+    #     "white",
+    #     "black",
+    #     "black",
+    #     "black",
+    #     "black",
+    #     "black",
+    #     "black",
+    #     "black",
+    #     "white",
+    #     "black",
+    # ]
+    colors = list(color_maps.values())
+    labels = list(color_maps.keys())
     if pyvis:
         nt = Network("500px", "500px", directed=True, notebook=False)
 
         # create legend based on https://github.com/WestHealth/pyvis/issues/50
-        num_legend_nodes = len(colors)
+        num_legend_nodes = len(color_maps)
         num_actual_nodes = len(g.nodes())
         step = 50
         x = -300
@@ -133,7 +136,10 @@ def draw_graph(network, pyvis=False):
         g.add_nodes_from(legend_nodes)
 
         nt.from_nx(g)
-        nt.show(network.id + ".html", notebook=False)
+        if output_file:
+            nt.show(output_file, notebook=False)
+        else:
+            nt.show(network.id + ".html", notebook=False)
     else:
         # create legend
         custom_lines = []
@@ -157,4 +163,7 @@ def draw_graph(network, pyvis=False):
         axis.set_xlim([1.2 * x for x in axis.get_xlim()])
         axis.set_ylim([1.2 * y for y in axis.get_ylim()])
         plt.tight_layout()
-        plt.savefig(network.id + ".png")
+        if output_file:
+            plt.savefig(output_file)
+        else:
+            plt.savefig(network.id + ".png")
