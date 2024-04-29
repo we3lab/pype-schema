@@ -1135,7 +1135,7 @@ class ModularUnit(Network):
         connections in the ModularUnit, e.g. pipes
 
     num_units: int
-         Number of MDPs running in parallel
+         Number of ModularUnit running in parallel
 
     Attributes
     ----------

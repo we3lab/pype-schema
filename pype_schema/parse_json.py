@@ -256,6 +256,8 @@ class JSONParser:
             raise TypeError(
                 "Please provide a valid json path or object for network to extend with"
             )
+        if verbose:
+            print(f"[*] Merging {new_network.id} into {self.network_obj.id}")
         old_network = copy.deepcopy(self.network_obj)
         if target_node_id not in old_network.nodes.keys():
             raise NameError("Node " + target_node_id + " not found in " + old_network.id)
@@ -271,8 +273,12 @@ class JSONParser:
                         print("remove connection: ", connection_id)
         for node_id, node_obj in new_network.nodes.items():
             old_network.add_node(node_obj)
+            if verbose:
+                print("add node: ", node_id)
         for connection_id, connection_obj in new_network.connections.items():
             old_network.add_connection(connection_obj)
+            if verbose:
+                print("add connection: ", connection_id)
         with open(connections_path, "r") as f:
             config = json.load(f)
             self.config['connections'].extend(config['connections'])
@@ -287,8 +293,12 @@ class JSONParser:
                 old_network.add_connection(
                     self.create_connection(connection_id, old_network)
                 )
+                if verbose:
+                    print("add connection: ", connection_id)
         if inplace:
             self.network_obj = old_network
+            if verbose:
+                print(f"replace the {self.network_obj.id} with the new network in place")
         return old_network
 
     def create_node(self, node_id):
