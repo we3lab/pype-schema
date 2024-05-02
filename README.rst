@@ -50,9 +50,9 @@ Useful Commands
 Legal Documents
 ===============
 
-This work was funded by the `Center for Integrated Facility Engineering <https://cife.stanford.edu/>`_ at Stanford as a
+This work was funded by the `Center for Integrated Facility Engineering <https://cife.stanford.edu/>`_ at Stanford University as a
 a part of CIFE Seed Proposal 2023-02
-`Formal proofs of safe operating limits at wastewater resource recovery facilities <https://cife.stanford.edu/formal-proofs-safe-operating-limits-wastewater-resource-recovery-facilities>`_.)
+`Formal proofs of safe operating limits at wastewater resource recovery facilities <https://cife.stanford.edu/formal-proofs-safe-operating-limits-wastewater-resource-recovery-facilities>`_.
 
 - `LICENSE <https://github.com/we3lab/pype-schema/blob/main/LICENSE/>`_
 - `CONTRIBUTING <https://github.com/we3lab/pype-schema/blob/main/CONTRIBUTING.rst/>`_
