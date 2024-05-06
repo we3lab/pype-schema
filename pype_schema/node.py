@@ -703,7 +703,7 @@ class Node(ABC):
         tag_type : TagType
             Optional tag type to filter by. None by default
 
-        obj_type : [Node, Connection, Tag]
+        obj_type : [Node, Connection, VirtualTag, Tag]
             The type of object to filter by. None by default
 
         recurse : bool
@@ -1473,6 +1473,9 @@ class Battery(Node):
     rte : float
         Round trip efficiency of the battery
 
+    leakage : pint.Quantity
+        Leakage of the battery as a Pint Quantity
+
     tags : dict of Tag
         Data tags associated with this battery
     """
@@ -1484,6 +1487,7 @@ class Battery(Node):
         charge_rate,
         discharge_rate,
         rte,
+        leakage,
         tags={},
     ):
         self.id = id

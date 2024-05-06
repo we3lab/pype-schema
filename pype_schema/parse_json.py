@@ -1031,7 +1031,7 @@ class JSONParser:
 
         Returns
         -------
-        (Quantity, Quantity, Quantity) or (float, float, float)
+        (pint.Quantity, pint.Quantity, pint.Quantity) or (float, float, float)
             (min, max, and average) with the given Pint units as a tuple.
             If no units given, then returns a tuple of floats.
         """
@@ -1068,7 +1068,7 @@ class JSONParser:
 
         Returns
         -------
-        (Quantity, Quantity) or (float, float)
+        (pint.Quantity, pint.Quantity) or (float, float)
             (lower, higher) heating values as a tuple, with units applied.
             Given as a float if no units are specified
         """
