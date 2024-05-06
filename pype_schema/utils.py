@@ -469,6 +469,12 @@ class ContentsType(Enum):
     Heat = auto()
     Oil = auto()
     Grease = auto()
+    Chemical = auto()
+    Disinfectant = auto()
+    Coagulant = auto()
+    IndustrialWastewater = auto()
+    MunicipalWastewater = auto()
+    DisinfectedEffluent = auto()
 
 
 class PumpType(Enum):

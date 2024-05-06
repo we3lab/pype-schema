@@ -274,7 +274,7 @@ class JSONParser:
                 self.config[node_id].get("discharge_rate (kW)"), "kw"
             )
             charge_rate = utils.parse_quantity(
-                self.config[node_id].get("discharge_rate (kW)"), "kw"
+                self.config[node_id].get("charge_rate (kW)"), "kw"
             )
             # if either discharge or charge rate are null assume they are the same
             if discharge_rate is None and charge_rate is None:

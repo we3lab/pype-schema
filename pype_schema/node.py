@@ -1439,7 +1439,7 @@ class Battery(Node):
         Storage capacity of the battery in kWh
 
     charge_rate : int
-        Maximum discharge rate of the battery in kW
+        Maximum charge rate of the battery in kW
 
     discharge_rate : int
         Maximum discharge rate of the battery in kW

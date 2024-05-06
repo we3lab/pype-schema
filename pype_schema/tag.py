@@ -33,6 +33,7 @@ class TagType(Enum):
     InFlow = auto()  # flow into a node
     OutFlow = auto()  # flow out of a node
     NetFlow = auto()  # net flow through a node
+    Speed = auto()
 
 
 CONTENTLESS_TYPES = [
