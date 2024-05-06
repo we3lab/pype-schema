@@ -1022,16 +1022,16 @@ class Facility(Network):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the network.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the facility
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate through the facility
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate through the facility
 
-    avg_flow : int
+    avg_flow : pint.Quantity or int
         Average flow rate through the facility
 
     tags : dict of Tag
@@ -1054,7 +1054,7 @@ class Facility(Network):
     output_contents : list of ContentsType
         Contents leaving the facility.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the facility in meters above sea level
 
     tags : dict of Tag
@@ -1131,22 +1131,22 @@ class Pump(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the pump
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the pump in meters above sea level
 
-    horsepower : int
-        Horsepower of a single pump
+    power_rating : pint.Quantity or int
+        Rated power of a single pump (in horsepower)
 
     num_units : int
         Number of pumps running in parallel
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate supplied by the pump
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate supplied by the pump
 
-    avg_flow : int
+    avg_flow : pint.Quantity or int
         Average flow rate supplied by the pump
 
     pump_type : PumpType
@@ -1166,11 +1166,11 @@ class Pump(Node):
     output_contents : list of ContentsType
         Contents leaving the pump
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the pump in meters above sea level
 
-    horsepower : int
-        Horsepower of a single pump
+    power_rating : pint.Quantity or int
+        Rated power of a single pump (in horsepower)
 
     num_units : int
         Number of pumps running in parallel
@@ -1198,7 +1198,7 @@ class Pump(Node):
         max_flow,
         avg_flow,
         elevation,
-        horsepower,
+        power_rating,
         num_units,
         pump_type=utils.PumpType.Constant,
         tags={},
@@ -1208,7 +1208,7 @@ class Pump(Node):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.pump_type = pump_type
-        self.horsepower = horsepower
+        self.power_rating = power_rating
         self.num_units = num_units
         self.tags = tags
         self.set_flow_rate(min_flow, max_flow, avg_flow)
@@ -1220,7 +1220,7 @@ class Pump(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"flow_rate:{self.flow_rate} elevation:{self.elevation} "
-            f"horsepower:{self.horsepower} num_units:{self.num_units} "
+            f"power_rating:{self.power_rating} num_units:{self.num_units} "
             f"tags:{self.tags}>\n"
         )
 
@@ -1235,7 +1235,7 @@ class Pump(Node):
             and self.output_contents == other.output_contents
             and self.elevation == other.elevation
             and self.pump_type == other.pump_type
-            and self.horsepower == other.horsepower
+            and self.power_rating == other.power_rating
             and self.num_units == other.num_units
             and self.tags == other.tags
             and self.flow_rate == other.flow_rate
@@ -1277,10 +1277,10 @@ class Tank(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the tank.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the tank in meters above sea level
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the tank in cubic meters
 
     tags : dict of Tag
@@ -1297,10 +1297,10 @@ class Tank(Node):
     output_contents : list of ContentsType
         Contents leaving the tank.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the tank in meters above sea level
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the tank in cubic meters
 
     tags : dict of Tag
@@ -1359,10 +1359,10 @@ class Reservoir(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the reservoir.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the reservoir in meters above sea level
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the reservoir in cubic meters
 
     tags : dict of Tag
@@ -1379,10 +1379,10 @@ class Reservoir(Node):
     output_contents : list of ContentsType
         Contents leaving the reservoir.
 
-    elevation : int
+    elevation : pint.Quantity or int
         Elevation of the reservoir in meters above sea level
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the reservoir in cubic meters
 
     tags : dict of Tag
@@ -1497,6 +1497,7 @@ class Battery(Node):
         self.charge_rate = charge_rate
         self.discharge_rate = discharge_rate
         self.rte = rte
+        self.leakage = leakage
         self.tags = tags
 
     def __repr__(self):
@@ -1505,7 +1506,7 @@ class Battery(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} capacity:{self.capacity} "
             f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
-            f"rte:{self.rte} tags:{self.tags}>\n"
+            f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1521,6 +1522,7 @@ class Battery(Node):
             and self.charge_rate == other.charge_rate
             and self.discharge_rate == other.discharge_rate
             and self.rte == other.rte
+            and self.leakage == other.leakage
             and self.tags == other.tags
         )
 
