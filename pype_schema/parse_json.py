@@ -238,12 +238,14 @@ class JSONParser:
             utils.parse_quantity(
                 self.config[node_id].get("elevation (meters)"), "m"
             )
+            warnings.warn("Please switch to new dictionary syntax for elevation with units", FutureWarning)
         num_units = self.config[node_id].get("num_units")
         volume = self.parse_unit_val_dict(self.config[node_id].get("volume"))
         if volume is None:
             volume = utils.parse_quantity(
                 self.config[node_id].get("volume (cubic meters)"), "m3"
             )
+            warnings.warn("Please switch to new dictionary syntax for volume with units", FutureWarning)
 
         flowrate = self.config[node_id].get("flowrate")
         if flowrate is None:
@@ -280,14 +282,17 @@ class JSONParser:
                 capacity = utils.parse_quantity(
                     self.config[node_id].get("capacity (kWh)"), "kwh"
                 )
+                warnings.warn("Please switch to new dictionary syntax for capacity with units", FutureWarning)
             if discharge_rate is None:
                 discharge_rate = utils.parse_quantity(
                     self.config[node_id].get("discharge_rate (kW)"), "kw"
                 )
+                warnings.warn("Please switch to new dictionary syntax for discharge rate with units", FutureWarning)
             if charge_rate is None:
                 charge_rate = utils.parse_quantity(
                     self.config[node_id].get("charge_rate (kW)"), "kw"
                 )
+                warnings.warn("Please switch to new dictionary syntax for charge rate with units", FutureWarning)
             # if either discharge or charge rate are null assume they are the same
             if discharge_rate is None and charge_rate is None:
                 warnings.warn("Battery object {} has no charge or discharge rate defined".format(node_id))
@@ -332,6 +337,7 @@ class JSONParser:
                 power_rating = utils.parse_quantity(
                     self.config[node_id].get("horsepower"), "hp"
                 )
+                warnings.warn("Please switch to new dictionary syntax for power rating with units", FutureWarning)
             node_obj = node.Pump(
                 node_id,
                 input_contents,
@@ -619,10 +625,11 @@ class JSONParser:
 
         if self.config[connection_id]["type"] == "Pipe":
             diameter = self.parse_unit_val_dict(self.config[connection_id].get("diameter"))
-            if diamater is None:
+            if diameter is None:
                 diameter = utils.parse_quantity(
                     self.config[connection_id].get("diameter (inches)"), "in"
                 )
+                warnings.warn("Please switch to new dictionary syntax for diamter with units", FutureWarning)
             connection_obj = connection.Pipe(
                 connection_id,
                 contents,
@@ -1288,7 +1295,7 @@ class JSONParser:
             conn_dict["heating_values"] = heat_dict
 
             if conn_obj.diameter is not None:
-                conn_dict["diameter (inches)"] = conn_obj.diameter.magnitude
+                conn_dict["diameter"] = self.unit_val_to_dict(conn_obj.diameter)
 
         # TODO: unsupported attribute: friction_coeff
 
