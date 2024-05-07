@@ -1314,7 +1314,7 @@ class Pump(Node):
             "Please switch from `horsepower` to new `power_rating` attribute",
             DeprecationWarning,
         )
-        return self.power_rating
+        return self.horsepower
 
     def set_horsepower(self, horsepower):
         warnings.warn(
@@ -1627,7 +1627,7 @@ class Battery(Node):
             "Please switch from `capacity` to new `energy_capacity` attribute",
             DeprecationWarning,
         )
-        return self.energy_capacity
+        return self.capacity
 
     def set_capacity(self, capacity):
         warnings.warn(
