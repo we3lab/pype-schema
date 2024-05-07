@@ -1651,19 +1651,19 @@ class Battery(Node):
             return self._energy_capacity
         except AttributeError:
             warnings.warn(
-                "Please switch from `horsepower` to new `power_rating` attribute",
+                "Please switch from `capacity` to new `energy_capacity` attribute",
                 DeprecationWarning,
             )
             return self.capacity
 
-    def set_energy_capacity(self, power_rating):
-        self._energy_capacity = power_rating
+    def set_energy_capacity(self, energy_capacity):
+        self._energy_capacity = energy_capacity
 
     def del_energy_capacity(self):
         del self._energy_capacity
-        if hasattr(self, "horsepower"):
+        if hasattr(self, "capacity"):
             warnings.warn(
-                "Please switch from `horsepower` to new `power_rating` attribute",
+                "Please switch from `capacity` to new `energy_capacity` attribute",
                 DeprecationWarning,
             )
             del self.capacity
