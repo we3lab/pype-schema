@@ -3,6 +3,17 @@ from . import utils
 from .tag import Tag, VirtualTag
 
 
+CAPACITY_ATTRS = [
+    "volume"
+    "energy_capacity",
+    "discharge_rate",
+    "charge_rate",
+    "flow_rate",
+    "gen_capacity",
+    "power_rating"
+]
+
+
 class Node(ABC):
     """Abstract class for all nodes
 
@@ -69,6 +80,22 @@ class Node(ABC):
             raise TypeError(
                 "'contents' must be either ContentsType or list of ContentsType"
             )
+
+    def get_capacities():
+        """Gets a dictionary of capacity-related attributes
+
+        Returns
+        -------
+        dict
+            Dictionary of attribute names and values
+        """
+        result = {}
+        for attr in CAPACITY_ATTRS:
+            try:
+                result[attr] = getattr(x, attr)
+            except AttributeError:
+                pass
+        return result
 
     def add_tag(self, tag):
         """Adds a tag to the node
@@ -1263,6 +1290,20 @@ class Pump(Node):
         # TODO: type check that pump_curve is a function
         self.pump_curve = pump_curve
 
+    def get_horsepower(self):
+        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        return self.power_rating
+
+    def set_horsepower(self, horsepower):
+        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        self.power_rating = capacity
+
+    def del_horsepower(self):
+        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        del self.power_rating
+
+    horsepower = property(get_horsepower, set_horsepower, del_horsepower)
+
 
 class Tank(Node):
     """
@@ -1435,8 +1476,8 @@ class Battery(Node):
     id : str
         Battery ID
 
-    capacity : int
-        Storage capacity of the battery in kWh
+    energy_capacity : int
+        Energy storage capacity of the battery in kWh
 
     charge_rate : int
         Maximum charge rate of the battery in kW
@@ -1461,8 +1502,8 @@ class Battery(Node):
     output_contents : list of ContentsType
         Contents leaving the battery.
 
-    capacity : int
-        Storage capacity of the battery in kWh
+    energy_capacity : int
+        Energy storage capacity of the battery in kWh
 
     charge_rate : int
         Maximum discharge rate of the battery in kW
@@ -1483,7 +1524,7 @@ class Battery(Node):
     def __init__(
         self,
         id,
-        capacity,
+        energy_capacity,
         charge_rate,
         discharge_rate,
         rte,
@@ -1493,7 +1534,7 @@ class Battery(Node):
         self.id = id
         self.input_contents = [utils.ContentsType.Electricity]
         self.output_contents = [utils.ContentsType.Electricity]
-        self.capacity = capacity
+        self.energy_capacity = energy_capacity
         self.charge_rate = charge_rate
         self.discharge_rate = discharge_rate
         self.rte = rte
@@ -1504,7 +1545,7 @@ class Battery(Node):
         return (
             f"<pype_schema.node.Battery id:{self.id} "
             f"input_contents:{self.input_contents} "
-            f"output_contents:{self.output_contents} capacity:{self.capacity} "
+            f"output_contents:{self.output_contents} energy_capacity:{self.energy_capacity} "
             f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
             f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
@@ -1518,13 +1559,27 @@ class Battery(Node):
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
-            and self.capacity == other.capacity
+            and self.energy_capacity == other.energy_capacity
             and self.charge_rate == other.charge_rate
             and self.discharge_rate == other.discharge_rate
             and self.rte == other.rte
             and self.leakage == other.leakage
             and self.tags == other.tags
         )
+
+    def get_capacity(self):
+        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        return self.energy_capacity
+
+    def set_capacity(self, capacity):
+        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        self.energy_capacity = capacity
+
+    def del_capacity(self):
+        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        del self.energy_capacity
+
+    capacity = property(get_capacity, set_capacity, del_capacity)
 
 
 class Digestion(Node):

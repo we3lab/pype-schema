@@ -1,4 +1,5 @@
 import json
+import pint
 import warnings
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
@@ -275,14 +276,14 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Battery":
-            capacity = self.parse_unit_val_dict(self.config[node_id].get("capacity"))
+            energy_capacity = self.parse_unit_val_dict(self.config[node_id].get("energy_capacity"))
             discharge_rate = self.parse_unit_val_dict(self.config[node_id].get("discharge_rate"))
             charge_rate = self.parse_unit_val_dict(self.config[node_id].get("charge_rate"))
-            if capacity is None:
-                capacity = utils.parse_quantity(
+            if energy_capacity is None:
+                energy_capacity = utils.parse_quantity(
                     self.config[node_id].get("capacity (kWh)"), "kwh"
                 )
-                warnings.warn("Please switch to new dictionary syntax for capacity with units", FutureWarning)
+                warnings.warn("Please switch to new dictionary syntax for energy capacity with units", FutureWarning)
             if discharge_rate is None:
                 discharge_rate = utils.parse_quantity(
                     self.config[node_id].get("discharge_rate (kW)"), "kw"
@@ -302,7 +303,7 @@ class JSONParser:
                 discharge_rate = charge_rate
             rte = self.config[node_id].get("rte")
             leakage = self.parse_unit_val_dict(self.config[node_id].get("leakage"))
-            node_obj = node.Battery(node_id, capacity, charge_rate, discharge_rate, rte, leakage, tags={})
+            node_obj = node.Battery(node_id, energy_capacity, charge_rate, discharge_rate, rte, leakage, tags={})
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
@@ -1099,7 +1100,7 @@ class JSONParser:
             Dictionary with keys ``value`` and ``units``
         """
         if isinstance(attribute, pint.Quantity):
-            data_dict = {"value": attribute.magnitude, "units": attribute.units}
+            data_dict = {"value": attribute.magnitude, "units": str(attribute.units)}
         else:
             data_dict = {"value": attribute, "units": None}
         return data_dict
@@ -1295,7 +1296,7 @@ class JSONParser:
             conn_dict["heating_values"] = heat_dict
 
             if conn_obj.diameter is not None:
-                conn_dict["diameter"] = self.unit_val_to_dict(conn_obj.diameter)
+                conn_dict["diameter"] = JSONParser.unit_val_to_dict(conn_obj.diameter)
 
         # TODO: unsupported attribute: friction_coeff
 
@@ -1360,16 +1361,16 @@ class JSONParser:
 
         if isinstance(node_obj, (node.Tank, node.Reservoir)):
             if node_obj.elevation is not None:
-                node_dict["elevation"] = self.unit_val_to_dict(node_obj.elevation)
+                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.volume is not None:
-                node_dict["volume"] = self.unit_val_to_dict(node_obj.volume)
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
         elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
-                node_dict["elevation"] = self.unit_val_to_dict(node_obj.elevation)
+                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.power_rating is not None:
-                node_dict["power_rating"] = self.unit_val_to_dict(node_obj.power_rating)
+                node_dict["power_rating"] = JSONParser.unit_val_to_dict(node_obj.power_rating)
 
             if node_obj.pump_type is not None:
                 node_dict["pump_type"] = node_obj.pump_type.name
@@ -1380,7 +1381,7 @@ class JSONParser:
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Digestion):
             if node_obj.volume is not None:
-                node_dict["volume"] = self.unit_val_to_dict(node_obj.volume)
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
             if node_obj.digester_type is not None:
                 node_dict["digester_type"] = node_obj.digester_type.name
@@ -1405,7 +1406,7 @@ class JSONParser:
             ),
         ):
             if node_obj.volume is not None:
-                node_dict["volume"] = self.unit_val_to_dict(node_obj.volume)
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
             node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
                 node_obj, "flow_rate"
@@ -1417,10 +1418,10 @@ class JSONParser:
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Battery):
-            node_dict["capacity"] = self.unit_val_to_dict(node_obj.capacity)
-            node_dict["discharge_rate"] = self.unit_val_to_dict(node_obj.discharge_rate)
-            node_dict["charge_rate"] = self.unit_val_to_dict(node_obj.charge_rate)
-            node_dict["leakage"] = self.unit_val_to_dict(node_obj.leakage)
+            node_dict["energy_capacity"] = JSONParser.unit_val_to_dict(node_obj.energy_capacity)
+            node_dict["discharge_rate"] = JSONParser.unit_val_to_dict(node_obj.discharge_rate)
+            node_dict["charge_rate"] = JSONParser.unit_val_to_dict(node_obj.charge_rate)
+            node_dict["leakage"] = JSONParser.unit_val_to_dict(node_obj.leakage)
             node_dict["rte"] = node_obj.rte
         elif isinstance(node_obj, node.Network):
             node_dict["type"] = type(node_obj).__name__
@@ -1438,7 +1439,7 @@ class JSONParser:
                 node_dict["connections"].append(conn.id)
             if isinstance(node_obj, node.Facility):
                 if node_obj.elevation is not None:
-                    node_dict["elevation"] = self.unit_val_to_dict(node_obj.elevation)
+                    node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
                 node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
                     node_obj, "flow_rate"

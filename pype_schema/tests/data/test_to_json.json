@@ -1054,7 +1054,6 @@
             "BatteryToFacility",
             "BoilerToFacility"
         ],
-        "elevation (meters)": 10,
         "flowrate": {
             "min": 5,
             "max": 25,
@@ -1224,7 +1223,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 250
+        "volume": {
+            "value": 250,
+            "units": "meter ** 3"
+        }
     },
     "PrimaryClarifier": {
         "type": "Clarification",
@@ -1236,7 +1238,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 800,
+        "volume": {
+            "value": 800,
+            "units": "meter ** 3"
+        },
         "flowrate": {
             "min": null,
             "max": null,
@@ -1256,7 +1261,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 2500,
+        "volume": {
+            "value": 2500,
+            "units": "meter ** 3"
+        },
         "flowrate": {
             "min": null,
             "max": null,
@@ -1275,7 +1283,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 800,
+        "volume": {
+            "value": 800,
+            "units": "meter ** 3"
+        },
         "flowrate": {
             "min": null,
             "max": null,
@@ -1294,7 +1305,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 2000,
+        "volume": {
+            "value": 2000,
+            "units": "meter ** 3"
+        },
         "flowrate": {
             "min": null,
             "max": null,
@@ -1314,7 +1328,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 300,
+        "volume": {
+            "value": 300,
+            "units": "meter ** 3"
+        },
         "flowrate": {
             "min": null,
             "max": null,
@@ -1333,7 +1350,10 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "volume (cubic meters)": 2500,
+        "volume": {
+            "value": 2500,
+            "units": "meter ** 3"
+        },
         "digester_type": "Anaerobic",
         "flowrate": {
             "min": null,
@@ -1524,8 +1544,23 @@
         ],
         "tags": {},
         "virtual_tags": {},
-        "capacity (kWh)": 2000,
-        "discharge_rate (kW)": 550
+        "energy_capacity": {
+            "value": 2000,
+            "units": "hour * kilowatt"
+        },
+        "discharge_rate": {
+            "value": 550,
+            "units": "kilowatt"
+        },
+        "charge_rate": {
+            "value": 550,
+            "units": "kilowatt"
+        },
+        "leakage": {
+            "value": null,
+            "units": null
+        },
+        "rte": null
     },
     "Ultrafiltration": {
         "type": "Filtration",
