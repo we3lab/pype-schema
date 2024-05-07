@@ -1,3 +1,4 @@
+import warnings
 from abc import ABC
 from . import utils
 from .tag import Tag, VirtualTag
@@ -1313,7 +1314,7 @@ class Pump(Node):
             "Please switch from `horsepower` to new `power_rating` attribute",
             DeprecationWarning,
         )
-        return self.horsepower
+        return self.power_rating
 
     def set_horsepower(self, horsepower):
         warnings.warn(
@@ -1625,7 +1626,7 @@ class Battery(Node):
             "Please switch from `capacity` to new `energy_capacity` attribute",
             DeprecationWarning,
         )
-        return self.capacity
+        return self.energy_capacity
 
     def set_capacity(self, capacity):
         warnings.warn(
