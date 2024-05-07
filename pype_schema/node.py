@@ -1602,12 +1602,24 @@ class Battery(Node):
             return self._rte
         except AttributeError:
             return None
-    
+
     def set_rte(self, rte):
         self._rte = rte
 
     def del_rte(self):
         del self._rte
+
+    def get_leakage(self):
+        try:
+            return self._leakage
+        except AttributeError:
+            return None
+
+    def set_leakage(self, leakage):
+        self._leakage = leakage
+
+    def del_leakage(self):
+        del self._leakage
 
     def get_energy_capacity(self):
         try:
@@ -1647,6 +1659,7 @@ class Battery(Node):
     def del_charge_rate(self):
         del self._charge_rate
 
+    leakage = property(get_leakage, set_leakage, del_leakage)
     rte = property(get_rte, set_rte, del_rte)
     charge_rate = property(get_charge_rate, set_charge_rate, del_charge_rate)
     energy_capacity = property(
