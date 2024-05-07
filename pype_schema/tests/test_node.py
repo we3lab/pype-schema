@@ -918,3 +918,46 @@ def test_select_tags_no_parent(
         tag, exit_point_id=exit_point_id, tag_type=tag_type
     )
     assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, node_id, expected",
+    [
+        (
+            "data/node.json",
+            "Cogenerator",
+            {
+                "gen_capacity": (
+                    pint.Quantity(400, "kW"), 
+                    pint.Quantity(750, "kW"), 
+                    pint.Quantity(600, "kW"),
+                )
+            }
+        ),
+        (
+            "data/node.json",
+            "RawSewagePump",
+            {"power_rating": None, "flow_rate": (None, None, None)}
+        ),
+        (
+            "data/merged_wwtp.json",
+            "GritChamber",
+            {"volume": pint.Quantity(250, "m^3")}
+        ),
+        (
+            "data/merged_wwtp.json",
+            "PrimaryClarifier",
+            {
+                "volume": pint.Quantity(800, "m^3"),
+                "flow_rate": (None, None, pint.Quantity(2, "MGD"))
+            }
+        ),
+    ],
+)
+def test_get_capacities(json_path, node_id, expected):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+    node = config.get_node(node_id, recurse=True)
+    result = node.get_capacities()
+    assert result == expected

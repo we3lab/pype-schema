@@ -4,7 +4,7 @@ from .tag import Tag, VirtualTag
 
 
 CAPACITY_ATTRS = [
-    "volume"
+    "volume",
     "energy_capacity",
     "discharge_rate",
     "charge_rate",
@@ -81,7 +81,7 @@ class Node(ABC):
                 "'contents' must be either ContentsType or list of ContentsType"
             )
 
-    def get_capacities():
+    def get_capacities(self):
         """Gets a dictionary of capacity-related attributes
 
         Returns
@@ -92,7 +92,7 @@ class Node(ABC):
         result = {}
         for attr in CAPACITY_ATTRS:
             try:
-                result[attr] = getattr(x, attr)
+                result[attr] = getattr(self, attr)
             except AttributeError:
                 pass
         return result
