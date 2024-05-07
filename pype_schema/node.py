@@ -1619,6 +1619,23 @@ class Battery(Node):
             )
             del self.capacity
 
+    def get_charge_rate(self):
+        try:
+            return self._charge_rate
+        except AttributeError:
+            warnings.warn(
+                "Please add `charge_rate` in addition to `discharge_rate` attribute",
+                DeprecationWarning,
+            )
+            return self.discharge_rate
+
+    def set_charge_rate(self, charge_rate):
+        self._charge_rate = charge_rate
+
+    def del_energy_capacity(self):
+        del self._charge_rate
+
+    charge_rate = property(get_charge_rate, set_charge_rate, del_charge_rate)
     energy_capacity = property(
         get_energy_capacity, set_energy_capacity, del_energy_capacity
     )
