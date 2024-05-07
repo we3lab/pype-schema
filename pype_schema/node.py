@@ -3,11 +3,7 @@ from . import utils
 from .tag import Tag, VirtualTag
 
 
-EFFICIENCY_ATTRS = [
-    "thermal_efficiency",
-    "electrical_efficiency",
-    "rte"
-]
+EFFICIENCY_ATTRS = ["thermal_efficiency", "electrical_efficiency", "rte"]
 
 CAPACITY_ATTRS = [
     "volume",
@@ -16,7 +12,7 @@ CAPACITY_ATTRS = [
     "charge_rate",
     "flow_rate",
     "gen_capacity",
-    "power_rating"
+    "power_rating",
 ]
 
 
@@ -1313,15 +1309,24 @@ class Pump(Node):
         self.pump_curve = pump_curve
 
     def get_horsepower(self):
-        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `horsepower` to new `power_rating` attribute",
+            DeprecationWarning,
+        )
         return self.power_rating
 
     def set_horsepower(self, horsepower):
-        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `horsepower` to new `power_rating` attribute",
+            DeprecationWarning,
+        )
         self.power_rating = capacity
 
     def del_horsepower(self):
-        warnings.warn("Please switch from `horsepower` to new `power_rating` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `horsepower` to new `power_rating` attribute",
+            DeprecationWarning,
+        )
         del self.power_rating
 
     horsepower = property(get_horsepower, set_horsepower, del_horsepower)
@@ -1590,15 +1595,24 @@ class Battery(Node):
         )
 
     def get_capacity(self):
-        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `capacity` to new `energy_capacity` attribute",
+            DeprecationWarning,
+        )
         return self.energy_capacity
 
     def set_capacity(self, capacity):
-        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `capacity` to new `energy_capacity` attribute",
+            DeprecationWarning,
+        )
         self.energy_capacity = capacity
 
     def del_capacity(self):
-        warnings.warn("Please switch from `capacity` to new `energy_capacity` attribute", DeprecationWarning)
+        warnings.warn(
+            "Please switch from `capacity` to new `energy_capacity` attribute",
+            DeprecationWarning,
+        )
         del self.energy_capacity
 
     capacity = property(get_capacity, set_capacity, del_capacity)

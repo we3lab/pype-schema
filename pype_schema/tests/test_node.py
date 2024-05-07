@@ -929,29 +929,25 @@ def test_select_tags_no_parent(
             "Cogenerator",
             {
                 "gen_capacity": (
-                    pint.Quantity(400, "kW"), 
-                    pint.Quantity(750, "kW"), 
+                    pint.Quantity(400, "kW"),
+                    pint.Quantity(750, "kW"),
                     pint.Quantity(600, "kW"),
                 )
-            }
+            },
         ),
         (
             "data/node.json",
             "RawSewagePump",
-            {"power_rating": None, "flow_rate": (None, None, None)}
+            {"power_rating": None, "flow_rate": (None, None, None)},
         ),
-        (
-            "data/merged_wwtp.json",
-            "GritChamber",
-            {"volume": pint.Quantity(250, "m^3")}
-        ),
+        ("data/merged_wwtp.json", "GritChamber", {"volume": pint.Quantity(250, "m^3")}),
         (
             "data/merged_wwtp.json",
             "PrimaryClarifier",
             {
                 "volume": pint.Quantity(800, "m^3"),
-                "flow_rate": (None, None, pint.Quantity(2, "MGD"))
-            }
+                "flow_rate": (None, None, pint.Quantity(2, "MGD")),
+            },
         ),
     ],
 )
@@ -973,21 +969,17 @@ def test_get_capacities(json_path, node_id, expected):
             {
                 "thermal_efficiency": None,
                 "electrical_efficiency": None,
-            }
+            },
         ),
         (
             "data/connection.json",
             "Cogenerator",
             {
                 "thermal_efficiency": (lambda x: 0.8),
-                "electrical_efficiency": (lambda x: 0.32)
-            }
+                "electrical_efficiency": (lambda x: 0.32),
+            },
         ),
-        (
-            "data/merged_wwtp.json",
-            "PrimaryClarifier",
-            {}
-        ),
+        ("data/merged_wwtp.json", "PrimaryClarifier", {}),
     ],
 )
 def test_get_efficiencies(json_path, node_id, expected):

@@ -44,7 +44,7 @@ CONTENTLESS_TYPES = [
     TagType.Rotation,
     TagType.Efficiency,
     TagType.Speed,
-    TagType.Frequency
+    TagType.Frequency,
 ]
 
 

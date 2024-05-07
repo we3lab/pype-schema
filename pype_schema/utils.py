@@ -433,8 +433,8 @@ def parse_units(units):
             ):
                 return u.inch
             elif (
-                clean_units == "hz" 
-                or clean_units == "hertz" 
+                clean_units == "hz"
+                or clean_units == "hertz"
                 or clean_units == "1/s"
                 or clean_units == "1/second"
                 or clean_units == "1/sec"
