@@ -236,7 +236,9 @@ class JSONParser:
         # strings like `elevation (meters)` and `volume (cubic meters)`
         # are included for backwards compatability
         if elevation is None:
-            utils.parse_quantity(self.config[node_id].get("elevation (meters)"), "m")
+            elevation = utils.parse_quantity(
+                self.config[node_id].get("elevation (meters)"), "m"
+            )
             warnings.warn(
                 "Please switch to new dictionary syntax for elevation with units",
                 FutureWarning,
