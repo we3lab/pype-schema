@@ -294,7 +294,8 @@ class JSONParser:
                     self.config[node_id].get("capacity (kWh)"), "kwh"
                 )
                 warnings.warn(
-                    "Please switch to new dictionary syntax for energy capacity with units",
+                    "Please switch to new dictionary syntax "
+                    + "for energy capacity with units",
                     FutureWarning,
                 )
             if discharge_rate is None:
@@ -302,7 +303,8 @@ class JSONParser:
                     self.config[node_id].get("discharge_rate (kW)"), "kw"
                 )
                 warnings.warn(
-                    "Please switch to new dictionary syntax for discharge rate with units",
+                    "Please switch to new dictionary syntax "
+                    + "for discharge rate with units",
                     FutureWarning,
                 )
             if charge_rate is None:
@@ -370,7 +372,8 @@ class JSONParser:
                     self.config[node_id].get("horsepower"), "hp"
                 )
                 warnings.warn(
-                    "Please switch to new dictionary syntax for power rating with units",
+                    "Please switch to new dictionary syntax "
+                    + "for power rating with units",
                     FutureWarning,
                 )
             node_obj = node.Pump(

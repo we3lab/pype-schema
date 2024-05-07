@@ -989,6 +989,6 @@ def test_get_efficiencies(json_path, node_id, expected):
     result = node.get_efficiencies()
     for key, efficiency in result.items():
         if callable(efficiency):
-            assert(efficiency(0) == expected[key](0))
+            assert efficiency(0) == expected[key](0)
         else:
             assert efficiency == expected[key]

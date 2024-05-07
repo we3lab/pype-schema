@@ -1330,7 +1330,7 @@ class Pump(Node):
             DeprecationWarning,
         )
         del self.horsepower
-        if hasattr(self, power_rating):
+        if hasattr(self, "power_rating"):
             del self._power_rating
 
     def get_power_rating(self):
@@ -1599,7 +1599,8 @@ class Battery(Node):
         return (
             f"<pype_schema.node.Battery id:{self.id} "
             f"input_contents:{self.input_contents} "
-            f"output_contents:{self.output_contents} energy_capacity:{self.energy_capacity} "
+            f"output_contents:{self.output_contents} "
+            f"energy_capacity:{self.energy_capacity} "
             f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
             f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
@@ -1642,7 +1643,7 @@ class Battery(Node):
             DeprecationWarning,
         )
         del self.capacity
-        if hasattr(self, power_rating):
+        if hasattr(self, "energy_capacity"):
             del self._energy_capacity
 
     def get_energy_capacity(self):
