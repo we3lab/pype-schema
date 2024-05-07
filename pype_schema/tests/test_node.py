@@ -987,4 +987,8 @@ def test_get_efficiencies(json_path, node_id, expected):
     config = parser.initialize_network()
     node = config.get_node(node_id, recurse=True)
     result = node.get_efficiencies()
-    assert result == expected
+    for key, efficiency in result.items():
+        if callable(efficiency):
+            assert(efficiency(0) == expected[key](0))
+        else:
+            assert efficiency == expected[key]

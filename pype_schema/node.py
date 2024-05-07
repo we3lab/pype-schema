@@ -1655,7 +1655,7 @@ class Battery(Node):
     def set_energy_capacity(self, power_rating):
         self._energy_capacity = power_rating
 
-    def del_power_rating(self):
+    def del_energy_capacity(self):
         del self._energy_capacity
         if hasattr(self, "horsepower"):
             warnings.warn(
