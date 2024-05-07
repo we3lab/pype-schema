@@ -1309,30 +1309,6 @@ class Pump(Node):
         # TODO: type check that pump_curve is a function
         self.pump_curve = pump_curve
 
-    def get_horsepower(self):
-        warnings.warn(
-            "Please switch from `horsepower` to new `power_rating` attribute",
-            DeprecationWarning,
-        )
-        return getattr(self, horsepower)
-
-    def set_horsepower(self, horsepower):
-        warnings.warn(
-            "Please switch from `horsepower` to new `power_rating` attribute",
-            DeprecationWarning,
-        )
-        self.horsepower = horsepower
-        self.power_rating = horsepower
-
-    def del_horsepower(self):
-        warnings.warn(
-            "Please switch from `horsepower` to new `power_rating` attribute",
-            DeprecationWarning,
-        )
-        del self.horsepower
-        if hasattr(self, "power_rating"):
-            del self._power_rating
-
     def get_power_rating(self):
         try:
             return self._power_rating
@@ -1355,7 +1331,6 @@ class Pump(Node):
             )
             del self.horsepower
 
-    horsepower = property(get_horsepower, set_horsepower, del_horsepower)
     power_rating = property(get_power_rating, set_power_rating, del_power_rating)
 
 
@@ -1622,30 +1597,6 @@ class Battery(Node):
             and self.tags == other.tags
         )
 
-    def get_capacity(self):
-        warnings.warn(
-            "Please switch from `capacity` to new `energy_capacity` attribute",
-            DeprecationWarning,
-        )
-        return getattr(self, capacity)
-
-    def set_capacity(self, capacity):
-        warnings.warn(
-            "Please switch from `capacity` to new `energy_capacity` attribute",
-            DeprecationWarning,
-        )
-        self.capacity = capacity
-        self.energy_capacity = capacity
-
-    def del_capacity(self):
-        warnings.warn(
-            "Please switch from `capacity` to new `energy_capacity` attribute",
-            DeprecationWarning,
-        )
-        del self.capacity
-        if hasattr(self, "energy_capacity"):
-            del self._energy_capacity
-
     def get_energy_capacity(self):
         try:
             return self._energy_capacity
@@ -1668,7 +1619,6 @@ class Battery(Node):
             )
             del self.capacity
 
-    capacity = property(get_capacity, set_capacity, del_capacity)
     energy_capacity = property(
         get_energy_capacity, set_energy_capacity, del_energy_capacity
     )
