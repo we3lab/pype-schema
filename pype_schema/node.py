@@ -1597,6 +1597,18 @@ class Battery(Node):
             and self.tags == other.tags
         )
 
+    def get_rte(self):
+        try:
+            return self._rte
+        except AttributeError:
+            return None
+    
+    def set_rte(self, rte):
+        self._rte = rte
+
+    def del_rte(self):
+        del self._rte
+
     def get_energy_capacity(self):
         try:
             return self._energy_capacity
@@ -1635,6 +1647,7 @@ class Battery(Node):
     def del_charge_rate(self):
         del self._charge_rate
 
+    rte = property(get_rte, set_rte, del_rte)
     charge_rate = property(get_charge_rate, set_charge_rate, del_charge_rate)
     energy_capacity = property(
         get_energy_capacity, set_energy_capacity, del_energy_capacity
