@@ -3,6 +3,12 @@ from . import utils
 from .tag import Tag, VirtualTag
 
 
+EFFICIENCY_ATTRS = [
+    "thermal_efficiency",
+    "electrical_efficiency",
+    "rte"
+]
+
 CAPACITY_ATTRS = [
     "volume",
     "energy_capacity",
@@ -80,6 +86,22 @@ class Node(ABC):
             raise TypeError(
                 "'contents' must be either ContentsType or list of ContentsType"
             )
+
+    def get_efficiencies(self):
+        """Gets a dictionary of efficiency-related attributes
+
+        Returns
+        -------
+        dict
+            Dictionary of attribute names and values
+        """
+        result = {}
+        for attr in EFFICIENCY_ATTRS:
+            try:
+                result[attr] = getattr(self, attr)
+            except AttributeError:
+                pass
+        return result
 
     def get_capacities(self):
         """Gets a dictionary of capacity-related attributes

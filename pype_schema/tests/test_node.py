@@ -961,3 +961,38 @@ def test_get_capacities(json_path, node_id, expected):
     node = config.get_node(node_id, recurse=True)
     result = node.get_capacities()
     assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, node_id, expected",
+    [
+        (
+            "data/node.json",
+            "Cogenerator",
+            {
+                "thermal_efficiency": None,
+                "electrical_efficiency": None,
+            }
+        ),
+        (
+            "data/connection.json",
+            "Cogenerator",
+            {
+                "thermal_efficiency": (lambda x: 0.8),
+                "electrical_efficiency": (lambda x: 0.32)
+            }
+        ),
+        (
+            "data/merged_wwtp.json",
+            "PrimaryClarifier",
+            {}
+        ),
+    ],
+)
+def test_get_efficiencies(json_path, node_id, expected):
+    parser = JSONParser(json_path)
+    config = parser.initialize_network()
+    node = config.get_node(node_id, recurse=True)
+    result = node.get_efficiencies()
+    assert result == expected
