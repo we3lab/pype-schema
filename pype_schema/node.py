@@ -1320,16 +1320,41 @@ class Pump(Node):
             "Please switch from `horsepower` to new `power_rating` attribute",
             DeprecationWarning,
         )
-        self.power_rating = capacity
+        self.power_rating = horsepower
 
     def del_horsepower(self):
         warnings.warn(
             "Please switch from `horsepower` to new `power_rating` attribute",
             DeprecationWarning,
         )
-        del self.power_rating
+        del self.horsepower
+        if hasattr(self, power_rating):
+            del self._power_rating
+
+    def get_power_rating(self):
+        try:
+            return self._power_rating
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `horsepower` to new `power_rating` attribute",
+                DeprecationWarning,
+            )
+            return self.horsepower
+
+    def set_power_rating(self, power_rating):
+        self._power_rating = power_rating
+
+    def del_power_rating(self):
+        del self._power_rating
+        if hasattr(self, "horsepower"):
+            warnings.warn(
+                "Please switch from `horsepower` to new `power_rating` attribute",
+                DeprecationWarning,
+            )
+            del self.horsepower
 
     horsepower = property(get_horsepower, set_horsepower, del_horsepower)
+    power_rating = property(get_power_rating, set_power_rating, del_power_rating)
 
 
 class Tank(Node):
@@ -1613,9 +1638,36 @@ class Battery(Node):
             "Please switch from `capacity` to new `energy_capacity` attribute",
             DeprecationWarning,
         )
-        del self.energy_capacity
+        del self.capacity
+        if hasattr(self, power_rating):
+            del self._energy_capacity
+
+    def get_energy_capacity(self):
+        try:
+            return self._energy_capacity
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `horsepower` to new `power_rating` attribute",
+                DeprecationWarning,
+            )
+            return self.capacity
+
+    def set_energy_capacity(self, power_rating):
+        self._energy_capacity = power_rating
+
+    def del_power_rating(self):
+        del self._energy_capacity
+        if hasattr(self, "horsepower"):
+            warnings.warn(
+                "Please switch from `horsepower` to new `power_rating` attribute",
+                DeprecationWarning,
+            )
+            del self.capacity
 
     capacity = property(get_capacity, set_capacity, del_capacity)
+    energy_capacity = property(
+        get_energy_capacity, set_energy_capacity, del_energy_capacity
+    )
 
 
 class Digestion(Node):
