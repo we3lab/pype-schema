@@ -1632,7 +1632,7 @@ class Battery(Node):
     def set_charge_rate(self, charge_rate):
         self._charge_rate = charge_rate
 
-    def del_energy_capacity(self):
+    def del_charge_rate(self):
         del self._charge_rate
 
     charge_rate = property(get_charge_rate, set_charge_rate, del_charge_rate)
