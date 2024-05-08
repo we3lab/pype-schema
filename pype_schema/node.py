@@ -16,8 +16,7 @@ CAPACITY_ATTRS = [
     "design_flow",
     "min_gen",
     "max_gen",
-    "design_gen"
-    "power_rating",
+    "design_gen" "power_rating",
 ]
 
 
@@ -1938,7 +1937,7 @@ class Cogeneration(Node):
     """
 
     def __init__(
-        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+        self, id, input_contents, min_gen, max_gen, design_gen, num_units, tags={}
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
@@ -1954,8 +1953,9 @@ class Cogeneration(Node):
     def __repr__(self):
         return (
             f"<pype_schema.node.Cogeneration id:{self.id} "
-            f"input_contents:{self.input_contents} output_contents:{self.output_contents} "
-            f"min_gen:{self.min_gen} max_gen:{self.max_gen} design_gen:{self.design_gen} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} min_gen:{self.min_gen} "
+            f"max_gen:{self.max_gen} design_gen:{self.design_gen} "
             f"num_units:{self.num_units} tags:{self.tags}>\n"
         )
 
@@ -1975,7 +1975,7 @@ class Cogeneration(Node):
             and self.tags == other.tags
         )
 
-    def set_gen_capacity(self, min, max, avg):
+    def set_gen_capacity(self, min, max, design):
         """Set the minimum, maximum, and average generation capacity
 
         Parameters
@@ -1986,15 +1986,15 @@ class Cogeneration(Node):
         max : int
             Maximum generation by a single cogenerator
 
-        avg : int
-            Average generation by a single cogenerator
+        design : int
+            Design generation by a single cogenerator
         """
         warnings.warn(
             "Please switch from `gen_capacity` tuple to new separate "
             + "`min_gen`, `max_gen` and `design_gen` attributes",
             DeprecationWarning,
         )
-        self.gen_capacity = (min, max, avg)
+        self.gen_capacity = (min, max, design)
 
     def get_min_gen(self):
         try:
@@ -2093,8 +2093,8 @@ class Boiler(Node):
     max_gen : int
         Maximum generation capacity of a single boiler
 
-    avg_gen : int
-        Average generation capacity of a single boiler
+    design_gen : int
+        Design generation capacity of a single boiler
 
     num_units : int
         Number of boiler units running in parallel
@@ -2114,8 +2114,15 @@ class Boiler(Node):
     output_contents : list of ContentsType
         Contents leaving the boiler (Electricity)
 
-    gen_capacity : tuple
-        Minimum, maximum, and average generation capacity
+    min_gen : int
+        Minimum generation capacity of a single boiler
+
+    max_gen : int
+        Maximum generation capacity of a single boiler
+
+    design_gen : int
+        Design generation capacity of a single boiler
+
 
     num_units : int
         Number of boiler units running in parallel
@@ -2129,14 +2136,16 @@ class Boiler(Node):
     """
 
     def __init__(
-        self, id, input_contents, min_gen, max_gen, avg_gen, num_units, tags={}
+        self, id, input_contents, min_gen, max_gen, design_gen, num_units, tags={}
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
         self.output_contents = [utils.ContentsType.Heat]
         self.num_units = num_units
         self.tags = tags
-        self.set_gen_capacity(min_gen, max_gen, avg_gen)
+        self.min_gen = min_gen
+        self.max_gen = max_gen
+        self.design_gen = design_gen
         self.set_thermal_efficiency(None)
 
     def __repr__(self):
@@ -2144,7 +2153,8 @@ class Boiler(Node):
             f"<pype_schema.node.Boiler id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"gen_capacity:{self.gen_capacity} tags:{self.tags}>\n"
+            f"min_gen:{self.min_gen} max_gen:{self.max_gen} "
+            f"design_gen:{self.design_gen} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -2157,11 +2167,13 @@ class Boiler(Node):
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
             and self.num_units == other.num_units
-            and self.gen_capacity == other.gen_capacity
+            and self.min_gen == other.min_gen
+            and self.max_gen == other.max_gen
+            and self.design_gen == other.design_gen
             and self.tags == other.tags
         )
 
-    def set_gen_capacity(self, min, max, avg):
+    def set_gen_capacity(self, min, max, design):
         """Set the minimum, maximum, and average generation capacity
 
         Parameters
@@ -2172,10 +2184,73 @@ class Boiler(Node):
         max : int
             Maximum generation by a single cogenerator
 
-        avg : int
-            Average generation by a single cogenerator
+        design : int
+            Design generation by a single cogenerator
         """
-        self.gen_capacity = (min, max, avg)
+        warnings.warn(
+            "Please switch from `gen_capacity` tuple to new separate "
+            + "`min_gen`, `max_gen` and `design_gen` attributes",
+            DeprecationWarning,
+        )
+        self.gen_capacity = (min, max, design)
+
+    def get_min_gen(self):
+        try:
+            return self._min_gen
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `gen_capacity` tuple to new `min_gen` attribute",
+                DeprecationWarning,
+            )
+            return self.gen_capacity[0]
+
+    def set_min_gen(self, min_gen):
+        self._min_gen = min_gen
+
+    def del_min_gen(self):
+        del self._min_gen
+        if hasattr(self, "gen_capacity"):
+            self.gen_capacity[0] = None
+
+    def get_max_gen(self):
+        try:
+            return self._max_gen
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `gen_capacity` tuple to new `max_gen` attribute",
+                DeprecationWarning,
+            )
+            return self.gen_capacity[1]
+
+    def set_max_gen(self, max_gen):
+        self._max_gen = max_gen
+
+    def del_max_gen(self):
+        del self._max_gen
+        if hasattr(self, "gen_capacity"):
+            self.gen_capacity[1] = None
+
+    def get_design_gen(self):
+        try:
+            return self._design_gen
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `gen_capacity` tuple to new `design_gen` attribute",
+                DeprecationWarning,
+            )
+            return self.gen_capacity[2]
+
+    def set_design_gen(self, design_gen):
+        self._design_gen = design_gen
+
+    def del_design_gen(self):
+        del self._design_gen
+        if hasattr(self, "gen_capacity"):
+            self.gen_capacity[2] = None
+
+    min_gen = property(get_min_gen, set_min_gen, del_min_gen)
+    max_gen = property(get_max_gen, set_max_gen, del_max_gen)
+    design_gen = property(get_design_gen, set_design_gen, del_design_gen)
 
     def set_thermal_efficiency(self, efficiency_curve):
         """Set the cogeneration efficiency to the given function
@@ -2804,14 +2879,14 @@ class Aeration(Node):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
-        
+
     def __repr__(self):
         return (
             f"<pype_schema.node.Aeration id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} min_flow:{self.min_flow} "
-            f"max_flow:{self.max_flow} design_flow:{self.design_flow} " 
+            f"max_flow:{self.max_flow} design_flow:{self.design_flow} "
             f"tags:{self.tags}>\n"
         )
 
@@ -2901,7 +2976,7 @@ class Chlorination(Node):
         output_contents,
         min_flow,
         max_flow,
-        avg_flow,
+        design_flow,
         num_units,
         volume,
         tags={},
@@ -2922,7 +2997,7 @@ class Chlorination(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} min_flow:{self.min_flow} "
-            f"max_flow:{self.max_flow} design_flow:{self.design_flow} " 
+            f"max_flow:{self.max_flow} design_flow:{self.design_flow} "
             f" tags:{self.tags}>\n"
         )
 

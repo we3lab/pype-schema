@@ -258,7 +258,7 @@ class JSONParser:
         if flowrate is None:
             flowrate = self.config[node_id].get("flow_rate")
 
-        min_flow, max_flow, design_flow = self.parse_min_max_avg(flowrate)
+        min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -443,10 +443,10 @@ class JSONParser:
             gen_capacity = self.config[node_id].get("generation_capacity")
             if gen_capacity is None:
                 self.config[node_id].get("gen_capacity")
-            min, max, avg = self.parse_min_max_avg(gen_capacity)
+            min, max, design = self.parse_min_max_design(gen_capacity)
             if self.config[node_id]["type"] == "Cogeneration":
                 node_obj = node.Cogeneration(
-                    node_id, input_contents, min, max, avg, num_units, tags={}
+                    node_id, input_contents, min, max, design, num_units, tags={}
                 )
                 electrical_efficiency = self.config[node_id].get(
                     "electrical efficiency"
@@ -460,7 +460,7 @@ class JSONParser:
                     thermal_efficiency = self.config[node_id].get("thermal_efficiency")
             else:
                 node_obj = node.Boiler(
-                    node_id, input_contents, min, max, avg, num_units, tags={}
+                    node_id, input_contents, min, max, design, num_units, tags={}
                 )
                 electrical_efficiency = None
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
@@ -655,8 +655,8 @@ class JSONParser:
         if flowrate is None:
             flowrate = self.config[connection_id].get("flow_rate")
 
-        min_flow, max_flow, design_flow = self.parse_min_max_avg(flowrate)
-        min_pres, max_pres, avg_pres = self.parse_min_max_avg(
+        min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
+        min_pres, max_pres, design_pres = self.parse_min_max_design(
             self.config[connection_id].get("pressure")
         )
         lower, higher = self.parse_heating_values(
@@ -686,6 +686,9 @@ class JSONParser:
                 diameter=diameter,
                 lower_heating_value=lower,
                 higher_heating_value=higher,
+                min_pres=min_pres,
+                max_pres=max_pres,
+                design_pres=design_pres,
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
@@ -1086,18 +1089,18 @@ class JSONParser:
         return contents
 
     @staticmethod
-    def parse_min_max_avg(min_max_avg):
+    def parse_min_max_design(min_max_design):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
         ----------
-        min_max_avg : dict
+        min_max_design : dict
             dictionary of the form {
                 ``min``: `int`
 
                 ``max``: `int`
 
-                ``avg``: `int`
+                ``design``: `int`
 
             }
 
@@ -1107,21 +1110,27 @@ class JSONParser:
             (min, max, and average) with the given Pint units as a tuple.
             If no units given, then returns a tuple of floats.
         """
-        if min_max_avg is None:
+        if min_max_design is None:
             return (None, None, None)
         else:
-            units = min_max_avg.get("units")
+            units = min_max_design.get("units")
+
+            # field name was changed from 'avg' to 'design'
+            # so this code is included for backwards compatability
+            design_val = min_max_design.get("design")
+            if design_val is None:
+                design_val = min_max_design.get("avg")
             if units:
                 return (
-                    utils.parse_quantity(min_max_avg.get("min"), units),
-                    utils.parse_quantity(min_max_avg.get("max"), units),
-                    utils.parse_quantity(min_max_avg.get("avg"), units),
+                    utils.parse_quantity(min_max_design.get("min"), units),
+                    utils.parse_quantity(min_max_design.get("max"), units),
+                    utils.parse_quantity(design_val, units),
                 )
             else:
                 return (
-                    min_max_avg.get("min"),
-                    min_max_avg.get("max"),
-                    min_max_avg.get("avg"),
+                    min_max_design.get("min"),
+                    min_max_design.get("max"),
+                    design_val,
                 )
 
     @staticmethod
@@ -1252,7 +1261,7 @@ class JSONParser:
         return tag_dict
 
     @staticmethod
-    def min_max_avg_to_dict(obj, attribute):
+    def min_max_design_to_dict(obj, attribute):
         """Converts the flow rate tuple of a `Node` or `Connection` into a
         dictionary object
 
@@ -1272,27 +1281,27 @@ class JSONParser:
 
                 ``max``: `float` or `int`
 
-                ``avg``: `float` or `int`
+                ``design``: `float` or `int`
 
                 ``units``: `str`
 
             }
         """
-        min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
+        min_max_design_dict = {"min": None, "max": None, "design": None, "units": None}
         values = getattr(obj, attribute)
         if values[0] is not None:
-            min_max_avg_dict["min"] = values[0].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[0].units)
+            min_max_design_dict["min"] = values[0].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[0].units)
 
         if values[1] is not None:
-            min_max_avg_dict["max"] = values[1].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[1].units)
+            min_max_design_dict["max"] = values[1].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[1].units)
 
         if values[2] is not None:
-            min_max_avg_dict["avg"] = values[2].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[2].units)
+            min_max_design_dict["design"] = values[2].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[2].units)
 
-        return min_max_avg_dict
+        return min_max_design_dict
 
     @staticmethod
     def conn_to_dict(conn_obj):
@@ -1323,10 +1332,12 @@ class JSONParser:
             conn_dict["entry_point"] = conn_obj.entry_point.id
 
         if isinstance(conn_obj, connection.Pipe):
-            conn_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            conn_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 conn_obj, "flow_rate"
             )
-            conn_dict["pressure"] = JSONParser.min_max_avg_to_dict(conn_obj, "pressure")
+            conn_dict["pressure"] = JSONParser.min_max_design_to_dict(
+                conn_obj, "pressure"
+            )
 
             heat_dict = {"lower": None, "higher": None, "units": "BTU/scf"}
             if conn_obj.heating_values[0] is not None:
@@ -1421,7 +1432,7 @@ class JSONParser:
             if node_obj.pump_type is not None:
                 node_dict["pump_type"] = node_obj.pump_type.name
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
@@ -1432,12 +1443,12 @@ class JSONParser:
             if node_obj.digester_type is not None:
                 node_dict["digester_type"] = node_obj.digester_type.name
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, (node.Cogeneration, node.Boiler)):
-            node_dict["generation_capacity"] = JSONParser.min_max_avg_to_dict(
+            node_dict["generation_capacity"] = JSONParser.min_max_design_to_dict(
                 node_obj, "gen_capacity"
             )
             node_dict["num_units"] = node_obj.num_units
@@ -1454,12 +1465,12 @@ class JSONParser:
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, (node.Screening, node.Conditioning, node.Flaring)):
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
@@ -1493,7 +1504,7 @@ class JSONParser:
                         node_obj.elevation
                     )
 
-                node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+                node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
         else:
