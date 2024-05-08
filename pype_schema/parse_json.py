@@ -258,7 +258,7 @@ class JSONParser:
         if flowrate is None:
             flowrate = self.config[node_id].get("flow_rate")
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
+        min_flow, max_flow, design_flow = self.parse_min_max_avg(flowrate)
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -347,7 +347,7 @@ class JSONParser:
                 elevation,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 tags={},
                 nodes={},
                 connections={},
@@ -382,10 +382,10 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
+                elevation,
                 min_flow,
                 max_flow,
-                avg_flow,
-                elevation,
+                design_flow,
                 power_rating,
                 num_units,
                 pump_type=pump_type,
@@ -422,7 +422,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -434,7 +434,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -494,7 +494,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 utils.DigesterType[digester_type],
@@ -507,7 +507,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -519,7 +519,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -530,7 +530,7 @@ class JSONParser:
                 num_units,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Thickening":
@@ -540,7 +540,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -552,7 +552,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 tags={},
             )
@@ -563,7 +563,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 tags={},
             )
@@ -655,7 +655,7 @@ class JSONParser:
         if flowrate is None:
             flowrate = self.config[connection_id].get("flow_rate")
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
+        min_flow, max_flow, design_flow = self.parse_min_max_avg(flowrate)
         min_pres, max_pres, avg_pres = self.parse_min_max_avg(
             self.config[connection_id].get("pressure")
         )
@@ -682,7 +682,7 @@ class JSONParser:
                 destination,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 diameter=diameter,
                 lower_heating_value=lower,
                 higher_heating_value=higher,
