@@ -928,11 +928,9 @@ def test_select_tags_no_parent(
             "data/node.json",
             "Cogenerator",
             {
-                "gen_capacity": (
-                    pint.Quantity(400, "kW"),
-                    pint.Quantity(750, "kW"),
-                    pint.Quantity(600, "kW"),
-                )
+                "min_gen": pint.Quantity(400, "kW"),
+                "max_gen": pint.Quantity(750, "kW"),
+                "design_gen": pint.Quantity(600, "kW"),
             },
         ),
         (
@@ -946,7 +944,7 @@ def test_select_tags_no_parent(
             "PrimaryClarifier",
             {
                 "volume": pint.Quantity(800, "m^3"),
-                "flow_rate": (None, None, pint.Quantity(2, "MGD")),
+                "design_flow": pint.Quantity(2, "MGD"),
             },
         ),
     ],
