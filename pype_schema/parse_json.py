@@ -271,30 +271,41 @@ class JSONParser:
                     old_network.remove_connection(connection_id)
                     if verbose:
                         print("remove connection: ", connection_id)
+
         for node_id, node_obj in new_network.nodes.items():
+            node_obj.id = f'{new_network.id}_{node_id}'
             old_network.add_node(node_obj)
             if verbose:
-                print("add node: ", node_id)
+                print("add node: ", node_obj.id)
         for connection_id, connection_obj in new_network.connections.items():
+            connection_obj.id = f'{new_network.id}_{connection_id}'
             old_network.add_connection(connection_obj)
             if verbose:
-                print("add connection: ", connection_id)
+                print("add connection: ", connection_obj.id)
         with open(connections_path, "r") as f:
             config = json.load(f)
-            self.config['connections'].extend(config['connections'])
-            for k, v in config.items():
+            for i, connection_id in enumerate(config['connections']):
+                self.config['connections'].append(f'{new_network.id}_{connection_id}')
+            for k, v in list(config.items()):
                 if k == "connections":
                     continue
-                self.config[k] = v
+                if v["source"] in new_network.nodes.keys():
+                    v["source"] = f'{new_network.id}_{v["source"]}'
+                if v["destination"] in new_network.nodes.keys():
+                    v["destination"] = f'{new_network.id}_{v["destination"]}'
+                self.config[f'{new_network.id}_{k}'] = v
+                if verbose:
+                    print("add connection: ", f'{new_network.id}_{connection_id}')
+            self.config['connections'].extend(config['connections'])
             for connection_id in config["connections"]:
                 # check that connection exists in dictionary (NameError)
                 if connection_id not in config.keys():
                     raise NameError(f"Connection {connection_id} not found in {connections_path}")
                 old_network.add_connection(
-                    self.create_connection(connection_id, old_network)
+                    self.create_connection(f'{new_network.id}_{connection_id}', old_network)
                 )
                 if verbose:
-                    print("add connection: ", connection_id)
+                    print("add connection: ", f'{new_network.id}_{connection_id}')
         if inplace:
             self.network_obj = old_network
             if verbose:
@@ -343,6 +354,14 @@ class JSONParser:
 
         selectivity = utils.parse_quantity(
             self.config[node_id].get("selectivity"), ""
+        )
+
+        residence_time = utils.parse_quantity(
+            self.config[node_id].get("residence_time"), ""
+        )
+
+        intensity = utils.parse_quantity(
+            self.config[node_id].get("intensity"), ""
         )
 
         # create correct type of node class
@@ -549,6 +568,21 @@ class JSONParser:
                 volume,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "UVSystem":
+            node_obj = node.UVSystem(
+                node_id,
+                residence_time,
+                intensity,
+                area, 
+                num_units,
+                input_contents=[],
+                output_contents=[],
+                min_flow=0,
+                max_flow=0,
+                avg_flow=0,
+                volume=0,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Flaring":
             node_obj = node.Flaring(
                 node_id,
@@ -601,6 +635,7 @@ class JSONParser:
                 volume,
                 dosing, 
                 pH, 
+                residence_time, 
                 tags={},
             )
         elif self.config[node_id]["type"] == "ModularUnit":

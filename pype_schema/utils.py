@@ -485,6 +485,18 @@ class DigesterType(Enum):
     Aerobic = auto()
     Anaerobic = auto()
 
+class DosingType(Enum):
+    """Enum to represent types of dosing"""
+
+    NaOCl = auto()
+    FeCl3 = auto()
+    Antiscalant = auto()
+    CO2 = auto()
+    CaOH2 = auto()
+    OrthoPolyphosphate = auto()
+    SBS = auto()
+    Polymer = auto()
+    UVLight = auto()
 
 def select_objs_helper(
     obj,
