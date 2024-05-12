@@ -1776,11 +1776,14 @@ class StaticMixer(Tank):
     volume : int
         Volume of the mixer in cubic meters
             
-    dosing : dict of Dosing
-        Dosing information for the mixer
+    dosing_rate : dict of DosingType:float
+        Dosing information for the mixer (key: DosingType, value: rate)
     
     pH : float
         pH value for the mixer
+
+    residence_time : float
+        Residence time of the mixer
 
     tags : dict of Tag
         Data tags associated with this mixer
@@ -1802,12 +1805,15 @@ class StaticMixer(Tank):
     volume : int
         Volume of the mixer in cubic meters
     
-    dosing : dict of Dosing
-        Dosing information for the mixer
+    dosing_rate : dict of DosingType:float
+        Dosing information for the mixer (key: DosingType, value: rate)
     
     pH : float 
         pH value for the mixer
 
+    residence_time : float
+        Residence time of the mixer
+    
     tags : dict of Tag
         Data tags associated with this mixer
 
@@ -1820,7 +1826,8 @@ class StaticMixer(Tank):
         output_contents,
         elevation,
         volume,
-        dosing,
+        dosing_rate,
+        residence_time,
         pH,
         tags={},
     ):
@@ -1829,8 +1836,9 @@ class StaticMixer(Tank):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
-        self.dosing = dosing
+        self.dosing_rate = dosing_rate
         self.pH = pH
+        self.residence_time = residence_time
         self.tags = tags
 
     def __repr__(self):
@@ -1838,7 +1846,7 @@ class StaticMixer(Tank):
             f"<pype_schema.node.StaticMixer id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"dosing:{self.dosing} pH:{self.pH} "
+            f"dosing_rate:{self.dosing_rate} pH:{self.pH} residence_time:{self.residence_time} "
             f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
@@ -1853,8 +1861,9 @@ class StaticMixer(Tank):
             and self.output_contents == other.output_contents
             and self.elevation == other.elevation
             and self.volume == other.volume
-            and self.dosing == other.dosing
+            and self.dosing_rate == other.dosing_rate
             and self.pH == other.pH
+            and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
 
@@ -3528,6 +3537,9 @@ class Chlorination(Node):
     dosing_rate : dict of DosingType:float
         UV intensity in the UV system 
 
+    dosing_rate : dict of DosingType:float
+        UV intensity in the UV system 
+
     tags : dict of Tag
         Data tags associated with this chlorinator
 
@@ -3571,6 +3583,7 @@ class Chlorination(Node):
         design_flow,
         num_units,
         volume,
+        dosing_rate={},
         dosing_rate={},
         tags={},
     ):
@@ -3718,27 +3731,13 @@ class UVSystem(Chlorination):
     
     residence_time : float
         Time in seconds that the water is exposed to UV light
-
-    intensity : float
-        Intensity of the UV light in W/m^2
-
-    tags : dict of Tag
-        Data tags associated with this chlorinator
-
-    Attributes
-    ----------
-    id : str
-        UVSystem ID
-
-    num_units : int
-        Number of chlorinators running in parallel
-
-    residence_time : float
-        Time in seconds that the water is exposed to UV light
     
-    intensity : float
-        Intensity of the UV light in W/m^2
+    dosing_rate : dict of DosingType:float
+        UV intensity in the UV system 
     
+    dosing_area : dict of DosingType:float
+        Area of the UV system that is exposed to UV light
+        
     tags : dict of Tag
         Data tags associated with this chlorinator
     """
@@ -3748,6 +3747,7 @@ class UVSystem(Chlorination):
         id,
         residence_time,
         intensity,
+        area, 
         num_units,
         input_contents=[],
         output_contents=[],
@@ -3763,17 +3763,19 @@ class UVSystem(Chlorination):
         self.num_units = num_units
         self.volume = volume
         self.residence_time = residence_time
-        self.intensity = intensity
+        self.dosing_rate = self.set_dosing({'UVLight': intensity}, mode='rate')
+        self.dosing_area = self.set_dosing({'UVLight': area}, mode='area')
         self.tags = tags
         self.set_flow_rate(0, 0, 0)
 
     def __repr__(self):
         return (
             f"<pype_schema.node.UVSystem id:{self.id} "
-            f"input_contents:{self.input_contents} "
-            f"output_contents:{self.output_contents} num_units:{self.num_units} "
-            f"volume:{self.volume} residence_time:{self.residence_time} "
-            f"volume:{self.volume} flow_rate:{self.flow_rate} tags:{self.tags}>\n"
+            f"residence_time:{self.residence_time} "
+            f"dosing_rate:{self.dosing_rate} "
+            f"dosing_area:{self.dosing_area} "
+            f"num_units:{self.num_units} "
+            f"tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -3787,7 +3789,9 @@ class UVSystem(Chlorination):
             and self.output_contents == other.output_contents
             and self.num_units == other.num_units
             and self.volume == other.volume
-            and self.flow_rate == other.flow_rate
+            and self.residence_time == other.residence_time
+            and self.dosing_rate == other.dosing_rate
+            and self.dosing_area == other.dosing_area
             and self.tags == other.tags
         )
 
