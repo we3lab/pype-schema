@@ -2,7 +2,6 @@ import os
 import pint
 import pickle
 import pytest
-import warnings
 from collections import Counter
 from pype_schema.units import u
 from pype_schema.utils import ContentsType
