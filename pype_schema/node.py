@@ -16,7 +16,8 @@ CAPACITY_ATTRS = [
     "design_flow",
     "min_gen",
     "max_gen",
-    "design_gen" "power_rating",
+    "design_gen",
+    "power_rating",
 ]
 
 

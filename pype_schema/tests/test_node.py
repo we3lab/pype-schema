@@ -936,7 +936,7 @@ def test_select_tags_no_parent(
         (
             "data/node.json",
             "RawSewagePump",
-            {"power_rating": None, "flow_rate": (None, None, None)},
+            {"power_rating": None, "min_flow": None, "max_flow": None, "design_flow": None},
         ),
         ("data/merged_wwtp.json", "GritChamber", {"volume": pint.Quantity(250, "m^3")}),
         (
@@ -944,6 +944,8 @@ def test_select_tags_no_parent(
             "PrimaryClarifier",
             {
                 "volume": pint.Quantity(800, "m^3"),
+                "min_flow": None,
+                "max_flow": None,
                 "design_flow": pint.Quantity(2, "MGD"),
             },
         ),
