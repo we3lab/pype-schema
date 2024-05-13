@@ -95,7 +95,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.connection</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
 
@@ -334,29 +335,29 @@
 <span class="sd">    destination : Node</span>
 <span class="sd">        Endpoint of the connection</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate through the pipe</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate through the pipe</span>
 
-<span class="sd">    avg_flow : int</span>
+<span class="sd">    avg_flow : pint.Quantity or int</span>
 <span class="sd">        Average flow rate through the pipe</span>
 
-<span class="sd">    diameter : int</span>
-<span class="sd">        Pipe diameter in meters</span>
+<span class="sd">    diameter : pint.Quantity or int</span>
+<span class="sd">        Pipe diameter</span>
 
 <span class="sd">    friction_coeff : int</span>
 <span class="sd">        Friction coefficient for the pipe</span>
 
-<span class="sd">    min_pres : int</span>
+<span class="sd">    min_pres : pint.Quantity or int</span>
 <span class="sd">        Minimum pressure inside the pipe</span>
 
-<span class="sd">    max_pres : int</span>
+<span class="sd">    max_pres : pint.Quantity or int</span>
 <span class="sd">        Maximum pressure inside the pipe</span>
 
-<span class="sd">    avg_pres : int</span>
-<span class="sd">        Average pressure inside the pipe</span>
+<span class="sd">    design_pres : pint.Quantity or int</span>
+<span class="sd">        Design pressure of the pipe</span>
 
 <span class="sd">    lower_heating_value : float</span>
 <span class="sd">        Lower heating value of gas in the pipe</span>
@@ -392,17 +393,29 @@
 <span class="sd">    destination : Node</span>
 <span class="sd">        Endpoint of the connection</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate through the pipe</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the pipe</span>
 
-<span class="sd">    diameter : int</span>
-<span class="sd">        Pipe diameter in meters</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the pipe</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the pipe</span>
+
+<span class="sd">    diameter : pint.Quantity or int</span>
+<span class="sd">        Pipe diameter</span>
 
 <span class="sd">    friction_coeff : int</span>
 <span class="sd">        Friction coefficient for the pipe</span>
 
-<span class="sd">    pressure : tuple</span>
-<span class="sd">        Minimum, maximum, and average pressure in the pipe</span>
+<span class="sd">    min_pressure : pint.Quantity or int</span>
+<span class="sd">        Minimum pressure inside the pipe</span>
+
+<span class="sd">    max_pressure : pint.Quantity or int</span>
+<span class="sd">        Maximum pressure inside the pipe</span>
+
+<span class="sd">    design_pressure : pint.Quantity or int</span>
+<span class="sd">        Design pressure of the pipe</span>
 
 <span class="sd">    heating_values : tuple</span>
 <span class="sd">        The lower and higher heating values of the gas in the pipe.</span>
@@ -431,12 +444,12 @@
         <span class="n">destination</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">diameter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">friction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">min_pres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">max_pres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">avg_pres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">design_pres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lower_heating_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">higher_heating_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -450,8 +463,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">diameter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">=</span> <span class="n">friction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_pressure</span><span class="p">(</span><span class="n">min_pres</span><span class="p">,</span> <span class="n">max_pres</span><span class="p">,</span> <span class="n">avg_pres</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_pressure</span> <span class="o">=</span> <span class="n">min_pres</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_pressure</span> <span class="o">=</span> <span class="n">max_pres</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_pressure</span> <span class="o">=</span> <span class="n">design_pres</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_heating_values</span><span class="p">(</span><span class="n">lower_heating_value</span><span class="p">,</span> <span class="n">higher_heating_value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">=</span> <span class="n">bidirectional</span>
@@ -473,7 +490,10 @@
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.connection.Pipe id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> source:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;destination:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> pressure:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> min_pressure:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_pressure</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_pressure:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_pressure</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_pressure:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_pressure</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;heating_values:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;diameter:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="si">}</span><span class="s2"> friction_coeff:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> bidirectional:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span><span class="si">}</span><span class="s2"> &quot;</span>
@@ -492,9 +512,13 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">friction_coeff</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_pressure</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_pressure</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_pressure</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_pressure</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_pressure</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_pressure</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">heating_values</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">exit_point</span>
@@ -508,12 +532,20 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">friction_coeff</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">friction_coeff</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_pressure</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">min_pressure</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_pressure</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">min_pressure</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_pressure</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">max_pressure</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_pressure</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">max_pressure</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_pressure</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">design_pressure</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_pressure</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">design_pressure</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">heating_values</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">heating_values</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
@@ -549,7 +581,7 @@
                 <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                     <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Pipe.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate through the connection</span>
 
 <span class="sd">        Parameters</span>
@@ -560,12 +592,78 @@
 <span class="sd">        max : int</span>
 <span class="sd">            Maximum flow rate through the connection</span>
 
-<span class="sd">        avg : int</span>
-<span class="sd">            Average flow rate through the connection</span>
+<span class="sd">        design : int</span>
+<span class="sd">            Design flow rate through the connection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Please switch from `flow_rate` tuple to separate &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;`min_flow`, `max_flow` and `design_flow` attributes&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span> <span class="o">=</span> <span class="nb">min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design</span></div>
 
-<div class="viewcode-block" id="Pipe.set_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `min_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span> <span class="o">=</span> <span class="n">min_flow</span></div>
+
+<div class="viewcode-block" id="Pipe.del_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Pipe.get_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `max_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="n">max_flow</span></div>
+
+<div class="viewcode-block" id="Pipe.del_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Pipe.get_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `design_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design_flow</span></div>
+
+<div class="viewcode-block" id="Pipe.del_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="n">min_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_min_flow</span><span class="p">,</span> <span class="n">set_min_flow</span><span class="p">,</span> <span class="n">del_min_flow</span><span class="p">)</span>
+    <span class="n">max_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_flow</span><span class="p">,</span> <span class="n">set_max_flow</span><span class="p">,</span> <span class="n">del_max_flow</span><span class="p">)</span>
+    <span class="n">design_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_design_flow</span><span class="p">,</span> <span class="n">set_design_flow</span><span class="p">,</span> <span class="n">del_design_flow</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Pipe.set_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average pressure inside the connection</span>
 
 <span class="sd">        Parameters</span>
@@ -576,10 +674,79 @@
 <span class="sd">        max : int</span>
 <span class="sd">            Maximum pressure inside the connection</span>
 
-<span class="sd">        avg : int</span>
-<span class="sd">            Average pressure inside the connection</span>
+<span class="sd">        design : int</span>
+<span class="sd">            Design pressure inside the connection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Please switch from `pressure` tuple to separate &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;`min_pressure`, `max_pressure` and `design_pressure` attributes&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span> <span class="o">=</span> <span class="nb">min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span> <span class="o">=</span> <span class="n">design</span></div>
+
+<div class="viewcode-block" id="Pipe.get_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `pressure` tuple to new `min_pressure` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_pressure</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span> <span class="o">=</span> <span class="n">min_pressure</span></div>
+
+<div class="viewcode-block" id="Pipe.del_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Pipe.get_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `pressure` tuple to new `max_pressure` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_pressure</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span> <span class="o">=</span> <span class="n">max_pressure</span></div>
+
+<div class="viewcode-block" id="Pipe.del_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Pipe.get_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `pressure` tuple to &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;new `design_pressure` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Pipe.set_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_pressure</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span> <span class="o">=</span> <span class="n">design_pressure</span></div>
+
+<div class="viewcode-block" id="Pipe.del_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="n">min_pressure</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_min_pressure</span><span class="p">,</span> <span class="n">set_min_pressure</span><span class="p">,</span> <span class="n">del_min_pressure</span><span class="p">)</span>
+    <span class="n">max_pressure</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_pressure</span><span class="p">,</span> <span class="n">set_max_pressure</span><span class="p">,</span> <span class="n">del_max_pressure</span><span class="p">)</span>
+    <span class="n">design_pressure</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">get_design_pressure</span><span class="p">,</span> <span class="n">set_design_pressure</span><span class="p">,</span> <span class="n">del_design_pressure</span>
+    <span class="p">)</span>
 
 <div class="viewcode-block" id="Pipe.set_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_heating_values">[docs]</a>    <span class="k">def</span> <span class="nf">set_heating_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the lower and higher heating values for gas in the connection</span>

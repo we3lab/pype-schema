@@ -96,6 +96,8 @@
              
   <h1>Source code for pype_schema.parse_json</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pint</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">connection</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
@@ -327,19 +329,33 @@
 <span class="sd">            a Python object with all the values from key `node_id`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_contents</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
-        <span class="n">elevation</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">),</span> <span class="s2">&quot;m&quot;</span>
-        <span class="p">)</span>
+        <span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">))</span>
+        <span class="c1"># strings like `elevation (meters)` and `volume (cubic meters)`</span>
+        <span class="c1"># are included for backwards compatability</span>
+        <span class="k">if</span> <span class="n">elevation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">elevation</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">),</span> <span class="s2">&quot;m&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch to new dictionary syntax for elevation with units&quot;</span><span class="p">,</span>
+                <span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="n">num_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;num_units&quot;</span><span class="p">)</span>
-        <span class="n">volume</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">),</span> <span class="s2">&quot;m3&quot;</span>
-        <span class="p">)</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;volume&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">volume</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">volume</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">),</span> <span class="s2">&quot;m3&quot;</span>
+            <span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch to new dictionary syntax for volume with units&quot;</span><span class="p">,</span>
+                <span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="n">flowrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flowrate&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">flowrate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">flowrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flow_rate&quot;</span><span class="p">)</span>
 
-        <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span><span class="n">flowrate</span><span class="p">)</span>
+        <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">design_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_design</span><span class="p">(</span><span class="n">flowrate</span><span class="p">)</span>
 
         <span class="c1"># create correct type of node class</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Network&quot;</span><span class="p">:</span>
@@ -363,13 +379,63 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">new_connection</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">)</span>
                 <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Battery&quot;</span><span class="p">:</span>
-            <span class="n">capacity</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;capacity (kWh)&quot;</span><span class="p">),</span> <span class="s2">&quot;kwh&quot;</span>
+            <span class="n">energy_capacity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;energy_capacity&quot;</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="n">discharge_rate</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discharge_rate (kW)&quot;</span><span class="p">),</span> <span class="s2">&quot;kw&quot;</span>
+            <span class="n">discharge_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discharge_rate&quot;</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Battery</span><span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">discharge_rate</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{})</span>
+            <span class="n">charge_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;charge_rate&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">energy_capacity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">energy_capacity</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;capacity (kWh)&quot;</span><span class="p">),</span> <span class="s2">&quot;kwh&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Please switch to new dictionary syntax &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;for energy capacity with units&quot;</span><span class="p">,</span>
+                    <span class="ne">FutureWarning</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">discharge_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">discharge_rate</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discharge_rate (kW)&quot;</span><span class="p">),</span> <span class="s2">&quot;kw&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Please switch to new dictionary syntax &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;for discharge rate with units&quot;</span><span class="p">,</span>
+                    <span class="ne">FutureWarning</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">charge_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">charge_rate</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;charge_rate (kW)&quot;</span><span class="p">),</span> <span class="s2">&quot;kw&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Please switch to new dictionary syntax for charge rate with units&quot;</span><span class="p">,</span>
+                    <span class="ne">FutureWarning</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># if either discharge or charge rate are null assume they are the same</span>
+            <span class="k">if</span> <span class="n">discharge_rate</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">charge_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Battery object </span><span class="si">{}</span><span class="s2"> has no charge or discharge rate defined&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">node_id</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">charge_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">charge_rate</span> <span class="o">=</span> <span class="n">discharge_rate</span>
+            <span class="k">elif</span> <span class="n">discharge_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">discharge_rate</span> <span class="o">=</span> <span class="n">charge_rate</span>
+            <span class="n">rte</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rte&quot;</span><span class="p">)</span>
+            <span class="n">leakage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;leakage&quot;</span><span class="p">))</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Battery</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">energy_capacity</span><span class="p">,</span>
+                <span class="n">charge_rate</span><span class="p">,</span>
+                <span class="n">discharge_rate</span><span class="p">,</span>
+                <span class="n">rte</span><span class="p">,</span>
+                <span class="n">leakage</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Facility&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Facility</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
@@ -378,7 +444,7 @@
                 <span class="n">elevation</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
                 <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
                 <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
@@ -396,18 +462,28 @@
                 <span class="n">pump_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">PumpType</span><span class="o">.</span><span class="n">Constant</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">pump_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">PumpType</span><span class="p">[</span><span class="n">pump_type</span><span class="p">]</span>
-            <span class="n">horsepower</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;horsepower&quot;</span><span class="p">),</span> <span class="s2">&quot;hp&quot;</span>
+
+            <span class="n">power_rating</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;power_rating&quot;</span><span class="p">)</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="n">power_rating</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">power_rating</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;horsepower&quot;</span><span class="p">),</span> <span class="s2">&quot;hp&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Please switch to new dictionary syntax &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;for power rating with units&quot;</span><span class="p">,</span>
+                    <span class="ne">FutureWarning</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Pump</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
                 <span class="n">input_contents</span><span class="p">,</span>
                 <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">elevation</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
-                <span class="n">elevation</span><span class="p">,</span>
-                <span class="n">horsepower</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">power_rating</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">pump_type</span><span class="o">=</span><span class="n">pump_type</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -443,7 +519,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -455,7 +531,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -464,10 +540,10 @@
             <span class="n">gen_capacity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generation_capacity&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">gen_capacity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gen_capacity&quot;</span><span class="p">)</span>
-            <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span><span class="n">gen_capacity</span><span class="p">)</span>
+            <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_design</span><span class="p">(</span><span class="n">gen_capacity</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Cogeneration&quot;</span><span class="p">:</span>
                 <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Cogeneration</span><span class="p">(</span>
-                    <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+                    <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
                 <span class="p">)</span>
                 <span class="n">electrical_efficiency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                     <span class="s2">&quot;electrical efficiency&quot;</span>
@@ -481,7 +557,7 @@
                     <span class="n">thermal_efficiency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;thermal_efficiency&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Boiler</span><span class="p">(</span>
-                    <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+                    <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
                 <span class="p">)</span>
                 <span class="n">electrical_efficiency</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">thermal_efficiency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;thermal efficiency&quot;</span><span class="p">)</span>
@@ -515,7 +591,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">utils</span><span class="o">.</span><span class="n">DigesterType</span><span class="p">[</span><span class="n">digester_type</span><span class="p">],</span>
@@ -528,7 +604,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -540,7 +616,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -551,7 +627,7 @@
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Thickening&quot;</span><span class="p">:</span>
@@ -561,7 +637,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -573,7 +649,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
@@ -584,7 +660,7 @@
                 <span class="n">output_contents</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
@@ -676,8 +752,8 @@
         <span class="k">if</span> <span class="n">flowrate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">flowrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flow_rate&quot;</span><span class="p">)</span>
 
-        <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span><span class="n">flowrate</span><span class="p">)</span>
-        <span class="n">min_pres</span><span class="p">,</span> <span class="n">max_pres</span><span class="p">,</span> <span class="n">avg_pres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_avg</span><span class="p">(</span>
+        <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">design_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_design</span><span class="p">(</span><span class="n">flowrate</span><span class="p">)</span>
+        <span class="n">min_pres</span><span class="p">,</span> <span class="n">max_pres</span><span class="p">,</span> <span class="n">design_pres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_design</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pressure&quot;</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_heating_values</span><span class="p">(</span>
@@ -685,9 +761,17 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">:</span>
-            <span class="n">diameter</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diameter (inches)&quot;</span><span class="p">),</span> <span class="s2">&quot;in&quot;</span>
+            <span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diameter&quot;</span><span class="p">)</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="n">diameter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">diameter</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diameter (inches)&quot;</span><span class="p">),</span> <span class="s2">&quot;in&quot;</span>
+                <span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Please switch to new dictionary syntax for diamter with units&quot;</span><span class="p">,</span>
+                    <span class="ne">FutureWarning</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="n">connection_obj</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Pipe</span><span class="p">(</span>
                 <span class="n">connection_id</span><span class="p">,</span>
                 <span class="n">contents</span><span class="p">,</span>
@@ -695,10 +779,13 @@
                 <span class="n">destination</span><span class="p">,</span>
                 <span class="n">min_flow</span><span class="p">,</span>
                 <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">avg_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">diameter</span><span class="o">=</span><span class="n">diameter</span><span class="p">,</span>
                 <span class="n">lower_heating_value</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span>
                 <span class="n">higher_heating_value</span><span class="o">=</span><span class="n">higher</span><span class="p">,</span>
+                <span class="n">min_pres</span><span class="o">=</span><span class="n">min_pres</span><span class="p">,</span>
+                <span class="n">max_pres</span><span class="o">=</span><span class="n">max_pres</span><span class="p">,</span>
+                <span class="n">design_pres</span><span class="o">=</span><span class="n">design_pres</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
                 <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span>
                 <span class="n">exit_point</span><span class="o">=</span><span class="n">exit_point</span><span class="p">,</span>
@@ -1098,44 +1185,104 @@
 
         <span class="k">return</span> <span class="n">contents</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_min_max_avg"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_avg">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_min_max_avg</span><span class="p">(</span><span class="n">min_max_avg</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.parse_min_max_design"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_design">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_min_max_design</span><span class="p">(</span><span class="n">min_max_design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        min_max_avg : dict</span>
+<span class="sd">        min_max_design : dict</span>
 <span class="sd">            dictionary of the form {</span>
 <span class="sd">                ``min``: `int`</span>
 
 <span class="sd">                ``max``: `int`</span>
 
-<span class="sd">                ``avg``: `int`</span>
+<span class="sd">                ``design``: `int`</span>
 
 <span class="sd">            }</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        (Quantity, Quantity, Quantity) or (float, float, float)</span>
+<span class="sd">        (pint.Quantity, pint.Quantity, pint.Quantity) or (float, float, float)</span>
 <span class="sd">            (min, max, and average) with the given Pint units as a tuple.</span>
 <span class="sd">            If no units given, then returns a tuple of floats.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">min_max_avg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">min_max_design</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">units</span> <span class="o">=</span> <span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
+
+            <span class="c1"># field name was changed from &#39;avg&#39; to &#39;design&#39;</span>
+            <span class="c1"># so this code is included for backwards compatability</span>
+            <span class="n">design_val</span> <span class="o">=</span> <span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;design&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">design_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">design_val</span> <span class="o">=</span> <span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">units</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;avg&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">),</span> <span class="n">units</span><span class="p">),</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">design_val</span><span class="p">,</span> <span class="n">units</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span>
-                    <span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span>
-                    <span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">),</span>
-                    <span class="n">min_max_avg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;avg&quot;</span><span class="p">),</span>
+                    <span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">),</span>
+                    <span class="n">min_max_design</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">),</span>
+                    <span class="n">design_val</span><span class="p">,</span>
                 <span class="p">)</span></div>
+
+<div class="viewcode-block" id="JSONParser.unit_val_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.unit_val_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">unit_val_to_dict</span><span class="p">(</span><span class="n">attribute</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the given attribute to dictionary of the form {</span>
+<span class="sd">                ``value``: ``float``</span>
+
+<span class="sd">                ``units``: `str`</span>
+
+<span class="sd">            }</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        attribute : pint.Quantity or float</span>
+<span class="sd">            Attribute to represent as a dictionary</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary with keys ``value`` and ``units``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="n">pint</span><span class="o">.</span><span class="n">Quantity</span><span class="p">):</span>
+            <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">attribute</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">attribute</span><span class="o">.</span><span class="n">units</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">attribute</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">data_dict</span></div>
+
+<div class="viewcode-block" id="JSONParser.parse_unit_val_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_unit_val_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_unit_val_dict</span><span class="p">(</span><span class="n">unit_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a Pint Quantity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        unit_dict : dict</span>
+<span class="sd">            dictionary of the form {</span>
+<span class="sd">                ``value``: ``float``</span>
+
+<span class="sd">                ``units``: `str`</span>
+
+<span class="sd">            }</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pint.Quantity or float</span>
+<span class="sd">            Dictionary as a Pint Quantity (or float if no units are specified)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">unit_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">unit_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">unit_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_quantity</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_heating_values">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">):</span>
@@ -1149,11 +1296,13 @@
 
 <span class="sd">                ``higher``: `float`</span>
 
+<span class="sd">                ``units``: `str`</span>
+
 <span class="sd">            }</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        (Quantity, Quantity) or (float, float)</span>
+<span class="sd">        (pint.Quantity, pint.Quantity) or (float, float)</span>
 <span class="sd">            (lower, higher) heating values as a tuple, with units applied.</span>
 <span class="sd">            Given as a float if no units are specified</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1208,8 +1357,8 @@
 
         <span class="k">return</span> <span class="n">tag_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.min_max_avg_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.min_max_avg_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">min_max_avg_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.min_max_design_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.min_max_design_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">min_max_design_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the flow rate tuple of a `Node` or `Connection` into a</span>
 <span class="sd">        dictionary object</span>
 
@@ -1229,27 +1378,41 @@
 
 <span class="sd">                ``max``: `float` or `int`</span>
 
-<span class="sd">                ``avg``: `float` or `int`</span>
+<span class="sd">                ``design``: `float` or `int`</span>
 
 <span class="sd">                ``units``: `str`</span>
 
 <span class="sd">            }</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">min_max_avg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;avg&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span>
+        <span class="n">min_max_design_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;design&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="c1"># try/except for backwards compatability with flow_rate and gen_capacity tuples</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attribute</span> <span class="o">==</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;flow&quot;</span>
+            <span class="k">elif</span> <span class="n">attribute</span> <span class="o">==</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;gen&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="n">attribute</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;min_&quot;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">),</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;max_&quot;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">),</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;design_&quot;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">),</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
-            <span class="n">min_max_avg_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;design&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">min_max_design_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">min_max_avg_dict</span></div>
+        <span class="k">return</span> <span class="n">min_max_design_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.conn_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.conn_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">conn_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">):</span>
@@ -1280,10 +1443,12 @@
             <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;entry_point&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">entry_point</span><span class="o">.</span><span class="n">id</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">Pipe</span><span class="p">):</span>
-            <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">conn_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
             <span class="p">)</span>
-            <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">)</span>
+            <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
+                <span class="n">conn_obj</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span>
+            <span class="p">)</span>
 
             <span class="n">heat_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;higher&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;BTU/scf&quot;</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">heating_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1297,7 +1462,7 @@
             <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;heating_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">heat_dict</span>
 
             <span class="k">if</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;diameter (inches)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">diameter</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
 
         <span class="c1"># TODO: unsupported attribute: friction_coeff</span>
 
@@ -1362,37 +1527,39 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Tank</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Reservoir</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Pump</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">horsepower</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;horsepower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">horsepower</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">power_rating</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;power_rating&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">power_rating</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">pump_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;pump_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">pump_type</span><span class="o">.</span><span class="n">name</span>
 
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Digestion</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">digester_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;digester_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">digester_type</span><span class="o">.</span><span class="n">name</span>
 
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Cogeneration</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Boiler</span><span class="p">)):</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;generation_capacity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;generation_capacity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
@@ -1407,20 +1574,27 @@
             <span class="p">),</span>
         <span class="p">):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">magnitude</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
 
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Screening</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Conditioning</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Flaring</span><span class="p">)):</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Battery</span><span class="p">):</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;capacity (kWh)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">capacity</span><span class="o">.</span><span class="n">magnitude</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;discharge_rate (kW)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">discharge_rate</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;energy_capacity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">energy_capacity</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;discharge_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">discharge_rate</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;charge_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">charge_rate</span><span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;leakage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">leakage</span><span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;rte&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">rte</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">):</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;input_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1437,9 +1611,11 @@
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Facility</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="o">.</span><span class="n">magnitude</span>
+                    <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                        <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span>
+                    <span class="p">)</span>
 
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_avg_to_dict</span><span class="p">(</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                     <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

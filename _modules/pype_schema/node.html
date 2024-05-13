@@ -95,9 +95,27 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.node</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span>
+
+
+<span class="n">EFFICIENCY_ATTRS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thermal_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;electrical_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;rte&quot;</span><span class="p">]</span>
+
+<span class="n">CAPACITY_ATTRS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;volume&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;energy_capacity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;discharge_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;charge_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;min_flow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max_flow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;design_flow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;min_gen&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max_gen&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;design_gen&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;power_rating&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -131,8 +149,8 @@
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Node.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate of the node</span>
+<div class="viewcode-block" id="Node.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and design flow rate of the node</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -142,10 +160,76 @@
 <span class="sd">        max : int</span>
 <span class="sd">            Maximum flow rate through the node</span>
 
-<span class="sd">        avg : int</span>
-<span class="sd">            Average flow rate through the node</span>
+<span class="sd">        design : int</span>
+<span class="sd">            Design flow rate through the node</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Please switch from `flow_rate` tuple to separate &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;`min_flow`, `max_flow` and `design_flow` attributes&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span> <span class="o">=</span> <span class="nb">min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design</span></div>
+
+<div class="viewcode-block" id="Node.get_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `min_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Node.set_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span> <span class="o">=</span> <span class="n">min_flow</span></div>
+
+<div class="viewcode-block" id="Node.del_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.del_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Node.get_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `max_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Node.set_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="n">max_flow</span></div>
+
+<div class="viewcode-block" id="Node.del_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.del_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Node.get_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `flow_rate` tuple to new `design_flow` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Node.set_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_flow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design_flow</span></div>
+
+<div class="viewcode-block" id="Node.del_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.del_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="n">min_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_min_flow</span><span class="p">,</span> <span class="n">set_min_flow</span><span class="p">,</span> <span class="n">del_min_flow</span><span class="p">)</span>
+    <span class="n">max_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_flow</span><span class="p">,</span> <span class="n">set_max_flow</span><span class="p">,</span> <span class="n">del_max_flow</span><span class="p">)</span>
+    <span class="n">design_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_design_flow</span><span class="p">,</span> <span class="n">set_design_flow</span><span class="p">,</span> <span class="n">del_design_flow</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Node.set_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_contents">[docs]</a>    <span class="k">def</span> <span class="nf">set_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="s2">&quot;input_contents&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the input or output contents of a node</span>
@@ -166,6 +250,38 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s2">&quot;&#39;contents&#39; must be either ContentsType or list of ContentsType&quot;</span>
             <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Node.get_efficiencies"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_efficiencies">[docs]</a>    <span class="k">def</span> <span class="nf">get_efficiencies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a dictionary of efficiency-related attributes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of attribute names and values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">EFFICIENCY_ATTRS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Node.get_capacities"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_capacities">[docs]</a>    <span class="k">def</span> <span class="nf">get_capacities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a dictionary of capacity-related attributes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of attribute names and values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">CAPACITY_ATTRS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="Node.add_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.add_tag">[docs]</a>    <span class="k">def</span> <span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
@@ -800,7 +916,7 @@
 <span class="sd">        tag_type : TagType</span>
 <span class="sd">            Optional tag type to filter by. None by default</span>
 
-<span class="sd">        obj_type : [Node, Connection, Tag]</span>
+<span class="sd">        obj_type : [Node, Connection, VirtualTag, Tag]</span>
 <span class="sd">            The type of object to filter by. None by default</span>
 
 <span class="sd">        recurse : bool</span>
@@ -1119,17 +1235,17 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the network.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the facility</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate through the facility</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate through the facility</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate through the facility</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the facility</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this facility</span>
@@ -1151,14 +1267,20 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the facility.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the facility in meters above sea level</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this facility</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Tuple of minimum, maximum, and average facility flow rate</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the facility</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the facility</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the facility</span>
 
 <span class="sd">    nodes : dict of Node</span>
 <span class="sd">        nodes in the facility, e.g. pumps, tanks, or processes</span>
@@ -1175,7 +1297,7 @@
         <span class="n">elevation</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
         <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
         <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
@@ -1184,17 +1306,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Facility id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;nodes:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="si">}</span><span class="s2"> connections:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1210,8 +1335,10 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nodes</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">connections</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
         <span class="p">)</span></div>
 
 
@@ -1228,23 +1355,23 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the pump</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the pump in meters above sea level</span>
 
-<span class="sd">    horsepower : int</span>
-<span class="sd">        Horsepower of a single pump</span>
+<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">        Rated power of a single pump (in horsepower)</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of pumps running in parallel</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate supplied by the pump</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate supplied by the pump</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate supplied by the pump</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
 <span class="sd">        Type of pump (either VFD or constant)</span>
@@ -1263,17 +1390,23 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the pump</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the pump in meters above sea level</span>
 
-<span class="sd">    horsepower : int</span>
-<span class="sd">        Horsepower of a single pump</span>
+<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">        Rated power of a single pump (in horsepower)</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of pumps running in parallel</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Tuple of minimum, maximum, and average pump flow rate</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate supplied by the pump</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate supplied by the pump</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
 <span class="sd">        Type of pump (either VFD or constant)</span>
@@ -1291,11 +1424,11 @@
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">input_contents</span><span class="p">,</span>
         <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
-        <span class="n">elevation</span><span class="p">,</span>
-        <span class="n">horsepower</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">power_rating</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">pump_type</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">PumpType</span><span class="o">.</span><span class="n">Constant</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -1305,10 +1438,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">=</span> <span class="n">pump_type</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span> <span class="o">=</span> <span class="n">horsepower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span> <span class="o">=</span> <span class="n">power_rating</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_pump_curve</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1316,8 +1451,9 @@
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Pump id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;horsepower:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;power_rating:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1332,10 +1468,12 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pump_type</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">horsepower</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">power_rating</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Pump.set_pump_type"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.set_pump_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_pump_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_type</span><span class="p">):</span>
@@ -1358,7 +1496,31 @@
 <span class="sd">            required to pump at that rate</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: type check that pump_curve is a function</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pump_curve</span> <span class="o">=</span> <span class="n">pump_curve</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pump_curve</span> <span class="o">=</span> <span class="n">pump_curve</span></div>
+
+<div class="viewcode-block" id="Pump.get_power_rating"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.get_power_rating">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power_rating</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `horsepower` to new `power_rating` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span></div>
+
+<div class="viewcode-block" id="Pump.set_power_rating"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.set_power_rating">[docs]</a>    <span class="k">def</span> <span class="nf">set_power_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power_rating</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_power_rating</span> <span class="o">=</span> <span class="n">power_rating</span></div>
+
+<div class="viewcode-block" id="Pump.del_power_rating"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.del_power_rating">[docs]</a>    <span class="k">def</span> <span class="nf">del_power_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power_rating</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;horsepower&quot;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `horsepower` to new `power_rating` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span></div>
+
+    <span class="n">power_rating</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_power_rating</span><span class="p">,</span> <span class="n">set_power_rating</span><span class="p">,</span> <span class="n">del_power_rating</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Tank"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Tank">[docs]</a><span class="k">class</span> <span class="nc">Tank</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -1374,10 +1536,10 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the tank.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the tank in meters above sea level</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -1394,10 +1556,10 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the tank.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the tank in meters above sea level</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -1456,10 +1618,10 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the reservoir.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the reservoir in meters above sea level</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the reservoir in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -1476,10 +1638,10 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the reservoir.</span>
 
-<span class="sd">    elevation : int</span>
+<span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the reservoir in meters above sea level</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the reservoir in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -1532,11 +1694,17 @@
 <span class="sd">    id : str</span>
 <span class="sd">        Battery ID</span>
 
-<span class="sd">    capacity : int</span>
-<span class="sd">        Storage capacity of the battery in kWh</span>
+<span class="sd">    energy_capacity : int</span>
+<span class="sd">        Energy storage capacity of the battery in kWh</span>
+
+<span class="sd">    charge_rate : int</span>
+<span class="sd">        Maximum charge rate of the battery in kW</span>
 
 <span class="sd">    discharge_rate : int</span>
 <span class="sd">        Maximum discharge rate of the battery in kW</span>
+
+<span class="sd">    rte : float</span>
+<span class="sd">        Round trip efficiency of the battery</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this battery</span>
@@ -1552,11 +1720,20 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the battery.</span>
 
-<span class="sd">    capacity : int</span>
-<span class="sd">        Storage capacity of the battery in kWh</span>
+<span class="sd">    energy_capacity : int</span>
+<span class="sd">        Energy storage capacity of the battery in kWh</span>
+
+<span class="sd">    charge_rate : int</span>
+<span class="sd">        Maximum discharge rate of the battery in kW</span>
 
 <span class="sd">    discharge_rate : int</span>
 <span class="sd">        Maximum discharge rate of the battery in kW</span>
+
+<span class="sd">    rte : float</span>
+<span class="sd">        Round trip efficiency of the battery</span>
+
+<span class="sd">    leakage : pint.Quantity</span>
+<span class="sd">        Leakage of the battery as a Pint Quantity</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this battery</span>
@@ -1565,23 +1742,31 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
-        <span class="n">capacity</span><span class="p">,</span>
+        <span class="n">energy_capacity</span><span class="p">,</span>
+        <span class="n">charge_rate</span><span class="p">,</span>
         <span class="n">discharge_rate</span><span class="p">,</span>
+        <span class="n">rte</span><span class="p">,</span>
+        <span class="n">leakage</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy_capacity</span> <span class="o">=</span> <span class="n">energy_capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charge_rate</span> <span class="o">=</span> <span class="n">charge_rate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span> <span class="o">=</span> <span class="n">discharge_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rte</span> <span class="o">=</span> <span class="n">rte</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leakage</span> <span class="o">=</span> <span class="n">leakage</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Battery id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;energy_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_capacity</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">charge_rate</span><span class="si">}</span><span class="s2"> discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span><span class="w"> </span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;rte:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rte</span><span class="si">}</span><span class="s2"> leakage:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">leakage</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -1593,10 +1778,82 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">energy_capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">charge_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">charge_rate</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">discharge_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rte</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">rte</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">leakage</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">leakage</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Battery.get_rte"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.get_rte">[docs]</a>    <span class="k">def</span> <span class="nf">get_rte</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rte</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Battery.set_rte"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.set_rte">[docs]</a>    <span class="k">def</span> <span class="nf">set_rte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rte</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rte</span> <span class="o">=</span> <span class="n">rte</span></div>
+
+<div class="viewcode-block" id="Battery.del_rte"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.del_rte">[docs]</a>    <span class="k">def</span> <span class="nf">del_rte</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rte</span></div>
+
+<div class="viewcode-block" id="Battery.get_leakage"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.get_leakage">[docs]</a>    <span class="k">def</span> <span class="nf">get_leakage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leakage</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Battery.set_leakage"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.set_leakage">[docs]</a>    <span class="k">def</span> <span class="nf">set_leakage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leakage</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_leakage</span> <span class="o">=</span> <span class="n">leakage</span></div>
+
+<div class="viewcode-block" id="Battery.del_leakage"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.del_leakage">[docs]</a>    <span class="k">def</span> <span class="nf">del_leakage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leakage</span></div>
+
+<div class="viewcode-block" id="Battery.get_energy_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.get_energy_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">get_energy_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_capacity</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `capacity` to new `energy_capacity` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span></div>
+
+<div class="viewcode-block" id="Battery.set_energy_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.set_energy_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_energy_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy_capacity</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_energy_capacity</span> <span class="o">=</span> <span class="n">energy_capacity</span></div>
+
+<div class="viewcode-block" id="Battery.del_energy_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.del_energy_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">del_energy_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_capacity</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;capacity&quot;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `capacity` to new `energy_capacity` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span></div>
+
+<div class="viewcode-block" id="Battery.get_charge_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.get_charge_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_charge_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_charge_rate</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please add `charge_rate` in addition to `discharge_rate` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span></div>
+
+<div class="viewcode-block" id="Battery.set_charge_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.set_charge_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_charge_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">charge_rate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_charge_rate</span> <span class="o">=</span> <span class="n">charge_rate</span></div>
+
+<div class="viewcode-block" id="Battery.del_charge_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery.del_charge_rate">[docs]</a>    <span class="k">def</span> <span class="nf">del_charge_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_charge_rate</span></div>
+
+    <span class="n">leakage</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_leakage</span><span class="p">,</span> <span class="n">set_leakage</span><span class="p">,</span> <span class="n">del_leakage</span><span class="p">)</span>
+    <span class="n">rte</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_rte</span><span class="p">,</span> <span class="n">set_rte</span><span class="p">,</span> <span class="n">del_rte</span><span class="p">)</span>
+    <span class="n">charge_rate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_charge_rate</span><span class="p">,</span> <span class="n">set_charge_rate</span><span class="p">,</span> <span class="n">del_charge_rate</span><span class="p">)</span>
+    <span class="n">energy_capacity</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">get_energy_capacity</span><span class="p">,</span> <span class="n">set_energy_capacity</span><span class="p">,</span> <span class="n">del_energy_capacity</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Digestion"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Digestion">[docs]</a><span class="k">class</span> <span class="nc">Digestion</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -1613,13 +1870,13 @@
 <span class="sd">        Contents leaving the digester (e.g. biogas or wastewater)</span>
 
 <span class="sd">    min_flow : int</span>
-<span class="sd">        Minimum flow rate through the process</span>
+<span class="sd">        Minimum flow rate through the digester</span>
 
 <span class="sd">    max_flow : int</span>
-<span class="sd">        Maximum flow rate through the process</span>
+<span class="sd">        Maximum flow rate through the digester</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate through the process</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of digesters running in parallel</span>
@@ -1650,8 +1907,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of the digester in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Tuple of minimum, maximum, and average digester flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate through the digester</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate through the digester</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    digester_type : DigesterType</span>
 <span class="sd">        Type of digestion (aerobic or anaerobic)</span>
@@ -1667,7 +1930,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">digester_type</span><span class="p">,</span>
@@ -1680,14 +1943,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span> <span class="o">=</span> <span class="n">digester_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Digestion id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;digester_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1703,7 +1969,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">digester_type</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">digester_type</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -1724,8 +1992,8 @@
 <span class="sd">    max_gen : int</span>
 <span class="sd">        Maximum generation capacity of a single cogenerator</span>
 
-<span class="sd">    avg_gen : int</span>
-<span class="sd">        Average generation capacity of a single cogenerator</span>
+<span class="sd">    design_gen : int</span>
+<span class="sd">        Design generation capacity of a single cogenerator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of cogenerator units running in parallel</span>
@@ -1745,8 +2013,14 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the cogenerator (Electricity)</span>
 
-<span class="sd">    gen_capacity : tuple</span>
-<span class="sd">        Minimum, maximum, and average generation capacity</span>
+<span class="sd">    min_gen : int</span>
+<span class="sd">        Minimum generation capacity of a single cogenerator</span>
+
+<span class="sd">    max_gen : int</span>
+<span class="sd">        Maximum generation capacity of a single cogenerator</span>
+
+<span class="sd">    design_gen : int</span>
+<span class="sd">        Average generation capacity of a single cogenerator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of cogenerator units running in parallel</span>
@@ -1764,14 +2038,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">design_gen</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Heat</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_gen_capacity</span><span class="p">(</span><span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span> <span class="o">=</span> <span class="n">min_gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span> <span class="o">=</span> <span class="n">max_gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span> <span class="o">=</span> <span class="n">design_gen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_electrical_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_thermal_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
@@ -1779,8 +2055,9 @@
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Cogeneration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;gen_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> min_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span><span class="si">}</span><span class="s2"> design_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -1793,11 +2070,13 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">gen_capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_gen</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_gen</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_gen</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Cogeneration.set_gen_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_gen_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_gen_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+<div class="viewcode-block" id="Cogeneration.set_gen_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_gen_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_gen_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average generation capacity</span>
 
 <span class="sd">        Parameters</span>
@@ -1808,10 +2087,76 @@
 <span class="sd">        max : int</span>
 <span class="sd">            Maximum generation by a single cogenerator</span>
 
-<span class="sd">        avg : int</span>
-<span class="sd">            Average generation by a single cogenerator</span>
+<span class="sd">        design : int</span>
+<span class="sd">            Design generation by a single cogenerator</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Please switch from `gen_capacity` tuple to new separate &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;`min_gen`, `max_gen` and `design_gen` attributes&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span> <span class="o">=</span> <span class="nb">min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span> <span class="o">=</span> <span class="nb">max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span> <span class="o">=</span> <span class="n">design</span></div>
+
+<div class="viewcode-block" id="Cogeneration.get_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.get_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `min_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Cogeneration.set_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span> <span class="o">=</span> <span class="n">min_gen</span></div>
+
+<div class="viewcode-block" id="Cogeneration.del_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.del_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Cogeneration.get_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.get_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `max_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Cogeneration.set_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span> <span class="o">=</span> <span class="n">max_gen</span></div>
+
+<div class="viewcode-block" id="Cogeneration.del_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.del_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Cogeneration.get_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.get_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `design_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Cogeneration.set_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span> <span class="o">=</span> <span class="n">design_gen</span></div>
+
+<div class="viewcode-block" id="Cogeneration.del_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.del_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    <span class="n">min_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_min_gen</span><span class="p">,</span> <span class="n">set_min_gen</span><span class="p">,</span> <span class="n">del_min_gen</span><span class="p">)</span>
+    <span class="n">max_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_gen</span><span class="p">,</span> <span class="n">set_max_gen</span><span class="p">,</span> <span class="n">del_max_gen</span><span class="p">)</span>
+    <span class="n">design_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_design_gen</span><span class="p">,</span> <span class="n">set_design_gen</span><span class="p">,</span> <span class="n">del_design_gen</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Cogeneration.set_electrical_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration.set_electrical_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_electrical_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the cogeneration efficiency to the given function</span>
@@ -1852,8 +2197,8 @@
 <span class="sd">    max_gen : int</span>
 <span class="sd">        Maximum generation capacity of a single boiler</span>
 
-<span class="sd">    avg_gen : int</span>
-<span class="sd">        Average generation capacity of a single boiler</span>
+<span class="sd">    design_gen : int</span>
+<span class="sd">        Design generation capacity of a single boiler</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of boiler units running in parallel</span>
@@ -1873,8 +2218,15 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the boiler (Electricity)</span>
 
-<span class="sd">    gen_capacity : tuple</span>
-<span class="sd">        Minimum, maximum, and average generation capacity</span>
+<span class="sd">    min_gen : int</span>
+<span class="sd">        Minimum generation capacity of a single boiler</span>
+
+<span class="sd">    max_gen : int</span>
+<span class="sd">        Maximum generation capacity of a single boiler</span>
+
+<span class="sd">    design_gen : int</span>
+<span class="sd">        Design generation capacity of a single boiler</span>
+
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of boiler units running in parallel</span>
@@ -1888,14 +2240,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">design_gen</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Heat</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_gen_capacity</span><span class="p">(</span><span class="n">min_gen</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">,</span> <span class="n">avg_gen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span> <span class="o">=</span> <span class="n">min_gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span> <span class="o">=</span> <span class="n">max_gen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span> <span class="o">=</span> <span class="n">design_gen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_thermal_efficiency</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1903,7 +2257,8 @@
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Boiler id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;gen_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span><span class="si">}</span><span class="s2"> max_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_gen:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -1916,11 +2271,13 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">gen_capacity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_gen</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_gen</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_gen</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_gen</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Boiler.set_gen_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_gen_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_gen_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">):</span>
+<div class="viewcode-block" id="Boiler.set_gen_capacity"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_gen_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">set_gen_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average generation capacity</span>
 
 <span class="sd">        Parameters</span>
@@ -1931,10 +2288,73 @@
 <span class="sd">        max : int</span>
 <span class="sd">            Maximum generation by a single cogenerator</span>
 
-<span class="sd">        avg : int</span>
-<span class="sd">            Average generation by a single cogenerator</span>
+<span class="sd">        design : int</span>
+<span class="sd">            Design generation by a single cogenerator</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">avg</span><span class="p">)</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Please switch from `gen_capacity` tuple to new separate &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;`min_gen`, `max_gen` and `design_gen` attributes&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Boiler.get_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.get_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `min_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Boiler.set_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span> <span class="o">=</span> <span class="n">min_gen</span></div>
+
+<div class="viewcode-block" id="Boiler.del_min_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.del_min_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Boiler.get_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.get_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `max_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Boiler.set_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span> <span class="o">=</span> <span class="n">max_gen</span></div>
+
+<div class="viewcode-block" id="Boiler.del_max_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.del_max_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Boiler.get_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.get_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please switch from `gen_capacity` tuple to new `design_gen` attribute&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Boiler.set_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_gen</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span> <span class="o">=</span> <span class="n">design_gen</span></div>
+
+<div class="viewcode-block" id="Boiler.del_design_gen"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.del_design_gen">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_gen</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_capacity</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="n">min_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_min_gen</span><span class="p">,</span> <span class="n">set_min_gen</span><span class="p">,</span> <span class="n">del_min_gen</span><span class="p">)</span>
+    <span class="n">max_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_gen</span><span class="p">,</span> <span class="n">set_max_gen</span><span class="p">,</span> <span class="n">del_max_gen</span><span class="p">)</span>
+    <span class="n">design_gen</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_design_gen</span><span class="p">,</span> <span class="n">set_design_gen</span><span class="p">,</span> <span class="n">del_design_gen</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Boiler.set_thermal_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler.set_thermal_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_thermal_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency_curve</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the cogeneration efficiency to the given function</span>
@@ -1967,8 +2387,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single clarifier</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single clarifier</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of clarifiers running in parallel</span>
@@ -1996,8 +2416,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of a single clarifier in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Tuple of minimum, maximum, and average digester flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single clarifier</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single clarifier</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this clarifier</span>
@@ -2010,7 +2436,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -2021,14 +2447,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Clarification id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2042,7 +2471,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2066,8 +2497,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single filter</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of filters running in parallel</span>
@@ -2095,8 +2526,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single filter</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single filter</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this filter</span>
@@ -2109,7 +2546,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -2120,14 +2557,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Filtration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2141,7 +2581,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2165,8 +2607,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single screen</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single screen</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of screens running in parallel</span>
@@ -2188,8 +2630,14 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of screens running in parallel</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single screen</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single screen</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this screen</span>
@@ -2202,7 +2650,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
@@ -2211,14 +2659,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Screening id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2231,7 +2682,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2255,8 +2708,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single biogas conditioner</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of biogas conditioners running in parallel</span>
@@ -2278,8 +2731,14 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of biogas conditioners running in parallel</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single biogas conditioner</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single biogas conditioner</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this screen</span>
@@ -2292,7 +2751,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
@@ -2301,14 +2760,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Conditioning id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2321,7 +2783,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2345,8 +2809,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single thickener</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single thickener</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of thickeners running in parallel</span>
@@ -2374,8 +2838,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of a single thickener in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single thickener</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single thickener</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this thickener</span>
@@ -2388,7 +2858,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -2399,14 +2869,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Thickening id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2420,7 +2894,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2444,8 +2920,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single aeration basin</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single aeration basin</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of aeration basins running in parallel</span>
@@ -2473,8 +2949,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of a single aeration basin in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single aeration basin</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single aeration basin</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this aerator</span>
@@ -2487,7 +2969,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -2498,14 +2980,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Aeration id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2519,7 +3005,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2543,8 +3031,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single chlorinator</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single chlorinator</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single chlorinator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
@@ -2572,8 +3060,14 @@
 <span class="sd">    volume : int</span>
 <span class="sd">        Volume of a single chlorinator in cubic meters</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single chlorinator</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single chlorinator</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single chlorinator</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this chlorinator</span>
@@ -2586,7 +3080,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">min_flow</span><span class="p">,</span>
         <span class="n">max_flow</span><span class="p">,</span>
-        <span class="n">avg_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -2597,14 +3091,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Chlorination id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2618,7 +3116,9 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -2639,8 +3139,8 @@
 <span class="sd">    max_flow : int</span>
 <span class="sd">        Maximum flow rate of a single flare</span>
 
-<span class="sd">    avg_flow : int</span>
-<span class="sd">        Average flow rate of a single flare</span>
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this flare</span>
@@ -2656,25 +3156,34 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of flares running in parallel</span>
 
-<span class="sd">    flow_rate : tuple</span>
-<span class="sd">        Minimum, maximum, and average flow rate</span>
+<span class="sd">    min_flow : int</span>
+<span class="sd">        Minimum flow rate of a single flare</span>
+
+<span class="sd">    max_flow : int</span>
+<span class="sd">        Maximum flow rate of a single flare</span>
+
+<span class="sd">    design_flow : int</span>
+<span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this flare</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">num_units</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">design_flow</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Biogas</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_rate</span><span class="p">(</span><span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">avg_flow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Flaring id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;flow_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2686,7 +3195,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
-            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">flow_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 </pre></div>

@@ -323,7 +323,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Pipe">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.connection.Connection" title="pype_schema.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -332,14 +332,14 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection</p></li>
 <li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
-<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate through the pipe</p></li>
-<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate through the pipe</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate through the pipe</p></li>
-<li><p><strong>diameter</strong> (<em>int</em>) – Pipe diameter in meters</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate through the pipe</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate through the pipe</p></li>
+<li><p><strong>avg_flow</strong> (<em>pint.Quantity or int</em>) – Average flow rate through the pipe</p></li>
+<li><p><strong>diameter</strong> (<em>pint.Quantity or int</em>) – Pipe diameter</p></li>
 <li><p><strong>friction_coeff</strong> (<em>int</em>) – Friction coefficient for the pipe</p></li>
-<li><p><strong>min_pres</strong> (<em>int</em>) – Minimum pressure inside the pipe</p></li>
-<li><p><strong>max_pres</strong> (<em>int</em>) – Maximum pressure inside the pipe</p></li>
-<li><p><strong>avg_pres</strong> (<em>int</em>) – Average pressure inside the pipe</p></li>
+<li><p><strong>min_pres</strong> (<em>pint.Quantity or int</em>) – Minimum pressure inside the pipe</p></li>
+<li><p><strong>max_pres</strong> (<em>pint.Quantity or int</em>) – Maximum pressure inside the pipe</p></li>
+<li><p><strong>design_pres</strong> (<em>pint.Quantity or int</em>) – Design pressure of the pipe</p></li>
 <li><p><strong>lower_heating_value</strong> (<em>float</em>) – Lower heating value of gas in the pipe</p></li>
 <li><p><strong>higher_heating_value</strong> (<em>float</em>) – Higher heating value of gas in the pipe</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pipe</p></li>
@@ -356,10 +356,14 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate through the pipe</p></li>
-<li><p><strong>diameter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Pipe diameter in meters</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate through the pipe</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate through the pipe</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate through the pipe</p></li>
+<li><p><strong>diameter</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Pipe diameter</p></li>
 <li><p><strong>friction_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Friction coefficient for the pipe</p></li>
-<li><p><strong>pressure</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average pressure in the pipe</p></li>
+<li><p><strong>min_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum pressure inside the pipe</p></li>
+<li><p><strong>max_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum pressure inside the pipe</p></li>
+<li><p><strong>design_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design pressure of the pipe</p></li>
 <li><p><strong>heating_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – The lower and higher heating values of the gas in the pipe.
 None if the pipe is not transporting gas</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
@@ -372,15 +376,115 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_design_flow">
+<span class="sig-name descname"><span class="pre">del_design_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_design_pressure">
+<span class="sig-name descname"><span class="pre">del_design_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_design_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_design_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_max_flow">
+<span class="sig-name descname"><span class="pre">del_max_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_max_pressure">
+<span class="sig-name descname"><span class="pre">del_max_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_max_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_max_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_min_flow">
+<span class="sig-name descname"><span class="pre">del_min_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.del_min_pressure">
+<span class="sig-name descname"><span class="pre">del_min_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.del_min_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.del_min_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.design_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">design_flow</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.design_pressure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">design_pressure</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.design_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_design_flow">
+<span class="sig-name descname"><span class="pre">get_design_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_design_pressure">
+<span class="sig-name descname"><span class="pre">get_design_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_design_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_design_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_max_flow">
+<span class="sig-name descname"><span class="pre">get_max_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_max_pressure">
+<span class="sig-name descname"><span class="pre">get_max_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_max_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_max_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_min_flow">
+<span class="sig-name descname"><span class="pre">get_min_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.get_min_pressure">
+<span class="sig-name descname"><span class="pre">get_min_pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.get_min_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.get_min_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.max_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_flow</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.max_pressure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_pressure</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.max_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.min_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_flow</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.min_pressure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_pressure</span></span><a class="headerlink" href="#pype_schema.connection.Pipe.min_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_design_flow">
+<span class="sig-name descname"><span class="pre">set_design_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_design_pressure">
+<span class="sig-name descname"><span class="pre">set_design_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_pressure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_design_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_design_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_flow_rate">
-<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_flow_rate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_flow_rate" title="Permalink to this definition"></a></dt>
 <dd><p>Set the minimum, maximum, and average flow rate through the connection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min</strong> (<em>int</em>) – Minimum flow rate through the connection</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum flow rate through the connection</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – Average flow rate through the connection</p></li>
+<li><p><strong>design</strong> (<em>int</em>) – Design flow rate through the connection</p></li>
 </ul>
 </dd>
 </dl>
@@ -401,15 +505,35 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_max_flow">
+<span class="sig-name descname"><span class="pre">set_max_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_max_pressure">
+<span class="sig-name descname"><span class="pre">set_max_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_pressure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_max_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_max_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_min_flow">
+<span class="sig-name descname"><span class="pre">set_min_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_min_pressure">
+<span class="sig-name descname"><span class="pre">set_min_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_pressure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_min_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_min_pressure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_pressure">
-<span class="sig-name descname"><span class="pre">set_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_pressure" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_pressure" title="Permalink to this definition"></a></dt>
 <dd><p>Set the minimum, maximum, and average pressure inside the connection</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min</strong> (<em>int</em>) – Minimum pressure inside the connection</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum pressure inside the connection</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – Average pressure inside the connection</p></li>
+<li><p><strong>design</strong> (<em>int</em>) – Design pressure inside the connection</p></li>
 </ul>
 </dd>
 </dl>
@@ -457,7 +581,7 @@ Default is None, indicating the destination does not have any children</p></li>
 <span id="pype-schema-node-module"></span><h2>pype_schema.node module<a class="headerlink" href="#module-pype_schema.node" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Aeration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Aeration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Aeration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Aeration" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Aeration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Aeration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Aeration" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -467,7 +591,7 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the aeration basin</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single aeration basin</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single aeration basin</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single aeration basin</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single aeration basin</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of aeration basins running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of a single aeration basin in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this aerator</p></li>
@@ -480,7 +604,9 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the aeration basin</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of aeration basins running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of a single aeration basin in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single aeration basin</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single aeration basin</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single aeration basin</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this aerator</p></li>
 </ul>
 </dd>
@@ -489,14 +615,16 @@ Default is None, indicating the destination does not have any children</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Battery">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Battery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discharge_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Battery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_capacity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discharge_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leakage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Battery ID</p></li>
-<li><p><strong>capacity</strong> (<em>int</em>) – Storage capacity of the battery in kWh</p></li>
+<li><p><strong>energy_capacity</strong> (<em>int</em>) – Energy storage capacity of the battery in kWh</p></li>
+<li><p><strong>charge_rate</strong> (<em>int</em>) – Maximum charge rate of the battery in kW</p></li>
 <li><p><strong>discharge_rate</strong> (<em>int</em>) – Maximum discharge rate of the battery in kW</p></li>
+<li><p><strong>rte</strong> (<em>float</em>) – Round trip efficiency of the battery</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this battery</p></li>
 </ul>
 </dd>
@@ -505,17 +633,100 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Battery ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the battery.</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the battery.</p></li>
-<li><p><strong>capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Storage capacity of the battery in kWh</p></li>
+<li><p><strong>energy_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Energy storage capacity of the battery in kWh</p></li>
+<li><p><strong>charge_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum discharge rate of the battery in kW</p></li>
 <li><p><strong>discharge_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum discharge rate of the battery in kW</p></li>
+<li><p><strong>rte</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Round trip efficiency of the battery</p></li>
+<li><p><strong>leakage</strong> (<em>pint.Quantity</em>) – Leakage of the battery as a Pint Quantity</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this battery</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.charge_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">charge_rate</span></span><a class="headerlink" href="#pype_schema.node.Battery.charge_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.del_charge_rate">
+<span class="sig-name descname"><span class="pre">del_charge_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.del_charge_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.del_charge_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.del_energy_capacity">
+<span class="sig-name descname"><span class="pre">del_energy_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.del_energy_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.del_energy_capacity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.del_leakage">
+<span class="sig-name descname"><span class="pre">del_leakage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.del_leakage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.del_leakage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.del_rte">
+<span class="sig-name descname"><span class="pre">del_rte</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.del_rte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.del_rte" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.energy_capacity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy_capacity</span></span><a class="headerlink" href="#pype_schema.node.Battery.energy_capacity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.get_charge_rate">
+<span class="sig-name descname"><span class="pre">get_charge_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.get_charge_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.get_charge_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.get_energy_capacity">
+<span class="sig-name descname"><span class="pre">get_energy_capacity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.get_energy_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.get_energy_capacity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.get_leakage">
+<span class="sig-name descname"><span class="pre">get_leakage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.get_leakage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.get_leakage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.get_rte">
+<span class="sig-name descname"><span class="pre">get_rte</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.get_rte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.get_rte" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.leakage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leakage</span></span><a class="headerlink" href="#pype_schema.node.Battery.leakage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.rte">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rte</span></span><a class="headerlink" href="#pype_schema.node.Battery.rte" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.set_charge_rate">
+<span class="sig-name descname"><span class="pre">set_charge_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">charge_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.set_charge_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.set_charge_rate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.set_energy_capacity">
+<span class="sig-name descname"><span class="pre">set_energy_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_capacity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.set_energy_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.set_energy_capacity" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.set_leakage">
+<span class="sig-name descname"><span class="pre">set_leakage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leakage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.set_leakage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.set_leakage" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Battery.set_rte">
+<span class="sig-name descname"><span class="pre">set_rte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rte</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Battery.set_rte"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Battery.set_rte" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Boiler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Boiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Boiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -524,7 +735,7 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the boiler</p></li>
 <li><p><strong>min_gen</strong> (<em>int</em>) – Minimum generation capacity of a single boiler</p></li>
 <li><p><strong>max_gen</strong> (<em>int</em>) – Maximum generation capacity of a single boiler</p></li>
-<li><p><strong>avg_gen</strong> (<em>int</em>) – Average generation capacity of a single boiler</p></li>
+<li><p><strong>design_gen</strong> (<em>int</em>) – Design generation capacity of a single boiler</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of boiler units running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this boiler</p></li>
 </ul>
@@ -535,28 +746,95 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the boiler
 (biogas, natural gas, or a blend of the two)</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the boiler (Electricity)</p></li>
-<li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
-<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of boiler units running in parallel</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this boiler</p></li>
-<li><p><strong>thermal_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
-the efficiency as a fraction</p></li>
+<li><p><strong>min_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum generation capacity of a single boiler</p></li>
+<li><p><strong>max_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum generation capacity of a single boiler</p></li>
+<li><p><strong>design_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design generation capacity of a single boiler</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="simple">
+<dt>num_units<span class="classifier">int</span></dt><dd><p>Number of boiler units running in parallel</p>
+</dd>
+<dt>tags<span class="classifier">dict of Tag</span></dt><dd><p>Data tags associated with this boiler</p>
+</dd>
+<dt>thermal_efficiency<span class="classifier">function</span></dt><dd><p>Function which takes in the current kWh and returns
+the efficiency as a fraction</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.del_design_gen">
+<span class="sig-name descname"><span class="pre">del_design_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.del_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.del_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.del_max_gen">
+<span class="sig-name descname"><span class="pre">del_max_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.del_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.del_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.del_min_gen">
+<span class="sig-name descname"><span class="pre">del_min_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.del_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.del_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.design_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">design_gen</span></span><a class="headerlink" href="#pype_schema.node.Boiler.design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.get_design_gen">
+<span class="sig-name descname"><span class="pre">get_design_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.get_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.get_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.get_max_gen">
+<span class="sig-name descname"><span class="pre">get_max_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.get_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.get_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.get_min_gen">
+<span class="sig-name descname"><span class="pre">get_min_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.get_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.get_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.max_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_gen</span></span><a class="headerlink" href="#pype_schema.node.Boiler.max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.min_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_gen</span></span><a class="headerlink" href="#pype_schema.node.Boiler.min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.set_design_gen">
+<span class="sig-name descname"><span class="pre">set_design_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Boiler.set_gen_capacity">
-<span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_gen_capacity" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_gen_capacity" title="Permalink to this definition"></a></dt>
 <dd><p>Set the minimum, maximum, and average generation capacity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min</strong> (<em>int</em>) – Minimum generation by a single cogenerator</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum generation by a single cogenerator</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – Average generation by a single cogenerator</p></li>
+<li><p><strong>design</strong> (<em>int</em>) – Design generation by a single cogenerator</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.set_max_gen">
+<span class="sig-name descname"><span class="pre">set_max_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Boiler.set_min_gen">
+<span class="sig-name descname"><span class="pre">set_min_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Boiler.set_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Boiler.set_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Boiler.set_thermal_efficiency">
@@ -573,7 +851,7 @@ the efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Chlorination">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Chlorination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Chlorination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Chlorination" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Chlorination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Chlorination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Chlorination" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -583,7 +861,7 @@ the efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the chlorinator</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single chlorinator</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single chlorinator</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single chlorinator</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single chlorinator</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of chlorinators running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of a single chlorinator in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this chlorinator</p></li>
@@ -596,7 +874,9 @@ the efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the chlorinator</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of chlorinators running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of a single chlorinator in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single chlorinator</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single chlorinator</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single chlorinator</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this chlorinator</p></li>
 </ul>
 </dd>
@@ -605,7 +885,7 @@ the efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Clarification">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Clarification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Clarification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Clarification" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Clarification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Clarification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Clarification" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -615,7 +895,7 @@ the efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the clarifier</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single clarifier</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single clarifier</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single clarifier</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single clarifier</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of clarifiers running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of the clarifier in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this clarifier</p></li>
@@ -628,7 +908,9 @@ the efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the clarifier</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of clarifiers running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of a single clarifier in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single clarifier</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single clarifier</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single clarifier</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this clarifier</p></li>
 </ul>
 </dd>
@@ -637,7 +919,7 @@ the efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Cogeneration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Cogeneration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Cogeneration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_gen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -646,7 +928,7 @@ the efficiency as a fraction</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the cogenerator</p></li>
 <li><p><strong>min_gen</strong> (<em>int</em>) – Minimum generation capacity of a single cogenerator</p></li>
 <li><p><strong>max_gen</strong> (<em>int</em>) – Maximum generation capacity of a single cogenerator</p></li>
-<li><p><strong>avg_gen</strong> (<em>int</em>) – Average generation capacity of a single cogenerator</p></li>
+<li><p><strong>design_gen</strong> (<em>int</em>) – Design generation capacity of a single cogenerator</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of cogenerator units running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this cogenerator</p></li>
 </ul>
@@ -657,7 +939,9 @@ the efficiency as a fraction</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the cogenerator
 (biogas, natural gas, or a blend of the two)</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the cogenerator (Electricity)</p></li>
-<li><p><strong>gen_capacity</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average generation capacity</p></li>
+<li><p><strong>min_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum generation capacity of a single cogenerator</p></li>
+<li><p><strong>max_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum generation capacity of a single cogenerator</p></li>
+<li><p><strong>design_gen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Average generation capacity of a single cogenerator</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of cogenerator units running in parallel</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this cogenerator</p></li>
 <li><p><strong>electrical_efficiency</strong> (<em>function</em>) – Function which takes in the current kWh and returns
@@ -667,6 +951,56 @@ the thermal efficiency as a fraction</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.del_design_gen">
+<span class="sig-name descname"><span class="pre">del_design_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.del_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.del_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.del_max_gen">
+<span class="sig-name descname"><span class="pre">del_max_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.del_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.del_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.del_min_gen">
+<span class="sig-name descname"><span class="pre">del_min_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.del_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.del_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.design_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">design_gen</span></span><a class="headerlink" href="#pype_schema.node.Cogeneration.design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.get_design_gen">
+<span class="sig-name descname"><span class="pre">get_design_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.get_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.get_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.get_max_gen">
+<span class="sig-name descname"><span class="pre">get_max_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.get_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.get_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.get_min_gen">
+<span class="sig-name descname"><span class="pre">get_min_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.get_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.get_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.max_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_gen</span></span><a class="headerlink" href="#pype_schema.node.Cogeneration.max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.min_gen">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_gen</span></span><a class="headerlink" href="#pype_schema.node.Cogeneration.min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_design_gen">
+<span class="sig-name descname"><span class="pre">set_design_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_design_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_design_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_electrical_efficiency">
 <span class="sig-name descname"><span class="pre">set_electrical_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">efficiency_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_electrical_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_electrical_efficiency" title="Permalink to this definition"></a></dt>
@@ -680,18 +1014,28 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_gen_capacity">
-<span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_gen_capacity" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_gen_capacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_gen_capacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_gen_capacity" title="Permalink to this definition"></a></dt>
 <dd><p>Set the minimum, maximum, and average generation capacity</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min</strong> (<em>int</em>) – Minimum generation by a single cogenerator</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum generation by a single cogenerator</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – Average generation by a single cogenerator</p></li>
+<li><p><strong>design</strong> (<em>int</em>) – Design generation by a single cogenerator</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_max_gen">
+<span class="sig-name descname"><span class="pre">set_max_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_max_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_max_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_min_gen">
+<span class="sig-name descname"><span class="pre">set_min_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_gen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Cogeneration.set_min_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Cogeneration.set_min_gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Cogeneration.set_thermal_efficiency">
@@ -708,7 +1052,7 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Conditioning">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Conditioning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Conditioning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Conditioning" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Conditioning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Conditioning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Conditioning" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -718,7 +1062,7 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the biogas conditioner</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single biogas conditioner</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single biogas conditioner</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single biogas conditioner</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single biogas conditioner</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of biogas conditioners running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this biogas conditioner</p></li>
 </ul>
@@ -729,7 +1073,9 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the biogas conditioner</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the biogas conditioner</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of biogas conditioners running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single biogas conditioner</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single biogas conditioner</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single biogas conditioner</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this screen</p></li>
 </ul>
 </dd>
@@ -738,7 +1084,7 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Digestion">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Digestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">digester_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Digestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Digestion" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Digestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">digester_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Digestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Digestion" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -746,9 +1092,9 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>id</strong> (<em>str</em>) – Digester ID</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the digester (e.g. biogas or wastewater)</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the digester (e.g. biogas or wastewater)</p></li>
-<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate through the process</p></li>
-<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate through the process</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate through the process</p></li>
+<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate through the digester</p></li>
+<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate through the digester</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate through the digester</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of digesters running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of the digester in cubic meters</p></li>
 <li><p><strong>digester_type</strong> (<em>DigesterType</em>) – Type of digestion (aerobic or anaerobic)</p></li>
@@ -762,7 +1108,9 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the digester (e.g. biogas or wastewater)</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of digesters running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of the digester in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average digester flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate through the digester</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate through the digester</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate through the digester</p></li>
 <li><p><strong>digester_type</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.DigesterType" title="pype_schema.utils.DigesterType"><em>DigesterType</em></a>) – Type of digestion (aerobic or anaerobic)</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this digester</p></li>
 </ul>
@@ -772,7 +1120,7 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Facility">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Facility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Facility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Facility" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Facility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Facility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Facility" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Network" title="pype_schema.node.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -780,10 +1128,10 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>id</strong> (<em>str</em>) – Facility ID</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the network.</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the network.</p></li>
-<li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the facility</p></li>
-<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate through the facility</p></li>
-<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate through the facility</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate through the facility</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the facility</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate through the facility</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate through the facility</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity or int</em>) – Design flow rate through the facility</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this facility</p></li>
 <li><p><strong>nodes</strong> (<em>dict of Node</em>) – nodes in the facility, e.g. pumps, tanks, or processes</p></li>
 <li><p><strong>connections</strong> (<em>dict of Connections</em>) – connections in the facility, e.g. pipes</p></li>
@@ -794,9 +1142,11 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Facility ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the facility.</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the facility.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the facility in meters above sea level</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the facility in meters above sea level</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this facility</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average facility flow rate</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate through the facility</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate through the facility</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate through the facility</p></li>
 <li><p><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – nodes in the facility, e.g. pumps, tanks, or processes</p></li>
 <li><p><strong>connections</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><em>Connections</em>) – connections in the facility, e.g. pipes</p></li>
 </ul>
@@ -806,7 +1156,7 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Filtration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Filtration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Filtration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Filtration" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Filtration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Filtration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Filtration" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -816,7 +1166,7 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the filter</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single filter</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single filter</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single filter</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single filter</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of filters running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of a single filter in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this filter</p></li>
@@ -829,7 +1179,9 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the filter</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of filters running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of a single filter in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single filter</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single filter</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single filter</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this filter</p></li>
 </ul>
 </dd>
@@ -838,7 +1190,7 @@ the thermal efficiency as a fraction</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Flaring">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Flaring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Flaring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Flaring" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Flaring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Flaring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Flaring" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -847,7 +1199,7 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of flares running in parallel</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single flare</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single flare</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single flare</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single flare</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this flare</p></li>
 </ul>
 </dd>
@@ -856,7 +1208,9 @@ the thermal efficiency as a fraction</p></li>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Flare ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the flare</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of flares running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single flare</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single flare</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single flare</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this flare</p></li>
 </ul>
 </dd>
@@ -992,6 +1346,26 @@ If False, only direct children are returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.del_design_flow">
+<span class="sig-name descname"><span class="pre">del_design_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.del_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.del_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.del_max_flow">
+<span class="sig-name descname"><span class="pre">del_max_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.del_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.del_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.del_min_flow">
+<span class="sig-name descname"><span class="pre">del_min_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.del_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.del_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Node.design_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">design_flow</span></span><a class="headerlink" href="#pype_schema.node.Node.design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Node.get_all_connections">
 <span class="sig-name descname"><span class="pre">get_all_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_all_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_all_connections" title="Permalink to this definition"></a></dt>
 <dd><p>Gets all Connection objects associated with this Node</p>
@@ -1101,6 +1475,20 @@ If False, only direct children are returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.get_capacities">
+<span class="sig-name descname"><span class="pre">get_capacities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_capacities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_capacities" title="Permalink to this definition"></a></dt>
+<dd><p>Gets a dictionary of capacity-related attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of attribute names and values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Node.get_connection">
 <span class="sig-name descname"><span class="pre">get_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_connection" title="Permalink to this definition"></a></dt>
 <dd><p>Get a connection from the network</p>
@@ -1120,6 +1508,35 @@ Default is False, meaning that only direct children will be returned.</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.get_design_flow">
+<span class="sig-name descname"><span class="pre">get_design_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.get_efficiencies">
+<span class="sig-name descname"><span class="pre">get_efficiencies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_efficiencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_efficiencies" title="Permalink to this definition"></a></dt>
+<dd><p>Gets a dictionary of efficiency-related attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of attribute names and values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.get_max_flow">
+<span class="sig-name descname"><span class="pre">get_max_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.get_min_flow">
+<span class="sig-name descname"><span class="pre">get_min_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.get_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.get_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Node.get_node">
@@ -1214,6 +1631,16 @@ Returns None if the <cite>tag_name</cite> is not found</p>
 <span class="sig-name descname"><span class="pre">input_contents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><span class="pre">pype_schema.utils.ContentsType</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">NotImplemented</span></em><a class="headerlink" href="#pype_schema.node.Node.input_contents" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Node.max_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_flow</span></span><a class="headerlink" href="#pype_schema.node.Node.max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Node.min_flow">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_flow</span></span><a class="headerlink" href="#pype_schema.node.Node.min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.node.Node.output_contents">
 <span class="sig-name descname"><span class="pre">output_contents</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><span class="pre">pype_schema.utils.ContentsType</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">NotImplemented</span></em><a class="headerlink" href="#pype_schema.node.Node.output_contents" title="Permalink to this definition"></a></dt>
@@ -1251,7 +1678,7 @@ which match source/destination node class, unit ID, and contents.
 <li><p><strong>entry_point_type</strong> (<em>class</em>) – Optional <cite>entry_point</cite> <cite>Node</cite> subclass to filter by. None by default</p></li>
 <li><p><strong>contents_type</strong> (<em>ContentsType</em>) – Optional contents to filter by. None by default</p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Optional tag type to filter by. None by default</p></li>
-<li><p><strong>obj_type</strong> (<em>[Node, Connection, Tag]</em>) – The type of object to filter by. None by default</p></li>
+<li><p><strong>obj_type</strong> (<em>[Node, Connection, VirtualTag, Tag]</em>) – The type of object to filter by. None by default</p></li>
 <li><p><strong>recurse</strong> (<em>bool</em>) – Whether to search for objects within nodes. False by default</p></li>
 </ul>
 </dd>
@@ -1351,19 +1778,34 @@ source/destination <cite>id</cite> and <cite>contents_type</cite></p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.set_design_flow">
+<span class="sig-name descname"><span class="pre">set_design_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.set_design_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.set_design_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Node.set_flow_rate">
-<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.set_flow_rate" title="Permalink to this definition"></a></dt>
-<dd><p>Set the minimum, maximum, and average flow rate of the node</p>
+<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.set_flow_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Set the minimum, maximum, and design flow rate of the node</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min</strong> (<em>int</em>) – Minimum flow rate through the node</p></li>
 <li><p><strong>max</strong> (<em>int</em>) – Maximum flow rate through the node</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – Average flow rate through the node</p></li>
+<li><p><strong>design</strong> (<em>int</em>) – Design flow rate through the node</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.set_max_flow">
+<span class="sig-name descname"><span class="pre">set_max_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.set_max_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.set_max_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Node.set_min_flow">
+<span class="sig-name descname"><span class="pre">set_min_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Node.set_min_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Node.set_min_flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.node.Node.tags">
@@ -1374,7 +1816,7 @@ source/destination <cite>id</cite> and <cite>contents_type</cite></p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Pump">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Pump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horsepower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pump_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PumpType.Constant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Pump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_rating</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pump_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PumpType.Constant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1382,12 +1824,12 @@ source/destination <cite>id</cite> and <cite>contents_type</cite></p>
 <li><p><strong>id</strong> (<em>str</em>) – Pump ID</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the pump</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the pump</p></li>
-<li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the pump in meters above sea level</p></li>
-<li><p><strong>horsepower</strong> (<em>int</em>) – Horsepower of a single pump</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the pump in meters above sea level</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity or int</em>) – Rated power of a single pump (in horsepower)</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of pumps running in parallel</p></li>
-<li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate supplied by the pump</p></li>
-<li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate supplied by the pump</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate supplied by the pump</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate supplied by the pump</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate supplied by the pump</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity or int</em>) – Design flow rate supplied by the pump</p></li>
 <li><p><strong>pump_type</strong> (<em>PumpType</em>) – Type of pump (either VFD or constant)</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pump</p></li>
 </ul>
@@ -1397,10 +1839,12 @@ source/destination <cite>id</cite> and <cite>contents_type</cite></p>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Pump ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the pump</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the pump</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the pump in meters above sea level</p></li>
-<li><p><strong>horsepower</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Horsepower of a single pump</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the pump in meters above sea level</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Rated power of a single pump (in horsepower)</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of pumps running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Tuple of minimum, maximum, and average pump flow rate</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate supplied by the pump</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate supplied by the pump</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate supplied by the pump</p></li>
 <li><p><strong>pump_type</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.PumpType" title="pype_schema.utils.PumpType"><em>PumpType</em></a>) – Type of pump (either VFD or constant)</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pump</p></li>
 <li><p><strong>pump_curve</strong> (<em>function</em>) – Function which takes in the current flow rate and returns the energy
@@ -1408,6 +1852,26 @@ required to pump at that rate</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Pump.del_power_rating">
+<span class="sig-name descname"><span class="pre">del_power_rating</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump.del_power_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump.del_power_rating" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Pump.get_power_rating">
+<span class="sig-name descname"><span class="pre">get_power_rating</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump.get_power_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump.get_power_rating" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.node.Pump.power_rating">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">power_rating</span></span><a class="headerlink" href="#pype_schema.node.Pump.power_rating" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.node.Pump.set_power_rating">
+<span class="sig-name descname"><span class="pre">set_power_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">power_rating</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump.set_power_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump.set_power_rating" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.node.Pump.set_pump_curve">
 <span class="sig-name descname"><span class="pre">set_pump_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pump_curve</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Pump.set_pump_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Pump.set_pump_curve" title="Permalink to this definition"></a></dt>
@@ -1443,8 +1907,8 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<em>str</em>) – Reservoir ID</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the reservoir.</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the reservoir.</p></li>
-<li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the reservoir in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<em>int</em>) – Volume of the reservoir in cubic meters</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the reservoir in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity or int</em>) – Volume of the reservoir in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this reservoir</p></li>
 </ul>
 </dd>
@@ -1453,8 +1917,8 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Reservoir ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the reservoir.</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the reservoir.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the reservoir in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of the reservoir in cubic meters</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the reservoir in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of the reservoir in cubic meters</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this reservoir</p></li>
 </ul>
 </dd>
@@ -1463,7 +1927,7 @@ required to pump at that rate</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Screening">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Screening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Screening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Screening" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Screening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Screening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Screening" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1473,7 +1937,7 @@ required to pump at that rate</p>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the screen</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single screen</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single screen</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single screen</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single screen</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of screens running in parallel</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this screen</p></li>
 </ul>
@@ -1484,7 +1948,9 @@ required to pump at that rate</p>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the screen</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the screen</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of screens running in parallel</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single screen</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single screen</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single screen</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this screen</p></li>
 </ul>
 </dd>
@@ -1501,8 +1967,8 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<em>str</em>) – Tank ID</p></li>
 <li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the tank.</p></li>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the tank.</p></li>
-<li><p><strong>elevation</strong> (<em>int</em>) – Elevation of the tank in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<em>int</em>) – Volume of the tank in cubic meters</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the tank in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity or int</em>) – Volume of the tank in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this tank</p></li>
 </ul>
 </dd>
@@ -1511,8 +1977,8 @@ required to pump at that rate</p>
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Tank ID</p></li>
 <li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the tank.</p></li>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the tank.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the tank in meters above sea level</p></li>
-<li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of the tank in cubic meters</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Elevation of the tank in meters above sea level</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of the tank in cubic meters</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this tank</p></li>
 </ul>
 </dd>
@@ -1521,7 +1987,7 @@ required to pump at that rate</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.Thickening">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Thickening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Thickening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Thickening" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Thickening</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Thickening"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Thickening" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1531,7 +1997,7 @@ required to pump at that rate</p>
 <li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the thickener</p></li>
 <li><p><strong>min_flow</strong> (<em>int</em>) – Minimum flow rate of a single thickener</p></li>
 <li><p><strong>max_flow</strong> (<em>int</em>) – Maximum flow rate of a single thickener</p></li>
-<li><p><strong>avg_flow</strong> (<em>int</em>) – Average flow rate of a single thickener</p></li>
+<li><p><strong>design_flow</strong> (<em>int</em>) – Design flow rate of a single thickener</p></li>
 <li><p><strong>num_units</strong> (<em>int</em>) – Number of thickeners running in parallel</p></li>
 <li><p><strong>volume</strong> (<em>int</em>) – Volume of a single thickener in cubic meters</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this thickener</p></li>
@@ -1544,7 +2010,9 @@ required to pump at that rate</p>
 <li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the thickener</p></li>
 <li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Number of thickeners running in parallel</p></li>
 <li><p><strong>volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Volume of a single thickener in cubic meters</p></li>
-<li><p><strong>flow_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – Minimum, maximum, and average flow rate</p></li>
+<li><p><strong>min_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimum flow rate of a single thickener</p></li>
+<li><p><strong>max_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Maximum flow rate of a single thickener</p></li>
+<li><p><strong>design_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Design flow rate of a single thickener</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this thickener</p></li>
 </ul>
 </dd>
@@ -1768,8 +2236,8 @@ stored hierarchically</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.min_max_avg_to_dict">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_max_avg_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.min_max_avg_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.min_max_avg_to_dict" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.min_max_design_to_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_max_design_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.min_max_design_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.min_max_design_to_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Converts the flow rate tuple of a <cite>Node</cite> or <cite>Connection</cite> into a
 dictionary object</p>
 <dl class="field-list simple">
@@ -1783,7 +2251,7 @@ dictionary object</p>
 <dd class="field-even"><p><dl>
 <dt>flow rate in the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>float</cite> or <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>float</cite> or <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">avg</span></code>: <cite>float</cite> or <cite>int</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>float</cite> or <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
 </dd>
 </dl>
@@ -1844,6 +2312,7 @@ parsed into JSON format</p>
 <dl>
 <dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">lower</span></code>: <cite>float</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">higher</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
 </dd>
 </dl>
 <p>}</p>
@@ -1853,22 +2322,22 @@ parsed into JSON format</p>
 Given as a float if no units are specified</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
+<dd class="field-odd"><p>(pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_min_max_avg">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_min_max_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_min_max_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_min_max_avg" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_min_max_design">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_min_max_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_min_max_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_min_max_design" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>min_max_avg</strong> (<em>dict</em>) –</p>
+<dd class="field-odd"><p><strong>min_max_design</strong> (<em>dict</em>) –</p>
 <dl>
 <dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">avg</span></code>: <cite>int</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>int</cite></p>
 </dd>
 </dl>
 <p>}</p>
@@ -1878,7 +2347,7 @@ Given as a float if no units are specified</p>
 If no units given, then returns a tuple of floats.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Quantity, Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
+<dd class="field-odd"><p>(pint.Quantity, pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1912,6 +2381,29 @@ which is used to gather relevant metadata</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag">Tag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_unit_val_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_unit_val_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_unit_val_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_unit_val_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a dictionary into a Pint Quantity</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unit_dict</strong> (<em>dict</em>) –</p>
+<dl>
+<dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary as a Pint Quantity (or float if no units are specified)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pint.Quantity or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1998,6 +2490,30 @@ parsed into JSON format</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.unit_val_to_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_val_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.unit_val_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.unit_val_to_dict" title="Permalink to this definition"></a></dt>
+<dd><dl>
+<dt>Converts the given attribute to dictionary of the form {</dt><dd><blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>attribute</strong> (<em>pint.Quantity or float</em>) – Attribute to represent as a dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with keys <code class="docutils literal notranslate"><span class="pre">value</span></code> and <code class="docutils literal notranslate"><span class="pre">units</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -2058,6 +2574,11 @@ across all units of the destination node</p></li>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.TagType.Concentration">
+<span class="sig-name descname"><span class="pre">Concentration</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#pype_schema.tag.TagType.Concentration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.tag.TagType.Conductivity">
 <span class="sig-name descname"><span class="pre">Conductivity</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#pype_schema.tag.TagType.Conductivity" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -2070,6 +2591,11 @@ across all units of the destination node</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.tag.TagType.Flow">
 <span class="sig-name descname"><span class="pre">Flow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pype_schema.tag.TagType.Flow" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.TagType.Frequency">
+<span class="sig-name descname"><span class="pre">Frequency</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#pype_schema.tag.TagType.Frequency" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2110,6 +2636,11 @@ across all units of the destination node</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.tag.TagType.RunTime">
 <span class="sig-name descname"><span class="pre">RunTime</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#pype_schema.tag.TagType.RunTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.TagType.Speed">
+<span class="sig-name descname"><span class="pre">Speed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#pype_schema.tag.TagType.Speed" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2432,6 +2963,31 @@ whether they are sludge, water, or gas</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Chemical">
+<span class="sig-name descname"><span class="pre">Chemical</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Chemical" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Coagulant">
+<span class="sig-name descname"><span class="pre">Coagulant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Coagulant" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Deodorant">
+<span class="sig-name descname"><span class="pre">Deodorant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Deodorant" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Disinfectant">
+<span class="sig-name descname"><span class="pre">Disinfectant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Disinfectant" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.DisinfectedEffluent">
+<span class="sig-name descname"><span class="pre">DisinfectedEffluent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DisinfectedEffluent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.DrinkingWater">
 <span class="sig-name descname"><span class="pre">DrinkingWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DrinkingWater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -2469,6 +3025,16 @@ whether they are sludge, water, or gas</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Heat">
 <span class="sig-name descname"><span class="pre">Heat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Heat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.IndustrialWastewater">
+<span class="sig-name descname"><span class="pre">IndustrialWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.IndustrialWastewater" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.MunicipalWastewater">
+<span class="sig-name descname"><span class="pre">MunicipalWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.MunicipalWastewater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2651,7 +3217,7 @@ whether they are sludge, water, or gas</p>
 <dd class="field-even"><p>a Pint Quantity with the given value and units</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Quantity</p>
+<dd class="field-odd"><p>pint.Quantity</p>
 </dd>
 </dl>
 </dd></dl>

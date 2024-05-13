@@ -72,15 +72,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.get_tag_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.get_tag_contents()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.initialize_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.initialize_network()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.merge_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.merge_network()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.min_max_avg_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.min_max_avg_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.min_max_design_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.min_max_design_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.node_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.node_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_contents()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_heating_values"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_heating_values()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_min_max_avg"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_min_max_avg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_min_max_design"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_min_max_design()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_unit_val_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_unit_val_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_virtual_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_virtual_tag()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.tag_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.tag_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.to_json"><code class="docutils literal notranslate"><span class="pre">JSONParser.to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.unit_val_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.unit_val_to_dict()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -314,8 +316,8 @@ stored hierarchically</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.min_max_avg_to_dict">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_max_avg_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.min_max_avg_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.min_max_avg_to_dict" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.min_max_design_to_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">min_max_design_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.min_max_design_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.min_max_design_to_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Converts the flow rate tuple of a <cite>Node</cite> or <cite>Connection</cite> into a
 dictionary object</p>
 <dl class="field-list simple">
@@ -329,7 +331,7 @@ dictionary object</p>
 <dd class="field-even"><p><dl>
 <dt>flow rate in the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>float</cite> or <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>float</cite> or <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">avg</span></code>: <cite>float</cite> or <cite>int</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>float</cite> or <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
 </dd>
 </dl>
@@ -390,6 +392,7 @@ parsed into JSON format</p>
 <dl>
 <dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">lower</span></code>: <cite>float</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">higher</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
 </dd>
 </dl>
 <p>}</p>
@@ -399,22 +402,22 @@ parsed into JSON format</p>
 Given as a float if no units are specified</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
+<dd class="field-odd"><p>(pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_min_max_avg">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_min_max_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_avg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_min_max_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_min_max_avg" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_min_max_design">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_min_max_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_max_design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_min_max_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_min_max_design" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>min_max_avg</strong> (<em>dict</em>) –</p>
+<dd class="field-odd"><p><strong>min_max_design</strong> (<em>dict</em>) –</p>
 <dl>
 <dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>int</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">avg</span></code>: <cite>int</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>int</cite></p>
 </dd>
 </dl>
 <p>}</p>
@@ -424,7 +427,7 @@ Given as a float if no units are specified</p>
 If no units given, then returns a tuple of floats.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Quantity, Quantity, Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
+<dd class="field-odd"><p>(pint.Quantity, pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -458,6 +461,29 @@ which is used to gather relevant metadata</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag">Tag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_unit_val_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_unit_val_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_unit_val_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_unit_val_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a dictionary into a Pint Quantity</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unit_dict</strong> (<em>dict</em>) –</p>
+<dl>
+<dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary as a Pint Quantity (or float if no units are specified)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pint.Quantity or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -540,6 +566,30 @@ parsed into JSON format</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.unit_val_to_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unit_val_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.unit_val_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.unit_val_to_dict" title="Permalink to this definition"></a></dt>
+<dd><dl>
+<dt>Converts the given attribute to dictionary of the form {</dt><dd><blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <code class="docutils literal notranslate"><span class="pre">float</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>attribute</strong> (<em>pint.Quantity or float</em>) – Attribute to represent as a dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with keys <code class="docutils literal notranslate"><span class="pre">value</span></code> and <code class="docutils literal notranslate"><span class="pre">units</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>

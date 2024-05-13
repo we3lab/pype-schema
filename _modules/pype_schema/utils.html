@@ -157,7 +157,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Quantity</span>
+<span class="sd">    pint.Quantity</span>
 <span class="sd">        a Pint Quantity with the given value and units</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -529,6 +529,14 @@
                 <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inches&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span> <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;inch&quot;</span>
             <span class="p">):</span>
                 <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">inch</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hz&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;hertz&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;1/s&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;1/second&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;1/sec&quot;</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">Hz</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">UndefinedUnitError</span><span class="p">(</span><span class="s2">&quot;Unsupported unit: &quot;</span> <span class="o">+</span> <span class="n">units</span><span class="p">)</span></div>
 
@@ -565,7 +573,14 @@
     <span class="n">Stormwater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Heat</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Oil</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Grease</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">Grease</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Chemical</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Coagulant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Disinfectant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Deodorant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">IndustrialWastewater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">MunicipalWastewater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DisinfectedEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.PumpType">[docs]</a><span class="k">class</span> <span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
