@@ -1288,7 +1288,7 @@ class JSONParser:
             }
         """
         min_max_design_dict = {"min": None, "max": None, "design": None, "units": None}
-        # try/except is for backwards compatability with old flow_rate and gen_capacity tuples
+        # try/except for backwards compatability with flow_rate and gen_capacity tuples
         try:
             values = getattr(obj, attribute)
         except AttributeError:
