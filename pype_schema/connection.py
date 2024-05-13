@@ -504,6 +504,9 @@ class Pipe(Connection):
             DeprecationWarning,
         )
         self.flow_rate = (min, max, design)
+        self._min_flow = min
+        self._max_flow = max
+        self._design_flow = design
 
     def get_min_flow(self):
         try:
@@ -521,7 +524,7 @@ class Pipe(Connection):
     def del_min_flow(self):
         del self._min_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[0] = None
+            self.flow_rate = (None, self.flow_rate[1], self.flow_rate[2])
 
     def get_max_flow(self):
         try:
@@ -539,7 +542,7 @@ class Pipe(Connection):
     def del_max_flow(self):
         del self._max_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[1] = None
+            self.flow_rate = (self.flow_rate[0], None, self.flow_rate[2])
 
     def get_design_flow(self):
         try:
@@ -557,7 +560,7 @@ class Pipe(Connection):
     def del_design_flow(self):
         del self._design_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[2] = None
+            self.flow_rate = (self.flow_rate[0], self.flow_rate[1], None)
 
     min_flow = property(get_min_flow, set_min_flow, del_min_flow)
     max_flow = property(get_max_flow, set_max_flow, del_max_flow)
@@ -583,6 +586,9 @@ class Pipe(Connection):
             DeprecationWarning,
         )
         self.pressure = (min, max, design)
+        self._min_pressure = min
+        self._max_pressure = max
+        self._design_pressure = design
 
     def get_min_pressure(self):
         try:
@@ -600,7 +606,7 @@ class Pipe(Connection):
     def del_min_pressure(self):
         del self._min_pressure
         if hasattr(self, "pressure"):
-            self.pressure[0] = None
+            self.pressure = (None, self.pressure[1], self.pressure[2])
 
     def get_max_pressure(self):
         try:
@@ -618,7 +624,7 @@ class Pipe(Connection):
     def del_max_pressure(self):
         del self._max_pressure
         if hasattr(self, "pressure"):
-            self.pressure[1] = None
+            self.pressure = (self.pressure[0], None, self.pressure[2])
 
     def get_design_pressure(self):
         try:
@@ -637,7 +643,7 @@ class Pipe(Connection):
     def del_design_pressure(self):
         del self._design_pressure
         if hasattr(self, "pressure"):
-            self.pressure[2] = None
+            self.pressure = (self.pressure[0], self.pressure[1], None)
 
     min_pressure = property(get_min_pressure, set_min_pressure, del_min_pressure)
     max_pressure = property(get_max_pressure, set_max_pressure, del_max_pressure)

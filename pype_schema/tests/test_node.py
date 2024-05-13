@@ -2,6 +2,7 @@ import os
 import pint
 import pickle
 import pytest
+import warnings
 from collections import Counter
 from pype_schema.units import u
 from pype_schema.utils import ContentsType
@@ -997,3 +998,100 @@ def test_get_efficiencies(json_path, node_id, expected):
             assert efficiency(0) == expected[key](0)
         else:
             assert efficiency == expected[key]
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "node, gen_capacity",
+    [
+        (
+            Cogeneration(
+                "TestCogen",
+                [ContentsType.Biogas, ContentsType.NaturalGas],
+                None,
+                None,
+                None,
+                1,
+            ),
+            (
+                pint.Quantity(400, "kW"),
+                pint.Quantity(750, "kW"),
+                pint.Quantity(600, "kW"),
+            ),
+        )
+    ],
+)
+def test_depr_gen_capacity(node, gen_capacity):
+    # check empty to start
+    with pytest.raises(AttributeError):
+        node.gen_capacity
+    assert node.min_gen is None
+    assert node.max_gen is None
+    assert node.design_gen is None
+
+    # set gen_capacity and assert warning
+    with pytest.warns(DeprecationWarning):
+        node.set_gen_capacity(*gen_capacity)
+
+    # check expected results
+    assert node.min_gen == gen_capacity[0]
+    assert node.max_gen == gen_capacity[1]
+    assert node.design_gen == gen_capacity[2]
+
+    # delete gen_capacity one-by-one, checking AttributeError
+    node.del_min_gen()
+    assert node.gen_capacity == (None, gen_capacity[1], gen_capacity[2])
+    node.del_max_gen()
+    assert node.gen_capacity == (None, None, gen_capacity[2])
+    node.del_design_gen()
+    assert node.gen_capacity == (None, None, None)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "node, flow_rate",
+    [
+        (
+            Pump(
+                "TestPump",
+                ContentsType.UntreatedSewage,
+                ContentsType.UntreatedSewage,
+                None,
+                None,
+                None,
+                None,
+                None,
+                2,
+            ),
+            (
+                pint.Quantity(1, "MGD"),
+                pint.Quantity(4, "MGD"),
+                pint.Quantity(3, "MGD"),
+            ),
+        )
+    ],
+)
+def test_depr_flow_rate(node, flow_rate):
+    # check empty to start
+    with pytest.raises(AttributeError):
+        node.flow_rate
+    assert node.min_flow is None
+    assert node.max_flow is None
+    assert node.design_flow is None
+
+    # set flow_rate and assert warning
+    with pytest.warns(DeprecationWarning):
+        node.set_flow_rate(*flow_rate)
+
+    # check expected results
+    assert node.min_flow == flow_rate[0]
+    assert node.max_flow == flow_rate[1]
+    assert node.design_flow == flow_rate[2]
+
+    # delete gen_capacity one-by-one, checking AttributeError
+    node.del_min_flow()
+    assert node.flow_rate == (None, flow_rate[1], flow_rate[2])
+    node.del_max_flow()
+    assert node.flow_rate == (None, None, flow_rate[2])
+    node.del_design_flow()
+    assert node.flow_rate == (None, None, None)

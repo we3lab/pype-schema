@@ -72,6 +72,9 @@ class Node(ABC):
             DeprecationWarning,
         )
         self.flow_rate = (min, max, design)
+        self._min_flow = min
+        self._max_flow = max
+        self._design_flow = design
 
     def get_min_flow(self):
         try:
@@ -89,7 +92,7 @@ class Node(ABC):
     def del_min_flow(self):
         del self._min_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[0] = None
+            self.flow_rate = (None, self.flow_rate[1], self.flow_rate[2])
 
     def get_max_flow(self):
         try:
@@ -107,7 +110,7 @@ class Node(ABC):
     def del_max_flow(self):
         del self._max_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[1] = None
+            self.flow_rate = (self.flow_rate[0], None, self.flow_rate[2])
 
     def get_design_flow(self):
         try:
@@ -125,7 +128,7 @@ class Node(ABC):
     def del_design_flow(self):
         del self._design_flow
         if hasattr(self, "flow_rate"):
-            self.flow_rate[2] = None
+            self.flow_rate = (self.flow_rate[0], self.flow_rate[1], None)
 
     min_flow = property(get_min_flow, set_min_flow, del_min_flow)
     max_flow = property(get_max_flow, set_max_flow, del_max_flow)
@@ -1996,6 +1999,9 @@ class Cogeneration(Node):
             DeprecationWarning,
         )
         self.gen_capacity = (min, max, design)
+        self._min_gen = min
+        self._max_gen = max
+        self._design_gen = design
 
     def get_min_gen(self):
         try:
@@ -2013,7 +2019,7 @@ class Cogeneration(Node):
     def del_min_gen(self):
         del self._min_gen
         if hasattr(self, "gen_capacity"):
-            self.gen_capacity[0] = None
+            self.gen_capacity = (None, self.gen_capacity[1], self.gen_capacity[2])
 
     def get_max_gen(self):
         try:
@@ -2031,7 +2037,7 @@ class Cogeneration(Node):
     def del_max_gen(self):
         del self._max_gen
         if hasattr(self, "gen_capacity"):
-            self.gen_capacity[1] = None
+            self.gen_capacity = (self.gen_capacity[0], None, self.gen_capacity[2])
 
     def get_design_gen(self):
         try:
@@ -2049,7 +2055,7 @@ class Cogeneration(Node):
     def del_design_gen(self):
         del self._design_gen
         if hasattr(self, "gen_capacity"):
-            self.gen_capacity[2] = None
+            self.gen_capacity = (self.gen_capacity[0], self.gen_capacity[1], None)
 
     min_gen = property(get_min_gen, set_min_gen, del_min_gen)
     max_gen = property(get_max_gen, set_max_gen, del_max_gen)
