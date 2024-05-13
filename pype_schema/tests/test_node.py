@@ -936,7 +936,12 @@ def test_select_tags_no_parent(
         (
             "data/node.json",
             "RawSewagePump",
-            {"power_rating": None, "min_flow": None, "max_flow": None, "design_flow": None},
+            {
+                "power_rating": None,
+                "min_flow": None,
+                "max_flow": None,
+                "design_flow": None,
+            },
         ),
         ("data/merged_wwtp.json", "GritChamber", {"volume": pint.Quantity(250, "m^3")}),
         (

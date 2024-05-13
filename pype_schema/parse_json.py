@@ -1288,7 +1288,21 @@ class JSONParser:
             }
         """
         min_max_design_dict = {"min": None, "max": None, "design": None, "units": None}
-        values = getattr(obj, attribute)
+        # try/except is for backwards compatability with old flow_rate and gen_capacity tuples
+        try:
+            values = getattr(obj, attribute)
+        except AttributeError:
+            if attribute == "flow_rate":
+                suffix = "flow"
+            elif attribute == "gen_capacity":
+                suffix = "gen"
+            else:
+                suffix = attribute
+            values = (
+                getattr(obj, "min_" + suffix),
+                getattr(obj, "max_" + suffix),
+                getattr(obj, "design_" + suffix),
+            )
         if values[0] is not None:
             min_max_design_dict["min"] = values[0].magnitude
             min_max_design_dict["units"] = "{!s}".format(values[0].units)
