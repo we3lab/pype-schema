@@ -89,3 +89,47 @@ def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
         result = type(err).__name__
 
     assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, conn_id, flow_rate",
+    [
+        (
+            "data/connection.json",
+            "GasToCogen",
+            (
+                pint.Quantity(1, "MGD"),
+                pint.Quantity(4, "MGD"),
+                pint.Quantity(3, "MGD"),
+            ),
+        )
+    ],
+)
+def test_depr_flow_rate(json_path, conn_id, flow_rate):
+    network = JSONParser(json_path).initialize_network()
+    conn = network.get_connection(conn_id, recurse=True)
+
+    # check empty to start
+    with pytest.raises(AttributeError):
+        conn.flow_rate
+    assert conn.min_flow is None
+    assert conn.max_flow is None
+    assert conn.design_flow is None
+
+    # set flow_rate and assert warning
+    with pytest.warns(DeprecationWarning):
+        conn.set_flow_rate(*flow_rate)
+
+    # check expected results
+    assert conn.min_flow == flow_rate[0]
+    assert conn.max_flow == flow_rate[1]
+    assert conn.design_flow == flow_rate[2]
+
+    # delete gen_capacity one-by-one, checking AttributeError
+    conn.del_min_flow()
+    assert conn.flow_rate == (None, flow_rate[1], flow_rate[2])
+    conn.del_max_flow()
+    assert conn.flow_rate == (None, None, flow_rate[2])
+    conn.del_design_flow()
+    assert conn.flow_rate == (None, None, None)

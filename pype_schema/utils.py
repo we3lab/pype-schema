@@ -60,7 +60,7 @@ def parse_quantity(value, units):
 
     Returns
     -------
-    Quantity
+    pint.Quantity
         a Pint Quantity with the given value and units
     """
     if value is not None:
@@ -432,6 +432,14 @@ def parse_units(units):
                 clean_units == "inches" or clean_units == "in" or clean_units == "inch"
             ):
                 return u.inch
+            elif (
+                clean_units == "hz"
+                or clean_units == "hertz"
+                or clean_units == "1/s"
+                or clean_units == "1/second"
+                or clean_units == "1/sec"
+            ):
+                return u.Hz
             else:
                 raise UndefinedUnitError("Unsupported unit: " + units)
 
@@ -469,7 +477,14 @@ class ContentsType(Enum):
     Heat = auto()
     Oil = auto()
     Grease = auto()
-    Air = auto()
+    Air = auto()    Chemical = auto()
+    Coagulant = auto()
+    Disinfectant = auto()
+    Deodorant = auto()
+    IndustrialWastewater = auto()
+    MunicipalWastewater = auto()
+    DisinfectedEffluent = auto()
+
 
 class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""

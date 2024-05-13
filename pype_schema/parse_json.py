@@ -1,4 +1,6 @@
 import json
+import pint
+import warnings
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -326,19 +328,33 @@ class JSONParser:
             a Python object with all the values from key `node_id`
         """
         (input_contents, output_contents) = self.parse_contents(node_id)
-        elevation = utils.parse_quantity(
-            self.config[node_id].get("elevation (meters)"), "m"
-        )
+        elevation = self.parse_unit_val_dict(self.config[node_id].get("elevation"))
+        # strings like `elevation (meters)` and `volume (cubic meters)`
+        # are included for backwards compatability
+        if elevation is None:
+            elevation = utils.parse_quantity(
+                self.config[node_id].get("elevation (meters)"), "m"
+            )
+            warnings.warn(
+                "Please switch to new dictionary syntax for elevation with units",
+                FutureWarning,
+            )
         num_units = self.config[node_id].get("num_units")
-        volume = utils.parse_quantity(
-            self.config[node_id].get("volume (cubic meters)"), "m3"
-        )
+        volume = self.parse_unit_val_dict(self.config[node_id].get("volume"))
+        if volume is None:
+            volume = utils.parse_quantity(
+                self.config[node_id].get("volume (cubic meters)"), "m3"
+            )
+            warnings.warn(
+                "Please switch to new dictionary syntax for volume with units",
+                FutureWarning,
+            )
 
         flowrate = self.config[node_id].get("flowrate")
         if flowrate is None:
             flowrate = self.config[node_id].get("flow_rate")
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
+        min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
 
         dosing = self.config[node_id].get("dosing", None)
 
@@ -388,13 +404,63 @@ class JSONParser:
                     self.create_connection(new_connection, node_obj)
                 )
         elif self.config[node_id]["type"] == "Battery":
-            capacity = utils.parse_quantity(
-                self.config[node_id].get("capacity (kWh)"), "kwh"
+            energy_capacity = self.parse_unit_val_dict(
+                self.config[node_id].get("energy_capacity")
             )
-            discharge_rate = utils.parse_quantity(
-                self.config[node_id].get("discharge_rate (kW)"), "kw"
+            discharge_rate = self.parse_unit_val_dict(
+                self.config[node_id].get("discharge_rate")
             )
-            node_obj = node.Battery(node_id, capacity, discharge_rate, tags={})
+            charge_rate = self.parse_unit_val_dict(
+                self.config[node_id].get("charge_rate")
+            )
+            if energy_capacity is None:
+                energy_capacity = utils.parse_quantity(
+                    self.config[node_id].get("capacity (kWh)"), "kwh"
+                )
+                warnings.warn(
+                    "Please switch to new dictionary syntax "
+                    + "for energy capacity with units",
+                    FutureWarning,
+                )
+            if discharge_rate is None:
+                discharge_rate = utils.parse_quantity(
+                    self.config[node_id].get("discharge_rate (kW)"), "kw"
+                )
+                warnings.warn(
+                    "Please switch to new dictionary syntax "
+                    + "for discharge rate with units",
+                    FutureWarning,
+                )
+            if charge_rate is None:
+                charge_rate = utils.parse_quantity(
+                    self.config[node_id].get("charge_rate (kW)"), "kw"
+                )
+                warnings.warn(
+                    "Please switch to new dictionary syntax for charge rate with units",
+                    FutureWarning,
+                )
+            # if either discharge or charge rate are null assume they are the same
+            if discharge_rate is None and charge_rate is None:
+                warnings.warn(
+                    "Battery object {} has no charge or discharge rate defined".format(
+                        node_id
+                    )
+                )
+            elif charge_rate is None:
+                charge_rate = discharge_rate
+            elif discharge_rate is None:
+                discharge_rate = charge_rate
+            rte = self.config[node_id].get("rte")
+            leakage = self.parse_unit_val_dict(self.config[node_id].get("leakage"))
+            node_obj = node.Battery(
+                node_id,
+                energy_capacity,
+                charge_rate,
+                discharge_rate,
+                rte,
+                leakage,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Facility":
             node_obj = node.Facility(
                 node_id,
@@ -403,7 +469,7 @@ class JSONParser:
                 elevation,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 tags={},
                 nodes={},
                 connections={},
@@ -421,18 +487,28 @@ class JSONParser:
                 pump_type = utils.PumpType.Constant
             else:
                 pump_type = utils.PumpType[pump_type]
-            horsepower = utils.parse_quantity(
-                self.config[node_id].get("horsepower"), "hp"
+
+            power_rating = self.parse_unit_val_dict(
+                self.config[node_id].get("power_rating")
             )
+            if power_rating is None:
+                power_rating = utils.parse_quantity(
+                    self.config[node_id].get("horsepower"), "hp"
+                )
+                warnings.warn(
+                    "Please switch to new dictionary syntax "
+                    + "for power rating with units",
+                    FutureWarning,
+                )
             node_obj = node.Pump(
                 node_id,
                 input_contents,
                 output_contents,
+                elevation,
                 min_flow,
                 max_flow,
-                avg_flow,
-                elevation,
-                horsepower,
+                design_flow,
+                power_rating,
                 num_units,
                 pump_type=pump_type,
                 tags={},
@@ -468,7 +544,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -480,7 +556,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -489,10 +565,10 @@ class JSONParser:
             gen_capacity = self.config[node_id].get("generation_capacity")
             if gen_capacity is None:
                 self.config[node_id].get("gen_capacity")
-            min, max, avg = self.parse_min_max_avg(gen_capacity)
+            min, max, design = self.parse_min_max_design(gen_capacity)
             if self.config[node_id]["type"] == "Cogeneration":
                 node_obj = node.Cogeneration(
-                    node_id, input_contents, min, max, avg, num_units, tags={}
+                    node_id, input_contents, min, max, design, num_units, tags={}
                 )
                 electrical_efficiency = self.config[node_id].get(
                     "electrical efficiency"
@@ -506,7 +582,7 @@ class JSONParser:
                     thermal_efficiency = self.config[node_id].get("thermal_efficiency")
             else:
                 node_obj = node.Boiler(
-                    node_id, input_contents, min, max, avg, num_units, tags={}
+                    node_id, input_contents, min, max, design, num_units, tags={}
                 )
                 electrical_efficiency = None
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
@@ -540,7 +616,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 utils.DigesterType[digester_type],
@@ -553,7 +629,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -580,7 +656,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -606,7 +682,7 @@ class JSONParser:
                 num_units,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Thickening":
@@ -616,7 +692,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 tags={},
@@ -628,7 +704,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 tags={},
             )
@@ -639,7 +715,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 tags={},
             )
@@ -759,8 +835,8 @@ class JSONParser:
         if flowrate is None:
             flowrate = self.config[connection_id].get("flow_rate")
 
-        min_flow, max_flow, avg_flow = self.parse_min_max_avg(flowrate)
-        min_pres, max_pres, avg_pres = self.parse_min_max_avg(
+        min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
+        min_pres, max_pres, design_pres = self.parse_min_max_design(
             self.config[connection_id].get("pressure")
         )
         lower, higher = self.parse_heating_values(
@@ -768,9 +844,17 @@ class JSONParser:
         )
 
         if self.config[connection_id]["type"] == "Pipe":
-            diameter = utils.parse_quantity(
-                self.config[connection_id].get("diameter (inches)"), "in"
+            diameter = self.parse_unit_val_dict(
+                self.config[connection_id].get("diameter")
             )
+            if diameter is None:
+                diameter = utils.parse_quantity(
+                    self.config[connection_id].get("diameter (inches)"), "in"
+                )
+                warnings.warn(
+                    "Please switch to new dictionary syntax for diamter with units",
+                    FutureWarning,
+                )
             connection_obj = connection.Pipe(
                 connection_id,
                 contents,
@@ -778,10 +862,13 @@ class JSONParser:
                 destination,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 diameter=diameter,
                 lower_heating_value=lower,
                 higher_heating_value=higher,
+                min_pres=min_pres,
+                max_pres=max_pres,
+                design_pres=design_pres,
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,
@@ -1182,43 +1269,103 @@ class JSONParser:
         return contents
 
     @staticmethod
-    def parse_min_max_avg(min_max_avg):
+    def parse_min_max_design(min_max_design):
         """Converts a dictionary into a tuple of flow rates
 
         Parameters
         ----------
-        min_max_avg : dict
+        min_max_design : dict
             dictionary of the form {
                 ``min``: `int`
 
                 ``max``: `int`
 
-                ``avg``: `int`
+                ``design``: `int`
 
             }
 
         Returns
         -------
-        (Quantity, Quantity, Quantity) or (float, float, float)
+        (pint.Quantity, pint.Quantity, pint.Quantity) or (float, float, float)
             (min, max, and average) with the given Pint units as a tuple.
             If no units given, then returns a tuple of floats.
         """
-        if min_max_avg is None:
+        if min_max_design is None:
             return (None, None, None)
         else:
-            units = min_max_avg.get("units")
+            units = min_max_design.get("units")
+
+            # field name was changed from 'avg' to 'design'
+            # so this code is included for backwards compatability
+            design_val = min_max_design.get("design")
+            if design_val is None:
+                design_val = min_max_design.get("avg")
             if units:
                 return (
-                    utils.parse_quantity(min_max_avg.get("min"), units),
-                    utils.parse_quantity(min_max_avg.get("max"), units),
-                    utils.parse_quantity(min_max_avg.get("avg"), units),
+                    utils.parse_quantity(min_max_design.get("min"), units),
+                    utils.parse_quantity(min_max_design.get("max"), units),
+                    utils.parse_quantity(design_val, units),
                 )
             else:
                 return (
-                    min_max_avg.get("min"),
-                    min_max_avg.get("max"),
-                    min_max_avg.get("avg"),
+                    min_max_design.get("min"),
+                    min_max_design.get("max"),
+                    design_val,
                 )
+
+    @staticmethod
+    def unit_val_to_dict(attribute):
+        """Converts the given attribute to dictionary of the form {
+                ``value``: ``float``
+
+                ``units``: `str`
+
+            }
+
+        Parameters
+        ----------
+        attribute : pint.Quantity or float
+            Attribute to represent as a dictionary
+
+        Returns
+        -------
+        dict
+            Dictionary with keys ``value`` and ``units``
+        """
+        if isinstance(attribute, pint.Quantity):
+            data_dict = {"value": attribute.magnitude, "units": str(attribute.units)}
+        else:
+            data_dict = {"value": attribute, "units": None}
+        return data_dict
+
+    @staticmethod
+    def parse_unit_val_dict(unit_dict):
+        """Converts a dictionary into a Pint Quantity
+
+        Parameters
+        ----------
+        unit_dict : dict
+            dictionary of the form {
+                ``value``: ``float``
+
+                ``units``: `str`
+
+            }
+
+        Returns
+        -------
+        pint.Quantity or float
+            Dictionary as a Pint Quantity (or float if no units are specified)
+        """
+        if unit_dict is not None:
+            val = unit_dict.get("value")
+            units = unit_dict.get("units")
+            if units is None:
+                return val
+            else:
+                return utils.parse_quantity(val, units)
+        else:
+            return None
 
     @staticmethod
     def parse_heating_values(heating_vals):
@@ -1232,11 +1379,13 @@ class JSONParser:
 
                 ``higher``: `float`
 
+                ``units``: `str`
+
             }
 
         Returns
         -------
-        (Quantity, Quantity) or (float, float)
+        (pint.Quantity, pint.Quantity) or (float, float)
             (lower, higher) heating values as a tuple, with units applied.
             Given as a float if no units are specified
         """
@@ -1292,7 +1441,7 @@ class JSONParser:
         return tag_dict
 
     @staticmethod
-    def min_max_avg_to_dict(obj, attribute):
+    def min_max_design_to_dict(obj, attribute):
         """Converts the flow rate tuple of a `Node` or `Connection` into a
         dictionary object
 
@@ -1312,27 +1461,41 @@ class JSONParser:
 
                 ``max``: `float` or `int`
 
-                ``avg``: `float` or `int`
+                ``design``: `float` or `int`
 
                 ``units``: `str`
 
             }
         """
-        min_max_avg_dict = {"min": None, "max": None, "avg": None, "units": None}
-        values = getattr(obj, attribute)
+        min_max_design_dict = {"min": None, "max": None, "design": None, "units": None}
+        # try/except for backwards compatability with flow_rate and gen_capacity tuples
+        try:
+            values = getattr(obj, attribute)
+        except AttributeError:
+            if attribute == "flow_rate":
+                suffix = "flow"
+            elif attribute == "gen_capacity":
+                suffix = "gen"
+            else:
+                suffix = attribute
+            values = (
+                getattr(obj, "min_" + suffix),
+                getattr(obj, "max_" + suffix),
+                getattr(obj, "design_" + suffix),
+            )
         if values[0] is not None:
-            min_max_avg_dict["min"] = values[0].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[0].units)
+            min_max_design_dict["min"] = values[0].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[0].units)
 
         if values[1] is not None:
-            min_max_avg_dict["max"] = values[1].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[1].units)
+            min_max_design_dict["max"] = values[1].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[1].units)
 
         if values[2] is not None:
-            min_max_avg_dict["avg"] = values[2].magnitude
-            min_max_avg_dict["units"] = "{!s}".format(values[2].units)
+            min_max_design_dict["design"] = values[2].magnitude
+            min_max_design_dict["units"] = "{!s}".format(values[2].units)
 
-        return min_max_avg_dict
+        return min_max_design_dict
 
     @staticmethod
     def conn_to_dict(conn_obj):
@@ -1363,10 +1526,12 @@ class JSONParser:
             conn_dict["entry_point"] = conn_obj.entry_point.id
 
         if isinstance(conn_obj, connection.Pipe):
-            conn_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            conn_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 conn_obj, "flow_rate"
             )
-            conn_dict["pressure"] = JSONParser.min_max_avg_to_dict(conn_obj, "pressure")
+            conn_dict["pressure"] = JSONParser.min_max_design_to_dict(
+                conn_obj, "pressure"
+            )
 
             heat_dict = {"lower": None, "higher": None, "units": "BTU/scf"}
             if conn_obj.heating_values[0] is not None:
@@ -1380,7 +1545,7 @@ class JSONParser:
             conn_dict["heating_values"] = heat_dict
 
             if conn_obj.diameter is not None:
-                conn_dict["diameter (inches)"] = conn_obj.diameter.magnitude
+                conn_dict["diameter"] = JSONParser.unit_val_to_dict(conn_obj.diameter)
 
         # TODO: unsupported attribute: friction_coeff
 
@@ -1445,37 +1610,39 @@ class JSONParser:
 
         if isinstance(node_obj, (node.Tank, node.Reservoir)):
             if node_obj.elevation is not None:
-                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.volume is not None:
-                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
         elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
-                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
-            if node_obj.horsepower is not None:
-                node_dict["horsepower"] = node_obj.horsepower.magnitude
+            if node_obj.power_rating is not None:
+                node_dict["power_rating"] = JSONParser.unit_val_to_dict(
+                    node_obj.power_rating
+                )
 
             if node_obj.pump_type is not None:
                 node_dict["pump_type"] = node_obj.pump_type.name
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Digestion):
             if node_obj.volume is not None:
-                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
             if node_obj.digester_type is not None:
                 node_dict["digester_type"] = node_obj.digester_type.name
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, (node.Cogeneration, node.Boiler)):
-            node_dict["generation_capacity"] = JSONParser.min_max_avg_to_dict(
+            node_dict["generation_capacity"] = JSONParser.min_max_design_to_dict(
                 node_obj, "gen_capacity"
             )
             node_dict["num_units"] = node_obj.num_units
@@ -1490,20 +1657,27 @@ class JSONParser:
             ),
         ):
             if node_obj.volume is not None:
-                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, (node.Screening, node.Conditioning, node.Flaring)):
-            node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Battery):
-            node_dict["capacity (kWh)"] = node_obj.capacity.magnitude
-            node_dict["discharge_rate (kW)"] = node_obj.discharge_rate.magnitude
+            node_dict["energy_capacity"] = JSONParser.unit_val_to_dict(
+                node_obj.energy_capacity
+            )
+            node_dict["discharge_rate"] = JSONParser.unit_val_to_dict(
+                node_obj.discharge_rate
+            )
+            node_dict["charge_rate"] = JSONParser.unit_val_to_dict(node_obj.charge_rate)
+            node_dict["leakage"] = JSONParser.unit_val_to_dict(node_obj.leakage)
+            node_dict["rte"] = node_obj.rte
         elif isinstance(node_obj, node.Network):
             node_dict["type"] = type(node_obj).__name__
             node_dict["input_contents"] = [
@@ -1520,9 +1694,11 @@ class JSONParser:
                 node_dict["connections"].append(conn.id)
             if isinstance(node_obj, node.Facility):
                 if node_obj.elevation is not None:
-                    node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+                    node_dict["elevation"] = JSONParser.unit_val_to_dict(
+                        node_obj.elevation
+                    )
 
-                node_dict["flowrate"] = JSONParser.min_max_avg_to_dict(
+                node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
         else:

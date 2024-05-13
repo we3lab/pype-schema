@@ -33,6 +33,9 @@ class TagType(Enum):
     InFlow = auto()  # flow into a node
     OutFlow = auto()  # flow out of a node
     NetFlow = auto()  # net flow through a node
+    Speed = auto()
+    Frequency = auto()
+    Concentration = auto()
 
 
 CONTENTLESS_TYPES = [
@@ -40,6 +43,8 @@ CONTENTLESS_TYPES = [
     TagType.RunStatus,
     TagType.Rotation,
     TagType.Efficiency,
+    TagType.Speed,
+    TagType.Frequency,
 ]
 
 
