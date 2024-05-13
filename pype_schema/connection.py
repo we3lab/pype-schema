@@ -1,3 +1,4 @@
+import warnings
 from abc import ABC
 from . import utils
 from . import node
@@ -237,29 +238,29 @@ class Pipe(Connection):
     destination : Node
         Endpoint of the connection
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate through the pipe
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate through the pipe
 
-    avg_flow : int
+    avg_flow : pint.Quantity or int
         Average flow rate through the pipe
 
-    diameter : int
-        Pipe diameter in meters
+    diameter : pint.Quantity or int
+        Pipe diameter
 
     friction_coeff : int
         Friction coefficient for the pipe
 
-    min_pres : int
+    min_pres : pint.Quantity or int
         Minimum pressure inside the pipe
 
-    max_pres : int
+    max_pres : pint.Quantity or int
         Maximum pressure inside the pipe
 
-    avg_pres : int
-        Average pressure inside the pipe
+    design_pres : pint.Quantity or int
+        Design pressure of the pipe
 
     lower_heating_value : float
         Lower heating value of gas in the pipe
@@ -295,17 +296,29 @@ class Pipe(Connection):
     destination : Node
         Endpoint of the connection
 
-    flow_rate : tuple
-        Minimum, maximum, and average flow rate through the pipe
+    min_flow : pint.Quantity or int
+        Minimum flow rate through the pipe
 
-    diameter : int
-        Pipe diameter in meters
+    max_flow : pint.Quantity or int
+        Maximum flow rate through the pipe
+
+    design_flow : pint.Quantity or int
+        Design flow rate through the pipe
+
+    diameter : pint.Quantity or int
+        Pipe diameter
 
     friction_coeff : int
         Friction coefficient for the pipe
 
-    pressure : tuple
-        Minimum, maximum, and average pressure in the pipe
+    min_pressure : pint.Quantity or int
+        Minimum pressure inside the pipe
+
+    max_pressure : pint.Quantity or int
+        Maximum pressure inside the pipe
+
+    design_pressure : pint.Quantity or int
+        Design pressure of the pipe
 
     heating_values : tuple
         The lower and higher heating values of the gas in the pipe.
@@ -334,12 +347,12 @@ class Pipe(Connection):
         destination,
         min_flow,
         max_flow,
-        avg_flow,
+        design_flow,
         diameter=None,
         friction=None,
         min_pres=None,
         max_pres=None,
-        avg_pres=None,
+        design_pres=None,
         lower_heating_value=None,
         higher_heating_value=None,
         tags={},
@@ -353,8 +366,12 @@ class Pipe(Connection):
         self.destination = destination
         self.diameter = diameter
         self.friction_coeff = friction
-        self.set_pressure(min_pres, max_pres, avg_pres)
-        self.set_flow_rate(min_flow, max_flow, avg_flow)
+        self.min_pressure = min_pres
+        self.max_pressure = max_pres
+        self.design_pressure = design_pres
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
         self.set_heating_values(lower_heating_value, higher_heating_value)
         self.tags = tags
         self.bidirectional = bidirectional
@@ -376,7 +393,10 @@ class Pipe(Connection):
             f"<pype_schema.connection.Pipe id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
-            f"flow_rate:{self.flow_rate} pressure:{self.pressure} "
+            f"min_flow:{self.min_flow} max_flow:{self.max_flow} "
+            f"design_flow:{self.design_flow} min_pressure:{self.min_pressure} "
+            f"max_pressure:{self.max_pressure} "
+            f"design_pressure:{self.design_pressure}"
             f"heating_values:{self.heating_values} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -395,9 +415,13 @@ class Pipe(Connection):
             and self.destination == other.destination
             and self.diameter == other.diameter
             and self.friction_coeff == other.friction_coeff
-            and self.pressure == other.pressure
+            and self.min_pressure == other.min_pressure
+            and self.max_pressure == other.max_pressure
+            and self.design_pressure == other.design_pressure
             and self.heating_values == other.heating_values
-            and self.flow_rate == other.flow_rate
+            and self.min_flow == other.min_flow
+            and self.max_flow == other.max_flow
+            and self.design_flow == other.design_flow
             and self.tags == other.tags
             and self.bidirectional == other.bidirectional
             and self.exit_point == other.exit_point
@@ -411,12 +435,20 @@ class Pipe(Connection):
 
         if self.diameter != other.diameter:
             return self.diameter < other.diameter
-        elif self.flow_rate != other.flow_rate:
-            return self.flow_rate < other.flow_rate
+        elif self.min_flow != other.min_flow:
+            return self.min_flow < other.min_flow
+        elif self.max_flow != other.max_flow:
+            return self.max_flow < other.max_flow
+        elif self.design_flow != other.design_flow:
+            return self.design_flow < other.design_flow
         elif self.friction_coeff != other.friction_coeff:
             return self.friction_coeff < other.friction_coeff
-        elif self.pressure != other.pressure:
-            return self.pressure < other.pressure
+        elif self.min_pressure != other.min_pressure:
+            return self.min_pressure < other.min_pressure
+        elif self.max_pressure != other.max_pressure:
+            return self.max_pressure < other.max_pressure
+        elif self.design_pressure != other.design_pressure:
+            return self.design_pressure < other.design_pressure
         elif self.heating_values != other.heating_values:
             return self.heating_values < other.heating_values
         elif self.contents != other.contents:
@@ -452,7 +484,7 @@ class Pipe(Connection):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
 
-    def set_flow_rate(self, min, max, avg):
+    def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and average flow rate through the connection
 
         Parameters
@@ -463,12 +495,78 @@ class Pipe(Connection):
         max : int
             Maximum flow rate through the connection
 
-        avg : int
-            Average flow rate through the connection
+        design : int
+            Design flow rate through the connection
         """
-        self.flow_rate = (min, max, avg)
+        warnings.warn(
+            "Please switch from `flow_rate` tuple to separate "
+            + "`min_flow`, `max_flow` and `design_flow` attributes",
+            DeprecationWarning,
+        )
+        self.flow_rate = (min, max, design)
+        self._min_flow = min
+        self._max_flow = max
+        self._design_flow = design
 
-    def set_pressure(self, min, max, avg):
+    def get_min_flow(self):
+        try:
+            return self._min_flow
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `flow_rate` tuple to new `min_flow` attribute",
+                DeprecationWarning,
+            )
+            return self.flow_rate[0]
+
+    def set_min_flow(self, min_flow):
+        self._min_flow = min_flow
+
+    def del_min_flow(self):
+        del self._min_flow
+        if hasattr(self, "flow_rate"):
+            self.flow_rate = (None, self.flow_rate[1], self.flow_rate[2])
+
+    def get_max_flow(self):
+        try:
+            return self._max_flow
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `flow_rate` tuple to new `max_flow` attribute",
+                DeprecationWarning,
+            )
+            return self.flow_rate[1]
+
+    def set_max_flow(self, max_flow):
+        self._max_flow = max_flow
+
+    def del_max_flow(self):
+        del self._max_flow
+        if hasattr(self, "flow_rate"):
+            self.flow_rate = (self.flow_rate[0], None, self.flow_rate[2])
+
+    def get_design_flow(self):
+        try:
+            return self._design_flow
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `flow_rate` tuple to new `design_flow` attribute",
+                DeprecationWarning,
+            )
+            return self.flow_rate[2]
+
+    def set_design_flow(self, design_flow):
+        self._design_flow = design_flow
+
+    def del_design_flow(self):
+        del self._design_flow
+        if hasattr(self, "flow_rate"):
+            self.flow_rate = (self.flow_rate[0], self.flow_rate[1], None)
+
+    min_flow = property(get_min_flow, set_min_flow, del_min_flow)
+    max_flow = property(get_max_flow, set_max_flow, del_max_flow)
+    design_flow = property(get_design_flow, set_design_flow, del_design_flow)
+
+    def set_pressure(self, min, max, design):
         """Set the minimum, maximum, and average pressure inside the connection
 
         Parameters
@@ -479,10 +577,79 @@ class Pipe(Connection):
         max : int
             Maximum pressure inside the connection
 
-        avg : int
-            Average pressure inside the connection
+        design : int
+            Design pressure inside the connection
         """
-        self.pressure = (min, max, avg)
+        warnings.warn(
+            "Please switch from `pressure` tuple to separate "
+            + "`min_pressure`, `max_pressure` and `design_pressure` attributes",
+            DeprecationWarning,
+        )
+        self.pressure = (min, max, design)
+        self._min_pressure = min
+        self._max_pressure = max
+        self._design_pressure = design
+
+    def get_min_pressure(self):
+        try:
+            return self._min_pressure
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `pressure` tuple to new `min_pressure` attribute",
+                DeprecationWarning,
+            )
+            return self.pressure[0]
+
+    def set_min_pressure(self, min_pressure):
+        self._min_pressure = min_pressure
+
+    def del_min_pressure(self):
+        del self._min_pressure
+        if hasattr(self, "pressure"):
+            self.pressure = (None, self.pressure[1], self.pressure[2])
+
+    def get_max_pressure(self):
+        try:
+            return self._max_pressure
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `pressure` tuple to new `max_pressure` attribute",
+                DeprecationWarning,
+            )
+            return self.pressure[1]
+
+    def set_max_pressure(self, max_pressure):
+        self._max_pressure = max_pressure
+
+    def del_max_pressure(self):
+        del self._max_pressure
+        if hasattr(self, "pressure"):
+            self.pressure = (self.pressure[0], None, self.pressure[2])
+
+    def get_design_pressure(self):
+        try:
+            return self._design_pressure
+        except AttributeError:
+            warnings.warn(
+                "Please switch from `pressure` tuple to "
+                + "new `design_pressure` attribute",
+                DeprecationWarning,
+            )
+            return self.pressure[2]
+
+    def set_design_pressure(self, design_pressure):
+        self._design_pressure = design_pressure
+
+    def del_design_pressure(self):
+        del self._design_pressure
+        if hasattr(self, "pressure"):
+            self.pressure = (self.pressure[0], self.pressure[1], None)
+
+    min_pressure = property(get_min_pressure, set_min_pressure, del_min_pressure)
+    max_pressure = property(get_max_pressure, set_max_pressure, del_max_pressure)
+    design_pressure = property(
+        get_design_pressure, set_design_pressure, del_design_pressure
+    )
 
     def set_heating_values(self, lower, higher):
         """Set the lower and higher heating values for gas in the connection
