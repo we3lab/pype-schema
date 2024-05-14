@@ -1441,7 +1441,7 @@ class Tank(Node):
         output_contents,
         elevation,
         volume,
-        num_units,
+        num_units=1,
         tags={},
     ):
         self.id = id
