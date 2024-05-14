@@ -1826,6 +1826,7 @@ class StaticMixer(Tank):
         output_contents,
         elevation,
         volume,
+        num_units, 
         dosing_rate,
         residence_time,
         pH,
@@ -1836,6 +1837,7 @@ class StaticMixer(Tank):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
+        self.num_units = num_units
         self.dosing_rate = dosing_rate
         self.pH = pH
         self.residence_time = residence_time
@@ -1844,7 +1846,7 @@ class StaticMixer(Tank):
     def __repr__(self):
         return (
             f"<pype_schema.node.StaticMixer id:{self.id} "
-            f"input_contents:{self.input_contents} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units}"
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"dosing_rate:{self.dosing_rate} pH:{self.pH} residence_time:{self.residence_time} "
             f"volume:{self.volume} tags:{self.tags}>\n"
