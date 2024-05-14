@@ -469,7 +469,7 @@ class ContentsType(Enum):
     Heat = auto()
     Oil = auto()
     Grease = auto()
-
+    Air = auto()
 
 class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""

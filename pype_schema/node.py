@@ -1522,6 +1522,9 @@ class StaticMixer(Tank):
 
     volume : int
         Volume of the mixer in cubic meters
+
+    num_units : int
+        Number of mixers
     
     dosing_rate : dict of DosingType:float
         Dosing information for the mixer (key: DosingType, value: rate)
@@ -1544,6 +1547,7 @@ class StaticMixer(Tank):
         output_contents,
         elevation,
         volume,
+        num_units, 
         dosing_rate,
         residence_time,
         pH,
@@ -1554,6 +1558,7 @@ class StaticMixer(Tank):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
+        self.num_units = num_units
         self.dosing_rate = dosing_rate
         self.pH = pH
         self.residence_time = residence_time
@@ -1562,7 +1567,7 @@ class StaticMixer(Tank):
     def __repr__(self):
         return (
             f"<pype_schema.node.StaticMixer id:{self.id} "
-            f"input_contents:{self.input_contents} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units}"
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
             f"dosing_rate:{self.dosing_rate} pH:{self.pH} residence_time:{self.residence_time} "
             f"volume:{self.volume} tags:{self.tags}>\n"
@@ -1579,6 +1584,7 @@ class StaticMixer(Tank):
             and self.output_contents == other.output_contents
             and self.elevation == other.elevation
             and self.volume == other.volume
+            and self.num_units == other.num_units
             and self.dosing_rate == other.dosing_rate
             and self.pH == other.pH
             and self.residence_time == other.residence_time
