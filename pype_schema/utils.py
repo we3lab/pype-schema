@@ -486,6 +486,7 @@ class ContentsType(Enum):
     DisinfectedEffluent = auto()
 
 
+
 class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""
 
@@ -494,11 +495,13 @@ class PumpType(Enum):
     ERI = auto()
     AirBlower = auto()
 
+
 class DigesterType(Enum):
     """Enum to represent types of digesters"""
 
     Aerobic = auto()
     Anaerobic = auto()
+
 
 class DosingType(Enum):
     """Enum to represent types of dosing"""
@@ -512,6 +515,7 @@ class DosingType(Enum):
     SBS = auto()
     Polymer = auto()
     UVLight = auto()
+
 
 def select_objs_helper(
     obj,

@@ -976,6 +976,7 @@ class Node(ABC):
 
         return selected_objs
 
+
 class Network(Node):
     """A water utility represented as a set of connections and nodes
 
@@ -1147,6 +1148,7 @@ class Network(Node):
 
         return desired_objs
 
+
 class Facility(Network):
     """
     Parameters
@@ -1266,6 +1268,7 @@ class Facility(Network):
             and self.design_flow == other.design_flow
         )
 
+
 class ModularUnit(Network):
     """Modular Unit in network
 
@@ -1308,7 +1311,7 @@ class ModularUnit(Network):
 
     nodes : dict of Node
         nodes in the ModularUnit, e.g. pumps, tanks, or facilities
-    
+
     num_units: int
         Number of MDPs running in parallel
 
@@ -1358,6 +1361,7 @@ class ModularUnit(Network):
             and self.connections == other.connections
         )
 
+
 class Pump(Node):
     """
     Parameters
@@ -1391,7 +1395,7 @@ class Pump(Node):
 
     pump_type : PumpType
         Type of pump (either VFD, ERI, AirBlower or constant)
-    
+
     efficiency : float
         efficiency of the pump
 
@@ -1486,9 +1490,8 @@ class Pump(Node):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
             return False
-        
+
         return (
-        (
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
@@ -1501,8 +1504,9 @@ class Pump(Node):
             and self.max_flow == other.max_flow
             and self.design_flow == other.design_flow
         ) and (
-            self.efficiency == other.efficiency if self.pump_type == utils.PumpType.ERI else True
-        )
+            self.efficiency == other.efficiency
+            if self.pump_type == utils.PumpType.ERI
+            else True
         )
 
     def set_pump_type(self, pump_type):
@@ -1569,7 +1573,7 @@ class Tank(Node):
 
     volume : pint.Quantity or int
         Volume of the tank in cubic meters
-    
+
     num_units : int
         Number of tanks
 
@@ -1642,6 +1646,7 @@ class Tank(Node):
             and self.tags == other.tags
         )
 
+
 class StaticMixer(Tank):
     """
     Parameters
@@ -1660,10 +1665,10 @@ class StaticMixer(Tank):
 
     volume : int
         Volume of the mixer in cubic meters
-            
+
     dosing_rate : dict of DosingType:float
         Dosing information for the mixer (key: DosingType, value: rate)
-    
+
     pH : float
         pH value for the mixer
 
@@ -1692,16 +1697,16 @@ class StaticMixer(Tank):
 
     num_units : int
         Number of mixers
-    
+
     dosing_rate : dict of DosingType:float
         Dosing information for the mixer (key: DosingType, value: rate)
-    
-    pH : float 
+
+    pH : float
         pH value for the mixer
 
     residence_time : float
         Residence time of the mixer
-    
+
     tags : dict of Tag
         Data tags associated with this mixer
 
@@ -1714,7 +1719,7 @@ class StaticMixer(Tank):
         output_contents,
         elevation,
         volume,
-        num_units, 
+        num_units,
         dosing_rate,
         residence_time,
         pH,
@@ -1868,6 +1873,7 @@ class StaticMixer(Tank):
             and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
+
 
 class Reservoir(Node):
     """
@@ -1949,6 +1955,7 @@ class Reservoir(Node):
             and self.volume == other.volume
             and self.tags == other.tags
         )
+
 
 class Battery(Node):
     """
@@ -2237,6 +2244,7 @@ class Digestion(Node):
             and self.tags == other.tags
         )
 
+
 class Cogeneration(Node):
     """
     Parameters
@@ -2441,6 +2449,7 @@ class Cogeneration(Node):
         # TODO: type check that efficiency_curve is a function
         self.thermal_efficiency = efficiency_curve
 
+
 class Boiler(Node):
     """
     Parameters
@@ -2627,6 +2636,7 @@ class Boiler(Node):
         # TODO: type check that efficiency_curve is a function
         self.thermal_efficiency = efficiency_curve
 
+
 class Clarification(Node):
     """
     Parameters
@@ -2736,6 +2746,7 @@ class Clarification(Node):
             and self.tags == other.tags
         )
 
+
 class Filtration(Node):
     """
     Parameters
@@ -2760,13 +2771,13 @@ class Filtration(Node):
 
     num_units : int
         Number of filters running in parallel
-    
+
     settling_time : float
         time it takes for the filter to reach the desired operation mode in seconds
-        
+
     volume : int
         Volume of a single filter in cubic meters
-    
+
     tags : dict of Tag
         Data tags associated with this filter
 
@@ -2853,6 +2864,7 @@ class Filtration(Node):
             and self.tags == other.tags
         )
 
+
 class ROMembrane(Filtration):
     """
     Parameters
@@ -2880,16 +2892,16 @@ class ROMembrane(Filtration):
 
     volume : int
         Volume of the RO membrane in cubic meters
-    
+
     area : float
         Area of the RO membrane in square meters
-    
+
     permeability : float
         Permeability of the RO membrane
-    
+
     selectivity : float
         Selectivity of the RO membrane
-    
+
     tags : dict of Tag
         Data tags associated with the RO membrane
 
@@ -3088,6 +3100,7 @@ class ROMembrane(Filtration):
             and self.tags == other.tags
         )
 
+
 class Screening(Node):
     """
     Parameters
@@ -3188,6 +3201,7 @@ class Screening(Node):
             and self.tags == other.tags
         )
 
+
 class Conditioning(Node):
     """
     Parameters
@@ -3287,6 +3301,7 @@ class Conditioning(Node):
             and self.design_flow == other.design_flow
             and self.tags == other.tags
         )
+
 
 class Thickening(Node):
     """
@@ -3398,6 +3413,7 @@ class Thickening(Node):
             and self.tags == other.tags
         )
 
+
 class Aeration(Node):
     """
     Parameters
@@ -3508,6 +3524,7 @@ class Aeration(Node):
             and self.tags == other.tags
         )
 
+
 class Chlorination(Node):
     """
     Parameters
@@ -3537,7 +3554,7 @@ class Chlorination(Node):
         Volume of a single chlorinator in cubic meters
 
     dosing_rate : dict of DosingType:float
-        UV intensity in the UV system 
+        UV intensity in the UV system
 
     dosing_rate : dict of DosingType:float
         UV intensity in the UV system 
@@ -3626,6 +3643,7 @@ class Chlorination(Node):
             and self.tags == other.tags
         )
 
+
 class UVSystem(Chlorination):
     """
     Parameters
@@ -3635,13 +3653,13 @@ class UVSystem(Chlorination):
 
     num_units : int
         Number of chlorinators running in parallel
-    
+
     residence_time : float
         Time in seconds that the water is exposed to UV light
 
     intensity : float
         Intensity of the UV light in W/m^2
-    
+
     area : float
         Area of the UV system
 
@@ -3658,13 +3676,13 @@ class UVSystem(Chlorination):
 
     residence_time : float
         Time in seconds that the water is exposed to UV light
-    
+
     dosing_rate : dict of DosingType:float
-        UV intensity in the UV system 
-    
+        UV intensity in the UV system
+
     dosing_area : dict of DosingType:float
         Area of the UV system that is exposed to UV light
-        
+
     tags : dict of Tag
         Data tags associated with this chlorinator
     """
@@ -3674,7 +3692,7 @@ class UVSystem(Chlorination):
         id,
         residence_time,
         intensity,
-        area, 
+        area,
         num_units,
         input_contents=[],
         output_contents=[],
@@ -3690,8 +3708,8 @@ class UVSystem(Chlorination):
         self.num_units = num_units
         self.volume = volume
         self.residence_time = residence_time
-        self.dosing_rate = self.set_dosing({'UVLight': intensity}, mode='rate')
-        self.dosing_area = self.set_dosing({'UVLight': area}, mode='area')
+        self.dosing_rate = self.set_dosing({"UVLight": intensity}, mode="rate")
+        self.dosing_area = self.set_dosing({"UVLight": area}, mode="area")
         self.tags = tags
         self.set_flow_rate(0, 0, 0)
 
@@ -3796,6 +3814,7 @@ class UVSystem(Chlorination):
             and self.dosing_area == other.dosing_area
             and self.tags == other.tags
         )
+
 
 class Flaring(Node):
     """
