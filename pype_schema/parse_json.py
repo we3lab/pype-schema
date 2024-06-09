@@ -365,6 +365,7 @@ class JSONParser:
             if verbose:
                 print("remove node: ", target_node_id)
             for connection_id, connection in self.network_obj.connections.items():
+                # print(1, connection_id, connection.source, connection.destination)
                 if (
                     target_node_id == connection.source.id
                     or target_node_id == connection.destination.id
@@ -1714,7 +1715,7 @@ class JSONParser:
 
         if isinstance(node_obj, (node.Reservoir)):
             if node_obj.elevation is not None:
-                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
 
             if node_obj.volume is not None:
                 node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
