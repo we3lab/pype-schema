@@ -355,16 +355,7 @@
             "higher": null,
             "units": "BTU/scf"
         },
-        "tags": {
-            "BoilerGasPurchases": {
-                "units": "foot ** 3 / minute",
-                "source_unit_id": "total",
-                "dest_unit_id": "total",
-                "totalized": false,
-                "type": "Flow",
-                "contents": "NaturalGas"
-            }
-        },
+        "tags": {},
         "virtual_tags": {}
     },
     "GritToPrimary": {

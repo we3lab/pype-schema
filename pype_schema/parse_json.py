@@ -220,27 +220,34 @@ class JSONParser:
         if inplace:
             self.network_obj = old_network
         return old_network
-    
-    def extend_node(self, new_network, target_node_id, connections_path, inplace=False, verbose=False):
+
+    def extend_node(
+        self,
+        new_network,
+        target_node_id,
+        connections_path,
+        inplace=False,
+        verbose=False,
+    ):
         """
-        Incoporates subnetwork (i.e. the `new_network`) into a node in a existing network (i.e. the `old_network`) 
+        Incoporates subnetwork (i.e. the `new_network`) into a node in a existing network (i.e. the `old_network`)
         modifying it in place and returning the modified network
-        
+
         Parameters
         ----------
         new_network: str or pype_schema.Network
             JSON file path or Network objet to merge with `self`
-        
+
         target_node_id: str
             ID of the node to expend, must be in the old_network
-        
+
         connections_path: str
             JSON file path to the connections connecting the new network to the old network
 
         Raises
         ------
         TypeError:
-            When 
+            When
             1. user does not provide a valid path or Network object for `old_network`
             2. user does not provide a valid path or Network object for `new_network`
             3. target_node_id is not in the old_network
@@ -349,32 +356,37 @@ class JSONParser:
             print(f"[*] Merging {new_network.id} into {self.network_obj.id}")
         old_network = copy.deepcopy(self.network_obj)
         if target_node_id not in old_network.nodes.keys():
-            raise NameError("Node " + target_node_id + " not found in " + old_network.id)
+            raise NameError(
+                "Node " + target_node_id + " not found in " + old_network.id
+            )
         else:
             # remove the node and connections that contains the node
             old_network.remove_node(target_node_id)
             if verbose:
                 print("remove node: ", target_node_id)
             for connection_id, connection in self.network_obj.connections.items():
-                if target_node_id == connection.source.id or target_node_id == connection.destination.id:
+                if (
+                    target_node_id == connection.source.id
+                    or target_node_id == connection.destination.id
+                ):
                     old_network.remove_connection(connection_id)
                     if verbose:
                         print("remove connection: ", connection_id)
 
         for node_id, node_obj in new_network.nodes.items():
-            node_obj.id = f'{new_network.id}_{node_id}'
+            node_obj.id = f"{new_network.id}_{node_id}"
             old_network.add_node(node_obj)
             if verbose:
                 print("add node: ", node_obj.id)
         for connection_id, connection_obj in new_network.connections.items():
-            connection_obj.id = f'{new_network.id}_{connection_id}'
+            connection_obj.id = f"{new_network.id}_{connection_id}"
             old_network.add_connection(connection_obj)
             if verbose:
                 print("add connection: ", connection_obj.id)
         with open(connections_path, "r") as f:
             config = json.load(f)
-            for i, connection_id in enumerate(config['connections']):
-                self.config['connections'].append(f'{new_network.id}_{connection_id}')
+            for i, connection_id in enumerate(config["connections"]):
+                self.config["connections"].append(f"{new_network.id}_{connection_id}")
             for k, v in list(config.items()):
                 if k == "connections":
                     continue
@@ -382,23 +394,29 @@ class JSONParser:
                     v["source"] = f'{new_network.id}_{v["source"]}'
                 if v["destination"] in new_network.nodes.keys():
                     v["destination"] = f'{new_network.id}_{v["destination"]}'
-                self.config[f'{new_network.id}_{k}'] = v
+                self.config[f"{new_network.id}_{k}"] = v
                 if verbose:
-                    print("add connection: ", f'{new_network.id}_{connection_id}')
-            self.config['connections'].extend(config['connections'])
+                    print("add connection: ", f"{new_network.id}_{connection_id}")
+            self.config["connections"].extend(config["connections"])
             for connection_id in config["connections"]:
                 # check that connection exists in dictionary (NameError)
                 if connection_id not in config.keys():
-                    raise NameError(f"Connection {connection_id} not found in {connections_path}")
+                    raise NameError(
+                        f"Connection {connection_id} not found in {connections_path}"
+                    )
                 old_network.add_connection(
-                    self.create_connection(f'{new_network.id}_{connection_id}', old_network)
+                    self.create_connection(
+                        f"{new_network.id}_{connection_id}", old_network
+                    )
                 )
                 if verbose:
-                    print("add connection: ", f'{new_network.id}_{connection_id}')
+                    print("add connection: ", f"{new_network.id}_{connection_id}")
         if inplace:
             self.network_obj = old_network
             if verbose:
-                print(f"replace the {self.network_obj.id} with the new network in place")
+                print(
+                    f"replace the {self.network_obj.id} by extenfing {target_node_id} with the new network in place"
+                )
         return old_network
 
     def create_node(self, node_id):
@@ -445,29 +463,21 @@ class JSONParser:
 
         dosing = self.config[node_id].get("dosing", None)
 
-        pH = utils.parse_quantity(
-            self.config[node_id].get("pH"), ""
-        )
+        pH = utils.parse_quantity(self.config[node_id].get("pH"), "")
 
-        area = utils.parse_quantity(
-            self.config[node_id].get("area (m2)"), "m2"
-        )
+        area = utils.parse_quantity(self.config[node_id].get("area (m2)"), "m2")
 
         permeability = utils.parse_quantity(
             self.config[node_id].get("permeability"), ""
-        )   
-
-        selectivity = utils.parse_quantity(
-            self.config[node_id].get("selectivity"), ""
         )
+
+        selectivity = utils.parse_quantity(self.config[node_id].get("selectivity"), "")
 
         residence_time = utils.parse_quantity(
             self.config[node_id].get("residence_time"), ""
         )
 
-        intensity = utils.parse_quantity(
-            self.config[node_id].get("intensity"), ""
-        )
+        intensity = utils.parse_quantity(self.config[node_id].get("intensity"), "")
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -622,7 +632,13 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
-                node_id, input_contents, output_contents, elevation, volume, num_units, tags={}
+                node_id,
+                input_contents,
+                output_contents,
+                elevation,
+                volume,
+                num_units,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Aeration":
             node_obj = node.Aeration(
@@ -753,7 +769,7 @@ class JSONParser:
                 node_id,
                 residence_time,
                 intensity,
-                area, 
+                area,
                 num_units,
                 input_contents=[],
                 output_contents=[],
@@ -813,9 +829,10 @@ class JSONParser:
                 output_contents,
                 elevation,
                 volume,
-                dosing, 
-                pH, 
-                residence_time, 
+                num_units,
+                dosing,
+                pH,
+                residence_time,
                 tags={},
             )
         elif self.config[node_id]["type"] == "ModularUnit":
@@ -1695,12 +1712,20 @@ class JSONParser:
         node_dict["tags"] = tag_dict
         node_dict["virtual_tags"] = v_tag_dict
 
-        if isinstance(node_obj, (node.Tank, node.Reservoir)):
+        if isinstance(node_obj, (node.Reservoir)):
             if node_obj.elevation is not None:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.volume is not None:
-                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+        elif isinstance(node_obj, node.Tank):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)

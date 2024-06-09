@@ -57,7 +57,7 @@ def draw_graph(network, pyvis=False, output_file=None):
             color = color_map[connection.contents.name]
         except KeyError:
             color = "red"
-        color_maps[connection.contents.name]=color
+        color_maps[connection.contents.name] = color
         g.add_edge(
             connection.source.id, connection.destination.id, color=color, label=id
         )
