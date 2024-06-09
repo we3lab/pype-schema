@@ -220,27 +220,34 @@ class JSONParser:
         if inplace:
             self.network_obj = old_network
         return old_network
- 
-    def extend_node(self, new_network, target_node_id, connections_path, inplace=False, verbose=False):
+
+    def extend_node(
+        self,
+        new_network,
+        target_node_id,
+        connections_path,
+        inplace=False,
+        verbose=False,
+    ):
         """
-        Incoporates subnetwork (i.e. the `new_network`) into a node in a existing network (i.e. the `old_network`) 
+        Incoporates subnetwork (i.e. the `new_network`) into a node in a existing network (i.e. the `old_network`)
         modifying it in place and returning the modified network
-        
+
         Parameters
         ----------
         new_network: str or pype_schema.Network
             JSON file path or Network objet to merge with `self`
-        
+
         target_node_id: str
             ID of the node to expend, must be in the old_network
-        
+
         connections_path: str
             JSON file path to the connections connecting the new network to the old network
 
         Raises
         ------
         TypeError:
-            When 
+            When
             1. user does not provide a valid path or Network object for `old_network`
             2. user does not provide a valid path or Network object for `new_network`
             3. target_node_id is not in the old_network
@@ -271,6 +278,7 @@ class JSONParser:
             if verbose:
                 print("remove node: ", target_node_id)
             for connection_id, connection in self.network_obj.connections.items():
+                # print(1, connection_id, connection.source, connection.destination)
                 if (
                     target_node_id == connection.source.id
                     or target_node_id == connection.destination.id
@@ -1625,6 +1633,14 @@ class JSONParser:
             if node_obj.volume is not None:
                 node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
         elif isinstance(node_obj, node.Tank):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
                 node_dict["elevation (meters)"] = node_obj.elevation.magnitude
 
