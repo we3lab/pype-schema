@@ -26,13 +26,13 @@
   ],
   "virtual_tags": {
     "GrossGasProduction": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
       "operations": "lambda x,y: x + y",
       "contents": "GasBlend",
       "units": "SCFM"
     },
     "GrossGasProductionList": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
       "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
       "contents": "GasBlend",
       "units": "SCFM"
@@ -789,7 +789,14 @@
     "contents": "NaturalGas",
     "entry_point": "Boiler",
     "bidirectional": false,
-    "tags": {}
+    "tags": {
+        "BoilerGasPurchases": {
+          "type": "Flow",
+          "units": "SCFM",
+          "contents": "NaturalGas",
+          "totalized": false
+        }
+    }
   },
   "GasToCogen": {
     "type": "Pipe",
@@ -799,7 +806,7 @@
     "entry_point": "Cogenerator",
     "bidirectional": false,
     "tags": {
-      "GasPurchases": {
+      "CogenGasPurchases": {
         "type": "Flow",
         "units": "SCFM",
         "contents": "NaturalGas",
@@ -808,13 +815,13 @@
     },
     "virtual_tags": {
       "NoGasPurchases": {
-        "tags": ["GasPurchases"],
+        "tags": ["CogenGasPurchases"],
         "operations": "lambda x: x==0",
         "type": "RunStatus",
         "units": null
       },
       "NoGasPurchasesList": {
-        "tags": ["GasPurchases"],
+        "tags": ["CogenGasPurchases"],
         "operations": "lambda x: [x_==0 for x_ in x]",
         "type": "RunStatus",
         "units": null

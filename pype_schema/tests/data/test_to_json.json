@@ -21,14 +21,15 @@
         "DesalOutlet",
         "RecycledWaterOutlet",
         "DrinkingWaterToDistribution",
-        "GasToFacility"
+        "GasToCogen",
+        "GasToBoiler"
     ],
     "virtual_tags": {
         "GrossGasProduction": {
             "units": "foot ** 3 / minute",
             "tags": [
                 "CombinedDigesterGasFlow",
-                "GasPurchases"
+                "CogenGasPurchases"
             ],
             "operations": "lambda x,y: x + y",
             "type": "Flow",
@@ -38,7 +39,7 @@
             "units": "foot ** 3 / minute",
             "tags": [
                 "CombinedDigesterGasFlow",
-                "GasPurchases"
+                "CogenGasPurchases"
             ],
             "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
             "type": "Flow",
@@ -277,7 +278,7 @@
         "tags": {},
         "virtual_tags": {}
     },
-    "GasToFacility": {
+    "GasToCogen": {
         "type": "Pipe",
         "source": "PowerGrid",
         "destination": "WWTP",
@@ -302,7 +303,7 @@
             "units": "BTU/scf"
         },
         "tags": {
-            "GasPurchases": {
+            "CogenGasPurchases": {
                 "units": "foot ** 3 / minute",
                 "source_unit_id": "total",
                 "dest_unit_id": "total",
@@ -315,7 +316,7 @@
             "NoGasPurchases": {
                 "units": "None",
                 "tags": [
-                    "GasPurchases"
+                    "CogenGasPurchases"
                 ],
                 "operations": "lambda x: x==0",
                 "type": "RunStatus"
@@ -323,12 +324,48 @@
             "NoGasPurchasesList": {
                 "units": "None",
                 "tags": [
-                    "GasPurchases"
+                    "CogenGasPurchases"
                 ],
                 "operations": "lambda x: [x_==0 for x_ in x]",
                 "type": "RunStatus"
             }
         }
+    },
+    "GasToBoiler": {
+        "type": "Pipe",
+        "source": "PowerGrid",
+        "destination": "WWTP",
+        "contents": "NaturalGas",
+        "bidirectional": false,
+        "entry_point": "Boiler",
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "pressure": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "heating_values": {
+            "lower": null,
+            "higher": null,
+            "units": "BTU/scf"
+        },
+        "tags": {
+            "BoilerGasPurchases": {
+                "units": "foot ** 3 / minute",
+                "source_unit_id": "total",
+                "dest_unit_id": "total",
+                "totalized": false,
+                "type": "Flow",
+                "contents": "NaturalGas"
+            }
+        },
+        "virtual_tags": {}
     },
     "GritToPrimary": {
         "type": "Pipe",
@@ -554,7 +591,33 @@
         },
         "virtual_tags": {}
     },
-    "CogenToFacility": {
+    "CogenHeatToFacility": {
+        "type": "Pipe",
+        "source": "Cogenerator",
+        "destination": "VirtualDemand",
+        "contents": "Heat",
+        "bidirectional": false,
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "pressure": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "heating_values": {
+            "lower": null,
+            "higher": null,
+            "units": "BTU/scf"
+        },
+        "tags": {},
+        "virtual_tags": {}
+    },
+    "CogenElecToFacility": {
         "type": "Wire",
         "source": "Cogenerator",
         "destination": "VirtualDemand",
@@ -861,6 +924,32 @@
         "tags": {},
         "virtual_tags": {}
     },
+    "BoilerToFacility": {
+        "type": "Pipe",
+        "source": "Boiler",
+        "destination": "VirtualDemand",
+        "contents": "Heat",
+        "bidirectional": false,
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "pressure": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "heating_values": {
+            "lower": null,
+            "higher": null,
+            "units": "BTU/scf"
+        },
+        "tags": {},
+        "virtual_tags": {}
+    },
     "UFToDisinfection": {
         "type": "Pipe",
         "source": "Ultrafiltration",
@@ -934,6 +1023,7 @@
             "AnaerobicDigester",
             "Conditioner",
             "Cogenerator",
+            "Boiler",
             "Flare",
             "VirtualDemand",
             "FOGTank",
@@ -950,7 +1040,8 @@
             "DigesterToConditioner",
             "ConditionerToCogen",
             "ConditionerToFlare",
-            "CogenToFacility",
+            "CogenHeatToFacility",
+            "CogenElecToFacility",
             "PrimaryToGT",
             "SecondaryToGT",
             "SecondaryToRAS",
@@ -960,7 +1051,8 @@
             "LiftToGrit",
             "FOGToPump",
             "FOGToDigester",
-            "BatteryToFacility"
+            "BatteryToFacility",
+            "BoilerToFacility"
         ],
         "elevation (meters)": 10,
         "flowrate": {
@@ -1276,7 +1368,26 @@
             "NaturalGas"
         ],
         "output_contents": [
-            "Electricity"
+            "Electricity",
+            "Heat"
+        ],
+        "tags": {},
+        "virtual_tags": {},
+        "generation_capacity": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": null
+        },
+        "num_units": 1
+    },
+    "Boiler": {
+        "type": "Boiler",
+        "input_contents": [
+            "NaturalGas"
+        ],
+        "output_contents": [
+            "Heat"
         ],
         "tags": {},
         "virtual_tags": {},
@@ -1306,10 +1417,12 @@
     "VirtualDemand": {
         "type": "Network",
         "input_contents": [
-            "Electricity"
+            "Electricity",
+            "Heat"
         ],
         "output_contents": [
-            "Electricity"
+            "Electricity",
+            "Heat"
         ],
         "tags": {},
         "virtual_tags": {},
