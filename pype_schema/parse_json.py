@@ -230,7 +230,8 @@ class JSONParser:
         verbose=False,
     ):
         """
-        Incoporates subnetwork (i.e. the `new_network`) into a node in a existing network (i.e. the `old_network`)
+        Incoporates subnetwork (i.e. the `new_network`) into a node
+        in a existing network (i.e. the `old_network`)
         modifying it in place and returning the modified network
 
         Parameters
@@ -242,7 +243,8 @@ class JSONParser:
             ID of the node to expend, must be in the old_network
 
         connections_path: str
-            JSON file path to the connections connecting the new network to the old network
+            JSON file path to the connections connecting
+            the new network to the old network
 
         Raises
         ------
@@ -277,11 +279,10 @@ class JSONParser:
             old_network.remove_node(target_node_id)
             if verbose:
                 print("remove node: ", target_node_id)
-            for connection_id, connection in self.network_obj.connections.items():
-                # print(1, connection_id, connection.source, connection.destination)
+            for connection_id, connection_obj in self.network_obj.connections.items():
                 if (
-                    target_node_id == connection.source.id
-                    or target_node_id == connection.destination.id
+                    target_node_id == connection_obj.source.id
+                    or target_node_id == connection_obj.destination.id
                 ):
                     old_network.remove_connection(connection_id)
                     if verbose:
@@ -329,7 +330,8 @@ class JSONParser:
             self.network_obj = old_network
             if verbose:
                 print(
-                    f"replace the {self.network_obj.id} by extenfing {target_node_id} with the new network in place"
+                    f"replace the {self.network_obj.id} by extenfing {target_node_id} "
+                    f"with the new network in place"
                 )
         return old_network
 

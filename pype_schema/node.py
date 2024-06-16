@@ -20,6 +20,7 @@ CAPACITY_ATTRS = [
     "power_rating",
 ]
 
+
 class Node(ABC):
     """Abstract class for all nodes
 
@@ -51,30 +52,30 @@ class Node(ABC):
             f"tags:{self.tags}>\n"
         )
 
-    def set_dosing(self, dose_rate, mode='rate'):
+    def set_dosing(self, dose_rate, mode="rate"):
         """Set the dosing rate of the node
 
         Parameters
         ----------
         dose_rate : dict of str:float
             Dosing rate of the chemical in the node
-        
+
         """
-        if mode not in ['rate', 'area']:
+        if mode not in ["rate", "area"]:
             raise ValueError("Dosing mode must be either 'rate' or 'area'")
-        
+
         dosing_dict = defaultdict(float)
 
         for k, v in dose_rate.items():
             if k not in utils.DosingType.__members__:
                 raise ValueError(f"{k} is not a valid dosing type")
             dosing_dict[utils.DosingType[k]] = v
-    
-        if mode == 'rate':
+
+        if mode == "rate":
             self.dosing_rate = dosing_dict
-        elif mode == 'area':
+        elif mode == "area":
             self.dosing_area = dosing_dict
-    
+
     def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and design flow rate of the node
 
@@ -1481,8 +1482,9 @@ class Pump(Node):
             f"min_flow:{self.min_flow} max_flow:{self.max_flow} "
             f"design_flow:{self.design_flow} elevation:{self.elevation} "
             f"power_rating:{self.power_rating} num_units:{self.num_units} "
-            f"pump_type:{self.pump_type} efficiency:{self.efficiency}" if self.pump_type == utils.PumpType.ERI else ""
-            f"tags:{self.tags}>\n"
+            f"pump_type:{self.pump_type} efficiency:{self.efficiency}"
+            if self.pump_type == utils.PumpType.ERI
+            else "" f"tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -1553,6 +1555,7 @@ class Pump(Node):
             del self.horsepower
 
     power_rating = property(get_power_rating, set_power_rating, del_power_rating)
+
 
 class Tank(Node):
     """
@@ -1625,7 +1628,8 @@ class Tank(Node):
         return (
             f"<pype_schema.node.Tank id:{self.id} "
             f"input_contents:{self.input_contents} "
-            f"output_contents:{self.output_contents} elevation:{self.elevation} num_units:{self.num_units} "
+            f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"num_units:{self.num_units} "
             f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
@@ -1739,7 +1743,8 @@ class StaticMixer(Tank):
             f"<pype_schema.node.StaticMixer id:{self.id} "
             f"input_contents:{self.input_contents} num_units:{self.num_units}"
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
-            f"dosing_rate:{self.dosing_rate} pH:{self.pH} residence_time:{self.residence_time} "
+            f"dosing_rate:{self.dosing_rate} pH:{self.pH} "
+            f"residence_time:{self.residence_time} "
             f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
@@ -1760,6 +1765,7 @@ class StaticMixer(Tank):
             and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
+
 
 class Reservoir(Node):
     """
@@ -1921,7 +1927,7 @@ class Battery(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"energy_capacity:{self.energy_capacity} "
-            f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
+            f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate}"
             f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
 
@@ -2010,6 +2016,7 @@ class Battery(Node):
     energy_capacity = property(
         get_energy_capacity, set_energy_capacity, del_energy_capacity
     )
+
 
 class Digestion(Node):
     """
@@ -2855,7 +2862,8 @@ class ROMembrane(Filtration):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} min_flow:{self.min_flow} max_flow:{self.max_flow} "
-            f"area:{self.area} permeability:{self.permeability} selectivity:{self.selectivity} "
+            f"area:{self.area} permeability:{self.permeability} "
+            f"selectivity:{self.selectivity} "
             f"design_flow:{self.design_flow} tags:{self.tags}>\n"
         )
 
@@ -3336,7 +3344,7 @@ class Chlorination(Node):
         UV intensity in the UV system
 
     dosing_rate : dict of DosingType:float
-        UV intensity in the UV system 
+        UV intensity in the UV system
 
     tags : dict of Tag
         Data tags associated with this chlorinator
@@ -3517,6 +3525,7 @@ class UVSystem(Chlorination):
             and self.dosing_area == other.dosing_area
             and self.tags == other.tags
         )
+
 
 class Flaring(Node):
     """

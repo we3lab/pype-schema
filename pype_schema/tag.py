@@ -216,15 +216,16 @@ class Tag:
         if not isinstance(other_type, TagType):
             raise TypeError("tag_type must be a TagType object")
 
-        flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]   
-        
+        flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
+
         if self.tag_type in flow_types and other_type in flow_types:
             return True
-        
+
         if self.tag_type == other_type:
             return True
-        
+
         return False
+
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
