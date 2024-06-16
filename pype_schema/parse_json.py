@@ -658,7 +658,7 @@ class JSONParser:
                 output_contents,
                 min_flow,
                 max_flow,
-                avg_flow,
+                design_flow,
                 num_units,
                 volume,
                 area,
