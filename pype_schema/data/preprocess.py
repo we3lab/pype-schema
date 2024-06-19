@@ -18,14 +18,19 @@ def load_taglist(taglist_path):
 
 
 def process_raw(xlsx_path, tagMap, tag_mapping=None):
+    date_parser = lambda x: pd.to_datetime(x, format="%Y/%m/%d %H:%M")
     df = pd.read_excel(
-        xlsx_path, skiprows=range(6), index_col=None, header=0, engine="openpyxl"
+        xlsx_path,
+        skiprows=range(6),
+        index_col=None,
+        header=0,
+        engine="openpyxl",
+        date_parser=date_parser,
     )
     new_cols = dict()
     for i, c in enumerate(df.columns):
         k = c.strip().replace("\n", "").replace("Weighted Avg", "")
         if i < 2:
-            new_cols[c] = k
             continue
         if k not in tagMap:
             print(f"Warning: tag {k} not found in taglist")
@@ -35,12 +40,13 @@ def process_raw(xlsx_path, tagMap, tag_mapping=None):
         if tag_mapping is not None:
             tag_mapping[k] = tagMap[k][0]
     df.rename(columns=new_cols, inplace=True)
+    print(df["From date"])
     return df, tag_mapping
 
 
 if __name__ == "__main__":
     tag_mapping = collections.defaultdict(str)
-    date = "2023_06"
+    date = "2023_05"
     xlsx_names = [
         f"SBData/{date}/EnergyDataMPDA",
         f"SBData/{date}/EnergyDataMPDB",

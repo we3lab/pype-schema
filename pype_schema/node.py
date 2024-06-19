@@ -1648,6 +1648,24 @@ class Tank(Node):
             and self.tags == other.tags
         )
 
+    def get_num_units(self):
+        try:
+            return self._num_units
+        except AttributeError:
+            warnings.warn(
+                "Please add `num_units` attribute to `Tank`",
+                DeprecationWarning,
+            )
+            return None
+
+    def set_num_units(self, num_units):
+        self._num_units = num_units
+
+    def del_num_units(self):
+        del self._num_units
+
+    num_units = property(get_num_units, set_num_units, del_num_units)
+
 
 class StaticMixer(Tank):
     """
@@ -1676,6 +1694,9 @@ class StaticMixer(Tank):
 
     residence_time : float
         Residence time of the mixer
+
+    num_units : int
+        Number of mixers
 
     tags : dict of Tag
         Data tags associated with this mixer
@@ -1709,6 +1730,9 @@ class StaticMixer(Tank):
     residence_time : float
         Residence time of the mixer
 
+    num_units : int
+        Number of mixers
+
     tags : dict of Tag
         Data tags associated with this mixer
 
@@ -1721,10 +1745,10 @@ class StaticMixer(Tank):
         output_contents,
         elevation,
         volume,
-        num_units,
         dosing_rate,
         residence_time,
         pH,
+        num_units=1,
         tags={},
     ):
         self.id = id
@@ -1732,10 +1756,10 @@ class StaticMixer(Tank):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
-        self.num_units = num_units
         self.dosing_rate = dosing_rate
         self.pH = pH
         self.residence_time = residence_time
+        self.num_units = num_units
         self.tags = tags
 
     def __repr__(self):
@@ -1765,6 +1789,24 @@ class StaticMixer(Tank):
             and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
+    
+    def get_num_units(self):
+        try:
+            return self._num_units
+        except AttributeError:
+            warnings.warn(
+                "Please add `num_units` attribute to `Tank`",
+                DeprecationWarning,
+            )
+            return 1
+
+    def set_num_units(self, num_units):
+        self._num_units = num_units
+
+    def del_num_units(self):
+        del self._num_units
+
+    num_units = property(get_num_units, set_num_units, del_num_units)
 
 
 class Reservoir(Node):

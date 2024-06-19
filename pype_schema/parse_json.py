@@ -1646,8 +1646,6 @@ class JSONParser:
             if node_obj.elevation is not None:
                 node_dict["elevation (meters)"] = node_obj.elevation.magnitude
 
-            if node_obj.volume is not None:
-                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
             if node_obj.num_units is not None:
                 node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Tank):
