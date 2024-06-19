@@ -120,7 +120,7 @@ def load_data(csv_paths, columns=[], remove_outliers=False, replace_zero=False):
         except ValueError:
             print(f"[!] dateparse error: {s}")
             return None
-        
+
     flows_series = collections.defaultdict(pd.Series)  # {tag: flow_series}
     time_series = None
     for csv_path in csv_paths:
@@ -249,13 +249,13 @@ def plot_flow_loss(
         if shift is None:
             shift = 0
         start_date = (start_date * 4 * 24) + int(shift * 4 * 24)
-        idx = idx[start_date: start_date + partial]
-        dates = dates[start_date: start_date + partial]
-        loss_val = loss_val[start_date: start_date + partial]
-        lossRatio_val = lossRatio_val[start_date: start_date + partial]
-        accumulated_leakage = accumulated_leakage[start_date: start_date + partial]
+        idx = idx[start_date : start_date + partial]
+        dates = dates[start_date : start_date + partial]
+        loss_val = loss_val[start_date : start_date + partial]
+        lossRatio_val = lossRatio_val[start_date : start_date + partial]
+        accumulated_leakage = accumulated_leakage[start_date : start_date + partial]
         for k, v in flows_series.items():
-            flows_series[k] = v[start_date: start_date + partial]
+            flows_series[k] = v[start_date : start_date + partial]
         if partial > 4 * 24 * 3:
             date_loc = mdates.DayLocator(interval=1)
             h_fmt = mdates.DateFormatter("%m/%d")
@@ -360,16 +360,16 @@ def plot_MPD_leakage_and_BW(
         if shift is None:
             shift = 0
         start_date = (start_date * 4 * 24) + int(shift * 4 * 24)
-        idx = idx[start_date: start_date + partial]
-        dates = dates[start_date: start_date + partial]
-        Leakage_val = Leakage_val[start_date: start_date + partial]
-        LeakageRatio_val = LeakageRatio_val[start_date: start_date + partial]
-        accumulated_leakage = accumulated_leakage[start_date: start_date + partial]
-        ResidualBeforeRO_val = ResidualBeforeRO_val[start_date: start_date + partial]
-        BW_val = BW_val[start_date: start_date + partial]
+        idx = idx[start_date : start_date + partial]
+        dates = dates[start_date : start_date + partial]
+        Leakage_val = Leakage_val[start_date : start_date + partial]
+        LeakageRatio_val = LeakageRatio_val[start_date : start_date + partial]
+        accumulated_leakage = accumulated_leakage[start_date : start_date + partial]
+        ResidualBeforeRO_val = ResidualBeforeRO_val[start_date : start_date + partial]
+        BW_val = BW_val[start_date : start_date + partial]
         print(f"[*] partial: {partial}, start_date: {start_date}, shift: {shift}")
         for k, v in flows_series.items():
-            flows_series[k] = v[start_date: start_date + partial]
+            flows_series[k] = v[start_date : start_date + partial]
         if partial > 4 * 24 * 3:
             date_loc = mdates.DayLocator(interval=1)
             h_fmt = mdates.DateFormatter("%m/%d")
@@ -528,12 +528,12 @@ def estimate_volumn(
         if shift is None:
             shift = 0
         start_date = (start_date * 4 * 24) + int(shift * 4 * 24)
-        idx = idx[start_date: start_date + partial]
-        dates = dates[start_date: start_date + partial]
-        level = level[start_date: start_date + partial]
-        BWResidual_val = BWResidual_val[start_date: start_date + partial]
+        idx = idx[start_date : start_date + partial]
+        dates = dates[start_date : start_date + partial]
+        level = level[start_date : start_date + partial]
+        BWResidual_val = BWResidual_val[start_date : start_date + partial]
         for k, v in flows_series.items():
-            flows_series[k] = v[start_date: start_date + partial]
+            flows_series[k] = v[start_date : start_date + partial]
         if partial > 4 * 24 * 3:
             date_loc = mdates.DayLocator(interval=1)
             h_fmt = mdates.DateFormatter("%m/%d")

@@ -1789,7 +1789,7 @@ class StaticMixer(Tank):
             and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
-    
+
     def get_num_units(self):
         try:
             return self._num_units
