@@ -5,6 +5,7 @@ from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
 from . import utils
+import copy
 
 
 class JSONParser:
@@ -220,6 +221,120 @@ class JSONParser:
             self.network_obj = old_network
         return old_network
 
+    def extend_node(
+        self,
+        new_network,
+        target_node_id,
+        connections_path,
+        inplace=False,
+        verbose=False,
+    ):
+        """
+        Incoporates subnetwork (i.e. the `new_network`) into a node
+        in a existing network (i.e. the `old_network`)
+        modifying it in place and returning the modified network
+
+        Parameters
+        ----------
+        new_network: str or pype_schema.Network
+            JSON file path or Network objet to merge with `self`
+
+        target_node_id: str
+            ID of the node to expend, must be in the old_network
+
+        connections_path: str
+            JSON file path to the connections connecting
+            the new network to the old network
+
+        Raises
+        ------
+        TypeError:
+            When
+            1. user does not provide a valid path or Network object for `old_network`
+            2. user does not provide a valid path or Network object for `new_network`
+            3. target_node_id is not in the old_network
+            4. any node in connections is not in the new_network or old_network
+
+        Returns
+        -------
+        pype_schema.node.Network:
+            Modified network object
+        """
+
+        if isinstance(new_network, str) and new_network.endswith("json"):
+            new_network = JSONParser(new_network).initialize_network()
+        if not isinstance(new_network, node.Network):
+            raise TypeError(
+                "Please provide a valid json path or object for network to extend with"
+            )
+        if verbose:
+            print(f"[*] Merging {new_network.id} into {self.network_obj.id}")
+        old_network = copy.deepcopy(self.network_obj)
+        if target_node_id not in old_network.nodes.keys():
+            raise NameError(
+                "Node " + target_node_id + " not found in " + old_network.id
+            )
+        else:
+            # remove the node and connections that contains the node
+            old_network.remove_node(target_node_id)
+            if verbose:
+                print("remove node: ", target_node_id)
+            for connection_id, connection_obj in self.network_obj.connections.items():
+                if (
+                    target_node_id == connection_obj.source.id
+                    or target_node_id == connection_obj.destination.id
+                ):
+                    old_network.remove_connection(connection_id)
+                    if verbose:
+                        print("remove connection: ", connection_id)
+
+        for node_id, node_obj in new_network.nodes.items():
+            node_obj.id = f"{new_network.id}_{node_id}"
+            old_network.add_node(node_obj)
+            if verbose:
+                print("add node: ", node_obj.id)
+        for connection_id, connection_obj in new_network.connections.items():
+            connection_obj.id = f"{new_network.id}_{connection_id}"
+            old_network.add_connection(connection_obj)
+            if verbose:
+                print("add connection: ", connection_obj.id)
+        with open(connections_path, "r") as f:
+            config = json.load(f)
+            for i, connection_id in enumerate(config["connections"]):
+                self.config["connections"].append(f"{new_network.id}_{connection_id}")
+            for k, v in list(config.items()):
+                if k == "connections":
+                    continue
+                if v["source"] in new_network.nodes.keys():
+                    v["source"] = f'{new_network.id}_{v["source"]}'
+                if v["destination"] in new_network.nodes.keys():
+                    v["destination"] = f'{new_network.id}_{v["destination"]}'
+                self.config[f"{new_network.id}_{k}"] = v
+                if verbose:
+                    print("add connection: ", f"{new_network.id}_{connection_id}")
+            self.config["connections"].extend(config["connections"])
+            for connection_id in config["connections"]:
+                # check that connection exists in dictionary (NameError)
+                if connection_id not in config.keys():
+                    raise NameError(
+                        f"Connection {connection_id} not found in {connections_path}"
+                    )
+                old_network.add_connection(
+                    self.create_connection(
+                        f"{new_network.id}_{connection_id}", old_network
+                    )
+                )
+                if verbose:
+                    print("add connection: ", f"{new_network.id}_{connection_id}")
+        if inplace:
+            self.network_obj = old_network
+            if verbose:
+                print(
+                    f"replace the {self.network_obj.id} by extenfing {target_node_id} "
+                    f"with the new network in place"
+                )
+        return old_network
+
     def create_node(self, node_id):
         """Converts a dictionary into a `Node` object
 
@@ -261,6 +376,24 @@ class JSONParser:
             flowrate = self.config[node_id].get("flow_rate")
 
         min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
+
+        dosing = self.config[node_id].get("dosing", None)
+
+        pH = utils.parse_quantity(self.config[node_id].get("pH"), "")
+
+        area = utils.parse_quantity(self.config[node_id].get("area (m2)"), "m2")
+
+        permeability = utils.parse_quantity(
+            self.config[node_id].get("permeability"), ""
+        )
+
+        selectivity = utils.parse_quantity(self.config[node_id].get("selectivity"), "")
+
+        residence_time = utils.parse_quantity(
+            self.config[node_id].get("residence_time"), ""
+        )
+
+        intensity = utils.parse_quantity(self.config[node_id].get("intensity"), "")
 
         # create correct type of node class
         if self.config[node_id]["type"] == "Network":
@@ -415,7 +548,13 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
-                node_id, input_contents, output_contents, elevation, volume, tags={}
+                node_id,
+                input_contents,
+                output_contents,
+                elevation,
+                volume,
+                num_units,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Aeration":
             node_obj = node.Aeration(
@@ -514,6 +653,21 @@ class JSONParser:
                 volume,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "ROMembrane":
+            node_obj = node.ROMembrane(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                area,
+                permeability,
+                selectivity,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Chlorination":
             node_obj = node.Chlorination(
                 node_id,
@@ -524,6 +678,21 @@ class JSONParser:
                 design_flow,
                 num_units,
                 volume,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "UVSystem":
+            node_obj = node.UVSystem(
+                node_id,
+                residence_time,
+                intensity,
+                area,
+                num_units,
+                input_contents=[],
+                output_contents=[],
+                min_flow=0,
+                max_flow=0,
+                avg_flow=0,
+                volume=0,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Flaring":
@@ -569,6 +738,35 @@ class JSONParser:
                 num_units,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "StaticMixer":
+            node_obj = node.StaticMixer(
+                node_id,
+                input_contents,
+                output_contents,
+                elevation,
+                volume,
+                num_units,
+                dosing,
+                pH,
+                residence_time,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "ModularUnit":
+            node_obj = node.ModularUnit(
+                node_id,
+                input_contents,
+                output_contents,
+                num_units,
+                tags={},
+                nodes={},
+                connections={},
+            )
+            for new_node in self.config[node_id]["nodes"]:
+                node_obj.add_node(self.create_node(new_node))
+            for new_connection in self.config[node_id]["connections"]:
+                node_obj.add_connection(
+                    self.create_connection(new_connection, node_obj)
+                )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
 
@@ -1435,7 +1633,29 @@ class JSONParser:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.volume is not None:
-                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+        elif isinstance(node_obj, node.Tank):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Pump):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Tank):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)

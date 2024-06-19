@@ -200,6 +200,32 @@ class Tag:
         else:
             return self.parent_id < other.parent_id
 
+    def check_type_compatibility(self, other_type):
+        """Check if the given tag_type is compatible with another
+
+        Parameters
+        ----------
+        other_type : TagType
+            Type of tag to compare against
+
+        Returns
+        -------
+        bool
+            True if compatible, False otherwise
+        """
+        if not isinstance(other_type, TagType):
+            raise TypeError("tag_type must be a TagType object")
+
+        flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
+
+        if self.tag_type in flow_types and other_type in flow_types:
+            return True
+
+        if self.tag_type == other_type:
+            return True
+
+        return False
+
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
@@ -305,7 +331,7 @@ class VirtualTag:
 
             if determine_type:
                 if tag_type is not None:
-                    if tag_type != tag.tag_type:
+                    if not tag.check_type_compatibility(tag_type):
                         raise ValueError(
                             "All Tags must have the same value for 'tag_type'"
                         )

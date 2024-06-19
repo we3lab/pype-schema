@@ -477,6 +477,7 @@ class ContentsType(Enum):
     Heat = auto()
     Oil = auto()
     Grease = auto()
+    Air = auto()
     Chemical = auto()
     Coagulant = auto()
     Disinfectant = auto()
@@ -491,6 +492,8 @@ class PumpType(Enum):
 
     Constant = auto()
     VFD = auto()
+    ERI = auto()
+    AirBlower = auto()
 
 
 class DigesterType(Enum):
@@ -498,6 +501,20 @@ class DigesterType(Enum):
 
     Aerobic = auto()
     Anaerobic = auto()
+
+
+class DosingType(Enum):
+    """Enum to represent types of dosing"""
+
+    NaOCl = auto()
+    FeCl3 = auto()
+    Antiscalant = auto()
+    CO2 = auto()
+    CaOH2 = auto()
+    OrthoPolyphosphate = auto()
+    SBS = auto()
+    Polymer = auto()
+    UVLight = auto()
 
 
 def select_objs_helper(
