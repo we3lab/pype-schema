@@ -23,10 +23,8 @@ def get_change(variable, delta_t=1, split=False):
         Rate of change variable or tuple of netative, positive rate of change variable
     """
     variable = variable.values if isinstance(variable, pd.Series) else variable
-    print("variable", variable)
     change = (variable[1:] - variable[:-1]) / delta_t
     change = np.concatenate([change, np.array([np.nan])])
-    print("change", change)
     change_neg, change_pos = change.copy(), change.copy()
     change_neg[change_neg > 0] = 0
     change_neg = -change_neg
