@@ -155,9 +155,6 @@ class JSONParser:
                 # If there is a Key error, it may be because a virtual tag
                 # is pointing to another virtual tag that hasn't been added yet.
                 except KeyError:
-                    self.parse_virtual_tag(
-                        v_tag_id, v_tag_info, obj, parent_network=self.network_obj
-                    )
                     for tag_pointer in v_tag_info["tags"]:
                         if tag_pointer not in config_v_tags:
                             raise KeyError(
