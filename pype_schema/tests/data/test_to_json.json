@@ -65,13 +65,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -102,13 +102,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -156,13 +156,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -182,13 +182,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -208,13 +208,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -235,13 +235,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -261,13 +261,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -288,13 +288,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -341,13 +341,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -376,13 +376,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -402,13 +402,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -428,13 +428,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -454,13 +454,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -480,13 +480,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -506,13 +506,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -565,13 +565,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -600,13 +600,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -690,13 +690,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -716,13 +716,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -742,13 +742,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -768,13 +768,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -794,13 +794,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -820,13 +820,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -846,13 +846,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -872,13 +872,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -898,13 +898,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -933,13 +933,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -959,13 +959,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -985,13 +985,13 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "pressure": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "heating_values": {
@@ -1054,10 +1054,14 @@
             "BatteryToFacility",
             "BoilerToFacility"
         ],
+        "elevation": {
+            "value": 10,
+            "units": "meter"
+        },
         "flowrate": {
             "min": 5,
             "max": 25,
-            "avg": 15,
+            "design": 15,
             "units": "MGD"
         }
     },
@@ -1076,7 +1080,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         }
     },
@@ -1143,7 +1147,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         }
     },
@@ -1176,7 +1180,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         }
     },
@@ -1208,7 +1212,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 2
@@ -1245,7 +1249,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": 2,
+            "design": 2,
             "units": "MGD"
         },
         "num_units": 8
@@ -1268,7 +1272,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": 1.5,
+            "design": 1.5,
             "units": "MGD"
         },
         "num_units": 8
@@ -1290,7 +1294,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": 2,
+            "design": 2,
             "units": "MGD"
         },
         "num_units": 8
@@ -1312,7 +1316,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1
@@ -1335,7 +1339,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1
@@ -1358,7 +1362,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 3
@@ -1376,7 +1380,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": 100,
+            "design": 100,
             "units": "foot ** 3 / minute"
         },
         "num_units": 5
@@ -1396,7 +1400,7 @@
         "generation_capacity": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1
@@ -1414,7 +1418,7 @@
         "generation_capacity": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1
@@ -1429,7 +1433,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1
@@ -1491,7 +1495,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": null
@@ -1510,7 +1514,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": null
@@ -1529,7 +1533,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": null
@@ -1575,7 +1579,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": null
@@ -1593,7 +1597,7 @@
         "flowrate": {
             "min": null,
             "max": null,
-            "avg": null,
+            "design": null,
             "units": null
         },
         "num_units": 1

@@ -19,7 +19,7 @@ dev_requirements = [
     *test_requirements,
     "tox>=3.24.5",
     "Sphinx==7.0.1",
-    "sphinx-rtd-theme==2.0.0"
+    "sphinx-rtd-theme==2.0.0",
 ]
 
 requirements = [
