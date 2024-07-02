@@ -252,11 +252,13 @@
                 <span class="c1"># If there is a Key error, it may be because a virtual tag</span>
                 <span class="c1"># is pointing to another virtual tag that hasn&#39;t been added yet.</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">parse_virtual_tag</span><span class="p">(</span>
-                        <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">parent_network</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span>
-                    <span class="p">)</span>
                     <span class="k">for</span> <span class="n">tag_pointer</span> <span class="ow">in</span> <span class="n">v_tag_info</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]:</span>
-                        <span class="k">if</span> <span class="n">tag_pointer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_v_tags</span><span class="p">:</span>
+                        <span class="c1"># Check if the tag being pointed to is in the already</span>
+                        <span class="c1"># initialized tags or the network&#39;s set of virtual tags</span>
+                        <span class="k">if</span> <span class="n">tag_pointer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_v_tags</span> <span class="ow">and</span> <span class="n">tag_pointer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+                            <span class="n">tag</span><span class="o">.</span><span class="n">id</span>
+                            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_all_tags</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="p">]:</span>
                             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;Invalid Tag id </span><span class="si">{</span><span class="n">tag_pointer</span><span class="si">}</span><span class="s2"> in VirtualTag </span><span class="si">{</span><span class="n">v_tag_id</span><span class="si">}</span><span class="s2">&quot;</span>
                             <span class="p">)</span>
