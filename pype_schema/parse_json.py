@@ -156,14 +156,12 @@ class JSONParser:
                 # is pointing to another virtual tag that hasn't been added yet.
                 except KeyError:
                     for tag_pointer in v_tag_info["tags"]:
-                        # Check if the tag being pointed to is in the already initialized 
+                        # Check if the tag being pointed to is in the already initialized
                         # tags or the network's set of virtual tags
-                        if (
-                            tag_pointer not in config_v_tags
-                            and tag_pointer not in [
-                                tag.id for tag in self.network_obj.get_all_tags(recurse=True)
-                            ]
-                        ):
+                        if tag_pointer not in config_v_tags and tag_pointer not in [
+                            tag.id
+                            for tag in self.network_obj.get_all_tags(recurse=True)
+                        ]:
                             raise KeyError(
                                 f"Invalid Tag id {tag_pointer} in VirtualTag {v_tag_id}"
                             )
