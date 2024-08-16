@@ -64,7 +64,9 @@ class Node(ABC):
             whether or not the dosing is defined as a volumetric 'rate' or by 'area'
         """
         if mode not in ["rate", "area"]:
-            raise ValueError("Dosing mode must be either 'rate' or 'area' not '" + mode + "'")
+            raise ValueError(
+                "Dosing mode must be either 'rate' or 'area' not '" + mode + "'"
+            )
 
         dosing_dict = defaultdict(float)
 

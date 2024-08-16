@@ -35,7 +35,7 @@ def test_create_network(json_path, expected_path, expected_boiler_efficiency):
     assert result == expected
     if expected_boiler_efficiency:
         assert (
-            result.get_node("Boiler", recurse=True).thermal_efficiency(...) 
+            result.get_node("Boiler", recurse=True).thermal_efficiency(...)
             == expected_boiler_efficiency
         )
 
