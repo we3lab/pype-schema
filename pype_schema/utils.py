@@ -491,8 +491,8 @@ class PumpType(Enum):
     """Enum to represent constant vs. variable drive pumps"""
 
     Constant = auto()
-    VFD = auto()
-    ERI = auto()
+    VFD = auto()  # variable frequency drive
+    ERD = auto()  # energy recovery device
     AirBlower = auto()
 
 
@@ -506,13 +506,13 @@ class DigesterType(Enum):
 class DosingType(Enum):
     """Enum to represent types of dosing"""
 
-    NaOCl = auto()
-    FeCl3 = auto()
+    NaOCl = auto()  # sodium hypochlorite
+    FeCl3 = auto()  # ferric chloride
     Antiscalant = auto()
-    CO2 = auto()
-    CaOH2 = auto()
+    CO2 = auto()  # carbon dioxide
+    CaOH2 = auto()  # calcium hydroxide
     OrthoPolyphosphate = auto()
-    SBS = auto()
+    SBS = auto()  # sodium bisulphite
     Polymer = auto()
     UVLight = auto()
 

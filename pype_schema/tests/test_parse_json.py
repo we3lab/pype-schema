@@ -16,14 +16,14 @@ pint.set_application_registry(u)
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, expected_path",
+    "json_path, expected_path, expected_boiler_efficiency",
     [
-        ("../data/sample.json", "data/sample.pkl"),
-        ("data/key_error.json", "KeyError"),
-        ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl"),
+        ("../data/sample.json", "data/sample.pkl", 0.8),
+        ("data/key_error.json", "KeyError", None),
+        ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl", None),
     ],
 )
-def test_create_network(json_path, expected_path):
+def test_create_network(json_path, expected_path, expected_boiler_efficiency):
     parser = JSONParser(json_path)
     try:
         result = parser.initialize_network(verbose=True)
@@ -33,6 +33,11 @@ def test_create_network(json_path, expected_path):
         result = type(err).__name__
         expected = expected_path
     assert result == expected
+    if expected_boiler_efficiency:
+        assert (
+            result.get_node("Boiler", recurse=True).thermal_efficiency(...) 
+            == expected_boiler_efficiency
+        )
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")

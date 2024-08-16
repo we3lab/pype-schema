@@ -60,9 +60,11 @@ class Node(ABC):
         dose_rate : dict of str:float
             Dosing rate of the chemical in the node
 
+        mode : str
+            whether or not the dosing is defined as a volumetric 'rate' or by 'area'
         """
         if mode not in ["rate", "area"]:
-            raise ValueError("Dosing mode must be either 'rate' or 'area'")
+            raise ValueError("Dosing mode must be either 'rate' or 'area' not '" + mode + "'")
 
         dosing_dict = defaultdict(float)
 
@@ -1287,13 +1289,13 @@ class ModularUnit(Network):
         Data tags associated with this ModularUnit
 
     nodes : dict of Node
-        nodes in the ModularUnit, e.g. pumps, tanks, or facilities
+        nodes in the ModularUnit, e.g. pumps, tanks, or filters
 
     connections : dict of Connections
         connections in the ModularUnit, e.g. pipes
 
     num_units: int
-         Number of MDPs running in parallel
+         Number of units running in parallel
 
     Attributes
     ----------
@@ -1310,10 +1312,10 @@ class ModularUnit(Network):
         Data tags associated with this ModularUnit
 
     nodes : dict of Node
-        nodes in the ModularUnit, e.g. pumps, tanks, or facilities
+        nodes in the ModularUnit, e.g. pumps, tanks, or filters
 
     num_units: int
-        Number of MDPs running in parallel
+        Number of units running in parallel
 
     connections : dict of Connections
         connections in the ModularUnit, e.g. pipes
@@ -1394,7 +1396,7 @@ class Pump(Node):
         Design flow rate supplied by the pump
 
     pump_type : PumpType
-        Type of pump (either VFD, ERI, AirBlower or constant)
+        Type of pump (either VFD, ERD, AirBlower or Constant)
 
     efficiency : float
         efficiency of the pump
@@ -1432,7 +1434,7 @@ class Pump(Node):
         Design flow rate supplied by the pump
 
     pump_type : PumpType
-        Type of pump (either VFD, ERI, AirBlower or constant)
+        Type of pump (either VFD, ERD, AirBlower or Constant)
 
     efficiency : float
         efficiency of the pump
@@ -1483,7 +1485,7 @@ class Pump(Node):
             f"design_flow:{self.design_flow} elevation:{self.elevation} "
             f"power_rating:{self.power_rating} num_units:{self.num_units} "
             f"pump_type:{self.pump_type} efficiency:{self.efficiency}"
-            if self.pump_type == utils.PumpType.ERI
+            if self.pump_type == utils.PumpType.ERD
             else "" f"tags:{self.tags}>\n"
         )
 
@@ -1506,7 +1508,7 @@ class Pump(Node):
             and self.design_flow == other.design_flow
         ) and (
             self.efficiency == other.efficiency
-            if self.pump_type == utils.PumpType.ERI
+            if self.pump_type == utils.PumpType.ERD
             else True
         )
 
@@ -1577,7 +1579,7 @@ class Tank(Node):
         Volume of the tank in cubic meters
 
     num_units : int
-        Number of tanks
+        Number of identical tanks in parallel
 
     tags : dict of Tag
         Data tags associated with this tank
@@ -1600,7 +1602,7 @@ class Tank(Node):
         Volume of the tank in cubic meters
 
     num_units : int
-        Number of tanks
+        Number of identical tanks in parallel
 
     tags : dict of Tag
         Data tags associated with this tank
@@ -1656,7 +1658,7 @@ class Tank(Node):
                 "Please add `num_units` attribute to `Tank`",
                 DeprecationWarning,
             )
-            return None
+            return 1
 
     def set_num_units(self, num_units):
         self._num_units = num_units
@@ -1747,7 +1749,7 @@ class StaticMixer(Tank):
         volume,
         dosing_rate,
         residence_time,
-        pH,
+        pH=None,
         num_units=1,
         tags={},
     ):
@@ -1795,7 +1797,7 @@ class StaticMixer(Tank):
             return self._num_units
         except AttributeError:
             warnings.warn(
-                "Please add `num_units` attribute to `Tank`",
+                "Please add `num_units` attribute to `StaticMixer`",
                 DeprecationWarning,
             )
             return 1
@@ -1969,7 +1971,7 @@ class Battery(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"energy_capacity:{self.energy_capacity} "
-            f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate}"
+            f"charge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate}"
             f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
 
