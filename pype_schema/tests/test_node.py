@@ -514,7 +514,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 10: return a single tag by "total" destination unit ID
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "SewerNetwork",
             None,
             None,
@@ -609,7 +609,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 15: bidirectional connection as source but searching for destination
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             None,
             "TeslaBattery",
             None,
@@ -628,7 +628,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 16: bidirectional connection as destination but searching for source
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "VirtualDemand",
             None,
             None,
@@ -868,7 +868,7 @@ def test_select_objs(
     "json_path, network_id, tag_id, tag_type, exit_point_id, expected",
     [
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Efficiency,
@@ -876,7 +876,7 @@ def test_select_objs(
             True,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             None,
@@ -884,7 +884,7 @@ def test_select_objs(
             True,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Flow,
@@ -892,7 +892,7 @@ def test_select_objs(
             False,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "PowerGrid",
             "ElectricityProductionByGasVolume",
             None,

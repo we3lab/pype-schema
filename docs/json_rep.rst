@@ -174,7 +174,7 @@ Putting all the above together, we have the following valid PyPES JSON represent
     }
 
 A more complex example is avaiable at 
-`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
+`wrrf_sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json>`_.
 
 .. _node_rep:
 
@@ -300,7 +300,7 @@ Below are two tables: first is all the ``Node`` subclasses and the second the at
 
     
 An example of how to define all the potential attributes is available in 
-`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
+`wrrf_sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json>`_.
 
 .. _conn_rep:
 
@@ -355,7 +355,7 @@ There are numerous types of connections, and each one has a number attributes.
     +------------+--------------------+----------------------+--------------------------+------------------------+-----------------------------+-------------------------------+-----------------------------+------------------------------+----------------------------+--------------------------+---------------------------------+--------------------------+---------------------------------+
 
 An example of how to define all the potential attributes is available in 
-`sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/sample.json>`_.
+`wrrf_sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json>`_.
 
 .. _tag_rep:
 

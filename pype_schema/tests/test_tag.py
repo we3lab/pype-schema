@@ -40,7 +40,7 @@ def test_init_errors(json_path, expected):
     "json_path, csv_path, tag_name, data_type, expected_path, expected_units",
     [
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "GrossGasProduction",
             "DataFrame",
@@ -48,7 +48,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "ElectricityProductionByGasVolume",
             "DataFrame",
@@ -56,7 +56,7 @@ def test_init_errors(json_path, expected):
             "kilowatt * hour * minute / (feet ** 3)",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "GrossGasProduction",
             "Dict",
@@ -64,7 +64,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "ElectricityProductionByGasVolume",
             "Dict",
@@ -72,7 +72,7 @@ def test_init_errors(json_path, expected):
             "kilowatt * hour * minute / (feet ** 3)",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "GrossGasProduction",
             "Array",
@@ -80,7 +80,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_array.csv",
             "GrossGasProduction",
             "Array",
@@ -88,7 +88,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_array.csv",
             "GrossGasProductionList",
             "List",
@@ -96,7 +96,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_array.csv",
             "GrossGasProduction",
             "Invalid",
@@ -104,7 +104,7 @@ def test_init_errors(json_path, expected):
             "SCFM",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "NoGasPurchases",
             "DataFrame",
@@ -112,7 +112,7 @@ def test_init_errors(json_path, expected):
             None,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "NoGasPurchases",
             "Dict",
@@ -120,7 +120,7 @@ def test_init_errors(json_path, expected):
             None,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/gas_purchases.csv",
             "NoGasPurchases",
             "Array",
@@ -128,7 +128,7 @@ def test_init_errors(json_path, expected):
             None,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/gas_purchases.csv",
             "NoGasPurchasesList",
             "List",
@@ -136,7 +136,7 @@ def test_init_errors(json_path, expected):
             None,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/sample_data.csv",
             "ElectricityGeneration_RShift2",
             "DataFrame",
@@ -144,7 +144,7 @@ def test_init_errors(json_path, expected):
             "kWh",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/elec_gen.csv",
             "ElectricityGeneration_RShift2_List",
             "List",
@@ -152,7 +152,7 @@ def test_init_errors(json_path, expected):
             "kWh",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/elec_gen.csv",
             "ElectricityGeneration_LShift1",
             "Dict",
@@ -160,7 +160,7 @@ def test_init_errors(json_path, expected):
             "kWh",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/elec_gen.csv",
             "ElectricityGeneration_LShift1_List",
             "List",
@@ -168,7 +168,7 @@ def test_init_errors(json_path, expected):
             "kWh",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/elec_gen.csv",
             "ElectricityGeneration_LShift1",
             "Invalid",
@@ -176,7 +176,7 @@ def test_init_errors(json_path, expected):
             "kWh",
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "data/elec_gen.csv",
             "ElectricityGenDelta",
             "Dict",
@@ -397,12 +397,12 @@ def test_tag_less_than(
     "json_path, tag_0_id, tag_1_id, expected",
     [
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "GrossGasProduction",
             "ElectricityProductionByGasVolume",
             True,
         ),
-        ("../data/sample.json", "GrossGasProduction", "CombinedDigesterGasFlow", False),
+        ("../data/wrrf_sample.json", "GrossGasProduction", "CombinedDigesterGasFlow", False),
     ],
 )
 def test_v_tag_less_than(json_path, tag_0_id, tag_1_id, expected):

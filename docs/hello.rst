@@ -15,14 +15,15 @@ For most users, the first step to using PyPES will be to pip install the Python 
 
     pip install pype-schema
 
-This installation should come with a sample facility configuration represented by `sample.json`. 
-To load this facility, run the following code from the `pype_schema/data` folder:
+This installation should come with two sample facility configurations: 
+one for water resource recovery (`wrrf_sample.json`) and one for desalination (`desal_sample.json`). 
+To load the water resource recovery facility (WRRF) example, run the following code from the `pype_schema/data` folder:
 
 .. code-block:: python
 
     from pype_schema.parse_json import JSONParser
 
-    parser = JSONParser("sample.json")
+    parser = JSONParser("wrrf_sample.json")
     network = parser.initialize_network()
 
 .. _model_struct:

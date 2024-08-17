@@ -18,7 +18,7 @@ pint.set_application_registry(u)
 @pytest.mark.parametrize(
     "json_path, expected_path, expected_boiler_efficiency",
     [
-        ("../data/sample.json", "data/sample.pkl", 0.8),
+        ("../data/wrrf_sample.json", "data/sample.pkl", 0.8),
         ("data/key_error.json", "KeyError", None),
         ("data/sample_nested_vtag.json", "data/sample_nested_vtag.pkl", None),
     ],
@@ -46,21 +46,21 @@ def test_create_network(json_path, expected_path, expected_boiler_efficiency):
     [
         (
             "data/sewer_expansion.json",
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             None,
             False,
             "data/merged.json",
         ),
         (
             "data/wwtp_expansion.json",
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             False,
             "data/merged_wwtp.json",
         ),
         (
             "data/wwtp_expansion.json",
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             True,
             "data/merged_wwtp.json",
@@ -86,10 +86,8 @@ def test_merge_network(
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-@pytest.mark.parametrize("json_path", [("../data/sample.json")])
-def test_to_json(
-    json_path,
-):
+@pytest.mark.parametrize("json_path", [("../data/wrrf_sample.json")])
+def test_to_json(json_path):
     expected = JSONParser(json_path).initialize_network()
     JSONParser.to_json(expected, "data/test_to_json.json", verbose=True)
     result = JSONParser("data/test_to_json.json").initialize_network()
