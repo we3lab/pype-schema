@@ -73,7 +73,12 @@ def test_set_heating_values(json_path, connection_name, expected):
     [
         ("../data/wrrf_sample.json", "GasToCogen", "DesalInlet", True),
         ("../data/wrrf_sample.json", "DesalOutlet", "DesalInlet", True),
-        ("../data/wrrf_sample.json", "ElectricToRecycledWater", "ElectricToDesal", False),
+        (
+            "../data/wrrf_sample.json",
+            "ElectricToRecycledWater",
+            "ElectricToDesal",
+            False,
+        ),
         ("../data/wrrf_sample.json", "CogenElecToFacility", "ElectricToDesal", False),
         ("../data/wrrf_sample.json", "GasToCogen", "CogenElecToFacility", "TypeError"),
     ],

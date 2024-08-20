@@ -402,7 +402,12 @@ def test_tag_less_than(
             "ElectricityProductionByGasVolume",
             True,
         ),
-        ("../data/wrrf_sample.json", "GrossGasProduction", "CombinedDigesterGasFlow", False),
+        (
+            "../data/wrrf_sample.json",
+            "GrossGasProduction",
+            "CombinedDigesterGasFlow",
+            False,
+        ),
     ],
 )
 def test_v_tag_less_than(json_path, tag_0_id, tag_1_id, expected):
