@@ -1554,7 +1554,7 @@ class Pump(Node):
     def set_efficiency(self, efficiency):
         self._efficiency = efficiency
 
-    def del_efficiency():
+    def del_efficiency(self):
         del self._efficiency
 
     def get_power_rating(self):
