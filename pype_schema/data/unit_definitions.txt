@@ -5,3 +5,5 @@ equivalent = mole = eq
 rev = revolution
 MGD = 1000000 * (gallon / day)
 british_thermal_unit = 1055.056 * joule = Btu = BTU
+flux_lmh = liter ** 2 / (hour * meter ** 2) = LMH
+permeability = LMH / bar

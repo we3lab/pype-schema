@@ -440,6 +440,53 @@ def parse_units(units):
                 or clean_units == "1/sec"
             ):
                 return u.Hz
+            elif (
+                clean_units == "lmh"
+                or clean_units == "liter**2/meters**2/hour"
+                or clean_units == "liter^2/meters^2/hour"
+                or clean_units == "liter2/meters2/hour"
+                or clean_units == "liter^2/hour/meters^2"
+                or clean_units == "liter**2/hour/meters**2"
+                or clean_units == "liter2/hour/meters2"
+                or clean_units == "l**2/m**2/h"
+                or clean_units == "l^2/m^2/h"
+                or clean_units == "l2/m2/h"
+                or clean_units == "l^2/h/m^2"
+                or clean_units == "l**2/h/m**2"
+                or clean_units == "l2/h/m2"
+            ):
+                return u.LMH
+            elif (
+                clean_units == "permeability"
+                or clean_units == "lmh/bar"
+                or clean_units == "flux_lmh/bar"
+                or clean_units == "liter**2/meters**2/hour/bar"
+                or clean_units == "liter^2/meters^2/hour/bar"
+                or clean_units == "liter2/meters2/hour/bar"
+                or clean_units == "liter^2/hour/meters^2/bar"
+                or clean_units == "liter**2/hour/meters**2/bar"
+                or clean_units == "liter2/hour/meters2/bar"
+                or clean_units == "l**2/m**2/h/bar"
+                or clean_units == "l^2/m^2/h/bar"
+                or clean_units == "l2/m2/h/bar"
+                or clean_units == "l^2/h/m^2/bar"
+                or clean_units == "l**2/h/m**2/bar"
+                or clean_units == "l2/h/m2/bar"
+            ):
+                return u.LMH / u.bar
+            elif (
+                clean_units == "intensity"
+                or clean_units == "w/m**2"
+                or clean_units == "w/m^2"
+                or clean_units == "w/m2"
+                or clean_units == "w/meter**2"
+                or clean_units == "w/meter^2"
+                or clean_units == "w/meter2"
+                or clean_units == "watt/meter**2"
+                or clean_units == "watt/meter^2"
+                or clean_units == "watt/meter2"
+            ):
+                return u.W / (u.m ** 2)
             else:
                 raise UndefinedUnitError("Unsupported unit: " + units)
 
@@ -485,6 +532,14 @@ class ContentsType(Enum):
     IndustrialWastewater = auto()
     MunicipalWastewater = auto()
     DisinfectedEffluent = auto()
+    SolidWaste = auto()
+    PretreatedWater = auto()
+    ProductWater = auto()
+    ChlorinatedSeawater = auto()
+    CoagulatedWater = auto()
+    FilterBackwash = auto()
+    Filtrate = auto()
+    WFBS = auto()  # Water Filter Backwash Solids
 
 
 class PumpType(Enum):

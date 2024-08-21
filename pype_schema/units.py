@@ -108,6 +108,8 @@ Other Units
 * ``u.joule`` = ``u.J``
 * ``u.mole`` = ``u.mol`` = ``u.equivalent`` = ``u.eq``
 * ``u.NTU`` = 1.47 * (``u.mg`` / ``u.L``)
+* ``u.BTU`` = 1055.056 * ``u.J``
+* ``u.LMH`` = ``u.liter`` ** 2 / (``u.hour`` * ``u.meter`` ** 2)
 
   * This turbidity-concentration relation applies to kaolinite clay and is
     obtained from `Coagulation behavior of polyaluminum chloride (Wei et al.,
