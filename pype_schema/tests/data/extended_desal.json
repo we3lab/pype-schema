@@ -1,0 +1,187 @@
+{
+    "nodes": [
+        "DesalPlant",
+        "PacificOcean"
+    ],
+    "connections": [
+        "OceanIntake",
+        "DesalProductOutlet",
+        "BrineDisposal",
+        "WaterDistribution"
+    ],
+    "virtual_tags": {},
+    "WaterDistribution": {
+        "type": "Network",
+        "contents": "DrinkingWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "DesalPlant": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Seawater",
+        "output_contents": ["DrinkingWater", "Brine"],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "nodes": [
+            "Pretreatment",
+            "ROMembranes",
+            "PressureExchanger",
+            "Postreatment"
+        ],
+        "connections": [
+            "PretreatmentToROModule",
+            "ROModuleToPosttreatment"
+        ]
+    },
+    "BrineDisposal": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "PacificOcean",
+        "exit_point": "ROModule",
+        "contents": "Brine",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "OceanIntake": {
+        "type": "Pipe",
+        "source": "PacificOcean",
+        "destination": "DesalPlant",
+        "entry_point": "ChlorinationBasin",
+        "contents": "Seawater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "DesalProductOutlet": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "exit_point": "Postreatment",
+        "contents": "DrinkingWater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "PacificOcean": {
+        "type": "Reservoir",
+        "contents": ["TreatedSewage", "Brine", "Seawater"],
+        "tags": {}
+    },
+    "Pretreatment": {
+        "type": "Network",
+        "input_contents": "Seawater",
+        "output_contents": "PretreatedWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "Posttreatment": {
+        "type": "Network",
+        "input_contents": "ProductWater",
+        "output_contents": "DrinkingWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "ROMembranes": {
+        "type": "ROMembrane",
+        "input_contents": ["PretreatedWater"],
+        "output_contents": ["Brine", "ProductWater"],
+        "volume": null,
+        "num_units": 3,
+        "area": {
+            "value": 1,
+            "units": "m^2"
+        },
+        "permeability": {
+            "value": 2,
+            "units": "LMH / bar"
+        },
+        "selectivity": {
+            "value": 2,
+            "units": "m / s"
+        },
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        }, 
+        "tags": {}
+    },
+    "PressureExchanger": {
+        "type": "Pump",
+        "pump_type": "ERD",
+        "contents": ["Brine", "PretreatedWater"],
+        "num_units": null,
+        "power_rating": null,
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "PressureExchangerDisposal": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "PacificOcean",
+        "exit_point": "PressureExchanger",
+        "contents": "Brine",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "PretreatToPressureExchanger": {
+        "type": "Pipe",
+        "source": "CartridgeFilter",
+        "destination": "PressureExchanger",
+        "contents": "PretreatedWater",
+        "tags": {}
+    },
+    "PressureExchangerToRO": {
+        "type": "Pipe",
+        "source": "PressureExchanger",
+        "destination": "ROMembranes",
+        "contents": "PretreatedWater",
+        "tags": {}
+    },
+    "ROToPressureExchanger": {
+        "type": "Pipe",
+        "source": "ROMembranes",
+        "destination": "PressureExchanger",
+        "contents": "Brine",
+        "tags": {}
+    },
+    "ROMembranesToPostreatment": {
+        "type": "Pipe",
+        "source": "ROMembranes",
+        "destination": "Postreatment",
+        "contents": "ProductWater",
+        "tags": {}
+    }
+}

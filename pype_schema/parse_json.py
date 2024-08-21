@@ -237,13 +237,13 @@ class JSONParser:
 
         Parameters
         ----------
-        new_network: str or pype_schema.Network
+        new_network : str or pype_schema.Network
             JSON file path or Network objet to merge with `self`
 
-        target_node_id: str
+        target_node_id : str
             ID of the node to expend, must be in the old_network
 
-        connections_path: str
+        connections_path : str
             JSON file path to the connections connecting
             the new network to the old network
 
@@ -261,7 +261,6 @@ class JSONParser:
         pype_schema.node.Network:
             Modified network object
         """
-
         if isinstance(new_network, str) and new_network.endswith("json"):
             new_network = JSONParser(new_network).initialize_network()
         if not isinstance(new_network, node.Network):

@@ -94,3 +94,23 @@ def test_to_json(json_path):
     JSONParser.to_json(expected, "data/test_to_json.json", verbose=True)
     result = JSONParser("data/test_to_json.json").initialize_network()
     assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "unextend_json, extension, target_node_id, conn_path, extend_json", 
+    [
+        (
+            "data/unextend_desal.json", 
+            "data/modular_unit.json", 
+            "ROModule",
+            "data/mod_unit_conn.json",
+            "data/extended_desal.json"
+        ), 
+    ]
+)
+def test_extend_node(unextend_json, extension, target_node_id, conn_path, extend_json):
+    old_network = JSONParser(unextend_json).initialize_network()
+    result = old_network.extend_node(extension, target_node_id, conn_path)
+    expected = JSONParser(extend_json).initialize_network()
+    assert result == expected

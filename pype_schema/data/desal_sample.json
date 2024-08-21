@@ -114,6 +114,7 @@
         "type": "Pipe",
         "source": "DesalPlant",
         "destination": "WaterDistribution",
+        "exit_point": "PostreatTank",
         "contents": "DrinkingWater",
         "flowrate": {
             "max": null,
