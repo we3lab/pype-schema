@@ -86,7 +86,9 @@ def test_merge_network(
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-@pytest.mark.parametrize("json_path", [("../data/wrrf_sample.json"), ("../data/desal_sample.json")])
+@pytest.mark.parametrize(
+    "json_path", [("../data/wrrf_sample.json"), ("../data/desal_sample.json")]
+)
 def test_to_json(json_path):
     expected = JSONParser(json_path).initialize_network()
     JSONParser.to_json(expected, "data/test_to_json.json", verbose=True)

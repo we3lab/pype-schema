@@ -486,7 +486,7 @@ def parse_units(units):
                 or clean_units == "watt/meter^2"
                 or clean_units == "watt/meter2"
             ):
-                return u.W / (u.m ** 2)
+                return u.W / (u.m**2)
             else:
                 raise UndefinedUnitError("Unsupported unit: " + units)
 

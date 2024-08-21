@@ -1,11 +1,12 @@
 import json
 import pint
+import copy
 import warnings
+from collections import defaultdict
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
 from . import utils
-import copy
 
 
 class JSONParser:
@@ -377,7 +378,7 @@ class JSONParser:
 
         min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
         dosing_rate = self.parse_dosing_rate(
-            self.config[node_id].get("dosing_rate", {})
+            self.config[node_id].get("dosing_rate", defaultdict(float))
         )
 
         # create correct type of node class
@@ -416,7 +417,7 @@ class JSONParser:
                     nodes={},
                     connections={},
                 )
-            
+
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
             for new_connection in self.config[node_id]["connections"]:
@@ -630,7 +631,7 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Filtration":
             settling_time = self.parse_unit_val_dict(
-               self.config[node_id].get("settling_time")
+                self.config[node_id].get("settling_time", {"value": 0.0})
             )
             node_obj = node.Filtration(
                 node_id,
@@ -654,7 +655,7 @@ class JSONParser:
                 self.config[node_id].get("selectivity")
             )
             settling_time = self.parse_unit_val_dict(
-               self.config[node_id].get("settling_time")
+                self.config[node_id].get("settling_time", {"value": 0.0})
             )
             node_obj = node.ROMembrane(
                 node_id,
@@ -1394,14 +1395,14 @@ class JSONParser:
             Dictionary in JSON-readable format. I.e., {
                 ``DosingTypeA``: {
                     ``value``: `float`
-                    
+
                     ``units``: `str`
 
                 }
 
                 ``DosingTypeB``: {
                     ``value``: `float`
-                    
+
                     ``units``: `str`
 
                 }
@@ -1412,7 +1413,7 @@ class JSONParser:
         for k, v in dosing_dict.items():
             new_v = JSONParser.unit_val_to_dict(v)
             new_dosing_dict[k.name] = new_v
-        
+
         return new_dosing_dict
 
     @staticmethod
@@ -1805,7 +1806,7 @@ class JSONParser:
                 node_obj, "gen_capacity"
             )
             node_dict["num_units"] = node_obj.num_units
-        elif isinstance(node_obj, (node.Disinfection, node.Chlorination)):
+        elif isinstance(node_obj, node.Disinfection):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
@@ -1816,7 +1817,17 @@ class JSONParser:
             node_dict["residence_time"] = JSONParser.unit_val_to_dict(
                 node_obj.residence_time
             )
-            node_dict["dosing_rate"] = JSONParser.dosing_to_dict(node_obj.dosing_rate)
+            if isinstance(node_obj, node.UVSystem):
+                node_dict["area"] = JSONParser.unit_val_to_dict(
+                    node_obj.dosing_area[utils.DosingType["UVLight"]]
+                )
+                node_dict["intensity"] = JSONParser.unit_val_to_dict(
+                    node_obj.dosing_rate[utils.DosingType["UVLight"]]
+                )
+            else:
+                node_dict["dosing_rate"] = JSONParser.dosing_to_dict(
+                    node_obj.dosing_rate
+                )
         elif isinstance(node_obj, node.Filtration):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
@@ -1828,23 +1839,16 @@ class JSONParser:
             node_dict["settling_time"] = JSONParser.unit_val_to_dict(
                 node_obj.settling_time
             )
-        elif isinstance(node_obj, node.UVSystem):
-            if node_obj.volume is not None:
-                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+            node_dict["dosing_rate"] = JSONParser.dosing_to_dict(node_obj.dosing_rate)
 
-            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
-                node_obj, "flow_rate"
-            )
-            node_dict["residence_time"] = JSONParser.unit_val_to_dict(
-                node_obj.residence_time
-            )
-            node_dict["num_units"] = node_obj.num_units
-            node_dict["area"] = JSONParser.unit_val_to_dict(
-                node_obj.dosing_area[utils.DosingType["UVLight"]]
-            )
-            node_dict["intensity"] = JSONParser.unit_val_to_dict(
-                node_obj.dosing_rate[utils.DosingType["UVLight"]]
-            )
+            if isinstance(node_obj, node.ROMembrane):
+                node_dict["area"] = JSONParser.unit_val_to_dict(node_obj.area)
+                node_dict["selectivity"] = JSONParser.unit_val_to_dict(
+                    node_obj.selectivity
+                )
+                node_dict["permeability"] = JSONParser.unit_val_to_dict(
+                    node_obj.permeability
+                )
         elif isinstance(node_obj, (node.Reactor, node.StaticMixer)):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
@@ -1858,24 +1862,6 @@ class JSONParser:
             )
             node_dict["dosing_rate"] = JSONParser.dosing_to_dict(node_obj.dosing_rate)
             node_dict["pH"] = node_obj.pH
-        elif isinstance(node_obj, node.ROMembrane):
-            if node_obj.volume is not None:
-                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
-
-            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
-                node_obj, "flow_rate"
-            )
-            node_dict["num_units"] = node_obj.num_units
-            node_dict["area"] = JSONParser.unit_val_to_dict(node_obj.area)
-            node_dict["selectivity"] = JSONParser.unit_val_to_dict(
-                node_obj.selectivity
-            )
-            node_dict["permeability"] = JSONParser.unit_val_to_dict(
-                node_obj.permeability
-            )
-            node_dict["settling_time"] = JSONParser.unit_val_to_dict(
-                node_obj.settling_time
-            )
         elif isinstance(node_obj, (node.Thickening, node.Aeration, node.Clarification)):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)

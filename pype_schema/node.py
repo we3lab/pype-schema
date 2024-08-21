@@ -74,14 +74,14 @@ class Node(ABC):
             if isinstance(k, utils.DosingType):
                 dosing_dict[k] = v
             else:
-                if (k not in utils.DosingType.__members__):
+                if k not in utils.DosingType.__members__:
                     raise ValueError(f"{k} is not a valid dosing type")
                 dosing_dict[utils.DosingType[k]] = v
 
         if mode == "rate":
-            self.dosing_rate = dosing_dict
+            self._dosing_rate = dosing_dict
         elif mode == "area":
-            self.dosing_area = dosing_dict
+            self._dosing_area = dosing_dict
 
     def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and design flow rate of the node
@@ -1157,7 +1157,7 @@ class Network(Node):
 
 
 class Facility(Network):
-    """A class representing any industrial facility 
+    """A class representing any industrial facility
     from wastewater treatment to desalination to solid waste management.
 
     Parameters
@@ -1372,7 +1372,7 @@ class ModularUnit(Network):
 
 
 class Pump(Node):
-    """Any kind of pump, such as constant speed, variable frequency drive (VFD), 
+    """Any kind of pump, such as constant speed, variable frequency drive (VFD),
     energy recovery device (ERD), and air blower.
 
 
@@ -1517,7 +1517,7 @@ class Pump(Node):
         )
 
     def set_pump_type(self, pump_type):
-        """Set the pump type, such as variable frequency drive (VFD) 
+        """Set the pump type, such as variable frequency drive (VFD)
         or energy recovery device (ERD).
 
         Parameters
@@ -1550,7 +1550,7 @@ class Pump(Node):
         except AttributeError:
             warnings.warn("Please add `efficiency` attribute", DeprecationWarning)
             return None
-    
+
     def set_efficiency(self, efficiency):
         self._efficiency = efficiency
 
@@ -1584,10 +1584,10 @@ class Pump(Node):
 
 
 class Tank(Node):
-    """A generic class to represent a storage tank. 
-    Any `input_contents` and `output_contents` can be provided 
+    """A generic class to represent a storage tank.
+    Any `input_contents` and `output_contents` can be provided
     and metadata such as `volume` and `elevation` can be specified.
-    
+
     Parameters
     ----------
     id : str
@@ -1803,7 +1803,7 @@ class Reactor(Node):
         self.design_flow = design_flow
         self.num_units = num_units
         self.volume = volume
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.pH = pH
         self.residence_time = residence_time
         self.tags = tags
@@ -1835,8 +1835,20 @@ class Reactor(Node):
             and self.tags == other.tags
         )
 
+    def get_dosing_rate(self):
+        return self._dosing_rate
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
+
+
 class StaticMixer(Reactor):
-    """A tank containing a static mixer, 
+    """A tank containing a static mixer,
     typically used for coagulation in water treatment.
 
     Parameters
@@ -1940,7 +1952,7 @@ class StaticMixer(Reactor):
         self.design_flow = design_flow
         self.num_units = num_units
         self.volume = volume
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.pH = pH
         self.residence_time = residence_time
         self.tags = tags
@@ -2350,7 +2362,7 @@ class Digestion(Node):
 
 
 class Cogeneration(Node):
-    """A class representing a cogeneration engine that produces 
+    """A class representing a cogeneration engine that produces
     both heat and electricity through biogas and/or natural gas combustion.
 
     Parameters
@@ -2954,7 +2966,7 @@ class Filtration(Node):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.settling_time = settling_time
 
     def __repr__(self):
@@ -2985,6 +2997,21 @@ class Filtration(Node):
             and self.settling_time == other.settling_time
             and self.tags == other.tags
         )
+
+    def get_dosing_rate(self):
+        try:
+            return self._dosing_rate
+        except AttributeError:
+            warnings.warn("Please add `dosing_rate` attribute", DeprecationWarning)
+            return defaultdict(float)
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
 
 
 class ROMembrane(Filtration):
@@ -3024,7 +3051,7 @@ class ROMembrane(Filtration):
 
     selectivity : float
         Selectivity of the RO membrane
-    
+
     dosing_rate : dict of DosingType:float
         Dosing information for the RO membrane (key: DosingType, value: rate)
 
@@ -3108,7 +3135,7 @@ class ROMembrane(Filtration):
         self.area = area
         self.permeability = permeability
         self.selectivity = selectivity
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.settling_time = settling_time
 
     def __repr__(self):
@@ -3147,7 +3174,7 @@ class ROMembrane(Filtration):
 
 
 class Screening(Node):
-    """A class representing the screening process for removing  
+    """A class representing the screening process for removing
     large solids from the intake of a facility, such as a bar screen.
 
     Parameters
@@ -3356,7 +3383,7 @@ class Conditioning(Node):
 
 class Thickening(Node):
     """A class to represent a general thickener,
-    such as gravity belt, dissolved air float (DAF), 
+    such as gravity belt, dissolved air float (DAF),
     or centrifugal thickening.
 
     Parameters
@@ -3470,7 +3497,7 @@ class Thickening(Node):
 
 class Aeration(Node):
     """A generic class for an aeration basin.
-    
+
     Parameters
     ----------
     id : str
@@ -3678,7 +3705,7 @@ class Disinfection(Node):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.residence_time = residence_time
 
     def __repr__(self):
@@ -3710,6 +3737,37 @@ class Disinfection(Node):
             and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
+
+    def get_residence_time(self):
+        try:
+            return self._res_time
+        except AttributeError:
+            warnings.warn("Please add `residence_time` attribute", DeprecationWarning)
+            return None
+
+    def set_residence_time(self, residence_time):
+        self._res_time = residence_time
+
+    def del_residence_time(self):
+        del self._res_time
+
+    def get_dosing_rate(self):
+        try:
+            return self._dosing_rate
+        except AttributeError:
+            warnings.warn("Please add `dosing_rate` attribute", DeprecationWarning)
+            return defaultdict(float)
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    residence_time = property(
+        get_residence_time, set_residence_time, del_residence_time
+    )
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
 
 
 class Chlorination(Disinfection):
@@ -3809,7 +3867,7 @@ class Chlorination(Disinfection):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
-        self.set_dosing(dosing_rate, mode="rate")
+        self.set_dosing_rate(dosing_rate)
         self.residence_time = residence_time
 
     def __repr__(self):
@@ -3848,10 +3906,16 @@ class UVSystem(Disinfection):
     Parameters
     ----------
     id : str
-        UVSystem ID
+        UV System ID
+
+    input_contents : list of ContentsType
+        Contents entering the UV system
+
+    output_contents : list of ContentsType
+        Contents leaving the UV system
 
     num_units : int
-        Number of chlorinators running in parallel
+        Number of UV systems running in parallel
 
     residence_time : pint.Quantity or float
         Time in seconds that the water is exposed to UV light
@@ -3860,7 +3924,7 @@ class UVSystem(Disinfection):
         Intensity of the UV light in W/m^2
 
     area : pint.Quantity or float
-        Area of the UV system
+        Application area of the UV light in m^2
 
     tags : dict of Tag
         Data tags associated with this chlorinator
@@ -3910,8 +3974,8 @@ class UVSystem(Disinfection):
         self.num_units = num_units
         self.volume = volume
         self.residence_time = residence_time
-        self.set_dosing({"UVLight": intensity}, mode="rate")
-        self.set_dosing({"UVLight": area}, mode="area")
+        self.set_dosing_rate({"UVLight": intensity})
+        self.set_dosing_area({"UVLight": area})
         self.tags = tags
 
     def __repr__(self):
@@ -3941,6 +4005,17 @@ class UVSystem(Disinfection):
             and self.dosing_area == other.dosing_area
             and self.tags == other.tags
         )
+
+    def get_dosing_area(self):
+        return self._dosing_area
+
+    def set_dosing_area(self, dosing_area):
+        self.set_dosing(dosing_area, mode="area")
+
+    def del_dosing_area(self):
+        del self._dosing_area
+
+    dosing_area = property(get_dosing_area, set_dosing_area, del_dosing_area)
 
 
 class Flaring(Node):

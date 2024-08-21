@@ -270,8 +270,8 @@
             "units": "LMH / bar"
         },
         "selectivity": {
-            "value": 95,
-            "units": "percent"
+            "value": 2,
+            "units": "m / s"
         },
         "flowrate": {
             "min": null,

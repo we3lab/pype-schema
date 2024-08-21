@@ -837,9 +837,9 @@ class Delivery(Connection):
 
     frequency : pint.Quantity or float
         If a pint quantity it will be interpreted based on units.
-        E.g., `0.25 days` will be interpreted as 0.25 days between deliveries, 
-        or in other words 4 deliveries per day. 
-        Whereas `0.25 / day` would indicate there is a quarter of a delivery per day, 
+        E.g., `0.25 days` will be interpreted as 0.25 days between deliveries,
+        or in other words 4 deliveries per day.
+        Whereas `0.25 / day` would indicate there is a quarter of a delivery per day,
         or more intuitively 4 days between each delivery.
         If unitless, assumed to be number of days between delivery
 
@@ -905,7 +905,7 @@ class Delivery(Connection):
         self.bidirectional = bidirectional
         self.exit_point = exit_point
         self.entry_point = entry_point
-        
+
     def __repr__(self):
         if self.exit_point is None:
             exit_point_id = "None"
