@@ -3,7 +3,7 @@
     "connections": [
         "PressureExchangerDisposal", 
         "PretreatToPressureExchanger",
-        "ROMembranesToPostreatment"
+        "ROMembranesToPosttreatment"
     ],
     "virtual_tags": {},
     "ROModule": {
@@ -93,10 +93,10 @@
         "contents": "Brine",
         "tags": {}
     },
-    "ROMembranesToPostreatment": {
+    "ROMembranesToPosttreatment": {
         "type": "Pipe",
         "source": "ROMembranes",
-        "destination": "Postreatment",
+        "destination": "Posttreatment",
         "contents": "ProductWater",
         "tags": {}
     }

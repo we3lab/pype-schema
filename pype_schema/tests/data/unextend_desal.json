@@ -1,13 +1,13 @@
 {
     "nodes": [
         "DesalPlant",
-        "PacificOcean"
+        "PacificOcean",
+        "WaterDistribution"
     ],
     "connections": [
         "OceanIntake",
         "DesalProductOutlet",
-        "WaterDistribution",
-        "PressureExchangerDisposal"
+        "BrineDisposal"
     ],
     "virtual_tags": {},
     "WaterDistribution": {
@@ -31,13 +31,11 @@
         "nodes": [
             "Pretreatment",
             "ROModule",
-            "Postreatment"
+            "Posttreatment"
         ],
         "connections": [
-            "PretreatToPressureExchanger",
-            "ROMembranesToPostreatment",
-            "ROToPressureExchanger",
-            "PressureExchangerToRO"
+            "PretreatmentToROModule",
+            "ROModuleToPosttreatment"
         ]
     },
     "BrineDisposal": {
@@ -72,7 +70,7 @@
         "type": "Pipe",
         "source": "DesalPlant",
         "destination": "WaterDistribution",
-        "exit_point": "Postreatment",
+        "exit_point": "Posttreatment",
         "contents": "DrinkingWater",
         "flowrate": {
             "max": null,
@@ -115,7 +113,7 @@
         "type": "Pipe",
         "source": "Pretreatment",
         "destination": "ROModule",
-        "contents": "PreatreatedWater",
+        "contents": "PretreatedWater",
         "flowrate": {
             "max": null,
             "min": null,
@@ -124,10 +122,10 @@
         },
         "tags": {}
     },
-    "ROModuleToPostreatment": {
+    "ROModuleToPosttreatment": {
         "type": "Pipe",
         "source": "ROModule",
-        "destination": "Postreatment",
+        "destination": "Posttreatment",
         "contents": "ProductWater",
         "flowrate": {
             "max": null,

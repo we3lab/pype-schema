@@ -32,11 +32,13 @@
             "Pretreatment",
             "ROMembranes",
             "PressureExchanger",
-            "Postreatment"
+            "Posttreatment"
         ],
         "connections": [
-            "PretreatmentToROModule",
-            "ROModuleToPosttreatment"
+            "PretreatToPressureExchanger",
+            "ROMembranesToPosttreatment",
+            "ROToPressureExchanger",
+            "PressureExchangerToRO"
         ]
     },
     "BrineDisposal": {
@@ -71,7 +73,7 @@
         "type": "Pipe",
         "source": "DesalPlant",
         "destination": "WaterDistribution",
-        "exit_point": "Postreatment",
+        "exit_point": "Posttreatment",
         "contents": "DrinkingWater",
         "flowrate": {
             "max": null,
@@ -177,10 +179,10 @@
         "contents": "Brine",
         "tags": {}
     },
-    "ROMembranesToPostreatment": {
+    "ROMembranesToPosttreatment": {
         "type": "Pipe",
         "source": "ROMembranes",
-        "destination": "Postreatment",
+        "destination": "Posttreatment",
         "contents": "ProductWater",
         "tags": {}
     }

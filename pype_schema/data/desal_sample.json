@@ -63,7 +63,7 @@
             "ROModule",
             "ProductTank",
             "UV-AOPReactor",
-            "PostreatTank",
+            "PosttreatTank",
             "BackwashPump",
             "BackwashThickener"
         ],
@@ -114,7 +114,7 @@
         "type": "Pipe",
         "source": "DesalPlant",
         "destination": "WaterDistribution",
-        "exit_point": "PostreatTank",
+        "exit_point": "PosttreatTank",
         "contents": "DrinkingWater",
         "flowrate": {
             "max": null,
@@ -318,7 +318,7 @@
         }, 
         "tags": {}
     },
-    "PostreatTank": {
+    "PosttreatTank": {
         "type": "Reactor",
         "num_units": 1,
         "elevation (meters)": null,
@@ -431,7 +431,7 @@
     "UV-AOPReactorToPosttreatTank": {
         "type": "Pipe",
         "source": "UV-AOPReactor",
-        "destination": "PostreatTank",
+        "destination": "PosttreatTank",
         "contents": "ProductWater",
         "tags": {}
     }
