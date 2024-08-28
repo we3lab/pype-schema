@@ -114,6 +114,4 @@ def test_extend_node(unextend_json, extension, target_node_id, conn_path, extend
     old_network = parser.initialize_network()
     result = parser.extend_node(extension, target_node_id, conn_path, verbose=True)
     expected = JSONParser(extend_json).initialize_network()
-    print(result)
-    print(expected)
     assert result == expected

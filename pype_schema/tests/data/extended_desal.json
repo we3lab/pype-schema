@@ -7,7 +7,7 @@
     "connections": [
         "OceanIntake",
         "DesalProductOutlet",
-        "PressureExchangerDisposal"
+        "ROModule-PressureExchangerDisposal"
     ],
     "virtual_tags": {},
     "WaterDistribution": {
@@ -30,15 +30,15 @@
         },
         "nodes": [
             "Pretreatment",
-            "ROMembranes",
-            "PressureExchanger",
+            "ROModule-ROMembranes",
+            "ROModule-PressureExchanger",
             "Posttreatment"
         ],
         "connections": [
-            "PretreatToPressureExchanger",
-            "ROMembranesToPosttreatment",
-            "ROToPressureExchanger",
-            "PressureExchangerToRO"
+            "ROModule-PretreatToPressureExchanger",
+            "ROModule-ROMembranesToPosttreatment",
+            "ROModule-ROToPressureExchanger",
+            "ROModule-PressureExchangerToRO"
         ]
     },
     "OceanIntake": {
@@ -90,7 +90,7 @@
         "nodes": [],
         "connections": []
     },
-    "ROMembranes": {
+    "ROModule-ROMembranes": {
         "type": "ROMembrane",
         "input_contents": ["PretreatedWater"],
         "output_contents": ["Brine", "ProductWater"],
@@ -116,7 +116,7 @@
         }, 
         "tags": {}
     },
-    "PressureExchanger": {
+    "ROModule-PressureExchanger": {
         "type": "Pump",
         "pump_type": "ERD",
         "contents": ["Brine", "PretreatedWater"],
@@ -130,11 +130,11 @@
         },
         "tags": {}
     },
-    "PressureExchangerDisposal": {
+    "ROModule-PressureExchangerDisposal": {
         "type": "Pipe",
         "source": "DesalPlant",
         "destination": "PacificOcean",
-        "exit_point": "PressureExchanger",
+        "exit_point": "ROModule-PressureExchanger",
         "contents": "Brine",
         "flowrate": {
             "max": null,
@@ -144,30 +144,30 @@
         },
         "tags": {}
     },
-    "PretreatToPressureExchanger": {
+    "ROModule-PretreatToPressureExchanger": {
         "type": "Pipe",
         "source": "Pretreatment",
-        "destination": "PressureExchanger",
+        "destination": "ROModule-PressureExchanger",
         "contents": "PretreatedWater",
         "tags": {}
     },
-    "PressureExchangerToRO": {
+    "ROModule-PressureExchangerToRO": {
         "type": "Pipe",
-        "source": "PressureExchanger",
-        "destination": "ROMembranes",
+        "source": "ROModule-PressureExchanger",
+        "destination": "ROModule-ROMembranes",
         "contents": "PretreatedWater",
         "tags": {}
     },
-    "ROToPressureExchanger": {
+    "ROModule-ROToPressureExchanger": {
         "type": "Pipe",
-        "source": "ROMembranes",
-        "destination": "PressureExchanger",
+        "source": "ROModule-ROMembranes",
+        "destination": "ROModule-PressureExchanger",
         "contents": "Brine",
         "tags": {}
     },
-    "ROMembranesToPosttreatment": {
+    "ROModule-ROMembranesToPosttreatment": {
         "type": "Pipe",
-        "source": "ROMembranes",
+        "source": "ROModule-ROMembranes",
         "destination": "Posttreatment",
         "contents": "ProductWater",
         "tags": {}

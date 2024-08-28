@@ -322,36 +322,27 @@ class JSONParser:
                 modified_network.remove_connection(connection_obj.id, recurse=True)
                 if verbose:
                     print("Removed connection:", connection_obj.id)
-        # add the target node to the correct level of the network
-        if new_network.id == target_node_id:
-            new_target_node = new_network
-        else:
-            new_target_node = new_network.get_node(target_node_id, recurse=True)
-        new_target_node = self.prefix_children(new_target_node, target_node_id)
-        parent_obj_id = self.network_obj.get_parent(new_target_node).id
+        # get the parent of the target node so we are at the correct level of the network
+        parent_obj_id = self.network_obj.get_parent(
+            self.network_obj.get_node(target_node_id, recurse=True)
+        ).id
         if parent_obj_id == "ParentNetwork":
-            modified_network.add_node(new_target_node)
+            parent_network = modified_network
         else:
-            modified_network.get_node(parent_obj_id, recurse=True).add_node(new_target_node)
-        if verbose:
-            print("Added node:", target_node_id)
-        # Note that when removing connections we had recurse=True but when adding them the
-        # parent nodes will contain recursive connections so we can switch to recurse=False
-        for connection_obj in new_network.get_all_connections(recurse=True):
-            entry_point_id = None if connection_obj.entry_point == None else connection_obj.entry_point.id
-            exit_point_id = None if connection_obj.exit_point == None else connection_obj.exit_point.id
-            if (
-                target_node_id == connection_obj.source.id
-                or target_node_id == connection_obj.destination.id
-                or target_node_id == entry_point_id
-                or target_node_id == exit_point_id
-            ):
-                connection_obj.id = f"{target_node_id}-{connection_obj.id}"
-                parent_obj_id = self.network_obj.get_parent(connection_obj).id
-                if parent_obj_id == "ParentNetwork":
-                    modified_network.add_connection(connection_obj)
-                else:
-                    modified_network.get_node(parent_obj_id, recurse=True).add_connection(connection_obj)
+            parent_network = modified_network.get_node(parent_obj_id, recurse=True)
+        # get just the new target node if it is not the entirety of the new network
+        try:
+            new_target_node = new_network.get_node(target_node_id, recurse=True)
+        except KeyError:
+            new_target_node = new_network
+        # modify the names of the child nodes and connections to avoid namespace collisions
+        new_target_node = self.prefix_children(new_target_node, target_node_id)
+        for node_obj in new_target_node.nodes.values():
+            parent_network.add_node(node_obj)
+            if verbose:
+                print("Added node:", node_obj.id)
+        for connection_obj in new_target_node.connections.values():
+            parent_network.add_connection(connection_obj)
             if verbose:
                 print("Added connection:", connection_obj.id)
         with open(connections_path, "r") as f:
@@ -365,13 +356,14 @@ class JSONParser:
                     self.config["connections"].append(f"{target_node_id}-{connection_id}")
                 else:
                     self.config[parent_id]["connections"].append(f"{target_node_id}-{connection_id}")
+            new_network_node_ids = [node_obj.id for node_obj in new_network.get_all_nodes(recurse=True)]
             # create the Connection object
             for k, v in list(config.items()):
                 if k == "connections":
                     continue
                 for field in ["source", "exit_point", "destination", "entry_point"]:
                     if (
-                        v.get(field) in new_network.nodes.keys() 
+                        v.get(field) in new_network_node_ids
                         and v[field] != target_node_id
                     ):
                         v[field] = f"{target_node_id}-{v[field]}"
@@ -967,12 +959,6 @@ class JSONParser:
         dest_id = self.config[connection_id].get("destination")
         if dest_id:
             destination = node_obj.get_node(dest_id)
-
-        if verbose:
-            print("source_id:", source_id)
-            print("source:", source)
-            print("dest_id:", dest_id)
-            print("destination:", destination)
 
         entry_point = self.config[connection_id].get("entry_point")
         if entry_point:

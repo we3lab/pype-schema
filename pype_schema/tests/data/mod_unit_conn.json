@@ -29,7 +29,7 @@
     },
     "ROMembranesToPosttreatment": {
         "type": "Pipe",
-        "source": "ROModule",
+        "source": "ROMembranes",
         "destination": "Posttreatment",
         "contents": "ProductWater",
         "parent_id": "DesalPlant",
