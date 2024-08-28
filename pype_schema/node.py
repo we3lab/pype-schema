@@ -528,6 +528,30 @@ class Node(ABC):
 
         return parent_obj
 
+    def get_parent(self, child_obj):
+        """Gets the parent object of a `Tag`, `Connection`, or `Node` object, 
+        as long as both `child_obj` and its parent object are children of `self`
+
+        Parameters
+        ----------
+        child_obj : `Tag`, `VirtualTag`, `Connection`, or `Node`
+            object for which we want the parent object
+
+        Returns
+        -------
+        Node or Connection
+            parent object of `child_obj`
+        """
+        if isinstance(child_obj, (Tag, VirtualTag)):
+            return self.get_parent_from_tag(child_obj)
+        elif child_obj.id in self.connections.keys() or child_obj.id in self.nodes.keys():
+            return self
+        else:
+            children = self.get_all_nodes(recurse=True)
+            for child in children:
+                if child_obj.id in child.connections.keys() or child_obj.id in child.nodes.keys():
+                    return child
+
     def select_tags(
         self,
         tag,
@@ -1086,7 +1110,7 @@ class Network(Node):
         """
         self.nodes[node.id] = node
 
-    def remove_node(self, node_name):
+    def remove_node(self, node_name, recurse=False):
         """Removes a node from the network
 
         Parameters
@@ -1094,12 +1118,26 @@ class Network(Node):
         node_name : str
             name of node to remove
 
+        recurse : bool
+            Whether or not to removed nodes recursively.
+            Default is False, meaning that only direct children will be removed.
+
         Raises
         ------
         KeyError
             if `node_name` is not found
         """
-        del self.nodes[node_name]
+        try:
+            del self.nodes[node_name]
+        except KeyError as ex:
+            if recurse:
+                for node in self.nodes.values():
+                    try:
+                        node.remove_node(node_name, recurse=True)
+                        return
+                    except (AttributeError, KeyError) as ex:
+                        continue
+            raise KeyError("Node " + node_name + " not found in network")
 
     def add_connection(self, connection):
         """Adds a connection to the network
@@ -1111,19 +1149,32 @@ class Network(Node):
         """
         self.connections[connection.id] = connection
 
-    def remove_connection(self, connection_name):
+    def remove_connection(self, connection_name, recurse=False):
         """Removes a connection from the network
         Parameters
         ----------
         connection_name : str
             name of connection to remove
 
+        recurse : bool
+
+
         Raises
         ------
         KeyError
             if `connection_name` is not found
         """
-        del self.connections[connection_name]
+        try:
+            del self.connections[connection_name]
+        except KeyError as ex:
+            if recurse:
+                for node in self.nodes.values():
+                    try:
+                        node.remove_connection(connection_name, recurse=True)
+                        return
+                    except (AttributeError, KeyError) as ex2:
+                        continue
+            raise KeyError("Connection " + connection_name + " not found in network")
 
     def get_list_of_type(self, desired_type, recurse=False):
         """Searches the Facility and returns a list of all objects of `desired_type`

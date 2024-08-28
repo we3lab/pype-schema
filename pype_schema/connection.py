@@ -391,6 +391,10 @@ class Pipe(Connection):
         else:
             entry_point_id = self.entry_point.id
 
+        print("self.id", self.id)
+        print("self.source", self.source)
+        print("self.destination", self.destination)
+
         return (
             f"<pype_schema.connection.Pipe id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "

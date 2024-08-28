@@ -1,3 +1,38 @@
 {
-    
+    "connections": [
+        "PressureExchangerDisposal", 
+        "PretreatToPressureExchanger",
+        "ROMembranesToPosttreatment"
+    ],
+    "PressureExchangerDisposal": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "PacificOcean",
+        "exit_point": "PressureExchanger",
+        "contents": "Brine",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "parent_id": "ParentNetwork",
+        "tags": {}
+    },
+    "PretreatToPressureExchanger": {
+        "type": "Pipe",
+        "source": "Pretreatment",
+        "destination": "PressureExchanger",
+        "contents": "PretreatedWater",
+        "parent_id": "DesalPlant",
+        "tags": {}
+    },
+    "ROMembranesToPosttreatment": {
+        "type": "Pipe",
+        "source": "ROModule",
+        "destination": "Posttreatment",
+        "contents": "ProductWater",
+        "parent_id": "DesalPlant",
+        "tags": {}
+    }
 }

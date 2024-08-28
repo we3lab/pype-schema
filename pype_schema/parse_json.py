@@ -120,8 +120,8 @@ class JSONParser:
             object to add virtual tags to
 
         verbose : bool
-            If `True` will print informative statements while adding virtual tags
-
+            If `True` will print informative statements while adding virtual tags.
+            Default is `False`
         """
         config_v_tags = self.collect_virtual_tags(self.config)
         network_v_tags = {}
@@ -222,6 +222,36 @@ class JSONParser:
             self.network_obj = old_network
         return old_network
 
+    @staticmethod
+    def prefix_children(target_node, prefix):
+        """Renames the children nodes and connections of the `target_node` by
+        prepending their ID with `prefix`. 
+
+        Parameters
+        ----------
+        target_node : node.Network
+            Network object to rename the children of with a `prefix`
+
+        prefix : str
+            String to prepend to the existing node and connection objects
+
+        Returns
+        -------
+        node.Network
+            New network object with 
+        """
+        new_network = copy.deepcopy(target_node)
+        for node in new_network.get_all_nodes(recurse=False):
+            new_network.remove_node(node.id)
+            node.id = prefix + "-" + node.id
+            node = JSONParser.prefix_children(node, prefix)
+            new_network.add_node(node)
+        for conn in new_network.get_all_connections(recurse=False):
+            new_network.remove_connection(conn.id)
+            conn.id = prefix + "-" +  conn.id
+            new_network.add_connection(conn)
+        return new_network
+
     def extend_node(
         self,
         new_network,
@@ -244,17 +274,23 @@ class JSONParser:
             ID of the node to expend, must be in the old_network
 
         connections_path : str
-            JSON file path to the connections connecting
-            the new network to the old network
+            JSON file path to the connections connecting `new_network` to `old_network`.
+            
+        inplace : bool
+            Whether to modify `self` in place or leave original object unmodified. 
+            False by default
+
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
 
         Raises
         ------
-        TypeError:
-            When
-            1. user does not provide a valid path or Network object for `old_network`
-            2. user does not provide a valid path or Network object for `new_network`
-            3. target_node_id is not in the old_network
-            4. any node in connections is not in the new_network or old_network
+        TypeError
+            When user does not provide a valid path or Network object for `old_network` or `new_network`
+        
+        KeyError
+            When `target_node_id` is not in the `old_network` or 
+            any node in `connections_path` is not in the `new_network` or `old_network`
 
         Returns
         -------
@@ -269,73 +305,107 @@ class JSONParser:
             )
         if verbose:
             print(f"[*] Merging {new_network.id} into {self.network_obj.id}")
-        old_network = copy.deepcopy(self.network_obj)
-        if target_node_id not in old_network.nodes.keys():
-            raise NameError(
-                "Node " + target_node_id + " not found in " + old_network.id
-            )
+        modified_network = copy.deepcopy(self.network_obj)
+        # remove the node and connections that contains the node
+        modified_network.remove_node(target_node_id, recurse=True)
+        if verbose:
+            print("Removed node:", target_node_id)
+        for connection_obj in self.network_obj.get_all_connections(recurse=True):
+            entry_point_id = None if connection_obj.entry_point == None else connection_obj.entry_point.id
+            exit_point_id = None if connection_obj.exit_point == None else connection_obj.exit_point.id
+            if (
+                target_node_id == connection_obj.source.id
+                or target_node_id == connection_obj.destination.id
+                or target_node_id == entry_point_id
+                or target_node_id == exit_point_id
+            ):
+                modified_network.remove_connection(connection_obj.id, recurse=True)
+                if verbose:
+                    print("Removed connection:", connection_obj.id)
+        # add the target node to the correct level of the network
+        if new_network.id == target_node_id:
+            new_target_node = new_network
         else:
-            # remove the node and connections that contains the node
-            old_network.remove_node(target_node_id)
+            new_target_node = new_network.get_node(target_node_id, recurse=True)
+        new_target_node = self.prefix_children(new_target_node, target_node_id)
+        parent_obj_id = self.network_obj.get_parent(new_target_node).id
+        if parent_obj_id == "ParentNetwork":
+            modified_network.add_node(new_target_node)
+        else:
+            modified_network.get_node(parent_obj_id, recurse=True).add_node(new_target_node)
+        if verbose:
+            print("Added node:", target_node_id)
+        # Note that when removing connections we had recurse=True but when adding them the
+        # parent nodes will contain recursive connections so we can switch to recurse=False
+        for connection_obj in new_network.get_all_connections(recurse=True):
+            entry_point_id = None if connection_obj.entry_point == None else connection_obj.entry_point.id
+            exit_point_id = None if connection_obj.exit_point == None else connection_obj.exit_point.id
+            if (
+                target_node_id == connection_obj.source.id
+                or target_node_id == connection_obj.destination.id
+                or target_node_id == entry_point_id
+                or target_node_id == exit_point_id
+            ):
+                connection_obj.id = f"{target_node_id}-{connection_obj.id}"
+                parent_obj_id = self.network_obj.get_parent(connection_obj).id
+                if parent_obj_id == "ParentNetwork":
+                    modified_network.add_connection(connection_obj)
+                else:
+                    modified_network.get_node(parent_obj_id, recurse=True).add_connection(connection_obj)
             if verbose:
-                print("remove node: ", target_node_id)
-            for connection_id, connection_obj in self.network_obj.connections.items():
-                if (
-                    target_node_id == connection_obj.source.id
-                    or target_node_id == connection_obj.destination.id
-                ):
-                    old_network.remove_connection(connection_id)
-                    if verbose:
-                        print("remove connection: ", connection_id)
-
-        for node_id, node_obj in new_network.nodes.items():
-            node_obj.id = f"{new_network.id}_{node_id}"
-            old_network.add_node(node_obj)
-            if verbose:
-                print("add node: ", node_obj.id)
-        for connection_id, connection_obj in new_network.connections.items():
-            connection_obj.id = f"{new_network.id}_{connection_id}"
-            old_network.add_connection(connection_obj)
-            if verbose:
-                print("add connection: ", connection_obj.id)
+                print("Added connection:", connection_obj.id)
         with open(connections_path, "r") as f:
             config = json.load(f)
-            for i, connection_id in enumerate(config["connections"]):
-                self.config["connections"].append(f"{new_network.id}_{connection_id}")
+            # update the config dictionary
+            for connection_id in config["connections"]:
+                conn_dict = config[connection_id]
+                parent_id = conn_dict.get("parent_id")
+                # add to ParentNetwork if no parent_id
+                if parent_id is None or parent_id == "ParentNetwork":
+                    self.config["connections"].append(f"{target_node_id}-{connection_id}")
+                else:
+                    self.config[parent_id]["connections"].append(f"{target_node_id}-{connection_id}")
+            # create the Connection object
             for k, v in list(config.items()):
                 if k == "connections":
                     continue
-                if v["source"] in new_network.nodes.keys():
-                    v["source"] = f'{new_network.id}_{v["source"]}'
-                if v["destination"] in new_network.nodes.keys():
-                    v["destination"] = f'{new_network.id}_{v["destination"]}'
-                self.config[f"{new_network.id}_{k}"] = v
+                for field in ["source", "exit_point", "destination", "entry_point"]:
+                    if (
+                        v.get(field) in new_network.nodes.keys() 
+                        and v[field] != target_node_id
+                    ):
+                        v[field] = f"{target_node_id}-{v[field]}"
+                self.config[f"{target_node_id}-{k}"] = v
                 if verbose:
-                    print("add connection: ", f"{new_network.id}_{connection_id}")
-            self.config["connections"].extend(config["connections"])
+                    print("Added connection:", f"{target_node_id}-{k}")
             for connection_id in config["connections"]:
-                # check that connection exists in dictionary (NameError)
+                # check that connection exists in dictionary (KeyError)
                 if connection_id not in config.keys():
-                    raise NameError(
+                    raise KeyError(
                         f"Connection {connection_id} not found in {connections_path}"
                     )
-                old_network.add_connection(
+                parent_id = config[connection_id].get("parent_id")
+                if parent_id is None or parent_id == "ParentNetwork":
+                    parent_obj = modified_network
+                else:
+                    parent_obj = modified_network.get_node(parent_id, recurse=True)
+                parent_obj.add_connection(
                     self.create_connection(
-                        f"{new_network.id}_{connection_id}", old_network
+                        f"{target_node_id}-{connection_id}", parent_obj, verbose=verbose
                     )
                 )
                 if verbose:
-                    print("add connection: ", f"{new_network.id}_{connection_id}")
+                    print("Added connection:", f"{target_node_id}-{connection_id}")
         if inplace:
-            self.network_obj = old_network
+            self.network_obj = modified_network
             if verbose:
                 print(
-                    f"replace the {self.network_obj.id} by extenfing {target_node_id} "
+                    f"Replaced the network {self.network_obj.id} by extending {target_node_id} "
                     f"with the new network in place"
                 )
-        return old_network
+        return modified_network
 
-    def create_node(self, node_id):
+    def create_node(self, node_id, verbose=False):
         """Converts a dictionary into a `Node` object
 
         Parameters
@@ -343,11 +413,16 @@ class JSONParser:
         node_id : str
             the string id for the `Node`
 
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
+
         Returns
         -------
         Node
             a Python object with all the values from key `node_id`
         """
+        if verbose:
+            print("Creating node:", node_id)
         (input_contents, output_contents) = self.parse_contents(node_id)
         elevation = self.parse_unit_val_dict(self.config[node_id].get("elevation"))
         # strings like `elevation (meters)` and `volume (cubic meters)`
@@ -851,7 +926,7 @@ class JSONParser:
                         node_obj.add_tag(v_tag)
         return node_obj
 
-    def create_connection(self, connection_id, node_obj):
+    def create_connection(self, connection_id, node_obj, verbose=False):
         """Converts a dictionary into a `Connection` object
 
         Parameters
@@ -863,11 +938,16 @@ class JSONParser:
             the string id for the `Node` which holds this connection.
             If None the default ID, 'ParentNetwork' is used
 
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
+
         Returns
         -------
         Connection
             a Python object with all the values from key `connection_id`
         """
+        if verbose:
+            print("Creating connection {} in node {}".format(connection_id, node_obj.id))
         contents = self.config[connection_id].get("contents")
         if isinstance(contents, list):
             contents = list(map(lambda con: utils.ContentsType[con], contents))
@@ -876,6 +956,7 @@ class JSONParser:
 
         bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
+        
         if source_id:
             source = node_obj.get_node(source_id)
 
@@ -886,6 +967,12 @@ class JSONParser:
         dest_id = self.config[connection_id].get("destination")
         if dest_id:
             destination = node_obj.get_node(dest_id)
+
+        if verbose:
+            print("source_id:", source_id)
+            print("source:", source)
+            print("dest_id:", dest_id)
+            print("destination:", destination)
 
         entry_point = self.config[connection_id].get("entry_point")
         if entry_point:
@@ -1928,7 +2015,7 @@ class JSONParser:
             number of spaces to indent the JSON file
 
         verbose : bool
-            Whether to print informative messages for debugging
+            Whether to print informative messages for debugging. Default is False
 
         Raises
         ------

@@ -1,10 +1,6 @@
 {
     "nodes": ["ROModule"],
-    "connections": [
-        "PressureExchangerDisposal", 
-        "PretreatToPressureExchanger",
-        "ROMembranesToPosttreatment"
-    ],
+    "connections": [],
     "virtual_tags": {},
     "ROModule": {
         "type": "ModularUnit",
@@ -58,27 +54,6 @@
         },
         "tags": {}
     },
-    "PressureExchangerDisposal": {
-        "type": "Pipe",
-        "source": "DesalPlant",
-        "destination": "PacificOcean",
-        "exit_point": "PressureExchanger",
-        "contents": "Brine",
-        "flowrate": {
-            "max": null,
-            "min": null,
-            "avg": null,
-            "units": "MGD"
-        },
-        "tags": {}
-    },
-    "PretreatToPressureExchanger": {
-        "type": "Pipe",
-        "source": "CartridgeFilter",
-        "destination": "PressureExchanger",
-        "contents": "PretreatedWater",
-        "tags": {}
-    },
     "PressureExchangerToRO": {
         "type": "Pipe",
         "source": "PressureExchanger",
@@ -91,13 +66,6 @@
         "source": "ROMembranes",
         "destination": "PressureExchanger",
         "contents": "Brine",
-        "tags": {}
-    },
-    "ROMembranesToPosttreatment": {
-        "type": "Pipe",
-        "source": "ROMembranes",
-        "destination": "Posttreatment",
-        "contents": "ProductWater",
         "tags": {}
     }
 }

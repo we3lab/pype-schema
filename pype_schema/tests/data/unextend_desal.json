@@ -103,7 +103,7 @@
     },
     "ROModule": {
         "type": "ModularUnit",
-        "input_contents": "Seawater",
+        "input_contents": "PretreatedWater",
         "output_contents": ["ProductWater", "Brine"],
         "tags": {},
         "nodes": [],
