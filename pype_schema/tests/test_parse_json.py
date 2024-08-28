@@ -98,16 +98,16 @@ def test_to_json(json_path):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "unextend_json, extension, target_node_id, conn_path, extend_json", 
+    "unextend_json, extension, target_node_id, conn_path, extend_json",
     [
         (
-            "data/unextend_desal.json", 
-            "data/modular_unit.json", 
+            "data/unextend_desal.json",
+            "data/modular_unit.json",
             "ROModule",
             "data/mod_unit_conn.json",
-            "data/extended_desal.json"
-        ), 
-    ]
+            "data/extended_desal.json",
+        ),
+    ],
 )
 def test_extend_node(unextend_json, extension, target_node_id, conn_path, extend_json):
     parser = JSONParser(unextend_json)

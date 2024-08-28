@@ -225,7 +225,7 @@ class JSONParser:
     @staticmethod
     def prefix_children(target_node, prefix):
         """Renames the children nodes and connections of the `target_node` by
-        prepending their ID with `prefix`. 
+        prepending their ID with `prefix`.
 
         Parameters
         ----------
@@ -238,7 +238,7 @@ class JSONParser:
         Returns
         -------
         node.Network
-            New network object with 
+            New network object with
         """
         new_network = copy.deepcopy(target_node)
         for node in new_network.get_all_nodes(recurse=False):
@@ -248,7 +248,7 @@ class JSONParser:
             new_network.add_node(node)
         for conn in new_network.get_all_connections(recurse=False):
             new_network.remove_connection(conn.id)
-            conn.id = prefix + "-" +  conn.id
+            conn.id = prefix + "-" + conn.id
             new_network.add_connection(conn)
         return new_network
 
@@ -275,9 +275,9 @@ class JSONParser:
 
         connections_path : str
             JSON file path to the connections connecting `new_network` to `old_network`.
-            
+
         inplace : bool
-            Whether to modify `self` in place or leave original object unmodified. 
+            Whether to modify `self` in place or leave original object unmodified.
             False by default
 
         verbose : bool
@@ -287,9 +287,9 @@ class JSONParser:
         ------
         TypeError
             When user does not provide a valid path or Network object for `old_network` or `new_network`
-        
+
         KeyError
-            When `target_node_id` is not in the `old_network` or 
+            When `target_node_id` is not in the `old_network` or
             any node in `connections_path` is not in the `new_network` or `old_network`
 
         Returns
@@ -311,8 +311,16 @@ class JSONParser:
         if verbose:
             print("Removed node:", target_node_id)
         for connection_obj in self.network_obj.get_all_connections(recurse=True):
-            entry_point_id = None if connection_obj.entry_point == None else connection_obj.entry_point.id
-            exit_point_id = None if connection_obj.exit_point == None else connection_obj.exit_point.id
+            entry_point_id = (
+                None
+                if connection_obj.entry_point == None
+                else connection_obj.entry_point.id
+            )
+            exit_point_id = (
+                None
+                if connection_obj.exit_point == None
+                else connection_obj.exit_point.id
+            )
             if (
                 target_node_id == connection_obj.source.id
                 or target_node_id == connection_obj.destination.id
@@ -353,10 +361,16 @@ class JSONParser:
                 parent_id = conn_dict.get("parent_id")
                 # add to ParentNetwork if no parent_id
                 if parent_id is None or parent_id == "ParentNetwork":
-                    self.config["connections"].append(f"{target_node_id}-{connection_id}")
+                    self.config["connections"].append(
+                        f"{target_node_id}-{connection_id}"
+                    )
                 else:
-                    self.config[parent_id]["connections"].append(f"{target_node_id}-{connection_id}")
-            new_network_node_ids = [node_obj.id for node_obj in new_network.get_all_nodes(recurse=True)]
+                    self.config[parent_id]["connections"].append(
+                        f"{target_node_id}-{connection_id}"
+                    )
+            new_network_node_ids = [
+                node_obj.id for node_obj in new_network.get_all_nodes(recurse=True)
+            ]
             # create the Connection object
             for k, v in list(config.items()):
                 if k == "connections":
@@ -939,7 +953,9 @@ class JSONParser:
             a Python object with all the values from key `connection_id`
         """
         if verbose:
-            print("Creating connection {} in node {}".format(connection_id, node_obj.id))
+            print(
+                "Creating connection {} in node {}".format(connection_id, node_obj.id)
+            )
         contents = self.config[connection_id].get("contents")
         if isinstance(contents, list):
             contents = list(map(lambda con: utils.ContentsType[con], contents))
@@ -948,7 +964,7 @@ class JSONParser:
 
         bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
-        
+
         if source_id:
             source = node_obj.get_node(source_id)
 

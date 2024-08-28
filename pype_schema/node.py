@@ -529,7 +529,7 @@ class Node(ABC):
         return parent_obj
 
     def get_parent(self, child_obj):
-        """Gets the parent object of a `Tag`, `Connection`, or `Node` object, 
+        """Gets the parent object of a `Tag`, `Connection`, or `Node` object,
         as long as both `child_obj` and its parent object are children of `self`
 
         Parameters
@@ -544,12 +544,17 @@ class Node(ABC):
         """
         if isinstance(child_obj, (Tag, VirtualTag)):
             return self.get_parent_from_tag(child_obj)
-        elif child_obj.id in self.connections.keys() or child_obj.id in self.nodes.keys():
+        elif (
+            child_obj.id in self.connections.keys() or child_obj.id in self.nodes.keys()
+        ):
             return self
         else:
             children = self.get_all_nodes(recurse=True)
             for child in children:
-                if child_obj.id in child.connections.keys() or child_obj.id in child.nodes.keys():
+                if (
+                    child_obj.id in child.connections.keys()
+                    or child_obj.id in child.nodes.keys()
+                ):
                     return child
 
     def select_tags(
