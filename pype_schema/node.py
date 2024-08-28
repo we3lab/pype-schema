@@ -1134,13 +1134,13 @@ class Network(Node):
         """
         try:
             del self.nodes[node_name]
-        except KeyError as ex:
+        except KeyError:
             if recurse:
                 for node in self.nodes.values():
                     try:
                         node.remove_node(node_name, recurse=True)
                         return
-                    except (AttributeError, KeyError) as ex:
+                    except (AttributeError, KeyError):
                         continue
             raise KeyError("Node " + node_name + " not found in network")
 
@@ -1171,13 +1171,13 @@ class Network(Node):
         """
         try:
             del self.connections[connection_name]
-        except KeyError as ex:
+        except KeyError:
             if recurse:
                 for node in self.nodes.values():
                     try:
                         node.remove_connection(connection_name, recurse=True)
                         return
-                    except (AttributeError, KeyError) as ex2:
+                    except (AttributeError, KeyError):
                         continue
             raise KeyError("Connection " + connection_name + " not found in network")
 

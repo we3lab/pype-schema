@@ -241,15 +241,15 @@ class JSONParser:
             New network object with
         """
         new_network = copy.deepcopy(target_node)
-        for node in new_network.get_all_nodes(recurse=False):
-            new_network.remove_node(node.id)
-            node.id = prefix + "-" + node.id
-            node = JSONParser.prefix_children(node, prefix)
-            new_network.add_node(node)
-        for conn in new_network.get_all_connections(recurse=False):
-            new_network.remove_connection(conn.id)
-            conn.id = prefix + "-" + conn.id
-            new_network.add_connection(conn)
+        for node_obj in new_network.get_all_nodes(recurse=False):
+            new_network.remove_node(node_obj.id)
+            node_obj.id = prefix + "-" + node_obj.id
+            node_obj = JSONParser.prefix_children(node_obj, prefix)
+            new_network.add_node(node_obj)
+        for conn_obj in new_network.get_all_connections(recurse=False):
+            new_network.remove_connection(conn_obj.id)
+            conn_obj.id = prefix + "-" + conn_obj.id
+            new_network.add_connection(conn_obj)
         return new_network
 
     def extend_node(
@@ -286,7 +286,8 @@ class JSONParser:
         Raises
         ------
         TypeError
-            When user does not provide a valid path or Network object for `old_network` or `new_network`
+            When user does not provide a valid path or Network object
+            for `old_network` or `new_network`
 
         KeyError
             When `target_node_id` is not in the `old_network` or
@@ -313,12 +314,12 @@ class JSONParser:
         for connection_obj in self.network_obj.get_all_connections(recurse=True):
             entry_point_id = (
                 None
-                if connection_obj.entry_point == None
+                if connection_obj.entry_point is None
                 else connection_obj.entry_point.id
             )
             exit_point_id = (
                 None
-                if connection_obj.exit_point == None
+                if connection_obj.exit_point is None
                 else connection_obj.exit_point.id
             )
             if (
@@ -330,7 +331,7 @@ class JSONParser:
                 modified_network.remove_connection(connection_obj.id, recurse=True)
                 if verbose:
                     print("Removed connection:", connection_obj.id)
-        # get the parent of the target node so we are at the correct level of the network
+        # get the parent of the target node so we are at the correct level of network
         parent_obj_id = self.network_obj.get_parent(
             self.network_obj.get_node(target_node_id, recurse=True)
         ).id
@@ -343,7 +344,7 @@ class JSONParser:
             new_target_node = new_network.get_node(target_node_id, recurse=True)
         except KeyError:
             new_target_node = new_network
-        # modify the names of the child nodes and connections to avoid namespace collisions
+        # modify names of the child nodes and connections to avoid namespace collisions
         new_target_node = self.prefix_children(new_target_node, target_node_id)
         for node_obj in new_target_node.nodes.values():
             parent_network.add_node(node_obj)
@@ -406,8 +407,8 @@ class JSONParser:
             self.network_obj = modified_network
             if verbose:
                 print(
-                    f"Replaced the network {self.network_obj.id} by extending {target_node_id} "
-                    f"with the new network in place"
+                    f"Replaced the network {self.network_obj.id} by extending "
+                    f"{target_node_id} with the new network in place"
                 )
         return modified_network
 
