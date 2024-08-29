@@ -131,6 +131,7 @@ class JSONParser:
                 (v_tag_id, v_tag_info)
                 for v_tag_id, v_tag_info in config_v_tags.copy().items()
             ]
+            processed = []
             while v_tag_queue:
                 v_tag_id, v_tag_info = v_tag_queue.pop(0)
                 # Try parsing the virtual tag
@@ -156,7 +157,7 @@ class JSONParser:
                     obj.add_tag(v_tag)
                 # If there is a Key error, it may be because a virtual tag
                 # is pointing to another virtual tag that hasn't been added yet.
-                except KeyError:
+                except KeyError as ex:
                     for tag_pointer in v_tag_info["tags"]:
                         # Check if the tag being pointed to is in the already
                         # initialized tags or the network's set of virtual tags
@@ -167,7 +168,14 @@ class JSONParser:
                             raise KeyError(
                                 f"Invalid Tag id {tag_pointer} in VirtualTag {v_tag_id}"
                             )
-                    v_tag_queue.append((v_tag_id, v_tag_info))
+                    # Since the tag was not in the network
+                    # if it was processed then there was an error during the processing
+                    # so we want to raise an exception
+                    if v_tag_id not in processed:
+                        v_tag_queue.append((v_tag_id, v_tag_info))
+                        processed.append(v_tag_id)
+                    else:
+                        raise ex
         for v_tag in network_v_tags.values():
             obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
             obj.add_tag(v_tag)
