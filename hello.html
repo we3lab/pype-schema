@@ -134,11 +134,12 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pype</span><span class="o">-</span><span class="n">schema</span>
 </pre></div>
 </div>
-<p>This installation should come with a sample facility configuration represented by <cite>sample.json</cite>.
-To load this facility, run the following code from the <cite>pype_schema/data</cite> folder:</p>
+<p>This installation should come with two sample facility configurations:
+one for water resource recovery (<cite>wrrf_sample.json</cite>) and one for desalination (<cite>desal_sample.json</cite>).
+To load the water resource recovery facility (WRRF) example, run the following code from the <cite>pype_schema/data</cite> folder:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.parse_json</span> <span class="kn">import</span> <span class="n">JSONParser</span>
 
-<span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">&quot;sample.json&quot;</span><span class="p">)</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">&quot;wrrf_sample.json&quot;</span><span class="p">)</span>
 <span class="n">network</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
 </pre></div>
 </div>

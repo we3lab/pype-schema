@@ -69,17 +69,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.conn_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.conn_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.create_connection"><code class="docutils literal notranslate"><span class="pre">JSONParser.create_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.create_node"><code class="docutils literal notranslate"><span class="pre">JSONParser.create_node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.dosing_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.dosing_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.extend_node"><code class="docutils literal notranslate"><span class="pre">JSONParser.extend_node()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.get_tag_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.get_tag_contents()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.initialize_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.initialize_network()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.merge_network"><code class="docutils literal notranslate"><span class="pre">JSONParser.merge_network()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.min_max_design_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.min_max_design_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.node_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.node_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_contents"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_contents()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_dosing_rate"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_dosing_rate()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_heating_values"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_heating_values()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_min_max_design"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_min_max_design()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_tag()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_unit_val_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_unit_val_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.parse_virtual_tag"><code class="docutils literal notranslate"><span class="pre">JSONParser.parse_virtual_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.prefix_children"><code class="docutils literal notranslate"><span class="pre">JSONParser.prefix_children()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.tag_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.tag_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.to_json"><code class="docutils literal notranslate"><span class="pre">JSONParser.to_json()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.parse_json.JSONParser.unit_val_to_dict"><code class="docutils literal notranslate"><span class="pre">JSONParser.unit_val_to_dict()</span></code></a></li>
@@ -154,7 +158,8 @@ NOTE: assumes the objects tags have already been added</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obj</strong> (<em>Node or Connection</em>) – object to add virtual tags to</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – If <cite>True</cite> will print informative statements while adding virtual tags</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If <cite>True</cite> will print informative statements while adding virtual tags.
+Default is <cite>False</cite></p></li>
 </ul>
 </dd>
 </dl>
@@ -203,7 +208,7 @@ parsed into JSON format</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.create_connection">
-<span class="sig-name descname"><span class="pre">create_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.create_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.create_connection" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.create_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.create_connection" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a dictionary into a <cite>Connection</cite> object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -211,6 +216,7 @@ parsed into JSON format</p>
 <li><p><strong>connection_id</strong> (<em>str</em>) – the string id for the <cite>Connection</cite></p></li>
 <li><p><strong>node_id</strong> (<em>str</em>) – the string id for the <cite>Node</cite> which holds this connection.
 If None the default ID, ‘ParentNetwork’ is used</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -224,17 +230,93 @@ If None the default ID, ‘ParentNetwork’ is used</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.create_node">
-<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.create_node" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.create_node" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a dictionary into a <cite>Node</cite> object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>node_id</strong> (<em>str</em>) – the string id for the <cite>Node</cite></p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_id</strong> (<em>str</em>) – the string id for the <cite>Node</cite></p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a Python object with all the values from key <cite>node_id</cite></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node">Node</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.dosing_to_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dosing_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dosing_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.dosing_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.dosing_to_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Converts the dosing rate or area dictionary from PyPES to JSON format.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dosing_dict</strong> (<em>dict</em>) –</p>
+<dl>
+<dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">DosingTypeA</span></code> : <cite>float</cite> or`pint.Quantity`</p>
+<p><code class="docutils literal notranslate"><span class="pre">DosingTypeB</span></code> : <cite>float</cite> or <cite>pint.Quantity</cite></p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl>
+<dt>Dictionary in JSON-readable format. I.e., {</dt><dd><dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DosingTypeA</span></code>: {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</dd>
+</dl>
+<p>}</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DosingTypeB</span></code>: {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.extend_node">
+<span class="sig-name descname"><span class="pre">extend_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.extend_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.extend_node" title="Permalink to this definition"></a></dt>
+<dd><p>Incoporates subnetwork (i.e. the <cite>new_network</cite>) into a node
+in a existing network (i.e. the <cite>old_network</cite>)
+modifying it in place and returning the modified network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_network</strong> (<em>str or pype_schema.Network</em>) – JSON file path or Network objet to merge with <cite>self</cite></p></li>
+<li><p><strong>target_node_id</strong> (<em>str</em>) – ID of the node to expend, must be in the old_network</p></li>
+<li><p><strong>connections_path</strong> (<em>str</em>) – JSON file path to the connections connecting <cite>new_network</cite> to <cite>old_network</cite>.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Whether to modify <cite>self</cite> in place or leave original object unmodified.
+False by default</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – When user does not provide a valid path or Network object
+    for <cite>old_network</cite> or <cite>new_network</cite></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.12)"><strong>KeyError</strong></a> – When <cite>target_node_id</cite> is not in the <cite>old_network</cite> or
+    any node in <cite>connections_path</cite> is not in the <cite>new_network</cite> or <cite>old_network</cite></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Modified network object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="pype_schema.html#pype_schema.node.Network" title="pype_schema.node.Network">pype_schema.node.Network</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,6 +465,34 @@ parsed into JSON format</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_dosing_rate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_dosing_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dosing_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_dosing_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_dosing_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a dictionary into a dictionary of a different format</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>heating_vals</strong> (<em>dict</em>) –</p>
+<p>dictionary of the form {</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">DosingType</span></code>: {</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">rate</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Keys are of DosingType or str and values of pint.Quantity or float
+Given as a float if no units are specified</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.parse_heating_values">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heating_vals</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.parse_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.parse_heating_values" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a dictionary into a tuple of flow rates</p>
@@ -415,9 +525,10 @@ Given as a float if no units are specified</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>min_max_design</strong> (<em>dict</em>) –</p>
 <dl>
-<dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>int</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>int</cite></p>
+<dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">max</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">design</span></code>: <cite>float</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">units</span></code>: <cite>str</cite></p>
 </dd>
 </dl>
 <p>}</p>
@@ -525,6 +636,27 @@ and all tags are in <cite>obj.tags</cite></p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.prefix_children">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prefix_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.prefix_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.prefix_children" title="Permalink to this definition"></a></dt>
+<dd><p>Renames the children nodes and connections of the <cite>target_node</cite> by
+prepending their ID with <cite>prefix</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_node</strong> (<em>node.Network</em>) – Network object to rename the children of with a <cite>prefix</cite></p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – String to prepend to the existing node and connection objects</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New network object with</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="pype_schema.html#pype_schema.node.Network" title="pype_schema.node.Network">node.Network</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.parse_json.JSONParser.tag_to_dict">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tag_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/parse_json.html#JSONParser.tag_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.parse_json.JSONParser.tag_to_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Converts a Tag or VirtualTag object to a dictionary that can be
@@ -555,7 +687,7 @@ parsed into JSON format</p>
 <li><p><strong>network</strong> (<em>node.Network</em>) – Network object to export to JSON</p></li>
 <li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format</p></li>
 <li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>

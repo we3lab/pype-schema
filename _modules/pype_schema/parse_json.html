@@ -97,7 +97,9 @@
   <h1>Source code for pype_schema.parse_json</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">pint</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">connection</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
@@ -215,8 +217,8 @@
 <span class="sd">            object to add virtual tags to</span>
 
 <span class="sd">        verbose : bool</span>
-<span class="sd">            If `True` will print informative statements while adding virtual tags</span>
-
+<span class="sd">            If `True` will print informative statements while adding virtual tags.</span>
+<span class="sd">            Default is `False`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">config_v_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
         <span class="n">network_v_tags</span> <span class="o">=</span> <span class="p">{}</span>
@@ -226,6 +228,7 @@
                 <span class="p">(</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="ow">in</span> <span class="n">config_v_tags</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="p">]</span>
+            <span class="n">processed</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">while</span> <span class="n">v_tag_queue</span><span class="p">:</span>
                 <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="o">=</span> <span class="n">v_tag_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="c1"># Try parsing the virtual tag</span>
@@ -251,7 +254,7 @@
                     <span class="n">obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
                 <span class="c1"># If there is a Key error, it may be because a virtual tag</span>
                 <span class="c1"># is pointing to another virtual tag that hasn&#39;t been added yet.</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">tag_pointer</span> <span class="ow">in</span> <span class="n">v_tag_info</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]:</span>
                         <span class="c1"># Check if the tag being pointed to is in the already</span>
                         <span class="c1"># initialized tags or the network&#39;s set of virtual tags</span>
@@ -262,7 +265,14 @@
                             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
                                 <span class="sa">f</span><span class="s2">&quot;Invalid Tag id </span><span class="si">{</span><span class="n">tag_pointer</span><span class="si">}</span><span class="s2"> in VirtualTag </span><span class="si">{</span><span class="n">v_tag_id</span><span class="si">}</span><span class="s2">&quot;</span>
                             <span class="p">)</span>
-                    <span class="n">v_tag_queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">))</span>
+                    <span class="c1"># Since the tag was not in the network</span>
+                    <span class="c1"># if it was processed then there was an error during the processing</span>
+                    <span class="c1"># so we want to raise an exception</span>
+                    <span class="k">if</span> <span class="n">v_tag_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">:</span>
+                        <span class="n">v_tag_queue</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span><span class="p">))</span>
+                        <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v_tag_id</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ex</span>
         <span class="k">for</span> <span class="n">v_tag</span> <span class="ow">in</span> <span class="n">network_v_tags</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_node_or_connection</span><span class="p">(</span><span class="n">v_tag</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span></div>
@@ -317,7 +327,197 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span> <span class="o">=</span> <span class="n">old_network</span>
         <span class="k">return</span> <span class="n">old_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.prefix_children"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.prefix_children">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">prefix_children</span><span class="p">(</span><span class="n">target_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renames the children nodes and connections of the `target_node` by</span>
+<span class="sd">        prepending their ID with `prefix`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_node : node.Network</span>
+<span class="sd">            Network object to rename the children of with a `prefix`</span>
+
+<span class="sd">        prefix : str</span>
+<span class="sd">            String to prepend to the existing node and connection objects</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        node.Network</span>
+<span class="sd">            New network object with</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_network</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">target_node</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node_obj</span> <span class="ow">in</span> <span class="n">new_network</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">new_network</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">node_obj</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">prefix_children</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+            <span class="n">new_network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">conn_obj</span> <span class="ow">in</span> <span class="n">new_network</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">new_network</span><span class="o">.</span><span class="n">remove_connection</span><span class="p">(</span><span class="n">conn_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">conn_obj</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">new_network</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_network</span></div>
+
+<div class="viewcode-block" id="JSONParser.extend_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.extend_node">[docs]</a>    <span class="k">def</span> <span class="nf">extend_node</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">new_network</span><span class="p">,</span>
+        <span class="n">target_node_id</span><span class="p">,</span>
+        <span class="n">connections_path</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Incoporates subnetwork (i.e. the `new_network`) into a node</span>
+<span class="sd">        in a existing network (i.e. the `old_network`)</span>
+<span class="sd">        modifying it in place and returning the modified network</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        new_network : str or pype_schema.Network</span>
+<span class="sd">            JSON file path or Network objet to merge with `self`</span>
+
+<span class="sd">        target_node_id : str</span>
+<span class="sd">            ID of the node to expend, must be in the old_network</span>
+
+<span class="sd">        connections_path : str</span>
+<span class="sd">            JSON file path to the connections connecting `new_network` to `old_network`.</span>
+
+<span class="sd">        inplace : bool</span>
+<span class="sd">            Whether to modify `self` in place or leave original object unmodified.</span>
+<span class="sd">            False by default</span>
+
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Whether to print informative messages for debugging. Default is False</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            When user does not provide a valid path or Network object</span>
+<span class="sd">            for `old_network` or `new_network`</span>
+
+<span class="sd">        KeyError</span>
+<span class="sd">            When `target_node_id` is not in the `old_network` or</span>
+<span class="sd">            any node in `connections_path` is not in the `new_network` or `old_network`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pype_schema.node.Network:</span>
+<span class="sd">            Modified network object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_network</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">new_network</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">):</span>
+            <span class="n">new_network</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="n">new_network</span><span class="p">)</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_network</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Please provide a valid json path or object for network to extend with&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[*] Merging </span><span class="si">{</span><span class="n">new_network</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> into </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">modified_network</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="p">)</span>
+        <span class="c1"># remove the node and connections that contains the node</span>
+        <span class="n">modified_network</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">target_node_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removed node:&quot;</span><span class="p">,</span> <span class="n">target_node_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">connection_obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_all_connections</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">entry_point_id</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">entry_point</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">entry_point</span><span class="o">.</span><span class="n">id</span>
+            <span class="p">)</span>
+            <span class="n">exit_point_id</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">exit_point</span><span class="o">.</span><span class="n">id</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">target_node_id</span> <span class="o">==</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+                <span class="ow">or</span> <span class="n">target_node_id</span> <span class="o">==</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+                <span class="ow">or</span> <span class="n">target_node_id</span> <span class="o">==</span> <span class="n">entry_point_id</span>
+                <span class="ow">or</span> <span class="n">target_node_id</span> <span class="o">==</span> <span class="n">exit_point_id</span>
+            <span class="p">):</span>
+                <span class="n">modified_network</span><span class="o">.</span><span class="n">remove_connection</span><span class="p">(</span><span class="n">connection_obj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removed connection:&quot;</span><span class="p">,</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="c1"># get the parent of the target node so we are at the correct level of network</span>
+        <span class="n">parent_obj_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_parent</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">target_node_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">parent_obj_id</span> <span class="o">==</span> <span class="s2">&quot;ParentNetwork&quot;</span><span class="p">:</span>
+            <span class="n">parent_network</span> <span class="o">=</span> <span class="n">modified_network</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parent_network</span> <span class="o">=</span> <span class="n">modified_network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">parent_obj_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># get just the new target node if it is not the entirety of the new network</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">new_target_node</span> <span class="o">=</span> <span class="n">new_network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">target_node_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">new_target_node</span> <span class="o">=</span> <span class="n">new_network</span>
+        <span class="c1"># modify names of the child nodes and connections to avoid namespace collisions</span>
+        <span class="n">new_target_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_children</span><span class="p">(</span><span class="n">new_target_node</span><span class="p">,</span> <span class="n">target_node_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">node_obj</span> <span class="ow">in</span> <span class="n">new_target_node</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">parent_network</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added node:&quot;</span><span class="p">,</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">connection_obj</span> <span class="ow">in</span> <span class="n">new_target_node</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">parent_network</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span><span class="n">connection_obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added connection:&quot;</span><span class="p">,</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">connections_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="c1"># update the config dictionary</span>
+            <span class="k">for</span> <span class="n">connection_id</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]:</span>
+                <span class="n">conn_dict</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span>
+                <span class="n">parent_id</span> <span class="o">=</span> <span class="n">conn_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">)</span>
+                <span class="c1"># add to ParentNetwork if no parent_id</span>
+                <span class="k">if</span> <span class="n">parent_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent_id</span> <span class="o">==</span> <span class="s2">&quot;ParentNetwork&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">parent_id</span><span class="p">][</span><span class="s2">&quot;connections&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="n">new_network_node_ids</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node_obj</span> <span class="ow">in</span> <span class="n">new_network</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="c1"># create the Connection object</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;connections&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;exit_point&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;entry_point&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">in</span> <span class="n">new_network_node_ids</span>
+                        <span class="ow">and</span> <span class="n">v</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">!=</span> <span class="n">target_node_id</span>
+                    <span class="p">):</span>
+                        <span class="n">v</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added connection:&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">connection_id</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]:</span>
+                <span class="c1"># check that connection exists in dictionary (KeyError)</span>
+                <span class="k">if</span> <span class="n">connection_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Connection </span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">connections_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">parent_id</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">parent_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent_id</span> <span class="o">==</span> <span class="s2">&quot;ParentNetwork&quot;</span><span class="p">:</span>
+                    <span class="n">parent_obj</span> <span class="o">=</span> <span class="n">modified_network</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parent_obj</span> <span class="o">=</span> <span class="n">modified_network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">parent_obj</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">parent_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Added connection:&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span> <span class="o">=</span> <span class="n">modified_network</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Replaced the network </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> by extending &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_node_id</span><span class="si">}</span><span class="s2"> with the new network in place&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">modified_network</span></div>
+
+<div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Node` object</span>
 
 <span class="sd">        Parameters</span>
@@ -325,11 +525,16 @@
 <span class="sd">        node_id : str</span>
 <span class="sd">            the string id for the `Node`</span>
 
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Whether to print informative messages for debugging. Default is False</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Node</span>
 <span class="sd">            a Python object with all the values from key `node_id`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating node:&quot;</span><span class="p">,</span> <span class="n">node_id</span><span class="p">)</span>
         <span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_contents</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
         <span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">))</span>
         <span class="c1"># strings like `elevation (meters)` and `volume (cubic meters)`</span>
@@ -358,21 +563,46 @@
             <span class="n">flowrate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;flow_rate&quot;</span><span class="p">)</span>
 
         <span class="n">min_flow</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">design_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_min_max_design</span><span class="p">(</span><span class="n">flowrate</span><span class="p">)</span>
+        <span class="n">dosing_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_dosing_rate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dosing_rate&quot;</span><span class="p">,</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+        <span class="p">)</span>
 
         <span class="c1"># create correct type of node class</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Network&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">num_units</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">num_units</span> <span class="o">=</span> <span class="mi">1</span>
-
-            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span>
-                <span class="n">node_id</span><span class="p">,</span>
-                <span class="n">input_contents</span><span class="p">,</span>
-                <span class="n">output_contents</span><span class="p">,</span>
-                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
-                <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
-                <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
-                <span class="n">num_units</span><span class="o">=</span><span class="n">num_units</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="s2">&quot;Facility&quot;</span><span class="p">,</span> <span class="s2">&quot;ModularUnit&quot;</span><span class="p">]:</span>
+            <span class="n">num_units</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">num_units</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">num_units</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Network&quot;</span><span class="p">:</span>
+                <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span>
+                    <span class="n">node_id</span><span class="p">,</span>
+                    <span class="n">input_contents</span><span class="p">,</span>
+                    <span class="n">output_contents</span><span class="p">,</span>
+                    <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">num_units</span><span class="o">=</span><span class="n">num_units</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Facility&quot;</span><span class="p">:</span>
+                <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Facility</span><span class="p">(</span>
+                    <span class="n">node_id</span><span class="p">,</span>
+                    <span class="n">input_contents</span><span class="p">,</span>
+                    <span class="n">output_contents</span><span class="p">,</span>
+                    <span class="n">elevation</span><span class="p">,</span>
+                    <span class="n">min_flow</span><span class="p">,</span>
+                    <span class="n">max_flow</span><span class="p">,</span>
+                    <span class="n">design_flow</span><span class="p">,</span>
+                    <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ModularUnit&quot;</span><span class="p">:</span>
+                <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">ModularUnit</span><span class="p">(</span>
+                    <span class="n">node_id</span><span class="p">,</span>
+                    <span class="n">input_contents</span><span class="p">,</span>
+                    <span class="n">output_contents</span><span class="p">,</span>
+                    <span class="n">num_units</span><span class="p">,</span>
+                    <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+                    <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+                <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">new_node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
                 <span class="n">node_obj</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">new_node</span><span class="p">))</span>
@@ -438,26 +668,6 @@
                 <span class="n">leakage</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Facility&quot;</span><span class="p">:</span>
-            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Facility</span><span class="p">(</span>
-                <span class="n">node_id</span><span class="p">,</span>
-                <span class="n">input_contents</span><span class="p">,</span>
-                <span class="n">output_contents</span><span class="p">,</span>
-                <span class="n">elevation</span><span class="p">,</span>
-                <span class="n">min_flow</span><span class="p">,</span>
-                <span class="n">max_flow</span><span class="p">,</span>
-                <span class="n">design_flow</span><span class="p">,</span>
-                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
-                <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
-                <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
-            <span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">new_node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
-                <span class="n">node_obj</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">new_node</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">new_connection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;connections&quot;</span><span class="p">]:</span>
-                <span class="n">node_obj</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">new_connection</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">)</span>
-                <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pump&quot;</span><span class="p">:</span>
             <span class="n">pump_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pump_type&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">pump_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -512,7 +722,13 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Tank&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Tank</span><span class="p">(</span>
-                <span class="n">node_id</span><span class="p">,</span> <span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{}</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">elevation</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Aeration&quot;</span><span class="p">:</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Aeration</span><span class="p">(</span>
@@ -600,6 +816,9 @@
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Filtration&quot;</span><span class="p">:</span>
+            <span class="n">settling_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settling_time&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+            <span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Filtration</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
                 <span class="n">input_contents</span><span class="p">,</span>
@@ -609,9 +828,41 @@
                 <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">settling_time</span><span class="o">=</span><span class="n">settling_time</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ROMembrane&quot;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;area&quot;</span><span class="p">))</span>
+            <span class="n">permeability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;permeability&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">selectivity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;selectivity&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">settling_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;settling_time&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">ROMembrane</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">area</span><span class="p">,</span>
+                <span class="n">permeability</span><span class="p">,</span>
+                <span class="n">selectivity</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">settling_time</span><span class="o">=</span><span class="n">settling_time</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Chlorination&quot;</span><span class="p">:</span>
+            <span class="n">residence_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;residence_time&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Chlorination</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
                 <span class="n">input_contents</span><span class="p">,</span>
@@ -621,6 +872,45 @@
                 <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
                 <span class="n">volume</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">residence_time</span><span class="o">=</span><span class="n">residence_time</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Disinfection&quot;</span><span class="p">:</span>
+            <span class="n">residence_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;residence_time&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Disinfection</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">residence_time</span><span class="o">=</span><span class="n">residence_time</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;UVSystem&quot;</span><span class="p">:</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;area&quot;</span><span class="p">))</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;intensity&quot;</span><span class="p">))</span>
+            <span class="n">residence_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;residence_time&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">UVSystem</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">residence_time</span><span class="p">,</span>
+                <span class="n">intensity</span><span class="p">,</span>
+                <span class="n">area</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Flaring&quot;</span><span class="p">:</span>
@@ -664,6 +954,44 @@
                 <span class="n">max_flow</span><span class="p">,</span>
                 <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Reactor&quot;</span><span class="p">:</span>
+            <span class="n">pH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pH&quot;</span><span class="p">)</span>
+            <span class="n">residence_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;residence_time&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Reactor</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">residence_time</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">pH</span><span class="o">=</span><span class="n">pH</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;StaticMixer&quot;</span><span class="p">:</span>
+            <span class="n">pH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pH&quot;</span><span class="p">)</span>
+            <span class="n">residence_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;residence_time&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">StaticMixer</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">min_flow</span><span class="p">,</span>
+                <span class="n">max_flow</span><span class="p">,</span>
+                <span class="n">design_flow</span><span class="p">,</span>
+                <span class="n">num_units</span><span class="p">,</span>
+                <span class="n">volume</span><span class="p">,</span>
+                <span class="n">residence_time</span><span class="p">,</span>
+                <span class="n">dosing_rate</span><span class="o">=</span><span class="n">dosing_rate</span><span class="p">,</span>
+                <span class="n">pH</span><span class="o">=</span><span class="n">pH</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -710,7 +1038,7 @@
                         <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Connection` object</span>
 
 <span class="sd">        Parameters</span>
@@ -722,11 +1050,18 @@
 <span class="sd">            the string id for the `Node` which holds this connection.</span>
 <span class="sd">            If None the default ID, &#39;ParentNetwork&#39; is used</span>
 
+<span class="sd">        verbose : bool</span>
+<span class="sd">            Whether to print informative messages for debugging. Default is False</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Connection</span>
 <span class="sd">            a Python object with all the values from key `connection_id`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Creating connection </span><span class="si">{}</span><span class="s2"> in node </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contents&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">contents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">con</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="p">[</span><span class="n">con</span><span class="p">],</span> <span class="n">contents</span><span class="p">))</span>
@@ -735,6 +1070,7 @@
 
         <span class="n">bidirectional</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bidirectional&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">source_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">source_id</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
 
@@ -763,6 +1099,7 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">:</span>
+            <span class="n">friction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;friction_coeff&quot;</span><span class="p">)</span>
             <span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diameter&quot;</span><span class="p">)</span>
             <span class="p">)</span>
@@ -783,6 +1120,7 @@
                 <span class="n">max_flow</span><span class="p">,</span>
                 <span class="n">design_flow</span><span class="p">,</span>
                 <span class="n">diameter</span><span class="o">=</span><span class="n">diameter</span><span class="p">,</span>
+                <span class="n">friction</span><span class="o">=</span><span class="n">friction</span><span class="p">,</span>
                 <span class="n">lower_heating_value</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span>
                 <span class="n">higher_heating_value</span><span class="o">=</span><span class="n">higher</span><span class="p">,</span>
                 <span class="n">min_pres</span><span class="o">=</span><span class="n">min_pres</span><span class="p">,</span>
@@ -796,6 +1134,17 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Wire&quot;</span><span class="p">:</span>
             <span class="n">connection_obj</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Wire</span><span class="p">(</span>
                 <span class="n">connection_id</span><span class="p">,</span>
+                <span class="n">source</span><span class="p">,</span>
+                <span class="n">destination</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span>
+                <span class="n">exit_point</span><span class="o">=</span><span class="n">exit_point</span><span class="p">,</span>
+                <span class="n">entry_point</span><span class="o">=</span><span class="n">entry_point</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Delivery&quot;</span><span class="p">:</span>
+            <span class="n">connection_obj</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Delivery</span><span class="p">(</span>
+                <span class="n">connection_id</span><span class="p">,</span>
+                <span class="n">contents</span><span class="p">,</span>
                 <span class="n">source</span><span class="p">,</span>
                 <span class="n">destination</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -1187,6 +1536,80 @@
 
         <span class="k">return</span> <span class="n">contents</span></div>
 
+<div class="viewcode-block" id="JSONParser.parse_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_dosing_rate">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_dosing_rate</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a dictionary of a different format</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        heating_vals : dict</span>
+<span class="sd">            dictionary of the form {</span>
+
+<span class="sd">                ``DosingType``: {</span>
+
+<span class="sd">                    ``rate``: `float`</span>
+
+<span class="sd">                    ``units``: `str`</span>
+<span class="sd">                }</span>
+
+<span class="sd">            }</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Keys are of DosingType or str and values of pint.Quantity or float</span>
+<span class="sd">            Given as a float if no units are specified</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_dosing_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dosing_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="o">.</span><span class="n">__members__</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> is not a valid dosing type&quot;</span><span class="p">)</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">new_dosing_dict</span><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">=</span> <span class="n">new_v</span>
+
+        <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
+
+<div class="viewcode-block" id="JSONParser.dosing_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.dosing_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">dosing_to_dict</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the dosing rate or area dictionary from PyPES to JSON format.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dosing_dict : dict</span>
+<span class="sd">            dictionary of the form {</span>
+<span class="sd">                ``DosingTypeA`` : `float` or`pint.Quantity`</span>
+
+<span class="sd">                ``DosingTypeB`` : `float` or `pint.Quantity`</span>
+
+<span class="sd">            }</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary in JSON-readable format. I.e., {</span>
+<span class="sd">                ``DosingTypeA``: {</span>
+<span class="sd">                    ``value``: `float`</span>
+
+<span class="sd">                    ``units``: `str`</span>
+
+<span class="sd">                }</span>
+
+<span class="sd">                ``DosingTypeB``: {</span>
+<span class="sd">                    ``value``: `float`</span>
+
+<span class="sd">                    ``units``: `str`</span>
+
+<span class="sd">                }</span>
+
+<span class="sd">            }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_dosing_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dosing_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">new_dosing_dict</span><span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_v</span>
+
+        <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
+
 <div class="viewcode-block" id="JSONParser.parse_min_max_design"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_design">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">parse_min_max_design</span><span class="p">(</span><span class="n">min_max_design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
@@ -1195,11 +1618,13 @@
 <span class="sd">        ----------</span>
 <span class="sd">        min_max_design : dict</span>
 <span class="sd">            dictionary of the form {</span>
-<span class="sd">                ``min``: `int`</span>
+<span class="sd">                ``min``: `float`</span>
 
-<span class="sd">                ``max``: `int`</span>
+<span class="sd">                ``max``: `float`</span>
 
-<span class="sd">                ``design``: `int`</span>
+<span class="sd">                ``design``: `float`</span>
+
+<span class="sd">                ``units``: `str`</span>
 
 <span class="sd">            }</span>
 
@@ -1432,6 +1857,7 @@
 <span class="sd">            `conn_obj` in dictionary form</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conn_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;destination&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
@@ -1466,7 +1892,8 @@
             <span class="k">if</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">diameter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
 
-        <span class="c1"># TODO: unsupported attribute: friction_coeff</span>
+            <span class="k">if</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">friction_coeff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;friction_coeff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">friction_coeff</span>
 
         <span class="n">tag_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">v_tag_dict</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1527,12 +1954,20 @@
         <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_dict</span>
         <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;virtual_tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_tag_dict</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Tank</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Reservoir</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Reservoir</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">magnitude</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Tank</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation (meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="o">.</span><span class="n">magnitude</span>
+
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Pump</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">elevation</span><span class="p">)</span>
@@ -1565,16 +2000,63 @@
                 <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;gen_capacity&quot;</span>
             <span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span>
-            <span class="n">node_obj</span><span class="p">,</span>
-            <span class="p">(</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">Chlorination</span><span class="p">,</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">Thickening</span><span class="p">,</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">Aeration</span><span class="p">,</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">Filtration</span><span class="p">,</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">Clarification</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Disinfection</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
+
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;residence_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">residence_time</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">UVSystem</span><span class="p">):</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">dosing_area</span><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="p">[</span><span class="s2">&quot;UVLight&quot;</span><span class="p">]]</span>
+                <span class="p">)</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;intensity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">dosing_rate</span><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="p">[</span><span class="s2">&quot;UVLight&quot;</span><span class="p">]]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;dosing_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">dosing_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">dosing_rate</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Filtration</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
+
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;settling_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">settling_time</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;dosing_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">dosing_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">dosing_rate</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">ROMembrane</span><span class="p">):</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;selectivity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">selectivity</span>
+                <span class="p">)</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;permeability&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                    <span class="n">node_obj</span><span class="o">.</span><span class="n">permeability</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Reactor</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">StaticMixer</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
+
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;num_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;residence_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">residence_time</span>
+            <span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;dosing_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">dosing_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">dosing_rate</span><span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;pH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">pH</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Thickening</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Aeration</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Clarification</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span>
 
@@ -1641,7 +2123,7 @@
 <span class="sd">            number of spaces to indent the JSON file</span>
 
 <span class="sd">        verbose : bool</span>
-<span class="sd">            Whether to print informative messages for debugging</span>
+<span class="sd">            Whether to print informative messages for debugging. Default is False</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>

@@ -99,7 +99,7 @@
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span>
-
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 
 <span class="n">EFFICIENCY_ATTRS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thermal_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;electrical_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;rte&quot;</span><span class="p">]</span>
 
@@ -148,6 +148,37 @@
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
+
+<div class="viewcode-block" id="Node.set_dosing"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_dosing">[docs]</a>    <span class="k">def</span> <span class="nf">set_dosing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dose_rate</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the dosing rate of the node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dose_rate : dict of str:float</span>
+<span class="sd">            Dosing rate of the chemical in the node</span>
+
+<span class="sd">        mode : str</span>
+<span class="sd">            whether or not the dosing is defined as a volumetric &#39;rate&#39; or by &#39;area&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">,</span> <span class="s2">&quot;area&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Dosing mode must be either &#39;rate&#39; or &#39;area&#39; not &#39;&quot;</span> <span class="o">+</span> <span class="n">mode</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">dosing_dict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dose_rate</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="p">):</span>
+                <span class="n">dosing_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="o">.</span><span class="n">__members__</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> is not a valid dosing type&quot;</span><span class="p">)</span>
+                <span class="n">dosing_dict</span><span class="p">[</span><span class="n">utils</span><span class="o">.</span><span class="n">DosingType</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;rate&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span> <span class="o">=</span> <span class="n">dosing_dict</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;area&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_area</span> <span class="o">=</span> <span class="n">dosing_dict</span></div>
 
 <div class="viewcode-block" id="Node.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and design flow rate of the node</span>
@@ -593,6 +624,35 @@
             <span class="n">parent_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_node_or_connection</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">parent_obj</span></div>
+
+<div class="viewcode-block" id="Node.get_parent"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child_obj</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the parent object of a `Tag`, `Connection`, or `Node` object,</span>
+<span class="sd">        as long as both `child_obj` and its parent object are children of `self`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        child_obj : `Tag`, `VirtualTag`, `Connection`, or `Node`</span>
+<span class="sd">            object for which we want the parent object</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Node or Connection</span>
+<span class="sd">            parent object of `child_obj`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent_from_tag</span><span class="p">(</span><span class="n">child_obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">child_obj</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="n">child_obj</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">child_obj</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="ow">or</span> <span class="n">child_obj</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="k">return</span> <span class="n">child</span></div>
 
 <div class="viewcode-block" id="Node.select_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Node.select_tags">[docs]</a>    <span class="k">def</span> <span class="nf">select_tags</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1152,7 +1212,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span></div>
 
-<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.remove_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a node from the network</span>
 
 <span class="sd">        Parameters</span>
@@ -1160,12 +1220,26 @@
 <span class="sd">        node_name : str</span>
 <span class="sd">            name of node to remove</span>
 
+<span class="sd">        recurse : bool</span>
+<span class="sd">            Whether or not to removed nodes recursively.</span>
+<span class="sd">            Default is False, meaning that only direct children will be removed.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        KeyError</span>
 <span class="sd">            if `node_name` is not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">node</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">return</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                        <span class="k">continue</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_name</span> <span class="o">+</span> <span class="s2">&quot; not found in network&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Network.add_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.add_connection">[docs]</a>    <span class="k">def</span> <span class="nf">add_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a connection to the network</span>
@@ -1177,19 +1251,32 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">connection</span></div>
 
-<div class="viewcode-block" id="Network.remove_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.remove_connection">[docs]</a>    <span class="k">def</span> <span class="nf">remove_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.remove_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.remove_connection">[docs]</a>    <span class="k">def</span> <span class="nf">remove_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a connection from the network</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        connection_name : str</span>
 <span class="sd">            name of connection to remove</span>
 
+<span class="sd">        recurse : bool</span>
+
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        KeyError</span>
 <span class="sd">            if `connection_name` is not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">node</span><span class="o">.</span><span class="n">remove_connection</span><span class="p">(</span><span class="n">connection_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">return</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                        <span class="k">continue</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Connection &quot;</span> <span class="o">+</span> <span class="n">connection_name</span> <span class="o">+</span> <span class="s2">&quot; not found in network&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Network.get_list_of_type"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.get_list_of_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_list_of_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desired_type</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches the Facility and returns a list of all objects of `desired_type`</span>
@@ -1223,7 +1310,9 @@
 
 
 <div class="viewcode-block" id="Facility"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Facility">[docs]</a><span class="k">class</span> <span class="nc">Facility</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing any industrial facility</span>
+<span class="sd">    from wastewater treatment to desalination to solid waste management.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -1342,8 +1431,104 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="ModularUnit"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.ModularUnit">[docs]</a><span class="k">class</span> <span class="nc">ModularUnit</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modular Unit in the network, such as a reverse osmosis skid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        ModularUnit ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the ModularUnit.</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the ModularUnit.</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this ModularUnit</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the ModularUnit, e.g. pumps, tanks, or filters</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the ModularUnit, e.g. pipes</span>
+
+<span class="sd">    num_units: int</span>
+<span class="sd">         Number of units running in parallel</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        ModularUnit ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the ModularUnit.</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the ModularUnit.</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this ModularUnit</span>
+
+<span class="sd">    nodes : dict of Node</span>
+<span class="sd">        nodes in the ModularUnit, e.g. pumps, tanks, or filters</span>
+
+<span class="sd">    num_units: int</span>
+<span class="sd">        Number of units running in parallel</span>
+
+<span class="sd">    connections : dict of Connections</span>
+<span class="sd">        connections in the ModularUnit, e.g. pipes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">connections</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="n">connections</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Network id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;nodes:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="si">}</span><span class="s2"> connections:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">connections</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">connections</span>
+        <span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Pump"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump">[docs]</a><span class="k">class</span> <span class="nc">Pump</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Any kind of pump, such as constant speed, variable frequency drive (VFD),</span>
+<span class="sd">    energy recovery device (ERD), and air blower.</span>
+
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -1374,7 +1559,10 @@
 <span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
-<span class="sd">        Type of pump (either VFD or constant)</span>
+<span class="sd">        Type of pump (either VFD, ERD, AirBlower or Constant)</span>
+
+<span class="sd">    efficiency : float</span>
+<span class="sd">        efficiency of the pump</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this pump</span>
@@ -1409,7 +1597,7 @@
 <span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
-<span class="sd">        Type of pump (either VFD or constant)</span>
+<span class="sd">        Type of pump (either VFD, ERD, AirBlower or Constant)</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this pump</span>
@@ -1431,6 +1619,7 @@
         <span class="n">power_rating</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">pump_type</span><span class="o">=</span><span class="n">utils</span><span class="o">.</span><span class="n">PumpType</span><span class="o">.</span><span class="n">Constant</span><span class="p">,</span>
+        <span class="n">efficiency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -1440,11 +1629,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">=</span> <span class="n">pump_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span> <span class="o">=</span> <span class="n">power_rating</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="o">=</span> <span class="n">efficiency</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_pump_curve</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pump_curve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_efficiency</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -1454,6 +1644,7 @@
             <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;power_rating:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;pump_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span><span class="si">}</span><span class="s2"> efficiency:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1462,6 +1653,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
+        <span class="c1"># TODO: add a way to compare pump_curve since it is a function</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
@@ -1474,17 +1666,8 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">efficiency</span>
         <span class="p">)</span>
-
-<div class="viewcode-block" id="Pump.set_pump_type"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.set_pump_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_pump_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_type</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the pump curve to the given function</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        pump_type : PumpType</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO: check that pump_type is a valid enum</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pump_type</span> <span class="o">=</span> <span class="n">pump_type</span></div>
 
 <div class="viewcode-block" id="Pump.set_pump_curve"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.set_pump_curve">[docs]</a>    <span class="k">def</span> <span class="nf">set_pump_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_curve</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the pump curve to the given function</span>
@@ -1497,6 +1680,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: type check that pump_curve is a function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pump_curve</span> <span class="o">=</span> <span class="n">pump_curve</span></div>
+
+<div class="viewcode-block" id="Pump.get_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.get_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">get_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_efficiency</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please add `efficiency` attribute&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Pump.set_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.set_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">set_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">efficiency</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_efficiency</span> <span class="o">=</span> <span class="n">efficiency</span></div>
+
+<div class="viewcode-block" id="Pump.del_efficiency"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.del_efficiency">[docs]</a>    <span class="k">def</span> <span class="nf">del_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_efficiency</span></div>
 
 <div class="viewcode-block" id="Pump.get_power_rating"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Pump.get_power_rating">[docs]</a>    <span class="k">def</span> <span class="nf">get_power_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1520,27 +1716,34 @@
             <span class="p">)</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">horsepower</span></div>
 
+    <span class="n">efficiency</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_efficiency</span><span class="p">,</span> <span class="n">set_efficiency</span><span class="p">,</span> <span class="n">del_efficiency</span><span class="p">)</span>
     <span class="n">power_rating</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_power_rating</span><span class="p">,</span> <span class="n">set_power_rating</span><span class="p">,</span> <span class="n">del_power_rating</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Tank"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Tank">[docs]</a><span class="k">class</span> <span class="nc">Tank</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class to represent a storage tank.</span>
+<span class="sd">    Any `input_contents` and `output_contents` can be provided</span>
+<span class="sd">    and metadata such as `volume` and `elevation` can be specified.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
 <span class="sd">        Tank ID</span>
 
 <span class="sd">    input_contents : ContentsType or list of ContentsType</span>
-<span class="sd">        Contents entering the tank.</span>
+<span class="sd">        Contents entering the tank</span>
 
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
-<span class="sd">        Contents leaving the tank.</span>
+<span class="sd">        Contents leaving the tank</span>
 
 <span class="sd">    elevation : pint.Quantity or int</span>
 <span class="sd">        Elevation of the tank in meters above sea level</span>
 
 <span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of identical tanks in parallel</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this tank</span>
@@ -1562,6 +1765,9 @@
 <span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
 
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of identical tanks in parallel</span>
+
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this tank</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1573,6 +1779,7 @@
         <span class="n">output_contents</span><span class="p">,</span>
         <span class="n">elevation</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -1580,6 +1787,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1587,6 +1795,7 @@
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Tank id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1601,12 +1810,322 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Tank.get_num_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Tank.get_num_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_units</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Please add `num_units` attribute to `Tank`&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Tank.set_num_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Tank.set_num_units">[docs]</a>    <span class="k">def</span> <span class="nf">set_num_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_units</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_units</span> <span class="o">=</span> <span class="n">num_units</span></div>
+
+<div class="viewcode-block" id="Tank.del_num_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Tank.del_num_units">[docs]</a>    <span class="k">def</span> <span class="nf">del_num_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_units</span></div>
+
+    <span class="n">num_units</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_num_units</span><span class="p">,</span> <span class="n">set_num_units</span><span class="p">,</span> <span class="n">del_num_units</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Reactor"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Reactor">[docs]</a><span class="k">class</span> <span class="nc">Reactor</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reactor modeled as a basic tank with chemical dosing point(s).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Reactor ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the reactor</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the reactor</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the reactor</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the reactor</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the reactor</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of reactor in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the reactor in cubic meters</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the reactor</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the reactor (key: DosingType, value: rate)</span>
+
+<span class="sd">    pH : float</span>
+<span class="sd">        pH value for the reactor</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this reactor</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Reactor ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the reactor</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the reactor</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the reactor</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the reactor</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the reactor</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of reactors</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the reactor in cubic meters</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the reactor</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the reactor (key: DosingType, value: rate)</span>
+
+<span class="sd">    pH : float</span>
+<span class="sd">        pH value for the reactor</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of reactors in parallel</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this reactor</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">residence_time</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">pH</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pH</span> <span class="o">=</span> <span class="n">pH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">=</span> <span class="n">residence_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Reactor id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> pH:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pH</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;residence_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pH</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">residence_time</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Reactor.get_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Reactor.get_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span></div>
+
+<div class="viewcode-block" id="Reactor.set_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Reactor.set_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dosing_rate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Reactor.del_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Reactor.del_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">del_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span></div>
+
+    <span class="n">dosing_rate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_dosing_rate</span><span class="p">,</span> <span class="n">set_dosing_rate</span><span class="p">,</span> <span class="n">del_dosing_rate</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StaticMixer"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.StaticMixer">[docs]</a><span class="k">class</span> <span class="nc">StaticMixer</span><span class="p">(</span><span class="n">Reactor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A tank containing a static mixer,</span>
+<span class="sd">    typically used for coagulation in water treatment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        StaticMixer ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the mixer</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the mixer</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the mixer</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the mixer</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the mixer</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of mixers in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the mixer in cubic meters</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the mixer</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the mixer (key: DosingType, value: rate)</span>
+
+<span class="sd">    pH : float</span>
+<span class="sd">        pH value for the mixer</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this mixer</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        StaticMixer ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the mixer</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the mixer</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate through the mixer</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate through the mixer</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate through the mixer</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of mixers in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the mixer in cubic meters</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the mixer</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the mixer (key: DosingType, value: rate)</span>
+
+<span class="sd">    pH : float</span>
+<span class="sd">        pH value for the mixer</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this mixer</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">residence_time</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">pH</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pH</span> <span class="o">=</span> <span class="n">pH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">=</span> <span class="n">residence_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.StaticMixer id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> pH:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pH</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;residence_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pH</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pH</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">residence_time</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Reservoir"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Reservoir">[docs]</a><span class="k">class</span> <span class="nc">Reservoir</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic reservoir used to represent lakes and oceans in addition</span>
+<span class="sd">    to manmade bodies of water.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -1688,7 +2207,9 @@
 
 
 <div class="viewcode-block" id="Battery"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Battery">[docs]</a><span class="k">class</span> <span class="nc">Battery</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic battery with metadata such as roundtrip efficiency (RTE),</span>
+<span class="sd">    energy capacity, and charge/discharge rates.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -1765,7 +2286,7 @@
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;energy_capacity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">energy_capacity</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">charge_rate</span><span class="si">}</span><span class="s2"> discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span><span class="w"> </span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;charge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">charge_rate</span><span class="si">}</span><span class="s2"> discharge_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">discharge_rate</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;rte:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rte</span><span class="si">}</span><span class="s2"> leakage:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">leakage</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1857,7 +2378,8 @@
 
 
 <div class="viewcode-block" id="Digestion"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Digestion">[docs]</a><span class="k">class</span> <span class="nc">Digestion</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a sludge digester, either aerobic or anaerobic.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -1869,19 +2391,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the digester (e.g. biogas or wastewater)</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate through the digester</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate through the digester</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of digesters running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the digester in cubic meters</span>
 
 <span class="sd">    digester_type : DigesterType</span>
@@ -1904,16 +2426,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of digesters running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the digester in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate through the digester</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate through the digester</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    digester_type : DigesterType</span>
@@ -1977,7 +2499,9 @@
 
 
 <div class="viewcode-block" id="Cogeneration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Cogeneration">[docs]</a><span class="k">class</span> <span class="nc">Cogeneration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a cogeneration engine that produces</span>
+<span class="sd">    both heat and electricity through biogas and/or natural gas combustion.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2182,7 +2706,8 @@
 
 
 <div class="viewcode-block" id="Boiler"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Boiler">[docs]</a><span class="k">class</span> <span class="nc">Boiler</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a boiler that produces heat through natural gas combustion.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2369,7 +2894,9 @@
 
 
 <div class="viewcode-block" id="Clarification"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Clarification">[docs]</a><span class="k">class</span> <span class="nc">Clarification</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a generic clarifier,</span>
+<span class="sd">    sedimentation tank, or settling basin.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2381,19 +2908,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the clarifier</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single clarifier</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single clarifier</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of clarifiers running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of the clarifier in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2413,16 +2940,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of clarifiers running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single clarifier in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single clarifier</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single clarifier</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2479,7 +3006,9 @@
 
 
 <div class="viewcode-block" id="Filtration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Filtration">[docs]</a><span class="k">class</span> <span class="nc">Filtration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The parent class for a wide range of filtration methods,</span>
+<span class="sd">    such as sand filters, trickling filters, or reverse osmosis membranes.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2491,20 +3020,26 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the filter</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single filter</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of filters running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the filter (key: DosingType, value: rate)</span>
+
+<span class="sd">    settling_time : float</span>
+<span class="sd">        time it takes for the filter to reach the desired operation mode in seconds</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this filter</span>
@@ -2523,17 +3058,23 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of filters running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single filter</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single filter</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the filter (key: DosingType, value: rate)</span>
+
+<span class="sd">    settling_time : float</span>
+<span class="sd">        time it takes for the filter to reach the desired operation mode</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this filter</span>
@@ -2549,6 +3090,8 @@
         <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">settling_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -2560,6 +3103,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span> <span class="o">=</span> <span class="n">settling_time</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -2567,7 +3112,8 @@
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;settling_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -2584,12 +3130,190 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">settling_time</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Filtration.get_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Filtration.get_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please add `dosing_rate` attribute&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Filtration.set_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Filtration.set_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dosing_rate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Filtration.del_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Filtration.del_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">del_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span></div>
+
+    <span class="n">dosing_rate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_dosing_rate</span><span class="p">,</span> <span class="n">set_dosing_rate</span><span class="p">,</span> <span class="n">del_dosing_rate</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ROMembrane"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.ROMembrane">[docs]</a><span class="k">class</span> <span class="nc">ROMembrane</span><span class="p">(</span><span class="n">Filtration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for representing a reverse osmosis membrane process.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        ROMembrane ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the RO membrane</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the RO membrane</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of the RO membrane</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of the RO membrane</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single filter</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of RO membranes running in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the RO membrane in cubic meters</span>
+
+<span class="sd">    area : float</span>
+<span class="sd">        Area of the RO membrane in square meters</span>
+
+<span class="sd">    permeability : float</span>
+<span class="sd">        Permeability of the RO membrane</span>
+
+<span class="sd">    selectivity : float</span>
+<span class="sd">        Selectivity of the RO membrane</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the RO membrane (key: DosingType, value: rate)</span>
+
+<span class="sd">    settling_time : float</span>
+<span class="sd">        time it takes for the filter to reach the desired operation mode</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with the RO membrane</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        ROMembrane ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the RO membrane</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the RO membrane</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of RO membranes running in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of a single filter in cubic meters</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of a single filter</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of a single filter</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single filter</span>
+
+<span class="sd">    area : float</span>
+<span class="sd">        Area of the RO membrane in square meters</span>
+
+<span class="sd">    permeability : float</span>
+<span class="sd">        Permeability of the RO membrane</span>
+
+<span class="sd">    selectivity : float</span>
+<span class="sd">        Selectivity of the RO membrane</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the RO membrane (key: DosingType, value: rate)</span>
+
+<span class="sd">    settling_time : float</span>
+<span class="sd">        time it takes for the filter to reach the desired operation mode</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with the RO membrane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">area</span><span class="p">,</span>
+        <span class="n">permeability</span><span class="p">,</span>
+        <span class="n">selectivity</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">settling_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">permeability</span> <span class="o">=</span> <span class="n">permeability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selectivity</span> <span class="o">=</span> <span class="n">selectivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span> <span class="o">=</span> <span class="n">settling_time</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Filtration.ROMembrane id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> area:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;permeability:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">permeability</span><span class="si">}</span><span class="s2"> selectivity:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selectivity</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> settling_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">area</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">permeability</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">permeability</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectivity</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">selectivity</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settling_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">settling_time</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Screening"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Screening">[docs]</a><span class="k">class</span> <span class="nc">Screening</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing the screening process for removing</span>
+<span class="sd">    large solids from the intake of a facility, such as a bar screen.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2601,13 +3325,13 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the screen</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single screen</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single screen</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    num_units : int</span>
@@ -2630,13 +3354,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of screens running in parallel</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single screen</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single screen</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2690,7 +3414,11 @@
 
 
 <div class="viewcode-block" id="Conditioning"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Conditioning">[docs]</a><span class="k">class</span> <span class="nc">Conditioning</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for representing biogas conditioners.</span>
+<span class="sd">    The conditioner prepares &#39;raw&#39; biogas from the digester</span>
+<span class="sd">    by removing impurities and readying it for combustion</span>
+<span class="sd">    for `Cogeneration`.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2702,13 +3430,13 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the biogas conditioner</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    num_units : int</span>
@@ -2731,13 +3459,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of biogas conditioners running in parallel</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2791,7 +3519,10 @@
 
 
 <div class="viewcode-block" id="Thickening"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Thickening">[docs]</a><span class="k">class</span> <span class="nc">Thickening</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to represent a general thickener,</span>
+<span class="sd">    such as gravity belt, dissolved air float (DAF),</span>
+<span class="sd">    or centrifugal thickening.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2803,19 +3534,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the thickener</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single thickener</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single thickener</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of thickeners running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single thickener in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2835,16 +3566,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of thickeners running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single thickener in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single thickener</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single thickener</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2902,7 +3633,8 @@
 
 
 <div class="viewcode-block" id="Aeration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Aeration">[docs]</a><span class="k">class</span> <span class="nc">Aeration</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class for an aeration basin.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -2914,19 +3646,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the aeration basin</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single aeration basin</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single aeration basin</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of aeration basins running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single aeration basin in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2946,16 +3678,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of aeration basins running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single aeration basin in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single aeration basin</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single aeration basin</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3012,8 +3744,172 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Chlorination"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Chlorination">[docs]</a><span class="k">class</span> <span class="nc">Chlorination</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Disinfection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection">[docs]</a><span class="k">class</span> <span class="nc">Disinfection</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class for a disinfection process,</span>
+<span class="sd">    such as chlorination, ozone, or UV light.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Disinfector ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the disinfector</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the disinfector</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of a single disinfector</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of a single disinfector</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single disinfector</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of disinfectors running in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of a single disinfectors in cubic meters</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the disinfector (key: DosingType, value: rate)</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the disinfector</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this disinfector</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Disinfector ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the disinfector</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the disinfector</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of disinfector running in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of a single disinfector in cubic meters</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of a single disinfector</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of a single disinfector</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single disinfector</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the disinfector (key: DosingType, value: rate)</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the disinfector</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this disinfector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">residence_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">=</span> <span class="n">residence_time</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Disinfection id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> residence_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">residence_time</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Disinfection.get_residence_time"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.get_residence_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_residence_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_res_time</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please add `residence_time` attribute&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Disinfection.set_residence_time"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.set_residence_time">[docs]</a>    <span class="k">def</span> <span class="nf">set_residence_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">residence_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_res_time</span> <span class="o">=</span> <span class="n">residence_time</span></div>
+
+<div class="viewcode-block" id="Disinfection.del_residence_time"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.del_residence_time">[docs]</a>    <span class="k">def</span> <span class="nf">del_residence_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_res_time</span></div>
+
+<div class="viewcode-block" id="Disinfection.get_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.get_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Please add `dosing_rate` attribute&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Disinfection.set_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.set_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dosing_rate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rate&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Disinfection.del_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Disinfection.del_dosing_rate">[docs]</a>    <span class="k">def</span> <span class="nf">del_dosing_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_rate</span></div>
+
+    <span class="n">residence_time</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">get_residence_time</span><span class="p">,</span> <span class="n">set_residence_time</span><span class="p">,</span> <span class="n">del_residence_time</span>
+    <span class="p">)</span>
+    <span class="n">dosing_rate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_dosing_rate</span><span class="p">,</span> <span class="n">set_dosing_rate</span><span class="p">,</span> <span class="n">del_dosing_rate</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Chlorination"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Chlorination">[docs]</a><span class="k">class</span> <span class="nc">Chlorination</span><span class="p">(</span><span class="n">Disinfection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for a chlorination basin.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -3025,20 +3921,26 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the chlorinator</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single chlorinator</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single chlorinator</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single chlorinator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single chlorinator in cubic meters</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the chlorinator (key: DosingType, value: rate)</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the chlorinator</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this chlorinator</span>
@@ -3057,17 +3959,23 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
 
-<span class="sd">    volume : int</span>
+<span class="sd">    volume : pint.Quantity or int</span>
 <span class="sd">        Volume of a single chlorinator in cubic meters</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single chlorinator</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single chlorinator</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single chlorinator</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        Dosing information for the chlorinator (key: DosingType, value: rate)</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Residence time of the chlorinator</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this chlorinator</span>
@@ -3083,6 +3991,8 @@
         <span class="n">design_flow</span><span class="p">,</span>
         <span class="n">num_units</span><span class="p">,</span>
         <span class="n">volume</span><span class="p">,</span>
+        <span class="n">dosing_rate</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">residence_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -3094,6 +4004,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">(</span><span class="n">dosing_rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">=</span> <span class="n">residence_time</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -3102,7 +4014,8 @@
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot; tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> residence_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -3119,8 +4032,127 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">residence_time</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UVSystem"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.UVSystem">[docs]</a><span class="k">class</span> <span class="nc">UVSystem</span><span class="p">(</span><span class="n">Disinfection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        UV System ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the UV system</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the UV system</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of UV systems running in parallel</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Time in seconds that the water is exposed to UV light</span>
+
+<span class="sd">    intensity : pint.Quantity or float</span>
+<span class="sd">        Intensity of the UV light in W/m^2</span>
+
+<span class="sd">    area : pint.Quantity or float</span>
+<span class="sd">        Application area of the UV light in m^2</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this chlorinator</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        UVSystem ID</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of chlorinators running in parallel</span>
+
+<span class="sd">    residence_time : pint.Quantity or float</span>
+<span class="sd">        Time in seconds that the water is exposed to UV light</span>
+
+<span class="sd">    dosing_rate : dict of DosingType:float</span>
+<span class="sd">        UV intensity in the UV system</span>
+
+<span class="sd">    dosing_area : dict of DosingType:float</span>
+<span class="sd">        Area of the UV system that is exposed to UV light</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this chlorinator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">residence_time</span><span class="p">,</span>
+        <span class="n">intensity</span><span class="p">,</span>
+        <span class="n">area</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">=</span> <span class="n">residence_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_rate</span><span class="p">({</span><span class="s2">&quot;UVLight&quot;</span><span class="p">:</span> <span class="n">intensity</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing_area</span><span class="p">({</span><span class="s2">&quot;UVLight&quot;</span><span class="p">:</span> <span class="n">area</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.UVSystem id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;residence_time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span><span class="si">}</span><span class="s2"> dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;dosing_area:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_area</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">residence_time</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">residence_time</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_rate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dosing_area</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dosing_area</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="UVSystem.get_dosing_area"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.UVSystem.get_dosing_area">[docs]</a>    <span class="k">def</span> <span class="nf">get_dosing_area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_area</span></div>
+
+<div class="viewcode-block" id="UVSystem.set_dosing_area"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.UVSystem.set_dosing_area">[docs]</a>    <span class="k">def</span> <span class="nf">set_dosing_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dosing_area</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dosing</span><span class="p">(</span><span class="n">dosing_area</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;area&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UVSystem.del_dosing_area"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.UVSystem.del_dosing_area">[docs]</a>    <span class="k">def</span> <span class="nf">del_dosing_area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dosing_area</span></div>
+
+    <span class="n">dosing_area</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_dosing_area</span><span class="p">,</span> <span class="n">set_dosing_area</span><span class="p">,</span> <span class="n">del_dosing_area</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Flaring"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Flaring">[docs]</a><span class="k">class</span> <span class="nc">Flaring</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
@@ -3133,13 +4165,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of flares running in parallel</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single flare</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single flare</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3156,13 +4188,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of flares running in parallel</span>
 
-<span class="sd">    min_flow : int</span>
+<span class="sd">    min_flow : pint.Quantity or int</span>
 <span class="sd">        Minimum flow rate of a single flare</span>
 
-<span class="sd">    max_flow : int</span>
+<span class="sd">    max_flow : pint.Quantity or int</span>
 <span class="sd">        Maximum flow rate of a single flare</span>
 
-<span class="sd">    design_flow : int</span>
+<span class="sd">    design_flow : pint.Quantity or int</span>
 <span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>

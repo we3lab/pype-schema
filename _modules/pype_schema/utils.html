@@ -537,6 +537,53 @@
                 <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;1/sec&quot;</span>
             <span class="p">):</span>
                 <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">Hz</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lmh&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter**2/meters**2/hour&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter^2/meters^2/hour&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter2/meters2/hour&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter^2/hour/meters^2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter**2/hour/meters**2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter2/hour/meters2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l**2/m**2/h&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l^2/m^2/h&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l2/m2/h&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l^2/h/m^2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l**2/h/m**2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l2/h/m2&quot;</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">LMH</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;permeability&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;lmh/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;flux_lmh/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter**2/meters**2/hour/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter^2/meters^2/hour/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter2/meters2/hour/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter^2/hour/meters^2/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter**2/hour/meters**2/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;liter2/hour/meters2/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l**2/m**2/h/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l^2/m^2/h/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l2/m2/h/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l^2/h/m^2/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l**2/h/m**2/bar&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;l2/h/m2/bar&quot;</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">LMH</span> <span class="o">/</span> <span class="n">u</span><span class="o">.</span><span class="n">bar</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;intensity&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/m**2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/m^2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/m2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/meter**2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/meter^2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;w/meter2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;watt/meter**2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;watt/meter^2&quot;</span>
+                <span class="ow">or</span> <span class="n">clean_units</span> <span class="o">==</span> <span class="s2">&quot;watt/meter2&quot;</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">W</span> <span class="o">/</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">UndefinedUnitError</span><span class="p">(</span><span class="s2">&quot;Unsupported unit: &quot;</span> <span class="o">+</span> <span class="n">units</span><span class="p">)</span></div>
 
@@ -574,20 +621,31 @@
     <span class="n">Heat</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Oil</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Grease</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Air</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Chemical</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Coagulant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Disinfectant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Deodorant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">IndustrialWastewater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">MunicipalWastewater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">DisinfectedEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">DisinfectedEffluent</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SolidWaste</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">PretreatedWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ProductWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">ChlorinatedSeawater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CoagulatedWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">FilterBackwash</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Filtrate</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">WFBS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Water Filter Backwash Solids</span></div>
 
 
 <div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.PumpType">[docs]</a><span class="k">class</span> <span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent constant vs. variable drive pumps&quot;&quot;&quot;</span>
 
     <span class="n">Constant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">VFD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">VFD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># variable frequency drive</span>
+    <span class="n">ERD</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># energy recovery device</span>
+    <span class="n">AirBlower</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="DigesterType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DigesterType">[docs]</a><span class="k">class</span> <span class="nc">DigesterType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -595,6 +653,20 @@
 
     <span class="n">Aerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Anaerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DosingType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DosingType">[docs]</a><span class="k">class</span> <span class="nc">DosingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of dosing&quot;&quot;&quot;</span>
+
+    <span class="n">NaOCl</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># sodium hypochlorite</span>
+    <span class="n">FeCl3</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># ferric chloride</span>
+    <span class="n">Antiscalant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">CO2</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># carbon dioxide</span>
+    <span class="n">CaOH2</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># calcium hydroxide</span>
+    <span class="n">OrthoPolyphosphate</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SBS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># sodium bisulphite</span>
+    <span class="n">Polymer</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">UVLight</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="select_objs_helper"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.select_objs_helper">[docs]</a><span class="k">def</span> <span class="nf">select_objs_helper</span><span class="p">(</span>

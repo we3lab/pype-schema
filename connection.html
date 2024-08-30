@@ -141,7 +141,7 @@
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this connection</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
@@ -300,7 +300,9 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Pipe">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>A generic class for pipes that transport any fluid,
+such as drinking water, natural gas, or industrial wastewater.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Pipe ID</p></li>
@@ -311,7 +313,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate through the pipe</p></li>
 <li><p><strong>avg_flow</strong> (<em>pint.Quantity or int</em>) – Average flow rate through the pipe</p></li>
 <li><p><strong>diameter</strong> (<em>pint.Quantity or int</em>) – Pipe diameter</p></li>
-<li><p><strong>friction_coeff</strong> (<em>int</em>) – Friction coefficient for the pipe</p></li>
+<li><p><strong>friction</strong> (<em>float</em>) – Friction coefficient for the pipe</p></li>
 <li><p><strong>min_pres</strong> (<em>pint.Quantity or int</em>) – Minimum pressure inside the pipe</p></li>
 <li><p><strong>max_pres</strong> (<em>pint.Quantity or int</em>) – Maximum pressure inside the pipe</p></li>
 <li><p><strong>design_pres</strong> (<em>pint.Quantity or int</em>) – Design pressure of the pipe</p></li>
@@ -399,14 +401,15 @@ Default is None, indicating the destination does not have any children</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Wire">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>A class for representing electrical connections.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>str</em>) – Pipe ID</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – Wire ID</p></li>
 <li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
-<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pump</p></li>
-<li><p><strong>bidirectional</strong> (<em>bool</em>) – whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this wire</p></li>
+<li><p><strong>bidirectional</strong> (<em>bool</em>) – Whether electricity can flow from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<em>Node</em>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<em>Node</em>) – The child node at which this connection enters its destination.

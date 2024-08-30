@@ -122,7 +122,7 @@
 <span class="sd">        Data tags associated with this connection</span>
 
 <span class="sd">    bidirectional : bool</span>
-<span class="sd">        whether flow can go from destination to source. False by default</span>
+<span class="sd">        Whether flow can go from destination to source. False by default</span>
 
 <span class="sd">    exit_point : Node</span>
 <span class="sd">        The child node from which this connection leaves its source.</span>
@@ -320,7 +320,9 @@
 
 
 <div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class for pipes that transport any fluid,</span>
+<span class="sd">    such as drinking water, natural gas, or industrial wastewater.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------</span>
 <span class="sd">    id : str</span>
@@ -347,7 +349,7 @@
 <span class="sd">    diameter : pint.Quantity or int</span>
 <span class="sd">        Pipe diameter</span>
 
-<span class="sd">    friction_coeff : int</span>
+<span class="sd">    friction : float</span>
 <span class="sd">        Friction coefficient for the pipe</span>
 
 <span class="sd">    min_pres : pint.Quantity or int</span>
@@ -763,11 +765,12 @@
 
 
 <div class="viewcode-block" id="Wire"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Wire">[docs]</a><span class="k">class</span> <span class="nc">Wire</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for representing electrical connections.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------</span>
 <span class="sd">    id : str</span>
-<span class="sd">        Pipe ID</span>
+<span class="sd">        Wire ID</span>
 
 <span class="sd">    source : Node</span>
 <span class="sd">        Starting point of the connection</span>
@@ -776,10 +779,10 @@
 <span class="sd">        Endpoint of the connection</span>
 
 <span class="sd">    tags : dict of Tag</span>
-<span class="sd">        Data tags associated with this pump</span>
+<span class="sd">        Data tags associated with this wire</span>
 
 <span class="sd">    bidirectional : bool</span>
-<span class="sd">        whether electricity can flow from destination to source. False by default</span>
+<span class="sd">        Whether electricity can flow from destination to source. False by default</span>
 
 <span class="sd">    exit_point : Node</span>
 <span class="sd">        The child node from which this connection leaves its source.</span>
@@ -836,6 +839,169 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exit_point_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">entry_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">entry_point_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.connection.Wire id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> source:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;destination:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> bidirectional:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">exit_point</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                <span class="c1"># TODO: uncomment when node comparison are supported</span>
+                <span class="c1"># if isinstance(self.source, type(other.source)):</span>
+                <span class="c1">#     return self.source &lt; other.source</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
+                <span class="c1"># if isinstance(self.destination, type(other.destination)):</span>
+                <span class="c1">#     return self.destination &lt; other.destination</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+        <span class="c1"># case with same number of different tags, so we compare tags in order</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">other_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]):</span>
+                <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Delivery"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Delivery">[docs]</a><span class="k">class</span> <span class="nc">Delivery</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to represent a connection via delivery,</span>
+<span class="sd">    such as monthly chemical deliveries or weekly trash disposal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Delivery ID</span>
+
+<span class="sd">    contents : ContentsType</span>
+<span class="sd">        Contents moving through the connection</span>
+
+<span class="sd">    source : Node</span>
+<span class="sd">        Starting point of the connection</span>
+
+<span class="sd">    destination : Node</span>
+<span class="sd">        Endpoint of the connection</span>
+
+<span class="sd">    frequency : pint.Quantity or float</span>
+<span class="sd">        If a pint quantity it will be interpreted based on units.</span>
+<span class="sd">        E.g., `0.25 days` will be interpreted as 0.25 days between deliveries,</span>
+<span class="sd">        or in other words 4 deliveries per day.</span>
+<span class="sd">        Whereas `0.25 / day` would indicate there is a quarter of a delivery per day,</span>
+<span class="sd">        or more intuitively 4 days between each delivery.</span>
+<span class="sd">        If unitless, assumed to be number of days between delivery</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this pump</span>
+
+<span class="sd">    bidirectional : bool</span>
+<span class="sd">        Whether deliveries are made from destination to source. False by default</span>
+
+<span class="sd">    exit_point : Node</span>
+<span class="sd">        The child node from which this connection leaves its source.</span>
+<span class="sd">        Default is None, indicating the source does not have any children</span>
+
+<span class="sd">    entry_point : Node</span>
+<span class="sd">        The child node at which this connection enters its destination.</span>
+<span class="sd">        Default is None, indicating the destination does not have any children</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Pipe ID</span>
+
+<span class="sd">    contents : ContentsType</span>
+<span class="sd">        Contents moving through the connection.</span>
+
+<span class="sd">    source : Node</span>
+<span class="sd">        Starting point of the connection</span>
+
+<span class="sd">    destination : Node</span>
+<span class="sd">        Endpoint of the connection</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this pipe</span>
+
+<span class="sd">    bidirectional : bool</span>
+<span class="sd">        Whether deliveries are made from destination to source. False by default</span>
+
+<span class="sd">    exit_point : Node</span>
+<span class="sd">        The child node from which this connection leaves its source.</span>
+<span class="sd">        Default is None, indicating the source does not have any children</span>
+
+<span class="sd">    entry_point : Node</span>
+<span class="sd">        The child node at which this connection enters its destination.</span>
+<span class="sd">        Default is None, indicating the destination does not have any children</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">,</span>
+        <span class="n">destination</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">exit_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">entry_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">=</span> <span class="n">bidirectional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
