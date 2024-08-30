@@ -7,7 +7,7 @@ from pype_schema.units import u
 from pype_schema.utils import ContentsType
 from pype_schema.tag import Tag, TagType
 from pype_schema.parse_json import JSONParser
-from pype_schema.node import Cogeneration, Pump
+from pype_schema.node import Cogeneration, Pump, Disinfection, ModularUnit
 from pype_schema.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -67,6 +67,32 @@ def test_get_tag(json_path, tag_name, expected_path):
         ),
         ("data/node.json", "SewerIntake", False, "data/sewer_intake.pkl"),
         ("data/node.json", "InvalidID", True, None),
+        (
+            "data/disinfection.json",
+            "DisinfectionTank",
+            False,
+            Disinfection(
+                "DisinfectionTank",
+                [ContentsType.UntreatedSewage],
+                [ContentsType.TreatedSewage],
+                None,
+                None,
+                None,
+                1,
+                2000 * u.L,
+            ),
+        ),
+        (
+            "data/unextend_desal.json",
+            "ROModule",
+            True,
+            ModularUnit(
+                "ROModule",
+                [ContentsType.PretreatedWater],
+                [ContentsType.ProductWater, ContentsType.Brine],
+                1,
+            ),
+        ),
     ],
 )
 def test_get_node_or_connection(json_path, obj_id, recurse, expected):
@@ -514,7 +540,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 10: return a single tag by "total" destination unit ID
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "SewerNetwork",
             None,
             None,
@@ -609,7 +635,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 15: bidirectional connection as source but searching for destination
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             None,
             "TeslaBattery",
             None,
@@ -628,7 +654,7 @@ def test_get_parent_from_tag(json_path, tag_path, expected):
         ),
         # Case 16: bidirectional connection as destination but searching for source
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "VirtualDemand",
             None,
             None,
@@ -868,7 +894,7 @@ def test_select_objs(
     "json_path, network_id, tag_id, tag_type, exit_point_id, expected",
     [
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Efficiency,
@@ -876,7 +902,7 @@ def test_select_objs(
             True,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             None,
@@ -884,7 +910,7 @@ def test_select_objs(
             True,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "WWTP",
             "ElectricityProductionByGasVolume",
             TagType.Flow,
@@ -892,7 +918,7 @@ def test_select_objs(
             False,
         ),
         (
-            "../data/sample.json",
+            "../data/wrrf_sample.json",
             "PowerGrid",
             "ElectricityProductionByGasVolume",
             None,
@@ -1094,3 +1120,49 @@ def test_depr_flow_rate(node, flow_rate):
     assert node.flow_rate == (None, None, flow_rate[2])
     node.del_design_flow()
     assert node.flow_rate == (None, None, None)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "obj1, obj2",
+    [
+        (
+            Disinfection(
+                "DisinfectionTank",
+                [ContentsType.UntreatedSewage],
+                [ContentsType.TreatedSewage],
+                None,
+                None,
+                None,
+                1,
+                2000 * u.L,
+            ),
+            ModularUnit(
+                "ROModule",
+                [ContentsType.PretreatedWater],
+                [ContentsType.ProductWater, ContentsType.Brine],
+                1,
+            ),
+        ),
+        (
+            ModularUnit(
+                "ROModule",
+                [ContentsType.PretreatedWater],
+                [ContentsType.ProductWater, ContentsType.Brine],
+                1,
+            ),
+            Disinfection(
+                "DisinfectionTank",
+                [ContentsType.UntreatedSewage],
+                [ContentsType.TreatedSewage],
+                None,
+                None,
+                None,
+                1,
+                2000 * u.L,
+            ),
+        ),
+    ],
+)
+def test_unequal_different_types(obj1, obj2):
+    assert obj1 != obj2

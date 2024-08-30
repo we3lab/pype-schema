@@ -1,0 +1,71 @@
+{
+    "nodes": ["ROModule"],
+    "connections": [],
+    "virtual_tags": {},
+    "ROModule": {
+        "type": "ModularUnit",
+        "num_units": 2,
+        "input_contents": ["PretreatedWater"],
+        "output_contents": ["ProductWater", "Brine"],
+        "nodes": ["ROMembranes", "PressureExchanger"],
+        "connections": [
+            "ROToPressureExchanger",
+            "PressureExchangerToRO"
+        ],
+        "tags": {}
+    },
+    "ROMembranes": {
+        "type": "ROMembrane",
+        "input_contents": ["PretreatedWater"],
+        "output_contents": ["Brine", "ProductWater"],
+        "volume": null,
+        "num_units": 3,
+        "area": {
+            "value": 1,
+            "units": "m^2"
+        },
+        "permeability": {
+            "value": 2,
+            "units": "LMH / bar"
+        },
+        "selectivity": {
+            "value": 2,
+            "units": "m / s"
+        },
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        }, 
+        "tags": {}
+    },
+    "PressureExchanger": {
+        "type": "Pump",
+        "pump_type": "ERD",
+        "contents": ["Brine", "PretreatedWater"],
+        "num_units": null,
+        "power_rating": null,
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "PressureExchangerToRO": {
+        "type": "Pipe",
+        "source": "PressureExchanger",
+        "destination": "ROMembranes",
+        "contents": "PretreatedWater",
+        "tags": {}
+    },
+    "ROToPressureExchanger": {
+        "type": "Pipe",
+        "source": "ROMembranes",
+        "destination": "PressureExchanger",
+        "contents": "Brine",
+        "tags": {}
+    }
+}

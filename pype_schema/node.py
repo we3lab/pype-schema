@@ -2,7 +2,7 @@ import warnings
 from abc import ABC
 from . import utils
 from .tag import Tag, VirtualTag
-
+from collections import defaultdict
 
 EFFICIENCY_ATTRS = ["thermal_efficiency", "electrical_efficiency", "rte"]
 
@@ -51,6 +51,37 @@ class Node(ABC):
             f"output_contents:{self.output_contents} "
             f"tags:{self.tags}>\n"
         )
+
+    def set_dosing(self, dose_rate, mode="rate"):
+        """Set the dosing rate of the node
+
+        Parameters
+        ----------
+        dose_rate : dict of str:float
+            Dosing rate of the chemical in the node
+
+        mode : str
+            whether or not the dosing is defined as a volumetric 'rate' or by 'area'
+        """
+        if mode not in ["rate", "area"]:
+            raise ValueError(
+                "Dosing mode must be either 'rate' or 'area' not '" + mode + "'"
+            )
+
+        dosing_dict = defaultdict(float)
+
+        for k, v in dose_rate.items():
+            if isinstance(k, utils.DosingType):
+                dosing_dict[k] = v
+            else:
+                if k not in utils.DosingType.__members__:
+                    raise ValueError(f"{k} is not a valid dosing type")
+                dosing_dict[utils.DosingType[k]] = v
+
+        if mode == "rate":
+            self._dosing_rate = dosing_dict
+        elif mode == "area":
+            self._dosing_area = dosing_dict
 
     def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and design flow rate of the node
@@ -496,6 +527,35 @@ class Node(ABC):
             parent_obj = self.get_node_or_connection(tag.parent_id, recurse=True)
 
         return parent_obj
+
+    def get_parent(self, child_obj):
+        """Gets the parent object of a `Tag`, `Connection`, or `Node` object,
+        as long as both `child_obj` and its parent object are children of `self`
+
+        Parameters
+        ----------
+        child_obj : `Tag`, `VirtualTag`, `Connection`, or `Node`
+            object for which we want the parent object
+
+        Returns
+        -------
+        Node or Connection
+            parent object of `child_obj`
+        """
+        if isinstance(child_obj, (Tag, VirtualTag)):
+            return self.get_parent_from_tag(child_obj)
+        elif (
+            child_obj.id in self.connections.keys() or child_obj.id in self.nodes.keys()
+        ):
+            return self
+        else:
+            children = self.get_all_nodes(recurse=True)
+            for child in children:
+                if (
+                    child_obj.id in child.connections.keys()
+                    or child_obj.id in child.nodes.keys()
+                ):
+                    return child
 
     def select_tags(
         self,
@@ -1055,7 +1115,7 @@ class Network(Node):
         """
         self.nodes[node.id] = node
 
-    def remove_node(self, node_name):
+    def remove_node(self, node_name, recurse=False):
         """Removes a node from the network
 
         Parameters
@@ -1063,12 +1123,26 @@ class Network(Node):
         node_name : str
             name of node to remove
 
+        recurse : bool
+            Whether or not to removed nodes recursively.
+            Default is False, meaning that only direct children will be removed.
+
         Raises
         ------
         KeyError
             if `node_name` is not found
         """
-        del self.nodes[node_name]
+        try:
+            del self.nodes[node_name]
+        except KeyError:
+            if recurse:
+                for node in self.nodes.values():
+                    try:
+                        node.remove_node(node_name, recurse=True)
+                        return
+                    except (AttributeError, KeyError):
+                        continue
+            raise KeyError("Node " + node_name + " not found in network")
 
     def add_connection(self, connection):
         """Adds a connection to the network
@@ -1080,19 +1154,32 @@ class Network(Node):
         """
         self.connections[connection.id] = connection
 
-    def remove_connection(self, connection_name):
+    def remove_connection(self, connection_name, recurse=False):
         """Removes a connection from the network
         Parameters
         ----------
         connection_name : str
             name of connection to remove
 
+        recurse : bool
+
+
         Raises
         ------
         KeyError
             if `connection_name` is not found
         """
-        del self.connections[connection_name]
+        try:
+            del self.connections[connection_name]
+        except KeyError:
+            if recurse:
+                for node in self.nodes.values():
+                    try:
+                        node.remove_connection(connection_name, recurse=True)
+                        return
+                    except (AttributeError, KeyError):
+                        continue
+            raise KeyError("Connection " + connection_name + " not found in network")
 
     def get_list_of_type(self, desired_type, recurse=False):
         """Searches the Facility and returns a list of all objects of `desired_type`
@@ -1126,7 +1213,9 @@ class Network(Node):
 
 
 class Facility(Network):
-    """
+    """A class representing any industrial facility
+    from wastewater treatment to desalination to solid waste management.
+
     Parameters
     ----------
     id : str
@@ -1245,8 +1334,104 @@ class Facility(Network):
         )
 
 
-class Pump(Node):
+class ModularUnit(Network):
+    """Modular Unit in the network, such as a reverse osmosis skid.
+
+    Parameters
+    ----------
+    id : str
+        ModularUnit ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the ModularUnit.
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the ModularUnit.
+
+    tags : dict of Tag
+        Data tags associated with this ModularUnit
+
+    nodes : dict of Node
+        nodes in the ModularUnit, e.g. pumps, tanks, or filters
+
+    connections : dict of Connections
+        connections in the ModularUnit, e.g. pipes
+
+    num_units: int
+         Number of units running in parallel
+
+    Attributes
+    ----------
+    id : str
+        ModularUnit ID
+
+    input_contents : list of ContentsType
+        Contents entering the ModularUnit.
+
+    output_contents : list of ContentsType
+        Contents leaving the ModularUnit.
+
+    tags : dict of Tag
+        Data tags associated with this ModularUnit
+
+    nodes : dict of Node
+        nodes in the ModularUnit, e.g. pumps, tanks, or filters
+
+    num_units: int
+        Number of units running in parallel
+
+    connections : dict of Connections
+        connections in the ModularUnit, e.g. pipes
     """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        num_units,
+        tags={},
+        nodes={},
+        connections={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.tags = tags
+        self.nodes = nodes
+        self.connections = connections
+        self.num_units = num_units
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Network id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} tags:{self.tags} "
+            f"nodes:{self.nodes} connections:{self.connections}>\n"
+            f"num_units:{self.num_units}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+            and self.nodes == other.nodes
+            and self.connections == other.connections
+        )
+
+
+class Pump(Node):
+    """Any kind of pump, such as constant speed, variable frequency drive (VFD),
+    energy recovery device (ERD), and air blower.
+
+
     Parameters
     ----------
     id : str
@@ -1277,7 +1462,10 @@ class Pump(Node):
         Design flow rate supplied by the pump
 
     pump_type : PumpType
-        Type of pump (either VFD or constant)
+        Type of pump (either VFD, ERD, AirBlower or Constant)
+
+    efficiency : float
+        efficiency of the pump
 
     tags : dict of Tag
         Data tags associated with this pump
@@ -1312,7 +1500,7 @@ class Pump(Node):
         Design flow rate supplied by the pump
 
     pump_type : PumpType
-        Type of pump (either VFD or constant)
+        Type of pump (either VFD, ERD, AirBlower or Constant)
 
     tags : dict of Tag
         Data tags associated with this pump
@@ -1334,6 +1522,7 @@ class Pump(Node):
         power_rating,
         num_units,
         pump_type=utils.PumpType.Constant,
+        efficiency=None,
         tags={},
     ):
         self.id = id
@@ -1343,11 +1532,12 @@ class Pump(Node):
         self.pump_type = pump_type
         self.power_rating = power_rating
         self.num_units = num_units
+        self.efficiency = efficiency
         self.tags = tags
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
-        self.set_pump_curve(None)
+        self.set_pump_curve(self.get_efficiency)
 
     def __repr__(self):
         return (
@@ -1357,6 +1547,7 @@ class Pump(Node):
             f"min_flow:{self.min_flow} max_flow:{self.max_flow} "
             f"design_flow:{self.design_flow} elevation:{self.elevation} "
             f"power_rating:{self.power_rating} num_units:{self.num_units} "
+            f"pump_type:{self.pump_type} efficiency:{self.efficiency}"
             f"tags:{self.tags}>\n"
         )
 
@@ -1365,6 +1556,7 @@ class Pump(Node):
         if not isinstance(other, self.__class__):
             return False
 
+        # TODO: add a way to compare pump_curve since it is a function
         return (
             self.id == other.id
             and self.input_contents == other.input_contents
@@ -1377,17 +1569,8 @@ class Pump(Node):
             and self.min_flow == other.min_flow
             and self.max_flow == other.max_flow
             and self.design_flow == other.design_flow
+            and self.efficiency == other.efficiency
         )
-
-    def set_pump_type(self, pump_type):
-        """Set the pump curve to the given function
-
-        Parameters
-        ----------
-        pump_type : PumpType
-        """
-        # TODO: check that pump_type is a valid enum
-        self.pump_type = pump_type
 
     def set_pump_curve(self, pump_curve):
         """Set the pump curve to the given function
@@ -1400,6 +1583,19 @@ class Pump(Node):
         """
         # TODO: type check that pump_curve is a function
         self.pump_curve = pump_curve
+
+    def get_efficiency(self):
+        try:
+            return self._efficiency
+        except AttributeError:
+            warnings.warn("Please add `efficiency` attribute", DeprecationWarning)
+            return None
+
+    def set_efficiency(self, efficiency):
+        self._efficiency = efficiency
+
+    def del_efficiency(self):
+        del self._efficiency
 
     def get_power_rating(self):
         try:
@@ -1423,27 +1619,34 @@ class Pump(Node):
             )
             del self.horsepower
 
+    efficiency = property(get_efficiency, set_efficiency, del_efficiency)
     power_rating = property(get_power_rating, set_power_rating, del_power_rating)
 
 
 class Tank(Node):
-    """
+    """A generic class to represent a storage tank.
+    Any `input_contents` and `output_contents` can be provided
+    and metadata such as `volume` and `elevation` can be specified.
+
     Parameters
     ----------
     id : str
         Tank ID
 
     input_contents : ContentsType or list of ContentsType
-        Contents entering the tank.
+        Contents entering the tank
 
     output_contents : ContentsType or list of ContentsType
-        Contents leaving the tank.
+        Contents leaving the tank
 
     elevation : pint.Quantity or int
         Elevation of the tank in meters above sea level
 
     volume : pint.Quantity or int
         Volume of the tank in cubic meters
+
+    num_units : int
+        Number of identical tanks in parallel
 
     tags : dict of Tag
         Data tags associated with this tank
@@ -1465,6 +1668,9 @@ class Tank(Node):
     volume : pint.Quantity or int
         Volume of the tank in cubic meters
 
+    num_units : int
+        Number of identical tanks in parallel
+
     tags : dict of Tag
         Data tags associated with this tank
     """
@@ -1476,6 +1682,7 @@ class Tank(Node):
         output_contents,
         elevation,
         volume,
+        num_units=1,
         tags={},
     ):
         self.id = id
@@ -1483,6 +1690,7 @@ class Tank(Node):
         self.set_contents(output_contents, "output_contents")
         self.elevation = elevation
         self.volume = volume
+        self.num_units = num_units
         self.tags = tags
 
     def __repr__(self):
@@ -1490,6 +1698,7 @@ class Tank(Node):
             f"<pype_schema.node.Tank id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} elevation:{self.elevation} "
+            f"num_units:{self.num_units} "
             f"volume:{self.volume} tags:{self.tags}>\n"
         )
 
@@ -1504,12 +1713,322 @@ class Tank(Node):
             and self.output_contents == other.output_contents
             and self.elevation == other.elevation
             and self.volume == other.volume
+            and self.num_units == other.num_units
+            and self.tags == other.tags
+        )
+
+    def get_num_units(self):
+        try:
+            return self._num_units
+        except AttributeError:
+            warnings.warn(
+                "Please add `num_units` attribute to `Tank`",
+                DeprecationWarning,
+            )
+            return 1
+
+    def set_num_units(self, num_units):
+        self._num_units = num_units
+
+    def del_num_units(self):
+        del self._num_units
+
+    num_units = property(get_num_units, set_num_units, del_num_units)
+
+
+class Reactor(Node):
+    """A reactor modeled as a basic tank with chemical dosing point(s).
+
+    Parameters
+    ----------
+    id : str
+        Reactor ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the reactor
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the reactor
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate through the reactor
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate through the reactor
+
+    design_flow : pint.Quantity or int
+        Design flow rate through the reactor
+
+    num_units : int
+        Number of reactor in parallel
+
+    volume : pint.Quantity or int
+        Volume of the reactor in cubic meters
+
+    residence_time : pint.Quantity or float
+        Residence time of the reactor
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the reactor (key: DosingType, value: rate)
+
+    pH : float
+        pH value for the reactor
+
+    tags : dict of Tag
+        Data tags associated with this reactor
+
+    Attributes
+    ----------
+    id : str
+        Reactor ID
+
+    input_contents : list of ContentsType
+        Contents entering the reactor
+
+    output_contents : list of ContentsType
+        Contents leaving the reactor
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate through the reactor
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate through the reactor
+
+    design_flow : pint.Quantity or int
+        Design flow rate through the reactor
+
+    num_units : int
+        Number of reactors
+
+    volume : pint.Quantity or int
+        Volume of the reactor in cubic meters
+
+    residence_time : pint.Quantity or float
+        Residence time of the reactor
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the reactor (key: DosingType, value: rate)
+
+    pH : float
+        pH value for the reactor
+
+    num_units : int
+        Number of reactors in parallel
+
+    tags : dict of Tag
+        Data tags associated with this reactor
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        residence_time,
+        dosing_rate={},
+        pH=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.num_units = num_units
+        self.volume = volume
+        self.set_dosing_rate(dosing_rate)
+        self.pH = pH
+        self.residence_time = residence_time
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Reactor id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units}"
+            f"output_contents:{self.output_contents} "
+            f"dosing_rate:{self.dosing_rate} pH:{self.pH} "
+            f"residence_time:{self.residence_time} "
+            f"volume:{self.volume} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.volume == other.volume
+            and self.num_units == other.num_units
+            and self.dosing_rate == other.dosing_rate
+            and self.pH == other.pH
+            and self.residence_time == other.residence_time
+            and self.tags == other.tags
+        )
+
+    def get_dosing_rate(self):
+        return self._dosing_rate
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
+
+
+class StaticMixer(Reactor):
+    """A tank containing a static mixer,
+    typically used for coagulation in water treatment.
+
+    Parameters
+    ----------
+    id : str
+        StaticMixer ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the mixer
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the mixer
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate through the mixer
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate through the mixer
+
+    design_flow : pint.Quantity or int
+        Design flow rate through the mixer
+
+    num_units : int
+        Number of mixers in parallel
+
+    volume : pint.Quantity or int
+        Volume of the mixer in cubic meters
+
+    residence_time : pint.Quantity or float
+        Residence time of the mixer
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the mixer (key: DosingType, value: rate)
+
+    pH : float
+        pH value for the mixer
+
+    tags : dict of Tag
+        Data tags associated with this mixer
+
+    Attributes
+    ----------
+    id : str
+        StaticMixer ID
+
+    input_contents : list of ContentsType
+        Contents entering the mixer
+
+    output_contents : list of ContentsType
+        Contents leaving the mixer
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate through the mixer
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate through the mixer
+
+    design_flow : pint.Quantity or int
+        Design flow rate through the mixer
+
+    num_units : int
+        Number of mixers in parallel
+
+    volume : pint.Quantity or int
+        Volume of the mixer in cubic meters
+
+    residence_time : pint.Quantity or float
+        Residence time of the mixer
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the mixer (key: DosingType, value: rate)
+
+    pH : float
+        pH value for the mixer
+
+    tags : dict of Tag
+        Data tags associated with this mixer
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        residence_time,
+        dosing_rate={},
+        pH=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.num_units = num_units
+        self.volume = volume
+        self.set_dosing_rate(dosing_rate)
+        self.pH = pH
+        self.residence_time = residence_time
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.StaticMixer id:{self.id} "
+            f"input_contents:{self.input_contents} num_units:{self.num_units}"
+            f"output_contents:{self.output_contents} "
+            f"dosing_rate:{self.dosing_rate} pH:{self.pH} "
+            f"residence_time:{self.residence_time} "
+            f"volume:{self.volume} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.volume == other.volume
+            and self.num_units == other.num_units
+            and self.dosing_rate == other.dosing_rate
+            and self.pH == other.pH
+            and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
 
 
 class Reservoir(Node):
-    """
+    """A generic reservoir used to represent lakes and oceans in addition
+    to manmade bodies of water.
+
     Parameters
     ----------
     id : str
@@ -1591,7 +2110,9 @@ class Reservoir(Node):
 
 
 class Battery(Node):
-    """
+    """A generic battery with metadata such as roundtrip efficiency (RTE),
+    energy capacity, and charge/discharge rates.
+
     Parameters
     ----------
     id : str
@@ -1668,7 +2189,7 @@ class Battery(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"energy_capacity:{self.energy_capacity} "
-            f"discharge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate }"
+            f"charge_rate:{self.charge_rate} discharge_rate:{self.discharge_rate}"
             f"rte:{self.rte} leakage:{self.leakage} tags:{self.tags}>\n"
         )
 
@@ -1760,7 +2281,8 @@ class Battery(Node):
 
 
 class Digestion(Node):
-    """
+    """A class representing a sludge digester, either aerobic or anaerobic.
+
     Parameters
     ----------
     id : str
@@ -1772,19 +2294,19 @@ class Digestion(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the digester (e.g. biogas or wastewater)
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate through the digester
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate through the digester
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate through the digester
 
     num_units : int
         Number of digesters running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the digester in cubic meters
 
     digester_type : DigesterType
@@ -1807,16 +2329,16 @@ class Digestion(Node):
     num_units : int
         Number of digesters running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the digester in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate through the digester
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate through the digester
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate through the digester
 
     digester_type : DigesterType
@@ -1880,7 +2402,9 @@ class Digestion(Node):
 
 
 class Cogeneration(Node):
-    """
+    """A class representing a cogeneration engine that produces
+    both heat and electricity through biogas and/or natural gas combustion.
+
     Parameters
     ----------
     id : str
@@ -2085,7 +2609,8 @@ class Cogeneration(Node):
 
 
 class Boiler(Node):
-    """
+    """A class representing a boiler that produces heat through natural gas combustion.
+
     Parameters
     ----------
     id : str
@@ -2272,7 +2797,9 @@ class Boiler(Node):
 
 
 class Clarification(Node):
-    """
+    """A class representing a generic clarifier,
+    sedimentation tank, or settling basin.
+
     Parameters
     ----------
     id : str
@@ -2284,19 +2811,19 @@ class Clarification(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the clarifier
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single clarifier
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single clarifier
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single clarifier
 
     num_units : int
         Number of clarifiers running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of the clarifier in cubic meters
 
     tags : dict of Tag
@@ -2316,16 +2843,16 @@ class Clarification(Node):
     num_units : int
         Number of clarifiers running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single clarifier in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single clarifier
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single clarifier
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single clarifier
 
     tags : dict of Tag
@@ -2382,7 +2909,9 @@ class Clarification(Node):
 
 
 class Filtration(Node):
-    """
+    """The parent class for a wide range of filtration methods,
+    such as sand filters, trickling filters, or reverse osmosis membranes.
+
     Parameters
     ----------
     id : str
@@ -2394,20 +2923,26 @@ class Filtration(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the filter
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single filter
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single filter
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single filter
 
     num_units : int
         Number of filters running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single filter in cubic meters
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the filter (key: DosingType, value: rate)
+
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode in seconds
 
     tags : dict of Tag
         Data tags associated with this filter
@@ -2426,17 +2961,23 @@ class Filtration(Node):
     num_units : int
         Number of filters running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single filter in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single filter
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single filter
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single filter
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the filter (key: DosingType, value: rate)
+
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode
 
     tags : dict of Tag
         Data tags associated with this filter
@@ -2452,6 +2993,8 @@ class Filtration(Node):
         design_flow,
         num_units,
         volume,
+        dosing_rate={},
+        settling_time=0.0,
         tags={},
     ):
         self.id = id
@@ -2463,6 +3006,8 @@ class Filtration(Node):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
+        self.set_dosing_rate(dosing_rate)
+        self.settling_time = settling_time
 
     def __repr__(self):
         return (
@@ -2470,7 +3015,8 @@ class Filtration(Node):
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} min_flow:{self.min_flow} max_flow:{self.max_flow} "
-            f"design_flow:{self.design_flow} tags:{self.tags}>\n"
+            f"design_flow:{self.design_flow} dosing_rate:{self.dosing_rate} "
+            f"settling_time:{self.settling_time} tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -2487,12 +3033,190 @@ class Filtration(Node):
             and self.min_flow == other.min_flow
             and self.max_flow == other.max_flow
             and self.design_flow == other.design_flow
+            and self.dosing_rate == other.dosing_rate
+            and self.settling_time == other.settling_time
+            and self.tags == other.tags
+        )
+
+    def get_dosing_rate(self):
+        try:
+            return self._dosing_rate
+        except AttributeError:
+            warnings.warn("Please add `dosing_rate` attribute", DeprecationWarning)
+            return defaultdict(float)
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
+
+
+class ROMembrane(Filtration):
+    """A class for representing a reverse osmosis membrane process.
+
+    Parameters
+    ----------
+    id : str
+        ROMembrane ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the RO membrane
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the RO membrane
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of the RO membrane
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of the RO membrane
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single filter
+
+    num_units : int
+        Number of RO membranes running in parallel
+
+    volume : pint.Quantity or int
+        Volume of the RO membrane in cubic meters
+
+    area : float
+        Area of the RO membrane in square meters
+
+    permeability : float
+        Permeability of the RO membrane
+
+    selectivity : float
+        Selectivity of the RO membrane
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the RO membrane (key: DosingType, value: rate)
+
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode
+
+    tags : dict of Tag
+        Data tags associated with the RO membrane
+
+    Attributes
+    ----------
+    id : str
+        ROMembrane ID
+
+    input_contents : list of ContentsType
+        Contents entering the RO membrane
+
+    output_contents : list of ContentsType
+        Contents leaving the RO membrane
+
+    num_units : int
+        Number of RO membranes running in parallel
+
+    volume : pint.Quantity or int
+        Volume of a single filter in cubic meters
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of a single filter
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of a single filter
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single filter
+
+    area : float
+        Area of the RO membrane in square meters
+
+    permeability : float
+        Permeability of the RO membrane
+
+    selectivity : float
+        Selectivity of the RO membrane
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the RO membrane (key: DosingType, value: rate)
+
+    settling_time : float
+        time it takes for the filter to reach the desired operation mode
+
+    tags : dict of Tag
+        Data tags associated with the RO membrane
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        area,
+        permeability,
+        selectivity,
+        dosing_rate={},
+        settling_time=0.0,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.area = area
+        self.permeability = permeability
+        self.selectivity = selectivity
+        self.set_dosing_rate(dosing_rate)
+        self.settling_time = settling_time
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Filtration.ROMembrane id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} min_flow:{self.min_flow} max_flow:{self.max_flow} "
+            f"design_flow:{self.design_flow} area:{self.area} "
+            f"permeability:{self.permeability} selectivity:{self.selectivity} "
+            f"dosing_rate:{self.dosing_rate} settling_time:{self.settling_time} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.min_flow == other.min_flow
+            and self.max_flow == other.max_flow
+            and self.design_flow == other.design_flow
+            and self.area == other.area
+            and self.permeability == other.permeability
+            and self.selectivity == other.selectivity
+            and self.dosing_rate == other.dosing_rate
+            and self.settling_time == other.settling_time
             and self.tags == other.tags
         )
 
 
 class Screening(Node):
-    """
+    """A class representing the screening process for removing
+    large solids from the intake of a facility, such as a bar screen.
+
     Parameters
     ----------
     id : str
@@ -2504,13 +3228,13 @@ class Screening(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the screen
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single screen
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single screen
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single screen
 
     num_units : int
@@ -2533,13 +3257,13 @@ class Screening(Node):
     num_units : int
         Number of screens running in parallel
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single screen
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single screen
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single screen
 
     tags : dict of Tag
@@ -2593,7 +3317,11 @@ class Screening(Node):
 
 
 class Conditioning(Node):
-    """
+    """A class for representing biogas conditioners.
+    The conditioner prepares 'raw' biogas from the digester
+    by removing impurities and readying it for combustion
+    for `Cogeneration`.
+
     Parameters
     ----------
     id : str
@@ -2605,13 +3333,13 @@ class Conditioning(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the biogas conditioner
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single biogas conditioner
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single biogas conditioner
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single biogas conditioner
 
     num_units : int
@@ -2634,13 +3362,13 @@ class Conditioning(Node):
     num_units : int
         Number of biogas conditioners running in parallel
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single biogas conditioner
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single biogas conditioner
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single biogas conditioner
 
     tags : dict of Tag
@@ -2694,7 +3422,10 @@ class Conditioning(Node):
 
 
 class Thickening(Node):
-    """
+    """A class to represent a general thickener,
+    such as gravity belt, dissolved air float (DAF),
+    or centrifugal thickening.
+
     Parameters
     ----------
     id : str
@@ -2706,19 +3437,19 @@ class Thickening(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the thickener
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single thickener
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single thickener
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single thickener
 
     num_units : int
         Number of thickeners running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single thickener in cubic meters
 
     tags : dict of Tag
@@ -2738,16 +3469,16 @@ class Thickening(Node):
     num_units : int
         Number of thickeners running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single thickener in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single thickener
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single thickener
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single thickener
 
     tags : dict of Tag
@@ -2805,7 +3536,8 @@ class Thickening(Node):
 
 
 class Aeration(Node):
-    """
+    """A generic class for an aeration basin.
+
     Parameters
     ----------
     id : str
@@ -2817,19 +3549,19 @@ class Aeration(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the aeration basin
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single aeration basin
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single aeration basin
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single aeration basin
 
     num_units : int
         Number of aeration basins running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single aeration basin in cubic meters
 
     tags : dict of Tag
@@ -2849,16 +3581,16 @@ class Aeration(Node):
     num_units : int
         Number of aeration basins running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single aeration basin in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single aeration basin
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single aeration basin
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single aeration basin
 
     tags : dict of Tag
@@ -2915,8 +3647,172 @@ class Aeration(Node):
         )
 
 
-class Chlorination(Node):
+class Disinfection(Node):
+    """A generic class for a disinfection process,
+    such as chlorination, ozone, or UV light.
+
+    Parameters
+    ----------
+    id : str
+        Disinfector ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the disinfector
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the disinfector
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of a single disinfector
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of a single disinfector
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single disinfector
+
+    num_units : int
+        Number of disinfectors running in parallel
+
+    volume : pint.Quantity or int
+        Volume of a single disinfectors in cubic meters
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the disinfector (key: DosingType, value: rate)
+
+    residence_time : pint.Quantity or float
+        Residence time of the disinfector
+
+    tags : dict of Tag
+        Data tags associated with this disinfector
+
+    Attributes
+    ----------
+    id : str
+        Disinfector ID
+
+    input_contents : list of ContentsType
+        Contents entering the disinfector
+
+    output_contents : list of ContentsType
+        Contents leaving the disinfector
+
+    num_units : int
+        Number of disinfector running in parallel
+
+    volume : pint.Quantity or int
+        Volume of a single disinfector in cubic meters
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of a single disinfector
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of a single disinfector
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single disinfector
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the disinfector (key: DosingType, value: rate)
+
+    residence_time : pint.Quantity or float
+        Residence time of the disinfector
+
+    tags : dict of Tag
+        Data tags associated with this disinfector
     """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        dosing_rate={},
+        residence_time=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.num_units = num_units
+        self.volume = volume
+        self.tags = tags
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.set_dosing_rate(dosing_rate)
+        self.residence_time = residence_time
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Disinfection id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} min_flow:{self.min_flow} "
+            f"max_flow:{self.max_flow} design_flow:{self.design_flow} "
+            f"dosing_rate:{self.dosing_rate} residence_time:{self.residence_time} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.min_flow == other.min_flow
+            and self.max_flow == other.max_flow
+            and self.design_flow == other.design_flow
+            and self.dosing_rate == other.dosing_rate
+            and self.residence_time == other.residence_time
+            and self.tags == other.tags
+        )
+
+    def get_residence_time(self):
+        try:
+            return self._res_time
+        except AttributeError:
+            warnings.warn("Please add `residence_time` attribute", DeprecationWarning)
+            return None
+
+    def set_residence_time(self, residence_time):
+        self._res_time = residence_time
+
+    def del_residence_time(self):
+        del self._res_time
+
+    def get_dosing_rate(self):
+        try:
+            return self._dosing_rate
+        except AttributeError:
+            warnings.warn("Please add `dosing_rate` attribute", DeprecationWarning)
+            return defaultdict(float)
+
+    def set_dosing_rate(self, dosing_rate):
+        self.set_dosing(dosing_rate, mode="rate")
+
+    def del_dosing_rate(self):
+        del self._dosing_rate
+
+    residence_time = property(
+        get_residence_time, set_residence_time, del_residence_time
+    )
+    dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
+
+
+class Chlorination(Disinfection):
+    """A class for a chlorination basin.
+
     Parameters
     ----------
     id : str
@@ -2928,20 +3824,26 @@ class Chlorination(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the chlorinator
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single chlorinator
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single chlorinator
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single chlorinator
 
     num_units : int
         Number of chlorinators running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single chlorinator in cubic meters
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the chlorinator (key: DosingType, value: rate)
+
+    residence_time : pint.Quantity or float
+        Residence time of the chlorinator
 
     tags : dict of Tag
         Data tags associated with this chlorinator
@@ -2960,17 +3862,23 @@ class Chlorination(Node):
     num_units : int
         Number of chlorinators running in parallel
 
-    volume : int
+    volume : pint.Quantity or int
         Volume of a single chlorinator in cubic meters
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single chlorinator
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single chlorinator
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single chlorinator
+
+    dosing_rate : dict of DosingType:float
+        Dosing information for the chlorinator (key: DosingType, value: rate)
+
+    residence_time : pint.Quantity or float
+        Residence time of the chlorinator
 
     tags : dict of Tag
         Data tags associated with this chlorinator
@@ -2986,6 +3894,8 @@ class Chlorination(Node):
         design_flow,
         num_units,
         volume,
+        dosing_rate={},
+        residence_time=None,
         tags={},
     ):
         self.id = id
@@ -2997,6 +3907,8 @@ class Chlorination(Node):
         self.min_flow = min_flow
         self.max_flow = max_flow
         self.design_flow = design_flow
+        self.set_dosing_rate(dosing_rate)
+        self.residence_time = residence_time
 
     def __repr__(self):
         return (
@@ -3005,7 +3917,8 @@ class Chlorination(Node):
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"volume:{self.volume} min_flow:{self.min_flow} "
             f"max_flow:{self.max_flow} design_flow:{self.design_flow} "
-            f" tags:{self.tags}>\n"
+            f"dosing_rate:{self.dosing_rate} residence_time:{self.residence_time} "
+            f"tags:{self.tags}>\n"
         )
 
     def __eq__(self, other):
@@ -3022,8 +3935,127 @@ class Chlorination(Node):
             and self.min_flow == other.min_flow
             and self.max_flow == other.max_flow
             and self.design_flow == other.design_flow
+            and self.dosing_rate == other.dosing_rate
+            and self.residence_time == other.residence_time
             and self.tags == other.tags
         )
+
+
+class UVSystem(Disinfection):
+    """
+    Parameters
+    ----------
+    id : str
+        UV System ID
+
+    input_contents : list of ContentsType
+        Contents entering the UV system
+
+    output_contents : list of ContentsType
+        Contents leaving the UV system
+
+    num_units : int
+        Number of UV systems running in parallel
+
+    residence_time : pint.Quantity or float
+        Time in seconds that the water is exposed to UV light
+
+    intensity : pint.Quantity or float
+        Intensity of the UV light in W/m^2
+
+    area : pint.Quantity or float
+        Application area of the UV light in m^2
+
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+
+    Attributes
+    ----------
+    id : str
+        UVSystem ID
+
+    num_units : int
+        Number of chlorinators running in parallel
+
+    residence_time : pint.Quantity or float
+        Time in seconds that the water is exposed to UV light
+
+    dosing_rate : dict of DosingType:float
+        UV intensity in the UV system
+
+    dosing_area : dict of DosingType:float
+        Area of the UV system that is exposed to UV light
+
+    tags : dict of Tag
+        Data tags associated with this chlorinator
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        residence_time,
+        intensity,
+        area,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.num_units = num_units
+        self.volume = volume
+        self.residence_time = residence_time
+        self.set_dosing_rate({"UVLight": intensity})
+        self.set_dosing_area({"UVLight": area})
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.UVSystem id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"volume:{self.volume} min_flow:{self.min_flow} "
+            f"max_flow:{self.max_flow} design_flow:{self.design_flow} "
+            f"residence_time:{self.residence_time} dosing_rate:{self.dosing_rate} "
+            f"dosing_area:{self.dosing_area} tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.volume == other.volume
+            and self.residence_time == other.residence_time
+            and self.dosing_rate == other.dosing_rate
+            and self.dosing_area == other.dosing_area
+            and self.tags == other.tags
+        )
+
+    def get_dosing_area(self):
+        return self._dosing_area
+
+    def set_dosing_area(self, dosing_area):
+        self.set_dosing(dosing_area, mode="area")
+
+    def del_dosing_area(self):
+        del self._dosing_area
+
+    dosing_area = property(get_dosing_area, set_dosing_area, del_dosing_area)
 
 
 class Flaring(Node):
@@ -3036,13 +4068,13 @@ class Flaring(Node):
     num_units : int
         Number of flares running in parallel
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single flare
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single flare
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single flare
 
     tags : dict of Tag
@@ -3059,13 +4091,13 @@ class Flaring(Node):
     num_units : int
         Number of flares running in parallel
 
-    min_flow : int
+    min_flow : pint.Quantity or int
         Minimum flow rate of a single flare
 
-    max_flow : int
+    max_flow : pint.Quantity or int
         Maximum flow rate of a single flare
 
-    design_flow : int
+    design_flow : pint.Quantity or int
         Design flow rate of a single flare
 
     tags : dict of Tag

@@ -1,0 +1,438 @@
+{
+    "nodes": [
+        "DesalPlant",
+        "PowerGrid",
+        "WaterDistribution",
+        "PacificOcean",
+        "Landfill"
+    ],
+    "connections": [
+        "OceanIntake",
+        "ElectricToDesal",
+        "DesalProductOutlet",
+        "SolidsDisposal",
+        "PressureExchangerDisposal"
+    ],
+    "virtual_tags": {},
+    "WaterDistribution": {
+        "type": "Network",
+        "contents": "DrinkingWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "PowerGrid": {
+        "type": "Network",
+        "contents": ["Electricity", "NaturalGas"],
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "Landfill": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "contents": ["SolidWaste", "WFBS"],
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
+    },
+    "DesalPlant": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Seawater",
+        "output_contents": ["DrinkingWater", "Brine"],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "nodes": [
+            "ChlorinationBasin",
+            "StaticMixer",
+            "PretreatTank",
+            "MediaFilter",
+            "CartridgeFilter",
+            "PressureExchanger",
+            "ROModule",
+            "ProductTank",
+            "UV-AOPReactor",
+            "PosttreatTank",
+            "BackwashPump",
+            "BackwashThickener"
+        ],
+        "connections": [
+            "ChlorinationToMixer",
+            "MixerToPretreat",
+            "PretreatToMediaFilter",
+            "MediaFilterToBackwashPump",
+            "BackwashPumpToThickener",
+            "MediaFilerToCartridgeFilter",
+            "CartridgeFilterToPressureExchanger",
+            "PressureExchangerToROModule",
+            "ROModuleToPressureExchanger",
+            "ROModuleToProductTank",
+            "ProductTankToUV-AOPReactor",
+            "UV-AOPReactorToPosttreatTank"
+        ]
+    },
+    "PressureExchangerDisposal": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "PacificOcean",
+        "exit_point": "PressureExchanger",
+        "contents": "Brine",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "OceanIntake": {
+        "type": "Pipe",
+        "source": "PacificOcean",
+        "destination": "DesalPlant",
+        "entry_point": "ChlorinationBasin",
+        "contents": "Seawater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "DesalProductOutlet": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "exit_point": "PosttreatTank",
+        "contents": "DrinkingWater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "ElectricToDesal": {
+        "type": "Wire",
+        "source": "PowerGrid",
+        "destination": "DesalPlant",
+        "contents": "Electricity",
+        "bidirectional": false,
+        "tags": {}
+    },
+    "PacificOcean": {
+        "type": "Reservoir",
+        "contents": ["TreatedSewage", "Brine", "Seawater"],
+        "tags": {}
+    },
+    "ChlorinationBasin": {
+        "type": "Chlorination",
+        "volume": {
+            "value": 10000,
+            "units": "m^3"
+        },
+        "input_contents": "Seawater",
+        "output_contents": "ChlorinatedSeawater",
+        "dosing_rate": {
+            "NaOCl": {
+                "value": 1,
+                "units": "mg / L"
+            }
+        },
+        "num_units": 1,
+        "tags": {}
+    },
+    "StaticMixer": {
+        "type": "StaticMixer",
+        "elevation (meters)": null,
+        "volume (cubic meters)": null,
+        "input_contents": "ChlorinatedSeawater",
+        "output_contents": "CoagulatedWater",
+        "residence_time": null,
+        "dosing_rate": {
+            "FeCl3": {
+                "value": 2,
+                "units": "mg / L"
+            }
+        },
+        "pH": 7,
+        "tags": {}
+    },
+    "PretreatTank": {
+        "type": "Tank",
+        "num_units": 1,
+        "elevation (meters)": null,
+        "volume (cubic meters)": 12000,
+        "contents": "CoagulatedWater",
+        "tags": {}
+    },
+    "MediaFilter": {
+        "type": "Filtration",
+        "input_contents": "CoagulatedWater",
+        "output_contents": ["Filtrate", "FilterBackwash"],
+        "volume (cubic meters)": null,
+        "num_units": null,
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "cubic meters / day",
+            "tags": {}
+        }
+    },
+    "BackwashPump": {
+        "type": "Pump",
+        "pump_type": "VFD",
+        "contents": "FilterBackwash",
+        "num_units": 1,
+        "power_rating": {
+            "value": null,
+            "units": "hp"
+        },
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "BackwashThickener": {
+        "type": "Thickening",
+        "input_contents": "FilterBackwash",
+        "output_contents": "WFBS",
+        "num_units": 1,
+        "volume (cubic meters)": 300,
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        }
+    },
+    "CartridgeFilter": {    
+        "type": "Filtration",
+        "input_contents": "Filtrate",
+        "output_contents": "PretreatedWater",
+        "volume (cubic meters)": null,
+        "num_units": null,
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "cubic meters / day",
+            "tags": {}
+        },
+        "dosing_rate": {
+            "Antiscalant": {
+                "value": null,
+                "units": "mg / L"
+            }
+        }
+    },
+    "PressureExchanger": {
+        "type": "Pump",
+        "pump_type": "ERD",
+        "contents": ["Brine", "PretreatedWater"],
+        "num_units": null,
+        "power_rating": null,
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "ROModule": {
+        "type": "ROMembrane",
+        "input_contents": ["PretreatedWater"],
+        "output_contents": ["Brine", "ProductWater"],
+        "volume": null,
+        "num_units": 3,
+        "area": {
+            "value": 1,
+            "units": "m^2"
+        },
+        "permeability": {
+            "value": 2,
+            "units": "LMH / bar"
+        },
+        "selectivity": {
+            "value": 2,
+            "units": "m / s"
+        },
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        }, 
+        "tags": {}
+    },
+    "ProductTank": {
+        "type": "Tank",
+        "num_units": 1,
+        "elevation (meters)": null,
+        "volume (cubic meters)": 8000,
+        "contents": "ProductWater",
+        "tags": {}
+    },
+    "UV-AOPReactor": {
+        "type": "UVSystem",
+        "contents": "ProductWater",
+        "num_units": 1,
+        "volume": {
+            "value": 5000,
+            "units": "cubic meter"
+        },
+        "residence_time": {
+            "value": 30,
+            "units": "minute"
+        },
+        "intensity": {
+            "value": 10,
+            "units": "W / m^2"
+        },
+        "area": {
+            "value": 0.5,
+            "units": "m^2"
+        },
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        }, 
+        "tags": {}
+    },
+    "PosttreatTank": {
+        "type": "Reactor",
+        "num_units": 1,
+        "elevation (meters)": null,
+        "volume (cubic meters)": 12000,
+        "input_contents": "ProductWater",
+        "output_contents": "DrinkingWater",
+        "dosing_rate": {
+            "CaOH2": {
+                "value": 1,
+                "units": "mg / L"
+            },
+            "CO2": {
+                "value": 450,
+                "units": "ppm"
+            }
+        },
+        "tags": {}
+    },
+    "SolidsDisposal": {
+        "type": "Delivery",
+        "source": "DesalPlant",
+        "destination": "Landfill",
+        "exit_point": "BackwashThickener",
+        "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "ChlorinationToMixer": {
+        "type": "Pipe",
+        "source": "ChlorinationBasin",
+        "destination": "StaticMixer",
+        "contents": "ChlorinatedSeawater",
+        "tags": {}
+    },
+    "MixerToPretreat": {
+        "type": "Pipe",
+        "source": "StaticMixer",
+        "destination": "PretreatTank",
+        "contents": "CoagulatedWater",
+        "tags": {}
+    },
+    "PretreatToMediaFilter": {
+        "type": "Pipe",
+        "source": "PretreatTank",
+        "destination": "MediaFilter",
+        "contents": "CoagulatedWater",
+        "tags": {}
+    },
+    "MediaFilterToBackwashPump": {
+        "type": "Pipe",
+        "source": "MediaFilter",
+        "destination": "BackwashPump",
+        "contents": "FilterBackwash",
+        "tags": {}
+    },
+    "BackwashPumpToThickener": {
+        "type": "Pipe",
+        "source": "MediaFilter",
+        "destination": "BackwashThickener",
+        "contents": "FilterBackwash",
+        "tags": {}
+    },
+    "MediaFilerToCartridgeFilter": {
+        "type": "Pipe",
+        "source": "MediaFilter",
+        "destination": "CartridgeFilter",
+        "contents": "Filtrate",
+        "tags": {}
+    },
+    "CartridgeFilterToPressureExchanger": {
+        "type": "Pipe",
+        "source": "CartridgeFilter",
+        "destination": "PressureExchanger",
+        "contents": "PretreatedWater",
+        "tags": {}
+    },
+    "PressureExchangerToROModule": {
+        "type": "Pipe",
+        "source": "PressureExchanger",
+        "destination": "ROModule",
+        "contents": "PretreatedWater",
+        "tags": {}
+    },
+    "ROModuleToPressureExchanger": {
+        "type": "Pipe",
+        "source": "ROModule",
+        "destination": "PressureExchanger",
+        "contents": "Brine",
+        "tags": {}
+    },
+    "ROModuleToProductTank": {
+        "type": "Pipe",
+        "source": "ROModule",
+        "destination": "ProductTank",
+        "contents": "ProductWater",
+        "tags": {}
+    },
+    "ProductTankToUV-AOPReactor": {
+        "type": "Pipe",
+        "source": "ProductTank",
+        "destination": "UV-AOPReactor",
+        "contents": "ProductWater",
+        "tags": {}
+    },
+    "UV-AOPReactorToPosttreatTank": {
+        "type": "Pipe",
+        "source": "UV-AOPReactor",
+        "destination": "PosttreatTank",
+        "contents": "ProductWater",
+        "tags": {}
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "nodes": ["DisinfectionTank"],
+    "connections": [],
+    "virtual_tags": {},
+    "DisinfectionTank": {
+        "type": "Disinfection",
+        "volume": {
+            "value": 2000,
+            "units": "L"
+        },
+        "input_contents": "UntreatedSewage",
+        "output_contents": "TreatedSewage",
+        "num_units": 1
+    }
+}

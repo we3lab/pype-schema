@@ -1,0 +1,100 @@
+{
+  "nodes": ["Facility1", "PowerGrid"],
+  "connections": ["GasToFacility"],
+  "Facility1": {
+    "type": "Facility",
+    "elevation (meters)": 10,
+    "input_contents": "UntreatedSewage",
+    "output_contents": "TreatedSewage",
+    "flowrate": {
+      "min": 5,
+      "max": 25,
+      "avg": 15
+    },
+    "nodes": ["Conditioner", "Cogenerator"],
+    "connections": ["ConditionerToCogen"]
+  },
+  "virtual_tags": {
+    "GrossGasProduction": {
+      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "binary_operations": "lambda tag1,tag2: tag1+tag2",
+      "units": "SCFM"
+    }
+  },
+  "ConditionerToCogen": {
+    "type": "Pipe",
+    "source": "Conditioner",
+    "destination": "Cogenerator",
+    "contents": "Biogas",
+    "flowrate": {
+      "max": null,
+      "min": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "heating_values": {
+      "lower": 600,
+      "higher": 700,
+      "units": "BTU/scf"
+    },
+    "tags": {
+      "CombinedDigesterGasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      }
+    }
+  },
+  "Conditioner": {
+    "type": "Conditioning",
+    "input_contents": "Biogas",
+    "output_contents": "Biogas",
+    "num_units": 5,
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": 100,
+      "units": "SCFM"
+    }
+  },
+  "Cogenerator": {
+    "type": "Cogeneration",
+    "num_units": 1,
+    "input_contents": ["Biogas", "NaturalGas"],
+    "output_contents": "Electricity",
+    "generation_capacity": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "kW"
+    },
+    "tags": {}
+  },
+  "GasToFacility": {
+    "type": "Pipe",
+    "source": "PowerGrid",
+    "destination": "Facility1",
+    "contents": "NaturalGas",
+    "entry_point": "Cogenerator",
+    "bidirectional": false,
+    "tags": {
+      "GasPurchases": {
+        "type": "Flow",
+        "units": "SCFM",
+        "contents": "NaturalGas",
+        "totalized": false
+      }
+    }
+  },
+  "PowerGrid": {
+    "type": "Network",
+    "contents": ["Electricity", "NaturalGas"],
+    "tags": {},
+    "nodes": [],
+    "connections": []
+  }
+}
+  

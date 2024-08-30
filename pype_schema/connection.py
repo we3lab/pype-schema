@@ -25,7 +25,7 @@ class Connection(ABC):
         Data tags associated with this connection
 
     bidirectional : bool
-        whether flow can go from destination to source. False by default
+        Whether flow can go from destination to source. False by default
 
     exit_point : Node
         The child node from which this connection leaves its source.
@@ -223,7 +223,9 @@ class Connection(ABC):
 
 
 class Pipe(Connection):
-    """
+    """A generic class for pipes that transport any fluid,
+    such as drinking water, natural gas, or industrial wastewater.
+
     Parameters
     ---------
     id : str
@@ -250,7 +252,7 @@ class Pipe(Connection):
     diameter : pint.Quantity or int
         Pipe diameter
 
-    friction_coeff : int
+    friction : float
         Friction coefficient for the pipe
 
     min_pres : pint.Quantity or int
@@ -666,11 +668,12 @@ class Pipe(Connection):
 
 
 class Wire(Connection):
-    """
+    """A class for representing electrical connections.
+
     Parameters
     ---------
     id : str
-        Pipe ID
+        Wire ID
 
     source : Node
         Starting point of the connection
@@ -679,10 +682,10 @@ class Wire(Connection):
         Endpoint of the connection
 
     tags : dict of Tag
-        Data tags associated with this pump
+        Data tags associated with this wire
 
     bidirectional : bool
-        whether electricity can flow from destination to source. False by default
+        Whether electricity can flow from destination to source. False by default
 
     exit_point : Node
         The child node from which this connection leaves its source.
@@ -739,6 +742,169 @@ class Wire(Connection):
         self.exit_point = exit_point
         self.entry_point = entry_point
         self.contents = utils.ContentsType.Electricity
+
+    def __repr__(self):
+        if self.exit_point is None:
+            exit_point_id = "None"
+        else:
+            exit_point_id = self.exit_point.id
+
+        if self.entry_point is None:
+            entry_point_id = "None"
+        else:
+            entry_point_id = self.entry_point.id
+
+        return (
+            f"<pype_schema.connection.Wire id:{self.id} "
+            f"contents:{self.contents} source:{self.source.id} "
+            f"destination:{self.destination.id} "
+            f"tags:{self.tags} bidirectional:{self.bidirectional} "
+            f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            # don't attempt to compare against unrelated types
+            return False
+
+        return (
+            self.id == other.id
+            and self.contents == other.contents
+            and self.source == other.source
+            and self.destination == other.destination
+            and self.tags == other.tags
+            and self.bidirectional == other.bidirectional
+            and self.exit_point == other.exit_point
+            and self.entry_point == other.entry_point
+        )
+
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.contents != other.contents:
+            return self.contents.value < other.contents.value
+        elif self.bidirectional != other.bidirectional:
+            return not self.bidirectional
+        elif self.exit_point != self.exit_point:
+            return self.exit_point < self.exit_point
+        elif self.entry_point != self.entry_point:
+            return self.entry_point < self.entry_point
+        elif len(self.tags) < len(other.tags):
+            return True
+        elif len(self.tags) > len(other.tags):
+            return False
+        elif self.tags == other.tags:
+            if self.source != other.source:
+                # TODO: uncomment when node comparison are supported
+                # if isinstance(self.source, type(other.source)):
+                #     return self.source < other.source
+                # else:
+                return self.source.id < other.source.id
+            elif self.destination != other.destination:
+                # if isinstance(self.destination, type(other.destination)):
+                #     return self.destination < other.destination
+                # else:
+                return self.destination.id < other.destination.id
+            else:
+                return self.id < other.id
+        # case with same number of different tags, so we compare tags in order
+        else:
+            other_tags = [tag for _, tag in sorted(other.tags.items())]
+            for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
+                if tag != other_tags[i]:
+                    return tag < other_tags[i]
+
+
+class Delivery(Connection):
+    """A class to represent a connection via delivery,
+    such as monthly chemical deliveries or weekly trash disposal.
+
+    Parameters
+    ---------
+    id : str
+        Delivery ID
+
+    contents : ContentsType
+        Contents moving through the connection
+
+    source : Node
+        Starting point of the connection
+
+    destination : Node
+        Endpoint of the connection
+
+    frequency : pint.Quantity or float
+        If a pint quantity it will be interpreted based on units.
+        E.g., `0.25 days` will be interpreted as 0.25 days between deliveries,
+        or in other words 4 deliveries per day.
+        Whereas `0.25 / day` would indicate there is a quarter of a delivery per day,
+        or more intuitively 4 days between each delivery.
+        If unitless, assumed to be number of days between delivery
+
+    tags : dict of Tag
+        Data tags associated with this pump
+
+    bidirectional : bool
+        Whether deliveries are made from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
+
+    Attributes
+    ----------
+    id : str
+        Pipe ID
+
+    contents : ContentsType
+        Contents moving through the connection.
+
+    source : Node
+        Starting point of the connection
+
+    destination : Node
+        Endpoint of the connection
+
+    tags : dict of Tag
+        Data tags associated with this pipe
+
+    bidirectional : bool
+        Whether deliveries are made from destination to source. False by default
+
+    exit_point : Node
+        The child node from which this connection leaves its source.
+        Default is None, indicating the source does not have any children
+
+    entry_point : Node
+        The child node at which this connection enters its destination.
+        Default is None, indicating the destination does not have any children
+    """
+
+    def __init__(
+        self,
+        id,
+        contents,
+        source,
+        destination,
+        tags={},
+        bidirectional=False,
+        exit_point=None,
+        entry_point=None,
+    ):
+        self.id = id
+        self.contents = contents
+        self.source = source
+        self.destination = destination
+        self.tags = tags
+        self.bidirectional = bidirectional
+        self.exit_point = exit_point
+        self.entry_point = entry_point
 
     def __repr__(self):
         if self.exit_point is None:

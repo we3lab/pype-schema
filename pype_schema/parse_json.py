@@ -1,6 +1,8 @@
 import json
 import pint
+import copy
 import warnings
+from collections import defaultdict
 from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
 from . import connection
 from . import node
@@ -118,8 +120,8 @@ class JSONParser:
             object to add virtual tags to
 
         verbose : bool
-            If `True` will print informative statements while adding virtual tags
-
+            If `True` will print informative statements while adding virtual tags.
+            Default is `False`
         """
         config_v_tags = self.collect_virtual_tags(self.config)
         network_v_tags = {}
@@ -129,6 +131,7 @@ class JSONParser:
                 (v_tag_id, v_tag_info)
                 for v_tag_id, v_tag_info in config_v_tags.copy().items()
             ]
+            processed = []
             while v_tag_queue:
                 v_tag_id, v_tag_info = v_tag_queue.pop(0)
                 # Try parsing the virtual tag
@@ -154,7 +157,7 @@ class JSONParser:
                     obj.add_tag(v_tag)
                 # If there is a Key error, it may be because a virtual tag
                 # is pointing to another virtual tag that hasn't been added yet.
-                except KeyError:
+                except KeyError as ex:
                     for tag_pointer in v_tag_info["tags"]:
                         # Check if the tag being pointed to is in the already
                         # initialized tags or the network's set of virtual tags
@@ -165,7 +168,14 @@ class JSONParser:
                             raise KeyError(
                                 f"Invalid Tag id {tag_pointer} in VirtualTag {v_tag_id}"
                             )
-                    v_tag_queue.append((v_tag_id, v_tag_info))
+                    # Since the tag was not in the network
+                    # if it was processed then there was an error during the processing
+                    # so we want to raise an exception
+                    if v_tag_id not in processed:
+                        v_tag_queue.append((v_tag_id, v_tag_info))
+                        processed.append(v_tag_id)
+                    else:
+                        raise ex
         for v_tag in network_v_tags.values():
             obj = self.network_obj.get_node_or_connection(v_tag.parent_id)
             obj.add_tag(v_tag)
@@ -220,7 +230,197 @@ class JSONParser:
             self.network_obj = old_network
         return old_network
 
-    def create_node(self, node_id):
+    @staticmethod
+    def prefix_children(target_node, prefix):
+        """Renames the children nodes and connections of the `target_node` by
+        prepending their ID with `prefix`.
+
+        Parameters
+        ----------
+        target_node : node.Network
+            Network object to rename the children of with a `prefix`
+
+        prefix : str
+            String to prepend to the existing node and connection objects
+
+        Returns
+        -------
+        node.Network
+            New network object with
+        """
+        new_network = copy.deepcopy(target_node)
+        for node_obj in new_network.get_all_nodes(recurse=False):
+            new_network.remove_node(node_obj.id)
+            node_obj.id = prefix + "-" + node_obj.id
+            node_obj = JSONParser.prefix_children(node_obj, prefix)
+            new_network.add_node(node_obj)
+        for conn_obj in new_network.get_all_connections(recurse=False):
+            new_network.remove_connection(conn_obj.id)
+            conn_obj.id = prefix + "-" + conn_obj.id
+            new_network.add_connection(conn_obj)
+        return new_network
+
+    def extend_node(
+        self,
+        new_network,
+        target_node_id,
+        connections_path,
+        inplace=False,
+        verbose=False,
+    ):
+        """
+        Incoporates subnetwork (i.e. the `new_network`) into a node
+        in a existing network (i.e. the `old_network`)
+        modifying it in place and returning the modified network
+
+        Parameters
+        ----------
+        new_network : str or pype_schema.Network
+            JSON file path or Network objet to merge with `self`
+
+        target_node_id : str
+            ID of the node to expend, must be in the old_network
+
+        connections_path : str
+            JSON file path to the connections connecting `new_network` to `old_network`.
+
+        inplace : bool
+            Whether to modify `self` in place or leave original object unmodified.
+            False by default
+
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
+
+        Raises
+        ------
+        TypeError
+            When user does not provide a valid path or Network object
+            for `old_network` or `new_network`
+
+        KeyError
+            When `target_node_id` is not in the `old_network` or
+            any node in `connections_path` is not in the `new_network` or `old_network`
+
+        Returns
+        -------
+        pype_schema.node.Network:
+            Modified network object
+        """
+        if isinstance(new_network, str) and new_network.endswith("json"):
+            new_network = JSONParser(new_network).initialize_network()
+        if not isinstance(new_network, node.Network):
+            raise TypeError(
+                "Please provide a valid json path or object for network to extend with"
+            )
+        if verbose:
+            print(f"[*] Merging {new_network.id} into {self.network_obj.id}")
+        modified_network = copy.deepcopy(self.network_obj)
+        # remove the node and connections that contains the node
+        modified_network.remove_node(target_node_id, recurse=True)
+        if verbose:
+            print("Removed node:", target_node_id)
+        for connection_obj in self.network_obj.get_all_connections(recurse=True):
+            entry_point_id = (
+                None
+                if connection_obj.entry_point is None
+                else connection_obj.entry_point.id
+            )
+            exit_point_id = (
+                None
+                if connection_obj.exit_point is None
+                else connection_obj.exit_point.id
+            )
+            if (
+                target_node_id == connection_obj.source.id
+                or target_node_id == connection_obj.destination.id
+                or target_node_id == entry_point_id
+                or target_node_id == exit_point_id
+            ):
+                modified_network.remove_connection(connection_obj.id, recurse=True)
+                if verbose:
+                    print("Removed connection:", connection_obj.id)
+        # get the parent of the target node so we are at the correct level of network
+        parent_obj_id = self.network_obj.get_parent(
+            self.network_obj.get_node(target_node_id, recurse=True)
+        ).id
+        if parent_obj_id == "ParentNetwork":
+            parent_network = modified_network
+        else:
+            parent_network = modified_network.get_node(parent_obj_id, recurse=True)
+        # get just the new target node if it is not the entirety of the new network
+        try:
+            new_target_node = new_network.get_node(target_node_id, recurse=True)
+        except KeyError:
+            new_target_node = new_network
+        # modify names of the child nodes and connections to avoid namespace collisions
+        new_target_node = self.prefix_children(new_target_node, target_node_id)
+        for node_obj in new_target_node.nodes.values():
+            parent_network.add_node(node_obj)
+            if verbose:
+                print("Added node:", node_obj.id)
+        for connection_obj in new_target_node.connections.values():
+            parent_network.add_connection(connection_obj)
+            if verbose:
+                print("Added connection:", connection_obj.id)
+        with open(connections_path, "r") as f:
+            config = json.load(f)
+            # update the config dictionary
+            for connection_id in config["connections"]:
+                conn_dict = config[connection_id]
+                parent_id = conn_dict.get("parent_id")
+                # add to ParentNetwork if no parent_id
+                if parent_id is None or parent_id == "ParentNetwork":
+                    self.config["connections"].append(
+                        f"{target_node_id}-{connection_id}"
+                    )
+                else:
+                    self.config[parent_id]["connections"].append(
+                        f"{target_node_id}-{connection_id}"
+                    )
+            new_network_node_ids = [
+                node_obj.id for node_obj in new_network.get_all_nodes(recurse=True)
+            ]
+            # create the Connection object
+            for k, v in list(config.items()):
+                if k == "connections":
+                    continue
+                for field in ["source", "exit_point", "destination", "entry_point"]:
+                    if (
+                        v.get(field) in new_network_node_ids
+                        and v[field] != target_node_id
+                    ):
+                        v[field] = f"{target_node_id}-{v[field]}"
+                self.config[f"{target_node_id}-{k}"] = v
+                if verbose:
+                    print("Added connection:", f"{target_node_id}-{k}")
+            for connection_id in config["connections"]:
+                # check that connection exists in dictionary (KeyError)
+                if connection_id not in config.keys():
+                    raise KeyError(
+                        f"Connection {connection_id} not found in {connections_path}"
+                    )
+                parent_id = config[connection_id].get("parent_id")
+                if parent_id is None or parent_id == "ParentNetwork":
+                    parent_obj = modified_network
+                else:
+                    parent_obj = modified_network.get_node(parent_id, recurse=True)
+                parent_obj.add_connection(
+                    self.create_connection(
+                        f"{target_node_id}-{connection_id}", parent_obj, verbose=verbose
+                    )
+                )
+                if verbose:
+                    print("Added connection:", f"{target_node_id}-{connection_id}")
+        if inplace:
+            self.network_obj = modified_network
+            if verbose:
+                print(
+                    f"Replaced the network {self.network_obj.id} by extending "
+                    f"{target_node_id} with the new network in place"
+                )
+        return modified_network
+
+    def create_node(self, node_id, verbose=False):
         """Converts a dictionary into a `Node` object
 
         Parameters
@@ -228,11 +428,16 @@ class JSONParser:
         node_id : str
             the string id for the `Node`
 
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
+
         Returns
         -------
         Node
             a Python object with all the values from key `node_id`
         """
+        if verbose:
+            print("Creating node:", node_id)
         (input_contents, output_contents) = self.parse_contents(node_id)
         elevation = self.parse_unit_val_dict(self.config[node_id].get("elevation"))
         # strings like `elevation (meters)` and `volume (cubic meters)`
@@ -261,21 +466,46 @@ class JSONParser:
             flowrate = self.config[node_id].get("flow_rate")
 
         min_flow, max_flow, design_flow = self.parse_min_max_design(flowrate)
+        dosing_rate = self.parse_dosing_rate(
+            self.config[node_id].get("dosing_rate", defaultdict(float))
+        )
 
         # create correct type of node class
-        if self.config[node_id]["type"] == "Network":
-            if num_units is None:
-                num_units = 1
-
-            node_obj = node.Network(
-                node_id,
-                input_contents,
-                output_contents,
-                tags={},
-                nodes={},
-                connections={},
-                num_units=num_units,
-            )
+        if self.config[node_id]["type"] in ["Network", "Facility", "ModularUnit"]:
+            num_units = 1 if num_units is None else num_units
+            if self.config[node_id]["type"] == "Network":
+                node_obj = node.Network(
+                    node_id,
+                    input_contents,
+                    output_contents,
+                    tags={},
+                    nodes={},
+                    connections={},
+                    num_units=num_units,
+                )
+            elif self.config[node_id]["type"] == "Facility":
+                node_obj = node.Facility(
+                    node_id,
+                    input_contents,
+                    output_contents,
+                    elevation,
+                    min_flow,
+                    max_flow,
+                    design_flow,
+                    tags={},
+                    nodes={},
+                    connections={},
+                )
+            elif self.config[node_id]["type"] == "ModularUnit":
+                node_obj = node.ModularUnit(
+                    node_id,
+                    input_contents,
+                    output_contents,
+                    num_units,
+                    tags={},
+                    nodes={},
+                    connections={},
+                )
 
             for new_node in self.config[node_id]["nodes"]:
                 node_obj.add_node(self.create_node(new_node))
@@ -341,26 +571,6 @@ class JSONParser:
                 leakage,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Facility":
-            node_obj = node.Facility(
-                node_id,
-                input_contents,
-                output_contents,
-                elevation,
-                min_flow,
-                max_flow,
-                design_flow,
-                tags={},
-                nodes={},
-                connections={},
-            )
-
-            for new_node in self.config[node_id]["nodes"]:
-                node_obj.add_node(self.create_node(new_node))
-            for new_connection in self.config[node_id]["connections"]:
-                node_obj.add_connection(
-                    self.create_connection(new_connection, node_obj)
-                )
         elif self.config[node_id]["type"] == "Pump":
             pump_type = self.config[node_id].get("pump_type")
             if pump_type is None:
@@ -415,7 +625,13 @@ class JSONParser:
             )
         elif self.config[node_id]["type"] == "Tank":
             node_obj = node.Tank(
-                node_id, input_contents, output_contents, elevation, volume, tags={}
+                node_id,
+                input_contents,
+                output_contents,
+                elevation,
+                volume,
+                num_units,
+                tags={},
             )
         elif self.config[node_id]["type"] == "Aeration":
             node_obj = node.Aeration(
@@ -503,6 +719,9 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "Filtration":
+            settling_time = self.parse_unit_val_dict(
+                self.config[node_id].get("settling_time", {"value": 0.0})
+            )
             node_obj = node.Filtration(
                 node_id,
                 input_contents,
@@ -512,9 +731,41 @@ class JSONParser:
                 design_flow,
                 num_units,
                 volume,
+                dosing_rate=dosing_rate,
+                settling_time=settling_time,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "ROMembrane":
+            area = self.parse_unit_val_dict(self.config[node_id].get("area"))
+            permeability = self.parse_unit_val_dict(
+                self.config[node_id].get("permeability")
+            )
+            selectivity = self.parse_unit_val_dict(
+                self.config[node_id].get("selectivity")
+            )
+            settling_time = self.parse_unit_val_dict(
+                self.config[node_id].get("settling_time", {"value": 0.0})
+            )
+            node_obj = node.ROMembrane(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                area,
+                permeability,
+                selectivity,
+                dosing_rate=dosing_rate,
+                settling_time=settling_time,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Chlorination":
+            residence_time = self.parse_unit_val_dict(
+                self.config[node_id].get("residence_time")
+            )
             node_obj = node.Chlorination(
                 node_id,
                 input_contents,
@@ -524,6 +775,45 @@ class JSONParser:
                 design_flow,
                 num_units,
                 volume,
+                dosing_rate=dosing_rate,
+                residence_time=residence_time,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Disinfection":
+            residence_time = self.parse_unit_val_dict(
+                self.config[node_id].get("residence_time")
+            )
+            node_obj = node.Disinfection(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                dosing_rate=dosing_rate,
+                residence_time=residence_time,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "UVSystem":
+            area = self.parse_unit_val_dict(self.config[node_id].get("area"))
+            intensity = self.parse_unit_val_dict(self.config[node_id].get("intensity"))
+            residence_time = self.parse_unit_val_dict(
+                self.config[node_id].get("residence_time")
+            )
+            node_obj = node.UVSystem(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                residence_time,
+                intensity,
+                area,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Flaring":
@@ -567,6 +857,44 @@ class JSONParser:
                 max_flow,
                 design_flow,
                 num_units,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Reactor":
+            pH = self.config[node_id].get("pH")
+            residence_time = self.parse_unit_val_dict(
+                self.config[node_id].get("residence_time")
+            )
+            node_obj = node.Reactor(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                residence_time,
+                dosing_rate=dosing_rate,
+                pH=pH,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "StaticMixer":
+            pH = self.config[node_id].get("pH")
+            residence_time = self.parse_unit_val_dict(
+                self.config[node_id].get("residence_time")
+            )
+            node_obj = node.StaticMixer(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                residence_time,
+                dosing_rate=dosing_rate,
+                pH=pH,
                 tags={},
             )
         else:
@@ -613,7 +941,7 @@ class JSONParser:
                         node_obj.add_tag(v_tag)
         return node_obj
 
-    def create_connection(self, connection_id, node_obj):
+    def create_connection(self, connection_id, node_obj, verbose=False):
         """Converts a dictionary into a `Connection` object
 
         Parameters
@@ -625,11 +953,18 @@ class JSONParser:
             the string id for the `Node` which holds this connection.
             If None the default ID, 'ParentNetwork' is used
 
+        verbose : bool
+            Whether to print informative messages for debugging. Default is False
+
         Returns
         -------
         Connection
             a Python object with all the values from key `connection_id`
         """
+        if verbose:
+            print(
+                "Creating connection {} in node {}".format(connection_id, node_obj.id)
+            )
         contents = self.config[connection_id].get("contents")
         if isinstance(contents, list):
             contents = list(map(lambda con: utils.ContentsType[con], contents))
@@ -638,6 +973,7 @@ class JSONParser:
 
         bidirectional = self.config[connection_id].get("bidirectional", False)
         source_id = self.config[connection_id].get("source")
+
         if source_id:
             source = node_obj.get_node(source_id)
 
@@ -666,6 +1002,7 @@ class JSONParser:
         )
 
         if self.config[connection_id]["type"] == "Pipe":
+            friction = self.config[connection_id].get("friction_coeff")
             diameter = self.parse_unit_val_dict(
                 self.config[connection_id].get("diameter")
             )
@@ -686,6 +1023,7 @@ class JSONParser:
                 max_flow,
                 design_flow,
                 diameter=diameter,
+                friction=friction,
                 lower_heating_value=lower,
                 higher_heating_value=higher,
                 min_pres=min_pres,
@@ -699,6 +1037,17 @@ class JSONParser:
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
                 connection_id,
+                source,
+                destination,
+                tags={},
+                bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point,
+            )
+        elif self.config[connection_id]["type"] == "Delivery":
+            connection_obj = connection.Delivery(
+                connection_id,
+                contents,
                 source,
                 destination,
                 tags={},
@@ -1091,6 +1440,80 @@ class JSONParser:
         return contents
 
     @staticmethod
+    def parse_dosing_rate(dosing_dict):
+        """Converts a dictionary into a dictionary of a different format
+
+        Parameters
+        ----------
+        heating_vals : dict
+            dictionary of the form {
+
+                ``DosingType``: {
+
+                    ``rate``: `float`
+
+                    ``units``: `str`
+                }
+
+            }
+
+        Returns
+        -------
+        dict
+            Keys are of DosingType or str and values of pint.Quantity or float
+            Given as a float if no units are specified
+        """
+        new_dosing_dict = {}
+        for k, v in dosing_dict.items():
+            if k not in utils.DosingType.__members__:
+                raise ValueError(f"{k} is not a valid dosing type")
+            new_v = JSONParser.parse_unit_val_dict(v)
+            new_dosing_dict[utils.DosingType[k]] = new_v
+
+        return new_dosing_dict
+
+    @staticmethod
+    def dosing_to_dict(dosing_dict):
+        """Converts the dosing rate or area dictionary from PyPES to JSON format.
+
+        Parameters
+        ----------
+        dosing_dict : dict
+            dictionary of the form {
+                ``DosingTypeA`` : `float` or`pint.Quantity`
+
+                ``DosingTypeB`` : `float` or `pint.Quantity`
+
+            }
+
+        Returns
+        -------
+        dict
+            Dictionary in JSON-readable format. I.e., {
+                ``DosingTypeA``: {
+                    ``value``: `float`
+
+                    ``units``: `str`
+
+                }
+
+                ``DosingTypeB``: {
+                    ``value``: `float`
+
+                    ``units``: `str`
+
+                }
+
+            }
+        """
+        new_dosing_dict = {}
+        for k, v in dosing_dict.items():
+            new_v = JSONParser.unit_val_to_dict(v)
+            new_dosing_dict[k.name] = new_v
+
+        return new_dosing_dict
+
+    @staticmethod
     def parse_min_max_design(min_max_design):
         """Converts a dictionary into a tuple of flow rates
 
@@ -1098,11 +1521,13 @@ class JSONParser:
         ----------
         min_max_design : dict
             dictionary of the form {
-                ``min``: `int`
+                ``min``: `float`
 
-                ``max``: `int`
+                ``max``: `float`
 
-                ``design``: `int`
+                ``design``: `float`
+
+                ``units``: `str`
 
             }
 
@@ -1335,6 +1760,7 @@ class JSONParser:
             `conn_obj` in dictionary form
         """
         conn_dict = {}
+        print(conn_obj)
         conn_dict["type"] = type(conn_obj).__name__
         conn_dict["source"] = conn_obj.source.id
         conn_dict["destination"] = conn_obj.destination.id
@@ -1369,7 +1795,8 @@ class JSONParser:
             if conn_obj.diameter is not None:
                 conn_dict["diameter"] = JSONParser.unit_val_to_dict(conn_obj.diameter)
 
-        # TODO: unsupported attribute: friction_coeff
+            if conn_obj.friction_coeff is not None:
+                conn_dict["friction_coeff"] = conn_obj.friction_coeff
 
         tag_dict = {}
         v_tag_dict = {}
@@ -1430,12 +1857,20 @@ class JSONParser:
         node_dict["tags"] = tag_dict
         node_dict["virtual_tags"] = v_tag_dict
 
-        if isinstance(node_obj, (node.Tank, node.Reservoir)):
+        if isinstance(node_obj, node.Reservoir):
             if node_obj.elevation is not None:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
 
             if node_obj.volume is not None:
-                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+        elif isinstance(node_obj, node.Tank):
+            if node_obj.elevation is not None:
+                node_dict["elevation (meters)"] = node_obj.elevation.magnitude
+
+            if node_obj.volume is not None:
+                node_dict["volume (cubic meters)"] = node_obj.volume.magnitude
+            if node_obj.num_units is not None:
+                node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, node.Pump):
             if node_obj.elevation is not None:
                 node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
@@ -1468,16 +1903,63 @@ class JSONParser:
                 node_obj, "gen_capacity"
             )
             node_dict["num_units"] = node_obj.num_units
-        elif isinstance(
-            node_obj,
-            (
-                node.Chlorination,
-                node.Thickening,
-                node.Aeration,
-                node.Filtration,
-                node.Clarification,
-            ),
-        ):
+        elif isinstance(node_obj, node.Disinfection):
+            if node_obj.volume is not None:
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
+                node_obj, "flow_rate"
+            )
+            node_dict["num_units"] = node_obj.num_units
+            node_dict["residence_time"] = JSONParser.unit_val_to_dict(
+                node_obj.residence_time
+            )
+            if isinstance(node_obj, node.UVSystem):
+                node_dict["area"] = JSONParser.unit_val_to_dict(
+                    node_obj.dosing_area[utils.DosingType["UVLight"]]
+                )
+                node_dict["intensity"] = JSONParser.unit_val_to_dict(
+                    node_obj.dosing_rate[utils.DosingType["UVLight"]]
+                )
+            else:
+                node_dict["dosing_rate"] = JSONParser.dosing_to_dict(
+                    node_obj.dosing_rate
+                )
+        elif isinstance(node_obj, node.Filtration):
+            if node_obj.volume is not None:
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
+                node_obj, "flow_rate"
+            )
+            node_dict["num_units"] = node_obj.num_units
+            node_dict["settling_time"] = JSONParser.unit_val_to_dict(
+                node_obj.settling_time
+            )
+            node_dict["dosing_rate"] = JSONParser.dosing_to_dict(node_obj.dosing_rate)
+
+            if isinstance(node_obj, node.ROMembrane):
+                node_dict["area"] = JSONParser.unit_val_to_dict(node_obj.area)
+                node_dict["selectivity"] = JSONParser.unit_val_to_dict(
+                    node_obj.selectivity
+                )
+                node_dict["permeability"] = JSONParser.unit_val_to_dict(
+                    node_obj.permeability
+                )
+        elif isinstance(node_obj, (node.Reactor, node.StaticMixer)):
+            if node_obj.volume is not None:
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
+                node_obj, "flow_rate"
+            )
+            node_dict["num_units"] = node_obj.num_units
+            node_dict["residence_time"] = JSONParser.unit_val_to_dict(
+                node_obj.residence_time
+            )
+            node_dict["dosing_rate"] = JSONParser.dosing_to_dict(node_obj.dosing_rate)
+            node_dict["pH"] = node_obj.pH
+        elif isinstance(node_obj, (node.Thickening, node.Aeration, node.Clarification)):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
@@ -1544,7 +2026,7 @@ class JSONParser:
             number of spaces to indent the JSON file
 
         verbose : bool
-            Whether to print informative messages for debugging
+            Whether to print informative messages for debugging. Default is False
 
         Raises
         ------

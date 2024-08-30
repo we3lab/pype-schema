@@ -1,0 +1,138 @@
+{
+    "nodes": [
+        "DesalPlant",
+        "PacificOcean",
+        "WaterDistribution"
+    ],
+    "connections": [
+        "OceanIntake",
+        "DesalProductOutlet",
+        "BrineDisposal"
+    ],
+    "virtual_tags": {},
+    "WaterDistribution": {
+        "type": "Network",
+        "contents": "DrinkingWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "DesalPlant": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Seawater",
+        "output_contents": ["DrinkingWater", "Brine"],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "nodes": [
+            "Pretreatment",
+            "ROModule",
+            "Posttreatment"
+        ],
+        "connections": [
+            "PretreatmentToROModule",
+            "ROModuleToPosttreatment"
+        ]
+    },
+    "BrineDisposal": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "PacificOcean",
+        "exit_point": "ROModule",
+        "contents": "Brine",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "OceanIntake": {
+        "type": "Pipe",
+        "source": "PacificOcean",
+        "destination": "DesalPlant",
+        "entry_point": "ChlorinationBasin",
+        "contents": "Seawater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "DesalProductOutlet": {
+        "type": "Pipe",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "exit_point": "Posttreatment",
+        "contents": "DrinkingWater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "PacificOcean": {
+        "type": "Reservoir",
+        "contents": ["TreatedSewage", "Brine", "Seawater"],
+        "tags": {}
+    },
+    "Pretreatment": {
+        "type": "Network",
+        "input_contents": "Seawater",
+        "output_contents": "PretreatedWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "Posttreatment": {
+        "type": "Network",
+        "input_contents": "ProductWater",
+        "output_contents": "DrinkingWater",
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "ROModule": {
+        "type": "ModularUnit",
+        "input_contents": "PretreatedWater",
+        "output_contents": ["ProductWater", "Brine"],
+        "tags": {},
+        "nodes": [],
+        "connections": []
+    },
+    "PretreatmentToROModule": {
+        "type": "Pipe",
+        "source": "Pretreatment",
+        "destination": "ROModule",
+        "contents": "PretreatedWater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    },
+    "ROModuleToPosttreatment": {
+        "type": "Pipe",
+        "source": "ROModule",
+        "destination": "Posttreatment",
+        "contents": "ProductWater",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "MGD"
+        },
+        "tags": {}
+    }
+}
