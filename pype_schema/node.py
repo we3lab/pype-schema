@@ -1586,7 +1586,13 @@ class Pump(Node):
         """
         if not isinstance(pump_type, utils.PumpType):
             raise TypeError("'pump_type' must be of `PumpType`")
-        self.pump_type = pump_type
+        self._pump_type = pump_type
+
+    def get_pump_type(self):
+        return self._pump_type
+
+    def del_pump_type(self):
+        del self._pump_type
 
     def set_pump_curve(self, pump_curve):
         """Set the pump curve to the given function
@@ -1637,6 +1643,7 @@ class Pump(Node):
 
     efficiency = property(get_efficiency, set_efficiency, del_efficiency)
     power_rating = property(get_power_rating, set_power_rating, del_power_rating)
+    pump_type = property(get_pump_type, set_pump_type, del_pump_type)
 
 
 class Tank(Node):
