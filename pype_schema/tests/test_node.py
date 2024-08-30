@@ -7,9 +7,7 @@ from pype_schema.units import u
 from pype_schema.utils import ContentsType
 from pype_schema.tag import Tag, TagType
 from pype_schema.parse_json import JSONParser
-from pype_schema.node import (
-    Cogeneration, Pump, Disinfection, ModularUnit
-)
+from pype_schema.node import Cogeneration, Pump, Disinfection, ModularUnit
 from pype_schema.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -70,9 +68,9 @@ def test_get_tag(json_path, tag_name, expected_path):
         ("data/node.json", "SewerIntake", False, "data/sewer_intake.pkl"),
         ("data/node.json", "InvalidID", True, None),
         (
-            "data/disinfection.json", 
-            "DisinfectionTank", 
-            False, 
+            "data/disinfection.json",
+            "DisinfectionTank",
+            False,
             Disinfection(
                 "DisinfectionTank",
                 [ContentsType.UntreatedSewage],
@@ -82,18 +80,18 @@ def test_get_tag(json_path, tag_name, expected_path):
                 None,
                 1,
                 2000 * u.L,
-            )
+            ),
         ),
         (
-            "data/unextend_desal.json", 
-            "ROModule", 
-            True, 
+            "data/unextend_desal.json",
+            "ROModule",
+            True,
             ModularUnit(
                 "ROModule",
                 [ContentsType.PretreatedWater],
                 [ContentsType.ProductWater, ContentsType.Brine],
                 1,
-            )
+            ),
         ),
     ],
 )
@@ -1128,7 +1126,7 @@ def test_depr_flow_rate(node, flow_rate):
 @pytest.mark.parametrize(
     "obj1, obj2",
     [
-        ( 
+        (
             Disinfection(
                 "DisinfectionTank",
                 [ContentsType.UntreatedSewage],
@@ -1146,7 +1144,7 @@ def test_depr_flow_rate(node, flow_rate):
                 1,
             ),
         ),
-        ( 
+        (
             ModularUnit(
                 "ROModule",
                 [ContentsType.PretreatedWater],
