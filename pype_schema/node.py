@@ -1334,6 +1334,206 @@ class Facility(Network):
         )
 
 
+class Joint(Node):
+    """A joint in the network, where multiple pipes meet.
+
+    Parameters
+    ----------
+    id : str
+        Joint ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the joint
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the joint
+
+    inflow: Connection or list of Connection
+        Connection object of list of connection objects that is the input of the joint
+
+    outflow: Connection or list of Connection
+        Connection object of list of connection objects that is the output of the joint
+
+    tags : dict of Tag
+        Data tags associated with this joint
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        inflow=None,
+        outflow=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.inflow = inflow
+        self.outflow = outflow
+        self.tags = tags
+        # TODO: Add check for inflow and outflow to be of type Connection
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Joint id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"inflow:{self.inflow} "
+            f"outflow:{self.outflow} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.inflow == other.inflow
+            and self.outflow == other.outflow
+            and self.tags == other.tags
+        )
+
+
+class Reducer(Joint):
+    """A reducer in the network, where multiple pipes meet.
+
+    Parameters
+    ----------
+    id : str
+        Reducer ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the reducer
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the reducer
+
+    inflow: Connection or list of Connection
+        Connection object of list of connection objects that is
+        the input of the reducer
+
+    outflow: Connection or list of Connection
+        Connection object of list of connection objects that is
+        the output of the reducer
+
+    tags : dict of Tag
+        Data tags associated with this reducer
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        inflow,
+        outflow,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.inflow = inflow
+        self.outflow = outflow
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Reducer id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"inflow:{self.inflow} "
+            f"outflow:{self.outflow} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.inflow == other.inflow
+            and self.outflow == other.outflow
+            and self.tags == other.tags
+        )
+
+
+class Splitter(Joint):
+    """A splitter in the network, where a pipe splits into multiple pipes.
+
+    Parameters
+    ----------
+    id : str
+        Splitter ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the splitter
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the splitter
+
+    inflow: Connection or list of Connection
+        Connection object of list of connection objects that
+        is the input of the splitter
+
+    outflow: Connection or list of Connection
+        Connection object of list of connection objects that
+        is the output of the splitter
+
+    tags : dict of Tag
+        Data tags associated with this splitter
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        inflow,
+        outflow,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.inflow = inflow
+        self.outflow = outflow
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Splitter id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"inflow:{self.inflow} "
+            f"outflow:{self.outflow} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.inflow == other.inflow
+            and self.outflow == other.outflow
+            and self.tags == other.tags
+        )
+
+
 class ModularUnit(Network):
     """Modular Unit in the network, such as a reverse osmosis skid.
 
