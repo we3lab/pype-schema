@@ -1,0 +1,193 @@
+{
+  "nodes": [
+    "Input",
+    "IntakeJoint",
+    "Anaerobic", 
+    "Anoxic", 
+    "IntermediateJoint", 
+    "Aerobic",
+    "Settler",
+    "SludgeJoint", 
+    "Output"
+  ],
+  "connections": [
+    "WasteWaterIntake",
+    "AnaerobicToIntakeJoint",
+    "AnaerobicToAnoxic",
+    "AnoxicToIntermediateJoint",
+    "IntermediateJointToAerobic",
+    "AerobicToSettler",
+    "SettlerToOutput", 
+    "SettlerToSludgeJoint",
+    "SludgeJointToOutput", 
+    "SludgeJointToAnoxic", 
+    "AerobicToAnoxic", 
+    "IntermediateJointToIntakeJoint"
+  ],
+  "virtual_tags": {
+  },
+  "Input":{
+    "type": "Reservoir",
+    "contents": ["UntreatedSewage", "TreatedSewage", "Chemical"],
+    "tags": {}
+  }, 
+  "IntakeJoint": {
+    "type": "Reducer",
+    "contents": "UntreatedSewage",
+    "inflow": ["WasteWaterIntake", "AnoxicToAnaerobic"], 
+    "outflow": "IntakeJoint", 
+    "tags": {}
+  }, 
+  "Anaerobic": {
+    "type": "Reactor",
+    "input_contents": "UntreatedSewage",
+    "output_contents": "UntreatedSewage",
+    "volume (cubic meters)": null,
+    "num_units": 1,
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {}
+  },
+  "Anoxic": {
+    "type": "Reactor",
+    "input_contents": "UntreatedSewage",
+    "output_contents": "UntreatedSewage",
+    "volume (cubic meters)": null,
+    "num_units": 1,
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {}
+  },
+  "IntermediateJoint": {
+    "type": "Reducer",
+    "contents": "UntreatedSewage",
+    "inflow": ["AnoxicToIntermediate", "SludgeToAnoxic"],
+    "outflow": "IntermediateJoint",
+    "tags": {}
+  },
+  "Aerobic": {
+    "type": "Reactor",
+    "input_contents": "UntreatedSewage",
+    "output_contents": "UntreatedSewage",
+    "volume (cubic meters)": null,
+    "num_units": 1,
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {}
+  },
+  "Settler": {
+    "type": "Clarification",
+    "elevation (meters)": null,
+    "volume (cubic meters)": null,
+    "contents": ["UntreatedSewage"],
+    "tags": {}
+  },
+  "SludgeJoint": {
+    "type": "Splitter",
+    "contents": ["UntreatedSewage", "SludgeBlend"],
+    "inflow": "SettlerToSludgeJoint", 
+    "outflow": ["SludgeJointToOutput", "SludgeJointToAnoxic"],
+    "tags": {}
+  },
+  "Output": {
+    "type": "Reservoir",
+    "contents": ["TreatedSewage", "UntreatedSewage", "SludgeBlend"],
+    "tags": {}
+  },
+  "WasteWaterIntake": {
+    "type": "Pipe",
+    "source": "Input",
+    "destination": "IntakeJoint",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "AnaerobicToIntakeJoint": {
+    "type": "Pipe",
+    "source": "Anaerobic",
+    "destination": "IntakeJoint",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "AnaerobicToAnoxic": {
+    "type": "Pipe",
+    "source": "Anaerobic",
+    "destination": "Anoxic",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "AnoxicToIntermediateJoint": {
+    "type": "Pipe",
+    "source": "Anoxic",
+    "destination": "IntermediateJoint",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "IntermediateJointToAerobic": {
+    "type": "Pipe",
+    "source": "IntermediateJoint",
+    "destination": "Aerobic",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "AerobicToSettler": {
+    "type": "Pipe",
+    "source": "Aerobic",
+    "destination": "Settler",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "SettlerToOutput": {
+    "type": "Pipe",
+    "source": "Settler",
+    "destination": "Output",
+    "contents": "TreatedSewage",
+    "tags": {}
+  },
+  "SettlerToSludgeJoint": {
+    "type": "Pipe",
+    "source": "Settler",
+    "destination": "SludgeJoint",
+    "contents": "SludgeBlend",
+    "tags": {}
+  },
+  "SludgeJointToOutput": {
+    "type": "Pipe",
+    "source": "SludgeJoint",
+    "destination": "Output",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "SludgeJointToAnoxic": {
+    "type": "Pipe",
+    "source": "SludgeJoint",
+    "destination": "Anoxic",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "AerobicToAnoxic": {
+    "type": "Pipe",
+    "source": "Aerobic",
+    "destination": "Anoxic",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  },
+  "IntermediateJointToIntakeJoint": {
+    "type": "Pipe",
+    "source": "IntermediateJoint",
+    "destination": "IntakeJoint",
+    "contents": "UntreatedSewage",
+    "tags": {}
+  }
+}

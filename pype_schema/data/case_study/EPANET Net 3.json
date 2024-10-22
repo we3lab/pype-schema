@@ -1,0 +1,1549 @@
+{
+  "nodes": [
+    "Joint1",
+    "Joint2",
+    "Joint3",
+    "Joint4",
+    "Joint5",
+    "Joint6",
+    "Joint7",
+    "Joint8",
+    "Joint9",
+    "Joint10",
+    "Joint11",
+    "Joint12",
+    "Joint13",
+    "Joint14",
+    "Joint15",
+    "Joint16",
+    "Joint17",
+    "Joint18",
+    "Joint19",
+    "Joint20",
+    "Joint21",
+    "Joint22",
+    "Joint23",
+    "Joint24",
+    "Joint25",
+    "Joint26",
+    "Joint27",
+    "Joint28",
+    "Joint29",
+    "Joint30",
+    "Joint31",
+    "Joint32",
+    "Joint33",
+    "Joint34",
+    "Joint35",
+    "Joint36",
+    "Joint37",
+    "Joint38",
+    "Joint39",
+    "Joint40",
+    "Joint41",
+    "Joint42",
+    "Joint43",
+    "Joint44",
+    "Joint45",
+    "Joint46",
+    "Joint47",
+    "Joint48",
+    "Joint49",
+    "Joint50",
+    "Joint51",
+    "Joint52",
+    "Joint53",
+    "Joint54",
+    "Joint55",
+    "Joint56",
+    "Joint57",
+    "Joint58",
+    "Joint59",
+    "Joint60",
+    "Joint61",
+    "Joint62",
+    "Joint63",
+    "Joint64",
+    "Joint65",
+    "Joint66",
+    "Joint67",
+    "Joint68",
+    "Joint69",
+    "Joint70",
+    "Joint71",
+    "Joint72",
+    "Joint73",
+    "Joint74",
+    "Joint75",
+    "Joint76",
+    "Joint77",
+    "Joint78",
+    "Joint79",
+    "Joint80",
+    "Joint81",
+    "Joint82",
+    "Joint83",
+    "Joint84",
+    "Joint85",
+    "Joint86",
+    "Joint87",
+    "Joint88",
+    "Joint89",
+    "Joint90",
+    "Joint91",
+    "Joint92",
+    "Reservoir93",
+    "Reservoir94",
+    "Tank95",
+    "Tank96",
+    "Tank97"
+  ],
+  "connections": [
+    "Pipe1",
+    "Pipe2",
+    "Pipe3",
+    "Pipe4",
+    "Pipe5",
+    "Pipe6",
+    "Pipe7",
+    "Pipe8",
+    "Pipe9",
+    "Pipe10",
+    "Pipe11",
+    "Pipe12",
+    "Pipe13",
+    "Pipe14",
+    "Pipe15",
+    "Pipe16",
+    "Pipe17",
+    "Pipe18",
+    "Pipe19",
+    "Pipe20",
+    "Pipe21",
+    "Pipe22",
+    "Pipe23",
+    "Pipe24",
+    "Pipe25",
+    "Pipe26",
+    "Pipe27",
+    "Pipe28",
+    "Pipe29",
+    "Pipe30",
+    "Pipe31",
+    "Pipe32",
+    "Pipe33",
+    "Pipe34",
+    "Pipe35",
+    "Pipe36",
+    "Pipe37",
+    "Pipe38",
+    "Pipe39",
+    "Pipe40",
+    "Pipe41",
+    "Pipe42",
+    "Pipe43",
+    "Pipe44",
+    "Pipe45",
+    "Pipe46",
+    "Pipe47",
+    "Pipe48",
+    "Pipe49",
+    "Pipe50",
+    "Pipe51",
+    "Pipe52",
+    "Pipe53",
+    "Pipe54",
+    "Pipe55",
+    "Pipe56",
+    "Pipe57",
+    "Pipe58",
+    "Pipe59",
+    "Pipe60",
+    "Pipe61",
+    "Pipe62",
+    "Pipe63",
+    "Pipe64",
+    "Pipe65",
+    "Pipe66",
+    "Pipe67",
+    "Pipe68",
+    "Pipe69",
+    "Pipe70",
+    "Pipe71",
+    "Pipe72",
+    "Pipe73",
+    "Pipe74",
+    "Pipe75",
+    "Pipe76",
+    "Pipe77",
+    "Pipe78",
+    "Pipe79",
+    "Pipe80",
+    "Pipe81",
+    "Pipe82",
+    "Pipe83",
+    "Pipe84",
+    "Pipe85",
+    "Pipe86",
+    "Pipe87",
+    "Pipe88",
+    "Pipe89",
+    "Pipe90",
+    "Pipe91",
+    "Pipe92",
+    "Pipe93",
+    "Pipe94",
+    "Pipe95",
+    "Pipe96",
+    "Pipe97",
+    "Pipe98",
+    "Pipe99",
+    "Pipe100",
+    "Pipe101",
+    "Pipe102",
+    "Pipe103",
+    "Pipe104",
+    "Pipe105",
+    "Pipe106",
+    "Pipe107",
+    "Pipe108",
+    "Pipe109",
+    "Pipe110",
+    "Pipe111",
+    "Pipe112",
+    "Pipe113",
+    "Pipe114",
+    "Pipe115",
+    "Pipe116",
+    "Pipe117",
+    "Pipe118",
+    "Pipe119"
+  ],
+  "virtual_tags": {},
+  "Joint1": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint2": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint3": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint4": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint5": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint6": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint7": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint8": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint9": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint10": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint11": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint12": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint13": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint14": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint15": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint16": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint17": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint18": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint19": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint20": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint21": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint22": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint23": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint24": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint25": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint26": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint27": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint28": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint29": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint30": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint31": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint32": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint33": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint34": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint35": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint36": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint37": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint38": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint39": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint40": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint41": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint42": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint43": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint44": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint45": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint46": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint47": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint48": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint49": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint50": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint51": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint52": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint53": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint54": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint55": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint56": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint57": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint58": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint59": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint60": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint61": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint62": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint63": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint64": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint65": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint66": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint67": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint68": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint69": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint70": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint71": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint72": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint73": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint74": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint75": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint76": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint77": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint78": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint79": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint80": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint81": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint82": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint83": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint84": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint85": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint86": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint87": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint88": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint89": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint90": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint91": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Joint92": {
+    "type": "Joint",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Reservoir93": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "levation (meters)": 220.0,
+    "tags": {}
+  },
+  "Reservoir94": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "levation (meters)": 167.0,
+    "tags": {}
+  },
+  "Tank95": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "levation (meters)": 131.89999389648438,
+    "volume (cubic meters)": -748466.75,
+    "tags": {}
+  },
+  "Tank96": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "levation (meters)": 116.5,
+    "volume (cubic meters)": -228747.21875,
+    "tags": {}
+  },
+  "Tank97": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "levation (meters)": 129.0,
+    "volume (cubic meters)": -2725005.0,
+    "tags": {}
+  },
+  "Pipe1": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Tank97",
+    "destination": "Joint3",
+    "tags": {}
+  },
+  "Pipe2": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Tank95",
+    "destination": "Joint5",
+    "tags": {}
+  },
+  "Pipe3": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Tank96",
+    "destination": "Joint6",
+    "tags": {}
+  },
+  "Pipe4": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Reservoir93",
+    "destination": "Joint7",
+    "tags": {}
+  },
+  "Pipe5": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint1",
+    "destination": "Joint10",
+    "tags": {}
+  },
+  "Pipe6": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint10",
+    "destination": "Joint11",
+    "tags": {}
+  },
+  "Pipe7": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint10",
+    "destination": "Joint12",
+    "tags": {}
+  },
+  "Pipe8": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint12",
+    "destination": "Joint13",
+    "tags": {}
+  },
+  "Pipe9": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint11",
+    "destination": "Joint14",
+    "tags": {}
+  },
+  "Pipe10": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint14",
+    "destination": "Joint15",
+    "tags": {}
+  },
+  "Pipe11": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint17",
+    "destination": "Joint15",
+    "tags": {}
+  },
+  "Pipe12": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint15",
+    "destination": "Joint16",
+    "tags": {}
+  },
+  "Pipe13": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint17",
+    "destination": "Joint16",
+    "tags": {}
+  },
+  "Pipe14": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint13",
+    "destination": "Joint17",
+    "tags": {}
+  },
+  "Pipe15": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint16",
+    "destination": "Joint54",
+    "tags": {}
+  },
+  "Pipe16": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint86",
+    "destination": "Joint12",
+    "tags": {}
+  },
+  "Pipe17": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint17",
+    "destination": "Joint18",
+    "tags": {}
+  },
+  "Pipe18": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint19",
+    "destination": "Joint20",
+    "tags": {}
+  },
+  "Pipe19": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint20",
+    "destination": "Joint18",
+    "tags": {}
+  },
+  "Pipe20": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint21",
+    "destination": "Joint20",
+    "tags": {}
+  },
+  "Pipe21": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint21",
+    "destination": "Joint19",
+    "tags": {}
+  },
+  "Pipe22": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint22",
+    "destination": "Joint21",
+    "tags": {}
+  },
+  "Pipe23": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint21",
+    "destination": "Joint23",
+    "tags": {}
+  },
+  "Pipe24": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint23",
+    "destination": "Joint24",
+    "tags": {}
+  },
+  "Pipe25": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint3",
+    "destination": "Joint24",
+    "tags": {}
+  },
+  "Pipe26": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint24",
+    "destination": "Joint25",
+    "tags": {}
+  },
+  "Pipe27": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint25",
+    "destination": "Joint26",
+    "tags": {}
+  },
+  "Pipe28": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint25",
+    "destination": "Joint27",
+    "tags": {}
+  },
+  "Pipe29": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint27",
+    "destination": "Joint28",
+    "tags": {}
+  },
+  "Pipe30": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint29",
+    "destination": "Joint28",
+    "tags": {}
+  },
+  "Pipe31": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint2",
+    "destination": "Joint29",
+    "tags": {}
+  },
+  "Pipe32": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint30",
+    "destination": "Joint28",
+    "tags": {}
+  },
+  "Pipe33": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint31",
+    "destination": "Joint30",
+    "tags": {}
+  },
+  "Pipe34": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint31",
+    "destination": "Joint32",
+    "tags": {}
+  },
+  "Pipe35": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint32",
+    "destination": "Joint33",
+    "tags": {}
+  },
+  "Pipe36": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint33",
+    "destination": "Joint34",
+    "tags": {}
+  },
+  "Pipe37": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint23",
+    "destination": "Joint34",
+    "tags": {}
+  },
+  "Pipe38": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint19",
+    "destination": "Joint33",
+    "tags": {}
+  },
+  "Pipe39": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint19",
+    "destination": "Joint35",
+    "tags": {}
+  },
+  "Pipe40": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint35",
+    "destination": "Joint36",
+    "tags": {}
+  },
+  "Pipe41": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint36",
+    "destination": "Joint37",
+    "tags": {}
+  },
+  "Pipe42": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint37",
+    "destination": "Joint38",
+    "tags": {}
+  },
+  "Pipe43": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint38",
+    "destination": "Joint39",
+    "tags": {}
+  },
+  "Pipe44": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint39",
+    "destination": "Joint40",
+    "tags": {}
+  },
+  "Pipe45": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint87",
+    "destination": "Joint42",
+    "tags": {}
+  },
+  "Pipe46": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint41",
+    "destination": "Joint42",
+    "tags": {}
+  },
+  "Pipe47": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint51",
+    "destination": "Joint60",
+    "tags": {}
+  },
+  "Pipe48": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint42",
+    "destination": "Joint43",
+    "tags": {}
+  },
+  "Pipe49": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint43",
+    "destination": "Joint44",
+    "tags": {}
+  },
+  "Pipe50": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint90",
+    "destination": "Joint43",
+    "tags": {}
+  },
+  "Pipe51": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint4",
+    "destination": "Joint47",
+    "tags": {}
+  },
+  "Pipe52": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint47",
+    "destination": "Joint45",
+    "tags": {}
+  },
+  "Pipe53": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint45",
+    "destination": "Joint46",
+    "tags": {}
+  },
+  "Pipe54": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint46",
+    "destination": "Joint48",
+    "tags": {}
+  },
+  "Pipe55": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint5",
+    "destination": "Joint46",
+    "tags": {}
+  },
+  "Pipe56": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint50",
+    "destination": "Joint49",
+    "tags": {}
+  },
+  "Pipe57": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint48",
+    "destination": "Joint50",
+    "tags": {}
+  },
+  "Pipe58": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint49",
+    "destination": "Joint61",
+    "tags": {}
+  },
+  "Pipe59": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint60",
+    "destination": "Joint50",
+    "tags": {}
+  },
+  "Pipe60": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint52",
+    "destination": "Joint48",
+    "tags": {}
+  },
+  "Pipe61": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint52",
+    "destination": "Joint51",
+    "tags": {}
+  },
+  "Pipe62": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint42",
+    "destination": "Joint89",
+    "tags": {}
+  },
+  "Pipe63": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint53",
+    "destination": "Joint51",
+    "tags": {}
+  },
+  "Pipe64": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint88",
+    "destination": "Joint52",
+    "tags": {}
+  },
+  "Pipe65": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint53",
+    "destination": "Joint54",
+    "tags": {}
+  },
+  "Pipe66": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint54",
+    "destination": "Joint55",
+    "tags": {}
+  },
+  "Pipe67": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint37",
+    "destination": "Joint55",
+    "tags": {}
+  },
+  "Pipe68": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint56",
+    "destination": "Joint53",
+    "tags": {}
+  },
+  "Pipe69": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint15",
+    "destination": "Joint56",
+    "tags": {}
+  },
+  "Pipe70": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint44",
+    "destination": "Joint57",
+    "tags": {}
+  },
+  "Pipe71": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint57",
+    "destination": "Joint58",
+    "tags": {}
+  },
+  "Pipe72": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint58",
+    "destination": "Joint59",
+    "tags": {}
+  },
+  "Pipe73": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint57",
+    "destination": "Joint91",
+    "tags": {}
+  },
+  "Pipe74": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint61",
+    "destination": "Joint63",
+    "tags": {}
+  },
+  "Pipe75": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint63",
+    "destination": "Joint62",
+    "tags": {}
+  },
+  "Pipe76": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint92",
+    "destination": "Joint63",
+    "tags": {}
+  },
+  "Pipe77": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint62",
+    "destination": "Joint64",
+    "tags": {}
+  },
+  "Pipe78": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint64",
+    "destination": "Joint65",
+    "tags": {}
+  },
+  "Pipe79": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint65",
+    "destination": "Joint66",
+    "tags": {}
+  },
+  "Pipe80": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint66",
+    "destination": "Joint67",
+    "tags": {}
+  },
+  "Pipe81": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint67",
+    "destination": "Joint68",
+    "tags": {}
+  },
+  "Pipe82": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint68",
+    "destination": "Joint69",
+    "tags": {}
+  },
+  "Pipe83": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint69",
+    "destination": "Joint70",
+    "tags": {}
+  },
+  "Pipe84": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint69",
+    "destination": "Joint71",
+    "tags": {}
+  },
+  "Pipe85": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint67",
+    "destination": "Joint72",
+    "tags": {}
+  },
+  "Pipe86": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint72",
+    "destination": "Joint73",
+    "tags": {}
+  },
+  "Pipe87": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint66",
+    "destination": "Joint74",
+    "tags": {}
+  },
+  "Pipe88": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint74",
+    "destination": "Joint72",
+    "tags": {}
+  },
+  "Pipe89": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint74",
+    "destination": "Joint75",
+    "tags": {}
+  },
+  "Pipe90": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint75",
+    "destination": "Joint76",
+    "tags": {}
+  },
+  "Pipe91": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint76",
+    "destination": "Joint77",
+    "tags": {}
+  },
+  "Pipe92": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint76",
+    "destination": "Joint78",
+    "tags": {}
+  },
+  "Pipe93": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint75",
+    "destination": "Joint79",
+    "tags": {}
+  },
+  "Pipe94": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint78",
+    "destination": "Joint79",
+    "tags": {}
+  },
+  "Pipe95": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint78",
+    "destination": "Joint82",
+    "tags": {}
+  },
+  "Pipe96": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint6",
+    "destination": "Joint82",
+    "tags": {}
+  },
+  "Pipe97": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint82",
+    "destination": "Joint81",
+    "tags": {}
+  },
+  "Pipe98": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint82",
+    "destination": "Joint80",
+    "tags": {}
+  },
+  "Pipe99": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint79",
+    "destination": "Joint80",
+    "tags": {}
+  },
+  "Pipe100": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint20",
+    "destination": "Joint83",
+    "tags": {}
+  },
+  "Pipe101": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint83",
+    "destination": "Joint84",
+    "tags": {}
+  },
+  "Pipe102": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint84",
+    "destination": "Joint86",
+    "tags": {}
+  },
+  "Pipe103": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint83",
+    "destination": "Joint85",
+    "tags": {}
+  },
+  "Pipe104": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint18",
+    "destination": "Joint85",
+    "tags": {}
+  },
+  "Pipe105": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint85",
+    "destination": "Joint86",
+    "tags": {}
+  },
+  "Pipe106": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint87",
+    "destination": "Joint88",
+    "tags": {}
+  },
+  "Pipe107": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint54",
+    "destination": "Joint88",
+    "tags": {}
+  },
+  "Pipe108": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint89",
+    "destination": "Joint52",
+    "tags": {}
+  },
+  "Pipe109": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint47",
+    "destination": "Joint90",
+    "tags": {}
+  },
+  "Pipe110": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint91",
+    "destination": "Joint92",
+    "tags": {}
+  },
+  "Pipe111": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint91",
+    "destination": "Joint61",
+    "tags": {}
+  },
+  "Pipe112": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint38",
+    "destination": "Joint87",
+    "tags": {}
+  },
+  "Pipe113": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint58",
+    "destination": "Joint92",
+    "tags": {}
+  },
+  "Pipe114": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint89",
+    "destination": "Joint90",
+    "tags": {}
+  },
+  "Pipe115": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint9",
+    "destination": "Joint22",
+    "tags": {}
+  },
+  "Pipe116": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint7",
+    "destination": "Joint8",
+    "tags": {}
+  },
+  "Pipe117": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint8",
+    "destination": "Joint9",
+    "tags": {}
+  },
+  "Pipe118": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Reservoir94",
+    "destination": "Joint1",
+    "tags": {}
+  },
+  "Pipe119": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Joint7",
+    "destination": "Joint9",
+    "tags": {}
+  }
+}

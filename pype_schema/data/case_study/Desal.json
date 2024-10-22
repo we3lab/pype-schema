@@ -1,0 +1,156 @@
+{
+  "nodes": [
+    "Input",
+    "HPPump",
+    "SWRO", 
+    "ERI", 
+    "CirculationPump", 
+    "WasteWaterSump", 
+    "Output"
+  ],
+  "connections": [
+    "InputToHPPump",
+    "InputToERI",
+    "HPPumpToSWRO",
+    "ERIToCirculationPump",
+    "ERIToWasewaterSump",
+    "SWROToERI",
+    "CirculationPumpToSWRO",
+    "SWROToOutput"
+  ],
+  "virtual_tags": {
+  },
+  "Input": {
+    "type": "Tank", 
+    "elevation": null,
+    "volume": null,
+    "contents": "Brine",
+    "tags": {}
+  },
+  "HPPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "Brine",
+    "power_rating": null,
+    "flowrate": {
+      "max": null,
+      "min": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {}
+  },
+  "SWRO": {
+    "type": "ROMembrane",
+    "contents": "Brine",
+    "volume": null,
+    "area": null,
+    "permeability": null,
+    "selectivity": null,
+    "flowrate": {
+      "min": null,
+      "max": null,
+      "avg": null,
+      "units": "MGD"
+    }, 
+    "tags": {}
+  },
+  "ERI": {
+    "type": "Pump",
+    "pump_type": "ERD",
+    "contents": "Brine",
+    "power_rating": null,
+    "flowrate": {
+      "max": null,
+      "min": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {}
+  },
+  "CirculationPump": {
+    "type": "Pump",
+    "pump_type": null,
+    "contents": "Brine",
+    "power_rating": null,
+    "flowrate": {
+      "max": null,
+      "min": null,
+      "avg": null,
+      "units": "MGD"
+    },
+    "tags": {
+    }
+  },
+  "WasteWaterSump": {
+    "type": "Tank",
+    "elevation": null,
+    "volume": null,
+    "contents": "Brine",
+    "tags": {}
+  },
+  "Output": {
+    "type": "Tank",
+    "elevation": null,
+    "volume": null,
+    "contents": "ProductWater",
+    "num_units": 1,
+    "tags": {}
+  },
+  "InputToHPPump": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "Input",
+    "destination": "HPPump",
+    "tags": {}
+  },
+  "InputToERI": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "Input",
+    "destination": "ERI",
+    "tags": {}
+  },
+  "HPPumpToSWRO": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "HPPump",
+    "destination": "SWRO",
+    "tags": {}
+  },
+  "ERIToCirculationPump": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "ERI",
+    "destination": "CirculationPump",
+    "tags": {}
+  },
+  "ERIToWasewaterSump": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "ERI",
+    "destination": "WasteWaterSump",
+    "tags": {}
+  },
+  "SWROToERI": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "SWRO",
+    "destination": "ERI",
+    "tags": {}
+  },
+  "CirculationPumpToSWRO": {
+    "type": "Pipe",
+    "contents": "Brine",
+    "source": "CirculationPump",
+    "destination": "SWRO",
+    "tags": {}
+  },
+  "SWROToOutput": {
+    "type": "Pipe",
+    "contents": "ProductWater",
+    "source": "SWRO",
+    "destination": "Output",
+    "tags": {}
+  }
+}
