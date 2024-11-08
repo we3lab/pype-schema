@@ -7,6 +7,7 @@ content_placeholder = "DrinkingWater"
 
 class NpEncoder(json.JSONEncoder):
     """Custom JSON encoder for numpy types"""
+
     def default(self, obj):
         if isinstance(obj, np.integer):
             return int(obj)

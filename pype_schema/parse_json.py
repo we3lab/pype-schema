@@ -470,9 +470,6 @@ class JSONParser:
             self.config[node_id].get("dosing_rate", defaultdict(float))
         )
 
-        inflow = self.config[node_id].get("inflow")
-        outflow = self.config[node_id].get("outflow")
-
         # create correct type of node class
         if self.config[node_id]["type"] in ["Network", "Facility", "ModularUnit"]:
             num_units = 1 if num_units is None else num_units
@@ -905,26 +902,6 @@ class JSONParser:
                 node_id,
                 input_contents,
                 output_contents,
-                inflow,
-                outflow,
-                tags={},
-            )
-        elif self.config[node_id]["type"] == "Reducer":
-            node_obj = node.Reducer(
-                node_id,
-                input_contents,
-                output_contents,
-                inflow,
-                outflow,
-                tags={},
-            )
-        elif self.config[node_id]["type"] == "Splitter":
-            node_obj = node.Splitter(
-                node_id,
-                input_contents,
-                output_contents,
-                inflow,
-                outflow,
                 tags={},
             )
         else:
@@ -2043,28 +2020,6 @@ class JSONParser:
             node_dict["output_contents"] = [
                 contents.name for contents in node_obj.output_contents
             ]
-            node_dict["inflow"] = [conn.id for conn in node_obj.inflow]
-            node_dict["outflow"] = [conn.id for conn in node_obj.outflow]
-        elif isinstance(node_obj, node.Reducer):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
-            node_dict["inflow"] = [conn.id for conn in node_obj.inflow]
-            node_dict["outflow"] = [conn.id for conn in node_obj.outflow]
-        elif isinstance(node_obj, node.Splitter):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
-            node_dict["inflow"] = [conn.id for conn in node_obj.inflow]
-            node_dict["outflow"] = [conn.id for conn in node_obj.outflow]
         else:
             raise TypeError("Unsupported Node type: " + type(node_obj).__name__)
         return node_dict
