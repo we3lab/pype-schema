@@ -7,7 +7,7 @@ import scipy as sp  # noqa: F401
 from numpy import ndarray, issubdtype
 from .utils import count_args
 from .operations import *  # noqa: F401, F403
-
+from .logbook import Logbook
 
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
@@ -36,6 +36,15 @@ class TagType(Enum):
     Speed = auto()
     Frequency = auto()
     Concentration = auto()
+    SetPoint = auto()  # history of control set points
+
+
+class DownsampleType(Enum):
+    """Enum to represent common methods of downsampling data"""
+
+    Average = auto()
+    Decimation = auto()
+    Reservoir = auto()
 
 
 CONTENTLESS_TYPES = [
@@ -104,10 +113,25 @@ class Tag:
         ID for the parent object (either a Node or Connection)
 
     totalized : bool
-        True if data is totalized. False otherwise
+        True if data is totalized. False by default
 
     contents : ContentsType
         Contents moving through the node
+
+    manufacturer : str
+        Name of the manufacturer for the physical sensor hardware. Default is None
+
+    measure_freq : pint.Quantity
+        Measurement frequency of the data with units. None by default
+
+    report_freq : pint.Quantity
+        Reporting frequency of the data with units. None by default
+
+    downsample_method : DownsampleType
+        None by default, meaning that data is reported on the same frequency it is measured
+    
+    calibration : Logbook
+        A history of sensor calibration.
     """
 
     def __init__(
@@ -120,6 +144,11 @@ class Tag:
         parent_id,
         totalized=False,
         contents=None,
+        manufacturer=None,
+        measure_freq=None,
+        report_freq=None,
+        downsample_method=None,
+        calibration=Logbook()
     ):
         self.id = id
         self.units = units
