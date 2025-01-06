@@ -90,6 +90,21 @@ class Tag:
     contents : ContentsType
         Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
 
+    manufacturer : str
+        Name of the manufacturer for the physical sensor hardware. Default is None
+
+    measure_freq : pint.Quantity
+        Measurement frequency of the data with units. None by default
+
+    report_freq : pint.Quantity
+        Reporting frequency of the data with units. None by default
+
+    downsample_method : DownsampleType
+        None by default, meaning that data is reported on the same frequency it is measured
+    
+    calibration : Logbook
+        A history of sensor calibration.
+
     Attributes
     ----------
     id : str
@@ -158,7 +173,13 @@ class Tag:
         self.source_unit_id = source_unit_id
         self.dest_unit_id = dest_unit_id
         self.parent_id = parent_id
+        self.manufacturer = manufacturer
+        self.measure_freq = measure_freq # TODO: convert from Pint units if string value
+        self.report_freq = report_freq # TODO: convert from Pint units if string value
+        self.downsample_method = downsample_method
+        self.calibration = calibration
 
+    # TODO: add new tag attributes here
     def __repr__(self):
         return (
             f"<pype_schema.tag.Tag id:{self.id} units:{self.units} "
@@ -167,6 +188,7 @@ class Tag:
             f"totalized:{self.totalized} contents:{self.contents}>\n"
         )
 
+    # TODO: add new tag attributes here
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
@@ -183,6 +205,7 @@ class Tag:
             and self.parent_id == other.parent_id
         )
 
+    # TODO: add new tag attributes here
     def __hash__(self):
         return hash(
             (
@@ -197,6 +220,7 @@ class Tag:
             )
         )
 
+    # TODO: add new tag attributes here
     def __lt__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
@@ -332,7 +356,9 @@ class VirtualTag:
         tag_type=None,
         parent_id=None,
         contents=None,
-    ):
+    ):  
+        # TODO: inherit report_freq from child tags
+        # TODO: incorporate DownsampleMethod for different report_freq
         self.id = id
         self.parent_id = parent_id
         self.tags = tags
