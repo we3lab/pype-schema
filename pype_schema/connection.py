@@ -675,6 +675,9 @@ class Wire(Connection):
     id : str
         Wire ID
 
+    contents : ContentsType
+        Contents moving through the connection.
+
     source : Node
         Starting point of the connection
 
@@ -727,6 +730,7 @@ class Wire(Connection):
     def __init__(
         self,
         id,
+        contents,
         source,
         destination,
         tags={},
@@ -735,13 +739,13 @@ class Wire(Connection):
         entry_point=None,
     ):
         self.id = id
+        self.contents = contents
         self.source = source
         self.destination = destination
         self.tags = tags
         self.bidirectional = bidirectional
         self.exit_point = exit_point
         self.entry_point = entry_point
-        self.contents = utils.ContentsType.Electricity
 
     def __repr__(self):
         if self.exit_point is None:
@@ -823,7 +827,10 @@ class Wireless(Connection):
     Parameters
     ---------
     id : str
-        Wire ID
+        Wireless connection ID
+
+    contents : ContentsType
+        Contents moving through the connection.
 
     source : Node
         Starting point of the connection
@@ -877,6 +884,7 @@ class Wireless(Connection):
     def __init__(
         self,
         id,
+        contents,
         source,
         destination,
         tags={},
@@ -885,13 +893,13 @@ class Wireless(Connection):
         entry_point=None,
     ):
         self.id = id
+        self.contents = contents
         self.source = source
         self.destination = destination
         self.tags = tags
         self.bidirectional = bidirectional
         self.exit_point = exit_point
         self.entry_point = entry_point
-        self.contents = utils.ContentsType.Electricity
 
     def __repr__(self):
         if self.exit_point is None:
@@ -1068,7 +1076,7 @@ class Delivery(Connection):
             entry_point_id = self.entry_point.id
 
         return (
-            f"<pype_schema.connection.Wire id:{self.id} "
+            f"<pype_schema.connection.Delivery id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
             f"destination:{self.destination.id} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "

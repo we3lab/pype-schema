@@ -1044,6 +1044,18 @@ class JSONParser:
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
                 connection_id,
+                contents,
+                source,
+                destination,
+                tags={},
+                bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point,
+            )
+        elif self.config[connection_id]["type"] == "Wireless":
+            connection_obj = connection.Wireless(
+                connection_id,
+                contents,
                 source,
                 destination,
                 tags={},
