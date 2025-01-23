@@ -1364,7 +1364,6 @@ class Joint(Node):
         self.set_contents(input_contents, "input_contents")
         self.set_contents(output_contents, "output_contents")
         self.tags = tags
-        # TODO: Add check for inflow and outflow to be of type Connection
 
     def __repr__(self):
         return (

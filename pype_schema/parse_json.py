@@ -1378,6 +1378,7 @@ class JSONParser:
         Tag
             a Python object with the given ID and the values from `tag_info`
         """
+        # TODO: add new tag attributes here
         contents = JSONParser.get_tag_contents(tag_id, tag_info, obj)
         tag_type = TagType[tag_info["type"]]
         totalized = tag_info.get("totalized", False)
@@ -2046,10 +2047,11 @@ class JSONParser:
             Network object to export to JSON
 
         file_path : str
-            path to write the configuration in JSON format
+            path to write the configuration in JSON format.
+            Default is None, meaning that no file will be written
 
         indent : int
-            number of spaces to indent the JSON file
+            number of spaces to indent the JSON file. Default is 4
 
         verbose : bool
             Whether to print informative messages for debugging. Default is False

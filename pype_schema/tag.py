@@ -9,6 +9,7 @@ from .utils import count_args
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
 
+
 class TagType(Enum):
     """Enum to represent types of SCADA tags"""
 
@@ -101,7 +102,7 @@ class Tag:
 
     downsample_method : DownsampleType
         None by default, meaning that data is reported on the same frequency it is measured
-    
+
     calibration : Logbook
         A history of sensor calibration.
 
@@ -144,7 +145,7 @@ class Tag:
 
     downsample_method : DownsampleType
         None by default, meaning that data is reported on the same frequency it is measured
-    
+
     calibration : Logbook
         A history of sensor calibration.
     """
@@ -163,7 +164,7 @@ class Tag:
         measure_freq=None,
         report_freq=None,
         downsample_method=None,
-        calibration=Logbook()
+        calibration=Logbook(),
     ):
         self.id = id
         self.units = units
@@ -174,8 +175,10 @@ class Tag:
         self.dest_unit_id = dest_unit_id
         self.parent_id = parent_id
         self.manufacturer = manufacturer
-        self.measure_freq = measure_freq # TODO: convert from Pint units if string value
-        self.report_freq = report_freq # TODO: convert from Pint units if string value
+        self.measure_freq = (
+            measure_freq  # TODO: convert from Pint units if string value
+        )
+        self.report_freq = report_freq  # TODO: convert from Pint units if string value
         self.downsample_method = downsample_method
         self.calibration = calibration
 
@@ -356,7 +359,7 @@ class VirtualTag:
         tag_type=None,
         parent_id=None,
         contents=None,
-    ):  
+    ):
         # TODO: inherit report_freq from child tags
         # TODO: incorporate DownsampleMethod for different report_freq
         self.id = id

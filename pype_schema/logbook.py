@@ -1,45 +1,133 @@
 import os
 import json
 import pandas as pd
+from enum import Enum, auto
+
+
+class LogCode(Enum):
+    """Enum to represent codes associated with logbook entries"""
+
+    Info = auto()
+    Warning = auto()
+    Error = auto()
+    Critical = auto()
+
+
+class LogEntry:
+    """A single `text` log entry in the digital `Logbook` with associated `timestamp`
+    and `code` (e.g., info or error)
+
+    Parameters
+    ----------
+    timestamp : datetime.datetime
+        The timestamp for the entry
+
+    text : str
+        The text portion of the entry
+
+    code : LogCode
+        The code associated with the entry. Default is Info
+
+    Attributes
+    ----------
+    timestamp : datetime.datetime
+        The timestamp for the entry
+
+    text : str
+        The text portion of the entry
+
+    code : LogCode
+        The code associated with the entry. Default is Info
+    """
+
+    def __init__(self, timestamp, text, code=LogCode.Info):
+        self.timestamp = timestamp
+        self.text = text
+        if code is None:
+            self.code = LogCode.Info
+        else:
+            self.code = code
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.logbook.LogEntry timestamp:{self.timestamp} "
+            f"text:{self.text} code:{self.code}>\n"
+        )
+
+    def pprint(self):
+        """Pretty print this entry"""
+        print("{\n" + self.timestamp.strftime("%b %d, %Y %H:%M:%S") + ",\n")
+        print(entry.code + ",\n" + entry.text + ",\n}")
+
 
 class Logbook:
-    """
+    """A digital logbook with built-in querying.
+
+    Parameters
+    ----------
+    entries : dict
+        Dictionary of the form { `int` : LogEntry }. Default is an empty dictionary
+
     Attributes
     ----------
     entries : dict
-        Dictionary of the form { `datetime` : `str` }
-        
+        Dictionary of the form { `int` : LogEntry }
     """
-    def __init__():
-        self.entries = {}
 
-    def add_entry(self, timestamp, entry):
-        """Modifies `self.entries` to add the desired `entry` text under `timestamp` key
-        
+    def __init__(self, entries={}):
+        self.entries = entries
+
+    def __repr__(self):
+        return f"<pype_schema.logbook.Logbook entries:{self.entries}>\n"
+
+    def next_entry_id(self):
+        """Gets the next entry ID by checking the current maximum ID
+
+        Returns
+        -------
+        int
+            ID for the next logbook entry
+        """
+        if len(entries) == 0:
+            entry_id = 0
+        else:
+            entry_id = max(entries.keys()) + 1
+
+        return entry_id
+
+    def add_entry(self, timestamp, text, code=LogCode.Info):
+        """Modifies `self.entries` to add the desired `text` with associated `timestamp`
+        and `code` (e.g., info or error). Entries are saved with automatically incremented
+        counter as their ID.
+
         Parameters
         ----------
         timestamp : datetime.datetime
-            The timestamp for the entry to be removed
+            The timestamp for the entry to be added
 
-        entry : str
+        text : str
             Plaintext logbook entry
-        """
-        self.entries[timestamp] = entry
 
-    def remove_entry(self, timestamp):
+        code : LogCode
+            Code associated with the entry. Default is Info
+        """
+        entry = LogEntry(timestamp, text, code=code)
+        self.entries[self.next_entry_id()] = entry
+
+    def remove_entry(self, entry_id):
         """Modifies `self.entries`
-        
+
         Parameters
         ----------
         timestamp : datetime.datetime
             The timestamp for the entry to be removed
         """
-        del self.entries[timestamp]
+        del self.entries[entry_id]
 
     def load_entries(self, filepath):
         """Adds all the logbook entries from the given `filepath`.
         Supports both JSON and CSV file formats.
-        
+
         Parameters
         ----------
         filpath : str
@@ -53,31 +141,97 @@ class Logbook:
         filename, file_extension = os.path.splitext(filepath)
         if file_extension == ".csv":
             df = pd.read_csv(filepath)
-            new_timestamps = df["timestamps"].to_list()
-            new_entries = df["entries"].to_list()
+            new_timestamps = df["timestamp"].to_list()
+            new_entries = df["text"].to_list()
+            try:
+                new_codes = df["code"].to_list()
+            except KeyError:
+                new_codes = [None] * len(new_entries)
+            for timestamp, text, code in zip(new_timestamps, new_entries, new_codes):
+                entry = LogEntry(timestamp, text, code=code)
+                self.entries[self.next_entry_id()] = entry
         elif file_extension == ".json":
-            with open('data.json', 'r') as file:
+            with open("data.json", "r") as file:
                 data = json.load(file)
-            new_timestamps = list(data.keys())
-            new_entries = list(data.values())
+            entry_list = data["entries"]
+            for entry in entry_list:
+                timestamp = datetime.strptime(entry["timestamp"], "%b %d, %Y %H:%M:%S")
+                if entry.get("code") is None:
+                    code = None
+                else:
+                    code = LogCode[entry["code"]]
+
+                entry = LogEntry(timestamp, entry["text"], code=code)
+                self.entries[self.next_entry_id()] = entry
         else:
-            raise ValueError("Invalid file extension {}. Only CSV and JSON are supported".format(file_extension))
+            raise ValueError(
+                "Invalid file extension {}. Only CSV and JSON are supported".format(
+                    file_extension
+                )
+            )
 
-        for timestamp, entry in zip(new_timestamps, new_entries):
-            self.entries[timestamp] = entry
+    def to_json(self, outpath="logbook.json", indent=4):
+        """Save the current Logbook as a JSON file
 
-    def query(
-        self, 
-        start_dt, 
-        end_dt=None,
-        keyword=None
-    ):
+        Parameters
+        ----------
+        outpath : str
+            Path where logbook will be saved. Default is "logbook.json"
+
+        indent : int
+            number of spaces to indent the JSON file. Default is 4
+
+        Returns
+        -------
+        dict
+            json in dictionary format
         """
+        entry_list = []
+        for entry in self.entries.values():
+            entry_list.append(
+                {
+                    "timestamp": entry.timestamp.strftime("%b %d, %Y %H:%M:%S"),
+                    "text": entry.text,
+                    "code": entry.code.name,
+                }
+            )
+
+        result = {"entries": entry_list}
+        with open(file_path, "w") as file:
+            json.dump(result, file, indent=indent)
+
+        return result
+
+    def to_csv(self, outpath="logbook.csv"):
+        """Save the current Logbook as a CSV file
+
+        Parameters
+        ----------
+        outpath : str
+            Path where logbook will be saved. Default is "logbook.csv"
+
+        Return
+        ------
+        pandas.DataFrame
+            csv in DataFrame format
+        """
+        entry_dict = {"timestamp": [], "text": [], "code": []}
+        for entry in self.entries.values():
+            entry_df["timestamp"].append(entry.timestamp.strftime("%b %d, %Y %H:%M:%S"))
+            entry_df["text"].append(entry.text)
+            entry_df["code"].append(entry.code.name)
+
+        entry_df = pd.DataFrame(entry_dict)
+        entry_df.to_csv(outpath)
+        return entry_df
+
+    def query(self, start_dt, end_dt=None, keyword=None, code=None):
+        """Queries logbook entries based on timestamp, keywords, and code.
 
         Parameters
         ----------
         start_dt : datetime.datetime
-
+            First datetime to include in the timestamps of log entries to return.
 
         end_dt : datetime.datetime
             Final datetime to include in the timestamps of log entries to return.
@@ -86,21 +240,102 @@ class Logbook:
         keyword : str
             Keyword to find in the log entry. None by default
 
+        code : LogCode
+            The code associated with desired logbook entries.
+            None by default, meaning all codes will be included
+
         Returns
         -------
         dict
-            Dictionary of logbook entries between start_dt and `end_dt`
+            Dictionary of logbook entries between `start_dt` and `end_dt`
+            that contain `keyword` and have a matching `code`
         """
         valid_entries = {}
-        for timestamp in self.entries.keys():
-            if timestamp < start_dt:
-                continue
-            if end_dt is not None:
-                if timestamp > end_dt:
-                    continue
-            if keyword is not None:
-                if keyword not in self.entries[timestamp]:
-                    continue
-            valid_entries[timestamp] = self.entries[timestamp]
-        
+        for entry_id, entry in self.entries.items():
+            if (
+                (entry.timestamp >= start_dt)
+                and (end_dt is None or entry.timestamp <= end_dt)
+                and (keyword is None or keyword in entry.text)
+                and (code is None or code == entry.code)
+            ):
+                valid_entries[entry_id] = entry
+
         return valid_entries
+
+    def print_query(self, start_dt, end_dt=None, keyword=None, code=None):
+        """Queries logbook entries based on timestamp, keywords, and code.
+        Pretty prints the queried entries, and then also returns them
+
+        Parameters
+        ----------
+        start_dt : datetime.datetime
+            First datetime to include in the timestamps of log entries to return.
+
+        end_dt : datetime.datetime
+            Final datetime to include in the timestamps of log entries to return.
+            None by default, meaning that all entries after `start_dt` will be returned
+
+        keyword : str
+            Keyword to find in the log entry. None by default
+
+        code : LogCode
+            The code associated with desired logbook entries.
+            None by default, meaning all codes will be included
+
+        Returns
+        -------
+        dict
+            Dictionary of logbook entries between `start_dt` and `end_dt`
+            that contain `keyword` and have a matching `code`
+        """
+        entries = query(start_dt, end_dt, keyword, code)
+        for entry in entries.values():
+            entry.pprint()
+
+        return entries
+
+    def save_query(
+        self, start_dt, end_dt=None, keyword=None, code=None, outpath="logbook.json"
+    ):
+        """Queries logbook entries based on timestamp, keywords, and code.
+        Saves the queried entries, and then also returns them
+
+        Parameters
+        ----------
+        start_dt : datetime.datetime
+            First datetime to include in the timestamps of log entries to return.
+
+        end_dt : datetime.datetime
+            Final datetime to include in the timestamps of log entries to return.
+            None by default, meaning that all entries after `start_dt` will be returned
+
+        keyword : str
+            Keyword to find in the log entry. None by default
+
+        code : LogCode
+            The code associated with desired logbook entries.
+            None by default, meaning all codes will be included
+
+        outpath : str
+            Path where logbook will be saved. Supported filetypes are ".json" and ".csv".
+            Default path is "logbook.json"
+
+        Returns
+        -------
+        dict
+            Dictionary of logbook entries between `start_dt` and `end_dt`
+            that contain `keyword` and have a matching `code`
+        """
+        # check file path and can throw exception before querying for efficiency
+        base, ext = os.path.splitext(outpath)
+        if ext not in [".json", ".csv"]:
+            raise ValueError("Only `.json` and `.csv` are supported extensions")
+
+        entries = query(start_dt, end_dt, keyword, code)
+        queried_logbook = Logbook(entries)
+        if ext == ".json":
+            queried_logbook.to_json(outpath=outpath)
+        else:  # if not JSON must be CSV given check above
+            queried_logbook.to_csv(outpath=outpath)
+
+        return entries
