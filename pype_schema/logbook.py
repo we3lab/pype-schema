@@ -2,6 +2,7 @@ import os
 import json
 import pandas as pd
 from enum import Enum, auto
+from dateutil.parser import parse
 
 
 class LogCode(Enum):
@@ -66,8 +67,9 @@ class LogEntry:
 
     def pprint(self):
         """Pretty print this entry"""
+        name = "None" if self.code is None else self.code.name
         print("{\n" + self.timestamp.strftime("%b %d, %Y %H:%M:%S") + ",\n")
-        print(entry.code + ",\n" + entry.text + ",\n}")
+        print(name + ",\n" + self.text + ",\n}")
 
 
 class Logbook:
@@ -84,8 +86,11 @@ class Logbook:
         Dictionary of the form { `int` : LogEntry }
     """
 
-    def __init__(self, entries={}):
-        self.entries = entries
+    def __init__(self, entries=None):
+        if entries is None: 
+            self.entries = {}
+        else:
+            self.entries = entries
 
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
@@ -104,10 +109,10 @@ class Logbook:
         int
             ID for the next logbook entry
         """
-        if len(entries) == 0:
+        if len(self.entries) == 0:
             entry_id = 0
         else:
-            entry_id = max(entries.keys()) + 1
+            entry_id = max(self.entries.keys()) + 1
 
         return entry_id
 
@@ -156,22 +161,22 @@ class Logbook:
         """
         filename, file_extension = os.path.splitext(filepath)
         if file_extension == ".csv":
-            df = pd.read_csv(filepath)
+            df = pd.read_csv(filepath, parse_dates=["timestamp"])
             new_timestamps = df["timestamp"].to_list()
             new_entries = df["text"].to_list()
             try:
-                new_codes = df["code"].to_list()
+                new_codes = df["code"].map(lambda x: LogCode[x])
             except KeyError:
                 new_codes = [None] * len(new_entries)
             for timestamp, text, code in zip(new_timestamps, new_entries, new_codes):
                 entry = LogEntry(timestamp, text, code=code)
                 self.entries[self.next_entry_id()] = entry
         elif file_extension == ".json":
-            with open("data.json", "r") as file:
+            with open(filepath, "r") as file:
                 data = json.load(file)
             entry_list = data["entries"]
             for entry in entry_list:
-                timestamp = datetime.strptime(entry["timestamp"], "%b %d, %Y %H:%M:%S")
+                timestamp = parse(entry["timestamp"], fuzzy=True)
                 if entry.get("code") is None:
                     code = None
                 else:
@@ -236,9 +241,9 @@ class Logbook:
         """
         entry_dict = {"timestamp": [], "text": [], "code": []}
         for entry in self.entries.values():
-            entry_df["timestamp"].append(entry.timestamp.strftime("%b %d, %Y %H:%M:%S"))
-            entry_df["text"].append(entry.text)
-            entry_df["code"].append(entry.code.name)
+            entry_dict["timestamp"].append(entry.timestamp.strftime("%b %d, %Y %H:%M:%S"))
+            entry_dict["text"].append(entry.text)
+            entry_dict["code"].append(entry.code.name)
 
         entry_df = pd.DataFrame(entry_dict)
         if outpath:
@@ -308,7 +313,7 @@ class Logbook:
             Dictionary of logbook entries between `start_dt` and `end_dt`
             that contain `keyword` and have a matching `code`
         """
-        entries = query(start_dt, end_dt, keyword, code)
+        entries = self.query(start_dt, end_dt, keyword, code)
         for entry in entries.values():
             entry.pprint()
 
@@ -350,11 +355,12 @@ class Logbook:
             if ext not in [".json", ".csv"]:
                 raise ValueError("Only `.json` and `.csv` are supported extensions")
 
-        entries = query(start_dt, end_dt, keyword, code)
+        entries = self.query(start_dt, end_dt, keyword, code)
         queried_logbook = Logbook(entries)
-        if ext == ".json":
-            queried_logbook.to_json(outpath=outpath)
-        else:  # if not JSON must be CSV given check above
-            queried_logbook.to_csv(outpath=outpath)
+        if outpath: 
+            if ext == ".json":
+                queried_logbook.to_json(outpath=outpath)
+            else:  # if not JSON must be CSV given check above
+                queried_logbook.to_csv(outpath=outpath)
 
         return entries
