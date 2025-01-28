@@ -48,6 +48,16 @@ class LogEntry:
         else:
             self.code = code
 
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.timestamp == other.timestamp
+            and self.text == other.text
+            and self.code == other.code
+        )
+
     def __repr__(self):
         return (
             f"<pype_schema.logbook.LogEntry timestamp:{self.timestamp} "
@@ -76,6 +86,12 @@ class Logbook:
 
     def __init__(self, entries={}):
         self.entries = entries
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+        return self.entries == other.entries
 
     def __repr__(self):
         return f"<pype_schema.logbook.Logbook entries:{self.entries}>\n"
@@ -170,13 +186,14 @@ class Logbook:
                 )
             )
 
-    def to_json(self, outpath="logbook.json", indent=4):
+    def to_json(self, outpath="", indent=4):
         """Save the current Logbook as a JSON file
 
         Parameters
         ----------
         outpath : str
-            Path where logbook will be saved. Default is "logbook.json"
+            Path where logbook will be saved.
+            Default is "", meaning that no file will be written
 
         indent : int
             number of spaces to indent the JSON file. Default is 4
@@ -197,18 +214,20 @@ class Logbook:
             )
 
         result = {"entries": entry_list}
-        with open(file_path, "w") as file:
-            json.dump(result, file, indent=indent)
+        if outpath:
+            with open(outpath, "w") as file:
+                json.dump(result, file, indent=indent)
 
         return result
 
-    def to_csv(self, outpath="logbook.csv"):
+    def to_csv(self, outpath=""):
         """Save the current Logbook as a CSV file
 
         Parameters
         ----------
         outpath : str
-            Path where logbook will be saved. Default is "logbook.csv"
+            Path where logbook will be saved.
+            Default is "", meaning no file will be saved
 
         Return
         ------
@@ -222,7 +241,8 @@ class Logbook:
             entry_df["code"].append(entry.code.name)
 
         entry_df = pd.DataFrame(entry_dict)
-        entry_df.to_csv(outpath)
+        if outpath:
+            entry_df.to_csv(outpath)
         return entry_df
 
     def query(self, start_dt, end_dt=None, keyword=None, code=None):
@@ -294,9 +314,7 @@ class Logbook:
 
         return entries
 
-    def save_query(
-        self, start_dt, end_dt=None, keyword=None, code=None, outpath="logbook.json"
-    ):
+    def save_query(self, start_dt, end_dt=None, keyword=None, code=None, outpath=""):
         """Queries logbook entries based on timestamp, keywords, and code.
         Saves the queried entries, and then also returns them
 
@@ -318,7 +336,7 @@ class Logbook:
 
         outpath : str
             Path where logbook will be saved. Supported filetypes are ".json" and ".csv".
-            Default path is "logbook.json"
+            Default path is "", meaning that no file will be written
 
         Returns
         -------
@@ -327,9 +345,10 @@ class Logbook:
             that contain `keyword` and have a matching `code`
         """
         # check file path and can throw exception before querying for efficiency
-        base, ext = os.path.splitext(outpath)
-        if ext not in [".json", ".csv"]:
-            raise ValueError("Only `.json` and `.csv` are supported extensions")
+        if outpath:
+            base, ext = os.path.splitext(outpath)
+            if ext not in [".json", ".csv"]:
+                raise ValueError("Only `.json` and `.csv` are supported extensions")
 
         entries = query(start_dt, end_dt, keyword, code)
         queried_logbook = Logbook(entries)

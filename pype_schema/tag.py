@@ -6,6 +6,7 @@ import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, issubdtype
 from .utils import count_args
+from .units import u
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
 
@@ -175,23 +176,29 @@ class Tag:
         self.dest_unit_id = dest_unit_id
         self.parent_id = parent_id
         self.manufacturer = manufacturer
-        self.measure_freq = (
-            measure_freq  # TODO: convert from Pint units if string value
-        )
-        self.report_freq = report_freq  # TODO: convert from Pint units if string value
+        # convert to Pint units if string value
+        if isinstance(measure_freq, str):
+            self.measure_freq = u.Quantity(measure_freq)
+        else:
+            self.measure_freq = measure_freq
+        if isinstance(report_freq, str):
+            self.report_freq = u.Quantity(report_freq)
+        else:
+            self.report_freq = report_freq
         self.downsample_method = downsample_method
         self.calibration = calibration
 
-    # TODO: add new tag attributes here
     def __repr__(self):
         return (
             f"<pype_schema.tag.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>\n"
+            f"totalized:{self.totalized} contents:{self.contents} "
+            f"manufacturer:{self.manufacturer} measure_freq:{self.measure_freq} "
+            f"report_freq:{self.report_freq} downsample_method:{self.downsample_method} "
+            f"calibration:{self.calibration}>\n"
         )
 
-    # TODO: add new tag attributes here
     def __eq__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
@@ -206,9 +213,12 @@ class Tag:
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
             and self.parent_id == other.parent_id
+            and self.measure_freq == other.measure_freq
+            and self.report_freq == other.report_freq
+            and self.downsample_method == other.downsample_method
+            and self.calibration == other.calibration
         )
 
-    # TODO: add new tag attributes here
     def __hash__(self):
         return hash(
             (
@@ -220,10 +230,13 @@ class Tag:
                 self.dest_unit_id,
                 self.units,
                 self.parent_id,
+                self.measure_freq,
+                self.report_freq,
+                self.downsample_method,
+                self.calibration,
             )
         )
 
-    # TODO: add new tag attributes here
     def __lt__(self, other):
         # don't attempt to compare against unrelated types
         if not isinstance(other, self.__class__):
@@ -253,6 +266,14 @@ class Tag:
                 return self.dest_unit_id < other.dest_unit_id
         elif self.units != other.units:
             return str(self.units) < str(other.units)
+        elif self.measure_freq != other.measure_freq:
+            return self.measure_freq < other.measure_freq
+        elif self.report_freq != other.report_freq:
+            return self.report_freq < other.report_freq
+        elif self.downsample_method != other.downsample_method:
+            return self.downsample_method < other.downsample_method
+        elif self.calibration != other.calibration:
+            return len(self.calibration) < len(other.calibration)
         else:
             return self.parent_id < other.parent_id
 
