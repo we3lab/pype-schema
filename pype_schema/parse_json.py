@@ -1387,13 +1387,13 @@ class JSONParser:
         dest_unit_id = tag_info.get("dest_unit_id", "total")
         manufacturer = tag_info.get("manufacturer")
         measure_freq = (
-            utils.parse_unit_val_dict(tag_info["measure_freq"])
-            if tag_info["measure_freq"]
+            JSONParser.parse_unit_val_dict(tag_info["measure_freq"])
+            if tag_info.get("measure_freq")
             else None
         )
         report_freq = (
-            utils.parse_unit_val_dict(tag_info["report_freq"])
-            if tag_info["report_freq"]
+            JSONParser.parse_unit_val_dict(tag_info["report_freq"])
+            if tag_info.get("report_freq")
             else None
         )
         try:
@@ -1723,7 +1723,8 @@ class JSONParser:
             tag_dict["totalized"] = tag_obj.totalized
             tag_dict["measure_freq"] = JSONParser.unit_val_to_dict(tag_obj.measure_freq)
             tag_dict["report_freq"] = JSONParser.unit_val_to_dict(tag_obj.report_freq)
-            tag_dict["downsample_method"] = tag_obj.downsample_method.name
+            if tag_obj.downsample_method:
+                tag_dict["downsample_method"] = tag_obj.downsample_method.name
             tag_dict["calibration"] = tag_obj.calibration.to_json()
         else:
             raise TypeError("'tag_obj' must be of type Tag or VirtualTag")

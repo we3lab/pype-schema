@@ -64,6 +64,9 @@ class LogEntry:
             f"<pype_schema.logbook.LogEntry timestamp:{self.timestamp} "
             f"text:{self.text} code:{self.code}>\n"
         )
+    
+    def __hash__(self):
+        return hash((self.timestamp, self.text, self.code))
 
     def pprint(self):
         """Pretty print this entry"""
@@ -100,6 +103,9 @@ class Logbook:
 
     def __repr__(self):
         return f"<pype_schema.logbook.Logbook entries:{self.entries}>\n"
+
+    def __hash__(self):
+        return hash(str(self.entries))
 
     def next_entry_id(self):
         """Gets the next entry ID by checking the current maximum ID

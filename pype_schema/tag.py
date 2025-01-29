@@ -213,6 +213,7 @@ class Tag:
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
             and self.parent_id == other.parent_id
+            and self.manufacturer == other.manufacturer
             and self.measure_freq == other.measure_freq
             and self.report_freq == other.report_freq
             and self.downsample_method == other.downsample_method
@@ -230,6 +231,7 @@ class Tag:
                 self.dest_unit_id,
                 self.units,
                 self.parent_id,
+                self.manufacturer,
                 self.measure_freq,
                 self.report_freq,
                 self.downsample_method,
@@ -276,6 +278,76 @@ class Tag:
             return len(self.calibration) < len(other.calibration)
         else:
             return self.parent_id < other.parent_id
+
+    def get_manufacturer(self):
+        try:
+            return self._manufacturer
+        except AttributeError:
+            return None
+
+    def set_manufacturer(self, manufacturer):
+        self._manufacturer = manufacturer
+
+    def del_manufacturer(self):
+        del self._manufacturer
+
+    manufacturer = property(get_manufacturer, set_manufacturer, del_manufacturer)
+
+    def get_report_freq(self):
+        try:
+            return self._report_freq
+        except AttributeError:
+            return None
+
+    def set_report_freq(self, report_freq):
+        self._report_freq = report_freq
+
+    def del_report_freq(self):
+        del self._report_freq
+
+    report_freq = property(get_report_freq, set_report_freq, del_report_freq)
+
+    def get_measure_freq(self):
+        try:
+            return self._measure_freq
+        except AttributeError:
+            return None
+
+    def set_measure_freq(self, measure_freq):
+        self._measure_freq = measure_freq
+
+    def del_measure_freq(self):
+        del self._measure_freq
+
+    measure_freq = property(get_measure_freq, set_measure_freq, del_measure_freq)
+
+    def get_downsample_method(self):
+        try:
+            return self._downsample_method
+        except AttributeError:
+            return None
+
+    def set_downsample_method(self, downsample_method):
+        self._downsample_method = downsample_method
+
+    def del_downsample_method(self):
+        del self._downsample_method
+
+    downsample_method = property(get_downsample_method, set_downsample_method, del_downsample_method)
+
+    def get_calibration(self):
+        try:
+            return self._calibration
+        except AttributeError:
+            return Logbook()
+
+    def set_calibration(self, calibration):
+        self._calibration = calibration
+
+    def del_calibration(self):
+        del self._calibration
+
+    calibration = property(get_calibration, set_calibration, del_calibration)
 
     def check_type_compatibility(self, other_type):
         """Check if the given tag_type is compatible with another
