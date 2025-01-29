@@ -48,7 +48,7 @@ def draw_graph(network, pyvis=False, output_file=None):
         False (networkx) by default
 
     output_file : str
-        Path to the desired output. 
+        Path to the desired output.
         Default is None, meaning the file will be saved as `networkd.id` + extension
     """
     # create empty graph

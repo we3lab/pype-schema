@@ -11,11 +11,20 @@ skip_all_tests = False
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "inp_file, out_file, expected_path",
-    [("data/EPANET Net 3.inp", "dummy_output.json", "data/EPANET Net 3.json")],
+    "inp_file, out_file, add_nodes, expected_path",
+    [
+        ("data/EPANET Net 3.inp", "dummy_output.json", False, "data/EPANET Net 3.json"),
+        ("data/L-TOWN.inp", "data/L-TOWN.json", False, "KeyError"),
+        ("data/L-TOWN.inp", "data/L-TOWN.json", True, "ValueError"),
+    ],
 )
-def test_epyt2pypes(inp_file, out_file, expected_path):
-    result = epyt2pypes(inp_file, out_file)
-    with open(expected_path, "r") as f:
-        expected = json.load(f)
+def test_epyt2pypes(inp_file, out_file, add_nodes, expected_path):
+    try:
+        result = epyt2pypes(inp_file, out_file, add_nodes=add_nodes)
+        with open(expected_path, "r") as f:
+            expected = json.load(f)
+    except Exception as err:
+        result = type(err).__name__
+        expected = expected_path
+
     assert result == expected
