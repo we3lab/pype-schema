@@ -195,7 +195,8 @@ class Tag:
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
             f"totalized:{self.totalized} contents:{self.contents} "
             f"manufacturer:{self.manufacturer} measure_freq:{self.measure_freq} "
-            f"report_freq:{self.report_freq} downsample_method:{self.downsample_method} "
+            f"report_freq:{self.report_freq} "
+            f"downsample_method:{self.downsample_method} "
             f"calibration:{self.calibration}>\n"
         )
 
