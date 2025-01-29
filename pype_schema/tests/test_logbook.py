@@ -54,11 +54,47 @@ pint.set_application_registry(u)
                 }
             ),
         ),
+        (
+            "data/sample_log.csv",
+            Logbook(
+                {
+                    0: LogEntry(
+                        datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
+                        "Change of shift. System operating as normal.",
+                        LogCode.Info,
+                    ),
+                    1: LogEntry(
+                        datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
+                        "Sludge samples taken from primary and secondary clarifiers.",
+                        LogCode.Info,
+                    ),
+                    2: LogEntry(
+                        datetime.strptime("2019-11-22 09:00:00", "%Y-%m-%d %H:%M:%S"),
+                        "Digester #1 taken offline due to pump failure.",
+                        LogCode.Error,
+                    ),
+                    3: LogEntry(
+                        datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
+                        "Potential clog in grit chamber sump.",
+                        LogCode.Warning,
+                    ),
+                    4: LogEntry(
+                        datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
+                        "Influent station failure forced facility shutdown.",
+                        LogCode.Critical,
+                    ),
+                }
+            ),
+        ),
+        ("data/sample_log.html", "ValueError")
     ],
 )
 def test_load_entries(log_path, expected):
     logbook = Logbook()
-    logbook.load_entries(log_path)
+    try:
+        logbook.load_entries(log_path)
+    except Exception as err:
+        logbook = type(err).__name__
     assert logbook == expected
 
 

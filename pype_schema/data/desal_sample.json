@@ -13,7 +13,8 @@
         "SolidsDisposal",
         "PressureExchangerDisposal",
         "WaterBill",
-        "ElectricityBill"
+        "ElectricityBill",
+        "Radio"
     ],
     "virtual_tags": {},
     "WaterDistribution": {
@@ -367,6 +368,14 @@
         "destination": "WaterDistribution",
         "bidirectional": false,
         "contents": "DataTransfer",
+        "tags": {}
+    },
+    "Radio": {
+        "type": "Wireless",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "bidirectional": true,
+        "contents": "ControlSignal",
         "tags": {}
     },
     "ChlorinationToMixer": {
