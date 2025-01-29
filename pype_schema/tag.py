@@ -6,7 +6,9 @@ import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, issubdtype
 from .utils import count_args
+from .units import u
 from .operations import *  # noqa: F401, F403
+from .logbook import Logbook
 
 
 class TagType(Enum):
@@ -36,6 +38,15 @@ class TagType(Enum):
     Speed = auto()
     Frequency = auto()
     Concentration = auto()
+    SetPoint = auto()  # history of control set points
+
+
+class DownsampleType(Enum):
+    """Enum to represent common methods of downsampling data"""
+
+    Average = auto()
+    Decimation = auto()
+    Reservoir = auto()
 
 
 CONTENTLESS_TYPES = [
@@ -81,6 +92,21 @@ class Tag:
     contents : ContentsType
         Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`
 
+    manufacturer : str
+        Name of the manufacturer for the physical sensor hardware. Default is None
+
+    measure_freq : pint.Quantity
+        Measurement frequency of the data with units. None by default
+
+    report_freq : pint.Quantity
+        Reporting frequency of the data with units. None by default
+
+    downsample_method : DownsampleType
+        None by default, meaning that data is reported on the same frequency as measured
+
+    calibration : Logbook
+        A history of sensor calibration.
+
     Attributes
     ----------
     id : str
@@ -104,10 +130,25 @@ class Tag:
         ID for the parent object (either a Node or Connection)
 
     totalized : bool
-        True if data is totalized. False otherwise
+        True if data is totalized. False by default
 
     contents : ContentsType
         Contents moving through the node
+
+    manufacturer : str
+        Name of the manufacturer for the physical sensor hardware. Default is None
+
+    measure_freq : pint.Quantity
+        Measurement frequency of the data with units. None by default
+
+    report_freq : pint.Quantity
+        Reporting frequency of the data with units. None by default
+
+    downsample_method : DownsampleType
+        None by default, meaning that data is reported on the same frequency as measured
+
+    calibration : Logbook
+        A history of sensor calibration.
     """
 
     def __init__(
@@ -120,6 +161,11 @@ class Tag:
         parent_id,
         totalized=False,
         contents=None,
+        manufacturer=None,
+        measure_freq=None,
+        report_freq=None,
+        downsample_method=None,
+        calibration=Logbook(),
     ):
         self.id = id
         self.units = units
@@ -129,13 +175,29 @@ class Tag:
         self.source_unit_id = source_unit_id
         self.dest_unit_id = dest_unit_id
         self.parent_id = parent_id
+        self.manufacturer = manufacturer
+        # convert to Pint units if string value
+        if isinstance(measure_freq, str):
+            self.measure_freq = u.Quantity(measure_freq)
+        else:
+            self.measure_freq = measure_freq
+        if isinstance(report_freq, str):
+            self.report_freq = u.Quantity(report_freq)
+        else:
+            self.report_freq = report_freq
+        self.downsample_method = downsample_method
+        self.calibration = calibration
 
     def __repr__(self):
         return (
             f"<pype_schema.tag.Tag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} source_unit_id:{self.source_unit_id} "
             f"dest_unit_id:{self.dest_unit_id} parent_id:{self.parent_id} "
-            f"totalized:{self.totalized} contents:{self.contents}>\n"
+            f"totalized:{self.totalized} contents:{self.contents} "
+            f"manufacturer:{self.manufacturer} measure_freq:{self.measure_freq} "
+            f"report_freq:{self.report_freq} "
+            f"downsample_method:{self.downsample_method} "
+            f"calibration:{self.calibration}>\n"
         )
 
     def __eq__(self, other):
@@ -152,6 +214,11 @@ class Tag:
             and self.dest_unit_id == other.dest_unit_id
             and self.units == other.units
             and self.parent_id == other.parent_id
+            and self.manufacturer == other.manufacturer
+            and self.measure_freq == other.measure_freq
+            and self.report_freq == other.report_freq
+            and self.downsample_method == other.downsample_method
+            and self.calibration == other.calibration
         )
 
     def __hash__(self):
@@ -165,6 +232,11 @@ class Tag:
                 self.dest_unit_id,
                 self.units,
                 self.parent_id,
+                self.manufacturer,
+                self.measure_freq,
+                self.report_freq,
+                self.downsample_method,
+                self.calibration,
             )
         )
 
@@ -197,8 +269,88 @@ class Tag:
                 return self.dest_unit_id < other.dest_unit_id
         elif self.units != other.units:
             return str(self.units) < str(other.units)
+        elif self.measure_freq != other.measure_freq:
+            return self.measure_freq < other.measure_freq
+        elif self.report_freq != other.report_freq:
+            return self.report_freq < other.report_freq
+        elif self.downsample_method != other.downsample_method:
+            return self.downsample_method < other.downsample_method
+        elif self.calibration != other.calibration:
+            return len(self.calibration) < len(other.calibration)
         else:
             return self.parent_id < other.parent_id
+
+    def get_manufacturer(self):
+        try:
+            return self._manufacturer
+        except AttributeError:
+            return None
+
+    def set_manufacturer(self, manufacturer):
+        self._manufacturer = manufacturer
+
+    def del_manufacturer(self):
+        del self._manufacturer
+
+    manufacturer = property(get_manufacturer, set_manufacturer, del_manufacturer)
+
+    def get_report_freq(self):
+        try:
+            return self._report_freq
+        except AttributeError:
+            return None
+
+    def set_report_freq(self, report_freq):
+        self._report_freq = report_freq
+
+    def del_report_freq(self):
+        del self._report_freq
+
+    report_freq = property(get_report_freq, set_report_freq, del_report_freq)
+
+    def get_measure_freq(self):
+        try:
+            return self._measure_freq
+        except AttributeError:
+            return None
+
+    def set_measure_freq(self, measure_freq):
+        self._measure_freq = measure_freq
+
+    def del_measure_freq(self):
+        del self._measure_freq
+
+    measure_freq = property(get_measure_freq, set_measure_freq, del_measure_freq)
+
+    def get_downsample_method(self):
+        try:
+            return self._downsample_method
+        except AttributeError:
+            return None
+
+    def set_downsample_method(self, downsample_method):
+        self._downsample_method = downsample_method
+
+    def del_downsample_method(self):
+        del self._downsample_method
+
+    downsample_method = property(
+        get_downsample_method, set_downsample_method, del_downsample_method
+    )
+
+    def get_calibration(self):
+        try:
+            return self._calibration
+        except AttributeError:
+            return Logbook()
+
+    def set_calibration(self, calibration):
+        self._calibration = calibration
+
+    def del_calibration(self):
+        del self._calibration
+
+    calibration = property(get_calibration, set_calibration, del_calibration)
 
     def check_type_compatibility(self, other_type):
         """Check if the given tag_type is compatible with another
@@ -304,6 +456,8 @@ class VirtualTag:
         parent_id=None,
         contents=None,
     ):
+        # TODO: inherit report_freq from child tags
+        # TODO: incorporate DownsampleMethod for different report_freq
         self.id = id
         self.parent_id = parent_id
         self.tags = tags

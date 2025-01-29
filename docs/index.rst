@@ -33,6 +33,7 @@ Welcome to the Python for Process Engineering Schema (PyPES) documentation!
    :maxdepth: 1
    :caption: Miscellaneous
 
+   logbook
    operations
    utils
    visualize

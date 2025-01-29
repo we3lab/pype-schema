@@ -1,0 +1,6 @@
+timestamp,text,code
+"Nov 23, 2019 22:00:00",Change of shift. System operating as normal.,Info
+"Nov 23, 2019 11:30:00",Sludge samples taken from primary and secondary clarifiers.,Info
+"Nov 22, 2019 09:00:00",Digester #1 taken offline due to pump failure.,Error
+"Nov 30, 2019 10:00:00",Potential clog in grit chamber sump.,Warning
+"Nov 30, 2019 17:00:00",Influent station failure forced facility shutdown.,Critical

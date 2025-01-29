@@ -140,7 +140,7 @@
     "type": "Wire",
     "source": "TeslaBattery",
     "destination": "VirtualDemand",
-    "contents": ["Electricity", "Heat"],
+    "contents": "Electricity",
     "bidirectional": true,
     "tags": {}
   },
