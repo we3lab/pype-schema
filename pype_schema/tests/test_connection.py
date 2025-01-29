@@ -89,13 +89,13 @@ def test_set_heating_values(json_path, connection_name, expected):
         ),
         (
             "../data/desal_sample.json",
-            "Radio",
+            "WaterBill",
             "ElectricityBill",
-            "TypeError",
+            True,
         ),
         (
             "../data/desal_sample.json",
-            "Radio",
+            "ElectricityBill",
             "PressureExchangerDisposal",
             "TypeError",
         ),
