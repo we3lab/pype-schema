@@ -108,13 +108,10 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 obj_counts["Pipe"] += 1
 
             elif G.getLinkType(connection).upper() == "PUMP":
-                # TODO: seperate pump into 2 pipes and a pump
                 pump_obj1 = {
                     "id": "Pump" + str(obj_counts["Pump"]),
                     "type": "Pump",
                     "contents": content_placeholder,
-                    "source": node_ids[G.getLinkNodesIndex(connection)[0]],
-                    "destination": "Pipe" + str(connection),
                     "tags": {},
                 }
                 nodes["Pump" + str(obj_counts["Pump"])] = pump_obj1
@@ -125,66 +122,68 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                     "type": "Pipe",
                     "contents": content_placeholder,
                     "source": node_ids[G.getLinkNodesIndex(connection)[0]],
+                    "destination": "Pump" + str(obj_counts["Pump"]),
+                    "tags": {},
+                }
+                connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                obj_counts["Pipe"] += 1
+
+                connection_obj = {
+                    "id": "Pipe" + str(obj_counts["Pipe"]),
+                    "type": "Pipe",
+                    "contents": content_placeholder,
+                    "source": "Pump" + str(obj_counts["Pump"]),
                     "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
                     "tags": {},
                 }
                 connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
                 obj_counts["Pipe"] += 1
 
-                pump_obj2 = {
-                    "id": "Pump" + str(obj_counts["Pump"]),
-                    "type": "Pump",
-                    "contents": content_placeholder,
-                    "source": "Pipe" + str(connection),
-                    "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
-                    "tags": {},
-                }
-                nodes["Pump" + str(obj_counts["Pump"])] = pump_obj2
-                obj_counts["Pump"] += 1
-
             elif G.getLinkType(connection).upper() == "VALVE":
-                # TODO: seperate valve into multiple pipes and a Joint
+                raise NotImplementedError("Valves not yet supported in PyPES")
+                # TODO: create Valve object
+                # then seperate valve into multiple pipes and a valve
                 # Assign the first node to source, and the other nodes to destination
-                sources = []
-                destinations = []
-                for i, linknode in enumerate(G.getLinkNodesIndex(connection)):
-                    if i == 0:
-                        sources.append(node_ids[linknode])
-                    else:
-                        destinations.append(node_ids[linknode])
+                # sources = []
+                # destinations = []
+                # for i, linknode in enumerate(G.getLinkNodesIndex(connection)):
+                #     if i == 0:
+                #         sources.append(node_ids[linknode])
+                #     else:
+                #         destinations.append(node_ids[linknode])
 
-                joint_obj = {
-                    "id": "Joint" + str(obj_counts["Joint"]),
-                    "type": "Joint",
-                    "contents": content_placeholder,
-                    "tags": {},
-                }
-                nodes["Joint" + str(obj_counts["Joint"])] = joint_obj
-                obj_counts["Joint"] += 1
+                # joint_obj = {
+                #     "id": "Joint" + str(obj_counts["Joint"]),
+                #     "type": "Joint",
+                #     "contents": content_placeholder,
+                #     "tags": {},
+                # }
+                # nodes["Joint" + str(obj_counts["Joint"])] = joint_obj
+                # obj_counts["Joint"] += 1
 
-                for source in sources:
-                    connection_obj = {
-                        "id": "Pipe" + str(obj_counts["Pipe"]),
-                        "type": "Pipe",
-                        "contents": content_placeholder,
-                        "source": source,
-                        "destination": "Joint" + str(obj_counts["Joint"] - 1),
-                        "tags": {},
-                    }
-                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
-                    obj_counts["Pipe"] += 1
+                # for source in sources:
+                #     connection_obj = {
+                #         "id": "Pipe" + str(obj_counts["Pipe"]),
+                #         "type": "Pipe",
+                #         "contents": content_placeholder,
+                #         "source": source,
+                #         "destination": "Joint" + str(obj_counts["Joint"] - 1),
+                #         "tags": {},
+                #     }
+                #     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                #     obj_counts["Pipe"] += 1
 
-                for destination in destinations:
-                    connection_obj = {
-                        "id": "Pipe" + str(obj_counts["Pipe"]),
-                        "type": "Pipe",
-                        "contents": content_placeholder,
-                        "source": "Joint" + str(obj_counts["Joint"] - 1),
-                        "destination": destination,
-                        "tags": {},
-                    }
-                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
-                    obj_counts["Pipe"] += 1
+                # for destination in destinations:
+                #     connection_obj = {
+                #         "id": "Pipe" + str(obj_counts["Pipe"]),
+                #         "type": "Pipe",
+                #         "contents": content_placeholder,
+                #         "source": "Joint" + str(obj_counts["Joint"] - 1),
+                #         "destination": destination,
+                #         "tags": {},
+                #     }
+                #     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                #     obj_counts["Pipe"] += 1
 
             else:
                 raise ValueError(
