@@ -78,6 +78,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -137,7 +138,7 @@
 <p>This installation should come with two sample facility configurations:
 one for water resource recovery (<cite>wrrf_sample.json</cite>) and one for desalination (<cite>desal_sample.json</cite>).
 To load the water resource recovery facility (WRRF) example, run the following code from the <cite>pype_schema/data</cite> folder:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.parse_json</span> <span class="kn">import</span> <span class="n">JSONParser</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.parse_json</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONParser</span>
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">&quot;wrrf_sample.json&quot;</span><span class="p">)</span>
 <span class="n">network</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
@@ -147,7 +148,7 @@ To load the water resource recovery facility (WRRF) example, run the following c
 <section id="model-structure">
 <span id="model-struct"></span><h2><a class="toc-backref" href="#id3" role="doc-backlink">Model Structure</a><a class="headerlink" href="#model-structure" title="Permalink to this heading"></a></h2>
 <p>The <a class="reference internal" href="visualize.html#visualize"><span class="std std-ref">visualize</span></a> module can be used to view the loaded PyPES representation with either of the <code class="docutils literal notranslate"><span class="pre">pyvis</span></code> or <code class="docutils literal notranslate"><span class="pre">networkx</span></code> packages.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.visualize</span> <span class="kn">import</span> <span class="n">draw_graph</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">draw_graph</span>
 
 <span class="n">pyvis</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="p">)</span>
@@ -190,8 +191,8 @@ They are not a part of the graph like nodes or connections, but are associated w
 <p>The graphical representation of the facility can be modified programmatically.
 This can be useful for modeling upgrades to existing infrastructure by seamlessly comparing two configurations side-by-side.</p>
 <p>For example, to add a 10,000 gallon storage tank at 1,000 meters elevation to the water distribution network:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.node</span> <span class="kn">import</span> <span class="n">Tank</span>
-<span class="kn">from</span> <span class="nn">pype_schema.utils</span> <span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">ContentsType</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tank</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">ContentsType</span>
 
 <span class="n">volume</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;gal&quot;</span><span class="p">)</span>
 <span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
@@ -215,7 +216,7 @@ This can be useful for modeling upgrades to existing infrastructure by seamlessl
 a connection is starting or ending at when the connection goes between levels in the graph. For example, in this
 case we want to specify that the drinking water treatment plant effluent goes not only to the water distribution
 network, but to a specific storage tank within the distribution network:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span>
 
 <span class="n">wds_conn</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
     <span class="n">source_id</span><span class="o">=</span><span class="s2">&quot;DrinkingWaterFacility&quot;</span><span class="p">,</span>
@@ -246,8 +247,8 @@ could query for all connections with <code class="docutils literal notranslate">
 </div>
 <p>Its often more convenient to get all the tags directly. Then, if the data is in CSV format the tags correspond to
 column names that can be operated on:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.tag</span> <span class="kn">import</span> <span class="n">Tag</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.tag</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;sample_data.csv&quot;</span><span class="p">)</span>
 
@@ -264,7 +265,7 @@ column names that can be operated on:</p>
 </div>
 <p>Then, <code class="docutils literal notranslate"><span class="pre">ng_import_timeseries</span></code> could be used for whatever application the user desires.
 For example, to plot the natural gas imports over time:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">ng_tags</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>

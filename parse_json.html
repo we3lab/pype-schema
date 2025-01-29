@@ -95,6 +95,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -685,8 +686,9 @@ parsed into JSON format</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network</strong> (<em>node.Network</em>) – Network object to export to JSON</p></li>
-<li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format</p></li>
-<li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format.
+Default is None, meaning that no file will be written</p></li>
+<li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file. Default is 4</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
 </ul>
 </dd>

@@ -20,6 +20,22 @@ pype\_schema.connection module
    :undoc-members:
    :show-inheritance:
 
+pype\_schema.epyt\_utils module
+-------------------------------
+
+.. automodule:: pype_schema.epyt_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pype\_schema.logbook module
+---------------------------
+
+.. automodule:: pype_schema.logbook
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pype\_schema.node module
 ------------------------
 

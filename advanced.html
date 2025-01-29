@@ -67,6 +67,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -108,8 +109,8 @@
 than a single efficiency value. To define an efficiency curve, first define a function and then use
 <code class="docutils literal notranslate"><span class="pre">set_pump_curve()</span></code> to set the <code class="docutils literal notranslate"><span class="pre">pump_curve</span></code> attribute to that function. <code class="docutils literal notranslate"><span class="pre">thermal_efficiency</span></code>
 and <code class="docutils literal notranslate"><span class="pre">electrical_efficiency</span></code> of <code class="docutils literal notranslate"><span class="pre">Cogenerator</span></code> and <code class="docutils literal notranslate"><span class="pre">Boiler</span></code> objects can be similarly defined.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pype_schema.node</span> <span class="kn">import</span> <span class="n">Pump</span>
-<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">PumpType</span><span class="p">,</span> <span class="n">ContentsType</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pump</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">PumpType</span><span class="p">,</span> <span class="n">ContentsType</span>
 
 <span class="n">min_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;gpm&quot;</span><span class="p">)</span>
 <span class="n">max_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;gpm&quot;</span><span class="p">)</span>
@@ -117,7 +118,7 @@ and <code class="docutils literal notranslate"><span class="pre">electrical_effi
 <span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
 <span class="n">horsepower</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;hp&quot;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">flowrate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">flowrate</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="n">flowrate</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="n">pump</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span>

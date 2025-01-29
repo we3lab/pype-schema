@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -220,8 +221,8 @@
 <span class="sd">* ``u.boltzmann_constant``</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pint</span>
 
 <span class="c1"># A global unit registry that can be used by any of other module.</span>
 <span class="n">unit_registry</span> <span class="o">=</span> <span class="n">pint</span><span class="o">.</span><span class="n">UnitRegistry</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="s2">&quot;mks&quot;</span><span class="p">,</span> <span class="n">autoconvert_offset_to_baseunit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -236,7 +237,7 @@
 <span class="n">u</span><span class="o">.</span><span class="n">load_definitions</span><span class="p">(</span><span class="n">units_path</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="set_sig_figs"><a class="viewcode-back" href="../../units.html#pype_schema.units.set_sig_figs">[docs]</a><span class="k">def</span> <span class="nf">set_sig_figs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<div class="viewcode-block" id="set_sig_figs"><a class="viewcode-back" href="../../units.html#pype_schema.units.set_sig_figs">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">set_sig_figs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the default number of significant figures used to print Pint,</span>
 <span class="sd">    Pandas and NumPy value quantities.</span>
 

@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,12 +96,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span>
-<span class="kn">from</span> <span class="nn">.units</span> <span class="kn">import</span> <span class="n">u</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pint</span><span class="w"> </span><span class="kn">import</span> <span class="n">UndefinedUnitError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">u</span>
 
 
-<div class="viewcode-block" id="count_args"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.count_args">[docs]</a><span class="k">def</span> <span class="nf">count_args</span><span class="p">(</span><span class="n">func_str</span><span class="p">):</span>
+<div class="viewcode-block" id="count_args"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.count_args">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">count_args</span><span class="p">(</span><span class="n">func_str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Count the arguments for a lambda function string</span>
 
 <span class="sd">    Parameters</span>
@@ -127,7 +128,7 @@
     <span class="k">return</span> <span class="n">nargs</span></div>
 
 
-<div class="viewcode-block" id="get_tag_sum_lambda_func"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.get_tag_sum_lambda_func">[docs]</a><span class="k">def</span> <span class="nf">get_tag_sum_lambda_func</span><span class="p">(</span><span class="n">unit_ids</span><span class="p">):</span>
+<div class="viewcode-block" id="get_tag_sum_lambda_func"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.get_tag_sum_lambda_func">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_tag_sum_lambda_func</span><span class="p">(</span><span class="n">unit_ids</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a lambda function string to sum tags</span>
 
 <span class="sd">    Parameters</span>
@@ -146,7 +147,7 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;lambda </span><span class="si">{</span><span class="n">arguments</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ops</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
-<div class="viewcode-block" id="parse_quantity"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.parse_quantity">[docs]</a><span class="k">def</span> <span class="nf">parse_quantity</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_quantity"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.parse_quantity">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">parse_quantity</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a value and unit string to a Pint quantity</span>
 
 <span class="sd">    Parameters</span>
@@ -169,7 +170,7 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="parse_units"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.parse_units">[docs]</a><span class="k">def</span> <span class="nf">parse_units</span><span class="p">(</span><span class="n">units</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_units"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.parse_units">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">parse_units</span><span class="p">(</span><span class="n">units</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a unit string to a Pint Unit object</span>
 
 <span class="sd">    Parameters</span>
@@ -588,7 +589,7 @@
                 <span class="k">raise</span> <span class="n">UndefinedUnitError</span><span class="p">(</span><span class="s2">&quot;Unsupported unit: &quot;</span> <span class="o">+</span> <span class="n">units</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ContentsType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.ContentsType">[docs]</a><span class="k">class</span> <span class="nc">ContentsType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="ContentsType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.ContentsType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ContentsType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to represent any possible contents,</span>
 <span class="sd">    whether they are sludge, water, or gas&quot;&quot;&quot;</span>
 
@@ -636,10 +637,12 @@
     <span class="n">CoagulatedWater</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">FilterBackwash</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Filtrate</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">WFBS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Water Filter Backwash Solids</span></div>
+    <span class="n">WFBS</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># Water Filter Backwash Solids</span>
+    <span class="n">ControlSignal</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">DataTransfer</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.PumpType">[docs]</a><span class="k">class</span> <span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PumpType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.PumpType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PumpType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent constant vs. variable drive pumps&quot;&quot;&quot;</span>
 
     <span class="n">Constant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -648,14 +651,14 @@
     <span class="n">AirBlower</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="DigesterType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DigesterType">[docs]</a><span class="k">class</span> <span class="nc">DigesterType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="DigesterType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DigesterType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DigesterType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of digesters&quot;&quot;&quot;</span>
 
     <span class="n">Aerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Anaerobic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="DosingType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DosingType">[docs]</a><span class="k">class</span> <span class="nc">DosingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="DosingType"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.DosingType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DosingType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of dosing&quot;&quot;&quot;</span>
 
     <span class="n">NaOCl</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># sodium hypochlorite</span>
@@ -669,7 +672,7 @@
     <span class="n">UVLight</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="select_objs_helper"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.select_objs_helper">[docs]</a><span class="k">def</span> <span class="nf">select_objs_helper</span><span class="p">(</span>
+<div class="viewcode-block" id="select_objs_helper"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.select_objs_helper">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">select_objs_helper</span><span class="p">(</span>
     <span class="n">obj</span><span class="p">,</span>
     <span class="n">obj_source_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">obj_dest_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -820,7 +823,7 @@
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="recursive_get"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.recursive_get">[docs]</a><span class="k">def</span> <span class="nf">recursive_get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dict_</span><span class="p">):</span>
+<div class="viewcode-block" id="recursive_get"><a class="viewcode-back" href="../../utils.html#pype_schema.utils.recursive_get">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">recursive_get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dict_</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Recursively search a nested dictionary for a key</span>
 
 <span class="sd">    Parameters</span>

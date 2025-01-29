@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,13 +96,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.connection</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">node</span>
 
 
-<div class="viewcode-block" id="Connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection">[docs]</a><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract class for all connections</span>
 
 <span class="sd">    Attributes</span>
@@ -142,7 +143,7 @@
     <span class="n">exit_point</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">entry_point</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">Node</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -161,7 +162,7 @@
             <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Connection.add_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.add_tag">[docs]</a>    <span class="k">def</span> <span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.add_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.add_tag">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
 
 <span class="sd">        Parameters</span>
@@ -173,7 +174,7 @@
             <span class="n">tag</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span></div>
 
-<div class="viewcode-block" id="Connection.remove_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.remove_tag">[docs]</a>    <span class="k">def</span> <span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.remove_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.remove_tag">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a tag from the node</span>
 
 <span class="sd">        Parameters</span>
@@ -183,7 +184,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Connection.get_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_tag">[docs]</a>    <span class="k">def</span> <span class="nf">get_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_tag">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a tag to the node</span>
 
 <span class="sd">        Parameters</span>
@@ -193,7 +194,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_name</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Connection.get_source_id"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_source_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_source_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_source_id"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_source_id">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_source_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -207,7 +208,7 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
-<div class="viewcode-block" id="Connection.get_exit_point"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_exit_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_exit_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_exit_point"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_exit_point">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_exit_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -221,7 +222,7 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
-<div class="viewcode-block" id="Connection.get_dest_id"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_dest_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_dest_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_dest_id"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_dest_id">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_dest_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -235,7 +236,7 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
-<div class="viewcode-block" id="Connection.get_entry_point"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_entry_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_entry_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_entry_point"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_entry_point">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_entry_point</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -249,7 +250,7 @@
 
         <span class="k">return</span> <span class="nb">id</span></div>
 
-<div class="viewcode-block" id="Connection.get_num_source_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_num_source_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_source_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_num_source_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_num_source_units">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_num_source_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -263,7 +264,7 @@
 
         <span class="k">return</span> <span class="n">num_units</span></div>
 
-<div class="viewcode-block" id="Connection.get_num_dest_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_num_dest_units">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_dest_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_num_dest_units"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_num_dest_units">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_num_dest_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -277,7 +278,7 @@
 
         <span class="k">return</span> <span class="n">num_units</span></div>
 
-<div class="viewcode-block" id="Connection.get_source_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_source_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_source_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_source_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_source_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_source_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a connection&#39;s source node returning its exit point if `recurse` is True</span>
 
 <span class="sd">        Parameters</span>
@@ -297,7 +298,7 @@
                 <span class="n">node_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
         <span class="k">return</span> <span class="n">node_obj</span></div>
 
-<div class="viewcode-block" id="Connection.get_dest_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_dest_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_dest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.get_dest_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Connection.get_dest_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_dest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets a connection&#39;s destination node,</span>
 <span class="sd">        returning its entry point if `recurse` is True</span>
 
@@ -319,7 +320,7 @@
         <span class="k">return</span> <span class="n">node_obj</span></div></div>
 
 
-<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Pipe</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class for pipes that transport any fluid,</span>
 <span class="sd">    such as drinking water, natural gas, or industrial wastewater.</span>
 
@@ -438,7 +439,7 @@
 <span class="sd">        Default is None, indicating the destination does not have any children</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">contents</span><span class="p">,</span>
@@ -477,7 +478,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -502,7 +503,7 @@
             <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -527,7 +528,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
@@ -583,7 +584,7 @@
                 <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                     <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Pipe.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_flow_rate">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_flow_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_flow_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_flow_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average flow rate through the connection</span>
 
 <span class="sd">        Parameters</span>
@@ -607,7 +608,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="nb">max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design</span></div>
 
-<div class="viewcode-block" id="Pipe.get_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -617,15 +618,15 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_flow</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span> <span class="o">=</span> <span class="n">min_flow</span></div>
 
-<div class="viewcode-block" id="Pipe.del_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_min_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_min_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_flow</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Pipe.get_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -635,15 +636,15 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span> <span class="o">=</span> <span class="n">max_flow</span></div>
 
-<div class="viewcode-block" id="Pipe.del_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_max_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_max_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_flow</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Pipe.get_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -653,10 +654,10 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_flow</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_flow</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span> <span class="o">=</span> <span class="n">design_flow</span></div>
 
-<div class="viewcode-block" id="Pipe.del_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_flow">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_design_flow"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_flow">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_design_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_flow</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow_rate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
@@ -665,7 +666,7 @@
     <span class="n">max_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_max_flow</span><span class="p">,</span> <span class="n">set_max_flow</span><span class="p">,</span> <span class="n">del_max_flow</span><span class="p">)</span>
     <span class="n">design_flow</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_design_flow</span><span class="p">,</span> <span class="n">set_design_flow</span><span class="p">,</span> <span class="n">del_design_flow</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Pipe.set_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the minimum, maximum, and average pressure inside the connection</span>
 
 <span class="sd">        Parameters</span>
@@ -689,7 +690,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span> <span class="o">=</span> <span class="nb">max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span> <span class="o">=</span> <span class="n">design</span></div>
 
-<div class="viewcode-block" id="Pipe.get_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_min_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -699,15 +700,15 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_pressure</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_min_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_pressure</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span> <span class="o">=</span> <span class="n">min_pressure</span></div>
 
-<div class="viewcode-block" id="Pipe.del_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_min_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_min_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_min_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_pressure</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Pipe.get_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_max_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -717,15 +718,15 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_pressure</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_max_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_pressure</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span> <span class="o">=</span> <span class="n">max_pressure</span></div>
 
-<div class="viewcode-block" id="Pipe.del_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_max_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_max_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_max_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_pressure</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Pipe.get_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">get_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.get_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.get_design_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -736,10 +737,10 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Pipe.set_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">set_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_pressure</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_design_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_pressure</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span> <span class="o">=</span> <span class="n">design_pressure</span></div>
 
-<div class="viewcode-block" id="Pipe.del_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_pressure">[docs]</a>    <span class="k">def</span> <span class="nf">del_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.del_design_pressure"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.del_design_pressure">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_design_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_design_pressure</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pressure&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span></div>
@@ -750,7 +751,7 @@
         <span class="n">get_design_pressure</span><span class="p">,</span> <span class="n">set_design_pressure</span><span class="p">,</span> <span class="n">del_design_pressure</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="Pipe.set_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_heating_values">[docs]</a>    <span class="k">def</span> <span class="nf">set_heating_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">):</span>
+<div class="viewcode-block" id="Pipe.set_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Pipe.set_heating_values">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_heating_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the lower and higher heating values for gas in the connection</span>
 
 <span class="sd">        Parameters</span>
@@ -764,13 +765,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">heating_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">higher</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Wire"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Wire">[docs]</a><span class="k">class</span> <span class="nc">Wire</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
+<div class="viewcode-block" id="Wire"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Wire">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Wire</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for representing electrical connections.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------</span>
 <span class="sd">    id : str</span>
 <span class="sd">        Wire ID</span>
+
+<span class="sd">    contents : ContentsType</span>
+<span class="sd">        Contents moving through the connection.</span>
 
 <span class="sd">    source : Node</span>
 <span class="sd">        Starting point of the connection</span>
@@ -821,9 +825,10 @@
 <span class="sd">        Default is None, indicating the destination does not have any children</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">,</span>
         <span class="n">source</span><span class="p">,</span>
         <span class="n">destination</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -832,15 +837,15 @@
         <span class="n">entry_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">=</span> <span class="n">bidirectional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">Electricity</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -859,7 +864,7 @@
             <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -875,7 +880,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
@@ -914,7 +919,161 @@
                     <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="Delivery"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Delivery">[docs]</a><span class="k">class</span> <span class="nc">Delivery</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
+<div class="viewcode-block" id="Wireless"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Wireless">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Wireless</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for representing electrical connections.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Wireless connection ID</span>
+
+<span class="sd">    contents : ContentsType</span>
+<span class="sd">        Contents moving through the connection.</span>
+
+<span class="sd">    source : Node</span>
+<span class="sd">        Starting point of the connection</span>
+
+<span class="sd">    destination : Node</span>
+<span class="sd">        Endpoint of the connection</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this wire</span>
+
+<span class="sd">    bidirectional : bool</span>
+<span class="sd">        Whether data can flow from destination to source. False by default</span>
+
+<span class="sd">    exit_point : Node</span>
+<span class="sd">        The child node from which this connection leaves its source.</span>
+<span class="sd">        Default is None, indicating the source does not have any children</span>
+
+<span class="sd">    entry_point : Node</span>
+<span class="sd">        The child node at which this connection enters its destination.</span>
+<span class="sd">        Default is None, indicating the destination does not have any children</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Pipe ID</span>
+
+<span class="sd">    contents : ContentsType</span>
+<span class="sd">        Contents moving through the connection.</span>
+
+<span class="sd">    source : Node</span>
+<span class="sd">        Starting point of the connection</span>
+
+<span class="sd">    destination : Node</span>
+<span class="sd">        Endpoint of the connection</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this pipe</span>
+
+<span class="sd">    bidirectional : bool</span>
+<span class="sd">        Whether data can flow from destination to source. False by default</span>
+
+<span class="sd">    exit_point : Node</span>
+<span class="sd">        The child node from which this connection leaves its source.</span>
+<span class="sd">        Default is None, indicating the source does not have any children</span>
+
+<span class="sd">    entry_point : Node</span>
+<span class="sd">        The child node at which this connection enters its destination.</span>
+<span class="sd">        Default is None, indicating the destination does not have any children</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">contents</span><span class="p">,</span>
+        <span class="n">source</span><span class="p">,</span>
+        <span class="n">destination</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">bidirectional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">exit_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">entry_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">=</span> <span class="n">bidirectional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exit_point_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">entry_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">entry_point_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.connection.Wireless id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> source:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;destination:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> bidirectional:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">exit_point</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                <span class="c1"># TODO: uncomment when node comparison are supported</span>
+                <span class="c1"># if isinstance(self.source, type(other.source)):</span>
+                <span class="c1">#     return self.source &lt; other.source</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="p">:</span>
+                <span class="c1"># if isinstance(self.destination, type(other.destination)):</span>
+                <span class="c1">#     return self.destination &lt; other.destination</span>
+                <span class="c1"># else:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+        <span class="c1"># case with same number of different tags, so we compare tags in order</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">other_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">tag</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">items</span><span class="p">())]):</span>
+                <span class="k">if</span> <span class="n">tag</span> <span class="o">!=</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="n">tag</span> <span class="o">&lt;</span> <span class="n">other_tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Delivery"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.connection.Delivery">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Delivery</span><span class="p">(</span><span class="n">Connection</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to represent a connection via delivery,</span>
 <span class="sd">    such as monthly chemical deliveries or weekly trash disposal.</span>
 
@@ -983,7 +1142,7 @@
 <span class="sd">        Default is None, indicating the destination does not have any children</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">contents</span><span class="p">,</span>
@@ -1003,7 +1162,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="o">=</span> <span class="n">exit_point</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">entry_point</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">exit_point_id</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1015,14 +1174,14 @@
             <span class="n">entry_point_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span><span class="o">.</span><span class="n">id</span>
 
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.connection.Wire id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.connection.Delivery id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> source:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;destination:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2"> bidirectional:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bidirectional</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;exit_point:</span><span class="si">{</span><span class="n">exit_point_id</span><span class="si">}</span><span class="s2"> entry_point:</span><span class="si">{</span><span class="n">entry_point_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -1038,7 +1197,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entry_point</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>

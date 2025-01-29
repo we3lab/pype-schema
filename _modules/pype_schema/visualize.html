@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,42 +96,44 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.visualize</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">pyvis.network</span> <span class="kn">import</span> <span class="n">Network</span>
-<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvis.network</span><span class="w"> </span><span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 
+<span class="c1"># flow contents to (edge color, text color) mapping</span>
 <span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;Electricity&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;UntreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PrimaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SecondaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TertiaryEffluent&quot;</span><span class="p">:</span> <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TreatedSewage&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WasteActivatedSludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PrimarySludge&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TWAS&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TPS&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Scum&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SludgeBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ThickenedSludgeBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Biogas&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;GasBlend&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;NaturalGas&quot;</span><span class="p">:</span> <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Seawater&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Brine&quot;</span><span class="p">:</span> <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SurfaceWater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Groundwater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Stormwater&quot;</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;NonpotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DrinkingWater&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PotableReuse&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;FatOilGrease&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;FoodWaste&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Electricity&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;UntreatedSewage&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PrimaryEffluent&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;SecondaryEffluent&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;TertiaryEffluent&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;TreatedSewage&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;WasteActivatedSludge&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PrimarySludge&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;TWAS&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;TPS&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Scum&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;SludgeBlend&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ThickenedSludgeBlend&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Biogas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;GasBlend&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;NaturalGas&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Seawater&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;aqua&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Brine&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;aqua&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;SurfaceWater&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Groundwater&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Stormwater&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;NonpotableReuse&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;purple&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;DrinkingWater&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PotableReuse&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;FatOilGrease&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;FoodWaste&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">),</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="draw_graph"><a class="viewcode-back" href="../../visualize.html#pype_schema.visualize.draw_graph">[docs]</a><span class="k">def</span> <span class="nf">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_graph"><a class="viewcode-back" href="../../visualize.html#pype_schema.visualize.draw_graph">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">pyvis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw all of the nodes and connections in the given network</span>
 
 <span class="sd">    Parameters</span>
@@ -141,72 +144,49 @@
 <span class="sd">    pyvis : bool</span>
 <span class="sd">        Whether to draw the graph with PyVis or Networkx.</span>
 <span class="sd">        False (networkx) by default</span>
+
+<span class="sd">    output_file : str</span>
+<span class="sd">        Path to the desired output.</span>
+<span class="sd">        Default is None, meaning the file will be saved as `networkd.id` + extension</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># create empty graph</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
 
     <span class="c1"># add list of nodes and edges to graph</span>
     <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">())</span>
+
+    <span class="n">flow_colors</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">font_colors</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">network</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">color_map</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">flow_color</span> <span class="o">=</span> <span class="n">color_map</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">font_color</span> <span class="o">=</span> <span class="n">color_map</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+            <span class="n">flow_color</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+            <span class="n">font_color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+
+        <span class="n">flow_colors</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">flow_color</span>
+        <span class="n">font_colors</span><span class="p">[</span><span class="n">connection</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_color</span>
 
         <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
-            <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">flow_color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">connection</span><span class="o">.</span><span class="n">bidirectional</span><span class="p">:</span>
             <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
-                <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="nb">id</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">flow_color</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;saddlebrown&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;green&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;gray&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;aqua&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;purple&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;Sludge/Scum&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Untreated Sewage&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Treated Sewage&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Electricity&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Biogas&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Natural Gas&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Freshwater&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Saline Water&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Non-potable Reuse&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Drinking Water&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;FOG/Food Waste&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
-    <span class="n">font_colors</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;white&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
-
+    <span class="n">colors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">flow_colors</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">flow_colors</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">pyvis</span><span class="p">:</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="s2">&quot;500px&quot;</span><span class="p">,</span> <span class="s2">&quot;500px&quot;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># create legend based on https://github.com/WestHealth/pyvis/issues/50</span>
-        <span class="n">num_legend_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+        <span class="n">num_legend_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">flow_colors</span><span class="p">)</span>
         <span class="n">num_actual_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
         <span class="n">step</span> <span class="o">=</span> <span class="mi">50</span>
         <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">300</span>
@@ -230,7 +210,10 @@
         <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">legend_nodes</span><span class="p">)</span>
 
         <span class="n">nt</span><span class="o">.</span><span class="n">from_nx</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-        <span class="n">nt</span><span class="o">.</span><span class="n">save_graph</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.html&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_file</span><span class="p">:</span>
+            <span class="n">nt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.html&quot;</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># create legend</span>
         <span class="n">custom_lines</span> <span class="o">=</span> <span class="p">[]</span>
@@ -254,7 +237,10 @@
         <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()])</span>
         <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">output_file</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

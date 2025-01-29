@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">tag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.DownsampleType"><code class="docutils literal notranslate"><span class="pre">DownsampleType</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.Tag.check_type_compatibility"><code class="docutils literal notranslate"><span class="pre">Tag.check_type_compatibility()</span></code></a></li>
 </ul>
@@ -79,6 +80,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -118,8 +120,14 @@
 <span id="id1"></span><h1><a class="toc-backref" href="#id2" role="doc-backlink">tag</a><a class="headerlink" href="#tag" title="Permalink to this heading"></a></h1>
 <p>This module consists of two classes, <code class="docutils literal notranslate"><span class="pre">Tag</span></code> and <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code>, which are used to represent data streams at a treatment facility.</p>
 <span class="target" id="module-pype_schema.tag"></span><dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.tag.DownsampleType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">DownsampleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#DownsampleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.DownsampleType" title="Permalink to this definition"></a></dt>
+<dd><p>Enum to represent common methods of downsampling data</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.tag.Tag">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manufacturer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_freq=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_freq=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_method=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration=&lt;pype_schema.logbook.Logbook</span> <span class="pre">entries:{}&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag" title="Permalink to this definition"></a></dt>
 <dd><p>Class to represent a SCADA or other data tag</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -136,6 +144,11 @@ None if the Tag is associated with a Node object instead of a Connection</p></li
 <li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
+<li><p><strong>manufacturer</strong> (<em>str</em>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
+<li><p><strong>measure_freq</strong> (<em>pint.Quantity</em>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<em>pint.Quantity</em>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>downsample_method</strong> (<em>DownsampleType</em>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
+<li><p><strong>calibration</strong> (<em>Logbook</em>) – A history of sensor calibration.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
@@ -148,8 +161,13 @@ across all units of the sources node</p></li>
 <li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the destination node</p></li>
 <li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
-<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False by default</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+<li><p><strong>manufacturer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
+<li><p><strong>measure_freq</strong> (<em>pint.Quantity</em>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<em>pint.Quantity</em>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>downsample_method</strong> (<a class="reference internal" href="#pype_schema.tag.DownsampleType" title="pype_schema.tag.DownsampleType"><em>DownsampleType</em></a>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
+<li><p><strong>calibration</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.logbook.Logbook" title="pype_schema.logbook.Logbook"><em>Logbook</em></a>) – A history of sensor calibration.</p></li>
 </ul>
 </dd>
 </dl>

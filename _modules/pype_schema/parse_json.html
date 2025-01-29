@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,18 +96,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.parse_json</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pint</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">.tag</span> <span class="kn">import</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">connection</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">node</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tag</span><span class="w"> </span><span class="kn">import</span> <span class="n">DownsampleType</span><span class="p">,</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.logbook</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logbook</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">connection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 
-<div class="viewcode-block" id="JSONParser"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser">[docs]</a><span class="k">class</span> <span class="nc">JSONParser</span><span class="p">:</span>
+<div class="viewcode-block" id="JSONParser"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">JSONParser</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A parser to convert a JSON file into a `Network` object</span>
 
 <span class="sd">    Parameters</span>
@@ -126,7 +128,7 @@
 <span class="sd">        Python representation of the JSON file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -135,7 +137,7 @@
         <span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JSONParser.initialize_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.initialize_network">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.initialize_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.initialize_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Network` object</span>
 
 <span class="sd">        Parameters</span>
@@ -170,7 +172,7 @@
         <span class="c1"># TODO: check for unused fields and throw a warning for each</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.collect_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.collect_virtual_tags">[docs]</a>    <span class="k">def</span> <span class="nf">collect_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.collect_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.collect_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">collect_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively collects all virtual tags in a network&#39;s dictionary</span>
 <span class="sd">        representation (i.e. config)</span>
 
@@ -207,7 +209,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">collect_virtual_tags</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="n">virtual_tags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">virtual_tags</span></div>
 
-<div class="viewcode-block" id="JSONParser.add_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.add_virtual_tags">[docs]</a>    <span class="k">def</span> <span class="nf">add_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.add_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.add_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds all virtual tags in an object</span>
 <span class="sd">        NOTE: assumes the objects tags have already been added</span>
 
@@ -277,7 +279,7 @@
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_node_or_connection</span><span class="p">(</span><span class="n">v_tag</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="JSONParser.merge_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.merge_network">[docs]</a>    <span class="k">def</span> <span class="nf">merge_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_network</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.merge_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.merge_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">merge_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_network</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Incorporates nodes/connections (i.e. the `new_network`) into a network</span>
 <span class="sd">        (i.e. `old_newtwork`) modifying it in place and returning the modified network</span>
 
@@ -328,7 +330,7 @@
         <span class="k">return</span> <span class="n">old_network</span></div>
 
 <div class="viewcode-block" id="JSONParser.prefix_children"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.prefix_children">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">prefix_children</span><span class="p">(</span><span class="n">target_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prefix_children</span><span class="p">(</span><span class="n">target_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Renames the children nodes and connections of the `target_node` by</span>
 <span class="sd">        prepending their ID with `prefix`.</span>
 
@@ -357,7 +359,7 @@
             <span class="n">new_network</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.extend_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.extend_node">[docs]</a>    <span class="k">def</span> <span class="nf">extend_node</span><span class="p">(</span>
+<div class="viewcode-block" id="JSONParser.extend_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.extend_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">new_network</span><span class="p">,</span>
         <span class="n">target_node_id</span><span class="p">,</span>
@@ -517,7 +519,7 @@
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">modified_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Node` object</span>
 
 <span class="sd">        Parameters</span>
@@ -708,7 +710,7 @@
                 <span class="n">pump_curve</span> <span class="o">=</span> <span class="n">efficiency</span>
             <span class="k">if</span> <span class="n">pump_curve</span><span class="p">:</span>
 
-                <span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
                     <span class="c1"># TODO: fix this so that it interpolates between dictionary values</span>
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">pump_curve</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
                         <span class="k">return</span> <span class="n">pump_curve</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
@@ -782,7 +784,7 @@
 
             <span class="k">if</span> <span class="n">electrical_efficiency</span><span class="p">:</span>
 
-                <span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
                     <span class="c1"># TODO: fix this so that it interpolates between dictionary values</span>
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">electrical_efficiency</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
                         <span class="k">return</span> <span class="n">electrical_efficiency</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
@@ -793,7 +795,7 @@
 
             <span class="k">if</span> <span class="n">thermal_efficiency</span><span class="p">:</span>
 
-                <span class="k">def</span> <span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
                     <span class="c1"># TODO: fix this so that it interpolates between dictionary values</span>
                     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">thermal_efficiency</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
                         <span class="k">return</span> <span class="n">thermal_efficiency</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
@@ -994,6 +996,13 @@
                 <span class="n">pH</span><span class="o">=</span><span class="n">pH</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Joint&quot;</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Joint</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported Node type: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
 
@@ -1038,7 +1047,7 @@
                         <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Connection` object</span>
 
 <span class="sd">        Parameters</span>
@@ -1134,6 +1143,18 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Wire&quot;</span><span class="p">:</span>
             <span class="n">connection_obj</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Wire</span><span class="p">(</span>
                 <span class="n">connection_id</span><span class="p">,</span>
+                <span class="n">contents</span><span class="p">,</span>
+                <span class="n">source</span><span class="p">,</span>
+                <span class="n">destination</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">bidirectional</span><span class="o">=</span><span class="n">bidirectional</span><span class="p">,</span>
+                <span class="n">exit_point</span><span class="o">=</span><span class="n">exit_point</span><span class="p">,</span>
+                <span class="n">entry_point</span><span class="o">=</span><span class="n">entry_point</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">connection_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Wireless&quot;</span><span class="p">:</span>
+            <span class="n">connection_obj</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Wireless</span><span class="p">(</span>
+                <span class="n">connection_id</span><span class="p">,</span>
+                <span class="n">contents</span><span class="p">,</span>
                 <span class="n">source</span><span class="p">,</span>
                 <span class="n">destination</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
@@ -1308,7 +1329,7 @@
 
         <span class="k">return</span> <span class="n">connection_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_contents">[docs]</a>    <span class="k">def</span> <span class="nf">parse_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONParser.parse_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_contents">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">parse_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of input and output contents</span>
 
 <span class="sd">        Parameters</span>
@@ -1353,7 +1374,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_virtual_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_virtual_tag">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_virtual_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">parent_network</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_virtual_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">parent_network</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary information into VirtualTag object</span>
 
 <span class="sd">        Parameters</span>
@@ -1423,7 +1444,7 @@
         <span class="k">return</span> <span class="n">v_tag</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_tag">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
 <span class="sd">        Parameters</span>
@@ -1462,6 +1483,25 @@
         <span class="n">pint_unit</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_units</span><span class="p">(</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">source_unit_id</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_unit_id&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span>
         <span class="n">dest_unit_id</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dest_unit_id&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">)</span>
+        <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;manufacturer&quot;</span><span class="p">)</span>
+        <span class="n">measure_freq</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">JSONParser</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;measure_freq&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;measure_freq&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">report_freq</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">JSONParser</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;report_freq&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;report_freq&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">downsample_method</span> <span class="o">=</span> <span class="n">DownsampleType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;downsample_method&quot;</span><span class="p">]]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">downsample_method</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">calibration_path</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;calibration_path&quot;</span><span class="p">)</span>
+        <span class="n">calibration</span> <span class="o">=</span> <span class="n">Logbook</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">calibration_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">calibration</span><span class="o">.</span><span class="n">load_entries</span><span class="p">(</span><span class="n">calibration_path</span><span class="p">)</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span>
             <span class="n">tag_id</span><span class="p">,</span>
             <span class="n">pint_unit</span><span class="p">,</span>
@@ -1471,12 +1511,17 @@
             <span class="n">obj</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">totalized</span><span class="o">=</span><span class="n">totalized</span><span class="p">,</span>
             <span class="n">contents</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span>
+            <span class="n">manufacturer</span><span class="o">=</span><span class="n">manufacturer</span><span class="p">,</span>
+            <span class="n">measure_freq</span><span class="o">=</span><span class="n">measure_freq</span><span class="p">,</span>
+            <span class="n">report_freq</span><span class="o">=</span><span class="n">report_freq</span><span class="p">,</span>
+            <span class="n">downsample_method</span><span class="o">=</span><span class="n">downsample_method</span><span class="p">,</span>
+            <span class="n">calibration</span><span class="o">=</span><span class="n">calibration</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">tag</span></div>
 
 <div class="viewcode-block" id="JSONParser.get_tag_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.get_tag_contents">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_tag_contents</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_tag_contents</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
 <span class="sd">        Parameters</span>
@@ -1537,7 +1582,7 @@
         <span class="k">return</span> <span class="n">contents</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_dosing_rate">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_dosing_rate</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_dosing_rate</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a dictionary of a different format</span>
 
 <span class="sd">        Parameters</span>
@@ -1570,7 +1615,7 @@
         <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.dosing_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.dosing_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">dosing_to_dict</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dosing_to_dict</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the dosing rate or area dictionary from PyPES to JSON format.</span>
 
 <span class="sd">        Parameters</span>
@@ -1611,7 +1656,7 @@
         <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_min_max_design"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_design">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_min_max_design</span><span class="p">(</span><span class="n">min_max_design</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_min_max_design</span><span class="p">(</span><span class="n">min_max_design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
 <span class="sd">        Parameters</span>
@@ -1658,7 +1703,7 @@
                 <span class="p">)</span></div>
 
 <div class="viewcode-block" id="JSONParser.unit_val_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.unit_val_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">unit_val_to_dict</span><span class="p">(</span><span class="n">attribute</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unit_val_to_dict</span><span class="p">(</span><span class="n">attribute</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the given attribute to dictionary of the form {</span>
 <span class="sd">                ``value``: ``float``</span>
 
@@ -1683,7 +1728,7 @@
         <span class="k">return</span> <span class="n">data_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_unit_val_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_unit_val_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_unit_val_dict</span><span class="p">(</span><span class="n">unit_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_unit_val_dict</span><span class="p">(</span><span class="n">unit_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a Pint Quantity</span>
 
 <span class="sd">        Parameters</span>
@@ -1712,7 +1757,7 @@
             <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_heating_values">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
 <span class="sd">        Parameters</span>
@@ -1746,7 +1791,7 @@
                 <span class="k">return</span> <span class="p">(</span><span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">),</span> <span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;higher&quot;</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="JSONParser.tag_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.tag_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">tag_to_dict</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tag_to_dict</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Tag or VirtualTag object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
 
@@ -1775,6 +1820,12 @@
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;source_unit_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">source_unit_id</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;dest_unit_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">dest_unit_id</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;totalized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">totalized</span>
+            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;manufacturer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">manufacturer</span>
+            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;measure_freq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">measure_freq</span><span class="p">)</span>
+            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;report_freq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">report_freq</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">downsample_method</span><span class="p">:</span>
+                <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;downsample_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">downsample_method</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;calibration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">calibration</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&#39;tag_obj&#39; must be of type Tag or VirtualTag&quot;</span><span class="p">)</span>
 
@@ -1785,7 +1836,7 @@
         <span class="k">return</span> <span class="n">tag_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.min_max_design_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.min_max_design_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">min_max_design_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">min_max_design_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the flow rate tuple of a `Node` or `Connection` into a</span>
 <span class="sd">        dictionary object</span>
 
@@ -1842,7 +1893,7 @@
         <span class="k">return</span> <span class="n">min_max_design_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.conn_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.conn_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">conn_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">conn_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Connection object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
 
@@ -1909,7 +1960,7 @@
         <span class="k">return</span> <span class="n">conn_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.node_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.node_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">node_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">node_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Node object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
 
@@ -2102,13 +2153,20 @@
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                     <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
                 <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Joint</span><span class="p">):</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;input_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="p">]</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;output_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported type:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">))</span>
-
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported Node type: &quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_dict</span></div>
 
 <div class="viewcode-block" id="JSONParser.to_json"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.to_json">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Network object to a JSON file</span>
 
 <span class="sd">        Parameters</span>
@@ -2117,10 +2175,11 @@
 <span class="sd">            Network object to export to JSON</span>
 
 <span class="sd">        file_path : str</span>
-<span class="sd">            path to write the configuration in JSON format</span>
+<span class="sd">            path to write the configuration in JSON format.</span>
+<span class="sd">            Default is None, meaning that no file will be written</span>
 
 <span class="sd">        indent : int</span>
-<span class="sd">            number of spaces to indent the JSON file</span>
+<span class="sd">            number of spaces to indent the JSON file. Default is 4</span>
 
 <span class="sd">        verbose : bool</span>
 <span class="sd">            Whether to print informative messages for debugging. Default is False</span>

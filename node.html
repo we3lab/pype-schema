@@ -79,6 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Facility"><code class="docutils literal notranslate"><span class="pre">Facility</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Filtration"><code class="docutils literal notranslate"><span class="pre">Filtration</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Flaring"><code class="docutils literal notranslate"><span class="pre">Flaring</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Joint"><code class="docutils literal notranslate"><span class="pre">Joint</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.ModularUnit"><code class="docutils literal notranslate"><span class="pre">ModularUnit</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.node.Network.add_connection"><code class="docutils literal notranslate"><span class="pre">Network.add_connection()</span></code></a></li>
@@ -135,6 +136,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -661,6 +663,22 @@ such as sand filters, trickling filters, or reverse osmosis membranes.</p>
 <li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate of a single flare</p></li>
 <li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate of a single flare</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this flare</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.node.Joint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Joint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Joint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Joint" title="Permalink to this definition"></a></dt>
+<dd><p>A joint in the network, where multiple pipes meet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Joint ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the joint</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the joint</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this joint</p></li>
 </ul>
 </dd>
 </dl>

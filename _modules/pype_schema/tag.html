@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,18 +96,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.tag</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>  <span class="c1"># noqa: F401</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># noqa: F401</span>
-<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>  <span class="c1"># noqa: F401</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">issubdtype</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">count_args</span>
-<span class="kn">from</span> <span class="nn">.operations</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa: F401, F403</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">issubdtype</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_args</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">u</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa: F401, F403</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.logbook</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logbook</span>
 
 
-<div class="viewcode-block" id="TagType"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.TagType">[docs]</a><span class="k">class</span> <span class="nc">TagType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="TagType"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.TagType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TagType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of SCADA tags&quot;&quot;&quot;</span>
 
     <span class="n">Flow</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># flow through a connection</span>
@@ -132,7 +135,16 @@
     <span class="n">NetFlow</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># net flow through a node</span>
     <span class="n">Speed</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Frequency</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">Concentration</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+    <span class="n">Concentration</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">SetPoint</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># history of control set points</span></div>
+
+
+<div class="viewcode-block" id="DownsampleType"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.DownsampleType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DownsampleType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent common methods of downsampling data&quot;&quot;&quot;</span>
+
+    <span class="n">Average</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Decimation</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Reservoir</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
 
 
 <span class="n">CONTENTLESS_TYPES</span> <span class="o">=</span> <span class="p">[</span>
@@ -145,7 +157,7 @@
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag">[docs]</a><span class="k">class</span> <span class="nc">Tag</span><span class="p">:</span>
+<div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Tag</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to represent a SCADA or other data tag</span>
 
 <span class="sd">    Parameters</span>
@@ -178,6 +190,21 @@
 <span class="sd">    contents : ContentsType</span>
 <span class="sd">        Data stream contents. E.g., `WasteActivatedSludge` or `NaturalGas`</span>
 
+<span class="sd">    manufacturer : str</span>
+<span class="sd">        Name of the manufacturer for the physical sensor hardware. Default is None</span>
+
+<span class="sd">    measure_freq : pint.Quantity</span>
+<span class="sd">        Measurement frequency of the data with units. None by default</span>
+
+<span class="sd">    report_freq : pint.Quantity</span>
+<span class="sd">        Reporting frequency of the data with units. None by default</span>
+
+<span class="sd">    downsample_method : DownsampleType</span>
+<span class="sd">        None by default, meaning that data is reported on the same frequency as measured</span>
+
+<span class="sd">    calibration : Logbook</span>
+<span class="sd">        A history of sensor calibration.</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -201,13 +228,28 @@
 <span class="sd">        ID for the parent object (either a Node or Connection)</span>
 
 <span class="sd">    totalized : bool</span>
-<span class="sd">        True if data is totalized. False otherwise</span>
+<span class="sd">        True if data is totalized. False by default</span>
 
 <span class="sd">    contents : ContentsType</span>
 <span class="sd">        Contents moving through the node</span>
+
+<span class="sd">    manufacturer : str</span>
+<span class="sd">        Name of the manufacturer for the physical sensor hardware. Default is None</span>
+
+<span class="sd">    measure_freq : pint.Quantity</span>
+<span class="sd">        Measurement frequency of the data with units. None by default</span>
+
+<span class="sd">    report_freq : pint.Quantity</span>
+<span class="sd">        Reporting frequency of the data with units. None by default</span>
+
+<span class="sd">    downsample_method : DownsampleType</span>
+<span class="sd">        None by default, meaning that data is reported on the same frequency as measured</span>
+
+<span class="sd">    calibration : Logbook</span>
+<span class="sd">        A history of sensor calibration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">units</span><span class="p">,</span>
@@ -217,6 +259,11 @@
         <span class="n">parent_id</span><span class="p">,</span>
         <span class="n">totalized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">contents</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">manufacturer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">measure_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">report_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">downsample_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">calibration</span><span class="o">=</span><span class="n">Logbook</span><span class="p">(),</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
@@ -226,16 +273,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">=</span> <span class="n">source_unit_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">=</span> <span class="n">dest_unit_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="n">parent_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span> <span class="o">=</span> <span class="n">manufacturer</span>
+        <span class="c1"># convert to Pint units if string value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">measure_freq</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">measure_freq</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span> <span class="o">=</span> <span class="n">measure_freq</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">report_freq</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">report_freq</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span> <span class="o">=</span> <span class="n">report_freq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span> <span class="o">=</span> <span class="n">downsample_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration</span> <span class="o">=</span> <span class="n">calibration</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.tag.Tag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> source_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;dest_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="si">}</span><span class="s2"> parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;manufacturer:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="si">}</span><span class="s2"> measure_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;report_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;downsample_method:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;calibration:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">calibration</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -249,9 +312,14 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">units</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">manufacturer</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">measure_freq</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">report_freq</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">downsample_method</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">calibration</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
@@ -262,10 +330,15 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calibration</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
@@ -294,10 +367,90 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">measure_freq</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">measure_freq</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">report_freq</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">report_freq</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">downsample_method</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">downsample_method</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">calibration</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calibration</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">calibration</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
 
-<div class="viewcode-block" id="Tag.check_type_compatibility"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag.check_type_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_type_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_type</span><span class="p">):</span>
+<div class="viewcode-block" id="Tag.get_manufacturer"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.get_manufacturer">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manufacturer</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Tag.set_manufacturer"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.set_manufacturer">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manufacturer</span> <span class="o">=</span> <span class="n">manufacturer</span></div>
+
+<div class="viewcode-block" id="Tag.del_manufacturer"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.del_manufacturer">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_manufacturer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manufacturer</span></div>
+
+    <span class="n">manufacturer</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_manufacturer</span><span class="p">,</span> <span class="n">set_manufacturer</span><span class="p">,</span> <span class="n">del_manufacturer</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tag.get_report_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.get_report_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_report_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_report_freq</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Tag.set_report_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.set_report_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_report_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_freq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_report_freq</span> <span class="o">=</span> <span class="n">report_freq</span></div>
+
+<div class="viewcode-block" id="Tag.del_report_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.del_report_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_report_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_report_freq</span></div>
+
+    <span class="n">report_freq</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_report_freq</span><span class="p">,</span> <span class="n">set_report_freq</span><span class="p">,</span> <span class="n">del_report_freq</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tag.get_measure_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.get_measure_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_measure_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measure_freq</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Tag.set_measure_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.set_measure_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_measure_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measure_freq</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_measure_freq</span> <span class="o">=</span> <span class="n">measure_freq</span></div>
+
+<div class="viewcode-block" id="Tag.del_measure_freq"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.del_measure_freq">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_measure_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measure_freq</span></div>
+
+    <span class="n">measure_freq</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_measure_freq</span><span class="p">,</span> <span class="n">set_measure_freq</span><span class="p">,</span> <span class="n">del_measure_freq</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tag.get_downsample_method"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.get_downsample_method">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_downsample_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_downsample_method</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Tag.set_downsample_method"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.set_downsample_method">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_downsample_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">downsample_method</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_downsample_method</span> <span class="o">=</span> <span class="n">downsample_method</span></div>
+
+<div class="viewcode-block" id="Tag.del_downsample_method"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.del_downsample_method">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_downsample_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_downsample_method</span></div>
+
+    <span class="n">downsample_method</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span>
+        <span class="n">get_downsample_method</span><span class="p">,</span> <span class="n">set_downsample_method</span><span class="p">,</span> <span class="n">del_downsample_method</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Tag.get_calibration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.get_calibration">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Logbook</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tag.set_calibration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.set_calibration">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calibration</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span> <span class="o">=</span> <span class="n">calibration</span></div>
+
+<div class="viewcode-block" id="Tag.del_calibration"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.tag.Tag.del_calibration">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">del_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span></div>
+
+    <span class="n">calibration</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_calibration</span><span class="p">,</span> <span class="n">set_calibration</span><span class="p">,</span> <span class="n">del_calibration</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Tag.check_type_compatibility"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag.check_type_compatibility">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">check_type_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_type</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the given tag_type is compatible with another</span>
 
 <span class="sd">        Parameters</span>
@@ -324,7 +477,7 @@
         <span class="k">return</span> <span class="kc">False</span></div></div>
 
 
-<div class="viewcode-block" id="VirtualTag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag">[docs]</a><span class="k">class</span> <span class="nc">VirtualTag</span><span class="p">:</span>
+<div class="viewcode-block" id="VirtualTag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">VirtualTag</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation for data that is not in the SCADA system, but is instead</span>
 <span class="sd">    a combination of existing tags combined via the `operations` lambda function string</span>
 
@@ -391,7 +544,7 @@
 <span class="sd">        Contents moving through the node</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">,</span>
@@ -401,6 +554,8 @@
         <span class="n">parent_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">contents</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="c1"># TODO: inherit report_freq from child tags</span>
+        <span class="c1"># TODO: incorporate DownsampleMethod for different report_freq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="n">parent_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
@@ -465,7 +620,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">operations</span> <span class="o">=</span> <span class="n">operations</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.tag.VirtualTag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> &quot;</span>
@@ -474,7 +629,7 @@
             <span class="sa">f</span><span class="s2">&quot;parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -489,7 +644,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">operations</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">operations</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
@@ -502,7 +657,7 @@
             <span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Tag</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
@@ -524,7 +679,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
-<div class="viewcode-block" id="VirtualTag.process_ops"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.process_ops">[docs]</a>    <span class="k">def</span> <span class="nf">process_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="VirtualTag.process_ops"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.process_ops">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">process_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the given data according to the VirtualTag&#39;s lambda string</span>
 
 <span class="sd">        Parameters</span>
@@ -586,7 +741,7 @@
 
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="VirtualTag.calculate_values"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.calculate_values">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
+<div class="viewcode-block" id="VirtualTag.calculate_values"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.calculate_values">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine the given data according to the VirtualTag&#39;s operations</span>
 
 <span class="sd">        Parameters</span>

@@ -65,6 +65,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -589,13 +590,14 @@ Default is None, indicating the destination does not have any children</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Wire">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.connection.Connection" title="pype_schema.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a></p>
 <p>A class for representing electrical connections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Wire ID</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this wire</p></li>
@@ -621,6 +623,339 @@ Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.connection.Wireless">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wireless</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wireless"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wireless" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pype_schema.connection.Connection" title="pype_schema.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a></p>
+<p>A class for representing electrical connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Wireless connection ID</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection.</p></li>
+<li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this wire</p></li>
+<li><p><strong>bidirectional</strong> (<em>bool</em>) – Whether data can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<em>Node</em>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<em>Node</em>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether data can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pype_schema.epyt_utils">
+<span id="pype-schema-epyt-utils-module"></span><h2>pype_schema.epyt_utils module<a class="headerlink" href="#module-pype_schema.epyt_utils" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.epyt_utils.NpEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.epyt_utils.</span></span><span class="sig-name descname"><span class="pre">NpEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/epyt_utils.html#NpEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.epyt_utils.NpEncoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSONEncoder</span></code></p>
+<p>Custom JSON encoder for numpy types</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.epyt_utils.NpEncoder.default">
+<span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/epyt_utils.html#NpEncoder.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.epyt_utils.NpEncoder.default" title="Permalink to this definition"></a></dt>
+<dd><p>Implement this method in a subclass such that it returns
+a serializable object for <code class="docutils literal notranslate"><span class="pre">o</span></code>, or calls the base implementation
+(to raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>).</p>
+<p>For example, to support arbitrary iterators, you could
+implement default like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">iterable</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="c1"># Let the base class default method raise the TypeError</span>
+    <span class="k">return</span> <span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.epyt_utils.epyt2pypes">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.epyt_utils.</span></span><span class="sig-name descname"><span class="pre">epyt2pypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/epyt_utils.html#epyt2pypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.epyt_utils.epyt2pypes" title="Permalink to this definition"></a></dt>
+<dd><p>Convert an EPANET input file to a PYPES JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inp_file</strong> (<em>str</em>) – Path to the EPANET input file</p></li>
+<li><p><strong>out_file</strong> (<em>str</em>) – Path to the PYPES JSON file</p></li>
+<li><p><strong>add_nodes</strong> (<em>bool</em>) – Whether to add additional nodes of Pumps</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pype_schema.logbook">
+<span id="pype-schema-logbook-module"></span><h2>pype_schema.logbook module<a class="headerlink" href="#module-pype_schema.logbook" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogCode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.logbook.</span></span><span class="sig-name descname"><span class="pre">LogCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#LogCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.LogCode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>Enum to represent codes associated with logbook entries</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogCode.Critical">
+<span class="sig-name descname"><span class="pre">Critical</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#pype_schema.logbook.LogCode.Critical" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogCode.Error">
+<span class="sig-name descname"><span class="pre">Error</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pype_schema.logbook.LogCode.Error" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogCode.Info">
+<span class="sig-name descname"><span class="pre">Info</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pype_schema.logbook.LogCode.Info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogCode.Warning">
+<span class="sig-name descname"><span class="pre">Warning</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pype_schema.logbook.LogCode.Warning" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogEntry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.logbook.</span></span><span class="sig-name descname"><span class="pre">LogEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LogCode.Info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#LogEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.LogEntry" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A single <cite>text</cite> log entry in the digital <cite>Logbook</cite> with associated <cite>timestamp</cite>
+and <cite>code</cite> (e.g., info or error)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>datetime.datetime</em>) – The timestamp for the entry</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text portion of the entry</p></li>
+<li><p><strong>code</strong> (<em>LogCode</em>) – The code associated with the entry. Default is Info</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><em>datetime.datetime</em></a>) – The timestamp for the entry</p></li>
+<li><p><strong>text</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The text portion of the entry</p></li>
+<li><p><strong>code</strong> (<a class="reference internal" href="#pype_schema.logbook.LogCode" title="pype_schema.logbook.LogCode"><em>LogCode</em></a>) – The code associated with the entry. Default is Info</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.LogEntry.pprint">
+<span class="sig-name descname"><span class="pre">pprint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#LogEntry.pprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.LogEntry.pprint" title="Permalink to this definition"></a></dt>
+<dd><p>Pretty print this entry</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.logbook.</span></span><span class="sig-name descname"><span class="pre">Logbook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A digital logbook with built-in querying.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>entries</strong> (<em>dict</em>) – Dictionary of the form { <cite>int</cite> : LogEntry }. Default is an empty dictionary</p>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>entries</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Dictionary of the form { <cite>int</cite> : LogEntry }</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.add_entry">
+<span class="sig-name descname"><span class="pre">add_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">LogCode.Info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.add_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.add_entry" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies <cite>self.entries</cite> to add the desired <cite>text</cite> with associated <cite>timestamp</cite>
+and <cite>code</cite> (e.g., info or error). Entries are saved with an automatically
+incremented counter as their ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>datetime.datetime</em>) – The timestamp for the entry to be added</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – Plaintext logbook entry</p></li>
+<li><p><strong>code</strong> (<em>LogCode</em>) – Code associated with the entry. Default is Info</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.load_entries">
+<span class="sig-name descname"><span class="pre">load_entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.load_entries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.load_entries" title="Permalink to this definition"></a></dt>
+<dd><p>Adds all the logbook entries from the given <cite>filepath</cite>.
+Supports both JSON and CSV file formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filpath</strong> (<em>str</em>) – The path to the file to load logbook entries from</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When file extension is not <cite>json</cite> or <cite>csv</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.next_entry_id">
+<span class="sig-name descname"><span class="pre">next_entry_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.next_entry_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.next_entry_id" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the next entry ID by checking the current maximum ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ID for the next logbook entry</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.print_query">
+<span class="sig-name descname"><span class="pre">print_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.print_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.print_query" title="Permalink to this definition"></a></dt>
+<dd><p>Queries logbook entries based on timestamp, keywords, and code.
+Pretty prints the queried entries, and then also returns them</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_dt</strong> (<em>datetime.datetime</em>) – First datetime to include in the timestamps of log entries to return.</p></li>
+<li><p><strong>end_dt</strong> (<em>datetime.datetime</em>) – Final datetime to include in the timestamps of log entries to return.
+None by default, meaning that all entries after <cite>start_dt</cite> will be returned</p></li>
+<li><p><strong>keyword</strong> (<em>str</em>) – Keyword to find in the log entry. None by default</p></li>
+<li><p><strong>code</strong> (<em>LogCode</em>) – The code associated with desired logbook entries.
+None by default, meaning all codes will be included</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of logbook entries between <cite>start_dt</cite> and <cite>end_dt</cite>
+that contain <cite>keyword</cite> and have a matching <cite>code</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.query">
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.query" title="Permalink to this definition"></a></dt>
+<dd><p>Queries logbook entries based on timestamp, keywords, and code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_dt</strong> (<em>datetime.datetime</em>) – First datetime to include in the timestamps of log entries to return.</p></li>
+<li><p><strong>end_dt</strong> (<em>datetime.datetime</em>) – Final datetime to include in the timestamps of log entries to return.
+None by default, meaning that all entries after <cite>start_dt</cite> will be returned</p></li>
+<li><p><strong>keyword</strong> (<em>str</em>) – Keyword to find in the log entry. None by default</p></li>
+<li><p><strong>code</strong> (<em>LogCode</em>) – The code associated with desired logbook entries.
+None by default, meaning all codes will be included</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of logbook entries between <cite>start_dt</cite> and <cite>end_dt</cite>
+that contain <cite>keyword</cite> and have a matching <cite>code</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.remove_entry">
+<span class="sig-name descname"><span class="pre">remove_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.remove_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.remove_entry" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies <cite>self.entries</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timestamp</strong> (<em>datetime.datetime</em>) – The timestamp for the entry to be removed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.save_query">
+<span class="sig-name descname"><span class="pre">save_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.save_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.save_query" title="Permalink to this definition"></a></dt>
+<dd><p>Queries logbook entries based on timestamp, keywords, and code.
+Saves the queried entries, and then also returns them</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_dt</strong> (<em>datetime.datetime</em>) – First datetime to include in the timestamps of log entries to return.</p></li>
+<li><p><strong>end_dt</strong> (<em>datetime.datetime</em>) – Final datetime to include in the timestamps of log entries to return.
+None by default, meaning that all entries after <cite>start_dt</cite> will be returned</p></li>
+<li><p><strong>keyword</strong> (<em>str</em>) – Keyword to find in the log entry. None by default</p></li>
+<li><p><strong>code</strong> (<em>LogCode</em>) – The code associated with desired logbook entries.
+None by default, meaning all codes will be included</p></li>
+<li><p><strong>outpath</strong> (<em>str</em>) – Path where logbook will be saved. Supported filetypes are JSON and CSV.
+Default path is “”, meaning that no file will be written</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of logbook entries between <cite>start_dt</cite> and <cite>end_dt</cite>
+that contain <cite>keyword</cite> and have a matching <cite>code</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.to_csv">
+<span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.to_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Save the current Logbook as a CSV file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>outpath</strong> (<em>str</em>) – Path where logbook will be saved.
+Default is “”, meaning no file will be saved</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>csv in DataFrame format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)">pandas.DataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.logbook.Logbook.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/logbook.html#Logbook.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.logbook.Logbook.to_json" title="Permalink to this definition"></a></dt>
+<dd><p>Save the current Logbook as a JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outpath</strong> (<em>str</em>) – Path where logbook will be saved.
+Default is “”, meaning that no file will be written</p></li>
+<li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file. Default is 4</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>json in dictionary format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1385,6 +1720,23 @@ such as sand filters, trickling filters, or reverse osmosis membranes.</p>
 <li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate of a single flare</p></li>
 <li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate of a single flare</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this flare</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.node.Joint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Joint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Joint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Joint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+<p>A joint in the network, where multiple pipes meet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Joint ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the joint</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the joint</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this joint</p></li>
 </ul>
 </dd>
 </dl>
@@ -2528,7 +2880,7 @@ the value at time t+1 and t</p>
 <dd class="field-even"><p>Rate of change variable or tuple of netative, positive rate of change variable</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.2.3)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.2.3)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3089,8 +3441,9 @@ parsed into JSON format</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>network</strong> (<em>node.Network</em>) – Network object to export to JSON</p></li>
-<li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format</p></li>
-<li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – path to write the configuration in JSON format.
+Default is None, meaning that no file will be written</p></li>
+<li><p><strong>indent</strong> (<em>int</em>) – number of spaces to indent the JSON file. Default is 4</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print informative messages for debugging. Default is False</p></li>
 </ul>
 </dd>
@@ -3136,8 +3489,30 @@ parsed into JSON format</p>
 <section id="module-pype_schema.tag">
 <span id="pype-schema-tag-module"></span><h2>pype_schema.tag module<a class="headerlink" href="#module-pype_schema.tag" title="Permalink to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.tag.DownsampleType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">DownsampleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#DownsampleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.DownsampleType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>Enum to represent common methods of downsampling data</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.DownsampleType.Average">
+<span class="sig-name descname"><span class="pre">Average</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pype_schema.tag.DownsampleType.Average" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.DownsampleType.Decimation">
+<span class="sig-name descname"><span class="pre">Decimation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pype_schema.tag.DownsampleType.Decimation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.DownsampleType.Reservoir">
+<span class="sig-name descname"><span class="pre">Reservoir</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pype_schema.tag.DownsampleType.Reservoir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.tag.Tag">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">Tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_unit_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manufacturer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_freq=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_freq=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_method=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration=&lt;pype_schema.logbook.Logbook</span> <span class="pre">entries:{}&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class to represent a SCADA or other data tag</p>
 <dl class="field-list simple">
@@ -3155,6 +3530,11 @@ None if the Tag is associated with a Node object instead of a Connection</p></li
 <li><p><strong>parent_id</strong> (<em>str</em>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>totalized</strong> (<em>bool</em>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Data stream contents. E.g., <cite>WasteActivatedSludge</cite> or <cite>NaturalGas</cite></p></li>
+<li><p><strong>manufacturer</strong> (<em>str</em>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
+<li><p><strong>measure_freq</strong> (<em>pint.Quantity</em>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<em>pint.Quantity</em>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>downsample_method</strong> (<em>DownsampleType</em>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
+<li><p><strong>calibration</strong> (<em>Logbook</em>) – A history of sensor calibration.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
@@ -3167,11 +3547,21 @@ across all units of the sources node</p></li>
 <li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the destination node</p></li>
 <li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
-<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False by default</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+<li><p><strong>manufacturer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
+<li><p><strong>measure_freq</strong> (<em>pint.Quantity</em>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<em>pint.Quantity</em>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>downsample_method</strong> (<a class="reference internal" href="tag.html#pype_schema.tag.DownsampleType" title="pype_schema.tag.DownsampleType"><em>DownsampleType</em></a>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
+<li><p><strong>calibration</strong> (<a class="reference internal" href="#pype_schema.logbook.Logbook" title="pype_schema.logbook.Logbook"><em>Logbook</em></a>) – A history of sensor calibration.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.calibration">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration</span></span><a class="headerlink" href="#pype_schema.tag.Tag.calibration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pype_schema.tag.Tag.check_type_compatibility">
 <span class="sig-name descname"><span class="pre">check_type_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.check_type_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.check_type_compatibility" title="Permalink to this definition"></a></dt>
@@ -3188,6 +3578,101 @@ across all units of the destination node</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.del_calibration">
+<span class="sig-name descname"><span class="pre">del_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.del_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.del_calibration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.del_downsample_method">
+<span class="sig-name descname"><span class="pre">del_downsample_method</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.del_downsample_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.del_downsample_method" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.del_manufacturer">
+<span class="sig-name descname"><span class="pre">del_manufacturer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.del_manufacturer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.del_manufacturer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.del_measure_freq">
+<span class="sig-name descname"><span class="pre">del_measure_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.del_measure_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.del_measure_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.del_report_freq">
+<span class="sig-name descname"><span class="pre">del_report_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.del_report_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.del_report_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.downsample_method">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">downsample_method</span></span><a class="headerlink" href="#pype_schema.tag.Tag.downsample_method" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.get_calibration">
+<span class="sig-name descname"><span class="pre">get_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.get_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.get_calibration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.get_downsample_method">
+<span class="sig-name descname"><span class="pre">get_downsample_method</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.get_downsample_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.get_downsample_method" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.get_manufacturer">
+<span class="sig-name descname"><span class="pre">get_manufacturer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.get_manufacturer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.get_manufacturer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.get_measure_freq">
+<span class="sig-name descname"><span class="pre">get_measure_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.get_measure_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.get_measure_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.get_report_freq">
+<span class="sig-name descname"><span class="pre">get_report_freq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.get_report_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.get_report_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.manufacturer">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">manufacturer</span></span><a class="headerlink" href="#pype_schema.tag.Tag.manufacturer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.measure_freq">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measure_freq</span></span><a class="headerlink" href="#pype_schema.tag.Tag.measure_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.report_freq">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">report_freq</span></span><a class="headerlink" href="#pype_schema.tag.Tag.report_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.set_calibration">
+<span class="sig-name descname"><span class="pre">set_calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibration</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.set_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.set_calibration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.set_downsample_method">
+<span class="sig-name descname"><span class="pre">set_downsample_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downsample_method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.set_downsample_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.set_downsample_method" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.set_manufacturer">
+<span class="sig-name descname"><span class="pre">set_manufacturer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manufacturer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.set_manufacturer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.set_manufacturer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.set_measure_freq">
+<span class="sig-name descname"><span class="pre">set_measure_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measure_freq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.set_measure_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.set_measure_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.Tag.set_report_freq">
+<span class="sig-name descname"><span class="pre">set_report_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_freq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#Tag.set_report_freq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.Tag.set_report_freq" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -3269,6 +3754,11 @@ across all units of the destination node</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.tag.TagType.RunTime">
 <span class="sig-name descname"><span class="pre">RunTime</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#pype_schema.tag.TagType.RunTime" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.tag.TagType.SetPoint">
+<span class="sig-name descname"><span class="pre">SetPoint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#pype_schema.tag.TagType.SetPoint" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -3620,6 +4110,16 @@ whether they are sludge, water, or gas</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.CoagulatedWater">
 <span class="sig-name descname"><span class="pre">CoagulatedWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.CoagulatedWater" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.ControlSignal">
+<span class="sig-name descname"><span class="pre">ControlSignal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ControlSignal" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.DataTransfer">
+<span class="sig-name descname"><span class="pre">DataTransfer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DataTransfer" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4042,7 +4542,7 @@ unit ID, and contents</p>
 <span id="pype-schema-visualize-module"></span><h2>pype_schema.visualize module<a class="headerlink" href="#module-pype_schema.visualize" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pype_schema.visualize.draw_graph">
-<span class="sig-prename descclassname"><span class="pre">pype_schema.visualize.</span></span><span class="sig-name descname"><span class="pre">draw_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyvis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/visualize.html#draw_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.visualize.draw_graph" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pype_schema.visualize.</span></span><span class="sig-name descname"><span class="pre">draw_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyvis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/visualize.html#draw_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.visualize.draw_graph" title="Permalink to this definition"></a></dt>
 <dd><p>Draw all of the nodes and connections in the given network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -4050,6 +4550,8 @@ unit ID, and contents</p>
 <li><p><strong>network</strong> (<em>Network</em>) – <cite>Network</cite> object to draw</p></li>
 <li><p><strong>pyvis</strong> (<em>bool</em>) – Whether to draw the graph with PyVis or Networkx.
 False (networkx) by default</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path to the desired output.
+Default is None, meaning the file will be saved as <cite>networkd.id</cite> + extension</p></li>
 </ul>
 </dd>
 </dl>

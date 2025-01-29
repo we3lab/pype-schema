@@ -64,6 +64,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
@@ -95,12 +96,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.operations</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>  <span class="c1"># noqa: F401</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>  <span class="c1"># noqa: F401</span>
 
 
-<div class="viewcode-block" id="get_change"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.operations.get_change">[docs]</a><span class="k">def</span> <span class="nf">get_change</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="get_change"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.operations.get_change">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_change</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts cumulative value to rate-of-change value using finite differences</span>
 <span class="sd">    Note: assumes rate of change at time t is equal to the difference between</span>
 <span class="sd">    the value at time t+1 and t</span>

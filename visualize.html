@@ -66,6 +66,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">visualize</a><ul>
@@ -109,7 +110,7 @@
 <p>This module consists of a single function, which draws a graph to visualize a configuration.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pype_schema.visualize.draw_graph">
-<span class="sig-prename descclassname"><span class="pre">pype_schema.visualize.</span></span><span class="sig-name descname"><span class="pre">draw_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyvis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/visualize.html#draw_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.visualize.draw_graph" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pype_schema.visualize.</span></span><span class="sig-name descname"><span class="pre">draw_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pyvis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/visualize.html#draw_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.visualize.draw_graph" title="Permalink to this definition"></a></dt>
 <dd><p>Draw all of the nodes and connections in the given network</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -117,6 +118,8 @@
 <li><p><strong>network</strong> (<em>Network</em>) – <cite>Network</cite> object to draw</p></li>
 <li><p><strong>pyvis</strong> (<em>bool</em>) – Whether to draw the graph with PyVis or Networkx.
 False (networkx) by default</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path to the desired output.
+Default is None, meaning the file will be saved as <cite>networkd.id</cite> + extension</p></li>
 </ul>
 </dd>
 </dl>

@@ -71,13 +71,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.connection.Connection.remove_tag"><code class="docutils literal notranslate"><span class="pre">Connection.remove_tag()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#pype_schema.connection.Pipe"><code class="docutils literal notranslate"><span class="pre">Pipe</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.connection.Pipe.set_flow_rate"><code class="docutils literal notranslate"><span class="pre">Pipe.set_flow_rate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.connection.Pipe.set_heating_values"><code class="docutils literal notranslate"><span class="pre">Pipe.set_heating_values()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.connection.Pipe.set_pressure"><code class="docutils literal notranslate"><span class="pre">Pipe.set_pressure()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.connection.Delivery"><code class="docutils literal notranslate"><span class="pre">Delivery</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.connection.Wire"><code class="docutils literal notranslate"><span class="pre">Wire</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.connection.Wireless"><code class="docutils literal notranslate"><span class="pre">Wireless</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
@@ -90,6 +86,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
@@ -128,7 +125,7 @@
 <section id="connection">
 <span id="id1"></span><h1><a class="toc-backref" href="#id2" role="doc-backlink">connection</a><a class="headerlink" href="#connection" title="Permalink to this heading"></a></h1>
 <p>This module consists of an abstract parent class, <code class="docutils literal notranslate"><span class="pre">Connection</span></code>, and three child classes,
-<code class="docutils literal notranslate"><span class="pre">Pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">Pump</span></code>, and <code class="docutils literal notranslate"><span class="pre">Wire</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">Pipe</span></code>, <code class="docutils literal notranslate"><span class="pre">Delivery</span></code>, <code class="docutils literal notranslate"><span class="pre">Wire</span></code>, and <code class="docutils literal notranslate"><span class="pre">Wireless</span></code>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Connection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><a class="reference internal" href="_modules/pype_schema/connection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Connection" title="Permalink to this definition"></a></dt>
@@ -298,29 +295,25 @@ returning its entry point if <cite>recurse</cite> is True</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pype_schema.connection.Pipe">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_pres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_heating_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe" title="Permalink to this definition"></a></dt>
-<dd><p>A generic class for pipes that transport any fluid,
-such as drinking water, natural gas, or industrial wastewater.</p>
+<dt class="sig sig-object py" id="pype_schema.connection.Delivery">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Delivery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Delivery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Delivery" title="Permalink to this definition"></a></dt>
+<dd><p>A class to represent a connection via delivery,
+such as monthly chemical deliveries or weekly trash disposal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>str</em>) – Pipe ID</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – Delivery ID</p></li>
 <li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection</p></li>
 <li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
-<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate through the pipe</p></li>
-<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate through the pipe</p></li>
-<li><p><strong>avg_flow</strong> (<em>pint.Quantity or int</em>) – Average flow rate through the pipe</p></li>
-<li><p><strong>diameter</strong> (<em>pint.Quantity or int</em>) – Pipe diameter</p></li>
-<li><p><strong>friction</strong> (<em>float</em>) – Friction coefficient for the pipe</p></li>
-<li><p><strong>min_pres</strong> (<em>pint.Quantity or int</em>) – Minimum pressure inside the pipe</p></li>
-<li><p><strong>max_pres</strong> (<em>pint.Quantity or int</em>) – Maximum pressure inside the pipe</p></li>
-<li><p><strong>design_pres</strong> (<em>pint.Quantity or int</em>) – Design pressure of the pipe</p></li>
-<li><p><strong>lower_heating_value</strong> (<em>float</em>) – Lower heating value of gas in the pipe</p></li>
-<li><p><strong>higher_heating_value</strong> (<em>float</em>) – Higher heating value of gas in the pipe</p></li>
-<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<em>bool</em>) – Whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>frequency</strong> (<em>pint.Quantity or float</em>) – If a pint quantity it will be interpreted based on units.
+E.g., <cite>0.25 days</cite> will be interpreted as 0.25 days between deliveries,
+or in other words 4 deliveries per day.
+Whereas <cite>0.25 / day</cite> would indicate there is a quarter of a delivery per day,
+or more intuitively 4 days between each delivery.
+If unitless, assumed to be number of days between delivery</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this pump</p></li>
+<li><p><strong>bidirectional</strong> (<em>bool</em>) – Whether deliveries are made from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<em>Node</em>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<em>Node</em>) – The child node at which this connection enters its destination.
@@ -330,21 +323,11 @@ Default is None, indicating the destination does not have any children</p></li>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
-<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Minimum flow rate through the pipe</p></li>
-<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate through the pipe</p></li>
-<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate through the pipe</p></li>
-<li><p><strong>diameter</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Pipe diameter</p></li>
-<li><p><strong>friction_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Friction coefficient for the pipe</p></li>
-<li><p><strong>min_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Minimum pressure inside the pipe</p></li>
-<li><p><strong>max_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum pressure inside the pipe</p></li>
-<li><p><strong>design_pressure</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design pressure of the pipe</p></li>
-<li><p><strong>heating_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – The lower and higher heating values of the gas in the pipe.
-None if the pipe is not transporting gas</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether deliveries are made from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
@@ -352,60 +335,17 @@ Default is None, indicating the destination does not have any children</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_flow_rate">
-<span class="sig-name descname"><span class="pre">set_flow_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_flow_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_flow_rate" title="Permalink to this definition"></a></dt>
-<dd><p>Set the minimum, maximum, and average flow rate through the connection</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>min</strong> (<em>int</em>) – Minimum flow rate through the connection</p></li>
-<li><p><strong>max</strong> (<em>int</em>) – Maximum flow rate through the connection</p></li>
-<li><p><strong>design</strong> (<em>int</em>) – Design flow rate through the connection</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_heating_values">
-<span class="sig-name descname"><span class="pre">set_heating_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lower</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_heating_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_heating_values" title="Permalink to this definition"></a></dt>
-<dd><p>Set the lower and higher heating values for gas in the connection</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lower</strong> (<em>float</em>) – Lower heating value of gas in the pipe</p></li>
-<li><p><strong>higher</strong> (<em>float</em>) – Higher heating value of gas in the pipe</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.connection.Pipe.set_pressure">
-<span class="sig-name descname"><span class="pre">set_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Pipe.set_pressure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Pipe.set_pressure" title="Permalink to this definition"></a></dt>
-<dd><p>Set the minimum, maximum, and average pressure inside the connection</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>min</strong> (<em>int</em>) – Minimum pressure inside the connection</p></li>
-<li><p><strong>max</strong> (<em>int</em>) – Maximum pressure inside the connection</p></li>
-<li><p><strong>design</strong> (<em>int</em>) – Design pressure inside the connection</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.connection.Wire">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wire"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wire" title="Permalink to this definition"></a></dt>
 <dd><p>A class for representing electrical connections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Wire ID</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this wire</p></li>
@@ -424,6 +364,42 @@ Default is None, indicating the destination does not have any children</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
 <li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.connection.Wireless">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.connection.</span></span><span class="sig-name descname"><span class="pre">Wireless</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bidirectional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/connection.html#Wireless"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.connection.Wireless" title="Permalink to this definition"></a></dt>
+<dd><p>A class for representing electrical connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Wireless connection ID</p></li>
+<li><p><strong>contents</strong> (<em>ContentsType</em>) – Contents moving through the connection.</p></li>
+<li><p><strong>source</strong> (<em>Node</em>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<em>Node</em>) – Endpoint of the connection</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this wire</p></li>
+<li><p><strong>bidirectional</strong> (<em>bool</em>) – Whether data can flow from destination to source. False by default</p></li>
+<li><p><strong>exit_point</strong> (<em>Node</em>) – The child node from which this connection leaves its source.
+Default is None, indicating the source does not have any children</p></li>
+<li><p><strong>entry_point</strong> (<em>Node</em>) – The child node at which this connection enters its destination.
+Default is None, indicating the destination does not have any children</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
+<li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
+<li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether data can flow from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pype_schema.logbook &mdash; PyPES 0.5.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PyPES
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hello.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../json_rep.html">JSON Representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tag.html">tag</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logbook.html">logbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../operations.html">operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyPES</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../pype_schema.html">pype_schema</a></li>
+      <li class="breadcrumb-item active">pype_schema.logbook</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pype_schema.logbook</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dateutil.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span>
+
+
+<div class="viewcode-block" id="LogCode"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.LogCode">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LogCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent codes associated with logbook entries&quot;&quot;&quot;</span>
+
+    <span class="n">Info</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="ne">Warning</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Error</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Critical</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LogEntry"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.LogEntry">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LogEntry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A single `text` log entry in the digital `Logbook` with associated `timestamp`</span>
+<span class="sd">    and `code` (e.g., info or error)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    timestamp : datetime.datetime</span>
+<span class="sd">        The timestamp for the entry</span>
+
+<span class="sd">    text : str</span>
+<span class="sd">        The text portion of the entry</span>
+
+<span class="sd">    code : LogCode</span>
+<span class="sd">        The code associated with the entry. Default is Info</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    timestamp : datetime.datetime</span>
+<span class="sd">        The timestamp for the entry</span>
+
+<span class="sd">    text : str</span>
+<span class="sd">        The text portion of the entry</span>
+
+<span class="sd">    code : LogCode</span>
+<span class="sd">        The code associated with the entry. Default is Info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">LogCode</span><span class="o">.</span><span class="n">Info</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">timestamp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">LogCode</span><span class="o">.</span><span class="n">Info</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">timestamp</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">text</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">code</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.logbook.LogEntry timestamp:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;text:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> code:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">))</span>
+
+<div class="viewcode-block" id="LogEntry.pprint"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.LogEntry.pprint">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">pprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pretty print this entry&quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="o">.</span><span class="n">name</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;{</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2">, %Y %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">}&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Logbook"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Logbook</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A digital logbook with built-in querying.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entries : dict</span>
+<span class="sd">        Dictionary of the form { `int` : LogEntry }. Default is an empty dictionary</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entries : dict</span>
+<span class="sd">        Dictionary of the form { `int` : LogEntry }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entries</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">entries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="n">entries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">entries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.logbook.Logbook entries:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Logbook.next_entry_id"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.next_entry_id">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_entry_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the next entry ID by checking the current maximum ID</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            ID for the next logbook entry</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">entry_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">entry_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">entry_id</span></div>
+
+<div class="viewcode-block" id="Logbook.add_entry"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.add_entry">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">LogCode</span><span class="o">.</span><span class="n">Info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modifies `self.entries` to add the desired `text` with associated `timestamp`</span>
+<span class="sd">        and `code` (e.g., info or error). Entries are saved with an automatically</span>
+<span class="sd">        incremented counter as their ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timestamp : datetime.datetime</span>
+<span class="sd">            The timestamp for the entry to be added</span>
+
+<span class="sd">        text : str</span>
+<span class="sd">            Plaintext logbook entry</span>
+
+<span class="sd">        code : LogCode</span>
+<span class="sd">            Code associated with the entry. Default is Info</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">LogEntry</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_entry_id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">entry</span></div>
+
+<div class="viewcode-block" id="Logbook.remove_entry"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.remove_entry">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Modifies `self.entries`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timestamp : datetime.datetime</span>
+<span class="sd">            The timestamp for the entry to be removed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="n">entry_id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Logbook.load_entries"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.load_entries">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">load_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds all the logbook entries from the given `filepath`.</span>
+<span class="sd">        Supports both JSON and CSV file formats.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filpath : str</span>
+<span class="sd">            The path to the file to load logbook entries from</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            When file extension is not `json` or `csv`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.csv&quot;</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+            <span class="n">new_timestamps</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="n">new_entries</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_codes</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">LogCode</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">new_codes</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_entries</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">code</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">new_timestamps</span><span class="p">,</span> <span class="n">new_entries</span><span class="p">,</span> <span class="n">new_codes</span><span class="p">):</span>
+                <span class="n">entry</span> <span class="o">=</span> <span class="n">LogEntry</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_entry_id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">entry</span>
+        <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">entry_list</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;entries&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entry_list</span><span class="p">:</span>
+                <span class="n">timestamp</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">],</span> <span class="n">fuzzy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;code&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">code</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">code</span> <span class="o">=</span> <span class="n">LogCode</span><span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]]</span>
+
+                <span class="n">entry</span> <span class="o">=</span> <span class="n">LogEntry</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_entry_id</span><span class="p">()]</span> <span class="o">=</span> <span class="n">entry</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid file extension </span><span class="si">{}</span><span class="s2">. Only CSV and JSON are supported&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">file_extension</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Logbook.to_json"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.to_json">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save the current Logbook as a JSON file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        outpath : str</span>
+<span class="sd">            Path where logbook will be saved.</span>
+<span class="sd">            Default is &quot;&quot;, meaning that no file will be written</span>
+
+<span class="sd">        indent : int</span>
+<span class="sd">            number of spaces to indent the JSON file. Default is 4</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            json in dictionary format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">entry_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2">, %Y %H:%M:%S&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                    <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">code</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;entries&quot;</span><span class="p">:</span> <span class="n">entry_list</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">outpath</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Logbook.to_csv"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.to_csv">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save the current Logbook as a CSV file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        outpath : str</span>
+<span class="sd">            Path where logbook will be saved.</span>
+<span class="sd">            Default is &quot;&quot;, meaning no file will be saved</span>
+
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            csv in DataFrame format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entry_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">entry_dict</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">timestamp</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%b </span><span class="si">%d</span><span class="s2">, %Y %H:%M:%S&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">entry_dict</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">entry_dict</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">code</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">entry_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">entry_dict</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">outpath</span><span class="p">:</span>
+            <span class="n">entry_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entry_df</span></div>
+
+<div class="viewcode-block" id="Logbook.query"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.query">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Queries logbook entries based on timestamp, keywords, and code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_dt : datetime.datetime</span>
+<span class="sd">            First datetime to include in the timestamps of log entries to return.</span>
+
+<span class="sd">        end_dt : datetime.datetime</span>
+<span class="sd">            Final datetime to include in the timestamps of log entries to return.</span>
+<span class="sd">            None by default, meaning that all entries after `start_dt` will be returned</span>
+
+<span class="sd">        keyword : str</span>
+<span class="sd">            Keyword to find in the log entry. None by default</span>
+
+<span class="sd">        code : LogCode</span>
+<span class="sd">            The code associated with desired logbook entries.</span>
+<span class="sd">            None by default, meaning all codes will be included</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of logbook entries between `start_dt` and `end_dt`</span>
+<span class="sd">            that contain `keyword` and have a matching `code`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valid_entries</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">entry_id</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">&gt;=</span> <span class="n">start_dt</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">end_dt</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">&lt;=</span> <span class="n">end_dt</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">keyword</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">code</span> <span class="o">==</span> <span class="n">entry</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">valid_entries</span><span class="p">[</span><span class="n">entry_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+
+        <span class="k">return</span> <span class="n">valid_entries</span></div>
+
+<div class="viewcode-block" id="Logbook.print_query"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.print_query">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">print_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Queries logbook entries based on timestamp, keywords, and code.</span>
+<span class="sd">        Pretty prints the queried entries, and then also returns them</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_dt : datetime.datetime</span>
+<span class="sd">            First datetime to include in the timestamps of log entries to return.</span>
+
+<span class="sd">        end_dt : datetime.datetime</span>
+<span class="sd">            Final datetime to include in the timestamps of log entries to return.</span>
+<span class="sd">            None by default, meaning that all entries after `start_dt` will be returned</span>
+
+<span class="sd">        keyword : str</span>
+<span class="sd">            Keyword to find in the log entry. None by default</span>
+
+<span class="sd">        code : LogCode</span>
+<span class="sd">            The code associated with desired logbook entries.</span>
+<span class="sd">            None by default, meaning all codes will be included</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of logbook entries between `start_dt` and `end_dt`</span>
+<span class="sd">            that contain `keyword` and have a matching `code`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">pprint</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">entries</span></div>
+
+<div class="viewcode-block" id="Logbook.save_query"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.logbook.Logbook.save_query">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Queries logbook entries based on timestamp, keywords, and code.</span>
+<span class="sd">        Saves the queried entries, and then also returns them</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_dt : datetime.datetime</span>
+<span class="sd">            First datetime to include in the timestamps of log entries to return.</span>
+
+<span class="sd">        end_dt : datetime.datetime</span>
+<span class="sd">            Final datetime to include in the timestamps of log entries to return.</span>
+<span class="sd">            None by default, meaning that all entries after `start_dt` will be returned</span>
+
+<span class="sd">        keyword : str</span>
+<span class="sd">            Keyword to find in the log entry. None by default</span>
+
+<span class="sd">        code : LogCode</span>
+<span class="sd">            The code associated with desired logbook entries.</span>
+<span class="sd">            None by default, meaning all codes will be included</span>
+
+<span class="sd">        outpath : str</span>
+<span class="sd">            Path where logbook will be saved. Supported filetypes are JSON and CSV.</span>
+<span class="sd">            Default path is &quot;&quot;, meaning that no file will be written</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary of logbook entries between `start_dt` and `end_dt`</span>
+<span class="sd">            that contain `keyword` and have a matching `code`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check file path and can throw exception before querying for efficiency</span>
+        <span class="k">if</span> <span class="n">outpath</span><span class="p">:</span>
+            <span class="n">base</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;.csv&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Only `.json` and `.csv` are supported extensions&quot;</span><span class="p">)</span>
+
+        <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">start_dt</span><span class="p">,</span> <span class="n">end_dt</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="n">queried_logbook</span> <span class="o">=</span> <span class="n">Logbook</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">outpath</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+                <span class="n">queried_logbook</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">outpath</span><span class="o">=</span><span class="n">outpath</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># if not JSON must be CSV given check above</span>
+                <span class="n">queried_logbook</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outpath</span><span class="o">=</span><span class="n">outpath</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entries</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, WE3 Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
