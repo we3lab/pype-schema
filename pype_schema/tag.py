@@ -333,7 +333,9 @@ class Tag:
     def del_downsample_method(self):
         del self._downsample_method
 
-    downsample_method = property(get_downsample_method, set_downsample_method, del_downsample_method)
+    downsample_method = property(
+        get_downsample_method, set_downsample_method, del_downsample_method
+    )
 
     def get_calibration(self):
         try:

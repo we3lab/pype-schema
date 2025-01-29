@@ -64,7 +64,7 @@ class LogEntry:
             f"<pype_schema.logbook.LogEntry timestamp:{self.timestamp} "
             f"text:{self.text} code:{self.code}>\n"
         )
-    
+
     def __hash__(self):
         return hash((self.timestamp, self.text, self.code))
 
@@ -90,7 +90,7 @@ class Logbook:
     """
 
     def __init__(self, entries=None):
-        if entries is None: 
+        if entries is None:
             self.entries = {}
         else:
             self.entries = entries
@@ -247,7 +247,9 @@ class Logbook:
         """
         entry_dict = {"timestamp": [], "text": [], "code": []}
         for entry in self.entries.values():
-            entry_dict["timestamp"].append(entry.timestamp.strftime("%b %d, %Y %H:%M:%S"))
+            entry_dict["timestamp"].append(
+                entry.timestamp.strftime("%b %d, %Y %H:%M:%S")
+            )
             entry_dict["text"].append(entry.text)
             entry_dict["code"].append(entry.code.name)
 
@@ -363,7 +365,7 @@ class Logbook:
 
         entries = self.query(start_dt, end_dt, keyword, code)
         queried_logbook = Logbook(entries)
-        if outpath: 
+        if outpath:
             if ext == ".json":
                 queried_logbook.to_json(outpath=outpath)
             else:  # if not JSON must be CSV given check above

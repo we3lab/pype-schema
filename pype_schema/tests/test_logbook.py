@@ -23,7 +23,7 @@ pint.set_application_registry(u)
     "log_path, expected",
     [
         (
-            "data/sample_log.json", 
+            "data/sample_log.json",
             Logbook(
                 {
                     0: LogEntry(
@@ -44,15 +44,15 @@ pint.set_application_registry(u)
                     3: LogEntry(
                         datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Potential clog in grit chamber sump.",
-                        LogCode.Warning
+                        LogCode.Warning,
                     ),
                     4: LogEntry(
                         datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Influent station failure forced facility shutdown.",
-                        LogCode.Critical
+                        LogCode.Critical,
                     ),
                 }
-            )
+            ),
         ),
     ],
 )
@@ -67,7 +67,7 @@ def test_load_entries(log_path, expected):
     "log_path, timestamp, text, code, expected",
     [
         (
-            "data/sample_log.json", 
+            "data/sample_log.json",
             datetime.strptime("2019-11-24 22:00:00", "%Y-%m-%d %H:%M:%S"),
             "Change of shift. System operating as normal.",
             LogCode.Info,
@@ -91,20 +91,20 @@ def test_load_entries(log_path, expected):
                     3: LogEntry(
                         datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Potential clog in grit chamber sump.",
-                        LogCode.Warning
+                        LogCode.Warning,
                     ),
                     4: LogEntry(
                         datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Influent station failure forced facility shutdown.",
-                        LogCode.Critical
+                        LogCode.Critical,
                     ),
                     5: LogEntry(
                         datetime.strptime("2019-11-24 22:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Change of shift. System operating as normal.",
                         LogCode.Info,
-                    )
+                    ),
                 }
-            )
+            ),
         ),
     ],
 )
@@ -120,7 +120,7 @@ def test_add_entry(log_path, timestamp, text, code, expected):
     "log_path, removal_id, expected",
     [
         (
-            "data/sample_log.json", 
+            "data/sample_log.json",
             0,
             Logbook(
                 {
@@ -137,18 +137,18 @@ def test_add_entry(log_path, timestamp, text, code, expected):
                     3: LogEntry(
                         datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Potential clog in grit chamber sump.",
-                        LogCode.Warning
+                        LogCode.Warning,
                     ),
                     4: LogEntry(
                         datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Influent station failure forced facility shutdown.",
-                        LogCode.Critical
+                        LogCode.Critical,
                     ),
                 }
-            )
+            ),
         ),
         (
-            "data/sample_log.json", 
+            "data/sample_log.json",
             3,
             Logbook(
                 {
@@ -170,10 +170,10 @@ def test_add_entry(log_path, timestamp, text, code, expected):
                     4: LogEntry(
                         datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                         "Influent station failure forced facility shutdown.",
-                        LogCode.Critical
+                        LogCode.Critical,
                     ),
                 }
-            )
+            ),
         ),
     ],
 )
@@ -186,7 +186,7 @@ def test_remove_entry(log_path, removal_id, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "csv_log_path, outpath, json_log_path", 
+    "csv_log_path, outpath, json_log_path",
     [("data/sample_log.csv", "", "data/output_log.json")],
 )
 def test_to_json(csv_log_path, outpath, json_log_path):
@@ -200,7 +200,7 @@ def test_to_json(csv_log_path, outpath, json_log_path):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_log_path, outpath, csv_log_path", 
+    "json_log_path, outpath, csv_log_path",
     [("data/sample_log.json", "", "data/output_log.csv")],
 )
 def test_to_csv(json_log_path, outpath, csv_log_path):
@@ -216,11 +216,11 @@ def test_to_csv(json_log_path, outpath, csv_log_path):
     "log_path, start_dt, end_dt, keyword, code, expected",
     [
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            None, 
-            None, 
-            None, 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            None,
+            None,
+            None,
             {
                 0: LogEntry(
                     datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
@@ -240,40 +240,21 @@ def test_to_csv(json_log_path, outpath, csv_log_path):
                 3: LogEntry(
                     datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Potential clog in grit chamber sump.",
-                    LogCode.Warning
+                    LogCode.Warning,
                 ),
                 4: LogEntry(
                     datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Influent station failure forced facility shutdown.",
-                    LogCode.Critical
+                    LogCode.Critical,
                 ),
-            }
+            },
         ),
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            None, 
-            None, 
-            LogCode.Info, 
-            {
-                0: LogEntry(
-                    datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
-                    "Change of shift. System operating as normal.",
-                    LogCode.Info,
-                ),
-                1: LogEntry(
-                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
-                    "Sludge samples taken from primary and secondary clarifiers.",
-                    LogCode.Info,
-                ),
-            }
-        ),
-        (
-            "data/sample_log.json", 
-            datetime(2019, 11, 23, 0, 0, 0), 
-            datetime(2019, 11, 24, 0, 0, 0), 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
             None,
-            None, 
+            None,
+            LogCode.Info,
             {
                 0: LogEntry(
                     datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
@@ -285,68 +266,87 @@ def test_to_csv(json_log_path, outpath, csv_log_path):
                     "Sludge samples taken from primary and secondary clarifiers.",
                     LogCode.Info,
                 ),
-            }
+            },
         ),
         (
-            "data/sample_log.json", 
-            datetime(2019, 11, 23, 0, 0, 0), 
-            datetime(2019, 11, 24, 0, 0, 0), 
+            "data/sample_log.json",
+            datetime(2019, 11, 23, 0, 0, 0),
+            datetime(2019, 11, 24, 0, 0, 0),
+            None,
+            None,
+            {
+                0: LogEntry(
+                    datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
+                    "Change of shift. System operating as normal.",
+                    LogCode.Info,
+                ),
+                1: LogEntry(
+                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
+                    "Sludge samples taken from primary and secondary clarifiers.",
+                    LogCode.Info,
+                ),
+            },
+        ),
+        (
+            "data/sample_log.json",
+            datetime(2019, 11, 23, 0, 0, 0),
+            datetime(2019, 11, 24, 0, 0, 0),
             "samples",
-            None, 
-            {
-                1: LogEntry(
-                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
-                    "Sludge samples taken from primary and secondary clarifiers.",
-                    LogCode.Info,
-                ),
-            }
-        ),
-        (
-            "data/sample_log.json", 
-            datetime(2019, 11, 23, 0, 0, 0), 
-            datetime(2019, 11, 24, 0, 0, 0), 
-            ".",
-            LogCode.Info, 
-            {
-                0: LogEntry(
-                    datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
-                    "Change of shift. System operating as normal.",
-                    LogCode.Info,
-                ),
-                1: LogEntry(
-                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
-                    "Sludge samples taken from primary and secondary clarifiers.",
-                    LogCode.Info,
-                ),
-            }
-        ),
-        (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
             None,
-            "shift", 
-            LogCode.Info, 
+            {
+                1: LogEntry(
+                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
+                    "Sludge samples taken from primary and secondary clarifiers.",
+                    LogCode.Info,
+                ),
+            },
+        ),
+        (
+            "data/sample_log.json",
+            datetime(2019, 11, 23, 0, 0, 0),
+            datetime(2019, 11, 24, 0, 0, 0),
+            ".",
+            LogCode.Info,
             {
                 0: LogEntry(
                     datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Change of shift. System operating as normal.",
                     LogCode.Info,
                 ),
-            }
+                1: LogEntry(
+                    datetime.strptime("2019-11-23 11:30:00", "%Y-%m-%d %H:%M:%S"),
+                    "Sludge samples taken from primary and secondary clarifiers.",
+                    LogCode.Info,
+                ),
+            },
         ),
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            datetime(2019, 11, 23, 0, 0), 
-            None, 
-            None, 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            None,
+            "shift",
+            LogCode.Info,
+            {
+                0: LogEntry(
+                    datetime.strptime("2019-11-23 22:00:00", "%Y-%m-%d %H:%M:%S"),
+                    "Change of shift. System operating as normal.",
+                    LogCode.Info,
+                ),
+            },
+        ),
+        (
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            datetime(2019, 11, 23, 0, 0),
+            None,
+            None,
             {
                 2: LogEntry(
                     datetime.strptime("2019-11-22 09:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Digester #1 taken offline due to pump failure.",
                     LogCode.Error,
                 ),
-            }
+            },
         ),
     ],
 )
@@ -362,16 +362,16 @@ def test_query(log_path, start_dt, end_dt, keyword, code, expected):
     "log_path, start_dt, end_dt, keyword, code, expected",
     [
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            None, 
-            None, 
-            None, 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            None,
+            None,
+            None,
             "{\nNov 23, 2019 22:00:00,\n\nInfo,\nChange of shift. System operating as normal.,\n}"
             "\n{\nNov 23, 2019 11:30:00,\n\nInfo,\nSludge samples taken from primary and secondary clarifiers.,\n}"
             "\n{\nNov 22, 2019 09:00:00,\n\nError,\nDigester #1 taken offline due to pump failure.,\n}"
             "\n{\nNov 30, 2019 10:00:00,\n\nWarning,\nPotential clog in grit chamber sump.,\n}"
-            "\n{\nNov 30, 2019 17:00:00,\n\nCritical,\nInfluent station failure forced facility shutdown.,\n}\n"
+            "\n{\nNov 30, 2019 17:00:00,\n\nCritical,\nInfluent station failure forced facility shutdown.,\n}\n",
         ),
     ],
 )
@@ -393,10 +393,10 @@ def test_print_query(log_path, start_dt, end_dt, keyword, code, expected):
     "log_path, start_dt, end_dt, keyword, code, outpath, expected",
     [
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            None, 
-            None, 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            None,
+            None,
             None,
             "data/output_log.csv",
             {
@@ -418,20 +418,20 @@ def test_print_query(log_path, start_dt, end_dt, keyword, code, expected):
                 3: LogEntry(
                     datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Potential clog in grit chamber sump.",
-                    LogCode.Warning
+                    LogCode.Warning,
                 ),
                 4: LogEntry(
                     datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Influent station failure forced facility shutdown.",
-                    LogCode.Critical
+                    LogCode.Critical,
                 ),
-            }
+            },
         ),
         (
-            "data/sample_log.json", 
-            datetime(2000, 1, 1), 
-            None, 
-            None, 
+            "data/sample_log.json",
+            datetime(2000, 1, 1),
+            None,
+            None,
             None,
             "data/output_log.json",
             {
@@ -453,14 +453,14 @@ def test_print_query(log_path, start_dt, end_dt, keyword, code, expected):
                 3: LogEntry(
                     datetime.strptime("2019-11-30 10:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Potential clog in grit chamber sump.",
-                    LogCode.Warning
+                    LogCode.Warning,
                 ),
                 4: LogEntry(
                     datetime.strptime("2019-11-30 17:00:00", "%Y-%m-%d %H:%M:%S"),
                     "Influent station failure forced facility shutdown.",
-                    LogCode.Critical
+                    LogCode.Critical,
                 ),
-            }
+            },
         ),
     ],
 )
