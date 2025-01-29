@@ -1,6 +1,7 @@
-from epyt import epanet
+import sys
 import json
 import numpy as np
+from epyt import epanet
 
 content_placeholder = "DrinkingWater"
 
@@ -18,7 +19,7 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 
-def epyt2pypes(inp_file, out_file, name):
+def epyt2pypes(inp_file, out_file, add_nodes=False):
     """Convert an EPANET input file to a PYPES JSON file
 
     Parameters
@@ -28,106 +29,203 @@ def epyt2pypes(inp_file, out_file, name):
 
     out_file : str
         Path to the PYPES JSON file
+
+    add_nodes : bool
+        Whether to add additional nodes of Pumps
     """
 
     G = epanet(inp_file)
 
-    node_ids = {}
-    connection_ids = {}
-    nodes = []
-    connections = []
+    node_ids = {} # EPANET node index to PYPES node id
+    nodes = {}
+    connections = {}
+
+    obj_counts = {
+        "Joint": 0,
+        "Tank": 0,
+        "Reservoir": 0,
+        "Pipe": 0,
+        "Pump": 0,
+    }
 
     for n in G.getNodeIndex():
         # Node type is one of: Junction, Reservoir, Tank
-        if G.getNodeType(n) == "JUNCTION":
+        if G.getNodeType(n).upper() == "JUNCTION":
+            id_str = "Joint" + str(obj_counts["Joint"]+1)
             node_obj = {
-                "id": "Joint" + str(n),
+                "id": id_str,
                 "type": "Joint",
                 "contents": content_placeholder,
                 "tags": {},
             }
-            node_ids[n] = "Joint" + str(n)
-        elif G.getNodeType(n) == "RESERVOIR":
+            node_ids[n] = id_str
+            nodes[id_str] = node_obj
+            obj_counts["Joint"] += 1
+
+        elif G.getNodeType(n).upper() == "RESERVOIR":
+            id_str = "Reservoir" + str(obj_counts["Reservoir"]+1)
             node_obj = {
-                "id": "Reservoir" + str(n),
+                "id": id_str,
                 "type": "Reservoir",
                 "contents": content_placeholder,
                 "levation (meters)": G.getNodeElevations(n),
                 "tags": {},
             }
-            node_ids[n] = "Reservoir" + str(n)
-        elif G.getNodeType(n) == "TANK":
+            node_ids[n] = id_str
+            nodes[id_str] = node_obj
+            obj_counts["Reservoir"] += 1
+
+        elif G.getNodeType(n).upper() == "TANK":
+            id_str = "Tank" + str(obj_counts["Tank"]+1)
             node_obj = {
-                "id": "Tank" + str(n),
+                "id":id_str,
                 "type": "Tank",
                 "contents": content_placeholder,
                 "levation (meters)": G.getNodeElevations(n),
                 "volume (cubic meters)": G.getNodeTankVolume(n),
                 "tags": {},
             }
-            node_ids[n] = "Tank" + str(n)
+            node_ids[n] = id_str
+            nodes[id_str] = node_obj
+            obj_counts["Tank"] += 1
+
         else:
             raise ValueError(f"Node type {G.getNodeType(n)} not recognized")
-        nodes.append(node_obj)
 
     for connection in G.getLinkIndex():
-        # Link type is one of: Pipe, Pump, Valve
-        if G.getLinkType(connection) == "PIPE":
-            connection_obj = {
-                "id": "Pipe" + str(connection),
-                "type": "Pipe",
-                "contents": content_placeholder,
-                "source": node_ids[G.getLinkNodesIndex(connection)[0]],
-                "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
-                "tags": {},
-            }
-            connection_ids[connection] = "Pipe" + str(connection)
-        elif G.getLinkType(connection) == "PUMP":
-            connection_obj = {
-                "id": "Pipe" + str(connection),
-                "type": "Pipe",
-                "contents": content_placeholder,
-                "source": node_ids[G.getLinkNodesIndex(connection)[0]],
-                "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
-                "tags": {},
-            }
-            connection_ids[connection] = "Pipe" + str(connection)
-        elif G.getLinkType(connection) == "RESERVOIR":
-            connection_obj = {
-                "id": "Pipe" + str(connection),
-                "type": "Pipe",
-                "contents": content_placeholder,
-                "source": node_ids[G.getLinkNodesIndex(connection)[0]],
-                "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
-                "tags": {},
-            }
-            connection_ids[connection] = "Pipe" + str(connection)
+        if add_nodes:
+            # Link type is one of: Pipe, Pump, Valve
+            if G.getLinkType(connection).upper() == "PIPE":
+                connection_obj = {
+                    "id": "Pipe" + str(obj_counts["Pipe"]),
+                    "type": "Pipe",
+                    "contents": content_placeholder,
+                    "source": node_ids[G.getLinkNodesIndex(connection)[0]],
+                    "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
+                    "tags": {},
+                }
+                connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                obj_counts["Pipe"] += 1
+
+            elif G.getLinkType(connection).upper() == "PUMP":
+                # TODO: seperate pump into 2 pipes and a pump
+                pump_obj1 = {
+                    "id": "Pump" + str(obj_counts["Pump"]), 
+                    "type": "Pump",
+                    "contents": content_placeholder,
+                    "source": node_ids[G.getLinkNodesIndex(connection)[0]],
+                    "destination": "Pipe" + str(connection),
+                    "tags": {},
+                }
+                nodes["Pump" + str(obj_counts["Pump"])] = pump_obj1
+                obj_counts["Pump"] += 1
+
+                connection_obj = {
+                    "id": "Pipe" + str(obj_counts["Pipe"]),
+                    "type": "Pipe",
+                    "contents": content_placeholder,
+                    "source": node_ids[G.getLinkNodesIndex(connection)[0]],
+                    "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
+                    "tags": {},
+                }
+                connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                obj_counts["Pipe"] += 1
+
+                pump_obj2 = {
+                    "id": "Pump" + str(obj_counts["Pump"]),
+                    "type": "Pump",
+                    "contents": content_placeholder,
+                    "source": "Pipe" + str(connection),
+                    "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
+                    "tags": {},
+                }
+                nodes["Pump" + str(obj_counts["Pump"])] = pump_obj2
+                obj_counts["Pump"] += 1
+
+            elif G.getLinkType(connection).upper() == "VALVE":
+                # TODO: seperate valve into multiple pipes and a Joint
+                # Assign the first node to source, and the other nodes to destination
+                sources = []
+                destinations = []
+                for i, linknode in enumerate(G.getLinkNodesIndex(connection)):
+                    if i == 0:
+                        sources.append(node_ids[linknode])
+                    else:
+                        destinations.append(node_ids[linknode])
+
+                joint_obj = {
+                    "id": "Joint" + str(obj_counts["Joint"]),
+                    "type": "Joint",
+                    "contents": content_placeholder,
+                    "tags": {},
+                }
+                nodes["Joint" + str(obj_counts["Joint"])] = joint_obj
+                obj_counts["Joint"] += 1
+
+                for source in sources:
+                    connection_obj = {
+                        "id": "Pipe" + str(obj_counts["Pipe"]),
+                        "type": "Pipe",
+                        "contents": content_placeholder,
+                        "source": source,
+                        "destination": "Joint" + str(obj_counts["Joint"] - 1),
+                        "tags": {},
+                    }
+                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                    obj_counts["Pipe"] += 1
+                
+                for destination in destinations:
+                    connection_obj = {
+                        "id": "Pipe" + str(obj_counts["Pipe"]),
+                        "type": "Pipe",
+                        "contents": content_placeholder,
+                        "source": "Joint" + str(obj_counts["Joint"] - 1),
+                        "destination": destination,
+                        "tags": {},
+                    }
+                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                    obj_counts["Pipe"] += 1
+
+            else:
+                raise ValueError(
+                    f"Connection type {G.getLinkType(connection)} not recognized"
+                )
         else:
-            raise ValueError(
-                f"Connection type {G.getLinkType(connection)} not recognized"
-            )
-        connections.append(connection_obj)
+            type_str = G.getLinkType(connection).upper()
+            type_str = type_str[0].upper() + type_str[1:].lower()
+            id_str = type_str + str(connection)
+            connection_obj = {
+                "id": id_str,
+                "type": "Pipe",
+                "contents": content_placeholder,
+                "source": node_ids[G.getLinkNodesIndex(connection)[0]],
+                "destination": node_ids[G.getLinkNodesIndex(connection)[1]],
+                "tags": {},
+            }
+            connections[id_str] = connection_obj
+            obj_counts[type_str] += 1
 
     data = {
-        "nodes": list(node_ids.values()),
-        "connections": list(connection_ids.values()),
+        "nodes": list(nodes.keys()),
+        "connections": list(connections.keys()),
         "virtual_tags": {},
     }
-    for node in nodes:
-        temp_node = node.copy()
+    for node_name, node_obj in nodes.items():
+        temp_node = node_obj.copy()
         temp_node.pop("id")
-        data[node["id"]] = temp_node
-    for connection in connections:
-        temp_connection = connection.copy()
+        data[node_name] = temp_node
+    for connection_name, connection_obj in connections.items():
+        temp_connection = connection_obj.copy()
         temp_connection.pop("id")
-        data[connection["id"]] = temp_connection
+        data[connection_name] = temp_connection
 
     with open(out_file, "w") as f:
         json.dump(data, f, indent=2, cls=NpEncoder)
 
+    return data
+
 
 if __name__ == "__main__":
-    epyt2pypes(
-        "data/WDS/EPANET Net 3.inp", "data/WDS/EPANET Net 3.json", name="EPANET Net 3"
-    )
-    print("EPANET to PYPES conversion complete.")
+    args = sys.argv[1:]
+    epyt2pypes(args[0], args[1])
+    print("EPANET to PYPES conversion from {} to {} complete".format(args[0], args[1]))

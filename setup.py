@@ -30,6 +30,7 @@ requirements = [
     "pandas>=1.4.0",
     "numpy>=1.22.1",
     "scipy>=1.8.0",
+    "epyt>=1.0.0"
 ]
 
 extra_requirements = {
