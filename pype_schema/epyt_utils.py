@@ -36,7 +36,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
 
     G = epanet(inp_file)
 
-    node_ids = {} # EPANET node index to PYPES node id
+    node_ids = {}  # EPANET node index to PYPES node id
     nodes = {}
     connections = {}
 
@@ -51,7 +51,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
     for n in G.getNodeIndex():
         # Node type is one of: Junction, Reservoir, Tank
         if G.getNodeType(n).upper() == "JUNCTION":
-            id_str = "Joint" + str(obj_counts["Joint"]+1)
+            id_str = "Joint" + str(obj_counts["Joint"] + 1)
             node_obj = {
                 "id": id_str,
                 "type": "Joint",
@@ -63,7 +63,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             obj_counts["Joint"] += 1
 
         elif G.getNodeType(n).upper() == "RESERVOIR":
-            id_str = "Reservoir" + str(obj_counts["Reservoir"]+1)
+            id_str = "Reservoir" + str(obj_counts["Reservoir"] + 1)
             node_obj = {
                 "id": id_str,
                 "type": "Reservoir",
@@ -76,9 +76,9 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             obj_counts["Reservoir"] += 1
 
         elif G.getNodeType(n).upper() == "TANK":
-            id_str = "Tank" + str(obj_counts["Tank"]+1)
+            id_str = "Tank" + str(obj_counts["Tank"] + 1)
             node_obj = {
-                "id":id_str,
+                "id": id_str,
                 "type": "Tank",
                 "contents": content_placeholder,
                 "levation (meters)": G.getNodeElevations(n),
@@ -110,7 +110,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             elif G.getLinkType(connection).upper() == "PUMP":
                 # TODO: seperate pump into 2 pipes and a pump
                 pump_obj1 = {
-                    "id": "Pump" + str(obj_counts["Pump"]), 
+                    "id": "Pump" + str(obj_counts["Pump"]),
                     "type": "Pump",
                     "contents": content_placeholder,
                     "source": node_ids[G.getLinkNodesIndex(connection)[0]],
@@ -173,7 +173,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                     }
                     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
                     obj_counts["Pipe"] += 1
-                
+
                 for destination in destinations:
                     connection_obj = {
                         "id": "Pipe" + str(obj_counts["Pipe"]),

@@ -351,6 +351,22 @@
         },
         "tags": {}
     },
+    "ElectricityBill": {
+        "type": "Wireless",
+        "source": "PowerGrid",
+        "destination": "DesalPlant",
+        "bidirectional": false,
+        "contents": "DataTransfer",
+        "tags": {}
+    },
+    "Radio": {
+        "type": "Wireless",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "bidirectional": true,
+        "contents": "ControlSignal",
+        "tags": {}
+    },
     "ChlorinationToMixer": {
         "type": "Pipe",
         "source": "ChlorinationBasin",
