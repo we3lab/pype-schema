@@ -86,7 +86,7 @@ pint.set_application_registry(u)
                 }
             ),
         ),
-        ("data/sample_log.html", "ValueError")
+        ("data/sample_log.html", "ValueError"),
     ],
 )
 def test_load_entries(log_path, expected):

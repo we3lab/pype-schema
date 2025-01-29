@@ -13,7 +13,7 @@ skip_all_tests = False
 @pytest.mark.parametrize(
     "inp_file, out_file, add_nodes, expected_path",
     [
-        ("data/EPANET Net 3.inp", "dummy_output.json", False, "data/EPANET Net 3.json"),
+        ("data/EPANET_Net_3.inp", "dummy_output.json", False, "data/EPANET_Net_3.json"),
         ("data/L-TOWN.inp", "data/L-TOWN.json", False, "KeyError"),
         ("data/L-TOWN.inp", "data/L-TOWN.json", True, "ValueError"),
     ],

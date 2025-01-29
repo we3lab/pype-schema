@@ -105,6 +105,12 @@ def test_set_heating_values(json_path, connection_name, expected):
             "PressureExchangerDisposal",
             "TypeError",
         ),
+        (
+            "../data/desal_sample.json",
+            "MixerToPretreat",
+            "PretreatToMediaFilter",
+            False,
+        ),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
