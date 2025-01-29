@@ -1415,6 +1415,7 @@ class JSONParser:
             contents=contents,
             manufacturer=manufacturer,
             measure_freq=measure_freq,
+            report_freq=report_freq,
             downsample_method=downsample_method,
             calibration=calibration,
         )
@@ -1721,6 +1722,7 @@ class JSONParser:
             tag_dict["source_unit_id"] = tag_obj.source_unit_id
             tag_dict["dest_unit_id"] = tag_obj.dest_unit_id
             tag_dict["totalized"] = tag_obj.totalized
+            tag_dict["manufacturer"] = tag_obj.manufacturer
             tag_dict["measure_freq"] = JSONParser.unit_val_to_dict(tag_obj.measure_freq)
             tag_dict["report_freq"] = JSONParser.unit_val_to_dict(tag_obj.report_freq)
             if tag_obj.downsample_method:

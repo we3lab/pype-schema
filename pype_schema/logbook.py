@@ -124,8 +124,8 @@ class Logbook:
 
     def add_entry(self, timestamp, text, code=LogCode.Info):
         """Modifies `self.entries` to add the desired `text` with associated `timestamp`
-        and `code` (e.g., info or error). Entries are saved with automatically incremented
-        counter as their ID.
+        and `code` (e.g., info or error). Entries are saved with an automatically
+        incremented counter as their ID.
 
         Parameters
         ----------
@@ -348,7 +348,7 @@ class Logbook:
             None by default, meaning all codes will be included
 
         outpath : str
-            Path where logbook will be saved. Supported filetypes are ".json" and ".csv".
+            Path where logbook will be saved. Supported filetypes are JSON and CSV.
             Default path is "", meaning that no file will be written
 
         Returns

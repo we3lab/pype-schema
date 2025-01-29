@@ -102,7 +102,7 @@ class Tag:
         Reporting frequency of the data with units. None by default
 
     downsample_method : DownsampleType
-        None by default, meaning that data is reported on the same frequency it is measured
+        None by default, meaning that data is reported on the same frequency as measured
 
     calibration : Logbook
         A history of sensor calibration.
@@ -145,7 +145,7 @@ class Tag:
         Reporting frequency of the data with units. None by default
 
     downsample_method : DownsampleType
-        None by default, meaning that data is reported on the same frequency it is measured
+        None by default, meaning that data is reported on the same frequency as measured
 
     calibration : Logbook
         A history of sensor calibration.

@@ -367,11 +367,16 @@ def test_query(log_path, start_dt, end_dt, keyword, code, expected):
             None,
             None,
             None,
-            "{\nNov 23, 2019 22:00:00,\n\nInfo,\nChange of shift. System operating as normal.,\n}"
-            "\n{\nNov 23, 2019 11:30:00,\n\nInfo,\nSludge samples taken from primary and secondary clarifiers.,\n}"
-            "\n{\nNov 22, 2019 09:00:00,\n\nError,\nDigester #1 taken offline due to pump failure.,\n}"
-            "\n{\nNov 30, 2019 10:00:00,\n\nWarning,\nPotential clog in grit chamber sump.,\n}"
-            "\n{\nNov 30, 2019 17:00:00,\n\nCritical,\nInfluent station failure forced facility shutdown.,\n}\n",
+            "{\nNov 23, 2019 22:00:00,\n\nInfo,\n"
+            "Change of shift. System operating as normal.,\n}"
+            "\n{\nNov 23, 2019 11:30:00,\n\nInfo,\n"
+            "Sludge samples taken from primary and secondary clarifiers.,\n}"
+            "\n{\nNov 22, 2019 09:00:00,\n\nError,"
+            "\nDigester #1 taken offline due to pump failure.,\n}"
+            "\n{\nNov 30, 2019 10:00:00,\n\nWarning,"
+            "\nPotential clog in grit chamber sump.,\n}"
+            "\n{\nNov 30, 2019 17:00:00,\n\nCritical,"
+            "\nInfluent station failure forced facility shutdown.,\n}\n",
         ),
     ],
 )
