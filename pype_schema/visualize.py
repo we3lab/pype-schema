@@ -46,6 +46,10 @@ def draw_graph(network, pyvis=False, output_file=None):
     pyvis : bool
         Whether to draw the graph with PyVis or Networkx.
         False (networkx) by default
+
+    output_file : str
+        Path to the desired output.
+        Default is None, meaning the file will be saved as `networkd.id` + extension
     """
     # create empty graph
     g = nx.MultiDiGraph()

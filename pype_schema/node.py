@@ -1386,6 +1386,57 @@ class Joint(Node):
         )
 
 
+class Joint(Node):
+    """A joint in the network, where multiple pipes meet.
+
+    Parameters
+    ----------
+    id : str
+        Joint ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the joint
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the joint
+
+    tags : dict of Tag
+        Data tags associated with this joint
+
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Joint id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.tags == other.tags
+        )
+
+
 class ModularUnit(Network):
     """Modular Unit in the network, such as a reverse osmosis skid.
 

@@ -3,7 +3,8 @@ import pint
 import copy
 import warnings
 from collections import defaultdict
-from .tag import TagType, Tag, VirtualTag, CONTENTLESS_TYPES
+from .tag import DownsampleType, TagType, Tag, VirtualTag, CONTENTLESS_TYPES
+from .logbook import Logbook
 from . import connection
 from . import node
 from . import utils
@@ -1044,6 +1045,18 @@ class JSONParser:
         elif self.config[connection_id]["type"] == "Wire":
             connection_obj = connection.Wire(
                 connection_id,
+                contents,
+                source,
+                destination,
+                tags={},
+                bidirectional=bidirectional,
+                exit_point=exit_point,
+                entry_point=entry_point,
+            )
+        elif self.config[connection_id]["type"] == "Wireless":
+            connection_obj = connection.Wireless(
+                connection_id,
+                contents,
                 source,
                 destination,
                 tags={},
@@ -1372,6 +1385,25 @@ class JSONParser:
         pint_unit = utils.parse_units(tag_info["units"]) if tag_info["units"] else None
         source_unit_id = tag_info.get("source_unit_id", "total")
         dest_unit_id = tag_info.get("dest_unit_id", "total")
+        manufacturer = tag_info.get("manufacturer")
+        measure_freq = (
+            JSONParser.parse_unit_val_dict(tag_info["measure_freq"])
+            if tag_info.get("measure_freq")
+            else None
+        )
+        report_freq = (
+            JSONParser.parse_unit_val_dict(tag_info["report_freq"])
+            if tag_info.get("report_freq")
+            else None
+        )
+        try:
+            downsample_method = DownsampleType[tag_info["downsample_method"]]
+        except KeyError:
+            downsample_method = None
+        calibration_path = tag_info.get("calibration_path")
+        calibration = Logbook()
+        if calibration_path is not None:
+            calibration.load_entries(calibration_path)
         tag = Tag(
             tag_id,
             pint_unit,
@@ -1381,6 +1413,11 @@ class JSONParser:
             obj.id,
             totalized=totalized,
             contents=contents,
+            manufacturer=manufacturer,
+            measure_freq=measure_freq,
+            report_freq=report_freq,
+            downsample_method=downsample_method,
+            calibration=calibration,
         )
 
         return tag
@@ -1685,6 +1722,12 @@ class JSONParser:
             tag_dict["source_unit_id"] = tag_obj.source_unit_id
             tag_dict["dest_unit_id"] = tag_obj.dest_unit_id
             tag_dict["totalized"] = tag_obj.totalized
+            tag_dict["manufacturer"] = tag_obj.manufacturer
+            tag_dict["measure_freq"] = JSONParser.unit_val_to_dict(tag_obj.measure_freq)
+            tag_dict["report_freq"] = JSONParser.unit_val_to_dict(tag_obj.report_freq)
+            if tag_obj.downsample_method:
+                tag_dict["downsample_method"] = tag_obj.downsample_method.name
+            tag_dict["calibration"] = tag_obj.calibration.to_json()
         else:
             raise TypeError("'tag_obj' must be of type Tag or VirtualTag")
 
@@ -2034,10 +2077,11 @@ class JSONParser:
             Network object to export to JSON
 
         file_path : str
-            path to write the configuration in JSON format
+            path to write the configuration in JSON format.
+            Default is None, meaning that no file will be written
 
         indent : int
-            number of spaces to indent the JSON file
+            number of spaces to indent the JSON file. Default is 4
 
         verbose : bool
             Whether to print informative messages for debugging. Default is False

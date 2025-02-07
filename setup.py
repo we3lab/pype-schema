@@ -30,6 +30,7 @@ requirements = [
     "pandas>=1.4.0",
     "numpy>=1.22.1",
     "scipy>=1.8.0",
+    "epyt>=1.0.0"
 ]
 
 extra_requirements = {
@@ -69,6 +70,6 @@ setup(
     extras_require=extra_requirements,
     test_suite="tests",
     url="https://github.com/we3lab/pype-schema",
-    version="0.5.2",
+    version="0.6.0",
     zip_safe=False,
 )

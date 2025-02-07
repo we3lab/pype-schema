@@ -1,0 +1,29 @@
+{
+    "entries": [
+        {
+            "timestamp": "Nov. 23 2019 10 PM",
+            "code": "Info",
+            "text": "Change of shift. System operating as normal."
+        },
+        {
+            "timestamp": "11/23/2019 11:30AM",
+            "code": "Info",
+            "text": "Sludge samples taken from primary and secondary clarifiers."
+        },
+        {
+            "timestamp": "9 AM, November 22nd, 2019",
+            "code": "Error",
+            "text": "Digester #1 taken offline due to pump failure."
+        },
+        {
+            "timestamp": "2019/11/30 10:00",
+            "code": "Warning",
+            "text": "Potential clog in grit chamber sump."
+        },
+        {
+            "timestamp": "30 Nov 2019 17:00",
+            "code": "Critical",
+            "text": "Influent station failure forced facility shutdown."
+        }
+    ]
+}

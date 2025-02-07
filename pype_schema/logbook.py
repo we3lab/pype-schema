@@ -78,7 +78,6 @@ class Logbook:
         ----------
         start_dt : datetime.datetime
 
-
         end_dt : datetime.datetime
             Final datetime to include in the timestamps of log entries to return.
             None by default, meaning that all entries after `start_dt` will be returned

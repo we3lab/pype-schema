@@ -1,0 +1,11 @@
+{
+    "nodes": ["Tank"],
+    "connections": [],
+    "virtual_tags": {},
+    "Tank": {
+        "type": "InfinityStone",
+        "input_contents": "UntreatedSewage",
+        "output_contents": "TreatedSewage",
+        "num_units": 1
+    }
+}

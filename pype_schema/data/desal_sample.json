@@ -11,7 +11,10 @@
         "ElectricToDesal",
         "DesalProductOutlet",
         "SolidsDisposal",
-        "PressureExchangerDisposal"
+        "PressureExchangerDisposal",
+        "WaterBill",
+        "ElectricityBill",
+        "Radio"
     ],
     "virtual_tags": {},
     "WaterDistribution": {
@@ -349,6 +352,30 @@
             "avg": null,
             "units": "tons / day"
         },
+        "tags": {}
+    },
+    "ElectricityBill": {
+        "type": "Wireless",
+        "source": "PowerGrid",
+        "destination": "DesalPlant",
+        "bidirectional": false,
+        "contents": "DataTransfer",
+        "tags": {}
+    },
+    "WaterBill": {
+        "type": "Wireless",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "bidirectional": false,
+        "contents": "DataTransfer",
+        "tags": {}
+    },
+    "Radio": {
+        "type": "Wireless",
+        "source": "DesalPlant",
+        "destination": "WaterDistribution",
+        "bidirectional": true,
+        "contents": "ControlSignal",
         "tags": {}
     },
     "ChlorinationToMixer": {
