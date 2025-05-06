@@ -37,6 +37,8 @@ class TagType(Enum):
     NetFlow = auto()  # net flow through a node
     Speed = auto()
     Frequency = auto()
+    Current = auto()
+    Voltage = auto()
     Concentration = auto()
     SetPoint = auto()  # history of control set points
 
