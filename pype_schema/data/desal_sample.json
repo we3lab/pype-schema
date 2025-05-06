@@ -210,7 +210,20 @@
             "avg": null,
             "units": "MGD"
         },
-        "tags": {}
+        "tags": {
+            "VFDCurrent": {
+                "type": "Current",
+                "units": "Amps",
+                "contents": "Electricity",
+                "totalized": false
+            },
+            "VFDVoltage": {
+                "type": "Voltage",
+                "units": "Volts",
+                "contents": "Electricity",
+                "totalized": false
+            }
+        }
     },
     "BackwashThickener": {
         "type": "Thickening",
