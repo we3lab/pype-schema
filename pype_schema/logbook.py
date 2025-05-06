@@ -255,7 +255,7 @@ class Logbook:
 
         entry_df = pd.DataFrame(entry_dict)
         if outpath:
-            entry_df.to_csv(outpath)
+            entry_df.to_csv(outpath, index=False)
         return entry_df
 
     def query(self, start_dt, end_dt=None, keyword=None, code=None):

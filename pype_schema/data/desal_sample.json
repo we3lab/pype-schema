@@ -4,7 +4,8 @@
         "PowerGrid",
         "WaterDistribution",
         "PacificOcean",
-        "Landfill"
+        "Landfill",
+        "ChemicalFactory"
     ],
     "connections": [
         "OceanIntake",
@@ -14,7 +15,8 @@
         "PressureExchangerDisposal",
         "WaterBill",
         "ElectricityBill",
-        "Radio"
+        "Radio",
+        "AntiscalantDelivery"
     ],
     "virtual_tags": {},
     "WaterDistribution": {
@@ -35,6 +37,21 @@
         "type": "Facility",
         "elevation (meters)": null,
         "contents": ["SolidWaste", "WFBS"],
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
+    },
+    "ChemicalFactory": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Electricity",
+        "output_contents": "Antiscalant",
         "tags": {},
         "nodes": [],
         "connections": [],
@@ -213,7 +230,7 @@
         "tags": {
             "VFDCurrent": {
                 "type": "Current",
-                "units": "Amps",
+                "units": "Ampere",
                 "contents": "Electricity",
                 "totalized": false
             },
@@ -359,6 +376,19 @@
         "destination": "Landfill",
         "exit_point": "BackwashThickener",
         "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "AntiscalantDelivery": {
+        "type": "Delivery",
+        "source": "ChemicalFactory",
+        "destination": "DesalPlant",
+        "contents": "Antiscalant",
         "flowrate": {
             "max": null,
             "min": null,

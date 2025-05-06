@@ -542,6 +542,7 @@ class ContentsType(Enum):
     WFBS = auto()  # Water Filter Backwash Solids
     ControlSignal = auto()
     DataTransfer = auto()
+    Antiscalant = auto()
 
 
 class PumpType(Enum):

@@ -111,6 +111,12 @@ def test_set_heating_values(json_path, connection_name, expected):
             "PretreatToMediaFilter",
             False,
         ),
+        (
+            "../data/desal_sample.json",
+            "SolidsDisposal",
+            "AntiscalantDelivery",
+            True,
+        ),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
