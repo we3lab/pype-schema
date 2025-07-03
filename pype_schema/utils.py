@@ -525,6 +525,8 @@ class ContentsType(Enum):
     Oil = auto()
     Grease = auto()
     Air = auto()
+    Oxygen = auto()
+    IdealGas = auto()
     Chemical = auto()
     Coagulant = auto()
     Disinfectant = auto()

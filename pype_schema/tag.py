@@ -61,6 +61,35 @@ CONTENTLESS_TYPES = [
 ]
 
 
+def check_type_compatibility(tag_type, other_type):
+    """Check if the given tag_type is compatible with another
+
+    Parameters
+    ----------
+    tag_type : TagType
+        Type of the first tag
+    other_type : TagType
+        Type of tag to compare against
+
+    Returns
+    -------
+    bool
+        True if compatible, False otherwise
+    """
+    if not isinstance(other_type, TagType):
+        raise TypeError("tag_type must be a TagType object")
+
+    flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
+
+    if tag_type in flow_types and other_type in flow_types:
+        return True
+
+    if tag_type == other_type:
+        return True
+
+    return False
+
+
 class Tag:
     """Class to represent a SCADA or other data tag
 
@@ -367,18 +396,7 @@ class Tag:
         bool
             True if compatible, False otherwise
         """
-        if not isinstance(other_type, TagType):
-            raise TypeError("tag_type must be a TagType object")
-
-        flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
-
-        if self.tag_type in flow_types and other_type in flow_types:
-            return True
-
-        if self.tag_type == other_type:
-            return True
-
-        return False
+        return check_type_compatibility(self.tag_type, other_type)
 
 
 class VirtualTag:
@@ -582,6 +600,21 @@ class VirtualTag:
             return other.totalized
         else:
             return str(self.units) < str(other.units)
+
+    def check_type_compatibility(self, other_type):
+        """Check if the given tag_type is compatible with another
+
+        Parameters
+        ----------
+        other_type : TagType
+            Type of tag to compare against
+
+        Returns
+        -------
+        bool
+            True if compatible, False otherwise
+        """
+        return check_type_compatibility(self.tag_type, other_type)
 
     def process_ops(self, data, tag_to_var_map={}):
         """Transform the given data according to the VirtualTag's lambda string

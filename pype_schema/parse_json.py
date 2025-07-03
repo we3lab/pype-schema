@@ -905,6 +905,26 @@ class JSONParser:
                 output_contents,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "Separator":
+            power_rating = self.parse_unit_val_dict(
+                self.config[node_id].get("power_rating")
+            )
+            elevation = self.parse_unit_val_dict(
+                self.config[node_id].get("elevation")
+            )
+            node_obj = node.Separator(
+                node_id,
+                input_contents,
+                output_contents,
+                min_flow,
+                max_flow,
+                design_flow,
+                num_units,
+                volume,
+                power_rating=power_rating,
+                elevation=elevation,
+                tags={},
+            )
         else:
             raise TypeError("Unsupported Node type: " + self.config[node_id]["type"])
 
@@ -2018,6 +2038,19 @@ class JSONParser:
             )
             node_dict["num_units"] = node_obj.num_units
         elif isinstance(node_obj, (node.Screening, node.Conditioning, node.Flaring)):
+            node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
+                node_obj, "flow_rate"
+            )
+            node_dict["num_units"] = node_obj.num_units
+        elif isinstance(node_obj, node.Separator):
+            if node_obj.volume is not None:
+                node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
+            if node_obj.power_rating is not None:
+                node_dict["power_rating"] = JSONParser.unit_val_to_dict(
+                    node_obj.power_rating
+                )
+            if node_obj.elevation is not None:
+                node_dict["elevation"] = JSONParser.unit_val_to_dict(node_obj.elevation)
             node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                 node_obj, "flow_rate"
             )
