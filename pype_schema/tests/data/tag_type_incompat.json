@@ -20,6 +20,18 @@
       "binary_operations": "lambda tag1,tag2: tag1+tag2",
       "contents": "GasBlend",
       "units": "SCFM"
+    },
+    "FlareBiogasFlow": {
+      "tags": ["WasteGasBurner1Flow", "WasteGasBurner2Flow"],
+      "operations": "lambda x,y: x+y",
+      "contents": "Biogas",
+      "units": "SCFM"
+    },
+    "CombinedOutflow": {
+      "tags": ["FlareBiogasFlow", "CogeneratorBiogasFlow"],
+      "operations": "lambda x,y: x+y",
+      "contents": "Biogas",
+      "units": "SCFM"
     }
   },
   "ConditionerToCogen": {
@@ -40,6 +52,30 @@
     },
     "tags": {
       "CombinedDigesterGasFlow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "WasteGasBurner1Flow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "WasteGasBurner2Flow": {
+        "type": "Flow",
+        "units": "SCFM",
+        "source_unit_id": "total",
+        "dest_unit_id": "total",
+        "contents": "Biogas",
+        "totalized": false
+      },
+      "CogeneratorBiogasFlow": {
         "type": "Flow",
         "units": "SCFM",
         "source_unit_id": "total",
