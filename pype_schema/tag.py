@@ -505,7 +505,7 @@ class VirtualTag:
 
             if determine_type:
                 if tag_type is not None:
-                    if not tag.check_type_compatibility(tag_type):
+                    if not check_type_compatibility(tag.tag_type, tag_type):
                         raise ValueError(
                             "All Tags must have the same value for 'tag_type'"
                         )
@@ -600,21 +600,6 @@ class VirtualTag:
             return other.totalized
         else:
             return str(self.units) < str(other.units)
-
-    def check_type_compatibility(self, other_type):
-        """Check if the given tag_type is compatible with another
-
-        Parameters
-        ----------
-        other_type : TagType
-            Type of tag to compare against
-
-        Returns
-        -------
-        bool
-            True if compatible, False otherwise
-        """
-        return check_type_compatibility(self.tag_type, other_type)
 
     def process_ops(self, data, tag_to_var_map={}):
         """Transform the given data according to the VirtualTag's lambda string
