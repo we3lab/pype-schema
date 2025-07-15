@@ -909,7 +909,6 @@ class JSONParser:
             power_rating = self.parse_unit_val_dict(
                 self.config[node_id].get("power_rating")
             )
-            elevation = self.parse_unit_val_dict(self.config[node_id].get("elevation"))
             node_obj = node.Separator(
                 node_id,
                 input_contents,
