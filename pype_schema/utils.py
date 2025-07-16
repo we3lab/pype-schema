@@ -739,9 +739,10 @@ def recursive_get(key, dict_):
     dict_ : dict
         (nested) dictionary to search
 
-    Returns : any, None
+    Returns
+    -------
+    any, None
         Value of the key if found, None otherwise
-
     """
     if key in dict_:
         return dict_[key]

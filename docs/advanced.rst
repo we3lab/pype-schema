@@ -9,7 +9,7 @@ Advanced Features
 Some attributes in PyPES are not static metadata. For example, a ``Pump`` may have an efficiency curve rather
 than a single efficiency value. To define an efficiency curve, first define a function and then use 
 ``set_pump_curve()`` to set the ``pump_curve`` attribute to that function. ``thermal_efficiency``
-and ``electrical_efficiency`` of ``Cogenerator`` and ``Boiler`` objects can be similarly defined.
+and ``electrical_efficiency`` of ``Cogeneration`` and ``Boiler`` objects can be similarly defined.
 
 .. code-block:: python
 
