@@ -457,7 +457,7 @@ def test_check_type_compatability(json_path, tag_0_id, tag_1_id, expected):
     network = JSONParser(json_path).initialize_network()
     tag_0 = network.get_tag(tag_0_id, recurse=True)
     tag_1 = network.get_tag(tag_1_id, recurse=True)
-    assert expected == check_type_compatibility(tag_0, tag_1)
+    assert expected == check_type_compatibility(tag_0.tag_type, tag_1.tag_type)
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
@@ -477,7 +477,7 @@ def test_check_type_incompatability(json_path, tag_id, node_id, expected):
     tag = network.get_tag(tag_id, recurse=True)
     node = network.get_node(node_id, recurse=True)
     try:
-        result = check_type_compatibility(tag, node)
+        result = check_type_compatibility(tag.tag_type, node)
     except Exception as err:
         result = type(err).__name__
 
