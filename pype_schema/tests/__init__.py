@@ -6,6 +6,7 @@ import pickle
 from pype_schema.tag import VirtualTag
 from pype_schema.node import Boiler, Cogeneration, Pump
 
+
 def pickle_with_functions(network, outpath):
     """Pickle an PyPES model, converting lambda functions to string arguments
 
