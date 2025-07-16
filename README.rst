@@ -29,7 +29,7 @@ Useful Commands
 
   This will install your package in editable mode.
 
-2. ``pytest pype_schema/tests --cov=pype_schema --cov-report=html``
+2. ``pytest pype_schema/tests --cov=pype_schema --cov-report=html --cov-exclude=pype_schema/tests``
 
   Produces an HTML test coverage report for the entire project which can
   be found at ``htmlcov/index.html``.
