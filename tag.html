@@ -70,6 +70,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.process_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_ops()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.check_type_compatibility"><code class="docutils literal notranslate"><span class="pre">check_type_compatibility()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -285,6 +286,26 @@ that differ from the original SCADA tag naming system</p></li>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.tag.check_type_compatibility">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">check_type_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#check_type_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.check_type_compatibility" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the given tag_type is compatible with another</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of the first tag</p></li>
+<li><p><strong>other_type</strong> (<em>TagType</em>) – Type of tag to compare against</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if compatible, False otherwise</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

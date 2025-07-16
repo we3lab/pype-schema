@@ -121,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Reactor"><code class="docutils literal notranslate"><span class="pre">Reactor</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Reservoir"><code class="docutils literal notranslate"><span class="pre">Reservoir</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Screening"><code class="docutils literal notranslate"><span class="pre">Screening</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Separator"><code class="docutils literal notranslate"><span class="pre">Separator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.StaticMixer"><code class="docutils literal notranslate"><span class="pre">StaticMixer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Tank"><code class="docutils literal notranslate"><span class="pre">Tank</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.node.Thickening"><code class="docutils literal notranslate"><span class="pre">Thickening</span></code></a></li>
@@ -1466,6 +1467,45 @@ large solids from the intake of a facility, such as a bar screen.</p>
 <li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate of a single screen</p></li>
 <li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate of a single screen</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this screen</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.node.Separator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Separator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_rating</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Separator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Separator" title="Permalink to this definition"></a></dt>
+<dd><p>A class representing a separator that divides a mixture into its components,
+such as air separation units that produce high purity oxygen and nitrogen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Separator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the separator (e.g., Air)</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate of a single separator</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate of a single separator</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity or int</em>) – Design flow rate of a single separator</p></li>
+<li><p><strong>num_units</strong> (<em>int</em>) – Number of separators running in parallel</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity or int</em>) – Volume of the separator in cubic meters</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity or int</em>) – Rated power of a single separator (in horsepower or kW)</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the separator in meters above sea level</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this separator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Separator ID</p></li>
+<li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the separator</p></li>
+<li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the separator</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of separators running in parallel</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Minimum flow rate of a single separator</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate of a single separator</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate of a single separator</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Volume of the separator in cubic meters</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Rated power of a single separator</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Elevation of the separator in meters above sea level</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this separator</p></li>
 </ul>
 </dd>
 </dl>

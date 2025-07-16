@@ -930,7 +930,7 @@ Default is “”, meaning no file will be saved</p>
 <dd class="field-even"><p>csv in DataFrame format</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)">pandas.DataFrame</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)">pandas.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -2678,6 +2678,46 @@ large solids from the intake of a facility, such as a bar screen.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.node.Separator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">Separator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_rating</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#Separator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.Separator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Node" title="pype_schema.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+<p>A class representing a separator that divides a mixture into its components,
+such as air separation units that produce high purity oxygen and nitrogen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Separator ID</p></li>
+<li><p><strong>input_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents entering the separator (e.g., Air)</p></li>
+<li><p><strong>output_contents</strong> (<em>ContentsType or list of ContentsType</em>) – Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity or int</em>) – Minimum flow rate of a single separator</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity or int</em>) – Maximum flow rate of a single separator</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity or int</em>) – Design flow rate of a single separator</p></li>
+<li><p><strong>num_units</strong> (<em>int</em>) – Number of separators running in parallel</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity or int</em>) – Volume of the separator in cubic meters</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity or int</em>) – Rated power of a single separator (in horsepower or kW)</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity or int</em>) – Elevation of the separator in meters above sea level</p></li>
+<li><p><strong>tags</strong> (<em>dict of Tag</em>) – Data tags associated with this separator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Separator ID</p></li>
+<li><p><strong>input_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents entering the separator</p></li>
+<li><p><strong>output_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents leaving the separator</p></li>
+<li><p><strong>num_units</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of separators running in parallel</p></li>
+<li><p><strong>min_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Minimum flow rate of a single separator</p></li>
+<li><p><strong>max_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Maximum flow rate of a single separator</p></li>
+<li><p><strong>design_flow</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Design flow rate of a single separator</p></li>
+<li><p><strong>volume</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Volume of the separator in cubic meters</p></li>
+<li><p><strong>power_rating</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Rated power of a single separator</p></li>
+<li><p><strong>elevation</strong> (<em>pint.Quantity</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Elevation of the separator in meters above sea level</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this separator</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.node.StaticMixer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.node.</span></span><span class="sig-name descname"><span class="pre">StaticMixer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_contents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residence_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dosing_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/node.html#StaticMixer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.node.StaticMixer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pype_schema.node.Reactor" title="pype_schema.node.Reactor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reactor</span></code></a></p>
@@ -2880,7 +2920,7 @@ the value at time t+1 and t</p>
 <dd class="field-even"><p>Rate of change variable or tuple of netative, positive rate of change variable</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.2.3)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3910,6 +3950,26 @@ that differ from the original SCADA tag naming system</p></li>
 
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.tag.check_type_compatibility">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">check_type_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#check_type_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.check_type_compatibility" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the given tag_type is compatible with another</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of the first tag</p></li>
+<li><p><strong>other_type</strong> (<em>TagType</em>) – Type of tag to compare against</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if compatible, False otherwise</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-pype_schema.units">
 <span id="pype-schema-units-module"></span><h2>pype_schema.units module<a class="headerlink" href="#module-pype_schema.units" title="Permalink to this heading"></a></h2>
@@ -4094,7 +4154,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Antiscalant">
-<span class="sig-name descname"><span class="pre">Antiscalant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Antiscalant" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Antiscalant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Antiscalant" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4109,47 +4169,47 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Chemical">
-<span class="sig-name descname"><span class="pre">Chemical</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Chemical" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Chemical</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Chemical" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.ChlorinatedSeawater">
-<span class="sig-name descname"><span class="pre">ChlorinatedSeawater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ChlorinatedSeawater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ChlorinatedSeawater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ChlorinatedSeawater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Coagulant">
-<span class="sig-name descname"><span class="pre">Coagulant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Coagulant" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Coagulant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Coagulant" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.CoagulatedWater">
-<span class="sig-name descname"><span class="pre">CoagulatedWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.CoagulatedWater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">CoagulatedWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.CoagulatedWater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.ControlSignal">
-<span class="sig-name descname"><span class="pre">ControlSignal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ControlSignal" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ControlSignal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ControlSignal" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.DataTransfer">
-<span class="sig-name descname"><span class="pre">DataTransfer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DataTransfer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DataTransfer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">49</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DataTransfer" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Deodorant">
-<span class="sig-name descname"><span class="pre">Deodorant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Deodorant" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Deodorant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Deodorant" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Disinfectant">
-<span class="sig-name descname"><span class="pre">Disinfectant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Disinfectant" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Disinfectant</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Disinfectant" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.DisinfectedEffluent">
-<span class="sig-name descname"><span class="pre">DisinfectedEffluent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">37</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DisinfectedEffluent" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DisinfectedEffluent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.DisinfectedEffluent" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4169,12 +4229,12 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.FilterBackwash">
-<span class="sig-name descname"><span class="pre">FilterBackwash</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.FilterBackwash" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">FilterBackwash</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.FilterBackwash" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Filtrate">
-<span class="sig-name descname"><span class="pre">Filtrate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Filtrate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">Filtrate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Filtrate" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4203,13 +4263,18 @@ whether they are sludge, water, or gas</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.IdealGas">
+<span class="sig-name descname"><span class="pre">IdealGas</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.IdealGas" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.IndustrialWastewater">
-<span class="sig-name descname"><span class="pre">IndustrialWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.IndustrialWastewater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">IndustrialWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">37</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.IndustrialWastewater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.MunicipalWastewater">
-<span class="sig-name descname"><span class="pre">MunicipalWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.MunicipalWastewater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">MunicipalWastewater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">38</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.MunicipalWastewater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4228,13 +4293,18 @@ whether they are sludge, water, or gas</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pype_schema.utils.ContentsType.Oxygen">
+<span class="sig-name descname"><span class="pre">Oxygen</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.Oxygen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.PotableReuse">
 <span class="sig-name descname"><span class="pre">PotableReuse</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.PotableReuse" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.PretreatedWater">
-<span class="sig-name descname"><span class="pre">PretreatedWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.PretreatedWater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PretreatedWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.PretreatedWater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4249,7 +4319,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.ProductWater">
-<span class="sig-name descname"><span class="pre">ProductWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">40</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ProductWater" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ProductWater</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.ProductWater" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4274,7 +4344,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.SolidWaste">
-<span class="sig-name descname"><span class="pre">SolidWaste</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">38</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.SolidWaste" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">SolidWaste</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">40</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.SolidWaste" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4319,7 +4389,7 @@ whether they are sludge, water, or gas</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pype_schema.utils.ContentsType.WFBS">
-<span class="sig-name descname"><span class="pre">WFBS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.WFBS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">WFBS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#pype_schema.utils.ContentsType.WFBS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4505,8 +4575,13 @@ whether they are sludge, water, or gas</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>key</strong> (<em>str</em>) – Key to search</p></li>
 <li><p><strong>dict_</strong> (<em>dict</em>) – (nested) dictionary to search</p></li>
-<li><p><strong>Returns</strong> (<em>any, None</em>) – Value of the key if found, None otherwise</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Value of the key if found, None otherwise</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>any, None</p>
 </dd>
 </dl>
 </dd></dl>

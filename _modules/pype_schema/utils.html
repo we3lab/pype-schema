@@ -623,6 +623,8 @@
     <span class="n">Oil</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Grease</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Air</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">Oxygen</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">IdealGas</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Chemical</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Coagulant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Disinfectant</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -835,9 +837,10 @@
 <span class="sd">    dict_ : dict</span>
 <span class="sd">        (nested) dictionary to search</span>
 
-<span class="sd">    Returns : any, None</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    any, None</span>
 <span class="sd">        Value of the key if found, None otherwise</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dict_</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">dict_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>

@@ -864,8 +864,8 @@ Both `"generation_capacity"` and `"gen_capacity"` are acceptable keys to use in 
         "units": "kW"
     }
 
-Since both heat and electricity are forms of energy, the generation capacity for the ``Cogenerator`` is tied to the electricity generation
-and for the ``Boiler`` to heat generation. Then, for the ``Cogenerator`` the heat generation capacity can be calculated by converting from
+Since both heat and electricity are forms of energy, the generation capacity for the ``Cogeneration`` object is tied to the electricity generation
+and for the ``Boiler`` to heat generation. Then, for ``Cogeneration`` the heat generation capacity can be calculated by converting from
 electricity to heat using ``electrical_efficiency`` and ``thermal_efficiency``.
 
 .. _heat_val:

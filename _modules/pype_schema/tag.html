@@ -159,6 +159,35 @@
 <span class="p">]</span>
 
 
+<div class="viewcode-block" id="check_type_compatibility"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.check_type_compatibility">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">check_type_compatibility</span><span class="p">(</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">other_type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the given tag_type is compatible with another</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tag_type : TagType</span>
+<span class="sd">        Type of the first tag</span>
+<span class="sd">    other_type : TagType</span>
+<span class="sd">        Type of tag to compare against</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if compatible, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other_type</span><span class="p">,</span> <span class="n">TagType</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;tag_type must be a TagType object&quot;</span><span class="p">)</span>
+
+    <span class="n">flow_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">TagType</span><span class="o">.</span><span class="n">Flow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">InFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">OutFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">NetFlow</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">tag_type</span> <span class="ow">in</span> <span class="n">flow_types</span> <span class="ow">and</span> <span class="n">other_type</span> <span class="ow">in</span> <span class="n">flow_types</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">tag_type</span> <span class="o">==</span> <span class="n">other_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
 <div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Tag</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to represent a SCADA or other data tag</span>
 
@@ -465,18 +494,7 @@
 <span class="sd">        bool</span>
 <span class="sd">            True if compatible, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other_type</span><span class="p">,</span> <span class="n">TagType</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;tag_type must be a TagType object&quot;</span><span class="p">)</span>
-
-        <span class="n">flow_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">TagType</span><span class="o">.</span><span class="n">Flow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">InFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">OutFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">NetFlow</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span> <span class="ow">in</span> <span class="n">flow_types</span> <span class="ow">and</span> <span class="n">other_type</span> <span class="ow">in</span> <span class="n">flow_types</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span> <span class="o">==</span> <span class="n">other_type</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="kc">False</span></div></div>
+        <span class="k">return</span> <span class="n">check_type_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">other_type</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="VirtualTag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">VirtualTag</span><span class="p">:</span>
@@ -585,7 +603,7 @@
 
             <span class="k">if</span> <span class="n">determine_type</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">tag_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">check_type_compatibility</span><span class="p">(</span><span class="n">tag_type</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_type_compatibility</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">tag_type</span><span class="p">):</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                             <span class="s2">&quot;All Tags must have the same value for &#39;tag_type&#39;&quot;</span>
                         <span class="p">)</span>

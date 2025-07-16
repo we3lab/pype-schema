@@ -4284,6 +4284,138 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Separator"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Separator">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Separator</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a separator that divides a mixture into its components,</span>
+<span class="sd">    such as air separation units that produce high purity oxygen and nitrogen.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Separator ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the separator (e.g., Air)</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of a single separator</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of a single separator</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single separator</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of separators running in parallel</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the separator in cubic meters</span>
+
+<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">        Rated power of a single separator (in horsepower or kW)</span>
+
+<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">        Elevation of the separator in meters above sea level</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this separator</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Separator ID</span>
+
+<span class="sd">    input_contents : list of ContentsType</span>
+<span class="sd">        Contents entering the separator</span>
+
+<span class="sd">    output_contents : list of ContentsType</span>
+<span class="sd">        Contents leaving the separator</span>
+
+<span class="sd">    num_units : int</span>
+<span class="sd">        Number of separators running in parallel</span>
+
+<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">        Minimum flow rate of a single separator</span>
+
+<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">        Maximum flow rate of a single separator</span>
+
+<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">        Design flow rate of a single separator</span>
+
+<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">        Volume of the separator in cubic meters</span>
+
+<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">        Rated power of a single separator</span>
+
+<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">        Elevation of the separator in meters above sea level</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this separator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">min_flow</span><span class="p">,</span>
+        <span class="n">max_flow</span><span class="p">,</span>
+        <span class="n">design_flow</span><span class="p">,</span>
+        <span class="n">num_units</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">,</span>
+        <span class="n">power_rating</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">=</span> <span class="n">min_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">=</span> <span class="n">max_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">=</span> <span class="n">design_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">=</span> <span class="n">num_units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span> <span class="o">=</span> <span class="n">power_rating</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Separator id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;design_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span><span class="si">}</span><span class="s2"> volume:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;power_rating:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span><span class="si">}</span><span class="s2"> elevation:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_units</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">num_units</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">min_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">max_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_flow</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">design_flow</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">volume</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">power_rating</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">power_rating</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">elevation</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
 </pre></div>
 
            </div>
