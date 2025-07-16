@@ -1281,6 +1281,14 @@
             "Oxygen", 
             "IdealGas"
         ],
+        "volume": {
+            "value": 100,
+            "units": "cubic meters"
+        },
+        "elevation": {
+            "value": 0,
+            "units": "meters"
+        },
         "num_units": 1,
         "flowrate": {
           "min": null,
