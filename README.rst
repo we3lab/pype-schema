@@ -22,6 +22,8 @@ Python for Process Engineering Schema (PyPES)
 
 A class hierarchy designed to represent configurations of process engineering systems, such as wastewater treatment or desalination plants.
 
+Full documentation available at https://we3lab.github.io/pype-schema/.
+
 Useful Commands
 ===============
 

@@ -4,7 +4,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from pype_schema.units import u
-from pype_schema.tag import Tag, TagType
+from pype_schema.tag import Tag, TagType, check_type_compatibility
 from pype_schema.utils import parse_units, ContentsType
 from pype_schema.parse_json import JSONParser
 
@@ -185,6 +185,15 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/gen_delta.csv",
             "kWh",
+        ),
+        # VirtualTag example for type compatibility
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data.csv",
+            "ElectricityProductionByGasVolume",
+            "DataFrame",
+            "data/electrical_efficiency.csv",
+            "kilowatt * hour / SCFM",
         ),
     ],
 )
@@ -418,3 +427,58 @@ def test_v_tag_less_than(json_path, tag_0_id, tag_1_id, expected):
     tag_0 = network.get_tag(tag_0_id, recurse=True)
     tag_1 = network.get_tag(tag_1_id, recurse=True)
     assert expected == (tag_0 < tag_1)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, tag_0_id, tag_1_id, expected",
+    [
+        (
+            "../data/wrrf_sample.json",
+            "GrossGasProduction",
+            "GrossGasProductionList",
+            True,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "GrossGasProduction",
+            "CombinedDigesterGasFlow",
+            True,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "GrossGasProduction",
+            "ElectricityProductionByGasVolume",
+            False,
+        ),
+    ],
+)
+def test_check_type_compatability(json_path, tag_0_id, tag_1_id, expected):
+    network = JSONParser(json_path).initialize_network()
+    tag_0 = network.get_tag(tag_0_id, recurse=True)
+    tag_1 = network.get_tag(tag_1_id, recurse=True)
+    assert expected == check_type_compatibility(tag_0.tag_type, tag_1.tag_type)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, tag_id, node_id, expected",
+    [
+        (
+            "../data/wrrf_sample.json",
+            "GrossGasProduction",
+            "Cogenerator",
+            "TypeError",
+        ),
+    ],
+)
+def test_check_type_incompatability(json_path, tag_id, node_id, expected):
+    network = JSONParser(json_path).initialize_network()
+    tag = network.get_tag(tag_id, recurse=True)
+    node = network.get_node(node_id, recurse=True)
+    try:
+        result = check_type_compatibility(tag.tag_type, node)
+    except Exception as err:
+        result = type(err).__name__
+
+    assert expected == result

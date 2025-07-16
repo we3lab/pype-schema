@@ -4186,3 +4186,135 @@ class Flaring(Node):
             and self.design_flow == other.design_flow
             and self.tags == other.tags
         )
+
+
+class Separator(Node):
+    """A class representing a separator that divides a mixture into its components,
+    such as air separation units that produce high purity oxygen and nitrogen.
+
+    Parameters
+    ----------
+    id : str
+        Separator ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the separator (e.g., Air)
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of a single separator
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of a single separator
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single separator
+
+    num_units : int
+        Number of separators running in parallel
+
+    volume : pint.Quantity or int
+        Volume of the separator in cubic meters
+
+    power_rating : pint.Quantity or int
+        Rated power of a single separator (in horsepower or kW)
+
+    elevation : pint.Quantity or int
+        Elevation of the separator in meters above sea level
+
+    tags : dict of Tag
+        Data tags associated with this separator
+
+    Attributes
+    ----------
+    id : str
+        Separator ID
+
+    input_contents : list of ContentsType
+        Contents entering the separator
+
+    output_contents : list of ContentsType
+        Contents leaving the separator
+
+    num_units : int
+        Number of separators running in parallel
+
+    min_flow : pint.Quantity or int
+        Minimum flow rate of a single separator
+
+    max_flow : pint.Quantity or int
+        Maximum flow rate of a single separator
+
+    design_flow : pint.Quantity or int
+        Design flow rate of a single separator
+
+    volume : pint.Quantity or int
+        Volume of the separator in cubic meters
+
+    power_rating : pint.Quantity or int
+        Rated power of a single separator
+
+    elevation : pint.Quantity or int
+        Elevation of the separator in meters above sea level
+
+    tags : dict of Tag
+        Data tags associated with this separator
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        min_flow,
+        max_flow,
+        design_flow,
+        num_units,
+        volume,
+        power_rating=None,
+        elevation=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.min_flow = min_flow
+        self.max_flow = max_flow
+        self.design_flow = design_flow
+        self.num_units = num_units
+        self.volume = volume
+        self.power_rating = power_rating
+        self.elevation = elevation
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Separator id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} num_units:{self.num_units} "
+            f"min_flow:{self.min_flow} max_flow:{self.max_flow} "
+            f"design_flow:{self.design_flow} volume:{self.volume} "
+            f"power_rating:{self.power_rating} elevation:{self.elevation} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.num_units == other.num_units
+            and self.min_flow == other.min_flow
+            and self.max_flow == other.max_flow
+            and self.design_flow == other.design_flow
+            and self.volume == other.volume
+            and self.power_rating == other.power_rating
+            and self.elevation == other.elevation
+            and self.tags == other.tags
+        )

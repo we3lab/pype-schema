@@ -61,6 +61,35 @@ CONTENTLESS_TYPES = [
 ]
 
 
+def check_type_compatibility(tag_type, other_type):
+    """Check if the given tag_type is compatible with another
+
+    Parameters
+    ----------
+    tag_type : TagType
+        Type of the first tag
+    other_type : TagType
+        Type of tag to compare against
+
+    Returns
+    -------
+    bool
+        True if compatible, False otherwise
+    """
+    if not isinstance(other_type, TagType):
+        raise TypeError("tag_type must be a TagType object")
+
+    flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
+
+    if tag_type in flow_types and other_type in flow_types:
+        return True
+
+    if tag_type == other_type:
+        return True
+
+    return False
+
+
 class Tag:
     """Class to represent a SCADA or other data tag
 
@@ -367,18 +396,7 @@ class Tag:
         bool
             True if compatible, False otherwise
         """
-        if not isinstance(other_type, TagType):
-            raise TypeError("tag_type must be a TagType object")
-
-        flow_types = [TagType.Flow, TagType.InFlow, TagType.OutFlow, TagType.NetFlow]
-
-        if self.tag_type in flow_types and other_type in flow_types:
-            return True
-
-        if self.tag_type == other_type:
-            return True
-
-        return False
+        return check_type_compatibility(self.tag_type, other_type)
 
 
 class VirtualTag:
@@ -487,7 +505,7 @@ class VirtualTag:
 
             if determine_type:
                 if tag_type is not None:
-                    if not tag.check_type_compatibility(tag_type):
+                    if not check_type_compatibility(tag.tag_type, tag_type):
                         raise ValueError(
                             "All Tags must have the same value for 'tag_type'"
                         )
