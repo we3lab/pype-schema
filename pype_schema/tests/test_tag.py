@@ -472,7 +472,7 @@ def test_check_type_compatability(json_path, tag_0_id, tag_1_id, expected):
         ),
     ],
 )
-def test_check_type_compatability(json_path, tag_id, node_id, expected):
+def test_check_type_incompatability(json_path, tag_id, node_id, expected):
     network = JSONParser(json_path).initialize_network()
     tag = network.get_tag(tag_id, recurse=True)
     node = network.get_node(node_id, recurse=True)
