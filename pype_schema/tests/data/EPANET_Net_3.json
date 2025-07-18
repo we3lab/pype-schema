@@ -1,97 +1,97 @@
 {
   "nodes": [
-    "Joint1",
-    "Joint2",
-    "Joint3",
-    "Joint4",
-    "Joint5",
-    "Joint6",
-    "Joint7",
-    "Joint8",
-    "Joint9",
-    "Joint10",
-    "Joint11",
-    "Joint12",
-    "Joint13",
-    "Joint14",
-    "Joint15",
-    "Joint16",
-    "Joint17",
-    "Joint18",
-    "Joint19",
-    "Joint20",
-    "Joint21",
-    "Joint22",
-    "Joint23",
-    "Joint24",
-    "Joint25",
-    "Joint26",
-    "Joint27",
-    "Joint28",
-    "Joint29",
-    "Joint30",
-    "Joint31",
-    "Joint32",
-    "Joint33",
-    "Joint34",
-    "Joint35",
-    "Joint36",
-    "Joint37",
-    "Joint38",
-    "Joint39",
-    "Joint40",
-    "Joint41",
-    "Joint42",
-    "Joint43",
-    "Joint44",
-    "Joint45",
-    "Joint46",
-    "Joint47",
-    "Joint48",
-    "Joint49",
-    "Joint50",
-    "Joint51",
-    "Joint52",
-    "Joint53",
-    "Joint54",
-    "Joint55",
-    "Joint56",
-    "Joint57",
-    "Joint58",
-    "Joint59",
-    "Joint60",
-    "Joint61",
-    "Joint62",
-    "Joint63",
-    "Joint64",
-    "Joint65",
-    "Joint66",
-    "Joint67",
-    "Joint68",
-    "Joint69",
-    "Joint70",
-    "Joint71",
-    "Joint72",
-    "Joint73",
-    "Joint74",
-    "Joint75",
-    "Joint76",
-    "Joint77",
-    "Joint78",
-    "Joint79",
-    "Joint80",
-    "Joint81",
-    "Joint82",
-    "Joint83",
-    "Joint84",
-    "Joint85",
-    "Joint86",
-    "Joint87",
-    "Joint88",
-    "Joint89",
-    "Joint90",
-    "Joint91",
-    "Joint92",
+    "Junction1",
+    "Junction2",
+    "Junction3",
+    "Junction4",
+    "Junction5",
+    "Junction6",
+    "Junction7",
+    "Junction8",
+    "Junction9",
+    "Junction10",
+    "Junction11",
+    "Junction12",
+    "Junction13",
+    "Junction14",
+    "Junction15",
+    "Junction16",
+    "Junction17",
+    "Junction18",
+    "Junction19",
+    "Junction20",
+    "Junction21",
+    "Junction22",
+    "Junction23",
+    "Junction24",
+    "Junction25",
+    "Junction26",
+    "Junction27",
+    "Junction28",
+    "Junction29",
+    "Junction30",
+    "Junction31",
+    "Junction32",
+    "Junction33",
+    "Junction34",
+    "Junction35",
+    "Junction36",
+    "Junction37",
+    "Junction38",
+    "Junction39",
+    "Junction40",
+    "Junction41",
+    "Junction42",
+    "Junction43",
+    "Junction44",
+    "Junction45",
+    "Junction46",
+    "Junction47",
+    "Junction48",
+    "Junction49",
+    "Junction50",
+    "Junction51",
+    "Junction52",
+    "Junction53",
+    "Junction54",
+    "Junction55",
+    "Junction56",
+    "Junction57",
+    "Junction58",
+    "Junction59",
+    "Junction60",
+    "Junction61",
+    "Junction62",
+    "Junction63",
+    "Junction64",
+    "Junction65",
+    "Junction66",
+    "Junction67",
+    "Junction68",
+    "Junction69",
+    "Junction70",
+    "Junction71",
+    "Junction72",
+    "Junction73",
+    "Junction74",
+    "Junction75",
+    "Junction76",
+    "Junction77",
+    "Junction78",
+    "Junction79",
+    "Junction80",
+    "Junction81",
+    "Junction82",
+    "Junction83",
+    "Junction84",
+    "Junction85",
+    "Junction86",
+    "Junction87",
+    "Junction88",
+    "Junction89",
+    "Junction90",
+    "Junction91",
+    "Junction92",
     "Reservoir1",
     "Reservoir2",
     "Tank1",
@@ -220,463 +220,463 @@
     "Pump119"
   ],
   "virtual_tags": {},
-  "Joint1": {
-    "type": "Joint",
+  "Junction1": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint2": {
-    "type": "Joint",
+  "Junction2": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint3": {
-    "type": "Joint",
+  "Junction3": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint4": {
-    "type": "Joint",
+  "Junction4": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint5": {
-    "type": "Joint",
+  "Junction5": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint6": {
-    "type": "Joint",
+  "Junction6": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint7": {
-    "type": "Joint",
+  "Junction7": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint8": {
-    "type": "Joint",
+  "Junction8": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint9": {
-    "type": "Joint",
+  "Junction9": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint10": {
-    "type": "Joint",
+  "Junction10": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint11": {
-    "type": "Joint",
+  "Junction11": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint12": {
-    "type": "Joint",
+  "Junction12": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint13": {
-    "type": "Joint",
+  "Junction13": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint14": {
-    "type": "Joint",
+  "Junction14": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint15": {
-    "type": "Joint",
+  "Junction15": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint16": {
-    "type": "Joint",
+  "Junction16": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint17": {
-    "type": "Joint",
+  "Junction17": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint18": {
-    "type": "Joint",
+  "Junction18": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint19": {
-    "type": "Joint",
+  "Junction19": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint20": {
-    "type": "Joint",
+  "Junction20": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint21": {
-    "type": "Joint",
+  "Junction21": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint22": {
-    "type": "Joint",
+  "Junction22": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint23": {
-    "type": "Joint",
+  "Junction23": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint24": {
-    "type": "Joint",
+  "Junction24": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint25": {
-    "type": "Joint",
+  "Junction25": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint26": {
-    "type": "Joint",
+  "Junction26": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint27": {
-    "type": "Joint",
+  "Junction27": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint28": {
-    "type": "Joint",
+  "Junction28": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint29": {
-    "type": "Joint",
+  "Junction29": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint30": {
-    "type": "Joint",
+  "Junction30": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint31": {
-    "type": "Joint",
+  "Junction31": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint32": {
-    "type": "Joint",
+  "Junction32": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint33": {
-    "type": "Joint",
+  "Junction33": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint34": {
-    "type": "Joint",
+  "Junction34": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint35": {
-    "type": "Joint",
+  "Junction35": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint36": {
-    "type": "Joint",
+  "Junction36": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint37": {
-    "type": "Joint",
+  "Junction37": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint38": {
-    "type": "Joint",
+  "Junction38": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint39": {
-    "type": "Joint",
+  "Junction39": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint40": {
-    "type": "Joint",
+  "Junction40": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint41": {
-    "type": "Joint",
+  "Junction41": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint42": {
-    "type": "Joint",
+  "Junction42": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint43": {
-    "type": "Joint",
+  "Junction43": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint44": {
-    "type": "Joint",
+  "Junction44": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint45": {
-    "type": "Joint",
+  "Junction45": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint46": {
-    "type": "Joint",
+  "Junction46": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint47": {
-    "type": "Joint",
+  "Junction47": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint48": {
-    "type": "Joint",
+  "Junction48": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint49": {
-    "type": "Joint",
+  "Junction49": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint50": {
-    "type": "Joint",
+  "Junction50": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint51": {
-    "type": "Joint",
+  "Junction51": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint52": {
-    "type": "Joint",
+  "Junction52": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint53": {
-    "type": "Joint",
+  "Junction53": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint54": {
-    "type": "Joint",
+  "Junction54": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint55": {
-    "type": "Joint",
+  "Junction55": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint56": {
-    "type": "Joint",
+  "Junction56": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint57": {
-    "type": "Joint",
+  "Junction57": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint58": {
-    "type": "Joint",
+  "Junction58": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint59": {
-    "type": "Joint",
+  "Junction59": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint60": {
-    "type": "Joint",
+  "Junction60": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint61": {
-    "type": "Joint",
+  "Junction61": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint62": {
-    "type": "Joint",
+  "Junction62": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint63": {
-    "type": "Joint",
+  "Junction63": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint64": {
-    "type": "Joint",
+  "Junction64": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint65": {
-    "type": "Joint",
+  "Junction65": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint66": {
-    "type": "Joint",
+  "Junction66": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint67": {
-    "type": "Joint",
+  "Junction67": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint68": {
-    "type": "Joint",
+  "Junction68": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint69": {
-    "type": "Joint",
+  "Junction69": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint70": {
-    "type": "Joint",
+  "Junction70": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint71": {
-    "type": "Joint",
+  "Junction71": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint72": {
-    "type": "Joint",
+  "Junction72": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint73": {
-    "type": "Joint",
+  "Junction73": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint74": {
-    "type": "Joint",
+  "Junction74": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint75": {
-    "type": "Joint",
+  "Junction75": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint76": {
-    "type": "Joint",
+  "Junction76": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint77": {
-    "type": "Joint",
+  "Junction77": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint78": {
-    "type": "Joint",
+  "Junction78": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint79": {
-    "type": "Joint",
+  "Junction79": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint80": {
-    "type": "Joint",
+  "Junction80": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint81": {
-    "type": "Joint",
+  "Junction81": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint82": {
-    "type": "Joint",
+  "Junction82": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint83": {
-    "type": "Joint",
+  "Junction83": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint84": {
-    "type": "Joint",
+  "Junction84": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint85": {
-    "type": "Joint",
+  "Junction85": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint86": {
-    "type": "Joint",
+  "Junction86": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint87": {
-    "type": "Joint",
+  "Junction87": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint88": {
-    "type": "Joint",
+  "Junction88": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint89": {
-    "type": "Joint",
+  "Junction89": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint90": {
-    "type": "Joint",
+  "Junction90": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint91": {
-    "type": "Joint",
+  "Junction91": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
-  "Joint92": {
-    "type": "Joint",
+  "Junction92": {
+    "type": "Junction",
     "contents": "DrinkingWater",
     "tags": {}
   },
@@ -717,833 +717,833 @@
     "type": "Pipe",
     "contents": "DrinkingWater",
     "source": "Tank3",
-    "destination": "Joint3",
+    "destination": "Junction3",
     "tags": {}
   },
   "Pipe2": {
     "type": "Pipe",
     "contents": "DrinkingWater",
     "source": "Tank1",
-    "destination": "Joint5",
+    "destination": "Junction5",
     "tags": {}
   },
   "Pipe3": {
     "type": "Pipe",
     "contents": "DrinkingWater",
     "source": "Tank2",
-    "destination": "Joint6",
+    "destination": "Junction6",
     "tags": {}
   },
   "Pipe4": {
     "type": "Pipe",
     "contents": "DrinkingWater",
     "source": "Reservoir1",
-    "destination": "Joint7",
+    "destination": "Junction7",
     "tags": {}
   },
   "Pipe5": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint1",
-    "destination": "Joint10",
+    "source": "Junction1",
+    "destination": "Junction10",
     "tags": {}
   },
   "Pipe6": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint10",
-    "destination": "Joint11",
+    "source": "Junction10",
+    "destination": "Junction11",
     "tags": {}
   },
   "Pipe7": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint10",
-    "destination": "Joint12",
+    "source": "Junction10",
+    "destination": "Junction12",
     "tags": {}
   },
   "Pipe8": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint12",
-    "destination": "Joint13",
+    "source": "Junction12",
+    "destination": "Junction13",
     "tags": {}
   },
   "Pipe9": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint11",
-    "destination": "Joint14",
+    "source": "Junction11",
+    "destination": "Junction14",
     "tags": {}
   },
   "Pipe10": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint14",
-    "destination": "Joint15",
+    "source": "Junction14",
+    "destination": "Junction15",
     "tags": {}
   },
   "Pipe11": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint17",
-    "destination": "Joint15",
+    "source": "Junction17",
+    "destination": "Junction15",
     "tags": {}
   },
   "Pipe12": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint15",
-    "destination": "Joint16",
+    "source": "Junction15",
+    "destination": "Junction16",
     "tags": {}
   },
   "Pipe13": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint17",
-    "destination": "Joint16",
+    "source": "Junction17",
+    "destination": "Junction16",
     "tags": {}
   },
   "Pipe14": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint13",
-    "destination": "Joint17",
+    "source": "Junction13",
+    "destination": "Junction17",
     "tags": {}
   },
   "Pipe15": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint16",
-    "destination": "Joint54",
+    "source": "Junction16",
+    "destination": "Junction54",
     "tags": {}
   },
   "Pipe16": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint86",
-    "destination": "Joint12",
+    "source": "Junction86",
+    "destination": "Junction12",
     "tags": {}
   },
   "Pipe17": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint17",
-    "destination": "Joint18",
+    "source": "Junction17",
+    "destination": "Junction18",
     "tags": {}
   },
   "Pipe18": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint19",
-    "destination": "Joint20",
+    "source": "Junction19",
+    "destination": "Junction20",
     "tags": {}
   },
   "Pipe19": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint20",
-    "destination": "Joint18",
+    "source": "Junction20",
+    "destination": "Junction18",
     "tags": {}
   },
   "Pipe20": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint21",
-    "destination": "Joint20",
+    "source": "Junction21",
+    "destination": "Junction20",
     "tags": {}
   },
   "Pipe21": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint21",
-    "destination": "Joint19",
+    "source": "Junction21",
+    "destination": "Junction19",
     "tags": {}
   },
   "Pipe22": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint22",
-    "destination": "Joint21",
+    "source": "Junction22",
+    "destination": "Junction21",
     "tags": {}
   },
   "Pipe23": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint21",
-    "destination": "Joint23",
+    "source": "Junction21",
+    "destination": "Junction23",
     "tags": {}
   },
   "Pipe24": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint23",
-    "destination": "Joint24",
+    "source": "Junction23",
+    "destination": "Junction24",
     "tags": {}
   },
   "Pipe25": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint3",
-    "destination": "Joint24",
+    "source": "Junction3",
+    "destination": "Junction24",
     "tags": {}
   },
   "Pipe26": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint24",
-    "destination": "Joint25",
+    "source": "Junction24",
+    "destination": "Junction25",
     "tags": {}
   },
   "Pipe27": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint25",
-    "destination": "Joint26",
+    "source": "Junction25",
+    "destination": "Junction26",
     "tags": {}
   },
   "Pipe28": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint25",
-    "destination": "Joint27",
+    "source": "Junction25",
+    "destination": "Junction27",
     "tags": {}
   },
   "Pipe29": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint27",
-    "destination": "Joint28",
+    "source": "Junction27",
+    "destination": "Junction28",
     "tags": {}
   },
   "Pipe30": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint29",
-    "destination": "Joint28",
+    "source": "Junction29",
+    "destination": "Junction28",
     "tags": {}
   },
   "Pipe31": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint2",
-    "destination": "Joint29",
+    "source": "Junction2",
+    "destination": "Junction29",
     "tags": {}
   },
   "Pipe32": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint30",
-    "destination": "Joint28",
+    "source": "Junction30",
+    "destination": "Junction28",
     "tags": {}
   },
   "Pipe33": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint31",
-    "destination": "Joint30",
+    "source": "Junction31",
+    "destination": "Junction30",
     "tags": {}
   },
   "Pipe34": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint31",
-    "destination": "Joint32",
+    "source": "Junction31",
+    "destination": "Junction32",
     "tags": {}
   },
   "Pipe35": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint32",
-    "destination": "Joint33",
+    "source": "Junction32",
+    "destination": "Junction33",
     "tags": {}
   },
   "Pipe36": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint33",
-    "destination": "Joint34",
+    "source": "Junction33",
+    "destination": "Junction34",
     "tags": {}
   },
   "Pipe37": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint23",
-    "destination": "Joint34",
+    "source": "Junction23",
+    "destination": "Junction34",
     "tags": {}
   },
   "Pipe38": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint19",
-    "destination": "Joint33",
+    "source": "Junction19",
+    "destination": "Junction33",
     "tags": {}
   },
   "Pipe39": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint19",
-    "destination": "Joint35",
+    "source": "Junction19",
+    "destination": "Junction35",
     "tags": {}
   },
   "Pipe40": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint35",
-    "destination": "Joint36",
+    "source": "Junction35",
+    "destination": "Junction36",
     "tags": {}
   },
   "Pipe41": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint36",
-    "destination": "Joint37",
+    "source": "Junction36",
+    "destination": "Junction37",
     "tags": {}
   },
   "Pipe42": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint37",
-    "destination": "Joint38",
+    "source": "Junction37",
+    "destination": "Junction38",
     "tags": {}
   },
   "Pipe43": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint38",
-    "destination": "Joint39",
+    "source": "Junction38",
+    "destination": "Junction39",
     "tags": {}
   },
   "Pipe44": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint39",
-    "destination": "Joint40",
+    "source": "Junction39",
+    "destination": "Junction40",
     "tags": {}
   },
   "Pipe45": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint87",
-    "destination": "Joint42",
+    "source": "Junction87",
+    "destination": "Junction42",
     "tags": {}
   },
   "Pipe46": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint41",
-    "destination": "Joint42",
+    "source": "Junction41",
+    "destination": "Junction42",
     "tags": {}
   },
   "Pipe47": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint51",
-    "destination": "Joint60",
+    "source": "Junction51",
+    "destination": "Junction60",
     "tags": {}
   },
   "Pipe48": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint42",
-    "destination": "Joint43",
+    "source": "Junction42",
+    "destination": "Junction43",
     "tags": {}
   },
   "Pipe49": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint43",
-    "destination": "Joint44",
+    "source": "Junction43",
+    "destination": "Junction44",
     "tags": {}
   },
   "Pipe50": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint90",
-    "destination": "Joint43",
+    "source": "Junction90",
+    "destination": "Junction43",
     "tags": {}
   },
   "Pipe51": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint4",
-    "destination": "Joint47",
+    "source": "Junction4",
+    "destination": "Junction47",
     "tags": {}
   },
   "Pipe52": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint47",
-    "destination": "Joint45",
+    "source": "Junction47",
+    "destination": "Junction45",
     "tags": {}
   },
   "Pipe53": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint45",
-    "destination": "Joint46",
+    "source": "Junction45",
+    "destination": "Junction46",
     "tags": {}
   },
   "Pipe54": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint46",
-    "destination": "Joint48",
+    "source": "Junction46",
+    "destination": "Junction48",
     "tags": {}
   },
   "Pipe55": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint5",
-    "destination": "Joint46",
+    "source": "Junction5",
+    "destination": "Junction46",
     "tags": {}
   },
   "Pipe56": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint50",
-    "destination": "Joint49",
+    "source": "Junction50",
+    "destination": "Junction49",
     "tags": {}
   },
   "Pipe57": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint48",
-    "destination": "Joint50",
+    "source": "Junction48",
+    "destination": "Junction50",
     "tags": {}
   },
   "Pipe58": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint49",
-    "destination": "Joint61",
+    "source": "Junction49",
+    "destination": "Junction61",
     "tags": {}
   },
   "Pipe59": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint60",
-    "destination": "Joint50",
+    "source": "Junction60",
+    "destination": "Junction50",
     "tags": {}
   },
   "Pipe60": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint52",
-    "destination": "Joint48",
+    "source": "Junction52",
+    "destination": "Junction48",
     "tags": {}
   },
   "Pipe61": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint52",
-    "destination": "Joint51",
+    "source": "Junction52",
+    "destination": "Junction51",
     "tags": {}
   },
   "Pipe62": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint42",
-    "destination": "Joint89",
+    "source": "Junction42",
+    "destination": "Junction89",
     "tags": {}
   },
   "Pipe63": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint53",
-    "destination": "Joint51",
+    "source": "Junction53",
+    "destination": "Junction51",
     "tags": {}
   },
   "Pipe64": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint88",
-    "destination": "Joint52",
+    "source": "Junction88",
+    "destination": "Junction52",
     "tags": {}
   },
   "Pipe65": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint53",
-    "destination": "Joint54",
+    "source": "Junction53",
+    "destination": "Junction54",
     "tags": {}
   },
   "Pipe66": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint54",
-    "destination": "Joint55",
+    "source": "Junction54",
+    "destination": "Junction55",
     "tags": {}
   },
   "Pipe67": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint37",
-    "destination": "Joint55",
+    "source": "Junction37",
+    "destination": "Junction55",
     "tags": {}
   },
   "Pipe68": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint56",
-    "destination": "Joint53",
+    "source": "Junction56",
+    "destination": "Junction53",
     "tags": {}
   },
   "Pipe69": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint15",
-    "destination": "Joint56",
+    "source": "Junction15",
+    "destination": "Junction56",
     "tags": {}
   },
   "Pipe70": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint44",
-    "destination": "Joint57",
+    "source": "Junction44",
+    "destination": "Junction57",
     "tags": {}
   },
   "Pipe71": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint57",
-    "destination": "Joint58",
+    "source": "Junction57",
+    "destination": "Junction58",
     "tags": {}
   },
   "Pipe72": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint58",
-    "destination": "Joint59",
+    "source": "Junction58",
+    "destination": "Junction59",
     "tags": {}
   },
   "Pipe73": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint57",
-    "destination": "Joint91",
+    "source": "Junction57",
+    "destination": "Junction91",
     "tags": {}
   },
   "Pipe74": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint61",
-    "destination": "Joint63",
+    "source": "Junction61",
+    "destination": "Junction63",
     "tags": {}
   },
   "Pipe75": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint63",
-    "destination": "Joint62",
+    "source": "Junction63",
+    "destination": "Junction62",
     "tags": {}
   },
   "Pipe76": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint92",
-    "destination": "Joint63",
+    "source": "Junction92",
+    "destination": "Junction63",
     "tags": {}
   },
   "Pipe77": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint62",
-    "destination": "Joint64",
+    "source": "Junction62",
+    "destination": "Junction64",
     "tags": {}
   },
   "Pipe78": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint64",
-    "destination": "Joint65",
+    "source": "Junction64",
+    "destination": "Junction65",
     "tags": {}
   },
   "Pipe79": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint65",
-    "destination": "Joint66",
+    "source": "Junction65",
+    "destination": "Junction66",
     "tags": {}
   },
   "Pipe80": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint66",
-    "destination": "Joint67",
+    "source": "Junction66",
+    "destination": "Junction67",
     "tags": {}
   },
   "Pipe81": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint67",
-    "destination": "Joint68",
+    "source": "Junction67",
+    "destination": "Junction68",
     "tags": {}
   },
   "Pipe82": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint68",
-    "destination": "Joint69",
+    "source": "Junction68",
+    "destination": "Junction69",
     "tags": {}
   },
   "Pipe83": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint69",
-    "destination": "Joint70",
+    "source": "Junction69",
+    "destination": "Junction70",
     "tags": {}
   },
   "Pipe84": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint69",
-    "destination": "Joint71",
+    "source": "Junction69",
+    "destination": "Junction71",
     "tags": {}
   },
   "Pipe85": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint67",
-    "destination": "Joint72",
+    "source": "Junction67",
+    "destination": "Junction72",
     "tags": {}
   },
   "Pipe86": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint72",
-    "destination": "Joint73",
+    "source": "Junction72",
+    "destination": "Junction73",
     "tags": {}
   },
   "Pipe87": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint66",
-    "destination": "Joint74",
+    "source": "Junction66",
+    "destination": "Junction74",
     "tags": {}
   },
   "Pipe88": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint74",
-    "destination": "Joint72",
+    "source": "Junction74",
+    "destination": "Junction72",
     "tags": {}
   },
   "Pipe89": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint74",
-    "destination": "Joint75",
+    "source": "Junction74",
+    "destination": "Junction75",
     "tags": {}
   },
   "Pipe90": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint75",
-    "destination": "Joint76",
+    "source": "Junction75",
+    "destination": "Junction76",
     "tags": {}
   },
   "Pipe91": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint76",
-    "destination": "Joint77",
+    "source": "Junction76",
+    "destination": "Junction77",
     "tags": {}
   },
   "Pipe92": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint76",
-    "destination": "Joint78",
+    "source": "Junction76",
+    "destination": "Junction78",
     "tags": {}
   },
   "Pipe93": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint75",
-    "destination": "Joint79",
+    "source": "Junction75",
+    "destination": "Junction79",
     "tags": {}
   },
   "Pipe94": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint78",
-    "destination": "Joint79",
+    "source": "Junction78",
+    "destination": "Junction79",
     "tags": {}
   },
   "Pipe95": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint78",
-    "destination": "Joint82",
+    "source": "Junction78",
+    "destination": "Junction82",
     "tags": {}
   },
   "Pipe96": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint6",
-    "destination": "Joint82",
+    "source": "Junction6",
+    "destination": "Junction82",
     "tags": {}
   },
   "Pipe97": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint82",
-    "destination": "Joint81",
+    "source": "Junction82",
+    "destination": "Junction81",
     "tags": {}
   },
   "Pipe98": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint82",
-    "destination": "Joint80",
+    "source": "Junction82",
+    "destination": "Junction80",
     "tags": {}
   },
   "Pipe99": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint79",
-    "destination": "Joint80",
+    "source": "Junction79",
+    "destination": "Junction80",
     "tags": {}
   },
   "Pipe100": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint20",
-    "destination": "Joint83",
+    "source": "Junction20",
+    "destination": "Junction83",
     "tags": {}
   },
   "Pipe101": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint83",
-    "destination": "Joint84",
+    "source": "Junction83",
+    "destination": "Junction84",
     "tags": {}
   },
   "Pipe102": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint84",
-    "destination": "Joint86",
+    "source": "Junction84",
+    "destination": "Junction86",
     "tags": {}
   },
   "Pipe103": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint83",
-    "destination": "Joint85",
+    "source": "Junction83",
+    "destination": "Junction85",
     "tags": {}
   },
   "Pipe104": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint18",
-    "destination": "Joint85",
+    "source": "Junction18",
+    "destination": "Junction85",
     "tags": {}
   },
   "Pipe105": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint85",
-    "destination": "Joint86",
+    "source": "Junction85",
+    "destination": "Junction86",
     "tags": {}
   },
   "Pipe106": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint87",
-    "destination": "Joint88",
+    "source": "Junction87",
+    "destination": "Junction88",
     "tags": {}
   },
   "Pipe107": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint54",
-    "destination": "Joint88",
+    "source": "Junction54",
+    "destination": "Junction88",
     "tags": {}
   },
   "Pipe108": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint89",
-    "destination": "Joint52",
+    "source": "Junction89",
+    "destination": "Junction52",
     "tags": {}
   },
   "Pipe109": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint47",
-    "destination": "Joint90",
+    "source": "Junction47",
+    "destination": "Junction90",
     "tags": {}
   },
   "Pipe110": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint91",
-    "destination": "Joint92",
+    "source": "Junction91",
+    "destination": "Junction92",
     "tags": {}
   },
   "Pipe111": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint91",
-    "destination": "Joint61",
+    "source": "Junction91",
+    "destination": "Junction61",
     "tags": {}
   },
   "Pipe112": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint38",
-    "destination": "Joint87",
+    "source": "Junction38",
+    "destination": "Junction87",
     "tags": {}
   },
   "Pipe113": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint58",
-    "destination": "Joint92",
+    "source": "Junction58",
+    "destination": "Junction92",
     "tags": {}
   },
   "Pipe114": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint89",
-    "destination": "Joint90",
+    "source": "Junction89",
+    "destination": "Junction90",
     "tags": {}
   },
   "Pipe115": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint9",
-    "destination": "Joint22",
+    "source": "Junction9",
+    "destination": "Junction22",
     "tags": {}
   },
   "Pipe116": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint7",
-    "destination": "Joint8",
+    "source": "Junction7",
+    "destination": "Junction8",
     "tags": {}
   },
   "Pipe117": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint8",
-    "destination": "Joint9",
+    "source": "Junction8",
+    "destination": "Junction9",
     "tags": {}
   },
   "Pump118": {
     "type": "Pipe",
     "contents": "DrinkingWater",
     "source": "Reservoir2",
-    "destination": "Joint1",
+    "destination": "Junction1",
     "tags": {}
   },
   "Pump119": {
     "type": "Pipe",
     "contents": "DrinkingWater",
-    "source": "Joint7",
-    "destination": "Joint9",
+    "source": "Junction7",
+    "destination": "Junction9",
     "tags": {}
   }
 }

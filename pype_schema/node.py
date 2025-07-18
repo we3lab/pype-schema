@@ -1334,23 +1334,22 @@ class Facility(Network):
         )
 
 
-class Joint(Node):
-    """A joint in the network, where multiple pipes meet.
+class Junction(Node):
+    """A junction in the network where multiple pipes meet.
 
     Parameters
     ----------
     id : str
-        Joint ID
+        Junction ID
 
     input_contents : ContentsType or list of ContentsType
-        Contents entering the joint
+        Contents entering the junction
 
     output_contents : ContentsType or list of ContentsType
-        Contents leaving the joint
+        Contents leaving the junction
 
     tags : dict of Tag
-        Data tags associated with this joint
-
+        Data tags associated with this junction
     """
 
     def __init__(
@@ -1367,7 +1366,7 @@ class Joint(Node):
 
     def __repr__(self):
         return (
-            f"<pype_schema.node.Joint id:{self.id} "
+            f"<pype_schema.node.Junction id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
             f"tags:{self.tags}>\n"

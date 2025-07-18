@@ -898,8 +898,8 @@ class JSONParser:
                 pH=pH,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Joint":
-            node_obj = node.Joint(
+        elif self.config[node_id]["type"] == "Junction":
+            node_obj = node.Junction(
                 node_id,
                 input_contents,
                 output_contents,
@@ -2085,7 +2085,7 @@ class JSONParser:
                 node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
-        elif isinstance(node_obj, node.Joint):
+        elif isinstance(node_obj, node.Junction):
             node_dict["type"] = type(node_obj).__name__
             node_dict["input_contents"] = [
                 contents.name for contents in node_obj.input_contents

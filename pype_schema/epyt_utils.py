@@ -41,7 +41,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
     connections = {}
 
     obj_counts = {
-        "Joint": 0,
+        "Junction": 0,
         "Tank": 0,
         "Reservoir": 0,
         "Pipe": 0,
@@ -51,16 +51,16 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
     for n in G.getNodeIndex():
         # Node type is one of: Junction, Reservoir, Tank
         if G.getNodeType(n).upper() == "JUNCTION":
-            id_str = "Joint" + str(obj_counts["Joint"] + 1)
+            id_str = "Junction" + str(obj_counts["Junction"] + 1)
             node_obj = {
                 "id": id_str,
-                "type": "Joint",
+                "type": "Junction",
                 "contents": content_placeholder,
                 "tags": {},
             }
             node_ids[n] = id_str
             nodes[id_str] = node_obj
-            obj_counts["Joint"] += 1
+            obj_counts["Junction"] += 1
 
         elif G.getNodeType(n).upper() == "RESERVOIR":
             id_str = "Reservoir" + str(obj_counts["Reservoir"] + 1)
@@ -152,14 +152,14 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 #     else:
                 #         destinations.append(node_ids[linknode])
 
-                # joint_obj = {
-                #     "id": "Joint" + str(obj_counts["Joint"]),
-                #     "type": "Joint",
+                # junction_obj = {
+                #     "id": "Junction" + str(obj_counts["Junction"]),
+                #     "type": "Junction",
                 #     "contents": content_placeholder,
                 #     "tags": {},
                 # }
-                # nodes["Joint" + str(obj_counts["Joint"])] = joint_obj
-                # obj_counts["Joint"] += 1
+                # nodes["Junction" + str(obj_counts["Junction"])] = junction_obj
+                # obj_counts["Junction"] += 1
 
                 # for source in sources:
                 #     connection_obj = {
@@ -167,7 +167,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 #         "type": "Pipe",
                 #         "contents": content_placeholder,
                 #         "source": source,
-                #         "destination": "Joint" + str(obj_counts["Joint"] - 1),
+                #         "destination": "Junction" + str(obj_counts["Junction"] - 1),
                 #         "tags": {},
                 #     }
                 #     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
@@ -178,7 +178,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 #         "id": "Pipe" + str(obj_counts["Pipe"]),
                 #         "type": "Pipe",
                 #         "contents": content_placeholder,
-                #         "source": "Joint" + str(obj_counts["Joint"] - 1),
+                #         "source": "JoJunctionint" + str(obj_counts["Junction"] - 1),
                 #         "destination": destination,
                 #         "tags": {},
                 #     }
