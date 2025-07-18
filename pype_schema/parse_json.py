@@ -1738,9 +1738,14 @@ class JSONParser:
         """
         tag_dict = {}
         if isinstance(tag_obj, VirtualTag):
+            tag_dict["mode"] = tag_obj.mode.name
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
-            tag_dict["operations"] = tag_obj.operations
+            if tag_obj.custom_operations:
+                tag_dict["custom_operations"] = tag_obj.custom_operations
+            else:
+                tag_dict["unary_operations"] = tag_obj.unary_operations
+                tag_dict["binary_operations"] = tag_obj.binary_operations
         elif isinstance(tag_obj, Tag):
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["source_unit_id"] = tag_obj.source_unit_id

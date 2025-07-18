@@ -23,7 +23,7 @@ def pickle_without_functions(network, outpath):
     vtags = [tag for tag in all_tags if isinstance(tag, VirtualTag)]
 
     for vtag in vtags:
-        vtag.operations = str(vtag.operations)
+        vtag.custom_operations = str(vtag.custom_operations)
 
     # set efficiency attribute to None
     boilers = network.select_objs(obj_type=Boiler, recurse=True)

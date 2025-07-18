@@ -5,7 +5,11 @@ from .tag import Tag, VirtualTag
 from collections import defaultdict
 
 EFFICIENCY_ATTRS = [
-    "thermal_efficiency", "electrical_efficiency", "rte", "pump_curve", "efficiency"
+    "thermal_efficiency",
+    "electrical_efficiency",
+    "rte",
+    "pump_curve",
+    "efficiency",
 ]
 
 CAPACITY_ATTRS = [
@@ -4070,7 +4074,7 @@ class UVSystem(Disinfection):
 
     num_units : int
         Number of UV systems running in parallel
-    
+
     volume : pint.quantity or float
         Volume of a single UV system in cubic meters
 
