@@ -905,6 +905,13 @@ class JSONParser:
                 output_contents,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "Valve":
+            node_obj = node.Valve(
+                node_id,
+                input_contents,
+                output_contents,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Separator":
             power_rating = self.parse_unit_val_dict(
                 self.config[node_id].get("power_rating")
@@ -2085,7 +2092,7 @@ class JSONParser:
                 node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
-        elif isinstance(node_obj, node.Junction):
+        elif isinstance(node_obj, (node.Junction, node.Valve)):
             node_dict["type"] = type(node_obj).__name__
             node_dict["input_contents"] = [
                 contents.name for contents in node_obj.input_contents

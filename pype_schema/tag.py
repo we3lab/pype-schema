@@ -12,7 +12,7 @@ from .logbook import Logbook
 
 
 class TagType(Enum):
-    """Enum to represent types of SCADA tags"""
+    """Enum to represent types of SCADA tags."""
 
     Flow = auto()  # flow through a connection
     Volume = auto()
@@ -44,11 +44,18 @@ class TagType(Enum):
 
 
 class DownsampleType(Enum):
-    """Enum to represent common methods of downsampling data"""
+    """Enum to represent common methods of downsampling data."""
 
     Average = auto()
     Decimation = auto()
     Reservoir = auto()
+
+
+class OperationMode(Enum):
+    """Enum to represent methods of VirtualTag operations."""
+
+    Algebraic = auto()
+    Custom = auto()
 
 
 CONTENTLESS_TYPES = [
@@ -401,7 +408,13 @@ class Tag:
 
 class VirtualTag:
     """Representation for data that is not in the SCADA system, but is instead
-    a combination of existing tags combined via the `operations` lambda function string
+    a combination of existing tags.
+    
+    Tags are combined via either `custom_operations` lambda function string or the
+    `unary_operations` and `binary_operations` lists depending on whether 
+    `mode` is `Algebraic` or `Custom`. 
+    
+    In `Algebraic` mode, all unary operations are applied before any binary operations.
 
     Parameters
     ----------
@@ -411,7 +424,19 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations : str
+    unary_operations : str or list
+        Function to apply when combining tags.
+        If a single string it will be applied to all Tags.
+        Otherwise, the `unary_operations` must be same length as `tags`,
+        and functions will be applied in order
+
+    binary_operations : str or list
+        Function to apply when combining tags.
+        If a single string it will be applied to all Tags.
+        Otherwise, the `binary_operations` must be one shorter than `tags`,
+        and functions will be applied in order
+
+    custom_operations : str
         String a lambda function to apply to all tags,
         must have number of args equal to number of tags
 
@@ -446,7 +471,36 @@ class VirtualTag:
     tags : list of Tag
         List of Tag objects to combine
 
-    operations :
+    unary_operations : ["noop", "delta", "<<", ">>", "~", "-"]
+        Unary operations to apply before combining tags.
+
+            "noop" : null operator, useful when
+            skipping tags in a list of unary operations.
+
+            "delta" : calculate the difference between
+            the current timestep and previous timestep
+
+            "<<" : shift all data left one timestep,
+            so that the last time step will be NaN
+
+            ">>" : shift all data right one timestep,
+            so that the first time step will be NaN
+
+            "~" : Boolean not
+
+            "-" : unary negation
+
+        Note that "delta", "<<", and ">>" return a timeseries padded
+        with NaN so that it is the same length as input data
+
+    binary_operations : ["+", "-", "*", "/"]
+        Binary operaitons to apply when combining tags.
+        Supported functions are "+", "-", "*", and "/".
+        If a single string is passed, it will be applied to all Tags.
+        Otherwise, the `binary_operations` list must be one shorter than `tags`,
+        and functions will be applied in order from left to right
+
+    custom_operations : str
         String giving a lambda function to apply to constituent tags
 
     units : str or Unit
@@ -464,13 +518,20 @@ class VirtualTag:
 
     contents : ContentsType
         Contents moving through the node
+
+    mode : OperationMode
+        Mode of operation. Either `Algebraic` or `Custom`.
+        Automatically determined based on values of `unary_operations`, 
+        `binary_operations` and `custom_operations`.
     """
 
     def __init__(
         self,
         id,
         tags,
-        operations=None,
+        unary_operations=None,
+        binary_operations=None,
+        custom_operations=None,
         units=None,
         tag_type=None,
         parent_id=None,
@@ -482,6 +543,24 @@ class VirtualTag:
         self.parent_id = parent_id
         self.tags = tags
         self.units = units
+
+        # determine OperationMode
+        if (unary_operations is not None) or (binary_operations is not None):
+            if custom_operations is not None:
+                raise ValueError(
+                    "`custom_operations` cannot be used with binary "
+                    "and unary operations. I.e., select either "
+                    "`OperationMode.Algebraic` or `OperationMode.Custom`."
+                )
+            else:
+                self.mode = OperationMode.Algebraic
+        elif custom_operations is not None:
+            self.mode = OperationMode.Custom
+        else:
+            raise ValueError(
+                "At least one of `unary_operations`, `binary_operations`, "
+                "and `custom_operations` must be provided."
+            )
 
         units = []
         totalized = None
@@ -528,26 +607,36 @@ class VirtualTag:
         self.tag_type = tag_type
         self.totalized = totalized
 
-        if operations is not None and operations:
-            if count_args(operations) != len(tags):
+        if self.mode == OperationMode.Algebraic:
+            
+        elif self.mode == OperationMode.Custom:
+            if custom_operations is not None and custom_operations:
+                if count_args(custom_operations) != len(tags):
+                    raise ValueError(
+                        "Operations lambda function must have the same "
+                        "number of arguments as the Tag list"
+                    )
+            elif len(tags) > 1:
                 raise ValueError(
-                    "Operations lambda function must have the same "
-                    "number of arguments as the Tag list"
+                    "Operations lambda function must be specified "
+                    "if multiple tags are given"
                 )
-        elif len(tags) > 1:
-            raise ValueError(
-                "Operations lambda function must be specified "
-                "if multiple tags are given"
-            )
 
-        self.operations = operations
+            self.custom_operations = custom_operations
+        else:
+            raise ValueError(
+                f"{self.mode} not currently supported. "
+                "Select either `OperationMode.Algebraic` or `OperationMode.Custom`."
+            )
 
     def __repr__(self):
         return (
             f"<pype_schema.tag.VirtualTag id:{self.id} units:{self.units} "
             f"tag_type:{self.tag_type} totalized:{self.totalized} "
             f"contents:{self.contents} tags:{[tag.id for tag in self.tags]} "
-            f"operations:{self.operations} "
+            f"unary_operations:{self.unary_operations} "
+            f"binary_operations:{self.binary_operations} "
+            f"custom_operations:{self.custom_operations} "
             f"parent_id:{self.parent_id}>\n"
         )
 
@@ -563,7 +652,9 @@ class VirtualTag:
             and self.totalized == other.totalized
             and self.units == other.units
             and self.tags == other.tags
-            and self.operations == other.operations
+            and self.unary_operations == other.unary_operations
+            and self.binary_operations == other.binary_operations
+            and self.custom_operations == other.custom_operations
         )
 
     def __hash__(self):
@@ -571,7 +662,9 @@ class VirtualTag:
             (
                 self.id,
                 str(self.tags),
-                str(self.operations),
+                str(self.unary_operations),
+                str(self.binary_operations),
+                str(self.custom_operations),
                 self.contents,
                 self.tag_type,
                 self.totalized,
@@ -588,8 +681,12 @@ class VirtualTag:
             return True
         elif len(self.tags) > len(other.tags):
             return False
-        elif self.operations != other.operations:
-            return self.operations < other.operations
+        elif self.unary_operations != other.unary_operations:
+            return self.unary_operations < other.unary_operations
+        elif self.binary_operations != other.binary_operations:
+            return self.binary_operations < other.binary_operations
+        elif self.custom_operations != other.custom_operations:
+            return self.custom_operations < other.custom_operations
         elif self.id != other.id:
             return self.id < other.id
         elif self.contents != other.contents:
@@ -601,7 +698,7 @@ class VirtualTag:
         else:
             return str(self.units) < str(other.units)
 
-    def process_ops(self, data, tag_to_var_map={}):
+    def process_custom_ops(self, data, tag_to_var_map={}):
         """Transform the given data according to the VirtualTag's lambda string
 
         Parameters
@@ -682,13 +779,20 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
-        if self.operations is not None and self.operations:
+        if self.mode == OperationMode.Algebraic:
+
+        elif self.mode == OperationMode.Custom:
             data = self.process_ops(data, tag_to_var_map=tag_to_var_map)
-        elif isinstance(data, (dict, DataFrame)):
-            # if ops, get appropriate column and rename
-            data = data[self.tags[0].id].rename(self.id)
-        elif isinstance(data, ndarray):
-            # flatten array since operations do that automatically
-            data = data[:, 0]
+            elif isinstance(data, (dict, DataFrame)):
+                # if custom_operations, get appropriate column and rename
+                data = data[self.tags[0].id].rename(self.id)
+            elif isinstance(data, ndarray):
+                # flatten array since operations do that automatically
+                data = data[:, 0]
+        else:
+            raise ValueError(
+                f"{self.mode} not currently supported. "
+                "Select either `OperationMode.Algebraic` or `OperationMode.Custom`."
+            )
 
         return data
