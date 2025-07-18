@@ -4,7 +4,9 @@ from . import utils
 from .tag import Tag, VirtualTag
 from collections import defaultdict
 
-EFFICIENCY_ATTRS = ["thermal_efficiency", "electrical_efficiency", "rte"]
+EFFICIENCY_ATTRS = [
+    "thermal_efficiency", "electrical_efficiency", "rte", "pump_curve", "efficiency"
+]
 
 CAPACITY_ATTRS = [
     "volume",
@@ -1227,16 +1229,16 @@ class Facility(Network):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the network.
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the facility
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the facility
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the facility
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the facility
 
     tags : dict of Tag
@@ -1259,19 +1261,19 @@ class Facility(Network):
     output_contents : list of ContentsType
         Contents leaving the facility.
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the facility in meters above sea level
 
     tags : dict of Tag
         Data tags associated with this facility
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the facility
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the facility
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the facility
 
     nodes : dict of Node
@@ -1493,22 +1495,22 @@ class Pump(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the pump
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the pump in meters above sea level
 
-    power_rating : pint.Quantity or int
+    power_rating : pint.quantity or float
         Rated power of a single pump (in horsepower)
 
     num_units : int
         Number of pumps running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate supplied by the pump
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate supplied by the pump
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate supplied by the pump
 
     pump_type : PumpType
@@ -1531,22 +1533,22 @@ class Pump(Node):
     output_contents : list of ContentsType
         Contents leaving the pump
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the pump in meters above sea level
 
-    power_rating : pint.Quantity or int
+    power_rating : pint.quantity or float
         Rated power of a single pump (in horsepower)
 
     num_units : int
         Number of pumps running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate supplied by the pump
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate supplied by the pump
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate supplied by the pump
 
     pump_type : PumpType
@@ -1689,10 +1691,10 @@ class Tank(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the tank
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the tank in meters above sea level
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the tank in cubic meters
 
     num_units : int
@@ -1712,10 +1714,10 @@ class Tank(Node):
     output_contents : list of ContentsType
         Contents leaving the tank.
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the tank in meters above sea level
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the tank in cubic meters
 
     num_units : int
@@ -1800,19 +1802,19 @@ class Reactor(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the reactor
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the reactor
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the reactor
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the reactor
 
     num_units : int
         Number of reactor in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the reactor in cubic meters
 
     residence_time : pint.Quantity or float
@@ -1838,19 +1840,19 @@ class Reactor(Node):
     output_contents : list of ContentsType
         Contents leaving the reactor
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the reactor
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the reactor
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the reactor
 
     num_units : int
         Number of reactors
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the reactor in cubic meters
 
     residence_time : pint.Quantity or float
@@ -1952,19 +1954,19 @@ class StaticMixer(Reactor):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the mixer
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the mixer
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the mixer
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the mixer
 
     num_units : int
         Number of mixers in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the mixer in cubic meters
 
     residence_time : pint.Quantity or float
@@ -1990,19 +1992,19 @@ class StaticMixer(Reactor):
     output_contents : list of ContentsType
         Contents leaving the mixer
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the mixer
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the mixer
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the mixer
 
     num_units : int
         Number of mixers in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the mixer in cubic meters
 
     residence_time : pint.Quantity or float
@@ -2090,10 +2092,10 @@ class Reservoir(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the reservoir.
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the reservoir in meters above sea level
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the reservoir in cubic meters
 
     tags : dict of Tag
@@ -2110,10 +2112,10 @@ class Reservoir(Node):
     output_contents : list of ContentsType
         Contents leaving the reservoir.
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the reservoir in meters above sea level
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the reservoir in cubic meters
 
     tags : dict of Tag
@@ -2180,6 +2182,9 @@ class Battery(Node):
     rte : float
         Round trip efficiency of the battery
 
+    leakage : pint.Quantity or float
+        Leakage of the battery as a Pint Quantity
+
     tags : dict of Tag
         Data tags associated with this battery
 
@@ -2206,7 +2211,7 @@ class Battery(Node):
     rte : float
         Round trip efficiency of the battery
 
-    leakage : pint.Quantity
+    leakage : pint.Quantity or float
         Leakage of the battery as a Pint Quantity
 
     tags : dict of Tag
@@ -2344,19 +2349,19 @@ class Digestion(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the digester (e.g. biogas or wastewater)
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the digester
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the digester
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the digester
 
     num_units : int
         Number of digesters running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the digester in cubic meters
 
     digester_type : DigesterType
@@ -2379,16 +2384,16 @@ class Digestion(Node):
     num_units : int
         Number of digesters running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the digester in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate through the digester
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate through the digester
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate through the digester
 
     digester_type : DigesterType
@@ -2861,19 +2866,19 @@ class Clarification(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the clarifier
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single clarifier
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single clarifier
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single clarifier
 
     num_units : int
         Number of clarifiers running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the clarifier in cubic meters
 
     tags : dict of Tag
@@ -2893,16 +2898,16 @@ class Clarification(Node):
     num_units : int
         Number of clarifiers running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single clarifier in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single clarifier
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single clarifier
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single clarifier
 
     tags : dict of Tag
@@ -2973,19 +2978,19 @@ class Filtration(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the filter
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single filter
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single filter
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single filter
 
     num_units : int
         Number of filters running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single filter in cubic meters
 
     dosing_rate : dict of DosingType:float
@@ -3011,16 +3016,16 @@ class Filtration(Node):
     num_units : int
         Number of filters running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single filter in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single filter
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single filter
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single filter
 
     dosing_rate : dict of DosingType:float
@@ -3118,19 +3123,19 @@ class ROMembrane(Filtration):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the RO membrane
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of the RO membrane
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of the RO membrane
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single filter
 
     num_units : int
         Number of RO membranes running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the RO membrane in cubic meters
 
     area : float
@@ -3165,16 +3170,16 @@ class ROMembrane(Filtration):
     num_units : int
         Number of RO membranes running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single filter in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single filter
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single filter
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single filter
 
     area : float
@@ -3278,13 +3283,13 @@ class Screening(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the screen
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single screen
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single screen
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single screen
 
     num_units : int
@@ -3307,13 +3312,13 @@ class Screening(Node):
     num_units : int
         Number of screens running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single screen
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single screen
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single screen
 
     tags : dict of Tag
@@ -3383,13 +3388,13 @@ class Conditioning(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the biogas conditioner
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single biogas conditioner
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single biogas conditioner
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single biogas conditioner
 
     num_units : int
@@ -3412,13 +3417,13 @@ class Conditioning(Node):
     num_units : int
         Number of biogas conditioners running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single biogas conditioner
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single biogas conditioner
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single biogas conditioner
 
     tags : dict of Tag
@@ -3487,19 +3492,19 @@ class Thickening(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the thickener
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single thickener
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single thickener
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single thickener
 
     num_units : int
         Number of thickeners running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single thickener in cubic meters
 
     tags : dict of Tag
@@ -3519,16 +3524,16 @@ class Thickening(Node):
     num_units : int
         Number of thickeners running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single thickener in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single thickener
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single thickener
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single thickener
 
     tags : dict of Tag
@@ -3599,19 +3604,19 @@ class Aeration(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the aeration basin
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single aeration basin
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single aeration basin
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single aeration basin
 
     num_units : int
         Number of aeration basins running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single aeration basin in cubic meters
 
     tags : dict of Tag
@@ -3631,16 +3636,16 @@ class Aeration(Node):
     num_units : int
         Number of aeration basins running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single aeration basin in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single aeration basin
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single aeration basin
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single aeration basin
 
     tags : dict of Tag
@@ -3712,19 +3717,19 @@ class Disinfection(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the disinfector
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single disinfector
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single disinfector
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single disinfector
 
     num_units : int
         Number of disinfectors running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single disinfectors in cubic meters
 
     dosing_rate : dict of DosingType:float
@@ -3750,16 +3755,16 @@ class Disinfection(Node):
     num_units : int
         Number of disinfector running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single disinfector in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single disinfector
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single disinfector
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single disinfector
 
     dosing_rate : dict of DosingType:float
@@ -3874,19 +3879,19 @@ class Chlorination(Disinfection):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the chlorinator
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single chlorinator
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single chlorinator
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single chlorinator
 
     num_units : int
         Number of chlorinators running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single chlorinator in cubic meters
 
     dosing_rate : dict of DosingType:float
@@ -3912,16 +3917,16 @@ class Chlorination(Disinfection):
     num_units : int
         Number of chlorinators running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of a single chlorinator in cubic meters
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single chlorinator
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single chlorinator
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single chlorinator
 
     dosing_rate : dict of DosingType:float
@@ -4004,8 +4009,20 @@ class UVSystem(Disinfection):
     output_contents : list of ContentsType
         Contents leaving the UV system
 
+    min_flow : pint.quantity or float
+        Minimum flow rate of a single UV system
+
+    max_flow : pint.quantity or float
+        Maximum flow rate of a single UV system
+
+    design_flow : pint.quantity or float
+        Design flow rate of a single UV system
+
     num_units : int
         Number of UV systems running in parallel
+    
+    volume : pint.quantity or float
+        Volume of a single UV system in cubic meters
 
     residence_time : pint.Quantity or float
         Time in seconds that the water is exposed to UV light
@@ -4017,15 +4034,27 @@ class UVSystem(Disinfection):
         Application area of the UV light in m^2
 
     tags : dict of Tag
-        Data tags associated with this chlorinator
+        Data tags associated with this UV system
 
     Attributes
     ----------
     id : str
         UVSystem ID
 
+    min_flow : pint.quantity or float
+        Minimum flow rate of a single UV system
+
+    max_flow : pint.quantity or float
+        Maximum flow rate of a single UV system
+
+    design_flow : pint.quantity or float
+        Design flow rate of a single UV system
+
     num_units : int
         Number of chlorinators running in parallel
+
+    volume : pint.quantity or float
+        Volume of a single UV system in cubic meters
 
     residence_time : pint.Quantity or float
         Time in seconds that the water is exposed to UV light
@@ -4037,7 +4066,7 @@ class UVSystem(Disinfection):
         Area of the UV system that is exposed to UV light
 
     tags : dict of Tag
-        Data tags associated with this chlorinator
+        Data tags associated with this UV system
     """
 
     def __init__(
@@ -4118,13 +4147,13 @@ class Flaring(Node):
     num_units : int
         Number of flares running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single flare
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single flare
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single flare
 
     tags : dict of Tag
@@ -4141,13 +4170,13 @@ class Flaring(Node):
     num_units : int
         Number of flares running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single flare
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single flare
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single flare
 
     tags : dict of Tag
@@ -4202,25 +4231,25 @@ class Separator(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single separator
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single separator
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single separator
 
     num_units : int
         Number of separators running in parallel
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the separator in cubic meters
 
-    power_rating : pint.Quantity or int
+    power_rating : pint.quantity or float
         Rated power of a single separator (in horsepower or kW)
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the separator in meters above sea level
 
     tags : dict of Tag
@@ -4240,22 +4269,22 @@ class Separator(Node):
     num_units : int
         Number of separators running in parallel
 
-    min_flow : pint.Quantity or int
+    min_flow : pint.quantity or float
         Minimum flow rate of a single separator
 
-    max_flow : pint.Quantity or int
+    max_flow : pint.quantity or float
         Maximum flow rate of a single separator
 
-    design_flow : pint.Quantity or int
+    design_flow : pint.quantity or float
         Design flow rate of a single separator
 
-    volume : pint.Quantity or int
+    volume : pint.quantity or float
         Volume of the separator in cubic meters
 
-    power_rating : pint.Quantity or int
+    power_rating : pint.quantity or float
         Rated power of a single separator
 
-    elevation : pint.Quantity or int
+    elevation : pint.quantity or float
         Elevation of the separator in meters above sea level
 
     tags : dict of Tag
