@@ -46,6 +46,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
         "Reservoir": 0,
         "Pipe": 0,
         "Pump": 0,
+        "Valve": 0,
     }
 
     for n in G.getNodeIndex():
@@ -61,7 +62,6 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             node_ids[n] = id_str
             nodes[id_str] = node_obj
             obj_counts["Junction"] += 1
-
         elif G.getNodeType(n).upper() == "RESERVOIR":
             id_str = "Reservoir" + str(obj_counts["Reservoir"] + 1)
             node_obj = {
@@ -74,7 +74,6 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             node_ids[n] = id_str
             nodes[id_str] = node_obj
             obj_counts["Reservoir"] += 1
-
         elif G.getNodeType(n).upper() == "TANK":
             id_str = "Tank" + str(obj_counts["Tank"] + 1)
             node_obj = {
@@ -88,7 +87,6 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             node_ids[n] = id_str
             nodes[id_str] = node_obj
             obj_counts["Tank"] += 1
-
         else:
             raise ValueError(f"Node type {G.getNodeType(n)} not recognized")
 
@@ -106,7 +104,6 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 }
                 connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
                 obj_counts["Pipe"] += 1
-
             elif G.getLinkType(connection).upper() == "PUMP":
                 pump_obj1 = {
                     "id": "Pump" + str(obj_counts["Pump"]),
@@ -138,53 +135,49 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 }
                 connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
                 obj_counts["Pipe"] += 1
-
             elif G.getLinkType(connection).upper() == "VALVE":
-                raise NotImplementedError("Valves not yet supported in PyPES")
-                # TODO: create Valve object
-                # then seperate valve into multiple pipes and a valve
+                # Separate valve into multiple pipes and a valve
                 # Assign the first node to source, and the other nodes to destination
-                # sources = []
-                # destinations = []
-                # for i, linknode in enumerate(G.getLinkNodesIndex(connection)):
-                #     if i == 0:
-                #         sources.append(node_ids[linknode])
-                #     else:
-                #         destinations.append(node_ids[linknode])
+                sources = []
+                destinations = []
+                for i, linknode in enumerate(G.getLinkNodesIndex(connection)):
+                    if i == 0:
+                        sources.append(node_ids[linknode])
+                    else:
+                        destinations.append(node_ids[linknode])
 
-                # junction_obj = {
-                #     "id": "Junction" + str(obj_counts["Junction"]),
-                #     "type": "Junction",
-                #     "contents": content_placeholder,
-                #     "tags": {},
-                # }
-                # nodes["Junction" + str(obj_counts["Junction"])] = junction_obj
-                # obj_counts["Junction"] += 1
+                valve_obj = {
+                    "id": "Valve" + str(obj_counts["Valve"]),
+                    "type": "Valve",
+                    "contents": content_placeholder,
+                    "tags": {},
+                }
+                nodes["Valve" + str(obj_counts["Valve"])] = valve_obj
+                obj_counts["Valve"] += 1
 
-                # for source in sources:
-                #     connection_obj = {
-                #         "id": "Pipe" + str(obj_counts["Pipe"]),
-                #         "type": "Pipe",
-                #         "contents": content_placeholder,
-                #         "source": source,
-                #         "destination": "Junction" + str(obj_counts["Junction"] - 1),
-                #         "tags": {},
-                #     }
-                #     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
-                #     obj_counts["Pipe"] += 1
+                for source in sources:
+                    connection_obj = {
+                        "id": "Pipe" + str(obj_counts["Pipe"]),
+                        "type": "Pipe",
+                        "contents": content_placeholder,
+                        "source": source,
+                        "destination": "Valve" + str(obj_counts["Valve"] - 1),
+                        "tags": {},
+                    }
+                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                    obj_counts["Pipe"] += 1
 
-                # for destination in destinations:
-                #     connection_obj = {
-                #         "id": "Pipe" + str(obj_counts["Pipe"]),
-                #         "type": "Pipe",
-                #         "contents": content_placeholder,
-                #         "source": "JoJunctionint" + str(obj_counts["Junction"] - 1),
-                #         "destination": destination,
-                #         "tags": {},
-                #     }
-                #     connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
-                #     obj_counts["Pipe"] += 1
-
+                for destination in destinations:
+                    connection_obj = {
+                        "id": "Pipe" + str(obj_counts["Pipe"]),
+                        "type": "Pipe",
+                        "contents": content_placeholder,
+                        "source": "Valve" + str(obj_counts["Valve"] - 1),
+                        "destination": destination,
+                        "tags": {},
+                    }
+                    connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
+                    obj_counts["Pipe"] += 1
             else:
                 raise ValueError(
                     f"Connection type {G.getLinkType(connection)} not recognized"
