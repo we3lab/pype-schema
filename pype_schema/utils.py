@@ -1,8 +1,5 @@
-import warnings
-from pandas import Series
 from enum import Enum, auto
-from numpy import ndarray, nan
-from pint import UndefinedUnitError, DimensionalityError
+from pint import UndefinedUnitError
 
 from .units import u
 

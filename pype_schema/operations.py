@@ -1,6 +1,9 @@
+import warnings
 import numpy as np
 import pandas as pd
 import scipy as sp  # noqa: F401
+from pint import DimensionalityError
+
 from .units import u
 
 
@@ -143,14 +146,14 @@ def unary_helper(data, un_op):
     elif un_op == "-":
         if isinstance(data, list):
             result = [not -x for x in data]
-        elif isinstance(data, (ndarray, Series)):
+        elif isinstance(data, (np.ndarray, pd.Series)):
             result = -data
         else:
             raise TypeError("Data must be either a list, array, or Series")
     elif un_op == "~":
         if isinstance(data, list):
             result = result = [not bool(x) for x in data]
-        elif isinstance(data, (ndarray, Series)):
+        elif isinstance(data, (np.ndarray, pd.Series)):
             result = data == 0
         else:
             raise TypeError("Data must be either a list, array, or Series")
@@ -165,17 +168,17 @@ def unary_helper(data, un_op):
                 for i in range(1, len(data)):
                     result[i] = data[i - 1]
                 result[0] = float("nan")
-        elif isinstance(data, ndarray):
+        elif isinstance(data, np.ndarray):
             result = data.copy().astype("float")
             if un_op == "<<":
                 for i in range(len(data) - 1):
                     result[i] = data[i + 1]
-                result[len(data) - 1] = nan
+                result[len(data) - 1] = np.nan
             elif un_op == ">>":
                 for i in range(1, len(data)):
                     result[i] = data[i - 1]
-                result[0] = nan
-        elif isinstance(data, Series):
+                result[0] = np.nan
+        elif isinstance(data, pd.Series):
             if un_op == "<<":
                 result = data.shift(-1)
             elif un_op == ">>":

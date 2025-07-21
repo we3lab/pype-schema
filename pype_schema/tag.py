@@ -673,7 +673,7 @@ class VirtualTag:
                                     "Unsupported binary operator:",
                                     binary_operations[i - 1],
                                 )
-                            prev_unit = binary_helper(
+                            prev_unit = binary_helper(  # noqa: 405
                                 binary_operations[i - 1],
                                 unit,
                                 prev_unit,
@@ -690,7 +690,7 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = binary_helper(
+                        prev_unit = binary_helper(  # noqa: 405
                             binary_operations,
                             unit,
                             prev_unit,
@@ -856,7 +856,9 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    result[i] = unary_helper(data[i], self.unary_operations[i])
+                    result[i] = unary_helper(  # noqa: 405
+                        data[i], self.unary_operations[i]
+                    )
         elif isinstance(data, ndarray):
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
@@ -870,7 +872,9 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    result[:, i] = unary_helper(data[:, i], self.unary_operations[i])
+                    result[:, i] = unary_helper(  # noqa: 405
+                        data[:, i], self.unary_operations[i]
+                    )
         elif isinstance(data, (dict, DataFrame)):
             for i, tag_obj in enumerate(self.tags):
                 if isinstance(tag_obj, self.__class__):
@@ -880,7 +884,9 @@ class VirtualTag:
                 else:
                     relevant_data = result[tag_obj.id]
 
-                relevant_data = unary_helper(relevant_data, self.unary_operations[i])
+                relevant_data = unary_helper(  # noqa: 405
+                    relevant_data, self.unary_operations[i]
+                )
 
                 if tag_to_var_map:
                     result[tag_to_var_map[tag_obj.id]] = relevant_data
