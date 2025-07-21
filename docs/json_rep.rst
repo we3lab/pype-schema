@@ -538,7 +538,7 @@ at the lowest level:
         "virtual_tags": {
             "BiogasProductionCombined": {
                 "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
-                "operations": "lambda x, y, z: x + y + z",
+                "custom_operations": "lambda x, y, z: x + y + z",
                 "units": "SCFM"
             }
         }
@@ -555,8 +555,36 @@ This tag would be located at the facility level since it is combining data from 
         "virtual_tags": {
             "ElectricalEfficiency": {
                 "tags": ["BiogasProductionCombined", "ElectricityGeneration"],
-                "operations": "lambda x, y: x / y",
+                "custom_operations": "lambda x, y: x / y",
                 "units": "SCFM / kW"
+            }
+        }
+    }
+
+The same ``VirtualTag`` objects could also be defined in ``Algebraic`` mode:
+
+.. code-block:: json
+    
+    "virtual_tags": {
+        "BiogasProductionCombined": {
+            "tags": ["Digester1GasFlow", "Digester2GasFlow", "Digester3GasFlow"],
+            "binary_operations": "+",
+            "units": "SCFM",
+            "mode": "algebraic"
+        }
+    }
+
+.. code-block:: json
+    
+    "WWTP": {
+        "nodes": ["AnaerobicDigester", "Cogenerator", "VirtualDemand"],
+        "connections": ["CogenElecToFacility", "DigesterToCogenerator"],
+        "virtual_tags": {
+            "ElectricalEfficiency": {
+                "tags": ["BiogasProductionCombined", "ElectricityGeneration"],
+                "binary_operations": "/",
+                "units": "SCFM / kW",
+                "mode": "algebraic"
             }
         }
     }
@@ -576,7 +604,9 @@ This tag would be located at the facility level since it is combining data from 
     +--------------------+----------------------+--------------------------------------------------------------------------------------------------------+
     | unary\_operations  | list of str          | Unary operations to apply before combining tags                                                        |
     +--------------------+----------------------+--------------------------------------------------------------------------------------------------------+
-    | binary\_operations | list or str          | Binary operations to apply before combining tags                                                       |
+    | binary\_operations | list or str          | Binary operations to apply when combining tags                                                         |
+    +--------------------+----------------------+--------------------------------------------------------------------------------------------------------+
+    | custom\_operations | str                  | Custom operations to apply when combining tags                                                         |
     +--------------------+----------------------+--------------------------------------------------------------------------------------------------------+
     | parent\_id         | str                  | Identifier for the parent object (either a Node or Connection)                                         |
     +--------------------+----------------------+--------------------------------------------------------------------------------------------------------+

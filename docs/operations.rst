@@ -1,9 +1,9 @@
 .. contents::
 
-.. _operations:
+.. _custom_ops:
 
 **********
-operations
+custom_ops
 **********
 This module consists of a pre-defined functions that are imported into
 :ref:`tag` for convenient use in ``VirtualTag`` objects.

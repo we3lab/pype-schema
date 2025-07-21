@@ -968,7 +968,7 @@ class JSONParser:
                         )
                         operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         v_tag = VirtualTag(
-                            tag_id, tags_by_contents, operations=operations
+                            tag_id, tags_by_contents, custom_operations=operations
                         )
                         node_obj.add_tag(v_tag)
         return node_obj
@@ -1167,7 +1167,7 @@ class JSONParser:
                                 v_tag = VirtualTag(
                                     tag_id,
                                     tag_list,
-                                    operations=operations,
+                                    custom_operations=operations,
                                     units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
@@ -1190,13 +1190,7 @@ class JSONParser:
                             v_tag = VirtualTag(
                                 tag_id,
                                 tag_list,
-                                operations=operations,
-                                units=tag_obj.units,
-                            )
-                            v_tag = VirtualTag(
-                                tag_id,
-                                tag_list,
-                                operations=operations,
+                                custom_operations=operations,
                                 units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
@@ -1226,7 +1220,7 @@ class JSONParser:
                                 v_tag = VirtualTag(
                                     tag_id,
                                     tag_list,
-                                    operations=operations,
+                                    custom_operations=operations,
                                     units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
@@ -1248,7 +1242,7 @@ class JSONParser:
                             v_tag = VirtualTag(
                                 tag_id,
                                 tag_list,
-                                operations=operations,
+                                custom_operations=operations,
                                 units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
@@ -1312,7 +1306,11 @@ class JSONParser:
             dictionary of the form {
                 ``tags``: `dict` of `Tag`
 
-                ``operations``: `str`
+                ``unary_operations``: `list` of `str`
+
+                ``binary_operations``: `list` of `str`
+
+                ``custom_operations``: `str`
 
                 ``type``: `TagType`
 
@@ -1358,15 +1356,45 @@ class JSONParser:
             contents_type = utils.ContentsType[tag_info["contents"]]
         except KeyError:
             contents_type = None
-        v_tag = VirtualTag(
-            tag_id,
-            tag_list,
-            operations=tag_info.get("operations"),
-            tag_type=tag_type,
-            contents=contents_type,
-            parent_id=tag_info.get("parent_id"),
-            units=pint_unit,
-        )
+        op_mode = tag_info.get("mode")
+        unary_ops = tag_info.get("unary_operations")
+        binary_ops = tag_info.get("binary_operations")
+        custom_ops = tag_info.get("custom_operations")
+        if (
+            op_mode in ["Algebraic", "algebraic"]
+            or binary_ops is not None
+            or unary_ops is not None
+        ):
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                unary_operations=unary_ops,
+                binary_operations=binary_ops,
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
+        elif op_mode in ["Custom", "custom"] or custom_ops is not None:
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                custom_operations=custom_ops,
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
+        else: # for backwards compatability
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                custom_operations=tag_info.get("operations"),
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
         return v_tag
 
     @staticmethod

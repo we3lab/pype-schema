@@ -759,7 +759,7 @@ def recursive_get(key, dict_):
 
 
 def binary_helper(operation, unit, prev_unit, totalized_mix=False):
-    """Helper for parsing operations and checking units
+    """Helper for parsing operations and checking units of binary operations
 
     Parameters
     ----------
