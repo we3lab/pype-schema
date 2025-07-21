@@ -34,7 +34,7 @@ Welcome to the Python for Process Engineering Schema (PyPES) documentation!
    :caption: Miscellaneous
 
    logbook
-   custom_ops
+   operations
    utils
    visualize
 

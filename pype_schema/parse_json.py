@@ -1385,7 +1385,7 @@ class JSONParser:
                 parent_id=tag_info.get("parent_id"),
                 units=pint_unit,
             )
-        else: # for backwards compatability
+        else:  # for backwards compatability
             v_tag = VirtualTag(
                 tag_id,
                 tag_list,

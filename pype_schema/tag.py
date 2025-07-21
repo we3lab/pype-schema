@@ -5,9 +5,9 @@ import pandas as pd  # noqa: F401
 import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, array, issubdtype
-from .utils import count_args, binary_helper, unary_helper, parse_units
+from .utils import count_args, parse_units
 from .units import u
-from .custom_ops import *  # noqa: F401, F403
+from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
 
 
