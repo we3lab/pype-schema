@@ -558,8 +558,11 @@ class VirtualTag:
                 )
             else:
                 self.mode = OperationMode.Algebraic
+                self.custom_operations = None
         elif custom_operations is not None:
             self.mode = OperationMode.Custom
+            self.unary_operations = None
+            self.binary_operations = None
         else:
             raise ValueError(
                 "At least one of `unary_operations`, `binary_operations`, "
@@ -1098,9 +1101,10 @@ class VirtualTag:
                 # flatten array since binary operations do that automatically
                 data = data[:, 0]
         elif self.mode == OperationMode.Custom:
-            data = self.process_custom_ops(data, tag_to_var_map=tag_to_var_map)
-            if isinstance(data, (dict, DataFrame)):
-                # if custom_operations, get appropriate column and rename
+            if self.custom_operations is not None and self.custom_operations:
+                data = self.process_custom_ops(data, tag_to_var_map=tag_to_var_map)
+            elif isinstance(data, (dict, DataFrame)):
+                # if custom_operations is empty, get appropriate column and rename
                 data = data[self.tags[0].id].rename(self.id)
             elif isinstance(data, ndarray):
                 # flatten array since operations do that automatically

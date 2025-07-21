@@ -277,7 +277,7 @@ def test_get_all_connections_from(json_path, node_id, expected):
         (
             "data/node.json",
             "data/top_level_connection_tag.pkl",
-            "data/electricty_to_wwtp.pkl",
+            "data/electricity_to_wwtp.pkl",
         ),
         # Case 3: tag exists at a lower level connection
         (
