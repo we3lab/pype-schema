@@ -912,6 +912,21 @@ class JSONParser:
                 output_contents,
                 tags={},
             )
+        elif self.config[node_id]["type"] == "PressureReleaseValve":
+            diameter = self.parse_unit_val_dict(
+                self.config[connection_id].get("diameter")
+            )
+            pressure_setting = self.parse_unit_val_dict(
+                self.config[node_id].get("pressure_setting")
+            )
+            node_obj = node.PressureReleaseValve(
+                node_id,
+                input_contents,
+                output_contents,
+                diameter=diamater,
+                pressure_setting=pressure_setting,
+                tags={},
+            )
         elif self.config[node_id]["type"] == "Separator":
             power_rating = self.parse_unit_val_dict(
                 self.config[node_id].get("power_rating")
@@ -2103,13 +2118,6 @@ class JSONParser:
             node_dict["leakage"] = JSONParser.unit_val_to_dict(node_obj.leakage)
             node_dict["rte"] = node_obj.rte
         elif isinstance(node_obj, node.Network):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
             node_dict["nodes"] = []
             node_dict["connections"] = []
             for subnode in node_obj.get_all_nodes(recurse=False):
@@ -2125,14 +2133,13 @@ class JSONParser:
                 node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
+        elif isinstance(node_obj, node.PressureReleaseValve):
+            node_dict["diameter"] = JSONParser.unit_val_to_dict(node_obj.diameter)
+            node_dict["pressure_setting"] = JSONParser.unit_val_to_dict(
+                node_obj.pressure_setting
+            )
         elif isinstance(node_obj, (node.Junction, node.Valve)):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
+            node_dict["diameter"] = JSONParser.unit_val_to_dict(node_obj.diameter)
         else:
             raise TypeError("Unsupported Node type: " + type(node_obj).__name__)
         return node_dict

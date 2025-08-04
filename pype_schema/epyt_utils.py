@@ -135,7 +135,8 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 }
                 connections["Pipe" + str(obj_counts["Pipe"])] = connection_obj
                 obj_counts["Pipe"] += 1
-            elif G.getLinkType(connection).upper() == "VALVE":
+            # TODO: change PRV to VALVE_TYPE_LIST to support multiple valve types
+            elif G.getLinkType(connection).upper() in ["PRV"]:
                 # Separate valve into multiple pipes and a valve
                 # Assign the first node to source, and the other nodes to destination
                 sources = []
@@ -148,7 +149,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
 
                 valve_obj = {
                     "id": "Valve" + str(obj_counts["Valve"]),
-                    "type": "Valve",
+                    "type": "PressureReleaseValve",
                     "contents": content_placeholder,
                     "tags": {},
                 }
@@ -184,7 +185,11 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 )
         else:
             type_str = G.getLinkType(connection).upper()
-            type_str = type_str[0].upper() + type_str[1:].lower()
+            # TODO: change this to VALVE_TYPE_LIST to support multiple valve types
+            if type_str in ["PRV"]:
+                type_str = "Valve"
+            else:
+                type_str = type_str[0].upper() + type_str[1:].lower()
             id_str = type_str + str(connection)
             connection_obj = {
                 "id": id_str,

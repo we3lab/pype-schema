@@ -1354,6 +1354,9 @@ class Junction(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the junction
 
+    diamater : pint.Quantity
+        Diameter of the junction
+
     tags : dict of Tag
         Data tags associated with this junction
     """
@@ -1363,11 +1366,13 @@ class Junction(Node):
         id,
         input_contents,
         output_contents,
+        diameter=None,
         tags={},
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
         self.set_contents(output_contents, "output_contents")
+        self.diameter = diameter
         self.tags = tags
 
     def __repr__(self):
@@ -1375,6 +1380,7 @@ class Junction(Node):
             f"<pype_schema.node.Junction id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
+            f"diameter:{self.diameter} "
             f"tags:{self.tags}>\n"
         )
 
@@ -1386,6 +1392,7 @@ class Junction(Node):
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
+            and self.diameter == other.diameter
             and self.tags == other.tags
         )
 
@@ -1404,6 +1411,9 @@ class Valve(Node):
     output_contents : ContentsType or list of ContentsType
         Contents leaving the valve
 
+    diamater : pint.Quantity
+        Diameter of the valve
+
     tags : dict of Tag
         Data tags associated with this valve
     """
@@ -1413,11 +1423,13 @@ class Valve(Node):
         id,
         input_contents,
         output_contents,
+        diameter=None,
         tags={},
     ):
         self.id = id
         self.set_contents(input_contents, "input_contents")
         self.set_contents(output_contents, "output_contents")
+        self.diameter = diameter
         self.tags = tags
 
     def __repr__(self):
@@ -1425,6 +1437,7 @@ class Valve(Node):
             f"<pype_schema.node.Valve id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} "
+            f"diameter:{self.diameter} "
             f"tags:{self.tags}>\n"
         )
 
@@ -1436,8 +1449,73 @@ class Valve(Node):
             self.id == other.id
             and self.input_contents == other.input_contents
             and self.output_contents == other.output_contents
+            and self.diameter == other.diameter
             and self.tags == other.tags
         )
+
+
+class PressureReleaseValve(Valve):
+    """A pressure release valve.
+
+    Parameters
+    ----------
+    id : str
+        Pressure release valve ID
+
+    input_contents : ContentsType or list of ContentsType
+        Contents entering the pressure release valve
+
+    output_contents : ContentsType or list of ContentsType
+        Contents leaving the pressure release valve
+
+    diameter : pint.Quantity
+        Diameter of the pressure release valve
+
+    pressure_setting : pint.Quantity
+        Rated or set pressure of the valve
+
+    tags : dict of Tag
+        Data tags associated with this valve
+    """
+
+    def __init__(
+        self,
+        id,
+        input_contents,
+        output_contents,
+        diameter=None,
+        pressure_setting=None,
+        tags={},
+    ):
+        self.id = id
+        self.set_contents(input_contents, "input_contents")
+        self.set_contents(output_contents, "output_contents")
+        self.diameter = diameter
+        self.pressure_setting = pressure_setting
+        self.tags = tags
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.node.Valve id:{self.id} "
+            f"input_contents:{self.input_contents} "
+            f"output_contents:{self.output_contents} "
+            f"diameter:{self.diameter} pressure_setting:{self.pressure_setting} "
+            f"tags:{self.tags}>\n"
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.input_contents == other.input_contents
+            and self.output_contents == other.output_contents
+            and self.diameter == other.diameter
+            and self.pressure_setting == other.pressure_setting
+            and self.tags == other.tags
+        )
+
 
 
 class ModularUnit(Network):
