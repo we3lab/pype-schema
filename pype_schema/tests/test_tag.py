@@ -27,7 +27,6 @@ pint.set_application_registry(u)
         ("data/wrong_op_len.json", "ValueError"),
         ("data/tag_type_incompat.json", "ValueError"),
         ("data/tag_contents_incompat.json", "ValueError"),
-        ("data/tag_recursive_no_units.json", "KeyError"),
     ],
 )
 def test_init_errors(json_path, expected):

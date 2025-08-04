@@ -707,7 +707,7 @@ class VirtualTag:
                         "when more than one tag is given."
                     )
                 self.binary_operations = None
-                prev_unit = units[0]
+                prev_unit = unit_list[0]
 
             # only overwrite if user did not define units
             if self.units is None:

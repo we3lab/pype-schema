@@ -1362,7 +1362,7 @@ class JSONParser:
                     )
                 )
             tag_list.append(subtag)
-        pint_unit = utils.parse_units(tag_info["units"])
+        pint_unit = utils.parse_units(tag_info.get("units"))
         try:
             tag_type = TagType[tag_info["type"]]
         except KeyError:
