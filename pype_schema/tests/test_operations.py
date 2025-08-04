@@ -293,4 +293,3 @@ def test_calculate_values(
         assert parse_units(expected_units) == tag.units
     else:
         assert tag.units is None
-

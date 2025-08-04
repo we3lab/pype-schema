@@ -1517,7 +1517,6 @@ class PressureReleaseValve(Valve):
         )
 
 
-
 class ModularUnit(Network):
     """Modular Unit in the network, such as a reverse osmosis skid.
 
