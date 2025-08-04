@@ -758,7 +758,7 @@
     "tags": {
       "CogenGasPurchases": {
         "type": "Flow",
-        "units": "SCFM",
+        "units": "GPM",
         "contents": "NaturalGas",
         "totalized": false
       }

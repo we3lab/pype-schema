@@ -760,7 +760,7 @@
         "type": "Flow",
         "units": "SCFM",
         "contents": "NaturalGas",
-        "totalized": false
+        "totalized": true
       }
     },
     "virtual_tags": {

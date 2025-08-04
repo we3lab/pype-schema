@@ -243,22 +243,53 @@ def test_init_errors(json_path, expected):
             "data/gen_delta.csv",
             "kWh",
         ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGenNegated",
+            "Dict",
+            "data/gen_negate.csv",
+            "kWh",
+        ),
+        (
+            "data/unit_incompat_algebraic.json",
+            "data/sample_array.csv",
+            "GrossGasProduction",
+            "Array",
+            "ValueError",
+            None,
+        ),
+        (
+            "data/unit_convert_algebraic.json",
+            "data/sample_array.csv",
+            "GrossGasProduction",
+            "Array",
+            "data/gross_gas.csv",
+            "SCFM",
+        ),
+        (
+            "data/totalized_warning_algebraic.json",
+            "data/sample_array.csv",
+            "GrossGasProduction",
+            "Array",
+            "data/gross_gas.csv",
+            "SCFM",
+        ),
     ],
 )
 def test_calculate_values(
     json_path, csv_path, tag_name, data_type, expected_path, expected_units
 ):
     parser = JSONParser(json_path)
-    result = parser.initialize_network()
-    tag = result.get_tag(tag_name, recurse=True)
-
-    data = pd.read_csv(csv_path)
     if isinstance(expected_path, str) and os.path.isfile(expected_path):
         expected = pd.read_csv(expected_path)
     else:
         expected = expected_path
-
     try:
+        result = parser.initialize_network()
+        tag = result.get_tag(tag_name, recurse=True)
+
+        data = pd.read_csv(csv_path)
         if data_type == "DataFrame":
             pd.testing.assert_series_equal(
                 tag.calculate_values(data), expected[tag_name]
@@ -289,7 +320,8 @@ def test_calculate_values(
         result = type(err).__name__
         assert result == expected
 
-    if expected_units is not None:
-        assert parse_units(expected_units) == tag.units
-    else:
-        assert tag.units is None
+    if not (isinstance(expected,str) and expected == "ValueError"):
+        if expected_units is not None:
+            assert parse_units(expected_units) == tag.units
+        else:
+            assert tag.units is None
