@@ -913,9 +913,7 @@ class JSONParser:
                 tags={},
             )
         elif self.config[node_id]["type"] == "PressureReleaseValve":
-            diameter = self.parse_unit_val_dict(
-                self.config[node_id].get("diameter")
-            )
+            diameter = self.parse_unit_val_dict(self.config[node_id].get("diameter"))
             pressure_setting = self.parse_unit_val_dict(
                 self.config[node_id].get("pressure_setting")
             )

@@ -320,7 +320,7 @@ def test_calculate_values(
         result = type(err).__name__
         assert result == expected
 
-    if not (isinstance(expected,str) and expected == "ValueError"):
+    if not (isinstance(expected, str) and expected == "ValueError"):
         if expected_units is not None:
             assert parse_units(expected_units) == tag.units
         else:
