@@ -332,7 +332,7 @@ def test_source_dest_nodes(json_path, connection_name, source_id, dest_id, recur
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, conn_id", 
+    "json_path, conn_id",
     [("data/connection.json", "GasToCogen")]
 )
 def test_get_fallback_error(json_path, conn_id):
