@@ -8,7 +8,12 @@ from pype_schema.utils import ContentsType
 from pype_schema.tag import Tag, TagType
 from pype_schema.parse_json import JSONParser
 from pype_schema.node import (
-    Cogeneration, Pump, Disinfection, ModularUnit, Junction, Valve
+    Cogeneration,
+    Pump,
+    Disinfection,
+    ModularUnit,
+    Junction,
+    Valve,
 )
 from pype_schema.connection import Pipe, Wire
 
