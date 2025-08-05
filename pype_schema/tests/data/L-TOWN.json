@@ -5611,20 +5611,20 @@
   "Reservoir1": {
     "type": "Reservoir",
     "contents": "DrinkingWater",
-    "levation (meters)": 100.0,
+    "elevation (meters)": 100.0,
     "tags": {}
   },
   "Reservoir2": {
     "type": "Reservoir",
     "contents": "DrinkingWater",
-    "levation (meters)": 100.0,
+    "elevation (meters)": 100.0,
     "tags": {}
   },
   "Tank1": {
     "type": "Tank",
     "contents": "DrinkingWater",
-    "levation (meters)": 98.68000030517578,
-    "volume (cubic meters)": -19840.791015625,
+    "elevation (meters)": 98.68000030517578,
+    "volume (cubic meters)": 804.2477416992188,
     "tags": {}
   },
   "Pipe1": {

@@ -683,34 +683,34 @@
   "Reservoir1": {
     "type": "Reservoir",
     "contents": "DrinkingWater",
-    "levation (meters)": 220.0,
+    "elevation (meters)": 220.0,
     "tags": {}
   },
   "Reservoir2": {
     "type": "Reservoir",
     "contents": "DrinkingWater",
-    "levation (meters)": 167.0,
+    "elevation (meters)": 167.0,
     "tags": {}
   },
   "Tank1": {
     "type": "Tank",
     "contents": "DrinkingWater",
-    "levation (meters)": 131.89999389648438,
-    "volume (cubic meters)": -748466.75,
+    "elevation (meters)": 131.89999389648438,
+    "volume (cubic meters)": 182151.5,
     "tags": {}
   },
   "Tank2": {
     "type": "Tank",
     "contents": "DrinkingWater",
-    "levation (meters)": 116.5,
-    "volume (cubic meters)": -228747.21875,
+    "elevation (meters)": 116.5,
+    "volume (cubic meters)": 79128.8671875,
     "tags": {}
   },
   "Tank3": {
     "type": "Tank",
     "contents": "DrinkingWater",
-    "levation (meters)": 129.0,
-    "volume (cubic meters)": -2725005.0,
+    "elevation (meters)": 129.0,
+    "volume (cubic meters)": 749904.4375,
     "tags": {}
   },
   "Pipe1": {

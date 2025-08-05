@@ -1184,7 +1184,6 @@ class JSONParser:
                                     units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
-
                         else:
                             tag_list = [
                                 connection_obj.tags[tag_obj.id]
