@@ -188,7 +188,7 @@ def test_set_heating_values(json_path, connection_name, expected):
         (
             "data/connection_less_than.json",
             "GasToBoiler",
-            "GasToBoilerCopy",
+            "GasToBoilerMGD",
             False,
         ),
         (
@@ -205,6 +205,19 @@ def test_set_heating_values(json_path, connection_name, expected):
             True,
         ),
         ("data/connection_less_than.json", "SecondaryToRAS", "SecondaryToGT", False),
+        ("data/connection_less_than.json", "BiosolidsDelivery", "SolidsDisposal", True),
+        (
+            "data/connection_less_than.json",
+            "GasToBoilerBidirectional",
+            "GasToBoiler",
+            False,
+        ),
+        (
+            "data/connection_less_than.json",
+            "ElectricToRecycledWater",
+            "ElectricToDesal",
+            True,
+        ),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
@@ -315,3 +328,24 @@ def test_source_dest_nodes(json_path, connection_name, source_id, dest_id, recur
 
     assert connection.get_source_node(recurse=recurse).id == source_id
     assert connection.get_dest_node(recurse=recurse).id == dest_id
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, conn_id", 
+    [("data/connection.json", "GasToCogen")]
+)
+def test_get_fallback_error(json_path, conn_id):
+    parser = JSONParser(json_path)
+    result = parser.initialize_network()
+    conn = result.get_connection(conn_id, recurse=True)
+    # delete all attributes we want to test the exception handling for
+    del conn.source
+    del conn.destination
+    # test that they return `None` without error
+    assert conn.get_source_id() is None
+    assert conn.get_num_source_units() is None
+    assert conn.get_dest_id() is None
+    assert conn.get_num_dest_units() is None
+    assert conn.get_exit_point() is None
+    assert conn.get_entry_point() is None

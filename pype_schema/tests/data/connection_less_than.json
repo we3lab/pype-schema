@@ -8,7 +8,9 @@
       "RecycledWaterFacility",
       "PurplePipeSystem",
       "DesalPlant",
-      "Ocean"
+      "Ocean",
+      "ChemicalFactory",
+      "Landfill"
     ],
     "connections": [
       "SewerIntake",
@@ -24,7 +26,10 @@
       "GasToCogen",
       "GasToBoiler",
       "OceanOutfall",
-      "GasToBoilerCopy"
+      "GasToBoilerMGD",
+      "GasToBoilerBidirectional",
+      "BiosolidsDelivery",
+      "SolidsDisposal"
     ],
     "virtual_tags": {
       "GrossGasProduction": {
@@ -363,6 +368,15 @@
     "PowerGrid": {
       "type": "Network",
       "contents": ["Electricity", "NaturalGas"],
+      "tags": {},
+      "nodes": [
+        "NodeA"
+      ],
+      "connections": []
+    },
+    "NodeA": {
+      "type": "Network",
+      "contents": ["Electricity"],
       "tags": {},
       "nodes": [],
       "connections": []
@@ -868,6 +882,7 @@
       "source": "PowerGrid",
       "destination": "DesalPlant",
       "contents": "Electricity",
+      "exit_point": "NodeA",
       "bidirectional": false,
       "tags": {}
     },
@@ -880,7 +895,7 @@
       "bidirectional": false,
       "tags": {}
     },
-    "GasToBoilerCopy": {
+    "GasToBoilerMGD": {
       "type": "Pipe",
       "source": "PowerGrid",
       "destination": "WWTP",
@@ -903,6 +918,22 @@
       "contents": "NaturalGas",
       "entry_point": "Boiler",
       "bidirectional": false,
+      "tags": {
+          "BoilerGasPurchases": {
+            "type": "Flow",
+            "units": "SCFM",
+            "contents": "NaturalGas",
+            "totalized": false
+          }
+      }
+    },
+    "GasToBoilerBidirectional": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Boiler",
+      "bidirectional": true,
       "tags": {
           "BoilerGasPurchases": {
             "type": "Flow",
@@ -998,6 +1029,62 @@
           "units": "kilowatt * hour"
         }
       }
+    },
+    "BiosolidsDelivery": {
+        "type": "Delivery",
+        "source": "ChemicalFactory",
+        "destination": "WWTP",
+        "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "SolidsDisposal": {
+        "type": "Delivery",
+        "source": "WWTP",
+        "destination": "Landfill",
+        "exit_point": "GravityThickener",
+        "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "Landfill": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "contents": ["SolidWaste", "WFBS"],
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
+    },
+    "ChemicalFactory": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Electricity",
+        "output_contents": "Antiscalant",
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
     }
   }
   

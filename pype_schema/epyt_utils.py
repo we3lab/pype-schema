@@ -95,12 +95,13 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
             nodes[id_str] = node_obj
             obj_counts["Tank"] += 1
         else:
-            raise ValueError(f"Node type {G.getNodeType(n)} not recognized")
+            raise ValueError(f"Node type {node_type} not recognized")
 
     for connection in G.getLinkIndex():
         if add_nodes:
+            conn_type = G.getLinkType(connection).upper()
             # Link type is one of: Pipe, Pump, Valve
-            if G.getLinkType(connection).upper() == "PIPE":
+            if conn_type == "PIPE":
                 connection_obj = {
                     "id": "Pipe" + str(obj_counts["Pipe"] + 1),
                     "type": "Pipe",
@@ -111,7 +112,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 }
                 connections["Pipe" + str(obj_counts["Pipe"] + 1)] = connection_obj
                 obj_counts["Pipe"] += 1
-            elif G.getLinkType(connection).upper() == "PUMP":
+            elif conn_type == "PUMP":
                 pump_obj1 = {
                     "id": "Pump" + str(obj_counts["Pump"] + 1),
                     "type": "Pump",
@@ -144,7 +145,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 # wait to increment pump count until all pipes are set up correctly
                 obj_counts["Pump"] += 1
             # TODO: change PRV to VALVE_TYPE_LIST to support multiple valve types
-            elif G.getLinkType(connection).upper() in ["PRV"]:
+            elif conn_type in ["PRV"]:
                 # Separate valve into multiple pipes and a valve
                 # Assign the first node to source, and the other nodes to destination
                 sources = []
@@ -189,9 +190,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
                 # wait to increment valve count until all pipes are set up correctly
                 obj_counts["Valve"] += 1
             else:
-                raise ValueError(
-                    f"Connection type {G.getLinkType(connection)} not recognized"
-                )
+                raise ValueError(f"Connection type {conn_type} not recognized")
         else:
             type_str = G.getLinkType(connection).upper()
             # TODO: change this to VALVE_TYPE_LIST to support multiple valve types

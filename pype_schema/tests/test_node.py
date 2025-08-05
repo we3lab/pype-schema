@@ -7,7 +7,9 @@ from pype_schema.units import u
 from pype_schema.utils import ContentsType
 from pype_schema.tag import Tag, TagType
 from pype_schema.parse_json import JSONParser
-from pype_schema.node import Cogeneration, Pump, Disinfection, ModularUnit
+from pype_schema.node import (
+    Cogeneration, Pump, Disinfection, ModularUnit, Junction, Valve
+)
 from pype_schema.connection import Pipe, Wire
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -1160,6 +1162,18 @@ def test_depr_flow_rate(node, flow_rate):
                 None,
                 1,
                 2000 * u.L,
+            ),
+        ),
+        (
+            Junction(
+                "Junction",
+                [ContentsType.UntreatedSewage],
+                [ContentsType.UntreatedSewage],
+            ),
+            Valve(
+                "Valve",
+                [ContentsType.PretreatedWater],
+                [ContentsType.ProductWater, ContentsType.Brine],
             ),
         ),
     ],
