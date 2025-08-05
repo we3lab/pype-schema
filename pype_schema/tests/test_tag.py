@@ -185,7 +185,6 @@ def test_init_errors(json_path, expected):
             "data/gen_delta.csv",
             "kWh",
         ),
-        # VirtualTag example for type compatibility
         (
             "../data/wrrf_sample.json",
             "data/sample_data.csv",
@@ -193,6 +192,14 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/electrical_efficiency.csv",
             "kilowatt * hour / SCFM",
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationComputed",
+            "DataFrame",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
         ),
     ],
 )

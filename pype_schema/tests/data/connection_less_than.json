@@ -45,6 +45,13 @@
         "type": "Efficiency",
         "parent_id": "Cogenerator",
         "units": "kilowatt * hour / SCFM"
+      },
+      "ElectricityGenerationComputed": {
+        "tags": ["ElectricityProductionByGasVolume", "GrossGasProduction", "Constant1"],
+        "binary_operations": "*",
+        "type": "Flow",
+        "parent_id": "Cogenerator",
+        "contents": "Electricity"
       }
     },
     "DrinkingWaterFacility": {
@@ -163,7 +170,13 @@
         "avg": null,
         "units": "kW"
       },
-      "tags": {}
+      "tags": {
+        "Constant1": {
+          "type": "RunStatus",
+          "units": null,
+          "contents": null
+        }
+      }
     },
     "Flare": {
       "type": "Flaring",

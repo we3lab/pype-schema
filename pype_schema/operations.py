@@ -74,6 +74,9 @@ def binary_helper(operation, unit, prev_unit, totalized_mix=False):
         Resulting Pint Unit from combining the `unit` and `prev_unit`
         according to `operation`
     """
+    # convert unit and prev_unit to dimensionless if None
+    unit = u.dimensionless if unit is None else unit
+    prev_unit = u.dimensionless if prev_unit is None else prev_unit
     if operation == "+" or operation == "-":
         if unit != prev_unit:
             try:
