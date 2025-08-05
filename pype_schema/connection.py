@@ -439,49 +439,48 @@ class Pipe(Connection):
             try:
                 return self.diameter < other.diameter
             except (ValueError, TypeError, AttributeError):
-                return (self.diameter is None)
+                return self.diameter is None
         elif self.min_flow != other.min_flow:
             try:
                 return self.min_flow < other.min_flow
             except (ValueError, TypeError, AttributeError):
-                return (self.min_flow is None)
+                return self.min_flow is None
         elif self.max_flow != other.max_flow:
             try:
                 return self.max_flow < other.max_flow
             except (ValueError, TypeError, AttributeError):
-                return (self.max_flow is None)
+                return self.max_flow is None
         elif self.design_flow != other.design_flow:
             try:
                 return self.design_flow < other.design_flow
             except (ValueError, TypeError, AttributeError):
-                return (self.design_flow is None)
+                return self.design_flow is None
         elif self.friction_coeff != other.friction_coeff:
             try:
                 return self.friction_coeff < other.friction_coeff
             except (ValueError, TypeError, AttributeError):
-                return (self.friction_coeff is None)
+                return self.friction_coeff is None
         elif self.min_pressure != other.min_pressure:
             try:
                 return self.min_pressure < other.min_pressure
             except (ValueError, TypeError, AttributeError):
-                return (self.min_pressure is None)
+                return self.min_pressure is None
         elif self.max_pressure != other.max_pressure:
             try:
                 return self.max_pressure < other.max_pressure
             except (ValueError, TypeError, AttributeError):
-                return (self.max_pressure is None)
+                return self.max_pressure is None
         elif self.design_pressure != other.design_pressure:
             try:
                 return self.design_pressure < other.design_pressure
             except (ValueError, TypeError, AttributeError):
-                return (self.design_pressure is None)
+                return self.design_pressure is None
         elif self.heating_values != other.heating_values:
             try:
                 return self.heating_values < other.heating_values
             except (ValueError, TypeError, AttributeError):
-                return (
-                    (self.heating_values[0] is None) 
-                    or (self.heating_values[1] is None)
+                return (self.heating_values[0] is None) or (
+                    self.heating_values[1] is None
                 )
         elif self.contents != other.contents:
             return self.contents.value < other.contents.value
@@ -491,12 +490,12 @@ class Pipe(Connection):
             try:
                 return self.exit_point.id < other.exit_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.exit_point is None)
+                return self.exit_point is None
         elif self.entry_point != other.entry_point:
             try:
                 return self.entry_point.id < other.entry_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.entry_point is None)
+                return self.entry_point is None
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -831,12 +830,12 @@ class Wire(Connection):
             try:
                 return self.exit_point.id < other.exit_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.exit_point is None)
+                return self.exit_point is None
         elif self.entry_point != other.entry_point:
             try:
                 return self.entry_point.id < other.entry_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.entry_point is None)
+                return self.entry_point is None
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -991,12 +990,12 @@ class Wireless(Connection):
             try:
                 return self.exit_point.id < other.exit_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.exit_point is None)
+                return self.exit_point is None
         elif self.entry_point != other.entry_point:
             try:
                 return self.entry_point.id < other.entry_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.entry_point is None)
+                return self.entry_point is None
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -1160,12 +1159,12 @@ class Delivery(Connection):
             try:
                 return self.exit_point.id < other.exit_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.exit_point is None)
+                return self.exit_point is None
         elif self.entry_point != other.entry_point:
             try:
                 return self.entry_point.id < other.entry_point.id
             except (ValueError, TypeError, AttributeError):
-                return (self.entry_point is None)
+                return self.entry_point is None
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):

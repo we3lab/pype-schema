@@ -786,7 +786,16 @@ class VirtualTag:
         elif len(self.tags) > len(other.tags):
             return False
         elif self.unary_operations != other.unary_operations:
-            return self.unary_operations < other.unary_operations
+            try:
+                return self.unary_operations < other.unary_operations
+            except TypeError:  # list of list of operations leads to error
+                flattened_self_ops = [
+                    item for sublist in self.unary_operations for item in sublist
+                ]
+                flattened_other_ops = [
+                    item for sublist in other.unary_operations for item in sublist
+                ]
+                return flattened_self_ops < flattened_other_ops
         elif self.binary_operations != other.binary_operations:
             return self.binary_operations < other.binary_operations
         elif self.custom_operations != other.custom_operations:

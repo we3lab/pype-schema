@@ -24,6 +24,7 @@ pint.set_application_registry(u)
         ("data/type_error.json", "TypeError", None),
         ("data/EPANET_Net_3.json", "data/net3.pkl", None),
         ("data/L-TOWN-with-nodes.json", "data/l_town.pkl", None),
+        ("data/valve.json", "data/valve.pkl", None),
     ],
 )
 def test_create_network(json_path, expected_path, expected_boiler_efficiency):

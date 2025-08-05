@@ -419,6 +419,24 @@ def test_tag_less_than(
             "CombinedDigesterGasFlow",
             False,
         ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "GrossGasProduction",
+            "ElectricityProductionByGasVolume",
+            True,
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "GrossGasProduction",
+            "CombinedDigesterGasFlow",
+            False,
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "NoGasPurchases",
+            "ElectricityGeneration_RShift2",
+            False,
+        ),
     ],
 )
 def test_v_tag_less_than(json_path, tag_0_id, tag_1_id, expected):

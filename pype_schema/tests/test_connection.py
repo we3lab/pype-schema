@@ -195,26 +195,16 @@ def test_set_heating_values(json_path, connection_name, expected):
             "data/connection_less_than.json",
             "SecondaryToContact",
             "PrimaryToAerator",
-            False
+            False,
         ),
-        (
-            "data/connection_less_than.json",
-            "SecondaryToGT",
-            "SecondaryToContact",
-            True
-        ),
+        ("data/connection_less_than.json", "SecondaryToGT", "SecondaryToContact", True),
         (
             "data/connection_less_than.json",
             "ConditionerToFlare",
             "ConditionerToCogen",
-            True
+            True,
         ),
-        (
-            "data/connection_less_than.json",
-            "SecondaryToRAS",
-            "SecondaryToGT",
-            False
-        )
+        ("data/connection_less_than.json", "SecondaryToRAS", "SecondaryToGT", False),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
