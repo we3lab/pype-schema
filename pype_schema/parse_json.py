@@ -1561,6 +1561,7 @@ class JSONParser:
                     ``rate``: `float`
 
                     ``units``: `str`
+        
                 }
 
             }

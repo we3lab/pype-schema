@@ -1162,6 +1162,7 @@ class Network(Node):
 
     def remove_connection(self, connection_name, recurse=False):
         """Removes a connection from the network
+
         Parameters
         ----------
         connection_name : str
