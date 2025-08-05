@@ -438,36 +438,51 @@ class Pipe(Connection):
         if self.diameter != other.diameter:
             try:
                 return self.diameter < other.diameter
-            except ValueError:
+            except (ValueError, TypeError, AttributeError):
                 return (self.diameter is None)
         elif self.min_flow != other.min_flow:
-            return self.min_flow < other.min_flow
+            try:
+                return self.min_flow < other.min_flow
+            except (ValueError, TypeError, AttributeError):
+                return (self.min_flow is None)
         elif self.max_flow != other.max_flow:
-            return self.max_flow < other.max_flow
+            try:
+                return self.max_flow < other.max_flow
+            except (ValueError, TypeError, AttributeError):
+                return (self.max_flow is None)
         elif self.design_flow != other.design_flow:
-            return self.design_flow < other.design_flow
+            try:
+                return self.design_flow < other.design_flow
+            except (ValueError, TypeError, AttributeError):
+                return (self.design_flow is None)
         elif self.friction_coeff != other.friction_coeff:
-            return self.friction_coeff < other.friction_coeff
+            try:
+                return self.friction_coeff < other.friction_coeff
+            except (ValueError, TypeError, AttributeError):
+                return (self.friction_coeff is None)
         elif self.min_pressure != other.min_pressure:
             try:
                 return self.min_pressure < other.min_pressure
-            except ValueError:
+            except (ValueError, TypeError, AttributeError):
                 return (self.min_pressure is None)
         elif self.max_pressure != other.max_pressure:
             try:
                 return self.max_pressure < other.max_pressure
-            except ValueError:
+            except (ValueError, TypeError, AttributeError):
                 return (self.max_pressure is None)
         elif self.design_pressure != other.design_pressure:
             try:
                 return self.design_pressure < other.design_pressure
-            except ValueError:
+            except (ValueError, TypeError, AttributeError):
                 return (self.design_pressure is None)
         elif self.heating_values != other.heating_values:
             try:
                 return self.heating_values < other.heating_values
-            except ValueError:
-                return (self.heating_values is None)
+            except (ValueError, TypeError, AttributeError):
+                return (
+                    (self.heating_values[0] is None) 
+                    or (self.heating_values[1] is None)
+                )
         elif self.contents != other.contents:
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
@@ -475,12 +490,12 @@ class Pipe(Connection):
         elif self.exit_point != other.exit_point:
             try:
                 return self.exit_point.id < other.exit_point.id
-            except (ValueError, AttributeError):
+            except (ValueError, TypeError, AttributeError):
                 return (self.exit_point is None)
         elif self.entry_point != other.entry_point:
             try:
                 return self.entry_point.id < other.entry_point.id
-            except (ValueError, AttributeError):
+            except (ValueError, TypeError, AttributeError):
                 return (self.entry_point is None)
         elif len(self.tags) < len(other.tags):
             return True
@@ -812,22 +827,16 @@ class Wire(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point is not None:
-            if other.exit_point is not None:
-                if self.exit_point != other.exit_point:
-                    return self.exit_point.id < other.exit_point.id
-            else:
-                return False
-        elif other.exit_point is not None:
-            return True
-        elif self.entry_point is not None:
-            if other.entry_point is not None:
-                if self.entry_point != other.entry_point:
-                    return self.entry_point.id < other.entry_point.id
-            else:
-                return False
-        elif other.entry_point is not None:
-            return True
+        elif self.exit_point != other.exit_point:
+            try:
+                return self.exit_point.id < other.exit_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.exit_point is None)
+        elif self.entry_point != other.entry_point:
+            try:
+                return self.entry_point.id < other.entry_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.entry_point is None)
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -978,22 +987,16 @@ class Wireless(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point is not None:
-            if other.exit_point is not None:
-                if self.exit_point != other.exit_point:
-                    return self.exit_point.id < other.exit_point.id
-            else:
-                return False
-        elif other.exit_point is not None:
-            return True
-        elif self.entry_point is not None:
-            if other.entry_point is not None:
-                if self.entry_point != other.entry_point:
-                    return self.entry_point.id < other.entry_point.id
-            else:
-                return False
-        elif other.entry_point is not None:
-            return True
+        elif self.exit_point != other.exit_point:
+            try:
+                return self.exit_point.id < other.exit_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.exit_point is None)
+        elif self.entry_point != other.entry_point:
+            try:
+                return self.entry_point.id < other.entry_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.entry_point is None)
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -1153,22 +1156,16 @@ class Delivery(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point is not None:
-            if other.exit_point is not None:
-                if self.exit_point != other.exit_point:
-                    return self.exit_point.id < other.exit_point.id
-            else:
-                return False
-        elif other.exit_point is not None:
-            return True
-        elif self.entry_point is not None:
-            if other.entry_point is not None:
-                if self.entry_point != other.entry_point:
-                    return self.entry_point.id < other.entry_point.id
-            else:
-                return False
-        elif other.entry_point is not None:
-            return True
+        elif self.exit_point != other.exit_point:
+            try:
+                return self.exit_point.id < other.exit_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.exit_point is None)
+        elif self.entry_point != other.entry_point:
+            try:
+                return self.entry_point.id < other.entry_point.id
+            except (ValueError, TypeError, AttributeError):
+                return (self.entry_point is None)
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):

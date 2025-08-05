@@ -505,8 +505,8 @@
         "units": "PSI"
       },
       "flowrate": {
-        "max": null,
-        "min": null,
+        "max": 100,
+        "min": 10,
         "avg": null,
         "units": "MGD"
       },
@@ -536,8 +536,8 @@
         "units": "PSI"
       },
       "flowrate": {
-        "max": null,
-        "min": null,
+        "max": 100,
+        "min": 10,
         "avg": null,
         "units": "MGD"
       },
@@ -548,6 +548,12 @@
       "source": "SecondaryClarifier",
       "destination": "WWTPContactChamber",
       "contents": "UntreatedSewage",
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "design": 25,
+        "units": "MGD"
+      },
       "tags": {}
     },
     "DigesterToConditioner": {
@@ -556,10 +562,10 @@
       "destination": "Conditioner",
       "contents": "Biogas",
       "flowrate": {
-        "max": null,
-        "min": null,
+        "max": 1000,
+        "min": 100,
         "avg": null,
-        "units": "MGD"
+        "units": "SCFM"
       },
       "tags": {}
     },
@@ -582,9 +588,9 @@
       "contents": "Biogas",
       "flowrate": {
         "max": null,
-        "min": null,
-        "avg": null,
-        "units": "MGD"
+        "min": 100,
+        "avg": 500,
+        "units": "SCFM"
       },
       "heating_values": {
         "lower": 600,
@@ -633,9 +639,9 @@
       "contents": "Biogas",
       "flowrate": {
         "max": null,
-        "min": null,
-        "avg": null,
-        "units": "MGD"
+        "min": 100,
+        "avg": 500,
+        "units": "SCFM"
       },
       "tags": {
         "TotalizedFlaredGas": {
@@ -660,6 +666,7 @@
       "source": "SecondaryClarifier",
       "destination": "RASPump",
       "contents": "WasteActivatedSludge",
+      "friction_coeff": 0.05,
       "tags": {}
     },
     "RASToAerator": {
@@ -786,6 +793,12 @@
         "max": null,
         "avg": null,
         "units": "PSI"
+      },
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "avg": null,
+        "units": "MGD"
       },
       "tags": {}
     },
