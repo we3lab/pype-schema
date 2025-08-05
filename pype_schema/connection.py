@@ -398,7 +398,7 @@ class Pipe(Connection):
             f"min_flow:{self.min_flow} max_flow:{self.max_flow} "
             f"design_flow:{self.design_flow} min_pressure:{self.min_pressure} "
             f"max_pressure:{self.max_pressure} "
-            f"design_pressure:{self.design_pressure}"
+            f"design_pressure:{self.design_pressure} "
             f"heating_values:{self.heating_values} "
             f"diameter:{self.diameter} friction_coeff:{self.friction_coeff} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
@@ -436,7 +436,10 @@ class Pipe(Connection):
             return NotImplemented
 
         if self.diameter != other.diameter:
-            return self.diameter < other.diameter
+            try:
+                return self.diameter < other.diameter
+            except ValueError:
+                return (self.diameter is None)
         elif self.min_flow != other.min_flow:
             return self.min_flow < other.min_flow
         elif self.max_flow != other.max_flow:
@@ -446,33 +449,39 @@ class Pipe(Connection):
         elif self.friction_coeff != other.friction_coeff:
             return self.friction_coeff < other.friction_coeff
         elif self.min_pressure != other.min_pressure:
-            return self.min_pressure < other.min_pressure
+            try:
+                return self.min_pressure < other.min_pressure
+            except ValueError:
+                return (self.min_pressure is None)
         elif self.max_pressure != other.max_pressure:
-            return self.max_pressure < other.max_pressure
+            try:
+                return self.max_pressure < other.max_pressure
+            except ValueError:
+                return (self.max_pressure is None)
         elif self.design_pressure != other.design_pressure:
-            return self.design_pressure < other.design_pressure
+            try:
+                return self.design_pressure < other.design_pressure
+            except ValueError:
+                return (self.design_pressure is None)
         elif self.heating_values != other.heating_values:
-            return self.heating_values < other.heating_values
+            try:
+                return self.heating_values < other.heating_values
+            except ValueError:
+                return (self.heating_values is None)
         elif self.contents != other.contents:
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point is not None:
-            if other.exit_point is not None:
-                if self.exit_point != other.exit_point:
-                    return self.exit_point.id < other.exit_point.id
-            else:
-                return False
-        elif other.exit_point is not None:
-            return True
-        elif self.entry_point is not None:
-            if other.entry_point is not None:
-                if self.entry_point != other.entry_point:
-                    return self.entry_point.id < other.entry_point.id
-            else:
-                return False
-        elif other.entry_point is not None:
-            return True
+        elif self.exit_point != other.exit_point:
+            try:
+                return self.exit_point.id < other.exit_point.id
+            except (ValueError, AttributeError):
+                return (self.exit_point is None)
+        elif self.entry_point != other.entry_point:
+            try:
+                return self.entry_point.id < other.entry_point.id
+            except (ValueError, AttributeError):
+                return (self.entry_point is None)
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -497,8 +506,6 @@ class Pipe(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
-        # if indistinguishable then return false
-        return False
 
     def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and average flow rate through the connection
@@ -845,8 +852,6 @@ class Wire(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
-        # if indistinguishable then return false
-        return False
 
 
 class Wireless(Connection):
@@ -1013,8 +1018,6 @@ class Wireless(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
-        # if indistinguishable then return false
-        return False
 
 
 class Delivery(Connection):
@@ -1190,5 +1193,3 @@ class Delivery(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
-        # if indistinguishable then return false
-        return False

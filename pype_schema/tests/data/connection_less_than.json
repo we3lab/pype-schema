@@ -23,7 +23,8 @@
       "DrinkingWaterToDistribution",
       "GasToCogen",
       "GasToBoiler",
-      "OceanOutfall"
+      "OceanOutfall",
+      "GasToBoilerCopy"
     ],
     "virtual_tags": {
       "GrossGasProduction": {
@@ -497,6 +498,12 @@
       "source": "PrimaryClarifier",
       "destination": "AerationBasin",
       "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": 75,
+        "units": "PSI"
+      },
       "flowrate": {
         "max": null,
         "min": null,
@@ -522,6 +529,12 @@
       "source": "AerationBasin",
       "destination": "SecondaryClarifier",
       "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": null,
+        "units": "PSI"
+      },
       "flowrate": {
         "max": null,
         "min": null,
@@ -683,6 +696,12 @@
       "destination": "Ocean",
       "contents": "TreatedSewage",
       "exit_point": "WWTPContactChamber",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": 75,
+        "units": "PSI"
+      },
       "flowrate": {
         "max": null,
         "min": null,
@@ -751,6 +770,10 @@
       "source": "BarScreen",
       "destination": "LiftPump",
       "contents": "UntreatedSewage",
+      "diameter": {
+        "units": "inch",
+        "value": 2
+      },
       "tags": {}
     },
     "LiftToGrit": {
@@ -758,6 +781,12 @@
       "source": "LiftPump",
       "destination": "GritChamber",
       "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": null,
+        "avg": null,
+        "units": "PSI"
+      },
       "tags": {}
     },
     "LiftPump": {
@@ -824,6 +853,22 @@
       "entry_point": "WWTPVirtualDemand",
       "bidirectional": false,
       "tags": {}
+    },
+    "GasToBoilerCopy": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Boiler",
+      "bidirectional": false,
+      "tags": {
+          "BoilerGasPurchases": {
+            "type": "Flow",
+            "units": "MGD",
+            "contents": "NaturalGas",
+            "totalized": false
+          }
+      }
     },
     "GasToBoiler": {
       "type": "Pipe",
