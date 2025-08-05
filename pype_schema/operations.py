@@ -145,7 +145,7 @@ def unary_helper(data, un_op):
         result = data - r_shift
     elif un_op == "-":
         if isinstance(data, list):
-            result = [not -x for x in data]
+            result = [-x for x in data]
         elif isinstance(data, (np.ndarray, pd.Series)):
             result = -data
         else:
