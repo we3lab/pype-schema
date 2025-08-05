@@ -2,6 +2,7 @@ import os
 import pint
 import pytest
 from pype_schema.units import u
+from pype_schema.tag import Tag
 from pype_schema.parse_json import JSONParser
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -81,6 +82,7 @@ def test_set_heating_values(json_path, connection_name, expected):
         ),
         ("../data/wrrf_sample.json", "CogenElecToFacility", "ElectricToDesal", False),
         ("../data/wrrf_sample.json", "GasToCogen", "CogenElecToFacility", "TypeError"),
+        ("../data/wrrf_sample.json", "GasToBoiler", "GasToCogen", True),
         (
             "../data/desal_sample.json",
             "SolidsDisposal",
@@ -117,6 +119,42 @@ def test_set_heating_values(json_path, connection_name, expected):
             "AntiscalantDelivery",
             True,
         ),
+        (
+            "../data/wrrf_sample.json",
+            "RecycledWaterOutlet",
+            "WWTPToRecycledWater",
+            False
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "ElectricToWWTP",
+            "CogenElecToFacility",
+            False,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "OceanOutfall",
+            "WWTPToRecycledWater",
+            False,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "OceanOutfall",
+            "WWTPToRecycledWater",
+            False,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "OceanOutfall",
+            "UFToDisinfection",
+            False,
+        ),
+        (
+            "data/connection_less_than.json",
+            "ElectricToWWTP",
+            "ElectricToRecycledWater",
+            False
+        )
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
@@ -174,3 +212,48 @@ def test_depr_flow_rate(json_path, conn_id, flow_rate):
     assert conn.flow_rate == (None, None, flow_rate[2])
     conn.del_design_flow()
     assert conn.flow_rate == (None, None, None)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, conn_id, tag_id",
+    [
+        (
+            "data/connection.json",
+            "GasToCogen",
+            "FakeTag"
+        ),
+    ],
+)
+def test_add_get_remove_tag(json_path, conn_id, tag_id):
+    tag = Tag(tag_id, None, None, None, None, None)
+    network = JSONParser(json_path).initialize_network()
+    conn = network.get_connection(conn_id, recurse=True)
+    conn.add_tag(tag)
+    assert conn.get_tag(tag_id) == tag
+    conn.remove_tag(tag_id)
+    try:
+        conn.get_tag(tag_id)
+    except Exception as err:
+        assert type(err).__name__ == "KeyError"
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, connection_name, source_id, dest_id, recurse",
+    [
+        ("data/connection.json", "GasToCogen", "Digester", "Cogenerator", False),
+        ("../data/wrrf_sample.json", "SewerIntake", "SewerNetwork", "WWTP", False),
+        ("../data/wrrf_sample.json", "SewerIntake", "SewerNetwork", "BarScreen", True),
+        ("../data/wrrf_sample.json", "WWTPToRecycledWater", "WWTP", "RecycledWaterFacility", False),
+        ("../data/wrrf_sample.json", "WWTPToRecycledWater", "SecondaryClarifier", "Ultrafiltration", True),
+    ],
+)
+def test_source_dest_nodes(json_path, connection_name, source_id, dest_id, recurse):
+    parser = JSONParser(json_path)
+
+    result = parser.initialize_network()
+    connection = result.get_connection(connection_name)
+
+    assert connection.get_source_node(recurse=recurse).id == source_id
+    assert connection.get_dest_node(recurse=recurse).id == dest_id

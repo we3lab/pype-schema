@@ -457,10 +457,22 @@ class Pipe(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point != self.exit_point:
-            return self.exit_point < self.exit_point
-        elif self.entry_point != self.entry_point:
-            return self.entry_point < self.entry_point
+        elif self.exit_point is not None:
+            if other.exit_point is not None:
+                if self.exit_point != other.exit_point:
+                    return self.exit_point.id < other.exit_point.id
+            else:
+                return False
+        elif other.exit_point is not None:
+            return True
+        elif self.entry_point is not None:
+            if other.entry_point is not None:
+                if self.entry_point != other.entry_point:
+                    return self.entry_point.id < other.entry_point.id
+            else:
+                return False
+        elif other.entry_point is not None:
+            return True
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -485,6 +497,8 @@ class Pipe(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
+        # if indistinguishable then return false
+        return False
 
     def set_flow_rate(self, min, max, design):
         """Set the minimum, maximum, and average flow rate through the connection
@@ -791,10 +805,22 @@ class Wire(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point != self.exit_point:
-            return self.exit_point < self.exit_point
-        elif self.entry_point != self.entry_point:
-            return self.entry_point < self.entry_point
+        elif self.exit_point is not None:
+            if other.exit_point is not None:
+                if self.exit_point != other.exit_point:
+                    return self.exit_point.id < other.exit_point.id
+            else:
+                return False
+        elif other.exit_point is not None:
+            return True
+        elif self.entry_point is not None:
+            if other.entry_point is not None:
+                if self.entry_point != other.entry_point:
+                    return self.entry_point.id < other.entry_point.id
+            else:
+                return False
+        elif other.entry_point is not None:
+            return True
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -819,6 +845,8 @@ class Wire(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
+        # if indistinguishable then return false
+        return False
 
 
 class Wireless(Connection):
@@ -945,10 +973,22 @@ class Wireless(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point != self.exit_point:
-            return self.exit_point < self.exit_point
-        elif self.entry_point != self.entry_point:
-            return self.entry_point < self.entry_point
+        elif self.exit_point is not None:
+            if other.exit_point is not None:
+                if self.exit_point != other.exit_point:
+                    return self.exit_point.id < other.exit_point.id
+            else:
+                return False
+        elif other.exit_point is not None:
+            return True
+        elif self.entry_point is not None:
+            if other.entry_point is not None:
+                if self.entry_point != other.entry_point:
+                    return self.entry_point.id < other.entry_point.id
+            else:
+                return False
+        elif other.entry_point is not None:
+            return True
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -973,6 +1013,8 @@ class Wireless(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
+        # if indistinguishable then return false
+        return False
 
 
 class Delivery(Connection):
@@ -1108,10 +1150,22 @@ class Delivery(Connection):
             return self.contents.value < other.contents.value
         elif self.bidirectional != other.bidirectional:
             return not self.bidirectional
-        elif self.exit_point != self.exit_point:
-            return self.exit_point < self.exit_point
-        elif self.entry_point != self.entry_point:
-            return self.entry_point < self.entry_point
+        elif self.exit_point is not None:
+            if other.exit_point is not None:
+                if self.exit_point != other.exit_point:
+                    return self.exit_point.id < other.exit_point.id
+            else:
+                return False
+        elif other.exit_point is not None:
+            return True
+        elif self.entry_point is not None:
+            if other.entry_point is not None:
+                if self.entry_point != other.entry_point:
+                    return self.entry_point.id < other.entry_point.id
+            else:
+                return False
+        elif other.entry_point is not None:
+            return True        
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):
@@ -1136,3 +1190,5 @@ class Delivery(Connection):
             for i, tag in enumerate([tag for _, tag in sorted(self.tags.items())]):
                 if tag != other_tags[i]:
                     return tag < other_tags[i]
+        # if indistinguishable then return false
+        return False
