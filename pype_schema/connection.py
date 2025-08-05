@@ -1165,7 +1165,7 @@ class Delivery(Connection):
             else:
                 return False
         elif other.entry_point is not None:
-            return True        
+            return True
         elif len(self.tags) < len(other.tags):
             return True
         elif len(self.tags) > len(other.tags):

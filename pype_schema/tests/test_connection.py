@@ -123,7 +123,7 @@ def test_set_heating_values(json_path, connection_name, expected):
             "../data/wrrf_sample.json",
             "RecycledWaterOutlet",
             "WWTPToRecycledWater",
-            False
+            False,
         ),
         (
             "../data/wrrf_sample.json",
@@ -153,8 +153,8 @@ def test_set_heating_values(json_path, connection_name, expected):
             "data/connection_less_than.json",
             "ElectricToWWTP",
             "ElectricToRecycledWater",
-            False
-        )
+            False,
+        ),
     ],
 )
 def test_conn_less_than(json_path, conn_id_0, conn_id_1, expected):
@@ -218,11 +218,7 @@ def test_depr_flow_rate(json_path, conn_id, flow_rate):
 @pytest.mark.parametrize(
     "json_path, conn_id, tag_id",
     [
-        (
-            "data/connection.json",
-            "GasToCogen",
-            "FakeTag"
-        ),
+        ("data/connection.json", "GasToCogen", "FakeTag"),
     ],
 )
 def test_add_get_remove_tag(json_path, conn_id, tag_id):
@@ -245,8 +241,20 @@ def test_add_get_remove_tag(json_path, conn_id, tag_id):
         ("data/connection.json", "GasToCogen", "Digester", "Cogenerator", False),
         ("../data/wrrf_sample.json", "SewerIntake", "SewerNetwork", "WWTP", False),
         ("../data/wrrf_sample.json", "SewerIntake", "SewerNetwork", "BarScreen", True),
-        ("../data/wrrf_sample.json", "WWTPToRecycledWater", "WWTP", "RecycledWaterFacility", False),
-        ("../data/wrrf_sample.json", "WWTPToRecycledWater", "SecondaryClarifier", "Ultrafiltration", True),
+        (
+            "../data/wrrf_sample.json",
+            "WWTPToRecycledWater",
+            "WWTP",
+            "RecycledWaterFacility",
+            False,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "WWTPToRecycledWater",
+            "SecondaryClarifier",
+            "Ultrafiltration",
+            True,
+        ),
     ],
 )
 def test_source_dest_nodes(json_path, connection_name, source_id, dest_id, recurse):
