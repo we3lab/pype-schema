@@ -55,7 +55,11 @@ Algebraic Mode
 “Algebraic” mode involves the combination of operations are separated into binary (e.g., “+” or “-”) and unary (e.g., “∼” or “»”). 
 Due to the closure of binary and unary operations, it is possible to recursively combine tags in any configuration the user desires. 
 This allows for complex new data streams to seamlessly be integrated into system models. 
-A full table of supported algebraic operations can be found below.
+
+As an example, the figure below shows efficiency calculated by ``VirtualTag`` ("EffVTag"), 
+which is composed of two ``VirtualTag`` objects ("ElecVTag" and "BiogasVTag") combined with the ``/`` operator. 
+``VirtualTag`` objects "ElecVTag" and "BiogasVTag" are each a composition of two real-world sensor measurements using the ``+`` operator.
+
 
 .. image:: _static/vtag-algebraic.png
   :width: 600
@@ -66,7 +70,7 @@ A full table of supported algebraic operations can be found below.
 
 An example of how to define all the potential attributes in algebraic mode is available in 
 `wrrf_sample.json <https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample_algebraic.json>`_.
-
+A full table of supported algebraic operations can be found below.
 Proofs of operator closure will be published along with the PyPES manuscript, which is currently under peer review.
 
 .. table:: A list of all operations, their type (unary, binary, or constant), and a description of the computation performed by each.
@@ -82,15 +86,15 @@ Proofs of operator closure will be published along with the PyPES manuscript, wh
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
     | >>        | Unary operator  | Shift all data to the right one timestep, so that the last timestep will be deleted from the data |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
-    | -         | Unary operator  | Unary negation                                                                                    |
+    | \-        | Unary operator  | Unary negation                                                                                    |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
     | ~         | Unary operator  | Boolean negation. If numerical data, all nonzero values are changed to 0 and zeros to 1           |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
-    | +         | Binary operator | Addition                                                                                          |
+    | \+        | Binary operator | Addition                                                                                          |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
-    | -         | Binary operator | Subtraction                                                                                       |
+    | \-        | Binary operator | Subtraction                                                                                       |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
-    | *         | Binary operator | Multiplication                                                                                    |
+    | \*        | Binary operator | Multiplication                                                                                    |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+
     | /         | Binary operator | Division                                                                                          |
     +-----------+-----------------+---------------------------------------------------------------------------------------------------+

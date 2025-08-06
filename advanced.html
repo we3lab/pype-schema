@@ -154,12 +154,15 @@ support dictionaries (through interpolation) and lambda functions.</p>
 <span id="id2"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Algebraic Mode</a><a class="headerlink" href="#algebraic-mode" title="Permalink to this heading"></a></h2>
 <p>“Algebraic” mode involves the combination of operations are separated into binary (e.g., “+” or “-”) and unary (e.g., “∼” or “»”).
 Due to the closure of binary and unary operations, it is possible to recursively combine tags in any configuration the user desires.
-This allows for complex new data streams to seamlessly be integrated into system models.
-A full table of supported algebraic operations can be found below.</p>
+This allows for complex new data streams to seamlessly be integrated into system models.</p>
+<p>As an example, the figure below shows efficiency calculated by <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> (“EffVTag”),
+which is composed of two <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects (“ElecVTag” and “BiogasVTag”) combined with the <code class="docutils literal notranslate"><span class="pre">/</span></code> operator.
+<code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects “ElecVTag” and “BiogasVTag” are each a composition of two real-world sensor measurements using the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator.</p>
 <a class="reference internal image-reference" href="_images/vtag-algebraic.png"><img alt="Example of the “algebraic” mode to calculate the efficiency of a biogas (BG) cogenerator. The efficiency is calculated by ``VirtualTag`` (&quot;EffVTag&quot;), which is composed of two ``VirtualTag`` objects (&quot;ElecVTag&quot; and &quot;BiogasVTag&quot;) combined with the ``/`` operator. ``VirtualTag`` objects &quot;ElecVTag&quot; and &quot;BiogasVTag&quot; are each a composition of two real-world sensor measurements using the ``+`` operator." src="_images/vtag-algebraic.png" style="width: 600px;" /></a>
 <p>An example of how to define all the potential attributes in algebraic mode is available in
-<a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample_algebraic.json">wrrf_sample.json</a>.</p>
-<p>Proofs of operator closure will be published along with the PyPES manuscript, which is currently under peer review.</p>
+<a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample_algebraic.json">wrrf_sample.json</a>.
+A full table of supported algebraic operations can be found below.
+Proofs of operator closure will be published along with the PyPES manuscript, which is currently under peer review.</p>
 <table class="docutils align-default" id="id3">
 <caption><span class="caption-text">A list of all operations, their type (unary, binary, or constant), and a description of the computation performed by each.</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <thead>
@@ -185,10 +188,7 @@ A full table of supported algebraic operations can be found below.</p>
 <td><p>Unary operator</p></td>
 <td><p>Shift all data to the right one timestep, so that the last timestep will be deleted from the data</p></td>
 </tr>
-<tr class="row-even"><td><ul class="simple">
-<li></li>
-</ul>
-</td>
+<tr class="row-even"><td><p>-</p></td>
 <td><p>Unary operator</p></td>
 <td><p>Unary negation</p></td>
 </tr>
@@ -196,24 +196,15 @@ A full table of supported algebraic operations can be found below.</p>
 <td><p>Unary operator</p></td>
 <td><p>Boolean negation. If numerical data, all nonzero values are changed to 0 and zeros to 1</p></td>
 </tr>
-<tr class="row-even"><td><ul class="simple">
-<li></li>
-</ul>
-</td>
+<tr class="row-even"><td><p>+</p></td>
 <td><p>Binary operator</p></td>
 <td><p>Addition</p></td>
 </tr>
-<tr class="row-odd"><td><ul class="simple">
-<li></li>
-</ul>
-</td>
+<tr class="row-odd"><td><p>-</p></td>
 <td><p>Binary operator</p></td>
 <td><p>Subtraction</p></td>
 </tr>
-<tr class="row-even"><td><ul class="simple">
-<li></li>
-</ul>
-</td>
+<tr class="row-even"><td><p>*</p></td>
 <td><p>Binary operator</p></td>
 <td><p>Multiplication</p></td>
 </tr>
