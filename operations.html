@@ -69,7 +69,9 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">operations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.binary_helper"><code class="docutils literal notranslate"><span class="pre">binary_helper()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.get_change"><code class="docutils literal notranslate"><span class="pre">get_change()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.unary_helper"><code class="docutils literal notranslate"><span class="pre">unary_helper()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
@@ -111,6 +113,39 @@
 <p>This module consists of a pre-defined functions that are imported into
 <a class="reference internal" href="tag.html#tag"><span class="std std-ref">tag</span></a> for convenient use in <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects.</p>
 <span class="target" id="module-pype_schema.operations"></span><dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.operations.binary_helper">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">binary_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_unit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalized_mix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#binary_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.binary_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Helper for parsing operations and checking units of binary operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operation</strong> (<em>[“+”, “-”, “</em>”, “/”]*) – Function to apply when combining tags.
+Supported functions are “+”, “-”, “*”, and “/”.</p></li>
+<li><p><strong>unit</strong> (<em>Unit</em>) – Units for the right side of the operation, represented as a Pint unit.</p></li>
+<li><p><strong>prev_unit</strong> (<em>Unit</em>) – Units for the left side of the operation, represented as a Pint unit.</p></li>
+<li><p><strong>totalized_mix</strong> (<em>bool</em>) – Skip unit checking when there is a mix of totalized and detotalized variables.
+Default is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When units are incompatible for addition or subtraction.
+    When <cite>operation</cite> is unsupported.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.13)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized variables makes it impossible
+    to verify unit compatibility</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Resulting Pint Unit from combining the <cite>unit</cite> and <cite>prev_unit</cite>
+according to <cite>operation</cite></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Unit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="pype_schema.operations.get_change">
 <span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">get_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#get_change"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.get_change" title="Permalink to this definition"></a></dt>
 <dd><p>Converts cumulative value to rate-of-change value using finite differences
@@ -129,6 +164,42 @@ the value at time t+1 and t</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.operations.unary_helper">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">unary_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">un_op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#unary_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.unary_helper" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the given data according to the VirtualTag’s unary operator</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>data</strong> (<em>list, array, or Series</em>) – a list, numpy array, or pandas Series of data to apply a unary operation to</p></li>
+<li><p><strong>un_op</strong> (<em>[“noop”, “delta”, “&lt;&lt;”, “&gt;&gt;”, “~”, “-“]</em>) –</p>
+<dl>
+<dt>Supported operations are:</dt><dd><p>“noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>“delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>“&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>“&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>“~” : Boolean not</p>
+<p>“-” : unary negation</p>
+</dd>
+</dl>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array of dataset trannsformed by unary operation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>

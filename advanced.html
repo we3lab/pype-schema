@@ -50,7 +50,11 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hello.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="json_rep.html">JSON Representation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#efficiency-curves">Efficiency Curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#algebraic-mode">Algebraic Mode</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contribution Agreement</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
 </ul>
@@ -100,11 +104,18 @@
   <nav class="contents" id="contents" role="doc-toc">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#advanced-features" id="id1">Advanced Features</a></p></li>
+<li><p><a class="reference internal" href="#advanced-features" id="id4">Advanced Features</a></p>
+<ul>
+<li><p><a class="reference internal" href="#efficiency-curves" id="id5">Efficiency Curves</a></p></li>
+<li><p><a class="reference internal" href="#algebraic-mode" id="id6">Algebraic Mode</a></p></li>
+</ul>
+</li>
 </ul>
 </nav>
 <section id="advanced-features">
-<span id="advanced"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">Advanced Features</a><a class="headerlink" href="#advanced-features" title="Permalink to this heading"></a></h1>
+<span id="advanced"></span><h1><a class="toc-backref" href="#id4" role="doc-backlink">Advanced Features</a><a class="headerlink" href="#advanced-features" title="Permalink to this heading"></a></h1>
+<section id="efficiency-curves">
+<span id="id1"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Efficiency Curves</a><a class="headerlink" href="#efficiency-curves" title="Permalink to this heading"></a></h2>
 <p>Some attributes in PyPES are not static metadata. For example, a <code class="docutils literal notranslate"><span class="pre">Pump</span></code> may have an efficiency curve rather
 than a single efficiency value. To define an efficiency curve, first define a function and then use
 <code class="docutils literal notranslate"><span class="pre">set_pump_curve()</span></code> to set the <code class="docutils literal notranslate"><span class="pre">pump_curve</span></code> attribute to that function. <code class="docutils literal notranslate"><span class="pre">thermal_efficiency</span></code>
@@ -138,6 +149,89 @@ and <code class="docutils literal notranslate"><span class="pre">electrical_effi
 </div>
 <p>Currently, only static efficiency values are supported in the JSON format, but the long-term plan is to
 support dictionaries (through interpolation) and lambda functions.</p>
+</section>
+<section id="algebraic-mode">
+<span id="id2"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Algebraic Mode</a><a class="headerlink" href="#algebraic-mode" title="Permalink to this heading"></a></h2>
+<p>“Algebraic” mode involves the combination of operations are separated into binary (e.g., “+” or “-”) and unary (e.g., “∼” or “»”).
+Due to the closure of binary and unary operations, it is possible to recursively combine tags in any configuration the user desires.
+This allows for complex new data streams to seamlessly be integrated into system models.
+A full table of supported algebraic operations can be found below.</p>
+<a class="reference internal image-reference" href="_images/vtag-algebraic.png"><img alt="Example of the “algebraic” mode to calculate the efficiency of a biogas (BG) cogenerator. The efficiency is calculated by ``VirtualTag`` (&quot;EffVTag&quot;), which is composed of two ``VirtualTag`` objects (&quot;ElecVTag&quot; and &quot;BiogasVTag&quot;) combined with the ``/`` operator. ``VirtualTag`` objects &quot;ElecVTag&quot; and &quot;BiogasVTag&quot; are each a composition of two real-world sensor measurements using the ``+`` operator." src="_images/vtag-algebraic.png" style="width: 600px;" /></a>
+<p>An example of how to define all the potential attributes in algebraic mode is available in
+<a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample_algebraic.json">wrrf_sample.json</a>.</p>
+<p>Proofs of operator closure will be published along with the PyPES manuscript, which is currently under peer review.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">A list of all operations, their type (unary, binary, or constant), and a description of the computation performed by each.</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>noop</p></td>
+<td><p>Unary operator</p></td>
+<td><p>No operation. Useful when skipping a tag in a list of unary operations</p></td>
+</tr>
+<tr class="row-odd"><td><p>delta</p></td>
+<td><p>Unary operator</p></td>
+<td><p>Input[t] - input[t-1] for t in 1,…,T</p></td>
+</tr>
+<tr class="row-even"><td><p>&lt;&lt;</p></td>
+<td><p>Unary operator</p></td>
+<td><p>Shift all data to the left one timestep, so that the first timestep will be deleted from the data</p></td>
+</tr>
+<tr class="row-odd"><td><p>&gt;&gt;</p></td>
+<td><p>Unary operator</p></td>
+<td><p>Shift all data to the right one timestep, so that the last timestep will be deleted from the data</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Unary operator</p></td>
+<td><p>Unary negation</p></td>
+</tr>
+<tr class="row-odd"><td><p>~</p></td>
+<td><p>Unary operator</p></td>
+<td><p>Boolean negation. If numerical data, all nonzero values are changed to 0 and zeros to 1</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Binary operator</p></td>
+<td><p>Addition</p></td>
+</tr>
+<tr class="row-odd"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Binary operator</p></td>
+<td><p>Subtraction</p></td>
+</tr>
+<tr class="row-even"><td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>Binary operator</p></td>
+<td><p>Multiplication</p></td>
+</tr>
+<tr class="row-odd"><td><p>/</p></td>
+<td><p>Binary operator</p></td>
+<td><p>Division</p></td>
+</tr>
+<tr class="row-even"><td><p>value</p></td>
+<td><p>Constant</p></td>
+<td><p>A value that is constant at all timesteps</p></td>
+</tr>
+<tr class="row-odd"><td><p>units</p></td>
+<td><p>Constant</p></td>
+<td><p>Dimensionality (e.g., cubic meters or kilowatts)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 
 

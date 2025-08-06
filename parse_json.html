@@ -513,7 +513,7 @@ Given as a float if no units are specified</p>
 Given as a float if no units are specified</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a>, <a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a>) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,7 +539,7 @@ Given as a float if no units are specified</p>
 If no units given, then returns a tuple of floats.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(pint.Quantity, pint.Quantity, pint.Quantity) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>)</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a>, <a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a>, <a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a>) or (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -595,7 +595,7 @@ which is used to gather relevant metadata</p></li>
 <dd class="field-even"><p>Dictionary as a Pint Quantity (or float if no units are specified)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pint.Quantity or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)">pint.Quantity</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -611,7 +611,9 @@ which is used to gather relevant metadata</p></li>
 <li><p><strong>tag_info</strong> (<em>dict</em>) –</p>
 <dl>
 <dt>dictionary of the form {</dt><dd><p><code class="docutils literal notranslate"><span class="pre">tags</span></code>: <cite>dict</cite> of <cite>Tag</cite></p>
-<p><code class="docutils literal notranslate"><span class="pre">operations</span></code>: <cite>str</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">unary_operations</span></code>: <cite>list</cite> of <cite>str</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">binary_operations</span></code>: <cite>list</cite> of <cite>str</cite></p>
+<p><code class="docutils literal notranslate"><span class="pre">custom_operations</span></code>: <cite>str</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">type</span></code>: <cite>TagType</cite></p>
 <p><code class="docutils literal notranslate"><span class="pre">contents</span></code>: <cite>str</cite></p>
 </dd>

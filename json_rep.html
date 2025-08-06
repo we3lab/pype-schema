@@ -119,32 +119,32 @@
   <nav class="contents" id="contents" role="doc-toc">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#json-representation" id="id28">JSON Representation</a></p>
+<li><p><a class="reference internal" href="#json-representation" id="id37">JSON Representation</a></p>
 <ul>
-<li><p><a class="reference internal" href="#representing-nodes" id="id29">Representing Nodes</a></p></li>
-<li><p><a class="reference internal" href="#representing-connections" id="id30">Representing Connections</a></p></li>
-<li><p><a class="reference internal" href="#representing-tags" id="id31">Representing Tags</a></p>
+<li><p><a class="reference internal" href="#representing-nodes" id="id38">Representing Nodes</a></p></li>
+<li><p><a class="reference internal" href="#representing-connections" id="id39">Representing Connections</a></p></li>
+<li><p><a class="reference internal" href="#representing-tags" id="id40">Representing Tags</a></p>
 <ul>
-<li><p><a class="reference internal" href="#basic-tag" id="id32">Basic <code class="docutils literal notranslate"><span class="pre">Tag</span></code></a></p></li>
-<li><p><a class="reference internal" href="#virtualtag" id="id33"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a></p></li>
-<li><p><a class="reference internal" href="#tagtype-enum" id="id34"><code class="docutils literal notranslate"><span class="pre">TagType</span></code> Enum</a></p></li>
+<li><p><a class="reference internal" href="#basic-tag" id="id41">Basic <code class="docutils literal notranslate"><span class="pre">Tag</span></code></a></p></li>
+<li><p><a class="reference internal" href="#virtualtag" id="id42"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a></p></li>
+<li><p><a class="reference internal" href="#tagtype-enum" id="id43"><code class="docutils literal notranslate"><span class="pre">TagType</span></code> Enum</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#contentstype-enum" id="id35"><code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> Enum</a></p></li>
-<li><p><a class="reference internal" href="#num-units-attribute" id="id36"><code class="docutils literal notranslate"><span class="pre">num_units</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#elevation-attribute" id="id37"><code class="docutils literal notranslate"><span class="pre">elevation</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#volume-attribute" id="id38"><code class="docutils literal notranslate"><span class="pre">volume</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#flow-rate-attribute" id="id39"><code class="docutils literal notranslate"><span class="pre">flow_rate</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#gen-capacity-attribute" id="id40"><code class="docutils literal notranslate"><span class="pre">gen_capacity</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#heating-values-attribute" id="id41"><code class="docutils literal notranslate"><span class="pre">heating_values</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#capacity-attribute" id="id42"><code class="docutils literal notranslate"><span class="pre">capacity</span></code> Attribute</a></p></li>
-<li><p><a class="reference internal" href="#discharge-rate-attribute" id="id43"><code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#contentstype-enum" id="id44"><code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> Enum</a></p></li>
+<li><p><a class="reference internal" href="#num-units-attribute" id="id45"><code class="docutils literal notranslate"><span class="pre">num_units</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#elevation-attribute" id="id46"><code class="docutils literal notranslate"><span class="pre">elevation</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#volume-attribute" id="id47"><code class="docutils literal notranslate"><span class="pre">volume</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#flow-rate-attribute" id="id48"><code class="docutils literal notranslate"><span class="pre">flow_rate</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#gen-capacity-attribute" id="id49"><code class="docutils literal notranslate"><span class="pre">gen_capacity</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#heating-values-attribute" id="id50"><code class="docutils literal notranslate"><span class="pre">heating_values</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#capacity-attribute" id="id51"><code class="docutils literal notranslate"><span class="pre">capacity</span></code> Attribute</a></p></li>
+<li><p><a class="reference internal" href="#discharge-rate-attribute" id="id52"><code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> Attribute</a></p></li>
 </ul>
 </li>
 </ul>
 </nav>
 <section id="json-representation">
-<span id="json-rep"></span><h1><a class="toc-backref" href="#id28" role="doc-backlink">JSON Representation</a><a class="headerlink" href="#json-representation" title="Permalink to this heading"></a></h1>
+<span id="json-rep"></span><h1><a class="toc-backref" href="#id37" role="doc-backlink">JSON Representation</a><a class="headerlink" href="#json-representation" title="Permalink to this heading"></a></h1>
 <p>The PyPES JSON file format is broken into four categories at the top level:</p>
 <ol class="arabic simple">
 <li><p>String <code class="docutils literal notranslate"><span class="pre">Node</span></code> ID list</p></li>
@@ -303,7 +303,7 @@ so that the meaning of fields such as “type”, “num_units”, “contents�
 <p>A more complex example is avaiable at
 <a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json">wrrf_sample.json</a>.</p>
 <section id="representing-nodes">
-<span id="node-rep"></span><h2><a class="toc-backref" href="#id29" role="doc-backlink">Representing Nodes</a><a class="headerlink" href="#representing-nodes" title="Permalink to this heading"></a></h2>
+<span id="node-rep"></span><h2><a class="toc-backref" href="#id38" role="doc-backlink">Representing Nodes</a><a class="headerlink" href="#representing-nodes" title="Permalink to this heading"></a></h2>
 <p>The most generic structure of a node is outlined above in <a class="reference internal" href="#json-rep"><span class="std std-ref">JSON Representation</span></a>, but that just scratches the surface.
 There are numerous types of nodes, and each one has a number attributes.</p>
 <p>For example, a <code class="docutils literal notranslate"><span class="pre">Digestion</span></code> object must have <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">input_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">output_contents</span></code>,
@@ -330,8 +330,8 @@ There are numerous types of nodes, and each one has a number attributes.</p>
 Optional attributes have default values (in the case of <code class="docutils literal notranslate"><span class="pre">flowrate</span></code> the default is <code class="docutils literal notranslate"><span class="pre">null</span></code>),
 so it would be equally correct to leave <code class="docutils literal notranslate"><span class="pre">flowrate</span></code> out of the JSON file entirely.
 Below are two tables: first is all the <code class="docutils literal notranslate"><span class="pre">Node</span></code> subclasses and the second the attributes of each subclass.</p>
-<table class="docutils align-default" id="id21">
-<caption><span class="caption-text">Description of all potential attributes of <code class="docutils literal notranslate"><span class="pre">Node</span></code> class and subclasses</span><a class="headerlink" href="#id21" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id30">
+<caption><span class="caption-text">Description of all potential attributes of <code class="docutils literal notranslate"><span class="pre">Node</span></code> class and subclasses</span><a class="headerlink" href="#id30" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Type</p></th>
@@ -364,11 +364,11 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>dictionary of all connections that are children of this node</p></td>
 </tr>
 <tr class="row-even"><td><p>elevation</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>facility/process elevation above sea level</p></td>
 </tr>
 <tr class="row-odd"><td><p>flow_rate</p></td>
-<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id17" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id25" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>min, max, and average flow rate of a single unit</p></td>
 </tr>
 <tr class="row-even"><td><p>num_units</p></td>
@@ -376,49 +376,97 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>number of identical parallel processes</p></td>
 </tr>
 <tr class="row-odd"><td><p>volume</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>volume of a single unit of the process</p></td>
 </tr>
-<tr class="row-even"><td><p>horsepower</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td><p>maximum horsepower of a single pump</p></td>
+<tr class="row-even"><td><p>power_rating</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>power rating of a process (e.g., horsepower of a pump)</p></td>
 </tr>
 <tr class="row-odd"><td><p>pump_type</p></td>
-<td><p>PumpType <a class="footnote-reference brackets" href="#id19" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td><p>PumpType <a class="footnote-reference brackets" href="#id27" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
 <td><p>type of pump (either constant or variable frequency drive (VFD))</p></td>
 </tr>
 <tr class="row-even"><td><p>pump_curve</p></td>
 <td><p>func</p></td>
 <td><p>function for the efficiency curve of a pump</p></td>
 </tr>
-<tr class="row-odd"><td><p>electrical_efficiency</p></td>
+<tr class="row-odd"><td><p>efficiency</p></td>
+<td><p>float</p></td>
+<td><p>constant value for the efficiency of a pump</p></td>
+</tr>
+<tr class="row-even"><td><p>electrical_efficiency</p></td>
 <td><p>func</p></td>
 <td><p>function for the electrical efficiency of a cogenerator</p></td>
 </tr>
-<tr class="row-even"><td><p>thermal_efficiency</p></td>
+<tr class="row-odd"><td><p>thermal_efficiency</p></td>
 <td><p>func</p></td>
 <td><p>function for the thermal efficiency of a boiler or cogenerator</p></td>
 </tr>
-<tr class="row-odd"><td><p>digester_type</p></td>
-<td><p>DigesterType <a class="footnote-reference brackets" href="#id20" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-even"><td><p>digester_type</p></td>
+<td><p>DigesterType <a class="footnote-reference brackets" href="#id28" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
 <td><p>type of digester (either aerobic or anaerobic)</p></td>
 </tr>
-<tr class="row-even"><td><p>gen_capacity</p></td>
-<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id17" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-odd"><td><p>gen_capacity</p></td>
+<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id25" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>min, max, and average generation capacity of a single engine</p></td>
 </tr>
-<tr class="row-odd"><td><p>capacity</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-even"><td><p>energy_capacity</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>maximum battery storage capacity</p></td>
 </tr>
-<tr class="row-even"><td><p>discharge_rate</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-odd"><td><p>rte</p></td>
+<td><p>float</p></td>
+<td><p>round trip efficiency of a battery</p></td>
+</tr>
+<tr class="row-even"><td><p>charge_rate</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>maximum charge rate of the battery</p></td>
+</tr>
+<tr class="row-odd"><td><p>discharge_rate</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>maximum discharge rate of the battery</p></td>
+</tr>
+<tr class="row-even"><td><p>leakage</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>leakage rate of a storage technology</p></td>
+</tr>
+<tr class="row-odd"><td><p>dosing_rate</p></td>
+<td><p>dict of {DosingType : float}</p></td>
+<td><p>rate at which the disinfectant is supplied to the system</p></td>
+</tr>
+<tr class="row-even"><td><p>dosing_area</p></td>
+<td><p>dict of {DosingType : float}</p></td>
+<td><p>area of the disinfection system that is exposed to disinfectant</p></td>
+</tr>
+<tr class="row-odd"><td><p>residence_time</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>hydraulic residence time of a reactor</p></td>
+</tr>
+<tr class="row-even"><td><p>pH</p></td>
+<td><p>float</p></td>
+<td><p>pH of a unit process</p></td>
+</tr>
+<tr class="row-odd"><td><p>area</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>cross-sectional area of a unit process</p></td>
+</tr>
+<tr class="row-even"><td><p>permeability</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>ability of membrane to allow molecules through</p></td>
+</tr>
+<tr class="row-odd"><td><p>selectivity</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>preference to allow certain molecules through while restricting others</p></td>
+</tr>
+<tr class="row-even"><td><p>settling_time</p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>average time for a particle to settle in a unit process</p></td>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id22">
-<caption><span class="caption-text">Matrix of attributes for each <code class="docutils literal notranslate"><span class="pre">Node</span></code> subclass</span><a class="headerlink" href="#id22" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id31">
+<caption><span class="caption-text">Matrix of attributes for each <code class="docutils literal notranslate"><span class="pre">Node</span></code> subclass</span><a class="headerlink" href="#id31" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"></th>
 <th class="head"><p>id</p></th>
@@ -431,15 +479,27 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <th class="head"><p>flow_rate</p></th>
 <th class="head"><p>num_units</p></th>
 <th class="head"><p>volume</p></th>
-<th class="head"><p>horsepower</p></th>
+<th class="head"><p>power_rating</p></th>
 <th class="head"><p>pump_type</p></th>
 <th class="head"><p>pump_curve</p></th>
+<th class="head"><p>efficiency</p></th>
 <th class="head"><p>electrical_efficiency</p></th>
 <th class="head"><p>thermal_efficiency</p></th>
 <th class="head"><p>digester_type</p></th>
 <th class="head"><p>gen_capacity</p></th>
-<th class="head"><p>capacity</p></th>
+<th class="head"><p>energy_capacity</p></th>
+<th class="head"><p>rte</p></th>
+<th class="head"><p>charge_rate</p></th>
 <th class="head"><p>discharge_rate</p></th>
+<th class="head"><p>leakage</p></th>
+<th class="head"><p>dosing_rate</p></th>
+<th class="head"><p>dosing_area</p></th>
+<th class="head"><p>residence_time</p></th>
+<th class="head"><p>pH</p></th>
+<th class="head"><p>area</p></th>
+<th class="head"><p>permeability</p></th>
+<th class="head"><p>selectivity</p></th>
+<th class="head"><p>settling_time</p></th>
 </tr>
 </thead>
 <tbody>
@@ -448,6 +508,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -484,6 +556,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>Facility</p></td>
 <td><p>✓</p></td>
@@ -494,6 +578,150 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Junction</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Valve</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>PRV <a class="footnote-reference brackets" href="#id29" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ModularUnit</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -520,6 +748,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -547,6 +787,84 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Reactor</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>StaticMixer</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>Reservoir</p></td>
 <td><p>✓</p></td>
@@ -568,6 +886,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>Screening</p></td>
 <td><p>✓</p></td>
@@ -579,6 +909,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -610,6 +952,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>Aeration</p></td>
 <td><p>✓</p></td>
@@ -622,6 +976,18 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -652,6 +1018,84 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+</tr>
+<tr class="row-even"><td><p>ROMembrane</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+</tr>
+<tr class="row-odd"><td><p>Disinfection</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>Chlorination</p></td>
 <td><p>✓</p></td>
@@ -673,29 +1117,20 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
-</tr>
-<tr class="row-odd"><td><p>Thickening</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Digestion</p></td>
+<tr class="row-odd"><td><p>UVSystem</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
@@ -711,33 +1146,24 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
-<td><p>✓</p></td>
 <td></td>
 <td></td>
 <td></td>
-</tr>
-<tr class="row-odd"><td><p>Conditioning</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td><p>✓</p></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Cogeneration</p></td>
+<tr class="row-even"><td><p>Thickening</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
@@ -745,21 +1171,6 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td><p>✓</p></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td></td>
-<td><p>✓</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>Boiler</p></td>
-<td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
@@ -767,22 +1178,7 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
-<td><p>✓</p></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td><p>✓</p></td>
-<td></td>
-<td><p>✓</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Flaring</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
-<td><p>✓</p></td>
 <td></td>
 <td></td>
 <td></td>
@@ -800,7 +1196,172 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Battery</p></td>
+<tr class="row-odd"><td><p>Digestion</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Conditioning</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Cogeneration</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Boiler</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Flaring</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Battery</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
@@ -818,8 +1379,20 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <td></td>
 <td></td>
 <td></td>
+<td></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -827,11 +1400,11 @@ Below are two tables: first is all the <code class="docutils literal notranslate
 <a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json">wrrf_sample.json</a>.</p>
 </section>
 <section id="representing-connections">
-<span id="conn-rep"></span><h2><a class="toc-backref" href="#id30" role="doc-backlink">Representing Connections</a><a class="headerlink" href="#representing-connections" title="Permalink to this heading"></a></h2>
+<span id="conn-rep"></span><h2><a class="toc-backref" href="#id39" role="doc-backlink">Representing Connections</a><a class="headerlink" href="#representing-connections" title="Permalink to this heading"></a></h2>
 <p>The most generic structure of a node is outlined above in <a class="reference internal" href="#json-rep"><span class="std std-ref">JSON Representation</span></a>, but that just scratches the surface.
 There are numerous types of connections, and each one has a number attributes.</p>
-<table class="docutils align-default" id="id23">
-<caption><span class="caption-text">Description of all potential attributes of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> class and subclasses</span><a class="headerlink" href="#id23" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id32">
+<caption><span class="caption-text">Description of all potential attributes of <code class="docutils literal notranslate"><span class="pre">Connection</span></code> class and subclasses</span><a class="headerlink" href="#id32" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Type</p></th>
@@ -872,11 +1445,11 @@ There are numerous types of connections, and each one has a number attributes.</
 <td><p>The child node at which this connection enters its destination.</p></td>
 </tr>
 <tr class="row-even"><td><p>flow_rate</p></td>
-<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id17" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id25" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>min, max, and average flow rate of a single unit</p></td>
 </tr>
 <tr class="row-odd"><td><p>diameter</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>inner diameter of a pipe</p></td>
 </tr>
 <tr class="row-even"><td><p>friction_coeff</p></td>
@@ -884,17 +1457,17 @@ There are numerous types of connections, and each one has a number attributes.</
 <td><p>Friction coefficient for a pipe</p></td>
 </tr>
 <tr class="row-odd"><td><p>pressure</p></td>
-<td><p>Quantity <a class="footnote-reference brackets" href="#id17" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>Quantity <a class="footnote-reference brackets" href="#id25" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>Minimum, maximum, and average pressure in a pipe</p></td>
 </tr>
 <tr class="row-even"><td><p>heating_values</p></td>
-<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id17" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>tuple of Quantity <a class="footnote-reference brackets" href="#id25" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>The lower and higher heating values of the gas in the pipe.</p></td>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id24">
-<caption><span class="caption-text">Matrix of attributes for each <code class="docutils literal notranslate"><span class="pre">Connection</span></code> subclass</span><a class="headerlink" href="#id24" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id33">
+<caption><span class="caption-text">Matrix of attributes for each <code class="docutils literal notranslate"><span class="pre">Connection</span></code> subclass</span><a class="headerlink" href="#id33" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"></th>
 <th class="head"><p>id</p></th>
@@ -928,7 +1501,7 @@ There are numerous types of connections, and each one has a number attributes.</
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Wire</p></td>
+<tr class="row-odd"><td><p>Delivery</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 <td><p>✓</p></td>
@@ -958,18 +1531,48 @@ There are numerous types of connections, and each one has a number attributes.</
 <td><p>✓</p></td>
 <td><p>✓</p></td>
 </tr>
+<tr class="row-odd"><td><p>Wire</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Wireless</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <p>An example of how to define all the potential attributes is available in
 <a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample.json">wrrf_sample.json</a>.</p>
 </section>
 <section id="representing-tags">
-<span id="tag-rep"></span><h2><a class="toc-backref" href="#id31" role="doc-backlink">Representing Tags</a><a class="headerlink" href="#representing-tags" title="Permalink to this heading"></a></h2>
+<span id="tag-rep"></span><h2><a class="toc-backref" href="#id40" role="doc-backlink">Representing Tags</a><a class="headerlink" href="#representing-tags" title="Permalink to this heading"></a></h2>
 <p>Both nodes and connections can have tags nested inside them.
 These tags represent sensors or data points at the facility.
 Two types of tags exist in PyPES: <code class="docutils literal notranslate"><span class="pre">Tag</span></code> and <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects.</p>
 <section id="basic-tag">
-<h3><a class="toc-backref" href="#id32" role="doc-backlink">Basic <code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><a class="headerlink" href="#basic-tag" title="Permalink to this heading"></a></h3>
+<h3><a class="toc-backref" href="#id41" role="doc-backlink">Basic <code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><a class="headerlink" href="#basic-tag" title="Permalink to this heading"></a></h3>
 <p>As with other objects, the <code class="docutils literal notranslate"><span class="pre">tags</span></code> dictionary is nested within the corresponding <code class="docutils literal notranslate"><span class="pre">Node</span></code> or <code class="docutils literal notranslate"><span class="pre">Connection</span></code>,
 and the keys are the string IDs for the facility’s database column names.</p>
 <p>The JSON format to represent a single tag in PyPES is as follows:</p>
@@ -1003,10 +1606,14 @@ and <code class="docutils literal notranslate"><span class="pre">contents_type</
 </div>
 </section>
 <section id="virtualtag">
-<span id="vtag-rep"></span><h3><a class="toc-backref" href="#id33" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a><a class="headerlink" href="#virtualtag" title="Permalink to this heading"></a></h3>
+<span id="vtag-rep"></span><h3><a class="toc-backref" href="#id42" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a><a class="headerlink" href="#virtualtag" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> class provides users with a powerful way to combine data from existing sensors to create new “virtual” sensors.
 Specifically, a user can define their own function or lambda expression that takes in other <code class="docutils literal notranslate"><span class="pre">Tag</span></code> or <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects and
 computes the resulting data.</p>
+<p><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> operations come in two modes: “Algebraic” and “Custom”. The documenation below covers custom mode, which is more flexible,
+but <a class="reference internal" href="advanced.html#algebraic-mode"><span class="std std-ref">Algebraic Mode</span></a> is fully documented in <a class="reference internal" href="advanced.html#advanced"><span class="std std-ref">Advanced Features</span></a>.
+The advantage of <a class="reference internal" href="advanced.html#algebraic-mode"><span class="std std-ref">Algebraic Mode</span></a> is the guarantee of operator closure that it provides, meaning that <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects can
+be combined ad infinitum without risk of error. There are no such guarantees is custom mode.</p>
 <p>These combinations can be quite simple. For example, let’s calculate the cogenerator efficiency from the following plant configuration:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;WWTP&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;nodes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;AnaerobicDigester&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cogenerator&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;VirtualDemand&quot;</span><span class="p">],</span>
@@ -1125,7 +1732,7 @@ at the lowest level:</p>
 <span class="w">    </span><span class="nt">&quot;virtual_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;BiogasProductionCombined&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Digester1GasFlow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Digester2GasFlow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Digester3GasFlow&quot;</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lambda x, y, z: x + y + z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;custom_operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lambda x, y, z: x + y + z&quot;</span><span class="p">,</span>
 <span class="w">            </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SCFM&quot;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1140,15 +1747,40 @@ This tag would be located at the facility level since it is combining data from 
 <span class="w">    </span><span class="nt">&quot;virtual_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;ElectricalEfficiency&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;BiogasProductionCombined&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ElectricityGeneration&quot;</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lambda x, y: x / y&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;custom_operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lambda x, y: x / y&quot;</span><span class="p">,</span>
 <span class="w">            </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SCFM / kW&quot;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<table class="docutils align-default" id="id25">
-<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> class</span><a class="headerlink" href="#id25" title="Permalink to this table"></a></caption>
+<p>The same <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> objects could also be defined in <code class="docutils literal notranslate"><span class="pre">Algebraic</span></code> mode:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;virtual_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;BiogasProductionCombined&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Digester1GasFlow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Digester2GasFlow&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Digester3GasFlow&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;binary_operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SCFM&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;algebraic&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;WWTP&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;nodes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;AnaerobicDigester&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cogenerator&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;VirtualDemand&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;connections&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CogenElecToFacility&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;DigesterToCogenerator&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;virtual_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;ElectricalEfficiency&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;BiogasProductionCombined&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ElectricityGeneration&quot;</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;binary_operations&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SCFM / kW&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;algebraic&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils align-default" id="id34">
+<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> class</span><a class="headerlink" href="#id34" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Type</p></th>
@@ -1161,7 +1793,7 @@ This tag would be located at the facility level since it is combining data from 
 <td><p>unique global identifier for the tag in the WRRF database</p></td>
 </tr>
 <tr class="row-odd"><td><p>units</p></td>
-<td><p>Unit <a class="footnote-reference brackets" href="#id17" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p>Unit <a class="footnote-reference brackets" href="#id25" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p>Units for the tag. Can be null, e.g., if a Boolean variable.</p></td>
 </tr>
 <tr class="row-even"><td><p>tag_type</p></td>
@@ -1178,17 +1810,21 @@ This tag would be located at the facility level since it is combining data from 
 </tr>
 <tr class="row-odd"><td><p>binary_operations</p></td>
 <td><p>list or str</p></td>
-<td><p>Binary operations to apply before combining tags</p></td>
+<td><p>Binary operations to apply when combining tags</p></td>
 </tr>
-<tr class="row-even"><td><p>parent_id</p></td>
+<tr class="row-even"><td><p>custom_operations</p></td>
+<td><p>str</p></td>
+<td><p>Custom operations to apply when combining tags</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_id</p></td>
 <td><p>str</p></td>
 <td><p>Identifier for the parent object (either a Node or Connection)</p></td>
 </tr>
-<tr class="row-odd"><td><p>totalized</p></td>
+<tr class="row-even"><td><p>totalized</p></td>
 <td><p>bool</p></td>
-<td><p>True if data is totalized, or a running summation reset periodically (usually daily). False otherwise.</p></td>
+<td><p>True if data is totalized (i.e., a running summation reset periodically, usually daily). False otherwise.</p></td>
 </tr>
-<tr class="row-even"><td><p>contents</p></td>
+<tr class="row-odd"><td><p>contents</p></td>
 <td><p>ContentsType</p></td>
 <td><p>Contents measured by the tag (e.g., biogas or primary effluent)</p></td>
 </tr>
@@ -1196,9 +1832,9 @@ This tag would be located at the facility level since it is combining data from 
 </table>
 </section>
 <section id="tagtype-enum">
-<span id="tag-type"></span><h3><a class="toc-backref" href="#id34" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">TagType</span></code> Enum</a><a class="headerlink" href="#tagtype-enum" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id26">
-<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">TagType</span></code> enum</span><a class="headerlink" href="#id26" title="Permalink to this table"></a></caption>
+<span id="tag-type"></span><h3><a class="toc-backref" href="#id43" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">TagType</span></code> Enum</a><a class="headerlink" href="#tagtype-enum" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id35">
+<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">TagType</span></code> enum</span><a class="headerlink" href="#id35" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Member</p></th>
 <th class="head"><p>Description</p></th>
@@ -1319,7 +1955,7 @@ This tag would be located at the facility level since it is combining data from 
 </section>
 </section>
 <section id="contentstype-enum">
-<span id="contents-type"></span><h2><a class="toc-backref" href="#id35" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> Enum</a><a class="headerlink" href="#contentstype-enum" title="Permalink to this heading"></a></h2>
+<span id="contents-type"></span><h2><a class="toc-backref" href="#id44" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> Enum</a><a class="headerlink" href="#contentstype-enum" title="Permalink to this heading"></a></h2>
 <p>A fundamental facet of process engineering is the conversion of reactants to products.
 In PyPES, these changes are represented by the <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> enum. For consistency,
 both <code class="docutils literal notranslate"><span class="pre">input_contents</span></code> and <code class="docutils literal notranslate"><span class="pre">output_contents</span></code> are represented as lists even when there
@@ -1350,8 +1986,8 @@ I.e., the below are two ways to represent the same node in JSON format:</p>
 </pre></div>
 </div>
 <p>Supported <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> values are shown in the table below.</p>
-<table class="docutils align-default" id="id27">
-<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> enum</span><a class="headerlink" href="#id27" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id36">
+<caption><span class="caption-text">Members of <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> enum</span><a class="headerlink" href="#id36" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>hline Member</p></th>
 <th class="head"><p>Description</p></th>
@@ -1445,11 +2081,65 @@ I.e., the below are two ways to represent the same node in JSON format:</p>
 <tr class="row-even"><td><p>Grease</p></td>
 <td><p>grease for any purpose (e.g., digestion or lubrication)</p></td>
 </tr>
+<tr class="row-odd"><td><p>Air</p></td>
+<td><p>atmospheric or compressed air (specify with <cite>Pressure</cite> attribute)</p></td>
+</tr>
+<tr class="row-even"><td><p>Chemical</p></td>
+<td><p>generic type for any chemical addition not otherwise specified</p></td>
+</tr>
+<tr class="row-odd"><td><p>Coagulant</p></td>
+<td><p>chemical addition used for coagulation (e.g., alum, FeCl)</p></td>
+</tr>
+<tr class="row-even"><td><p>Disinfectant</p></td>
+<td><p>chemical addition used for disinfection (e.g., chlorine, ozone)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deodorant</p></td>
+<td><p>chemical addition used to remove odor from sewage</p></td>
+</tr>
+<tr class="row-even"><td><p>IndustrialWastewater</p></td>
+<td><p>wastewater from industrial processes</p></td>
+</tr>
+<tr class="row-odd"><td><p>MunicipalWastewater</p></td>
+<td><p>wastewater from residential toilets</p></td>
+</tr>
+<tr class="row-even"><td><p>SolidWaste</p></td>
+<td><p>waste would traditionally be disposed of in a landfill</p></td>
+</tr>
+<tr class="row-odd"><td><p>PretreatedWater</p></td>
+<td><p>generic type for pre-treatment steps not otherwise specified</p></td>
+</tr>
+<tr class="row-even"><td><p>ProductWater</p></td>
+<td><p>final product of the treatment process</p></td>
+</tr>
+<tr class="row-odd"><td><p>ChlorinatedSeawater</p></td>
+<td><p>seawater that has been chlorinated but is otherwise untreated</p></td>
+</tr>
+<tr class="row-even"><td><p>CoagulatedWater</p></td>
+<td><p>water that has been coagulated in preparation for separation</p></td>
+</tr>
+<tr class="row-odd"><td><p>FilterBackwash</p></td>
+<td><p>contaminated water resulting from backwashing process</p></td>
+</tr>
+<tr class="row-even"><td><p>Filtrate</p></td>
+<td><p>fluid passing through the filter (i.e., permeate)</p></td>
+</tr>
+<tr class="row-odd"><td><p>WFBS</p></td>
+<td><p>water filter backwash solids</p></td>
+</tr>
+<tr class="row-even"><td><p>ControlSignal</p></td>
+<td><p>electronic signal for controlling an actuator</p></td>
+</tr>
+<tr class="row-odd"><td><p>DataTransfer</p></td>
+<td><p>data sent electronically between computers</p></td>
+</tr>
+<tr class="row-even"><td><p>Antiscalant</p></td>
+<td><p>chemical addition to reduce mineral buildup</p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="num-units-attribute">
-<span id="num-units"></span><h2><a class="toc-backref" href="#id36" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">num_units</span></code> Attribute</a><a class="headerlink" href="#num-units-attribute" title="Permalink to this heading"></a></h2>
+<span id="num-units"></span><h2><a class="toc-backref" href="#id45" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">num_units</span></code> Attribute</a><a class="headerlink" href="#num-units-attribute" title="Permalink to this heading"></a></h2>
 <p>There are often identical parallel processes in a treatment train.
 The <code class="docutils literal notranslate"><span class="pre">num_units</span></code> attribute exists to ease the effort needed to represent these identical objects.</p>
 <p>For example, the anaerobic digester from <a class="reference internal" href="#vtag-rep"><span class="std std-ref">VirtualTag</span></a> was specified with three digesters in parallel.
@@ -1461,7 +2151,7 @@ That example shows how flow from the three digesters can be tracked separately b
 <p>By default <code class="docutils literal notranslate"><span class="pre">num_units</span></code> is set to 1, meaning there is only a single instance and no parallel processes.</p>
 </section>
 <section id="elevation-attribute">
-<span id="elevation"></span><h2><a class="toc-backref" href="#id37" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">elevation</span></code> Attribute</a><a class="headerlink" href="#elevation-attribute" title="Permalink to this heading"></a></h2>
+<span id="elevation"></span><h2><a class="toc-backref" href="#id46" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">elevation</span></code> Attribute</a><a class="headerlink" href="#elevation-attribute" title="Permalink to this heading"></a></h2>
 <p>Elevations can be assigned to some nodes to help calculate the headloss or pressure drop throughout the system.
 Currently, elevation is only supported by <code class="docutils literal notranslate"><span class="pre">Facility</span></code>, <code class="docutils literal notranslate"><span class="pre">Pump</span></code>, <code class="docutils literal notranslate"><span class="pre">Tank</span></code>, and <code class="docutils literal notranslate"><span class="pre">Reservoir</span></code> nodes, but that could
 easily be extended in the future.</p>
@@ -1473,7 +2163,7 @@ easily be extended in the future.</p>
 from <a class="reference internal" href="#flowrate"><span class="std std-ref">flow_rate Attribute</span></a> and <a class="reference internal" href="#gen-capacity"><span class="std std-ref">gen_capacity Attribute</span></a>.</p>
 </section>
 <section id="volume-attribute">
-<span id="volume"></span><h2><a class="toc-backref" href="#id38" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">volume</span></code> Attribute</a><a class="headerlink" href="#volume-attribute" title="Permalink to this heading"></a></h2>
+<span id="volume"></span><h2><a class="toc-backref" href="#id47" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">volume</span></code> Attribute</a><a class="headerlink" href="#volume-attribute" title="Permalink to this heading"></a></h2>
 <p>Elevations can be assigned to some nodes to help calculate the headloss or pressure drop throughout the system.
 Currently, elevation is only supported by <code class="docutils literal notranslate"><span class="pre">Tank</span></code>, <code class="docutils literal notranslate"><span class="pre">Reservoir</span></code>, <code class="docutils literal notranslate"><span class="pre">Aeration</span></code>, <code class="docutils literal notranslate"><span class="pre">Filtration</span></code>, <code class="docutils literal notranslate"><span class="pre">Chlorination</span></code>, <code class="docutils literal notranslate"><span class="pre">Thickening</span></code>,
 <code class="docutils literal notranslate"><span class="pre">Digestion</span></code>, and <code class="docutils literal notranslate"><span class="pre">Conditioning</span></code> nodes, but that could easily be extended in the future.</p>
@@ -1485,7 +2175,7 @@ Currently, elevation is only supported by <code class="docutils literal notransl
 from <a class="reference internal" href="#flowrate"><span class="std std-ref">flow_rate Attribute</span></a> and <a class="reference internal" href="#gen-capacity"><span class="std std-ref">gen_capacity Attribute</span></a>.</p>
 </section>
 <section id="flow-rate-attribute">
-<span id="flowrate"></span><h2><a class="toc-backref" href="#id39" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">flow_rate</span></code> Attribute</a><a class="headerlink" href="#flow-rate-attribute" title="Permalink to this heading"></a></h2>
+<span id="flowrate"></span><h2><a class="toc-backref" href="#id48" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">flow_rate</span></code> Attribute</a><a class="headerlink" href="#flow-rate-attribute" title="Permalink to this heading"></a></h2>
 <p>Flow rates in PyPES are defined as tuples of the form <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max,</span> <span class="pre">avg)</span></code>.
 Any member of the tuple can be left as <code class="docutils literal notranslate"><span class="pre">None</span></code>. For example, if there is only a minimum of maximum flow rate.
 Units must be specified (e.g., m<sup>3</sup> / day or ft<sup>3</sup> / min) as text strings.
@@ -1514,7 +2204,7 @@ So the following two represent the same <code class="docutils literal notranslat
 can be used to change a <code class="docutils literal notranslate"><span class="pre">Node</span></code> or <code class="docutils literal notranslate"><span class="pre">Connection</span></code> objects <code class="docutils literal notranslate"><span class="pre">flow_rate</span></code> attribute.</p>
 </section>
 <section id="gen-capacity-attribute">
-<span id="gen-capacity"></span><h2><a class="toc-backref" href="#id40" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">gen_capacity</span></code> Attribute</a><a class="headerlink" href="#gen-capacity-attribute" title="Permalink to this heading"></a></h2>
+<span id="gen-capacity"></span><h2><a class="toc-backref" href="#id49" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">gen_capacity</span></code> Attribute</a><a class="headerlink" href="#gen-capacity-attribute" title="Permalink to this heading"></a></h2>
 <p>Generation capacity of a boiler or cogenerator is represented as a <code class="docutils literal notranslate"><span class="pre">(min,</span> <span class="pre">max,</span> <span class="pre">avg)</span></code> tuple just like the <a class="reference internal" href="#flowrate"><span class="std std-ref">flow_rate Attribute</span></a>:.
 Note that this is the generation capacity for a <strong>single</strong> engine if there are multiple,
 so the combined flow rate would require multiplying by <code class="docutils literal notranslate"><span class="pre">num_units</span></code>.</p>
@@ -1532,10 +2222,10 @@ and for the <code class="docutils literal notranslate"><span class="pre">Boiler<
 electricity to heat using <code class="docutils literal notranslate"><span class="pre">electrical_efficiency</span></code> and <code class="docutils literal notranslate"><span class="pre">thermal_efficiency</span></code>.</p>
 </section>
 <section id="heating-values-attribute">
-<span id="heat-val"></span><h2><a class="toc-backref" href="#id41" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">heating_values</span></code> Attribute</a><a class="headerlink" href="#heating-values-attribute" title="Permalink to this heading"></a></h2>
+<span id="heat-val"></span><h2><a class="toc-backref" href="#id50" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">heating_values</span></code> Attribute</a><a class="headerlink" href="#heating-values-attribute" title="Permalink to this heading"></a></h2>
 </section>
 <section id="capacity-attribute">
-<span id="capacity"></span><h2><a class="toc-backref" href="#id42" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">capacity</span></code> Attribute</a><a class="headerlink" href="#capacity-attribute" title="Permalink to this heading"></a></h2>
+<span id="capacity"></span><h2><a class="toc-backref" href="#id51" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">capacity</span></code> Attribute</a><a class="headerlink" href="#capacity-attribute" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">capacity</span></code> attribute provides the maximum storage capacity for a <code class="docutils literal notranslate"><span class="pre">Battery</span></code> object.
 To assign a value to the <code class="docutils literal notranslate"><span class="pre">capacity</span></code> in JSON:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;capacity (kWh)&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span>
@@ -1545,7 +2235,7 @@ To assign a value to the <code class="docutils literal notranslate"><span class=
 from <a class="reference internal" href="#flowrate"><span class="std std-ref">flow_rate Attribute</span></a> and <a class="reference internal" href="#gen-capacity"><span class="std std-ref">gen_capacity Attribute</span></a>.</p>
 </section>
 <section id="discharge-rate-attribute">
-<span id="discharge-rate"></span><h2><a class="toc-backref" href="#id43" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> Attribute</a><a class="headerlink" href="#discharge-rate-attribute" title="Permalink to this heading"></a></h2>
+<span id="discharge-rate"></span><h2><a class="toc-backref" href="#id52" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> Attribute</a><a class="headerlink" href="#discharge-rate-attribute" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> attribute provides the maximum rate of discharge
 (and at the moment charge, but these will be separated in the future) for a <code class="docutils literal notranslate"><span class="pre">Battery</span></code> object.
 To assign a value to the <code class="docutils literal notranslate"><span class="pre">discharge_rate</span></code> in JSON:</p>
@@ -1555,18 +2245,22 @@ To assign a value to the <code class="docutils literal notranslate"><span class=
 <p>Currently, the units are hardcoded as kilowatts, but this will soon be modified to match the dictionary-style unit-parsing
 from <a class="reference internal" href="#flowrate"><span class="std std-ref">flow_rate Attribute</span></a> and <a class="reference internal" href="#gen-capacity"><span class="std std-ref">gen_capacity Attribute</span></a>.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id17" role="doc-footnote">
+<aside class="footnote brackets" id="id25" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id7">5</a>,<a role="doc-backlink" href="#id8">6</a>,<a role="doc-backlink" href="#id9">7</a>,<a role="doc-backlink" href="#id11">8</a>,<a role="doc-backlink" href="#id12">9</a>,<a role="doc-backlink" href="#id13">10</a>,<a role="doc-backlink" href="#id14">11</a>,<a role="doc-backlink" href="#id16">12</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id7">5</a>,<a role="doc-backlink" href="#id8">6</a>,<a role="doc-backlink" href="#id9">7</a>,<a role="doc-backlink" href="#id10">8</a>,<a role="doc-backlink" href="#id11">9</a>,<a role="doc-backlink" href="#id12">10</a>,<a role="doc-backlink" href="#id13">11</a>,<a role="doc-backlink" href="#id14">12</a>,<a role="doc-backlink" href="#id15">13</a>,<a role="doc-backlink" href="#id16">14</a>,<a role="doc-backlink" href="#id19">15</a>,<a role="doc-backlink" href="#id20">16</a>,<a role="doc-backlink" href="#id21">17</a>,<a role="doc-backlink" href="#id22">18</a>,<a role="doc-backlink" href="#id24">19</a>)</span>
 <p>from <a class="reference external" href="https://pint.readthedocs.io/en/stable/">Pint</a></p>
 </aside>
-<aside class="footnote brackets" id="id19" role="doc-footnote">
+<aside class="footnote brackets" id="id27" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">2</a><span class="fn-bracket">]</span></span>
 <p><code class="docutils literal notranslate"><span class="pre">PumpType</span></code> is an enum that contains two members: <code class="docutils literal notranslate"><span class="pre">Constant</span></code> or <code class="docutils literal notranslate"><span class="pre">VFD</span></code></p>
 </aside>
-<aside class="footnote brackets" id="id20" role="doc-footnote">
+<aside class="footnote brackets" id="id28" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">3</a><span class="fn-bracket">]</span></span>
 <p><code class="docutils literal notranslate"><span class="pre">DigesterType</span></code> is an enum that contains two members: <code class="docutils literal notranslate"><span class="pre">Aerobic</span></code> or <code class="docutils literal notranslate"><span class="pre">Anaerobic</span></code></p>
+</aside>
+<aside class="footnote brackets" id="id29" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id17">4</a><span class="fn-bracket">]</span></span>
+<p><code class="docutils literal notranslate"><span class="pre">PRV</span></code> stands for pressure reducing valve</p>
 </aside>
 </aside>
 </section>

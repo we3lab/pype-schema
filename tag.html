@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">tag</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.DownsampleType"><code class="docutils literal notranslate"><span class="pre">DownsampleType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.OperationMode"><code class="docutils literal notranslate"><span class="pre">OperationMode</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.Tag.check_type_compatibility"><code class="docutils literal notranslate"><span class="pre">Tag.check_type_compatibility()</span></code></a></li>
 </ul>
@@ -67,7 +68,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.TagType"><code class="docutils literal notranslate"><span class="pre">TagType</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.VirtualTag"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.calculate_values"><code class="docutils literal notranslate"><span class="pre">VirtualTag.calculate_values()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.process_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_ops()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.process_binary_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_binary_ops()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.process_custom_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_custom_ops()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pype_schema.tag.VirtualTag.process_unary_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_unary_ops()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.tag.check_type_compatibility"><code class="docutils literal notranslate"><span class="pre">check_type_compatibility()</span></code></a></li>
@@ -123,7 +126,13 @@
 <span class="target" id="module-pype_schema.tag"></span><dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.tag.DownsampleType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">DownsampleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#DownsampleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.DownsampleType" title="Permalink to this definition"></a></dt>
-<dd><p>Enum to represent common methods of downsampling data</p>
+<dd><p>Enum to represent common methods of downsampling data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.tag.OperationMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">OperationMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#OperationMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.OperationMode" title="Permalink to this definition"></a></dt>
+<dd><p>Enum to represent methods of VirtualTag operations.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -165,8 +174,8 @@ across all units of the destination node</p></li>
 <li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False by default</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
 <li><p><strong>manufacturer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
-<li><p><strong>measure_freq</strong> (<em>pint.Quantity</em>) – Measurement frequency of the data with units. None by default</p></li>
-<li><p><strong>report_freq</strong> (<em>pint.Quantity</em>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>measure_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)"><em>pint.Quantity</em></a>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.24.4)"><em>pint.Quantity</em></a>) – Reporting frequency of the data with units. None by default</p></li>
 <li><p><strong>downsample_method</strong> (<a class="reference internal" href="#pype_schema.tag.DownsampleType" title="pype_schema.tag.DownsampleType"><em>DownsampleType</em></a>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
 <li><p><strong>calibration</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.logbook.Logbook" title="pype_schema.logbook.Logbook"><em>Logbook</em></a>) – A history of sensor calibration.</p></li>
 </ul>
@@ -194,20 +203,32 @@ across all units of the destination node</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.tag.TagType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">TagType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#TagType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.TagType" title="Permalink to this definition"></a></dt>
-<dd><p>Enum to represent types of SCADA tags</p>
+<dd><p>Enum to represent types of SCADA tags.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pype_schema.tag.VirtualTag">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">VirtualTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.tag.</span></span><span class="sig-name descname"><span class="pre">VirtualTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unary_operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary_operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_operations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag" title="Permalink to this definition"></a></dt>
 <dd><p>Representation for data that is not in the SCADA system, but is instead
-a combination of existing tags combined via the <cite>operations</cite> lambda function string</p>
+a combination of existing tags.</p>
+<p>Tags are combined via either <cite>custom_operations</cite> lambda function string or the
+<cite>unary_operations</cite> and <cite>binary_operations</cite> lists depending on whether
+<cite>mode</cite> is <cite>Algebraic</cite> or <cite>Custom</cite>.</p>
+<p>In <cite>Algebraic</cite> mode, all unary operations are applied before any binary operations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – VirtualTag ID</p></li>
 <li><p><strong>tags</strong> (<em>list of Tag</em>) – List of Tag objects to combine</p></li>
-<li><p><strong>operations</strong> (<em>str</em>) – String a lambda function to apply to all tags,
+<li><p><strong>unary_operations</strong> (<em>str or list</em>) – Function to apply when combining tags.
+If a single string it will be applied to all Tags.
+Otherwise, the <cite>unary_operations</cite> must be same length as <cite>tags</cite>,
+and functions will be applied in order</p></li>
+<li><p><strong>binary_operations</strong> (<em>str or list</em>) – Function to apply when combining tags.
+If a single string it will be applied to all Tags.
+Otherwise, the <cite>binary_operations</cite> must be one shorter than <cite>tags</cite>,
+and functions will be applied in order</p></li>
+<li><p><strong>custom_operations</strong> (<em>str</em>) – String a lambda function to apply to all tags,
 must have number of args equal to number of tags</p></li>
 <li><p><strong>tag_type</strong> (<em>TagType</em>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite>.
 Default is None, and it will be automatically determined from constituent
@@ -230,13 +251,37 @@ determined from consituent Tag contents</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Tag ID</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – List of Tag objects to combine</p></li>
-<li><p><strong>operations</strong> – String giving a lambda function to apply to constituent tags</p></li>
+<li><p><strong>unary_operations</strong> (<em>[</em><em>&quot;noop&quot;</em><em>, </em><em>&quot;delta&quot;</em><em>, </em><em>&quot;&lt;&lt;&quot;</em><em>, </em><em>&quot;&gt;&gt;&quot;</em><em>, </em><em>&quot;~&quot;</em><em>, </em><em>&quot;-&quot;</em><em>]</em>) – <p>Unary operations to apply before combining tags.</p>
+<blockquote>
+<div><p>”noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>”delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>”&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>”&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>”~” : Boolean not</p>
+<p>”-” : unary negation</p>
+</div></blockquote>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</p></li>
+<li><p><strong>binary_operations</strong> (<em>[</em><em>&quot;+&quot;</em><em>, </em><em>&quot;-&quot;</em><em>, </em><em>&quot;*&quot;</em><em>, </em><em>&quot;/&quot;</em><em>]</em>) – Binary operaitons to apply when combining tags.
+Supported functions are “+”, “-”, “*”, and “/”.
+If a single string is passed, it will be applied to all Tags.
+Otherwise, the <cite>binary_operations</cite> list must be one shorter than <cite>tags</cite>,
+and functions will be applied in order from left to right</p></li>
+<li><p><strong>custom_operations</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – String giving a lambda function to apply to constituent tags</p></li>
 <li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
 E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<a class="reference internal" href="#pype_schema.tag.TagType" title="pype_schema.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
 <li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
 <li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
+<li><p><strong>mode</strong> (<a class="reference internal" href="#pype_schema.tag.OperationMode" title="pype_schema.tag.OperationMode"><em>OperationMode</em></a>) – Mode of operation. Either <cite>Algebraic</cite> or <cite>Custom</cite>.
+Automatically determined based on values of <cite>unary_operations</cite>,
+<cite>binary_operations</cite> and <cite>custom_operations</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -264,8 +309,31 @@ that differ from the original SCADA tag naming system</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pype_schema.tag.VirtualTag.process_ops">
-<span class="sig-name descname"><span class="pre">process_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag.process_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag.process_ops" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pype_schema.tag.VirtualTag.process_binary_ops">
+<span class="sig-name descname"><span class="pre">process_binary_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag.process_binary_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag.process_binary_ops" title="Permalink to this definition"></a></dt>
+<dd><p>Combine the given data according to the VirtualTag’s binary operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
+correct dimensions. I.e., the number of columns is one more than
+binary operations and same length as unary operations</p></li>
+<li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
+that differ from the original SCADA tag naming system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array of combined dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.VirtualTag.process_custom_ops">
+<span class="sig-name descname"><span class="pre">process_custom_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag.process_custom_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag.process_custom_ops" title="Permalink to this definition"></a></dt>
 <dd><p>Transform the given data according to the VirtualTag’s lambda string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -273,6 +341,46 @@ that differ from the original SCADA tag naming system</p></li>
 <li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
 correct dimensions. I.e., the number of columns is one more than
 binary operations and same length as unary operations</p></li>
+<li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
+that differ from the original SCADA tag naming system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array of combined dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pype_schema.tag.VirtualTag.process_unary_ops">
+<span class="sig-name descname"><span class="pre">process_unary_ops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_to_var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/tag.html#VirtualTag.process_unary_ops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.tag.VirtualTag.process_unary_ops" title="Permalink to this definition"></a></dt>
+<dd><p>Transform the given data according to the VirtualTag’s unary operator</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>data</strong> (<em>list, array, dict, or DataFrame</em>) – a list, numpy array, or pandas DataFrame of data that has the
+correct dimensions. I.e., the number of columns is one more than
+binary operations and same length as unary operations</p></li>
+<li><p><strong>un_op</strong> (<em>[“noop”, “delta”, “&lt;&lt;”, “&gt;&gt;”, “~”, “-“]</em>) –</p>
+<p>Supported operations are:</p>
+<blockquote>
+<div><p>“noop” : null operator, useful when
+skipping tags in a list of unary operations.</p>
+<p>“delta” : calculate the difference between
+the current timestep and previous timestep</p>
+<p>“&lt;&lt;” : shift all data left one timestep,
+so that the last time step will be NaN</p>
+<p>“&gt;&gt;” : shift all data right one timestep,
+so that the first time step will be NaN</p>
+<p>“~” : Boolean not</p>
+<p>“-” : unary negation</p>
+</div></blockquote>
+<p>Note that “delta”, “&lt;&lt;”, and “&gt;&gt;” return a timeseries padded
+with NaN so that it is the same length as input data</p>
+</li>
 <li><p><strong>tag_to_var_map</strong> (<em>dict</em>) – dictionary of the form { tag.id : variable_name } for using data files
 that differ from the original SCADA tag naming system</p></li>
 </ul>

@@ -996,11 +996,31 @@
                 <span class="n">pH</span><span class="o">=</span><span class="n">pH</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Joint&quot;</span><span class="p">:</span>
-            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Joint</span><span class="p">(</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Junction&quot;</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Junction</span><span class="p">(</span>
                 <span class="n">node_id</span><span class="p">,</span>
                 <span class="n">input_contents</span><span class="p">,</span>
                 <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Valve&quot;</span><span class="p">:</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Valve</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PRV&quot;</span><span class="p">:</span>
+            <span class="n">diameter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diameter&quot;</span><span class="p">))</span>
+            <span class="n">pressure_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_unit_val_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pressure_setting&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">node_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">PRV</span><span class="p">(</span>
+                <span class="n">node_id</span><span class="p">,</span>
+                <span class="n">input_contents</span><span class="p">,</span>
+                <span class="n">output_contents</span><span class="p">,</span>
+                <span class="n">diameter</span><span class="o">=</span><span class="n">diameter</span><span class="p">,</span>
+                <span class="n">pressure_setting</span><span class="o">=</span><span class="n">pressure_setting</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Separator&quot;</span><span class="p">:</span>
@@ -1059,7 +1079,7 @@
                         <span class="p">)</span>
                         <span class="n">operations</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_tag_sum_lambda_func</span><span class="p">(</span><span class="n">tag_source_unit_ids</span><span class="p">)</span>
                         <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
-                            <span class="n">tag_id</span><span class="p">,</span> <span class="n">tags_by_contents</span><span class="p">,</span> <span class="n">operations</span><span class="o">=</span><span class="n">operations</span>
+                            <span class="n">tag_id</span><span class="p">,</span> <span class="n">tags_by_contents</span><span class="p">,</span> <span class="n">custom_operations</span><span class="o">=</span><span class="n">operations</span>
                         <span class="p">)</span>
                         <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_obj</span></div>
@@ -1258,11 +1278,10 @@
                                 <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
                                     <span class="n">tag_id</span><span class="p">,</span>
                                     <span class="n">tag_list</span><span class="p">,</span>
-                                    <span class="n">operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
+                                    <span class="n">custom_operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
                                     <span class="n">units</span><span class="o">=</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
                                 <span class="p">)</span>
                                 <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
-
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[</span>
                                 <span class="n">connection_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
@@ -1281,13 +1300,7 @@
                             <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
                                 <span class="n">tag_id</span><span class="p">,</span>
                                 <span class="n">tag_list</span><span class="p">,</span>
-                                <span class="n">operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
-                                <span class="n">units</span><span class="o">=</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
-                                <span class="n">tag_id</span><span class="p">,</span>
-                                <span class="n">tag_list</span><span class="p">,</span>
-                                <span class="n">operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
+                                <span class="n">custom_operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
                                 <span class="n">units</span><span class="o">=</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
                             <span class="p">)</span>
                             <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
@@ -1317,7 +1330,7 @@
                                 <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
                                     <span class="n">tag_id</span><span class="p">,</span>
                                     <span class="n">tag_list</span><span class="p">,</span>
-                                    <span class="n">operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
+                                    <span class="n">custom_operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
                                     <span class="n">units</span><span class="o">=</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
                                 <span class="p">)</span>
                                 <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
@@ -1339,7 +1352,7 @@
                             <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
                                 <span class="n">tag_id</span><span class="p">,</span>
                                 <span class="n">tag_list</span><span class="p">,</span>
-                                <span class="n">operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
+                                <span class="n">custom_operations</span><span class="o">=</span><span class="n">operations</span><span class="p">,</span>
                                 <span class="n">units</span><span class="o">=</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">,</span>
                             <span class="p">)</span>
                             <span class="n">connection_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
@@ -1403,7 +1416,11 @@
 <span class="sd">            dictionary of the form {</span>
 <span class="sd">                ``tags``: `dict` of `Tag`</span>
 
-<span class="sd">                ``operations``: `str`</span>
+<span class="sd">                ``unary_operations``: `list` of `str`</span>
+
+<span class="sd">                ``binary_operations``: `list` of `str`</span>
+
+<span class="sd">                ``custom_operations``: `str`</span>
 
 <span class="sd">                ``type``: `TagType`</span>
 
@@ -1440,7 +1457,7 @@
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="n">tag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subtag</span><span class="p">)</span>
-        <span class="n">pint_unit</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_units</span><span class="p">(</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
+        <span class="n">pint_unit</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_units</span><span class="p">(</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">tag_type</span> <span class="o">=</span> <span class="n">TagType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -1449,15 +1466,45 @@
             <span class="n">contents_type</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ContentsType</span><span class="p">[</span><span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="n">contents_type</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
-            <span class="n">tag_id</span><span class="p">,</span>
-            <span class="n">tag_list</span><span class="p">,</span>
-            <span class="n">operations</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operations&quot;</span><span class="p">),</span>
-            <span class="n">tag_type</span><span class="o">=</span><span class="n">tag_type</span><span class="p">,</span>
-            <span class="n">contents</span><span class="o">=</span><span class="n">contents_type</span><span class="p">,</span>
-            <span class="n">parent_id</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">),</span>
-            <span class="n">units</span><span class="o">=</span><span class="n">pint_unit</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">op_mode</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">)</span>
+        <span class="n">unary_ops</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;unary_operations&quot;</span><span class="p">)</span>
+        <span class="n">binary_ops</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;binary_operations&quot;</span><span class="p">)</span>
+        <span class="n">custom_ops</span> <span class="o">=</span> <span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;custom_operations&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">op_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Algebraic&quot;</span><span class="p">,</span> <span class="s2">&quot;algebraic&quot;</span><span class="p">]</span>
+            <span class="ow">or</span> <span class="n">binary_ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">unary_ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
+                <span class="n">tag_id</span><span class="p">,</span>
+                <span class="n">tag_list</span><span class="p">,</span>
+                <span class="n">unary_operations</span><span class="o">=</span><span class="n">unary_ops</span><span class="p">,</span>
+                <span class="n">binary_operations</span><span class="o">=</span><span class="n">binary_ops</span><span class="p">,</span>
+                <span class="n">tag_type</span><span class="o">=</span><span class="n">tag_type</span><span class="p">,</span>
+                <span class="n">contents</span><span class="o">=</span><span class="n">contents_type</span><span class="p">,</span>
+                <span class="n">parent_id</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">),</span>
+                <span class="n">units</span><span class="o">=</span><span class="n">pint_unit</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Custom&quot;</span><span class="p">,</span> <span class="s2">&quot;custom&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">custom_ops</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
+                <span class="n">tag_id</span><span class="p">,</span>
+                <span class="n">tag_list</span><span class="p">,</span>
+                <span class="n">custom_operations</span><span class="o">=</span><span class="n">custom_ops</span><span class="p">,</span>
+                <span class="n">tag_type</span><span class="o">=</span><span class="n">tag_type</span><span class="p">,</span>
+                <span class="n">contents</span><span class="o">=</span><span class="n">contents_type</span><span class="p">,</span>
+                <span class="n">parent_id</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">),</span>
+                <span class="n">units</span><span class="o">=</span><span class="n">pint_unit</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># for backwards compatability</span>
+            <span class="n">v_tag</span> <span class="o">=</span> <span class="n">VirtualTag</span><span class="p">(</span>
+                <span class="n">tag_id</span><span class="p">,</span>
+                <span class="n">tag_list</span><span class="p">,</span>
+                <span class="n">custom_operations</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operations&quot;</span><span class="p">),</span>
+                <span class="n">tag_type</span><span class="o">=</span><span class="n">tag_type</span><span class="p">,</span>
+                <span class="n">contents</span><span class="o">=</span><span class="n">contents_type</span><span class="p">,</span>
+                <span class="n">parent_id</span><span class="o">=</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">),</span>
+                <span class="n">units</span><span class="o">=</span><span class="n">pint_unit</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">v_tag</span></div>
 
 <div class="viewcode-block" id="JSONParser.parse_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_tag">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -1612,6 +1659,7 @@
 <span class="sd">                    ``rate``: `float`</span>
 
 <span class="sd">                    ``units``: `str`</span>
+
 <span class="sd">                }</span>
 
 <span class="sd">            }</span>
@@ -1829,9 +1877,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tag_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">):</span>
+            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">name</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">tags</span><span class="p">]</span>
-            <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;operations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">operations</span>
+            <span class="k">if</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">:</span>
+                <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;custom_operations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">custom_operations</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;unary_operations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">unary_operations</span>
+                <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;binary_operations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">binary_operations</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">,</span> <span class="n">Tag</span><span class="p">):</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{!s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
             <span class="n">tag_dict</span><span class="p">[</span><span class="s2">&quot;source_unit_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">source_unit_id</span>
@@ -2161,13 +2214,6 @@
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;leakage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">leakage</span><span class="p">)</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;rte&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">rte</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">):</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;input_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">input_contents</span>
-            <span class="p">]</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;output_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">output_contents</span>
-            <span class="p">]</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">subnode</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">get_all_nodes</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -2183,14 +2229,13 @@
                 <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;flowrate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">min_max_design_to_dict</span><span class="p">(</span>
                     <span class="n">node_obj</span><span class="p">,</span> <span class="s2">&quot;flow_rate&quot;</span>
                 <span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Joint</span><span class="p">):</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;input_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">input_contents</span>
-            <span class="p">]</span>
-            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;output_contents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">contents</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">contents</span> <span class="ow">in</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">output_contents</span>
-            <span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">PRV</span><span class="p">):</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;pressure_setting&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span>
+                <span class="n">node_obj</span><span class="o">.</span><span class="n">pressure_setting</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">Junction</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">Valve</span><span class="p">)):</span>
+            <span class="n">node_dict</span><span class="p">[</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="o">.</span><span class="n">unit_val_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="o">.</span><span class="n">diameter</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported Node type: &quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_dict</span></div>

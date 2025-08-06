@@ -280,7 +280,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Flaring"><code class="docutils literal notranslate"><span class="pre">Flaring</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Joint"><code class="docutils literal notranslate"><span class="pre">Joint</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Junction"><code class="docutils literal notranslate"><span class="pre">Junction</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.ModularUnit"><code class="docutils literal notranslate"><span class="pre">ModularUnit</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Network.add_connection"><code class="docutils literal notranslate"><span class="pre">Network.add_connection()</span></code></a></li>
@@ -330,6 +330,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Node.tags"><code class="docutils literal notranslate"><span class="pre">Node.tags</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.PRV"><code class="docutils literal notranslate"><span class="pre">PRV</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump"><code class="docutils literal notranslate"><span class="pre">Pump</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump.del_efficiency"><code class="docutils literal notranslate"><span class="pre">Pump.del_efficiency()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.Pump.del_power_rating"><code class="docutils literal notranslate"><span class="pre">Pump.del_power_rating()</span></code></a></li>
@@ -369,10 +370,13 @@
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.node.UVSystem.set_dosing_area"><code class="docutils literal notranslate"><span class="pre">UVSystem.set_dosing_area()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.node.Valve"><code class="docutils literal notranslate"><span class="pre">Valve</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.operations">pype_schema.operations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.operations.binary_helper"><code class="docutils literal notranslate"><span class="pre">binary_helper()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.operations.get_change"><code class="docutils literal notranslate"><span class="pre">get_change()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.operations.unary_helper"><code class="docutils literal notranslate"><span class="pre">unary_helper()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pype_schema.html#module-pype_schema.parse_json">pype_schema.parse_json module</a><ul>
@@ -409,6 +413,11 @@
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.DownsampleType.Average"><code class="docutils literal notranslate"><span class="pre">DownsampleType.Average</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.DownsampleType.Decimation"><code class="docutils literal notranslate"><span class="pre">DownsampleType.Decimation</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.DownsampleType.Reservoir"><code class="docutils literal notranslate"><span class="pre">DownsampleType.Reservoir</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.OperationMode"><code class="docutils literal notranslate"><span class="pre">OperationMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.OperationMode.Algebraic"><code class="docutils literal notranslate"><span class="pre">OperationMode.Algebraic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.OperationMode.Custom"><code class="docutils literal notranslate"><span class="pre">OperationMode.Custom</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul>
@@ -467,7 +476,9 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag"><code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.calculate_values"><code class="docutils literal notranslate"><span class="pre">VirtualTag.calculate_values()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.process_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_ops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.process_binary_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_binary_ops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.process_custom_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_custom_ops()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pype_schema.html#pype_schema.tag.VirtualTag.process_unary_ops"><code class="docutils literal notranslate"><span class="pre">VirtualTag.process_unary_ops()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pype_schema.html#pype_schema.tag.check_type_compatibility"><code class="docutils literal notranslate"><span class="pre">check_type_compatibility()</span></code></a></li>

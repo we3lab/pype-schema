@@ -102,7 +102,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.tag</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 
-<span class="n">EFFICIENCY_ATTRS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thermal_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;electrical_efficiency&quot;</span><span class="p">,</span> <span class="s2">&quot;rte&quot;</span><span class="p">]</span>
+<span class="n">EFFICIENCY_ATTRS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;thermal_efficiency&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;electrical_efficiency&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pump_curve&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;efficiency&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="n">CAPACITY_ATTRS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;volume&quot;</span><span class="p">,</span>
@@ -1254,6 +1260,7 @@
 
 <div class="viewcode-block" id="Network.remove_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Network.remove_connection">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">remove_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_name</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes a connection from the network</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        connection_name : str</span>
@@ -1325,16 +1332,16 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the network.</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the facility</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the facility</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the facility</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the facility</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -1357,19 +1364,19 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the facility.</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the facility in meters above sea level</span>
 
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this facility</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the facility</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the facility</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the facility</span>
 
 <span class="sd">    nodes : dict of Node</span>
@@ -1432,23 +1439,25 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Joint"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Joint">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Joint</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A joint in the network, where multiple pipes meet.</span>
+<div class="viewcode-block" id="Junction"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Junction">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Junction</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A junction in the network where multiple pipes meet.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
-<span class="sd">        Joint ID</span>
+<span class="sd">        Junction ID</span>
 
 <span class="sd">    input_contents : ContentsType or list of ContentsType</span>
-<span class="sd">        Contents entering the joint</span>
+<span class="sd">        Contents entering the junction</span>
 
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
-<span class="sd">        Contents leaving the joint</span>
+<span class="sd">        Contents leaving the junction</span>
+
+<span class="sd">    diamater : pint.Quantity</span>
+<span class="sd">        Diameter of the junction</span>
 
 <span class="sd">    tags : dict of Tag</span>
-<span class="sd">        Data tags associated with this joint</span>
-
+<span class="sd">        Data tags associated with this junction</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -1456,18 +1465,21 @@
         <span class="nb">id</span><span class="p">,</span>
         <span class="n">input_contents</span><span class="p">,</span>
         <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">diameter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Joint id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Junction id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;diameter:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
@@ -1479,6 +1491,127 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Valve"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Valve">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Valve</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic valve.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Valve ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the valve</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the valve</span>
+
+<span class="sd">    diamater : pint.Quantity</span>
+<span class="sd">        Diameter of the valve</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this valve</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">diameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Valve id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;diameter:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PRV"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.PRV">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PRV</span><span class="p">(</span><span class="n">Valve</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A pressure reducing valve.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+<span class="sd">        Pressure release valve ID</span>
+
+<span class="sd">    input_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents entering the pressure release valve</span>
+
+<span class="sd">    output_contents : ContentsType or list of ContentsType</span>
+<span class="sd">        Contents leaving the pressure release valve</span>
+
+<span class="sd">    diameter : pint.Quantity</span>
+<span class="sd">        Diameter of the pressure release valve</span>
+
+<span class="sd">    pressure_setting : pint.Quantity</span>
+<span class="sd">        Rated or set pressure of the valve</span>
+
+<span class="sd">    tags : dict of Tag</span>
+<span class="sd">        Data tags associated with this valve</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">input_contents</span><span class="p">,</span>
+        <span class="n">output_contents</span><span class="p">,</span>
+        <span class="n">diameter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pressure_setting</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="s2">&quot;input_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_contents</span><span class="p">(</span><span class="n">output_contents</span><span class="p">,</span> <span class="s2">&quot;output_contents&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">diameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pressure_setting</span> <span class="o">=</span> <span class="n">pressure_setting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Valve id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;diameter:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="si">}</span><span class="s2"> pressure_setting:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure_setting</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;tags:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">input_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">output_contents</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">diameter</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pressure_setting</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pressure_setting</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">tags</span>
         <span class="p">)</span></div>
 
@@ -1592,22 +1725,22 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the pump</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the pump in meters above sea level</span>
 
-<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">    power_rating : pint.quantity or float</span>
 <span class="sd">        Rated power of a single pump (in horsepower)</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of pumps running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate supplied by the pump</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate supplied by the pump</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
@@ -1630,22 +1763,22 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the pump</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the pump in meters above sea level</span>
 
-<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">    power_rating : pint.quantity or float</span>
 <span class="sd">        Rated power of a single pump (in horsepower)</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of pumps running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate supplied by the pump</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate supplied by the pump</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate supplied by the pump</span>
 
 <span class="sd">    pump_type : PumpType</span>
@@ -1788,10 +1921,10 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the tank</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the tank in meters above sea level</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
 
 <span class="sd">    num_units : int</span>
@@ -1811,10 +1944,10 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the tank.</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the tank in meters above sea level</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the tank in cubic meters</span>
 
 <span class="sd">    num_units : int</span>
@@ -1899,19 +2032,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the reactor</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the reactor</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the reactor</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the reactor</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of reactor in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the reactor in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
@@ -1937,19 +2070,19 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the reactor</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the reactor</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the reactor</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the reactor</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of reactors</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the reactor in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
@@ -2051,19 +2184,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the mixer</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the mixer</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the mixer</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the mixer</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of mixers in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the mixer in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
@@ -2089,19 +2222,19 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the mixer</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the mixer</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the mixer</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the mixer</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of mixers in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the mixer in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
@@ -2189,10 +2322,10 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the reservoir.</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the reservoir in meters above sea level</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the reservoir in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2209,10 +2342,10 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the reservoir.</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the reservoir in meters above sea level</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the reservoir in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2279,6 +2412,9 @@
 <span class="sd">    rte : float</span>
 <span class="sd">        Round trip efficiency of the battery</span>
 
+<span class="sd">    leakage : pint.Quantity or float</span>
+<span class="sd">        Leakage of the battery as a Pint Quantity</span>
+
 <span class="sd">    tags : dict of Tag</span>
 <span class="sd">        Data tags associated with this battery</span>
 
@@ -2305,7 +2441,7 @@
 <span class="sd">    rte : float</span>
 <span class="sd">        Round trip efficiency of the battery</span>
 
-<span class="sd">    leakage : pint.Quantity</span>
+<span class="sd">    leakage : pint.Quantity or float</span>
 <span class="sd">        Leakage of the battery as a Pint Quantity</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2443,19 +2579,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the digester (e.g. biogas or wastewater)</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the digester</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the digester</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of digesters running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the digester in cubic meters</span>
 
 <span class="sd">    digester_type : DigesterType</span>
@@ -2478,16 +2614,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of digesters running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the digester in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate through the digester</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate through the digester</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate through the digester</span>
 
 <span class="sd">    digester_type : DigesterType</span>
@@ -2960,19 +3096,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the clarifier</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single clarifier</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single clarifier</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of clarifiers running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the clarifier in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -2992,16 +3128,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of clarifiers running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single clarifier in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single clarifier</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single clarifier</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single clarifier</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3072,25 +3208,25 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the filter</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single filter</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of filters running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
 <span class="sd">        Dosing information for the filter (key: DosingType, value: rate)</span>
 
-<span class="sd">    settling_time : float</span>
+<span class="sd">    settling_time : pint.quantity or float</span>
 <span class="sd">        time it takes for the filter to reach the desired operation mode in seconds</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3110,22 +3246,22 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of filters running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single filter</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
 <span class="sd">        Dosing information for the filter (key: DosingType, value: rate)</span>
 
-<span class="sd">    settling_time : float</span>
+<span class="sd">    settling_time : pint.quantity or float</span>
 <span class="sd">        time it takes for the filter to reach the desired operation mode</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3217,34 +3353,34 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the RO membrane</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of the RO membrane</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of the RO membrane</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of RO membranes running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the RO membrane in cubic meters</span>
 
-<span class="sd">    area : float</span>
+<span class="sd">    area : pint.quantity or float</span>
 <span class="sd">        Area of the RO membrane in square meters</span>
 
-<span class="sd">    permeability : float</span>
+<span class="sd">    permeability : pint.quantity or float</span>
 <span class="sd">        Permeability of the RO membrane</span>
 
-<span class="sd">    selectivity : float</span>
+<span class="sd">    selectivity : pint.quantity or float</span>
 <span class="sd">        Selectivity of the RO membrane</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
 <span class="sd">        Dosing information for the RO membrane (key: DosingType, value: rate)</span>
 
-<span class="sd">    settling_time : float</span>
+<span class="sd">    settling_time : pint.quantity or float</span>
 <span class="sd">        time it takes for the filter to reach the desired operation mode</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3264,16 +3400,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of RO membranes running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single filter in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single filter</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single filter</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single filter</span>
 
 <span class="sd">    area : float</span>
@@ -3288,7 +3424,7 @@
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
 <span class="sd">        Dosing information for the RO membrane (key: DosingType, value: rate)</span>
 
-<span class="sd">    settling_time : float</span>
+<span class="sd">    settling_time : pint.quantity or float</span>
 <span class="sd">        time it takes for the filter to reach the desired operation mode</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3377,13 +3513,13 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the screen</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single screen</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single screen</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    num_units : int</span>
@@ -3406,13 +3542,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of screens running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single screen</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single screen</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single screen</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3482,13 +3618,13 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the biogas conditioner</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    num_units : int</span>
@@ -3511,13 +3647,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of biogas conditioners running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single biogas conditioner</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single biogas conditioner</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3586,19 +3722,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the thickener</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single thickener</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single thickener</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of thickeners running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single thickener in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3618,16 +3754,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of thickeners running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single thickener in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single thickener</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single thickener</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single thickener</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3698,19 +3834,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the aeration basin</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single aeration basin</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single aeration basin</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of aeration basins running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single aeration basin in cubic meters</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3730,16 +3866,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of aeration basins running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single aeration basin in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single aeration basin</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single aeration basin</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single aeration basin</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -3811,19 +3947,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the disinfector</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single disinfector</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single disinfector</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single disinfector</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of disinfectors running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single disinfectors in cubic meters</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
@@ -3849,16 +3985,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of disinfector running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single disinfector in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single disinfector</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single disinfector</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single disinfector</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
@@ -3973,19 +4109,19 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the chlorinator</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single chlorinator</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single chlorinator</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single chlorinator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single chlorinator in cubic meters</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
@@ -4011,16 +4147,16 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of a single chlorinator in cubic meters</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single chlorinator</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single chlorinator</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single chlorinator</span>
 
 <span class="sd">    dosing_rate : dict of DosingType:float</span>
@@ -4103,8 +4239,20 @@
 <span class="sd">    output_contents : list of ContentsType</span>
 <span class="sd">        Contents leaving the UV system</span>
 
+<span class="sd">    min_flow : pint.quantity or float</span>
+<span class="sd">        Minimum flow rate of a single UV system</span>
+
+<span class="sd">    max_flow : pint.quantity or float</span>
+<span class="sd">        Maximum flow rate of a single UV system</span>
+
+<span class="sd">    design_flow : pint.quantity or float</span>
+<span class="sd">        Design flow rate of a single UV system</span>
+
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of UV systems running in parallel</span>
+
+<span class="sd">    volume : pint.quantity or float</span>
+<span class="sd">        Volume of a single UV system in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
 <span class="sd">        Time in seconds that the water is exposed to UV light</span>
@@ -4116,15 +4264,27 @@
 <span class="sd">        Application area of the UV light in m^2</span>
 
 <span class="sd">    tags : dict of Tag</span>
-<span class="sd">        Data tags associated with this chlorinator</span>
+<span class="sd">        Data tags associated with this UV system</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
 <span class="sd">        UVSystem ID</span>
 
+<span class="sd">    min_flow : pint.quantity or float</span>
+<span class="sd">        Minimum flow rate of a single UV system</span>
+
+<span class="sd">    max_flow : pint.quantity or float</span>
+<span class="sd">        Maximum flow rate of a single UV system</span>
+
+<span class="sd">    design_flow : pint.quantity or float</span>
+<span class="sd">        Design flow rate of a single UV system</span>
+
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of chlorinators running in parallel</span>
+
+<span class="sd">    volume : pint.quantity or float</span>
+<span class="sd">        Volume of a single UV system in cubic meters</span>
 
 <span class="sd">    residence_time : pint.Quantity or float</span>
 <span class="sd">        Time in seconds that the water is exposed to UV light</span>
@@ -4136,7 +4296,7 @@
 <span class="sd">        Area of the UV system that is exposed to UV light</span>
 
 <span class="sd">    tags : dict of Tag</span>
-<span class="sd">        Data tags associated with this chlorinator</span>
+<span class="sd">        Data tags associated with this UV system</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -4217,13 +4377,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of flares running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single flare</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single flare</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -4240,13 +4400,13 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of flares running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single flare</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single flare</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single flare</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -4301,25 +4461,25 @@
 <span class="sd">    output_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents leaving the separator (e.g., Oxygen, IdealGas for Nitrogen)</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single separator</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single separator</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single separator</span>
 
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of separators running in parallel</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the separator in cubic meters</span>
 
-<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">    power_rating : pint.quantity or float</span>
 <span class="sd">        Rated power of a single separator (in horsepower or kW)</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the separator in meters above sea level</span>
 
 <span class="sd">    tags : dict of Tag</span>
@@ -4339,22 +4499,22 @@
 <span class="sd">    num_units : int</span>
 <span class="sd">        Number of separators running in parallel</span>
 
-<span class="sd">    min_flow : pint.Quantity or int</span>
+<span class="sd">    min_flow : pint.quantity or float</span>
 <span class="sd">        Minimum flow rate of a single separator</span>
 
-<span class="sd">    max_flow : pint.Quantity or int</span>
+<span class="sd">    max_flow : pint.quantity or float</span>
 <span class="sd">        Maximum flow rate of a single separator</span>
 
-<span class="sd">    design_flow : pint.Quantity or int</span>
+<span class="sd">    design_flow : pint.quantity or float</span>
 <span class="sd">        Design flow rate of a single separator</span>
 
-<span class="sd">    volume : pint.Quantity or int</span>
+<span class="sd">    volume : pint.quantity or float</span>
 <span class="sd">        Volume of the separator in cubic meters</span>
 
-<span class="sd">    power_rating : pint.Quantity or int</span>
+<span class="sd">    power_rating : pint.quantity or float</span>
 <span class="sd">        Rated power of a single separator</span>
 
-<span class="sd">    elevation : pint.Quantity or int</span>
+<span class="sd">    elevation : pint.quantity or float</span>
 <span class="sd">        Elevation of the separator in meters above sea level</span>
 
 <span class="sd">    tags : dict of Tag</span>
