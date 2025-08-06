@@ -4,8 +4,6 @@ import warnings
 import numpy as np
 from epyt import epanet
 
-content_placeholder = "DrinkingWater"
-
 
 class NpEncoder(json.JSONEncoder):
     """Custom JSON encoder for numpy types"""
@@ -20,7 +18,13 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 
-def epyt2pypes(inp_file, out_file, add_nodes=False, use_name_as_id=False):
+def epyt2pypes(
+    inp_file, 
+    out_file,
+    add_nodes=False,
+    use_name_as_id=False,
+    content_placeholder = "DrinkingWater",
+):
     """Convert an EPANET input file to a PYPES JSON file
 
     Parameters
@@ -41,7 +45,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False, use_name_as_id=False):
     Returns
     -------
     dict
-        dictionary of `Node`, `Connection`, and `VirtualTag` objects 
+        dictionary of `Node`, `Connection`, and `VirtualTag` objects
         with keys "nodes", "connections", and "virtual_tags"
     """
 
