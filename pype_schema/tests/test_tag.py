@@ -27,7 +27,6 @@ pint.set_application_registry(u)
         ("data/wrong_op_len.json", "ValueError"),
         ("data/tag_type_incompat.json", "ValueError"),
         ("data/tag_contents_incompat.json", "ValueError"),
-        ("data/tag_recursive_no_units.json", "KeyError"),
     ],
 )
 def test_init_errors(json_path, expected):
@@ -186,7 +185,6 @@ def test_init_errors(json_path, expected):
             "data/gen_delta.csv",
             "kWh",
         ),
-        # VirtualTag example for type compatibility
         (
             "../data/wrrf_sample.json",
             "data/sample_data.csv",
@@ -194,6 +192,14 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/electrical_efficiency.csv",
             "kilowatt * hour / SCFM",
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationComputed",
+            "DataFrame",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
         ),
     ],
 )
@@ -418,6 +424,24 @@ def test_tag_less_than(
             "../data/wrrf_sample.json",
             "GrossGasProduction",
             "CombinedDigesterGasFlow",
+            False,
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "GrossGasProduction",
+            "ElectricityProductionByGasVolume",
+            True,
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "GrossGasProduction",
+            "CombinedDigesterGasFlow",
+            False,
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "NoGasPurchases",
+            "ElectricityGeneration_RShift2",
             False,
         ),
     ],

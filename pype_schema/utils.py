@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from pint import UndefinedUnitError
+
 from .units import u
 
 

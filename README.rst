@@ -52,7 +52,9 @@ Useful Commands
 Legal Documents
 ===============
 
-This work was funded by the `Center for Integrated Facility Engineering <https://cife.stanford.edu/>`_ at Stanford University as a
+This work is supported by the National Alliance for Water Innovation (NAWI), funded by the U.S. Department of Energy, Energy Efficiency and Renewable Energy Office, Advanced Manufacturing Office under Funding Opportunity Announcement DE-FOA-0001905. The views expressed herein do not necessarily represent the views of the U.S. Department of Energy or the United States Government.
+
+This work is also supported by the `Center for Integrated Facility Engineering <https://cife.stanford.edu/>`_ at Stanford University as a
 a part of CIFE Seed Proposal 2023-02
 `Formal proofs of safe operating limits at wastewater resource recovery facilities <https://cife.stanford.edu/formal-proofs-safe-operating-limits-wastewater-resource-recovery-facilities>`_.
 

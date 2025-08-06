@@ -1,0 +1,87 @@
+{
+  "nodes": [
+    "Junction1",
+    "Junction2",
+    "Reservoir1",
+    "Reservoir2",
+    "Tank1",
+    "Valve0"
+  ],
+  "connections": [
+    "Pipe0",
+    "Pipe1",
+    "Pipe2",
+    "Pipe3",
+    "Pipe4"
+  ],
+  "virtual_tags": {},
+  "Junction1": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Junction2": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Reservoir1": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "levation (meters)": 220.0,
+    "tags": {}
+  },
+  "Reservoir2": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "levation (meters)": 167.0,
+    "tags": {}
+  },
+  "Tank1": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "levation (meters)": 131.89999389648438,
+    "volume (cubic meters)": -748466.75,
+    "tags": {}
+  },
+  "Valve0": {
+    "type": "Valve",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "Pipe0": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Reservoir1",
+    "destination": "Junction1",
+    "tags": {}
+  },
+  "Pipe1": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Reservoir2",
+    "destination": "Junction2",
+    "tags": {}
+  },
+  "Pipe2": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Tank1",
+    "destination": "Junction1",
+    "tags": {}
+  },
+  "Pipe3": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Junction2",
+    "destination": "Valve0",
+    "tags": {}
+  },
+  "Pipe4": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Valve0",
+    "destination": "Junction1",
+    "tags": {}
+  }
+}

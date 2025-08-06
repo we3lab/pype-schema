@@ -22,7 +22,8 @@
     "RecycledWaterOutlet",
     "DrinkingWaterToDistribution",
     "GasToCogen",
-    "GasToBoiler"
+    "GasToBoiler",
+    "OceanOutfall"
   ],
   "virtual_tags": {
     "GrossGasProduction": {

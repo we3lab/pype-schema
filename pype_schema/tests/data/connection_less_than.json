@@ -1,0 +1,1090 @@
+{
+    "nodes": [
+      "WWTP",
+      "DrinkingWaterFacility",
+      "PowerGrid",
+      "WaterDistribution",
+      "SewerNetwork",
+      "RecycledWaterFacility",
+      "PurplePipeSystem",
+      "DesalPlant",
+      "Ocean",
+      "ChemicalFactory",
+      "Landfill"
+    ],
+    "connections": [
+      "SewerIntake",
+      "WWTPToRecycledWater",
+      "ElectricToWWTP",
+      "ElectricToRecycledWater",
+      "ElectricToDesal",
+      "DesalWaste",
+      "DesalInlet",
+      "DesalOutlet",
+      "RecycledWaterOutlet",
+      "DrinkingWaterToDistribution",
+      "GasToCogen",
+      "GasToBoiler",
+      "OceanOutfall",
+      "GasToBoilerMGD",
+      "GasToBoilerBidirectional",
+      "BiosolidsDelivery",
+      "SolidsDisposal"
+    ],
+    "virtual_tags": {
+      "GrossGasProduction": {
+        "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
+        "operations": "lambda x,y: x + y",
+        "contents": "GasBlend",
+        "units": "SCFM"
+      },
+      "GrossGasProductionList": {
+        "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
+        "operations": "lambda x,y: [sum(z) for z in zip(x,y)]",
+        "contents": "GasBlend",
+        "units": "SCFM"
+      },    
+      "ElectricityProductionByGasVolume": {
+        "tags": ["ElectricityGeneration", "GrossGasProduction"],
+        "operations": "lambda x,y: x / y",
+        "type": "Efficiency",
+        "parent_id": "Cogenerator",
+        "units": "kilowatt * hour / SCFM"
+      },
+      "ElectricityGenerationComputed": {
+        "tags": ["ElectricityProductionByGasVolume", "GrossGasProduction", "Constant1"],
+        "binary_operations": "*",
+        "type": "Flow",
+        "parent_id": "Cogenerator",
+        "contents": "Electricity"
+      }
+    },
+    "DrinkingWaterFacility": {
+      "type": "Facility",
+      "elevation (meters)": null,
+      "input_contents": "SurfaceWater",
+      "output_contents": "DrinkingWater",
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "nodes": [],
+      "connections": [],
+      "tags": {}
+    },
+    "WWTP": {
+      "type": "Facility",
+      "elevation (meters)": 10,
+      "input_contents": "UntreatedSewage",
+      "output_contents": "TreatedSewage",
+      "flowrate": {
+        "min": 5,
+        "max": 25,
+        "avg": 15,
+        "units": "MGD"
+      },
+      "nodes": [
+        "BarScreen",
+        "GritChamber",
+        "PrimaryClarifier",
+        "OxygenPlant",
+        "AerationBasin",
+        "SecondaryClarifier",
+        "WWTPContactChamber",
+        "GravityThickener",
+        "AnaerobicDigester",
+        "Conditioner",
+        "Cogenerator",
+        "Boiler",
+        "Flare",
+        "WWTPVirtualDemand",
+        "FOGTank",
+        "FOGPump",
+        "RASPump",
+        "LiftPump",
+        "TeslaBattery"
+      ],
+      "connections": [
+        "GritToPrimary",
+        "PrimaryToAerator",
+        "OxygenToAerator",
+        "AeratorToSecondary",
+        "SecondaryToContact",
+        "DigesterToConditioner",
+        "ConditionerToCogen",
+        "ConditionerToFlare",
+        "CogenHeatToFacility",
+        "CogenElecToFacility",
+        "PrimaryToGT",
+        "SecondaryToGT",
+        "SecondaryToRAS",
+        "RASToAerator",
+        "GTToDigester",
+        "ScreenToLift",
+        "LiftToGrit",
+        "FOGToPump",
+        "FOGToDigester",
+        "BatteryToFacility",
+        "BoilerToFacility"
+      ]
+    },
+    "BarScreen": {
+      "type": "Screening",
+      "input_contents": "UntreatedSewage",
+      "output_contents": "UntreatedSewage",
+      "num_units": 2,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      }
+    },
+    "Boiler": {
+      "type": "Boiler",
+      "num_units": 1,
+      "input_contents": ["NaturalGas"],
+      "output_contents": "Heat",
+      "generation_capacity": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "kW"
+      },
+      "thermal efficiency": 0.8,
+      "tags": {}
+    },
+    "BoilerToFacility": {
+      "type": "Pipe",
+      "source": "Boiler",
+      "destination": "WWTPVirtualDemand",
+      "contents": "Heat",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "Cogenerator": {
+      "type": "Cogeneration",
+      "num_units": 1,
+      "input_contents": ["Biogas", "NaturalGas"],
+      "output_contents": ["Electricity", "Heat"],
+      "generation_capacity": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "kW"
+      },
+      "tags": {
+        "Constant1": {
+          "type": "RunStatus",
+          "units": null,
+          "contents": null
+        }
+      }
+    },
+    "Flare": {
+      "type": "Flaring",
+      "num_units": 1,
+      "contents": "Biogas",
+      "tags": {}
+    },
+    "WWTPVirtualDemand": {
+      "type": "Network",
+      "contents": ["Electricity", "Heat"],
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "RecycledWaterVirtualDemand": {
+      "type": "Network",
+      "contents": ["Electricity", "Heat"],
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "TeslaBattery": {
+      "type": "Battery",
+      "contents": "Electricity",
+      "capacity (kWh)": 2000,
+      "discharge_rate (kW)": 550,
+      "tags": {}
+    },
+    "BatteryToFacility": {
+      "type": "Wire",
+      "source": "TeslaBattery",
+      "destination": "WWTPVirtualDemand",
+      "contents": "Electricity",
+      "bidirectional": true,
+      "tags": {}
+    },
+    "FOGTank": {
+      "type": "Tank",
+      "elevation (meters)": null,
+      "volume (cubic meters)": null,
+      "contents": "FatOilGrease",
+      "tags": {
+        "TankVolume": {
+          "type": "Volume",
+          "units": "gallons",
+          "contents": "FatOilGrease"
+        },
+        "TankLevel": {
+          "type": "Level",
+          "units": "feet",
+          "contents": "FatOilGrease"
+        }
+      }
+    },
+    "GritChamber": {
+      "type": "Tank",
+      "elevation (meters)": null,
+      "volume (cubic meters)": 250,
+      "contents": "UntreatedSewage"
+    },
+    "PrimaryClarifier": {
+      "type": "Clarification",
+      "contents": "UntreatedSewage",
+      "volume (cubic meters)": 800,
+      "num_units": 8,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": 2,
+        "units": "MGD"
+      }
+    },
+    "SecondaryClarifier": {
+      "type": "Clarification",
+      "contents": "UntreatedSewage",
+      "volume (cubic meters)": 800,
+      "num_units": 8,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": 2,
+        "units": "MGD"
+      }
+    },
+    "AerationBasin": {
+      "type": "Aeration",
+      "input_contents": ["UntreatedSewage", "WasteActivatedSludge"],
+      "output_contents": "UntreatedSewage",
+      "volume (cubic meters)": 2500,
+      "num_units": 8,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": 1.5,
+        "units": "MGD"
+      }
+    },
+    "OxygenPlant": {
+      "type": "Separator",
+      "input_contents": "Air",
+      "output_contents": ["Oxygen", "IdealGas"],
+      "num_units": 1,
+      "volume": {
+        "value": 100,
+        "units": "cubic meters"
+      },
+      "elevation": {
+        "value": 0,
+        "units": "meters"
+      },
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null
+      },
+      "tags": {}
+    },
+    "AnaerobicDigester": {
+      "type": "Digestion",
+      "input_contents": "ThickenedSludgeBlend",
+      "output_contents": "Biogas",
+      "digester_type": "Anaerobic",
+      "volume (cubic meters)": 2500,
+      "num_units": 3,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "WWTPContactChamber": {
+      "type": "Chlorination",
+      "volume (cubic meters)": 2000,
+      "input_contents": "UntreatedSewage",
+      "output_contents": "TreatedSewage",
+      "num_units": 1
+    },
+    "GravityThickener": {
+      "type": "Thickening",
+      "input_contents": ["PrimarySludge", "WasteActivatedSludge"],
+      "output_contents": "ThickenedSludgeBlend",
+      "num_units": 1,
+      "volume (cubic meters)": 300,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      }
+    },
+    "SewerNetwork": {
+      "type": "Network",
+      "contents": "UntreatedSewage",
+      "nodes": [],
+      "connections": [],
+      "tags": {}
+    },
+    "Ocean": {
+      "type": "Reservoir",
+      "contents": ["TreatedSewage", "Brine", "Seawater"],
+      "tags": {}
+    },
+    "ReclaimedReservoir": {
+      "type": "Reservoir",
+      "contents": "NonpotableReuse",
+      "tags": {}
+    },
+    "PurplePipeSystem": {
+      "type": "Network",
+      "contents": "NonpotableReuse",
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "WaterDistribution": {
+      "type": "Network",
+      "contents": "DrinkingWater",
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "PowerGrid": {
+      "type": "Network",
+      "contents": ["Electricity", "NaturalGas"],
+      "tags": {},
+      "nodes": [
+        "NodeA"
+      ],
+      "connections": []
+    },
+    "NodeA": {
+      "type": "Network",
+      "contents": ["Electricity"],
+      "tags": {},
+      "nodes": [],
+      "connections": []
+    },
+    "DesalPlant": {
+      "type": "Facility",
+      "elevation (meters)": null,
+      "input_contents": "Seawater",
+      "output_contents": ["DrinkingWater", "Brine"],
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "nodes": [],
+      "connections": []
+    },
+    "RecycledWaterFacility": {
+      "type": "Facility",
+      "elevation (meters)": null,
+      "input_contents": "TreatedSewage",
+      "output_contents": "NonpotableReuse",
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "nodes": ["RecycledWaterVirtualDemand", "Ultrafiltration", "RWFContactChamber", "ReclaimedReservoir"],
+      "connections": ["UFToDisinfection", "ChlorinatorToReservoir"]
+    },
+    "Ultrafiltration": {
+      "type": "Filtration",
+      "contents": "TreatedSewage",
+      "volume (cubic meters)": null,
+      "num_units": null,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": null,
+        "units": "MGD",
+        "tags": {
+          "InletTemperature": {
+            "type": "Temperature",
+            "units": "C",
+            "contents": "SecondaryEffluent",
+            "totalized": false
+          }
+        }
+      }
+    },
+    "RWFContactChamber": {
+      "type": "Chlorination",
+      "volume (cubic meters)": null,
+      "num_units": 1,
+      "input_contents": "TreatedSewage",
+      "output_contents": "NonpotableReuse"
+    },
+    "UFToDisinfection": {
+      "type": "Pipe",
+      "source": "Ultrafiltration",
+      "destination": "RWFContactChamber",
+      "contents": "TreatedSewage",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "FOGToPump": {
+      "type": "Pipe",
+      "source": "FOGTank",
+      "destination": "FOGPump",
+      "contents": "FatOilGrease",
+      "tags": {}
+    },
+    "FOGToDigester": {
+      "type": "Pipe",
+      "source": "FOGPump",
+      "destination": "AnaerobicDigester",
+      "contents": "FatOilGrease",
+      "tags": {}
+    },
+    "FOGPump": {
+      "type": "Pump",
+      "pump_type": null,
+      "contents": "FatOilGrease",
+      "num_units": null,
+      "horsepower": null,
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "ChlorinatorToReservoir": {
+      "type": "Pipe",
+      "source": "RWFContactChamber",
+      "destination": "ReclaimedReservoir",
+      "contents": "NonpotableReuse",
+      "tags": {}
+    },
+    "SewerIntake": {
+      "type": "Pipe",
+      "source": "SewerNetwork",
+      "destination": "WWTP",
+      "contents": "UntreatedSewage",
+      "entry_point": "BarScreen",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {
+        "InfluentFlow": {
+          "type": "Flow",
+          "units": "GPM",
+          "source_unit_id": "total",
+          "dest_unit_id": "total",
+          "contents": "UntreatedSewage",
+          "totalized": false
+        }
+      }
+    },
+    "GritToPrimary": {
+      "type": "Pipe",
+      "source": "GritChamber",
+      "destination": "PrimaryClarifier",
+      "contents": "UntreatedSewage",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "PrimaryToAerator": {
+      "type": "Pipe",
+      "source": "PrimaryClarifier",
+      "destination": "AerationBasin",
+      "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": 75,
+        "units": "PSI"
+      },
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "OxygenToAerator": {
+      "type": "Pipe",
+      "source": "OxygenPlant",
+      "destination": "AerationBasin",
+      "contents": "Oxygen",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null
+      },
+      "tags": {}
+    },
+    "AeratorToSecondary":{
+      "type": "Pipe",
+      "source": "AerationBasin",
+      "destination": "SecondaryClarifier",
+      "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": null,
+        "units": "PSI"
+      },
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "SecondaryToContact": {
+      "type": "Pipe",
+      "source": "SecondaryClarifier",
+      "destination": "WWTPContactChamber",
+      "contents": "UntreatedSewage",
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "design": 25,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "DigesterToConditioner": {
+      "type": "Pipe",
+      "source": "AnaerobicDigester",
+      "destination": "Conditioner",
+      "contents": "Biogas",
+      "flowrate": {
+        "max": 1000,
+        "min": 100,
+        "avg": null,
+        "units": "SCFM"
+      },
+      "tags": {}
+    },
+    "Conditioner": {
+      "type": "Conditioning",
+      "input_contents": "Biogas",
+      "output_contents": "Biogas",
+      "num_units": 5,
+      "flowrate": {
+        "min": null,
+        "max": null,
+        "avg": 100,
+        "units": "SCFM"
+      }
+    },
+    "ConditionerToCogen": {
+      "type": "Pipe",
+      "source": "Conditioner",
+      "destination": "Cogenerator",
+      "contents": "Biogas",
+      "flowrate": {
+        "max": null,
+        "min": 100,
+        "avg": 500,
+        "units": "SCFM"
+      },
+      "heating_values": {
+        "lower": 600,
+        "higher": 700,
+        "units": "BTU/scf"
+      },
+      "tags": {
+        "Digester1GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 1,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        },
+        "Digester2GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 2,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        },
+        "Digester3GasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": 3,
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        },
+        "CombinedDigesterGasFlow": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": "total",
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": false
+        }
+      }
+    },
+    "ConditionerToFlare": {
+      "type": "Pipe",
+      "source": "Conditioner",
+      "destination": "Flare",
+      "contents": "Biogas",
+      "flowrate": {
+        "max": null,
+        "min": 100,
+        "avg": 500,
+        "units": "SCFM"
+      },
+      "tags": {
+        "TotalizedFlaredGas": {
+          "type": "Flow",
+          "units": "SCFM",
+          "source_unit_id": "total",
+          "dest_unit_id": "total",
+          "contents": "Biogas",
+          "totalized": true
+        }
+      }
+    },
+    "SecondaryToGT": {
+      "type": "Pipe",
+      "source": "SecondaryClarifier",
+      "destination": "GravityThickener",
+      "contents": "WasteActivatedSludge",
+      "tags": {}
+    },
+    "SecondaryToRAS": {
+      "type": "Pipe",
+      "source": "SecondaryClarifier",
+      "destination": "RASPump",
+      "contents": "WasteActivatedSludge",
+      "friction_coeff": 0.05,
+      "tags": {}
+    },
+    "RASToAerator": {
+      "type": "Pipe",
+      "source": "RASPump",
+      "destination": "AerationBasin",
+      "contents": "WasteActivatedSludge",
+      "tags": {}
+    },
+    "RASPump": {
+      "type": "Pump",
+      "pump_type": null,
+      "contents": "WasteActivatedSludge",
+      "num_units": null,
+      "horsepower": null,
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "PrimaryToGT": {
+      "type": "Pipe",
+      "source": "PrimaryClarifier",
+      "destination": "GravityThickener",
+      "contents": "PrimarySludge",
+      "tags": {}
+    },
+    "OceanOutfall": {
+      "type": "Pipe",
+      "source": "WWTP",
+      "destination": "Ocean",
+      "contents": "TreatedSewage",
+      "exit_point": "WWTPContactChamber",
+      "pressure": {
+        "min": 10,
+        "max": 100,
+        "avg": 75,
+        "units": "PSI"
+      },
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "DesalWaste": {
+      "type": "Pipe",
+      "source": "DesalPlant",
+      "destination": "Ocean",
+      "contents": "Brine",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "WWTPToRecycledWater": {
+      "type": "Pipe",
+      "source": "WWTP",
+      "destination": "RecycledWaterFacility",
+      "contents": "TreatedSewage",
+      "exit_point": "SecondaryClarifier",
+      "entry_point": "Ultrafiltration",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "RecycledWaterOutlet": {
+      "type": "Pipe",
+      "source": "RecycledWaterFacility",
+      "destination": "PurplePipeSystem",
+      "contents": "NonpotableReuse",
+      "exit_point": "ReclaimedReservoir",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "DrinkingWaterToDistribution": {
+      "type": "Pipe",
+      "source": "DrinkingWaterFacility",
+      "destination": "WaterDistribution",
+      "contents": "DrinkingWater",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "ScreenToLift": {
+      "type": "Pipe",
+      "source": "BarScreen",
+      "destination": "LiftPump",
+      "contents": "UntreatedSewage",
+      "diameter": {
+        "units": "inch",
+        "value": 2
+      },
+      "tags": {}
+    },
+    "LiftToGrit": {
+      "type": "Pipe",
+      "source": "LiftPump",
+      "destination": "GritChamber",
+      "contents": "UntreatedSewage",
+      "pressure": {
+        "min": 10,
+        "max": null,
+        "avg": null,
+        "units": "PSI"
+      },
+      "flowrate": {
+        "max": 100,
+        "min": 10,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "LiftPump": {
+      "type": "Pump",
+      "pump_type": null,
+      "contents": "UntreatedSewage",
+      "horsepower": null,
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "DesalInlet": {
+      "type": "Pipe",
+      "source": "Ocean",
+      "destination": "DesalPlant",
+      "contents": "Seawater",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "DesalOutlet": {
+      "type": "Pipe",
+      "source": "DesalPlant",
+      "destination": "WaterDistribution",
+      "contents": "DrinkingWater",
+      "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+      },
+      "tags": {}
+    },
+    "ElectricToRecycledWater": {
+      "type": "Wire",
+      "source": "PowerGrid",
+      "destination": "RecycledWaterFacility",
+      "entry_point": "RecycledWaterVirtualDemand",
+      "contents": "Electricity",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "ElectricToDesal": {
+      "type": "Wire",
+      "source": "PowerGrid",
+      "destination": "DesalPlant",
+      "contents": "Electricity",
+      "exit_point": "NodeA",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "ElectricToWWTP": {
+      "type": "Wire",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "Electricity",
+      "entry_point": "WWTPVirtualDemand",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "GasToBoilerMGD": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Boiler",
+      "bidirectional": false,
+      "tags": {
+          "BoilerGasPurchases": {
+            "type": "Flow",
+            "units": "MGD",
+            "contents": "NaturalGas",
+            "totalized": false
+          }
+      }
+    },
+    "GasToBoiler": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Boiler",
+      "bidirectional": false,
+      "tags": {
+          "BoilerGasPurchases": {
+            "type": "Flow",
+            "units": "SCFM",
+            "contents": "NaturalGas",
+            "totalized": false
+          }
+      }
+    },
+    "GasToBoilerBidirectional": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Boiler",
+      "bidirectional": true,
+      "tags": {
+          "BoilerGasPurchases": {
+            "type": "Flow",
+            "units": "SCFM",
+            "contents": "NaturalGas",
+            "totalized": false
+          }
+      }
+    },
+    "GasToCogen": {
+      "type": "Pipe",
+      "source": "PowerGrid",
+      "destination": "WWTP",
+      "contents": "NaturalGas",
+      "entry_point": "Cogenerator",
+      "bidirectional": false,
+      "tags": {
+        "CogenGasPurchases": {
+          "type": "Flow",
+          "units": "SCFM",
+          "contents": "NaturalGas",
+          "totalized": false
+        }
+      },
+      "virtual_tags": {
+        "NoGasPurchases": {
+          "tags": ["CogenGasPurchases"],
+          "operations": "lambda x: x==0",
+          "type": "RunStatus",
+          "units": null
+        },
+        "NoGasPurchasesList": {
+          "tags": ["CogenGasPurchases"],
+          "operations": "lambda x: [x_==0 for x_ in x]",
+          "type": "RunStatus",
+          "units": null
+        }
+      }
+    },
+    "GTToDigester": {
+      "type": "Pipe",
+      "source": "GravityThickener",
+      "destination": "AnaerobicDigester",
+      "contents": "ThickenedSludgeBlend",
+      "tags": {}
+    },
+    "CogenHeatToFacility": {
+      "type": "Pipe",
+      "source": "Cogenerator",
+      "destination": "WWTPVirtualDemand",
+      "contents": "Heat",
+      "bidirectional": false,
+      "tags": {}
+    },
+    "CogenElecToFacility": {
+      "type": "Wire",
+      "source": "Cogenerator",
+      "destination": "WWTPVirtualDemand",
+      "contents": "Electricity",
+      "bidirectional": false,
+      "tags": {
+        "ElectricityGeneration": {
+          "type": "Flow",
+          "units": "kWh",
+          "contents": "Electricity",
+          "totalized": false
+        }
+      },
+      "virtual_tags": {
+        "ElectricityGeneration_RShift2": {
+          "tags": ["ElectricityGeneration"],
+          "operations": "lambda x: x.shift(2)",
+          "units": "kilowatt * hour"
+        },
+        "ElectricityGeneration_RShift2_List": {
+          "tags": ["ElectricityGeneration"],
+          "operations": "lambda x: ['nan', 'nan'] + x[:-2]",
+          "units": "kilowatt * hour"
+        },      
+        "ElectricityGeneration_LShift1": {
+          "tags": ["ElectricityGeneration"],
+          "operations": "lambda x: x.shift(-1)",
+          "units": "kilowatt * hour"
+        },
+        "ElectricityGeneration_LShift1_List": {
+          "tags": ["ElectricityGeneration"],
+          "operations": "lambda x: x[1:] + ['nan']",
+          "units": "kilowatt * hour"
+        },      
+        "ElectricityGenDelta": {
+          "tags": ["ElectricityGeneration"],
+          "operations": "lambda x: x.diff()",
+          "units": "kilowatt * hour"
+        }
+      }
+    },
+    "BiosolidsDelivery": {
+        "type": "Delivery",
+        "source": "ChemicalFactory",
+        "destination": "WWTP",
+        "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "SolidsDisposal": {
+        "type": "Delivery",
+        "source": "WWTP",
+        "destination": "Landfill",
+        "exit_point": "GravityThickener",
+        "contents": "WFBS",
+        "flowrate": {
+            "max": null,
+            "min": null,
+            "avg": null,
+            "units": "tons / day"
+        },
+        "tags": {}
+    },
+    "Landfill": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "contents": ["SolidWaste", "WFBS"],
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
+    },
+    "ChemicalFactory": {
+        "type": "Facility",
+        "elevation (meters)": null,
+        "input_contents": "Electricity",
+        "output_contents": "Antiscalant",
+        "tags": {},
+        "nodes": [],
+        "connections": [],
+        "flowrate": {
+            "min": null,
+            "max": null,
+            "avg": null,
+            "units": "tons / day"
+        }
+    }
+  }
+  

@@ -24,7 +24,8 @@
         "GasToCogen",
         "GasToBoiler",
         "SewerIntake",
-        "MainSewerLine"
+        "MainSewerLine",
+        "OceanOutfall"
     ],
     "virtual_tags": {
         "GrossGasProduction": {
@@ -1610,5 +1611,19 @@
         ],
         "tags": {},
         "virtual_tags": {}
+    },
+    "OceanOutfall": {
+        "type": "Pipe",
+        "source": "WWTP",
+        "destination": "Ocean",
+        "contents": "TreatedSewage",
+        "exit_point": "WWTPContactChamber",
+        "flowrate": {
+        "max": null,
+        "min": null,
+        "avg": null,
+        "units": "MGD"
+        },
+        "tags": {}
     }
 }

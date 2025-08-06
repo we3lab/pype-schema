@@ -14,8 +14,10 @@ skip_all_tests = False
     "inp_file, out_file, add_nodes, expected_path",
     [
         ("data/EPANET_Net_3.inp", "dummy_output.json", False, "data/EPANET_Net_3.json"),
-        ("data/L-TOWN.inp", "data/L-TOWN.json", False, "KeyError"),
-        ("data/L-TOWN.inp", "data/L-TOWN.json", True, "ValueError"),
+        ("data/L-TOWN.inp", "dummy_output.json", False, "data/L-TOWN.json"),
+        ("data/L-TOWN.inp", "dummy_output.json", True, "data/L-TOWN-with-nodes.json"),
+        ("data/valve.inp", "dummy_output.json", False, "KeyError"),
+        ("data/valve.inp", "dummy_output.json", True, "ValueError"),
     ],
 )
 def test_epyt2pypes(inp_file, out_file, add_nodes, expected_path):

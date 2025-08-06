@@ -898,11 +898,31 @@ class JSONParser:
                 pH=pH,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Joint":
-            node_obj = node.Joint(
+        elif self.config[node_id]["type"] == "Junction":
+            node_obj = node.Junction(
                 node_id,
                 input_contents,
                 output_contents,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "Valve":
+            node_obj = node.Valve(
+                node_id,
+                input_contents,
+                output_contents,
+                tags={},
+            )
+        elif self.config[node_id]["type"] == "PRV":
+            diameter = self.parse_unit_val_dict(self.config[node_id].get("diameter"))
+            pressure_setting = self.parse_unit_val_dict(
+                self.config[node_id].get("pressure_setting")
+            )
+            node_obj = node.PRV(
+                node_id,
+                input_contents,
+                output_contents,
+                diameter=diameter,
+                pressure_setting=pressure_setting,
                 tags={},
             )
         elif self.config[node_id]["type"] == "Separator":
@@ -961,7 +981,7 @@ class JSONParser:
                         )
                         operations = utils.get_tag_sum_lambda_func(tag_source_unit_ids)
                         v_tag = VirtualTag(
-                            tag_id, tags_by_contents, operations=operations
+                            tag_id, tags_by_contents, custom_operations=operations
                         )
                         node_obj.add_tag(v_tag)
         return node_obj
@@ -1160,11 +1180,10 @@ class JSONParser:
                                 v_tag = VirtualTag(
                                     tag_id,
                                     tag_list,
-                                    operations=operations,
+                                    custom_operations=operations,
                                     units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
-
                         else:
                             tag_list = [
                                 connection_obj.tags[tag_obj.id]
@@ -1183,13 +1202,7 @@ class JSONParser:
                             v_tag = VirtualTag(
                                 tag_id,
                                 tag_list,
-                                operations=operations,
-                                units=tag_obj.units,
-                            )
-                            v_tag = VirtualTag(
-                                tag_id,
-                                tag_list,
-                                operations=operations,
+                                custom_operations=operations,
                                 units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
@@ -1219,7 +1232,7 @@ class JSONParser:
                                 v_tag = VirtualTag(
                                     tag_id,
                                     tag_list,
-                                    operations=operations,
+                                    custom_operations=operations,
                                     units=tag_obj.units,
                                 )
                                 connection_obj.add_tag(v_tag)
@@ -1241,7 +1254,7 @@ class JSONParser:
                             v_tag = VirtualTag(
                                 tag_id,
                                 tag_list,
-                                operations=operations,
+                                custom_operations=operations,
                                 units=tag_obj.units,
                             )
                             connection_obj.add_tag(v_tag)
@@ -1305,7 +1318,11 @@ class JSONParser:
             dictionary of the form {
                 ``tags``: `dict` of `Tag`
 
-                ``operations``: `str`
+                ``unary_operations``: `list` of `str`
+
+                ``binary_operations``: `list` of `str`
+
+                ``custom_operations``: `str`
 
                 ``type``: `TagType`
 
@@ -1342,7 +1359,7 @@ class JSONParser:
                     )
                 )
             tag_list.append(subtag)
-        pint_unit = utils.parse_units(tag_info["units"])
+        pint_unit = utils.parse_units(tag_info.get("units"))
         try:
             tag_type = TagType[tag_info["type"]]
         except KeyError:
@@ -1351,15 +1368,45 @@ class JSONParser:
             contents_type = utils.ContentsType[tag_info["contents"]]
         except KeyError:
             contents_type = None
-        v_tag = VirtualTag(
-            tag_id,
-            tag_list,
-            operations=tag_info.get("operations"),
-            tag_type=tag_type,
-            contents=contents_type,
-            parent_id=tag_info.get("parent_id"),
-            units=pint_unit,
-        )
+        op_mode = tag_info.get("mode")
+        unary_ops = tag_info.get("unary_operations")
+        binary_ops = tag_info.get("binary_operations")
+        custom_ops = tag_info.get("custom_operations")
+        if (
+            op_mode in ["Algebraic", "algebraic"]
+            or binary_ops is not None
+            or unary_ops is not None
+        ):
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                unary_operations=unary_ops,
+                binary_operations=binary_ops,
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
+        elif op_mode in ["Custom", "custom"] or custom_ops is not None:
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                custom_operations=custom_ops,
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
+        else:  # for backwards compatability
+            v_tag = VirtualTag(
+                tag_id,
+                tag_list,
+                custom_operations=tag_info.get("operations"),
+                tag_type=tag_type,
+                contents=contents_type,
+                parent_id=tag_info.get("parent_id"),
+                units=pint_unit,
+            )
         return v_tag
 
     @staticmethod
@@ -1514,6 +1561,7 @@ class JSONParser:
                     ``rate``: `float`
 
                     ``units``: `str`
+
                 }
 
             }
@@ -1731,9 +1779,14 @@ class JSONParser:
         """
         tag_dict = {}
         if isinstance(tag_obj, VirtualTag):
+            tag_dict["mode"] = tag_obj.mode.name
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["tags"] = [tag.id for tag in tag_obj.tags]
-            tag_dict["operations"] = tag_obj.operations
+            if tag_obj.custom_operations:
+                tag_dict["custom_operations"] = tag_obj.custom_operations
+            else:
+                tag_dict["unary_operations"] = tag_obj.unary_operations
+                tag_dict["binary_operations"] = tag_obj.binary_operations
         elif isinstance(tag_obj, Tag):
             tag_dict["units"] = "{!s}".format(tag_obj.units)
             tag_dict["source_unit_id"] = tag_obj.source_unit_id
@@ -2063,13 +2116,6 @@ class JSONParser:
             node_dict["leakage"] = JSONParser.unit_val_to_dict(node_obj.leakage)
             node_dict["rte"] = node_obj.rte
         elif isinstance(node_obj, node.Network):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
             node_dict["nodes"] = []
             node_dict["connections"] = []
             for subnode in node_obj.get_all_nodes(recurse=False):
@@ -2085,14 +2131,13 @@ class JSONParser:
                 node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
-        elif isinstance(node_obj, node.Joint):
-            node_dict["type"] = type(node_obj).__name__
-            node_dict["input_contents"] = [
-                contents.name for contents in node_obj.input_contents
-            ]
-            node_dict["output_contents"] = [
-                contents.name for contents in node_obj.output_contents
-            ]
+        elif isinstance(node_obj, node.PRV):
+            node_dict["diameter"] = JSONParser.unit_val_to_dict(node_obj.diameter)
+            node_dict["pressure_setting"] = JSONParser.unit_val_to_dict(
+                node_obj.pressure_setting
+            )
+        elif isinstance(node_obj, (node.Junction, node.Valve)):
+            node_dict["diameter"] = JSONParser.unit_val_to_dict(node_obj.diameter)
         else:
             raise TypeError("Unsupported Node type: " + type(node_obj).__name__)
         return node_dict

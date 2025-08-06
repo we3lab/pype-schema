@@ -16,7 +16,7 @@
   },
   "virtual_tags": {
     "GrossGasProduction": {
-      "tags": ["CombinedDigesterGasFlow", "GasPurchases"],
+      "tags": ["CombinedDigesterGasFlow", "CogenGasPurchases"],
       "binary_operations": "lambda tag1,tag2: tag1+tag2",
       "units": "SCFM"
     }
@@ -81,7 +81,7 @@
     "entry_point": "Cogenerator",
     "bidirectional": false,
     "tags": {
-      "GasPurchases": {
+      "CogenGasPurchases": {
         "type": "Flow",
         "units": "SCFM",
         "contents": "NaturalGas",

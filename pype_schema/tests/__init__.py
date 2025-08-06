@@ -4,7 +4,7 @@
 
 import pickle
 from pype_schema.tag import VirtualTag
-from pype_schema.node import Boiler, Cogeneration, Pump
+from pype_schema.node import Boiler, Cogeneration, Pump, Network
 
 
 def pickle_without_functions(network, outpath):
@@ -19,25 +19,31 @@ def pickle_without_functions(network, outpath):
         file path to save the pickled object
     """
     # make all the VirtualTag operations into strings
-    all_tags = network.get_all_tags(virtual=True, recurse=True)
+    if isinstance(network, Network):
+        all_tags = network.get_all_tags(virtual=True, recurse=True)
+    else:
+        all_tags = network.tags
     vtags = [tag for tag in all_tags if isinstance(tag, VirtualTag)]
 
     for vtag in vtags:
-        vtag.operations = str(vtag.operations)
+        vtag.custom_operations = str(vtag.custom_operations)
 
-    # set efficiency attribute to None
-    boilers = network.select_objs(obj_type=Boiler, recurse=True)
-    for boiler in boilers:
-        boiler.set_thermal_efficiency(None)
+    try:
+        # set efficiency attribute to None
+        boilers = network.select_objs(obj_type=Boiler, recurse=True)
+        for boiler in boilers:
+            boiler.set_thermal_efficiency(None)
 
-    cogens = network.select_objs(obj_type=Cogeneration, recurse=True)
-    for cogen in cogens:
-        cogen.set_thermal_efficiency(None)
-        cogen.set_electrical_efficiency(None)
+        cogens = network.select_objs(obj_type=Cogeneration, recurse=True)
+        for cogen in cogens:
+            cogen.set_thermal_efficiency(None)
+            cogen.set_electrical_efficiency(None)
 
-    pumps = network.select_objs(obj_type=Pump, recurse=True)
-    for pump in pumps:
-        pump.set_pump_curve(None)
+        pumps = network.select_objs(obj_type=Pump, recurse=True)
+        for pump in pumps:
+            pump.set_pump_curve(None)
+    except AttributeError:
+        pass
 
     # export pickled object
     with open(outpath, "wb") as pickle_file:
