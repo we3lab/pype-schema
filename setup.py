@@ -72,6 +72,6 @@ setup(
     extras_require=extra_requirements,
     test_suite="tests",
     url="https://github.com/we3lab/pype-schema",
-    version="0.6.1",
+    version="0.7.0",
     zip_safe=False,
 )
