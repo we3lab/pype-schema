@@ -1455,8 +1455,8 @@ class Valve(Node):
         )
 
 
-class PressureReleaseValve(Valve):
-    """A pressure release valve.
+class PRV(Valve):
+    """A pressure reducing valve.
 
     Parameters
     ----------
@@ -3128,7 +3128,7 @@ class Filtration(Node):
     dosing_rate : dict of DosingType:float
         Dosing information for the filter (key: DosingType, value: rate)
 
-    settling_time : float
+    settling_time : pint.quantity or float
         time it takes for the filter to reach the desired operation mode in seconds
 
     tags : dict of Tag
@@ -3163,7 +3163,7 @@ class Filtration(Node):
     dosing_rate : dict of DosingType:float
         Dosing information for the filter (key: DosingType, value: rate)
 
-    settling_time : float
+    settling_time : pint.quantity or float
         time it takes for the filter to reach the desired operation mode
 
     tags : dict of Tag
@@ -3270,19 +3270,19 @@ class ROMembrane(Filtration):
     volume : pint.quantity or float
         Volume of the RO membrane in cubic meters
 
-    area : float
+    area : pint.quantity or float
         Area of the RO membrane in square meters
 
-    permeability : float
+    permeability : pint.quantity or float
         Permeability of the RO membrane
 
-    selectivity : float
+    selectivity : pint.quantity or float
         Selectivity of the RO membrane
 
     dosing_rate : dict of DosingType:float
         Dosing information for the RO membrane (key: DosingType, value: rate)
 
-    settling_time : float
+    settling_time : pint.quantity or float
         time it takes for the filter to reach the desired operation mode
 
     tags : dict of Tag
@@ -3326,7 +3326,7 @@ class ROMembrane(Filtration):
     dosing_rate : dict of DosingType:float
         Dosing information for the RO membrane (key: DosingType, value: rate)
 
-    settling_time : float
+    settling_time : pint.quantity or float
         time it takes for the filter to reach the desired operation mode
 
     tags : dict of Tag

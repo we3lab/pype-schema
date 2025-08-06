@@ -158,7 +158,7 @@ def epyt2pypes(inp_file, out_file, add_nodes=False):
 
                 valve_obj = {
                     "id": "Valve" + str(obj_counts["Valve"] + 1),
-                    "type": "PressureReleaseValve",
+                    "type": "PRV",
                     "contents": content_placeholder,
                     "tags": {},
                 }

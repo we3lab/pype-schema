@@ -5641,17 +5641,17 @@
     "tags": {}
   },
   "Valve1": {
-    "type": "PressureReleaseValve",
+    "type": "PRV",
     "contents": "DrinkingWater",
     "tags": {}
   },
   "Valve2": {
-    "type": "PressureReleaseValve",
+    "type": "PRV",
     "contents": "DrinkingWater",
     "tags": {}
   },
   "Valve3": {
-    "type": "PressureReleaseValve",
+    "type": "PRV",
     "contents": "DrinkingWater",
     "tags": {}
   },

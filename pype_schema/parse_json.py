@@ -912,12 +912,12 @@ class JSONParser:
                 output_contents,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "PressureReleaseValve":
+        elif self.config[node_id]["type"] == "PRV":
             diameter = self.parse_unit_val_dict(self.config[node_id].get("diameter"))
             pressure_setting = self.parse_unit_val_dict(
                 self.config[node_id].get("pressure_setting")
             )
-            node_obj = node.PressureReleaseValve(
+            node_obj = node.PRV(
                 node_id,
                 input_contents,
                 output_contents,
@@ -1561,7 +1561,7 @@ class JSONParser:
                     ``rate``: `float`
 
                     ``units``: `str`
-        
+
                 }
 
             }
@@ -2131,7 +2131,7 @@ class JSONParser:
                 node_dict["flowrate"] = JSONParser.min_max_design_to_dict(
                     node_obj, "flow_rate"
                 )
-        elif isinstance(node_obj, node.PressureReleaseValve):
+        elif isinstance(node_obj, node.PRV):
             node_dict["diameter"] = JSONParser.unit_val_to_dict(node_obj.diameter)
             node_dict["pressure_setting"] = JSONParser.unit_val_to_dict(
                 node_obj.pressure_setting

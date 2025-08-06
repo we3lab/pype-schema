@@ -134,8 +134,7 @@ network, but to a specific storage tank within the distribution network:
     )[0]
     wds_conn.entry_point = tank
 
-The next section, :ref:`query_model`, explains querying using ``select_objs`` in further detail.
-
+The next section, :ref:`query_model`, explains querying using ``select_objs`` in further detail. 
 Rather than adding components to the model one-by-one in Python, 
 a user can edit the JSON file directly and then re-load the model (see :ref:`json_rep`) 
 
