@@ -1073,7 +1073,7 @@ class VirtualTag:
                 varname = tag_to_var_map[tag_obj.id] if tag_to_var_map else tag_obj.id
                 varnames.append(varname)
                 if isinstance(tag_obj, self.__class__):
-                    data[varname] = tag_obj.calculate_values(data)
+                    data[varname] = tag_obj.calculate_values(data, tag_to_var_map)
             result = func_(*[data[varname] for varname in varnames])
             if isinstance(result, Series):
                 result.rename(self.id, inplace=True)
