@@ -954,7 +954,7 @@ class VirtualTag:
             result = None
             for i, tag_obj in enumerate(self.tags):
                 if isinstance(tag_obj, self.__class__):
-                    relevant_data = tag_obj.calculate_values(data)
+                    relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
                     relevant_data = data[tag_to_var_map[tag_obj.id]]
                 else:
