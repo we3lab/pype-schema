@@ -3,7 +3,6 @@
 """Unit test package for pype_schema."""
 
 import pickle
-import warnings
 from pype_schema.tag import VirtualTag, Tag
 from pype_schema.node import Boiler, Cogeneration, Pump, Network
 
@@ -56,12 +55,12 @@ def generate_tag_to_var_map(network):
     rom tag IDs to variable names, renaming variables linking
     objects in the network
     (used to generate mapping json file for tests)
-    
+
     Parameters
     ----------
     network : Network
         The network to generate the mapping for
-        
+
     Returns
     -------
     dict
@@ -73,13 +72,13 @@ def generate_tag_to_var_map(network):
             tag_to_var_map[tag.id] = tag.id
         elif isinstance(tag, Tag):  # rename for other tags
             parent = network.get_parent_from_tag(tag)
-            if hasattr(parent, 'id'):
+            if hasattr(parent, "id"):
                 source_id = parent.id
             else:
                 source_id = "Unknown"
-            
+
             contents_type = tag.contents.name if tag.contents is not None else "None"
             variable_type = tag.tag_type.name
-            
+
             tag_to_var_map[tag.id] = f"{source_id}_{contents_type}_{variable_type}"
     return tag_to_var_map
