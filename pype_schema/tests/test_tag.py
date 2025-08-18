@@ -250,19 +250,18 @@ def test_calculate_values(
     else:
         expected = expected_path
 
+    # Pass in tag_to_var_map only if not None
+    kwargs = {}
+    if tag_to_var_map is not None:
+        kwargs['tag_to_var_map'] = tag_to_var_map
+
     try:
         if data_type == "DataFrame":
-            if tag_to_var_map is None:
-                result = tag.calculate_values(data)
-            else:
-                result = tag.calculate_values(data, tag_to_var_map)
+            result = tag.calculate_values(data, **kwargs)
             pd.testing.assert_series_equal(result, expected[tag_name])
         elif data_type == "Array":
             data = data.to_numpy()
-            if tag_to_var_map is None:
-                result = tag.calculate_values(data)
-            else:
-                result = tag.calculate_values(data, tag_to_var_map)
+            result = tag.calculate_values(data, **kwargs)
             assert np.allclose(
                 result,
                 expected.to_numpy().flatten(),
@@ -270,10 +269,7 @@ def test_calculate_values(
             )
         elif data_type == "List":
             data = data.values.T.tolist()
-            if tag_to_var_map is None:
-                result = tag.calculate_values(data)
-            else:
-                result = tag.calculate_values(data, tag_to_var_map)
+            result = tag.calculate_values(data, **kwargs)
             assert np.allclose(
                 np.array(result, dtype=np.float64),
                 expected.values.flatten(),
@@ -281,17 +277,11 @@ def test_calculate_values(
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")
-            if tag_to_var_map is None:
-                result = tag.calculate_values(data)
-            else:
-                result = tag.calculate_values(data, tag_to_var_map)
+            result = tag.calculate_values(data, **kwargs)
             pd.testing.assert_series_equal(result, expected[tag_name])
         elif data_type == "Invalid":
             data = pd.Series([])
-            if tag_to_var_map is None:
-                tag.calculate_values(data)
-            else:
-                tag.calculate_values(data, tag_to_var_map)
+            tag.calculate_values(data, **kwargs)
     except Exception as err:
         result = type(err).__name__
         assert result == expected
