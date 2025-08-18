@@ -247,21 +247,19 @@ def test_calculate_values(
     result = parser.initialize_network()
     tag = result.get_tag(tag_name, recurse=True)
 
+    # Pass in tag_to_var_map as kwarg only if defined
+    kwargs = {}
     if tag_to_var_map is not None:
         with open(tag_to_var_map, "r") as f:
             tag_to_var_map = json.load(f)
+        kwargs["tag_to_var_map"] = tag_to_var_map
 
     data = pd.read_csv(csv_path)
     if isinstance(expected_path, str) and os.path.isfile(expected_path):
         expected = pd.read_csv(expected_path)
     else:
         expected = expected_path
-
-    # Pass in tag_to_var_map only if not None
-    kwargs = {}
-    if tag_to_var_map is not None:
-        kwargs["tag_to_var_map"] = tag_to_var_map
-
+        
     try:
         if data_type == "DataFrame":
             result = tag.calculate_values(data, **kwargs)
