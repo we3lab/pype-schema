@@ -259,31 +259,31 @@ def test_calculate_values(
         expected = pd.read_csv(expected_path)
     else:
         expected = expected_path
-        
+
     try:
         if data_type == "DataFrame":
-            result = tag.calculate_values(data, **kwargs)
-            pd.testing.assert_series_equal(result, expected[tag_name])
+            pd.testing.assert_series_equal(
+                tag.calculate_values(data, **kwargs), expected[tag_name]
+            )
         elif data_type == "Array":
             data = data.to_numpy()
-            result = tag.calculate_values(data, **kwargs)
             assert np.allclose(
-                result,
+                tag.calculate_values(data, **kwargs),
                 expected.to_numpy().flatten(),
                 equal_nan=True,
             )
         elif data_type == "List":
             data = data.values.T.tolist()
-            result = tag.calculate_values(data, **kwargs)
             assert np.allclose(
-                np.array(result, dtype=np.float64),
+                np.array(tag.calculate_values(data, **kwargs), dtype=np.float64),
                 expected.values.flatten(),
                 equal_nan=True,
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")
-            result = tag.calculate_values(data, **kwargs)
-            pd.testing.assert_series_equal(result, expected[tag_name])
+            pd.testing.assert_series_equal(
+                tag.calculate_values(data, **kwargs), expected[tag_name]
+            )
         elif data_type == "Invalid":
             data = pd.Series([])
             tag.calculate_values(data, **kwargs)
