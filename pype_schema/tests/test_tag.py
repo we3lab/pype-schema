@@ -39,7 +39,8 @@ def test_init_errors(json_path, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, csv_path, tag_name, data_type, expected_path, expected_units, tag_to_var_map",
+    "json_path, csv_path, tag_name, data_type,"
+    "expected_path, expected_units, tag_to_var_map",
     [
         (
             "../data/wrrf_sample.json",
@@ -233,15 +234,22 @@ def test_init_errors(json_path, expected):
     ],
 )
 def test_calculate_values(
-    json_path, csv_path, tag_name, data_type, expected_path, expected_units, tag_to_var_map
+    json_path,
+    csv_path,
+    tag_name,
+    data_type,
+    expected_path,
+    expected_units,
+    tag_to_var_map,
 ):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
     tag = result.get_tag(tag_name, recurse=True)
-    
+
     if tag_to_var_map is not None:
-        with open(tag_to_var_map, 'r') as f:
+        with open(tag_to_var_map, "r") as f:
             import json
+
             tag_to_var_map = json.load(f)
 
     data = pd.read_csv(csv_path)
@@ -253,7 +261,7 @@ def test_calculate_values(
     # Pass in tag_to_var_map only if not None
     kwargs = {}
     if tag_to_var_map is not None:
-        kwargs['tag_to_var_map'] = tag_to_var_map
+        kwargs["tag_to_var_map"] = tag_to_var_map
 
     try:
         if data_type == "DataFrame":
