@@ -57,6 +57,13 @@
         "type": "Flow",
         "parent_id": "Cogenerator",
         "contents": "Electricity"
+      },
+      "ElectricityGenerationConstant": {
+        "tags": ["ElectricityProductionByGasVolume", "GrossGasProduction", "Constant(1)"],
+        "binary_operations": "*",
+        "type": "Flow",
+        "parent_id": "Cogenerator",
+        "contents": "Electricity"
       }
     },
     "DrinkingWaterFacility": {

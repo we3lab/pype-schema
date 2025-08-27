@@ -19,11 +19,11 @@ class NpEncoder(json.JSONEncoder):
 
 
 def epyt2pypes(
-    inp_file, 
+    inp_file,
     out_file,
     add_nodes=False,
     use_name_as_id=False,
-    content_placeholder = "DrinkingWater",
+    content_placeholder="DrinkingWater",
 ):
     """Convert an EPANET input file to a PYPES JSON file
 

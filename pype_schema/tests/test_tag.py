@@ -201,6 +201,14 @@ def test_init_errors(json_path, expected):
             "data/elec_gen_comp.csv",
             "kilowatt * hour",
         ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationConstant",
+            "DataFrame",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
+        ),
     ],
 )
 def test_calculate_values(

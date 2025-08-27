@@ -9,6 +9,7 @@ from .utils import count_args, parse_units
 from .units import u
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
+from .operations import Constant
 
 
 UNARY_OPS = ["noop", "delta", "<<", ">>", "~", "-"]
@@ -576,36 +577,37 @@ class VirtualTag:
         determine_contents = True if contents is None else False
         totalized_mix = False
         for tag in tags:
-            unit_list.append(tag.units)
-            if totalized is not None and not totalized_mix:
-                if totalized != tag.totalized:
-                    warnings.warn(
-                        "Tags should have the same value for 'totalized'. "
-                        "Setting `totalized` to false under the assumption "
-                        "that data has been cleaned and detotalized already."
-                    )
-                    totalized = False
-                    totalized_mix = True
-            else:
-                totalized = tag.totalized
-
-            if determine_type:
-                if tag_type is not None:
-                    if not check_type_compatibility(tag.tag_type, tag_type):
-                        raise ValueError(
-                            "All Tags must have the same value for 'tag_type'"
+            if not isinstance(tag, Constant):
+                unit_list.append(tag.units)
+                if totalized is not None and not totalized_mix:
+                    if totalized != tag.totalized:
+                        warnings.warn(
+                            "Tags should have the same value for 'totalized'. "
+                            "Setting `totalized` to false under the assumption "
+                            "that data has been cleaned and detotalized already."
                         )
+                        totalized = False
+                        totalized_mix = True
                 else:
-                    tag_type = tag.tag_type
+                    totalized = tag.totalized
 
-            if determine_contents and tag_type not in CONTENTLESS_TYPES:
-                if contents is not None:
-                    if contents != tag.contents:
-                        raise ValueError(
-                            "All Tags must have the same value for 'contents'"
-                        )
-                else:
-                    contents = tag.contents
+                if determine_type:
+                    if tag_type is not None:
+                        if not check_type_compatibility(tag.tag_type, tag_type):
+                            raise ValueError(
+                                "All Tags must have the same value for 'tag_type'"
+                            )
+                    else:
+                        tag_type = tag.tag_type
+
+                if determine_contents and tag_type not in CONTENTLESS_TYPES:
+                    if contents is not None:
+                        if contents != tag.contents:
+                            raise ValueError(
+                                "All Tags must have the same value for 'contents'"
+                            )
+                    else:
+                        contents = tag.contents
 
         if tag_type in CONTENTLESS_TYPES:
             self.contents = None

@@ -1,9 +1,11 @@
+import re
 import json
 import pint
 import copy
 import warnings
 from collections import defaultdict
 from .tag import DownsampleType, TagType, Tag, VirtualTag, CONTENTLESS_TYPES
+from .operations import Constant
 from .logbook import Logbook
 from . import connection
 from . import node
@@ -135,7 +137,7 @@ class JSONParser:
             processed = []
             while v_tag_queue:
                 v_tag_id, v_tag_info = v_tag_queue.pop(0)
-                # Try parsing the virtual tag
+                # Try parsing the VirtualTag
                 try:
                     if verbose:
                         print(f"Parsing virtual tag {v_tag_id}...")
@@ -1351,13 +1353,19 @@ class JSONParser:
         tag_list = []
         parent_network = obj if parent_network is None else parent_network
         for subtag_id in tag_info["tags"]:
-            subtag = parent_network.get_tag(subtag_id, recurse=True)
-            if subtag is None:
-                raise KeyError(
-                    "Could not find Tag id {} in VirtualTag {}".format(
-                        subtag_id, tag_id
+            # check if Constant should be loaded
+            if re.match("^Constant\([+-]?\d*\.?\d*\)", subtag_id):
+                # remove initial 'Constant(' and final parenthesis ')'
+                val_str = subtag_id.strip()[9:-1]
+                subtag = Constant(float(val_str))
+            else:
+                subtag = parent_network.get_tag(subtag_id, recurse=True)
+                if subtag is None:
+                    raise KeyError(
+                        "Could not find Tag id {} in VirtualTag {}".format(
+                            subtag_id, tag_id
+                        )
                     )
-                )
             tag_list.append(subtag)
         pint_unit = utils.parse_units(tag_info.get("units"))
         try:
