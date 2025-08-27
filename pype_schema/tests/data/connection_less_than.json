@@ -59,7 +59,7 @@
         "contents": "Electricity"
       },
       "ElectricityGenerationConstant": {
-        "tags": ["ElectricityProductionByGasVolume", "GrossGasProduction", "Constant(1)"],
+        "tags": ["Constant(1)", "ElectricityProductionByGasVolume", "GrossGasProduction"],
         "binary_operations": "*",
         "type": "Flow",
         "parent_id": "Cogenerator",

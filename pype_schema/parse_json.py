@@ -1888,7 +1888,6 @@ class JSONParser:
             `conn_obj` in dictionary form
         """
         conn_dict = {}
-        print(conn_obj)
         conn_dict["type"] = type(conn_obj).__name__
         conn_dict["source"] = conn_obj.source.id
         conn_dict["destination"] = conn_obj.destination.id

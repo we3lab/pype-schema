@@ -206,7 +206,7 @@ def test_init_errors(json_path, expected):
             "data/sample_data.csv",
             "ElectricityGenerationConstant",
             "DataFrame",
-            "data/elec_gen_comp.csv",
+            "data/elec_gen_con.csv",
             "kilowatt * hour",
         ),
     ],

@@ -854,10 +854,11 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
+        num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
         result = data.copy()
         num_ops = len(self.unary_operations)
         if isinstance(data, list):
-            if len(self.unary_operations) != len(data):
+            if len(self.unary_operations) != len(data) + num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -873,7 +874,7 @@ class VirtualTag:
         elif isinstance(data, ndarray):
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
-            if len(self.unary_operations) != data.shape[1]:
+            if len(self.unary_operations) != data.shape[1] + num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -927,8 +928,9 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
+        num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
         if isinstance(data, list):
-            if len(self.binary_operations) != len(data) - 1:
+            if len(self.binary_operations) != len(data) + num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -938,24 +940,43 @@ class VirtualTag:
                 )
             else:
                 arr = array(data)
-                result = data[0]
-                for i in range(arr.shape[0] - 1):
-                    if self.binary_operations[i] == "+":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] + data[i + 1][j]
-                    elif self.binary_operations[i] == "-":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] - data[i + 1][j]
-                    elif self.binary_operations[i] == "*":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] * data[i + 1][j]
-                    elif self.binary_operations[i] == "/":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] / data[i + 1][j]
+                if isinstance(self.tags[0], Constant):
+                    result = (np.ones(arr.shape[1]) * self.tags[0].value).tolist()
+                else:
+                    result = data[0]
+                for i in range(arr.shape[0] + num_constants - 1):
+                    if isinstance(self.tags[i + 1], Constant):
+                        if self.binary_operations[i] == "+":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] + self.tags[i + 1].value
+                        elif self.binary_operations[i] == "-":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] - self.tags[i + 1].value
+                        elif self.binary_operations[i] == "*":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] * self.tags[i + 1].value
+                        elif self.binary_operations[i] == "/":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] / self.tags[i + 1].value
+                    else:
+                        if self.binary_operations[i] == "+":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] + data[i + 1][j]
+                        elif self.binary_operations[i] == "-":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] - data[i + 1][j]
+                        elif self.binary_operations[i] == "*":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] * data[i + 1][j]
+                        elif self.binary_operations[i] == "/":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] / data[i + 1][j]
         elif isinstance(data, DataFrame):
             result = None
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    relevant_data = pd.Series([tag_obj.value] * len(data))
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
                     relevant_data = data[tag_to_var_map[tag_obj.id]]
@@ -974,7 +995,7 @@ class VirtualTag:
                     elif self.binary_operations[i - 1] == "/":
                         result /= relevant_data
         elif isinstance(data, ndarray):
-            if len(self.binary_operations) != data.shape[1] - 1:
+            if len(self.binary_operations) != data.shape[1] + num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -983,20 +1004,36 @@ class VirtualTag:
                     )
                 )
             else:
-                result = data[:, 0]
-                for i in range(data.shape[1] - 1):
-                    if self.binary_operations[i] == "+":
-                        result += data[:, i + 1]
-                    elif self.binary_operations[i] == "-":
-                        result -= data[:, i + 1]
-                    elif self.binary_operations[i] == "*":
-                        result *= data[:, i + 1]
-                    elif self.binary_operations[i] == "/":
-                        result /= data[:, i + 1]
+                if isinstance(self.tags[0], Constant):
+                    result = np.ones(data.shape[0]) * self.tags[0].value
+                else:
+                    result = data[:, 0]
+                for i in range(data.shape[1] + num_constants - 1):
+                    if isinstance(self.tags[i + 1], Constant):
+                        if self.binary_operations[i] == "+":
+                            result += self.tags[i + 1].value
+                        elif self.binary_operations[i] == "-":
+                            result -= self.tags[i + 1].value
+                        elif self.binary_operations[i] == "*":
+                            result *= self.tags[i + 1].value
+                        elif self.binary_operations[i] == "/":
+                            result /= self.tags[i + 1].value
+                    else:
+                        if self.binary_operations[i] == "+":
+                            result += data[:, i + 1]
+                        elif self.binary_operations[i] == "-":
+                            result -= data[:, i + 1]
+                        elif self.binary_operations[i] == "*":
+                            result *= data[:, i + 1]
+                        elif self.binary_operations[i] == "/":
+                            result /= data[:, i + 1]
         elif isinstance(data, dict):
             result = None
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    first_key = next(iter(data))
+                    relevant_data = np.ones(len(data[first_key])) * tag_obj.value
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
                     relevant_data = data[tag_to_var_map[tag_obj.id]]
