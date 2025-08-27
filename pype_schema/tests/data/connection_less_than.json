@@ -1010,6 +1010,11 @@
         }
       },
       "virtual_tags": {
+        "ElectricityGeneration_Minus1": {
+          "tags": ["ElectricityGeneration", "Constant(1)"],
+          "binary_operations": "-",
+          "units": "kilowatt * hour"
+        },
         "ElectricityGeneration_RShift2": {
           "tags": ["ElectricityGeneration"],
           "operations": "lambda x: x.shift(2)",

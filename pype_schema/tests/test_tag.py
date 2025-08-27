@@ -209,6 +209,30 @@ def test_init_errors(json_path, expected):
             "data/elec_gen_con.csv",
             "kilowatt * hour",
         ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationConstant",
+            "Dict",
+            "data/elec_gen_con.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Minus1",
+            "List",
+            "data/elec_gen_minus1.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Minus1",
+            "Array",
+            "data/elec_gen_minus1.csv",
+            "kilowatt * hour",
+        ),
     ],
 )
 def test_calculate_values(
@@ -238,7 +262,6 @@ def test_calculate_values(
             )
         elif data_type == "List":
             data = data.values.T.tolist()
-            tag.calculate_values(data)
             assert np.allclose(
                 np.array(tag.calculate_values(data), dtype=np.float64),
                 expected.values.flatten(),

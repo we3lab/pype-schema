@@ -943,7 +943,7 @@ class VirtualTag:
                 if isinstance(self.tags[0], Constant):
                     result = (np.ones(arr.shape[1]) * self.tags[0].value).tolist()
                 else:
-                    result = data[0]
+                    result = data.copy()[0]
                 for i in range(arr.shape[0] + num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
                         if self.binary_operations[i] == "+":
@@ -979,9 +979,9 @@ class VirtualTag:
                 elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
-                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                    relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
-                    relevant_data = data[tag_obj.id]
+                    relevant_data = data[tag_obj.id].copy()
 
                 if result is None:
                     result = relevant_data.rename(self.id, inplace=False)
@@ -1007,7 +1007,7 @@ class VirtualTag:
                 if isinstance(self.tags[0], Constant):
                     result = np.ones(data.shape[0]) * self.tags[0].value
                 else:
-                    result = data[:, 0]
+                    result = data.copy()[:, 0]
                 for i in range(data.shape[1] + num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
                         if self.binary_operations[i] == "+":
@@ -1036,9 +1036,9 @@ class VirtualTag:
                 elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
-                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                    relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
-                    relevant_data = data[tag_obj.id]
+                    relevant_data = data[tag_obj.id].copy()
 
                 if result is None:
                     result = relevant_data
