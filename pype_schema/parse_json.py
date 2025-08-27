@@ -1354,7 +1354,7 @@ class JSONParser:
         parent_network = obj if parent_network is None else parent_network
         for subtag_id in tag_info["tags"]:
             # check if Constant should be loaded
-            if re.match("^Constant\([+-]?\d*\.?\d*\)", subtag_id):
+            if re.match("^Constant\([+-]?\d*\.?\d*\)", subtag_id):  # noqa: W605
                 # remove initial 'Constant(' and final parenthesis ')'
                 val_str = subtag_id.strip()[9:-1]
                 subtag = Constant(float(val_str))

@@ -868,9 +868,17 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    result[i] = unary_helper(  # noqa: 405
-                        data[i], self.unary_operations[i]
-                    )
+                    if isinstance(self.tags[i], Constant):
+                        relevant_data = (
+                            np.ones(len(data[i])) * self.tags[i].value
+                        ).tolist()
+                        result[i] = unary_helper(  # noqa: 405
+                            relevant_data, self.unary_operations[i]
+                        )
+                    else:
+                        result[i] = unary_helper(  # noqa: 405
+                            data[i], self.unary_operations[i]
+                        )
         elif isinstance(data, ndarray):
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
@@ -884,12 +892,24 @@ class VirtualTag:
                 )
             else:
                 for i in range(num_ops):
-                    result[:, i] = unary_helper(  # noqa: 405
-                        data[:, i], self.unary_operations[i]
-                    )
+                    if isinstance(self.tags[i], Constant):
+                        relevant_data = np.ones(len(data[:, i])) * self.tags[i].value
+                        result[:, i] = unary_helper(  # noqa: 405
+                            relevant_data, self.unary_operations[i]
+                        )
+                    else:
+                        result[:, i] = unary_helper(  # noqa: 405
+                            data[:, i], self.unary_operations[i]
+                        )
         elif isinstance(data, (dict, DataFrame)):
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    if isinstance(data, dict):
+                        first_key = next(iter(data))
+                        relevant_data = np.ones(len(data[first_key])) * tag_obj.value
+                    else:  # must be a DataFrame
+                        relevant_data = pd.Series([tag_obj.value] * len(data))
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data)
                 elif tag_to_var_map:
                     relevant_data = result[tag_to_var_map[tag_obj.id]]
