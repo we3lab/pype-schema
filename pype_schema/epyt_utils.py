@@ -74,7 +74,7 @@ def epyt2pypes(
             elevation = float(elevation.flat[0])
         # Node type is one of: Junction, Reservoir, Tank
         if node_type == "JUNCTION":
-            if use_name_as_id:
+            if use_name_as_id and not add_nodes:
                 id_str = G.getNodeNameID(n)
             else:
                 id_str = "Junction" + str(obj_counts["Junction"] + 1)
@@ -88,7 +88,7 @@ def epyt2pypes(
             nodes[id_str] = node_obj
             obj_counts["Junction"] += 1
         elif node_type == "RESERVOIR":
-            if use_name_as_id:
+            if use_name_as_id and not add_nodes:
                 id_str = G.getNodeNameID(n)
             else:
                 id_str = "Reservoir" + str(obj_counts["Reservoir"] + 1)
@@ -106,7 +106,7 @@ def epyt2pypes(
             volume = G.getNodeTankMaximumWaterVolume(n)
             if isinstance(volume, np.ndarray):
                 volume = float(volume.flat[0])
-            if use_name_as_id:
+            if use_name_as_id and not add_nodes:
                 id_str = G.getNodeNameID(n)
             else:
                 id_str = "Tank" + str(obj_counts["Tank"] + 1)
