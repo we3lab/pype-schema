@@ -1,0 +1,1189 @@
+{
+  "nodes": [
+    "10",
+    "15",
+    "20",
+    "35",
+    "40",
+    "50",
+    "60",
+    "601",
+    "61",
+    "101",
+    "103",
+    "105",
+    "107",
+    "109",
+    "111",
+    "113",
+    "115",
+    "117",
+    "119",
+    "120",
+    "121",
+    "123",
+    "125",
+    "127",
+    "129",
+    "131",
+    "139",
+    "141",
+    "143",
+    "145",
+    "147",
+    "149",
+    "151",
+    "153",
+    "157",
+    "159",
+    "161",
+    "163",
+    "164",
+    "166",
+    "167",
+    "169",
+    "171",
+    "173",
+    "177",
+    "179",
+    "181",
+    "183",
+    "184",
+    "185",
+    "187",
+    "189",
+    "191",
+    "193",
+    "195",
+    "197",
+    "199",
+    "201",
+    "203",
+    "204",
+    "205",
+    "206",
+    "207",
+    "208",
+    "209",
+    "211",
+    "213",
+    "215",
+    "217",
+    "219",
+    "225",
+    "229",
+    "231",
+    "237",
+    "239",
+    "241",
+    "243",
+    "247",
+    "249",
+    "251",
+    "253",
+    "255",
+    "257",
+    "259",
+    "261",
+    "263",
+    "265",
+    "267",
+    "269",
+    "271",
+    "273",
+    "275",
+    "River",
+    "Lake",
+    "1",
+    "2",
+    "3"
+  ],
+  "connections": [
+    "20",
+    "40",
+    "50",
+    "60",
+    "101",
+    "103",
+    "105",
+    "107",
+    "109",
+    "111",
+    "112",
+    "113",
+    "114",
+    "115",
+    "116",
+    "117",
+    "119",
+    "120",
+    "121",
+    "122",
+    "123",
+    "125",
+    "129",
+    "131",
+    "133",
+    "135",
+    "137",
+    "145",
+    "147",
+    "149",
+    "151",
+    "153",
+    "155",
+    "159",
+    "161",
+    "163",
+    "169",
+    "171",
+    "173",
+    "175",
+    "177",
+    "179",
+    "180",
+    "181",
+    "183",
+    "185",
+    "186",
+    "187",
+    "189",
+    "191",
+    "193",
+    "195",
+    "197",
+    "199",
+    "201",
+    "202",
+    "203",
+    "204",
+    "205",
+    "207",
+    "209",
+    "211",
+    "213",
+    "215",
+    "217",
+    "219",
+    "221",
+    "223",
+    "225",
+    "229",
+    "231",
+    "233",
+    "235",
+    "237",
+    "238",
+    "239",
+    "240",
+    "241",
+    "243",
+    "245",
+    "247",
+    "249",
+    "251",
+    "257",
+    "261",
+    "263",
+    "269",
+    "271",
+    "273",
+    "275",
+    "277",
+    "281",
+    "283",
+    "285",
+    "287",
+    "289",
+    "291",
+    "293",
+    "295",
+    "297",
+    "299",
+    "301",
+    "303",
+    "305",
+    "307",
+    "309",
+    "311",
+    "313",
+    "315",
+    "317",
+    "319",
+    "321",
+    "323",
+    "325",
+    "329",
+    "330",
+    "333",
+    "10",
+    "335"
+  ],
+  "virtual_tags": {},
+  "10": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "Lake",
+    "destination": "10",
+    "tags": {}
+  },
+  "15": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "20": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "3",
+    "destination": "20",
+    "tags": {}
+  },
+  "35": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "40": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "1",
+    "destination": "40",
+    "tags": {}
+  },
+  "50": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "2",
+    "destination": "50",
+    "tags": {}
+  },
+  "60": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "River",
+    "destination": "60",
+    "tags": {}
+  },
+  "601": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "61": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "101": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "10",
+    "destination": "101",
+    "tags": {}
+  },
+  "103": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "101",
+    "destination": "103",
+    "tags": {}
+  },
+  "105": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "101",
+    "destination": "105",
+    "tags": {}
+  },
+  "107": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "105",
+    "destination": "107",
+    "tags": {}
+  },
+  "109": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "103",
+    "destination": "109",
+    "tags": {}
+  },
+  "111": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "109",
+    "destination": "111",
+    "tags": {}
+  },
+  "113": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "111",
+    "destination": "113",
+    "tags": {}
+  },
+  "115": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "107",
+    "destination": "115",
+    "tags": {}
+  },
+  "117": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "263",
+    "destination": "105",
+    "tags": {}
+  },
+  "119": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "115",
+    "destination": "117",
+    "tags": {}
+  },
+  "120": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "119",
+    "destination": "120",
+    "tags": {}
+  },
+  "121": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "120",
+    "destination": "117",
+    "tags": {}
+  },
+  "123": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "121",
+    "destination": "119",
+    "tags": {}
+  },
+  "125": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "123",
+    "destination": "121",
+    "tags": {}
+  },
+  "127": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "129": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "121",
+    "destination": "125",
+    "tags": {}
+  },
+  "131": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "125",
+    "destination": "127",
+    "tags": {}
+  },
+  "139": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "141": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "143": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "145": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "129",
+    "destination": "139",
+    "tags": {}
+  },
+  "147": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "139",
+    "destination": "141",
+    "tags": {}
+  },
+  "149": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "143",
+    "destination": "141",
+    "tags": {}
+  },
+  "151": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "15",
+    "destination": "143",
+    "tags": {}
+  },
+  "153": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "145",
+    "destination": "141",
+    "tags": {}
+  },
+  "157": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "159": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "147",
+    "destination": "149",
+    "tags": {}
+  },
+  "161": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "149",
+    "destination": "151",
+    "tags": {}
+  },
+  "163": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "151",
+    "destination": "153",
+    "tags": {}
+  },
+  "164": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "166": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "167": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "169": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "125",
+    "destination": "153",
+    "tags": {}
+  },
+  "171": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "119",
+    "destination": "151",
+    "tags": {}
+  },
+  "173": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "119",
+    "destination": "157",
+    "tags": {}
+  },
+  "177": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "159",
+    "destination": "161",
+    "tags": {}
+  },
+  "179": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "161",
+    "destination": "163",
+    "tags": {}
+  },
+  "181": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "164",
+    "destination": "166",
+    "tags": {}
+  },
+  "183": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "265",
+    "destination": "169",
+    "tags": {}
+  },
+  "184": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "185": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "167",
+    "destination": "169",
+    "tags": {}
+  },
+  "187": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "169",
+    "destination": "171",
+    "tags": {}
+  },
+  "189": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "171",
+    "destination": "173",
+    "tags": {}
+  },
+  "191": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "271",
+    "destination": "171",
+    "tags": {}
+  },
+  "193": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "35",
+    "destination": "181",
+    "tags": {}
+  },
+  "195": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "181",
+    "destination": "177",
+    "tags": {}
+  },
+  "197": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "177",
+    "destination": "179",
+    "tags": {}
+  },
+  "199": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "179",
+    "destination": "183",
+    "tags": {}
+  },
+  "201": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "40",
+    "destination": "179",
+    "tags": {}
+  },
+  "203": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "183",
+    "destination": "185",
+    "tags": {}
+  },
+  "204": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "184",
+    "destination": "205",
+    "tags": {}
+  },
+  "205": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "204",
+    "destination": "185",
+    "tags": {}
+  },
+  "206": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "207": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "189",
+    "destination": "183",
+    "tags": {}
+  },
+  "208": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "209": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "189",
+    "destination": "187",
+    "tags": {}
+  },
+  "211": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "169",
+    "destination": "269",
+    "tags": {}
+  },
+  "213": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "191",
+    "destination": "187",
+    "tags": {}
+  },
+  "215": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "267",
+    "destination": "189",
+    "tags": {}
+  },
+  "217": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "191",
+    "destination": "193",
+    "tags": {}
+  },
+  "219": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "193",
+    "destination": "195",
+    "tags": {}
+  },
+  "225": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "111",
+    "destination": "197",
+    "tags": {}
+  },
+  "229": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "173",
+    "destination": "199",
+    "tags": {}
+  },
+  "231": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "199",
+    "destination": "201",
+    "tags": {}
+  },
+  "237": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "205",
+    "destination": "207",
+    "tags": {}
+  },
+  "239": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "275",
+    "destination": "207",
+    "tags": {}
+  },
+  "241": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "208",
+    "destination": "209",
+    "tags": {}
+  },
+  "243": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "209",
+    "destination": "211",
+    "tags": {}
+  },
+  "247": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "213",
+    "destination": "215",
+    "tags": {}
+  },
+  "249": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "215",
+    "destination": "217",
+    "tags": {}
+  },
+  "251": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "217",
+    "destination": "219",
+    "tags": {}
+  },
+  "253": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "255": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "257": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "217",
+    "destination": "225",
+    "tags": {}
+  },
+  "259": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "261": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "213",
+    "destination": "229",
+    "tags": {}
+  },
+  "263": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "229",
+    "destination": "231",
+    "tags": {}
+  },
+  "265": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "267": {
+    "type": "Junction",
+    "contents": "DrinkingWater",
+    "tags": {}
+  },
+  "269": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "211",
+    "destination": "237",
+    "tags": {}
+  },
+  "271": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "237",
+    "destination": "229",
+    "tags": {}
+  },
+  "273": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "237",
+    "destination": "239",
+    "tags": {}
+  },
+  "275": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "239",
+    "destination": "241",
+    "tags": {}
+  },
+  "River": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "elevation (meters)": 220.0,
+    "tags": {}
+  },
+  "Lake": {
+    "type": "Reservoir",
+    "contents": "DrinkingWater",
+    "elevation (meters)": 167.0,
+    "tags": {}
+  },
+  "1": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "elevation (meters)": 131.89999389648438,
+    "volume (cubic meters)": 182151.5,
+    "tags": {}
+  },
+  "2": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "elevation (meters)": 116.5,
+    "volume (cubic meters)": 79128.8671875,
+    "tags": {}
+  },
+  "3": {
+    "type": "Tank",
+    "contents": "DrinkingWater",
+    "elevation (meters)": 129.0,
+    "volume (cubic meters)": 749904.4375,
+    "tags": {}
+  },
+  "112": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "115",
+    "destination": "111",
+    "tags": {}
+  },
+  "114": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "115",
+    "destination": "113",
+    "tags": {}
+  },
+  "116": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "113",
+    "destination": "193",
+    "tags": {}
+  },
+  "122": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "121",
+    "destination": "120",
+    "tags": {}
+  },
+  "133": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "20",
+    "destination": "127",
+    "tags": {}
+  },
+  "135": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "127",
+    "destination": "129",
+    "tags": {}
+  },
+  "137": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "129",
+    "destination": "131",
+    "tags": {}
+  },
+  "155": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "147",
+    "destination": "145",
+    "tags": {}
+  },
+  "175": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "157",
+    "destination": "159",
+    "tags": {}
+  },
+  "180": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "163",
+    "destination": "164",
+    "tags": {}
+  },
+  "186": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "187",
+    "destination": "204",
+    "tags": {}
+  },
+  "202": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "185",
+    "destination": "184",
+    "tags": {}
+  },
+  "221": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "161",
+    "destination": "195",
+    "tags": {}
+  },
+  "223": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "197",
+    "destination": "191",
+    "tags": {}
+  },
+  "233": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "201",
+    "destination": "203",
+    "tags": {}
+  },
+  "235": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "199",
+    "destination": "273",
+    "tags": {}
+  },
+  "238": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "207",
+    "destination": "206",
+    "tags": {}
+  },
+  "240": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "206",
+    "destination": "208",
+    "tags": {}
+  },
+  "245": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "211",
+    "destination": "213",
+    "tags": {}
+  },
+  "277": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "241",
+    "destination": "243",
+    "tags": {}
+  },
+  "281": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "241",
+    "destination": "247",
+    "tags": {}
+  },
+  "283": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "239",
+    "destination": "249",
+    "tags": {}
+  },
+  "285": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "247",
+    "destination": "249",
+    "tags": {}
+  },
+  "287": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "247",
+    "destination": "255",
+    "tags": {}
+  },
+  "289": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "50",
+    "destination": "255",
+    "tags": {}
+  },
+  "291": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "255",
+    "destination": "253",
+    "tags": {}
+  },
+  "293": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "255",
+    "destination": "251",
+    "tags": {}
+  },
+  "295": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "249",
+    "destination": "251",
+    "tags": {}
+  },
+  "297": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "120",
+    "destination": "257",
+    "tags": {}
+  },
+  "299": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "257",
+    "destination": "259",
+    "tags": {}
+  },
+  "301": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "259",
+    "destination": "263",
+    "tags": {}
+  },
+  "303": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "257",
+    "destination": "261",
+    "tags": {}
+  },
+  "305": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "117",
+    "destination": "261",
+    "tags": {}
+  },
+  "307": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "261",
+    "destination": "263",
+    "tags": {}
+  },
+  "309": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "265",
+    "destination": "267",
+    "tags": {}
+  },
+  "311": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "193",
+    "destination": "267",
+    "tags": {}
+  },
+  "313": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "269",
+    "destination": "189",
+    "tags": {}
+  },
+  "315": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "181",
+    "destination": "271",
+    "tags": {}
+  },
+  "317": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "273",
+    "destination": "275",
+    "tags": {}
+  },
+  "319": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "273",
+    "destination": "205",
+    "tags": {}
+  },
+  "321": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "163",
+    "destination": "265",
+    "tags": {}
+  },
+  "323": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "201",
+    "destination": "275",
+    "tags": {}
+  },
+  "325": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "269",
+    "destination": "271",
+    "tags": {}
+  },
+  "329": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "61",
+    "destination": "123",
+    "tags": {}
+  },
+  "330": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "60",
+    "destination": "601",
+    "tags": {}
+  },
+  "333": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "601",
+    "destination": "61",
+    "tags": {}
+  },
+  "335": {
+    "type": "Pipe",
+    "contents": "DrinkingWater",
+    "source": "60",
+    "destination": "61",
+    "tags": {}
+  }
+}
