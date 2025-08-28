@@ -548,6 +548,7 @@ class VirtualTag:
         self.parent_id = parent_id
         self.tags = tags
         self.units = units
+        self.num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
 
         # determine OperationMode
         if (unary_operations is not None) or (binary_operations is not None):
@@ -620,7 +621,7 @@ class VirtualTag:
             if isinstance(unary_operations, list):
                 if len(unary_operations) != len(tags):
                     raise ValueError(
-                        "Unary operations list must be same length as Tag list"
+                        "`unary_operations` must be same length as Tag list"
                     )
                 else:
                     for i, unit in enumerate(unit_list):
@@ -854,11 +855,10 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
-        num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
         result = data.copy()
         num_ops = len(self.unary_operations)
         if isinstance(data, list):
-            if len(self.unary_operations) != len(data) + num_constants:
+            if len(self.unary_operations) != len(data) + self.num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -882,7 +882,7 @@ class VirtualTag:
         elif isinstance(data, ndarray):
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
-            if len(self.unary_operations) != data.shape[1] + num_constants:
+            if len(self.unary_operations) != data.shape[1] + self.num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -948,9 +948,8 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
-        num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
         if isinstance(data, list):
-            if len(self.binary_operations) != len(data) + num_constants - 1:
+            if len(self.binary_operations) != len(data) + self.num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -964,7 +963,7 @@ class VirtualTag:
                     result = (np.ones(arr.shape[1]) * self.tags[0].value).tolist()
                 else:
                     result = data.copy()[0]
-                for i in range(arr.shape[0] + num_constants - 1):
+                for i in range(arr.shape[0] + self.num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
                         if self.binary_operations[i] == "+":
                             for j in range(arr.shape[1]):
@@ -1015,7 +1014,7 @@ class VirtualTag:
                     elif self.binary_operations[i - 1] == "/":
                         result /= relevant_data
         elif isinstance(data, ndarray):
-            if len(self.binary_operations) != data.shape[1] + num_constants - 1:
+            if len(self.binary_operations) != data.shape[1] + self.num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -1028,7 +1027,7 @@ class VirtualTag:
                     result = np.ones(data.shape[0]) * self.tags[0].value
                 else:
                     result = data.copy()[:, 0]
-                for i in range(data.shape[1] + num_constants - 1):
+                for i in range(data.shape[1] + self.num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
                         if self.binary_operations[i] == "+":
                             result += self.tags[i + 1].value
