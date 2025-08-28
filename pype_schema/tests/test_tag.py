@@ -3,6 +3,7 @@ import pint
 import pytest
 import numpy as np
 import pandas as pd
+import json
 from pype_schema.units import u
 from pype_schema.tag import Tag, TagType, check_type_compatibility
 from pype_schema.utils import parse_units, ContentsType
@@ -39,7 +40,8 @@ def test_init_errors(json_path, expected):
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "json_path, csv_path, tag_name, data_type, expected_path, expected_units",
+    "json_path, csv_path, tag_name, data_type,"
+    "expected_path, expected_units, tag_to_var_map",
     [
         (
             "../data/wrrf_sample.json",
@@ -48,6 +50,7 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/gross_gas.csv",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -56,6 +59,7 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/electrical_efficiency.csv",
             "kilowatt * hour * minute / (feet ** 3)",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -64,6 +68,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/gross_gas.csv",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -72,6 +77,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/electrical_efficiency.csv",
             "kilowatt * hour * minute / (feet ** 3)",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -80,6 +86,7 @@ def test_init_errors(json_path, expected):
             "Array",
             "ValueError",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -88,6 +95,7 @@ def test_init_errors(json_path, expected):
             "Array",
             "data/gross_gas.csv",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -96,6 +104,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/gross_gas.csv",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -104,6 +113,7 @@ def test_init_errors(json_path, expected):
             "Invalid",
             "TypeError",
             "SCFM",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -111,6 +121,7 @@ def test_init_errors(json_path, expected):
             "NoGasPurchases",
             "DataFrame",
             "data/no_gas_bool.csv",
+            None,
             None,
         ),
         (
@@ -120,6 +131,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/no_gas_bool.csv",
             None,
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -127,6 +139,7 @@ def test_init_errors(json_path, expected):
             "NoGasPurchases",
             "Array",
             "data/no_gas_bool.csv",
+            None,
             None,
         ),
         (
@@ -136,6 +149,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/no_gas_bool.csv",
             None,
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -144,6 +158,7 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/gen_rshift2.csv",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -152,6 +167,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/gen_rshift2.csv",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -160,6 +176,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/gen_lshift1.csv",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -168,6 +185,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/gen_lshift1.csv",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -176,6 +194,7 @@ def test_init_errors(json_path, expected):
             "Invalid",
             "TypeError",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -184,6 +203,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/gen_delta.csv",
             "kWh",
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -192,6 +212,7 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/electrical_efficiency.csv",
             "kilowatt * hour / SCFM",
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -200,15 +221,38 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/elec_gen_comp.csv",
             "kilowatt * hour",
+            None,
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data_mapped.csv",
+            "GrossGasProduction",
+            "DataFrame",
+            "data/gross_gas.csv",
+            "SCFM",
+            "data/tag_to_var_map.json",
         ),
     ],
 )
 def test_calculate_values(
-    json_path, csv_path, tag_name, data_type, expected_path, expected_units
+    json_path,
+    csv_path,
+    tag_name,
+    data_type,
+    expected_path,
+    expected_units,
+    tag_to_var_map,
 ):
     parser = JSONParser(json_path)
     result = parser.initialize_network()
     tag = result.get_tag(tag_name, recurse=True)
+
+    # Pass in tag_to_var_map as kwarg only if defined
+    kwargs = {}
+    if tag_to_var_map is not None:
+        with open(tag_to_var_map, "r") as f:
+            tag_to_var_map = json.load(f)
+        kwargs["tag_to_var_map"] = tag_to_var_map
 
     data = pd.read_csv(csv_path)
     if isinstance(expected_path, str) and os.path.isfile(expected_path):
@@ -219,31 +263,30 @@ def test_calculate_values(
     try:
         if data_type == "DataFrame":
             pd.testing.assert_series_equal(
-                tag.calculate_values(data), expected[tag_name]
+                tag.calculate_values(data, **kwargs), expected[tag_name]
             )
         elif data_type == "Array":
             data = data.to_numpy()
             assert np.allclose(
-                tag.calculate_values(data),
+                tag.calculate_values(data, **kwargs),
                 expected.to_numpy().flatten(),
                 equal_nan=True,
             )
         elif data_type == "List":
             data = data.values.T.tolist()
-            tag.calculate_values(data)
             assert np.allclose(
-                np.array(tag.calculate_values(data), dtype=np.float64),
+                np.array(tag.calculate_values(data, **kwargs), dtype=np.float64),
                 expected.values.flatten(),
                 equal_nan=True,
             )
         elif data_type == "Dict":
             data = data.to_dict(orient="series")
             pd.testing.assert_series_equal(
-                tag.calculate_values(data), expected[tag_name]
+                tag.calculate_values(data, **kwargs), expected[tag_name]
             )
         elif data_type == "Invalid":
             data = pd.Series([])
-            tag.calculate_values(data)
+            tag.calculate_values(data, **kwargs)
     except Exception as err:
         result = type(err).__name__
         assert result == expected
