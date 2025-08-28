@@ -53,15 +53,15 @@ class Constant:
         if not isinstance(other, self.__class__):
             return NotImplemented
 
-        if self.id != other.id:
-            return self.id < other.id
-        elif self.value != other.value:
+        if self.value != other.value:
             return self.value < other.value
+        elif self.id != other.id:
+            return self.id < other.id
         elif self.parent_id != other.parent_id:
             if self.parent_id is None:
-                return False
-            elif other.parent_id is None:
                 return True
+            elif other.parent_id is None:
+                return False
             else:
                 return self.parent_id < other.parent_id
         else:  # if all equal, less than is False
