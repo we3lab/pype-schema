@@ -856,6 +856,7 @@ class VirtualTag:
             numpy array of combined dataset
         """
         result = data.copy()
+        constant_count = 0
         num_ops = len(self.unary_operations)
         if isinstance(data, list):
             if len(self.unary_operations) != len(data) + self.num_constants:
@@ -869,15 +870,16 @@ class VirtualTag:
             else:
                 for i in range(num_ops):
                     if isinstance(self.tags[i], Constant):
+                        constant_count += 1
                         relevant_data = (
-                            np.ones(len(data[i])) * self.tags[i].value
+                            np.ones(len(data[0])) * self.tags[i].value
                         ).tolist()
                         result[i] = unary_helper(  # noqa: 405
                             relevant_data, self.unary_operations[i]
                         )
                     else:
                         result[i] = unary_helper(  # noqa: 405
-                            data[i], self.unary_operations[i]
+                            data[i - constant_count], self.unary_operations[i]
                         )
         elif isinstance(data, ndarray):
             if issubdtype(data.dtype, (int)):
@@ -893,13 +895,14 @@ class VirtualTag:
             else:
                 for i in range(num_ops):
                     if isinstance(self.tags[i], Constant):
-                        relevant_data = np.ones(len(data[:, i])) * self.tags[i].value
+                        constant_count += 1
+                        relevant_data = np.ones(len(data[:, 0])) * self.tags[i].value
                         result[:, i] = unary_helper(  # noqa: 405
                             relevant_data, self.unary_operations[i]
                         )
                     else:
                         result[:, i] = unary_helper(  # noqa: 405
-                            data[:, i], self.unary_operations[i]
+                            data[:, i - constant_count], self.unary_operations[i]
                         )
         elif isinstance(data, (dict, DataFrame)):
             for i, tag_obj in enumerate(self.tags):
@@ -948,6 +951,7 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
+        constant_count = 0
         if isinstance(data, list):
             if len(self.binary_operations) != len(data) + self.num_constants - 1:
                 raise ValueError(
@@ -960,11 +964,13 @@ class VirtualTag:
             else:
                 arr = array(data)
                 if isinstance(self.tags[0], Constant):
+                    constant_count += 1
                     result = (np.ones(arr.shape[1]) * self.tags[0].value).tolist()
                 else:
                     result = data.copy()[0]
                 for i in range(arr.shape[0] + self.num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
+                        constant_count += 1
                         if self.binary_operations[i] == "+":
                             for j in range(arr.shape[1]):
                                 result[j] = result[j] + self.tags[i + 1].value
@@ -980,16 +986,16 @@ class VirtualTag:
                     else:
                         if self.binary_operations[i] == "+":
                             for j in range(arr.shape[1]):
-                                result[j] = result[j] + data[i + 1][j]
+                                result[j] = result[j] + data[i - constant_count + 1][j]
                         elif self.binary_operations[i] == "-":
                             for j in range(arr.shape[1]):
-                                result[j] = result[j] - data[i + 1][j]
+                                result[j] = result[j] - data[i - constant_count + 1][j]
                         elif self.binary_operations[i] == "*":
                             for j in range(arr.shape[1]):
-                                result[j] = result[j] * data[i + 1][j]
+                                result[j] = result[j] * data[i - constant_count + 1][j]
                         elif self.binary_operations[i] == "/":
                             for j in range(arr.shape[1]):
-                                result[j] = result[j] / data[i + 1][j]
+                                result[j] = result[j] / data[i - constant_count + 1][j]
         elif isinstance(data, DataFrame):
             result = None
             for i, tag_obj in enumerate(self.tags):
@@ -1024,11 +1030,13 @@ class VirtualTag:
                 )
             else:
                 if isinstance(self.tags[0], Constant):
+                    constant_count += 1
                     result = np.ones(data.shape[0]) * self.tags[0].value
                 else:
                     result = data.copy()[:, 0]
                 for i in range(data.shape[1] + self.num_constants - 1):
                     if isinstance(self.tags[i + 1], Constant):
+                        constant_count += 1
                         if self.binary_operations[i] == "+":
                             result += self.tags[i + 1].value
                         elif self.binary_operations[i] == "-":
@@ -1039,13 +1047,13 @@ class VirtualTag:
                             result /= self.tags[i + 1].value
                     else:
                         if self.binary_operations[i] == "+":
-                            result += data[:, i + 1]
+                            result += data[:, i - constant_count + 1]
                         elif self.binary_operations[i] == "-":
-                            result -= data[:, i + 1]
+                            result -= data[:, i - constant_count + 1]
                         elif self.binary_operations[i] == "*":
-                            result *= data[:, i + 1]
+                            result *= data[:, i - constant_count + 1]
                         elif self.binary_operations[i] == "/":
-                            result /= data[:, i + 1]
+                            result /= data[:, i - constant_count + 1]
         elif isinstance(data, dict):
             result = None
             for i, tag_obj in enumerate(self.tags):

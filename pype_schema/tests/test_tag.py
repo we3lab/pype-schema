@@ -203,6 +203,22 @@ def test_init_errors(json_path, expected):
         ),
         (
             "data/connection_less_than.json",
+            "data/elec_gen_w_constant.csv",
+            "ElectricityGenerationComputed",
+            "List",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen_w_constant.csv",
+            "ElectricityGenerationComputed",
+            "Array",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "data/connection_less_than.json",
             "data/sample_data.csv",
             "ElectricityGenerationConstant",
             "DataFrame",
