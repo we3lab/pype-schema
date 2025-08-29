@@ -676,7 +676,7 @@ class VirtualTag:
                                     "Unsupported binary operator:",
                                     binary_operations[i - 1],
                                 )
-                            prev_unit = binary_helper(  # noqa: 405
+                            prev_unit = binary_helper(  # noqa: F405
                                 binary_operations[i - 1],
                                 unit,
                                 prev_unit,
@@ -693,7 +693,7 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = binary_helper(  # noqa: 405
+                        prev_unit = binary_helper(  # noqa: F405
                             binary_operations,
                             unit,
                             prev_unit,
@@ -877,11 +877,11 @@ class VirtualTag:
                         # ensure that result is of the correct length
                         # the value will be overwritten
                         result.append(relevant_data)
-                        result[i] = unary_helper(  # noqa: 405
+                        result[i] = unary_helper(  # noqa: F405
                             relevant_data, self.unary_operations[i]
                         )
                     else:
-                        result[i] = unary_helper(  # noqa: 405
+                        result[i] = unary_helper(  # noqa: F405
                             data[i - constant_count], self.unary_operations[i]
                         )
         elif isinstance(data, ndarray):
@@ -900,12 +900,12 @@ class VirtualTag:
                 for i in range(num_ops):
                     if isinstance(self.tags[i], Constant):
                         relevant_data = np.ones(len(data[:, 0])) * self.tags[i].value
-                        result[:, i] = unary_helper(  # noqa: 405
+                        result[:, i] = unary_helper(  # noqa: F405
                             relevant_data, self.unary_operations[i]
                         )
                         constant_count += 1
                     else:
-                        result[:, i] = unary_helper(  # noqa: 405
+                        result[:, i] = unary_helper(  # noqa: F405
                             data[:, i - constant_count], self.unary_operations[i]
                         )
         elif isinstance(data, (dict, DataFrame)):
@@ -924,7 +924,7 @@ class VirtualTag:
                 else:
                     relevant_data = result[tag_obj.id]
 
-                relevant_data = unary_helper(  # noqa: 405
+                relevant_data = unary_helper(  # noqa: F405
                     relevant_data, self.unary_operations[i]
                 )
 
