@@ -798,8 +798,9 @@
         "binary_operations": ["+"]
       },
       "ElectricityGeneration_Divide2": {
-        "tags": ["ElectricityGeneration", "Constant(2)"],
-        "binary_operations": ["/"]
+        "tags": ["ElectricityGeneration", "Constant(2)", "Constant(1)", "Constant(2)", "Constant(2)"],
+        "unary_operations": "noop",
+        "binary_operations": ["/", "*", "+", "-"]
       },
       "ElectricityGeneration_RShift2": {
         "tags": ["ElectricityGeneration"],

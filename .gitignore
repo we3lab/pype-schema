@@ -24,6 +24,16 @@ htmlcov
 *.png
 *.html
 pype_schema/tests/data/test_to_json.json
+pype_schema/tests/data/dummy_output.json
+pype_schema/tests/data/valve.txt
+pype_schema/tests/data/valve_temp.txt
+pype_schema/tests/data/valve_temp.inp
+pype_schema/tests/data/L-TOWN.txt
+pype_schema/tests/data/L-TOWN_temp.txt
+pype_schema/tests/data/L-TOWN_temp.inp
+pype_schema/tests/data/EPANET_Net_3.txt
+pype_schema/tests/data/EPANET_Net_3_temp.txt
+pype_schema/tests/data/EPANET_Net_3_temp.inp
 pype_schema/tests/lib/
 
 # Executables
