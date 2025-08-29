@@ -11,18 +11,46 @@ skip_all_tests = False
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "inp_file, out_file, add_nodes, expected_path",
+    "inp_file, out_file, add_nodes, use_name_as_id, expected_path",
     [
-        ("data/EPANET_Net_3.inp", "dummy_output.json", False, "data/EPANET_Net_3.json"),
-        ("data/L-TOWN.inp", "dummy_output.json", False, "data/L-TOWN.json"),
-        ("data/L-TOWN.inp", "dummy_output.json", True, "data/L-TOWN-with-nodes.json"),
-        ("data/valve.inp", "dummy_output.json", False, "KeyError"),
-        ("data/valve.inp", "dummy_output.json", True, "ValueError"),
+        (
+            "data/EPANET_Net_3.inp",
+            "data/dummy_output.json",
+            False,
+            False,
+            "data/EPANET_Net_3.json",
+        ),
+        ("data/L-TOWN.inp", "data/dummy_output.json", False, False, "data/L-TOWN.json"),
+        (
+            "data/L-TOWN.inp",
+            "data/dummy_output.json",
+            True,
+            False,
+            "data/L-TOWN-with-nodes.json",
+        ),
+        (
+            "data/L-TOWN.inp",
+            "data/dummy_output.json",
+            True,
+            True,
+            "data/L-TOWN-with-nodes.json",
+        ),
+        ("data/valve.inp", "data/dummy_output.json", False, False, "KeyError"),
+        ("data/valve.inp", "data/dummy_output.json", True, False, "ValueError"),
+        (
+            "data/EPANET_Net_3.inp",
+            "data/dummy_output.json",
+            False,
+            True,
+            "data/EPANET_Net_3_name_as_id.json",
+        ),
     ],
 )
-def test_epyt2pypes(inp_file, out_file, add_nodes, expected_path):
+def test_epyt2pypes(inp_file, out_file, add_nodes, use_name_as_id, expected_path):
     try:
-        result = epyt2pypes(inp_file, out_file, add_nodes=add_nodes)
+        result = epyt2pypes(
+            inp_file, out_file, add_nodes=add_nodes, use_name_as_id=use_name_as_id
+        )
         with open(expected_path, "r") as f:
             expected = json.load(f)
     except Exception as err:

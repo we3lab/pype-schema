@@ -125,6 +125,14 @@ def test_init_errors(json_path, expected):
         ),
         (
             "../data/wrrf_sample_algebraic.json",
+            "data/array_division.csv",
+            "ElectricityProductionByGasVolume",
+            "List",
+            "data/electrical_efficiency.csv",
+            "kilowatt * hour * minute / (feet ** 3)",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
             "data/sample_data.csv",
             "GrossGasProduction",
             "Array",
@@ -307,6 +315,70 @@ def test_init_errors(json_path, expected):
             "data/gross_gas.csv",
             "SCFM",
         ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Plus1.5",
+            "Array",
+            "data/elec_gen_plus1point5.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Plus1.5",
+            "List",
+            "data/elec_gen_plus1point5.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Plus1.5",
+            "Dict",
+            "data/elec_gen_plus1point5.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Plus1.5",
+            "DataFrame",
+            "data/elec_gen_plus1point5.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Divide2",
+            "Array",
+            "data/elec_gen_divide2.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Divide2",
+            "List",
+            "data/elec_gen_divide2.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Divide2",
+            "Dict",
+            "data/elec_gen_divide2.csv",
+            "kilowatt * hour",
+        ),
+        (
+            "../data/wrrf_sample_algebraic.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Divide2",
+            "DataFrame",
+            "data/elec_gen_divide2.csv",
+            "kilowatt * hour",
+        ),
     ],
 )
 def test_calculate_values(
@@ -357,3 +429,30 @@ def test_calculate_values(
             assert parse_units(expected_units) == tag.units
         else:
             assert tag.units is None
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "constant0, constant1, expected",
+    [
+        (operations.Constant(-1), operations.Constant(0), True),
+        (operations.Constant(0), operations.Constant(-1), False),
+        (operations.Constant(100.1), operations.Constant(100.1), False),
+        (operations.Constant(1.0), operations.Constant(1), False),
+        (operations.Constant(1), operations.Constant(1.0), True),
+        (operations.Constant(1, parent_id="ABC"), operations.Constant(1), False),
+        (operations.Constant(1), operations.Constant(1, parent_id="XYZ"), True),
+        (
+            operations.Constant(1, parent_id="ABC"),
+            operations.Constant(1, parent_id="XYZ"),
+            True,
+        ),
+        (
+            operations.Constant(1, parent_id="ABC"),
+            operations.Constant(1, parent_id="ABC"),
+            False,
+        ),
+    ],
+)
+def test_constant_less_than(constant0, constant1, expected):
+    assert (constant0 < constant1) == expected
