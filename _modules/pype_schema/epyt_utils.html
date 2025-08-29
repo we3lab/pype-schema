@@ -98,10 +98,9 @@
   <h1>Source code for pype_schema.epyt_utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">epyt</span><span class="w"> </span><span class="kn">import</span> <span class="n">epanet</span>
-
-<span class="n">content_placeholder</span> <span class="o">=</span> <span class="s2">&quot;DrinkingWater&quot;</span>
 
 
 <div class="viewcode-block" id="NpEncoder"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.epyt_utils.NpEncoder">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
@@ -117,7 +116,13 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">NpEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="epyt2pypes"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.epyt_utils.epyt2pypes">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">epyt2pypes</span><span class="p">(</span><span class="n">inp_file</span><span class="p">,</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="epyt2pypes"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.epyt_utils.epyt2pypes">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">epyt2pypes</span><span class="p">(</span>
+    <span class="n">inp_file</span><span class="p">,</span>
+    <span class="n">out_file</span><span class="p">,</span>
+    <span class="n">add_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_name_as_id</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">content_placeholder</span><span class="o">=</span><span class="s2">&quot;DrinkingWater&quot;</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an EPANET input file to a PYPES JSON file</span>
 
 <span class="sd">    Parameters</span>
@@ -130,7 +135,20 @@
 
 <span class="sd">    add_nodes : bool</span>
 <span class="sd">        Whether to add additional nodes of Pumps</span>
+
+<span class="sd">    use_name_as_id : bool</span>
+<span class="sd">        Whether to use the node name as the node id.</span>
+<span class="sd">        False by default, and ignored if `add_nodes` is True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        dictionary of `Node`, `Connection`, and `VirtualTag` objects</span>
+<span class="sd">        with keys &quot;nodes&quot;, &quot;connections&quot;, and &quot;virtual_tags&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">add_nodes</span> <span class="ow">and</span> <span class="n">use_name_as_id</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;use_name_as_id is ignored if add_nodes is True&quot;</span><span class="p">)</span>
 
     <span class="n">G</span> <span class="o">=</span> <span class="n">epanet</span><span class="p">(</span><span class="n">inp_file</span><span class="p">)</span>
 
@@ -154,7 +172,10 @@
             <span class="n">elevation</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">elevation</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1"># Node type is one of: Junction, Reservoir, Tank</span>
         <span class="k">if</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">&quot;JUNCTION&quot;</span><span class="p">:</span>
-            <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Junction&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Junction&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Junction&quot;</span><span class="p">,</span>
@@ -165,7 +186,10 @@
             <span class="n">nodes</span><span class="p">[</span><span class="n">id_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span>
             <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">&quot;RESERVOIR&quot;</span><span class="p">:</span>
-            <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Reservoir&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Reservoir&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Reservoir&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Reservoir&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Reservoir&quot;</span><span class="p">,</span>
@@ -180,7 +204,10 @@
             <span class="n">volume</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeTankMaximumWaterVolume</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
                 <span class="n">volume</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Tank&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Tank&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Tank&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Tank&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Tank&quot;</span><span class="p">,</span>
@@ -296,7 +323,10 @@
                 <span class="n">type_str</span> <span class="o">=</span> <span class="s2">&quot;Valve&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">type_str</span> <span class="o">=</span> <span class="n">type_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">type_str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-            <span class="n">id_str</span> <span class="o">=</span> <span class="n">type_str</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">use_name_as_id</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getLinkNameID</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">type_str</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
             <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
@@ -329,6 +359,7 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># TODO: add flags to command line argument</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="n">epyt2pypes</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EPANET to PYPES conversion from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> complete&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>

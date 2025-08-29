@@ -96,12 +96,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.parse_json</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pint</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.tag</span><span class="w"> </span><span class="kn">import</span> <span class="n">DownsampleType</span><span class="p">,</span> <span class="n">TagType</span><span class="p">,</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">VirtualTag</span><span class="p">,</span> <span class="n">CONTENTLESS_TYPES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Constant</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.logbook</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logbook</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">connection</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">node</span>
@@ -233,7 +235,7 @@
             <span class="n">processed</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">while</span> <span class="n">v_tag_queue</span><span class="p">:</span>
                 <span class="n">v_tag_id</span><span class="p">,</span> <span class="n">v_tag_info</span> <span class="o">=</span> <span class="n">v_tag_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="c1"># Try parsing the virtual tag</span>
+                <span class="c1"># Try parsing the VirtualTag</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parsing virtual tag </span><span class="si">{</span><span class="n">v_tag_id</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
@@ -1449,13 +1451,19 @@
         <span class="n">tag_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">parent_network</span> <span class="o">=</span> <span class="n">obj</span> <span class="k">if</span> <span class="n">parent_network</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parent_network</span>
         <span class="k">for</span> <span class="n">subtag_id</span> <span class="ow">in</span> <span class="n">tag_info</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]:</span>
-            <span class="n">subtag</span> <span class="o">=</span> <span class="n">parent_network</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">subtag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-                    <span class="s2">&quot;Could not find Tag id </span><span class="si">{}</span><span class="s2"> in VirtualTag </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">subtag_id</span><span class="p">,</span> <span class="n">tag_id</span>
+            <span class="c1"># check if Constant should be loaded</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^Constant\([+-]?\d*\.?\d*\)&quot;</span><span class="p">,</span> <span class="n">subtag_id</span><span class="p">):</span>  <span class="c1"># noqa: W605</span>
+                <span class="c1"># remove initial &#39;Constant(&#39; and final parenthesis &#39;)&#39;</span>
+                <span class="n">val_str</span> <span class="o">=</span> <span class="n">subtag_id</span><span class="o">.</span><span class="n">strip</span><span class="p">()[</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">subtag</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">val_str</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">subtag</span> <span class="o">=</span> <span class="n">parent_network</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">subtag_id</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">subtag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                        <span class="s2">&quot;Could not find Tag id </span><span class="si">{}</span><span class="s2"> in VirtualTag </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">subtag_id</span><span class="p">,</span> <span class="n">tag_id</span>
+                        <span class="p">)</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
             <span class="n">tag_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subtag</span><span class="p">)</span>
         <span class="n">pint_unit</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parse_units</span><span class="p">(</span><span class="n">tag_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1978,7 +1986,6 @@
 <span class="sd">            `conn_obj` in dictionary form</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">conn_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">id</span>
         <span class="n">conn_dict</span><span class="p">[</span><span class="s2">&quot;destination&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn_obj</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">id</span>

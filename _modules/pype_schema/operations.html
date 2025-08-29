@@ -105,6 +105,67 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">u</span>
 
 
+<div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.operations.Constant">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Constant</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation for a constant value that is not in the SCADA system.</span>
+
+<span class="sd">    Only need for `Algebraic` mode since lambda expressions support constant</span>
+<span class="sd">    values directly.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value : float</span>
+<span class="sd">        The value of this constant at all timesteps</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : str</span>
+
+<span class="sd">    value : float</span>
+<span class="sd">        The value of this constant at all timesteps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parent_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="s2">&quot;Constant(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">=</span> <span class="n">parent_id</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.operations.Constant id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;value:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">parent_id</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># if all equal, less than is False</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
 <div class="viewcode-block" id="get_change"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.operations.get_change">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_change</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts cumulative value to rate-of-change value using finite differences</span>
 <span class="sd">    Note: assumes rate of change at time t is equal to the difference between</span>
