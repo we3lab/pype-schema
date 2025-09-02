@@ -1,3 +1,6 @@
+.. image::
+   https://github.com/we3lab/pype-schema/docs/_static/PyPES_Logo.png
+
 *********************************************
 Python for Process Engineering Schema (PyPES)
 *********************************************
