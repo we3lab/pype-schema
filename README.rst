@@ -1,3 +1,6 @@
+.. image::
+   https://raw.githubusercontent.com/we3lab/pype-schema/refs/heads/main/docs/_static/pypes-logo.png
+
 *********************************************
 Python for Process Engineering Schema (PyPES)
 *********************************************
@@ -19,6 +22,11 @@ Python for Process Engineering Schema (PyPES)
    :height: 30
    :target: https://codecov.io/gh/we3lab/pype-schema
    :alt: Code Coverage
+
+.. image:: https://zenodo.org/badge/511340686.svg
+  :height: 30
+  :target: https://doi.org/10.5281/zenodo.17042020
+  :alt: Zenodo DOI
 
 A class hierarchy designed to represent configurations of process engineering systems, such as wastewater treatment or desalination plants.
 
