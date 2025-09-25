@@ -224,6 +224,60 @@ def test_init_errors(json_path, expected):
             None,
         ),
         (
+            "data/connection_less_than.json",
+            "data/elec_gen_w_constant.csv",
+            "ElectricityGenerationComputed",
+            "List",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen_w_constant.csv",
+            "ElectricityGenerationComputed",
+            "Array",
+            "data/elec_gen_comp.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationConstant",
+            "DataFrame",
+            "data/elec_gen_con.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/sample_data.csv",
+            "ElectricityGenerationConstant",
+            "Dict",
+            "data/elec_gen_con.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Minus1",
+            "List",
+            "data/elec_gen_minus1.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "ElectricityGeneration_Minus1",
+            "Array",
+            "data/elec_gen_minus1.csv",
+            "kilowatt * hour",
+            None
+        ),
+        (
             "../data/wrrf_sample.json",
             "data/sample_data_mapped.csv",
             "GrossGasProduction",

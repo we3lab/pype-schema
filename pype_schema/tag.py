@@ -9,6 +9,7 @@ from .utils import count_args, parse_units
 from .units import u
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
+from .operations import Constant
 
 
 UNARY_OPS = ["noop", "delta", "<<", ">>", "~", "-"]
@@ -547,6 +548,7 @@ class VirtualTag:
         self.parent_id = parent_id
         self.tags = tags
         self.units = units
+        self.num_constants = sum([isinstance(tag, Constant) for tag in self.tags])
 
         # determine OperationMode
         if (unary_operations is not None) or (binary_operations is not None):
@@ -576,36 +578,37 @@ class VirtualTag:
         determine_contents = True if contents is None else False
         totalized_mix = False
         for tag in tags:
-            unit_list.append(tag.units)
-            if totalized is not None and not totalized_mix:
-                if totalized != tag.totalized:
-                    warnings.warn(
-                        "Tags should have the same value for 'totalized'. "
-                        "Setting `totalized` to false under the assumption "
-                        "that data has been cleaned and detotalized already."
-                    )
-                    totalized = False
-                    totalized_mix = True
-            else:
-                totalized = tag.totalized
-
-            if determine_type:
-                if tag_type is not None:
-                    if not check_type_compatibility(tag.tag_type, tag_type):
-                        raise ValueError(
-                            "All Tags must have the same value for 'tag_type'"
+            if not isinstance(tag, Constant):
+                unit_list.append(tag.units)
+                if totalized is not None and not totalized_mix:
+                    if totalized != tag.totalized:
+                        warnings.warn(
+                            "Tags should have the same value for 'totalized'. "
+                            "Setting `totalized` to false under the assumption "
+                            "that data has been cleaned and detotalized already."
                         )
+                        totalized = False
+                        totalized_mix = True
                 else:
-                    tag_type = tag.tag_type
+                    totalized = tag.totalized
 
-            if determine_contents and tag_type not in CONTENTLESS_TYPES:
-                if contents is not None:
-                    if contents != tag.contents:
-                        raise ValueError(
-                            "All Tags must have the same value for 'contents'"
-                        )
-                else:
-                    contents = tag.contents
+                if determine_type:
+                    if tag_type is not None:
+                        if not check_type_compatibility(tag.tag_type, tag_type):
+                            raise ValueError(
+                                "All Tags must have the same value for 'tag_type'"
+                            )
+                    else:
+                        tag_type = tag.tag_type
+
+                if determine_contents and tag_type not in CONTENTLESS_TYPES:
+                    if contents is not None:
+                        if contents != tag.contents:
+                            raise ValueError(
+                                "All Tags must have the same value for 'contents'"
+                            )
+                    else:
+                        contents = tag.contents
 
         if tag_type in CONTENTLESS_TYPES:
             self.contents = None
@@ -618,7 +621,7 @@ class VirtualTag:
             if isinstance(unary_operations, list):
                 if len(unary_operations) != len(tags):
                     raise ValueError(
-                        "Unary operations list must be same length as Tag list"
+                        "`unary_operations` must be same length as Tag list"
                     )
                 else:
                     for i, unit in enumerate(unit_list):
@@ -673,7 +676,7 @@ class VirtualTag:
                                     "Unsupported binary operator:",
                                     binary_operations[i - 1],
                                 )
-                            prev_unit = binary_helper(  # noqa: 405
+                            prev_unit = binary_helper(  # noqa: F405
                                 binary_operations[i - 1],
                                 unit,
                                 prev_unit,
@@ -690,7 +693,7 @@ class VirtualTag:
                         unit = parse_units(unit)
 
                     if prev_unit is not None:
-                        prev_unit = binary_helper(  # noqa: 405
+                        prev_unit = binary_helper(  # noqa: F405
                             binary_operations,
                             unit,
                             prev_unit,
@@ -852,10 +855,10 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
-        result = data.copy()
+        constant_count = 0
         num_ops = len(self.unary_operations)
         if isinstance(data, list):
-            if len(self.unary_operations) != len(data):
+            if num_ops != len(data) + self.num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -864,14 +867,25 @@ class VirtualTag:
                     )
                 )
             else:
+                result = data.copy()
                 for i in range(num_ops):
-                    result[i] = unary_helper(  # noqa: 405
-                        data[i], self.unary_operations[i]
-                    )
+                    if isinstance(self.tags[i], Constant):
+                        constant_count += 1
+                        relevant_data = (
+                            np.ones(len(data[0])) * self.tags[i].value
+                        ).tolist()
+                        # ensure that result is of the correct length
+                        # the value will be overwritten
+                        result.append(relevant_data)
+                        result[i] = unary_helper(  # noqa: F405
+                            relevant_data, self.unary_operations[i]
+                        )
+                    else:
+                        result[i] = unary_helper(  # noqa: F405
+                            data[i - constant_count], self.unary_operations[i]
+                        )
         elif isinstance(data, ndarray):
-            if issubdtype(data.dtype, (int)):
-                result = result.astype("float")
-            if len(self.unary_operations) != data.shape[1]:
+            if num_ops != data.shape[1] + self.num_constants:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(same length as unary operations). "
@@ -880,20 +894,37 @@ class VirtualTag:
                     )
                 )
             else:
+                result = np.zeros((len(data[:, 0]), num_ops))
+                if issubdtype(data.dtype, (int)):
+                    result = result.astype("float")
                 for i in range(num_ops):
-                    result[:, i] = unary_helper(  # noqa: 405
-                        data[:, i], self.unary_operations[i]
-                    )
+                    if isinstance(self.tags[i], Constant):
+                        relevant_data = np.ones(len(data[:, 0])) * self.tags[i].value
+                        result[:, i] = unary_helper(  # noqa: F405
+                            relevant_data, self.unary_operations[i]
+                        )
+                        constant_count += 1
+                    else:
+                        result[:, i] = unary_helper(  # noqa: F405
+                            data[:, i - constant_count], self.unary_operations[i]
+                        )
         elif isinstance(data, (dict, DataFrame)):
+            result = data.copy()
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    if isinstance(data, dict):
+                        first_key = next(iter(data))
+                        relevant_data = np.ones(len(data[first_key])) * tag_obj.value
+                    else:  # must be a DataFrame
+                        relevant_data = pd.Series([tag_obj.value] * len(data))
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
                     relevant_data = result[tag_to_var_map[tag_obj.id]]
                 else:
                     relevant_data = result[tag_obj.id]
 
-                relevant_data = unary_helper(  # noqa: 405
+                relevant_data = unary_helper(  # noqa: F405
                     relevant_data, self.unary_operations[i]
                 )
 
@@ -925,8 +956,14 @@ class VirtualTag:
         list, array, or Series
             numpy array of combined dataset
         """
+        constant_count = 0
+        # if there are unary operations, then constants have alrady been added to data
+        if self.unary_operations is not None:
+            num_constants = 0
+        else:
+            num_constants = self.num_constants
         if isinstance(data, list):
-            if len(self.binary_operations) != len(data) - 1:
+            if len(self.binary_operations) != len(data) + num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -936,29 +973,53 @@ class VirtualTag:
                 )
             else:
                 arr = array(data)
-                result = data[0]
-                for i in range(arr.shape[0] - 1):
-                    if self.binary_operations[i] == "+":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] + data[i + 1][j]
-                    elif self.binary_operations[i] == "-":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] - data[i + 1][j]
-                    elif self.binary_operations[i] == "*":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] * data[i + 1][j]
-                    elif self.binary_operations[i] == "/":
-                        for j in range(arr.shape[1]):
-                            result[j] = result[j] / data[i + 1][j]
+                if isinstance(self.tags[0], Constant) and num_constants != 0:
+                    constant_count += 1
+                    result = (np.ones(arr.shape[1]) * self.tags[0].value).tolist()
+                else:
+                    result = data.copy()[0]
+                for i in range(arr.shape[0] + num_constants - 1):
+                    if isinstance(self.tags[i + 1], Constant) and num_constants != 0:
+                        constant_count += 1
+                        if self.binary_operations[i] == "+":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] + self.tags[i + 1].value
+                        elif self.binary_operations[i] == "-":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] - self.tags[i + 1].value
+                        elif self.binary_operations[i] == "*":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] * self.tags[i + 1].value
+                        elif self.binary_operations[i] == "/":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] / self.tags[i + 1].value
+                    else:
+                        if self.binary_operations[i] == "+":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] + data[i - constant_count + 1][j]
+                        elif self.binary_operations[i] == "-":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] - data[i - constant_count + 1][j]
+                        elif self.binary_operations[i] == "*":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] * data[i - constant_count + 1][j]
+                        elif self.binary_operations[i] == "/":
+                            for j in range(arr.shape[1]):
+                                result[j] = result[j] / data[i - constant_count + 1][j]
         elif isinstance(data, DataFrame):
             result = None
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    if num_constants != 0:
+                        relevant_data = pd.Series([tag_obj.value] * len(data))
+                    else:
+                        relevant_data = data[tag_obj.id].copy()
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
-                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                    relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
-                    relevant_data = data[tag_obj.id]
+                    relevant_data = data[tag_obj.id].copy()
 
                 if result is None:
                     result = relevant_data.rename(self.id, inplace=False)
@@ -972,7 +1033,7 @@ class VirtualTag:
                     elif self.binary_operations[i - 1] == "/":
                         result /= relevant_data
         elif isinstance(data, ndarray):
-            if len(self.binary_operations) != data.shape[1] - 1:
+            if len(self.binary_operations) != data.shape[1] + num_constants - 1:
                 raise ValueError(
                     "Data must have the correct dimensions "
                     "(one more element than binary operations). "
@@ -981,25 +1042,46 @@ class VirtualTag:
                     )
                 )
             else:
-                result = data[:, 0]
-                for i in range(data.shape[1] - 1):
-                    if self.binary_operations[i] == "+":
-                        result += data[:, i + 1]
-                    elif self.binary_operations[i] == "-":
-                        result -= data[:, i + 1]
-                    elif self.binary_operations[i] == "*":
-                        result *= data[:, i + 1]
-                    elif self.binary_operations[i] == "/":
-                        result /= data[:, i + 1]
+                if isinstance(self.tags[0], Constant) and num_constants != 0:
+                    constant_count += 1
+                    result = np.ones(data.shape[0]) * self.tags[0].value
+                else:
+                    result = data.copy()[:, 0]
+                for i in range(data.shape[1] + num_constants - 1):
+                    if isinstance(self.tags[i + 1], Constant) and num_constants != 0:
+                        constant_count += 1
+                        if self.binary_operations[i] == "+":
+                            result += self.tags[i + 1].value
+                        elif self.binary_operations[i] == "-":
+                            result -= self.tags[i + 1].value
+                        elif self.binary_operations[i] == "*":
+                            result *= self.tags[i + 1].value
+                        elif self.binary_operations[i] == "/":
+                            result /= self.tags[i + 1].value
+                    else:
+                        if self.binary_operations[i] == "+":
+                            result += data[:, i - constant_count + 1]
+                        elif self.binary_operations[i] == "-":
+                            result -= data[:, i - constant_count + 1]
+                        elif self.binary_operations[i] == "*":
+                            result *= data[:, i - constant_count + 1]
+                        elif self.binary_operations[i] == "/":
+                            result /= data[:, i - constant_count + 1]
         elif isinstance(data, dict):
             result = None
             for i, tag_obj in enumerate(self.tags):
-                if isinstance(tag_obj, self.__class__):
+                if isinstance(tag_obj, Constant):
+                    if num_constants != 0:
+                        first_key = next(iter(data))
+                        relevant_data = np.ones(len(data[first_key])) * tag_obj.value
+                    else:
+                        relevant_data = data[tag_obj.id].copy()
+                elif isinstance(tag_obj, self.__class__):
                     relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
-                    relevant_data = data[tag_to_var_map[tag_obj.id]]
+                    relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
-                    relevant_data = data[tag_obj.id]
+                    relevant_data = data[tag_obj.id].copy()
 
                 if result is None:
                     result = relevant_data

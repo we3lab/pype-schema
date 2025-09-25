@@ -7,6 +7,67 @@ from pint import DimensionalityError
 from .units import u
 
 
+class Constant:
+    """Representation for a constant value that is not in the SCADA system.
+
+    Only need for `Algebraic` mode since lambda expressions support constant
+    values directly.
+
+    Parameters
+    ----------
+    value : float
+        The value of this constant at all timesteps
+
+    Attributes
+    ----------
+    id : str
+
+    value : float
+        The value of this constant at all timesteps
+    """
+
+    def __init__(self, value, parent_id=None):
+        self.id = "Constant(" + str(value) + ")"
+        self.value = value
+        self.parent_id = parent_id
+
+    def __repr__(self):
+        return (
+            f"<pype_schema.operations.Constant id:{self.id} "
+            f"value:{self.value} parent_id:{self.parent_id}>\n"
+        )
+
+    def __eq__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return False
+
+        return (
+            self.id == other.id
+            and self.value == other.value
+            and self.parent_id == other.parent_id
+        )
+
+    def __lt__(self, other):
+        # don't attempt to compare against unrelated types
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+
+        if self.value != other.value:
+            return self.value < other.value
+        elif self.id != other.id:
+            return self.id < other.id
+        elif self.parent_id != other.parent_id:
+            if self.parent_id is None:
+                return True
+            elif other.parent_id is None:
+                return False
+            else:
+                return self.parent_id < other.parent_id
+        else:  # if all equal, less than is False
+            return False
+
+
 def get_change(variable, delta_t=1, split=False):
     """Converts cumulative value to rate-of-change value using finite differences
     Note: assumes rate of change at time t is equal to the difference between

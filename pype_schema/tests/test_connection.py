@@ -346,3 +346,37 @@ def test_get_fallback_error(json_path, conn_id):
     assert conn.get_num_dest_units() is None
     assert conn.get_exit_point() is None
     assert conn.get_entry_point() is None
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "json_path, conn_id, expected",
+    [
+        (
+            "data/connection.json",
+            "GasToCogen",
+            "<pype_schema.connection.Pipe id:GasToCogen contents:ContentsType.Biogas source:Digester destination:Cogenerator min_flow:None max_flow:None design_flow:None min_pressure:None max_pressure:None design_pressure:None heating_values:(<Quantity(600, 'british_thermal_unit / foot ** 3')>, <Quantity(700, 'british_thermal_unit / foot ** 3')>) diameter:None friction_coeff:None tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "BatteryToFacility",
+            "<pype_schema.connection.Wire id:BatteryToFacility contents:ContentsType.Electricity source:TeslaBattery destination:VirtualDemand tags:{} bidirectional:True exit_point:None entry_point:None>\n",  # noqa: E501
+        ),
+        (
+            "../data/desal_sample.json",
+            "ElectricityBill",
+            "<pype_schema.connection.Wireless id:ElectricityBill contents:ContentsType.DataTransfer source:PowerGrid destination:DesalPlant tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+        ),
+        (
+            "../data/desal_sample.json",
+            "AntiscalantDelivery",
+            "<pype_schema.connection.Delivery id:AntiscalantDelivery contents:ContentsType.Antiscalant source:ChemicalFactory destination:DesalPlant tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+        ),
+    ],
+)
+def test_repr(json_path, conn_id, expected):
+    parser = JSONParser(json_path)
+    result = parser.initialize_network()
+    conn = result.get_connection(conn_id, recurse=True)
+
+    assert repr(conn) == expected
