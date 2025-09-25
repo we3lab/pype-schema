@@ -216,7 +216,7 @@ def unary_helper(data, un_op):
             raise TypeError("Data must be either a list, array, or Series")
     elif un_op == "~":
         if isinstance(data, list):
-            result = result = [not bool(x) for x in data]
+            result = [not bool(x) for x in data]
         elif isinstance(data, (np.ndarray, pd.Series)):
             result = data == 0
         else:

@@ -230,7 +230,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/elec_gen_comp.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -239,7 +239,7 @@ def test_init_errors(json_path, expected):
             "Array",
             "data/elec_gen_comp.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -248,7 +248,7 @@ def test_init_errors(json_path, expected):
             "DataFrame",
             "data/elec_gen_con.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -257,7 +257,7 @@ def test_init_errors(json_path, expected):
             "Dict",
             "data/elec_gen_con.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -266,7 +266,7 @@ def test_init_errors(json_path, expected):
             "List",
             "data/elec_gen_minus1.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "data/connection_less_than.json",
@@ -275,7 +275,7 @@ def test_init_errors(json_path, expected):
             "Array",
             "data/elec_gen_minus1.csv",
             "kilowatt * hour",
-            None
+            None,
         ),
         (
             "../data/wrrf_sample.json",
@@ -303,7 +303,25 @@ def test_init_errors(json_path, expected):
             "data/gross_gas.csv",
             "SCFM",
             "data/tag_to_var_map.json",
-        )
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data_mapped.csv",
+            "ElectricityProductionByGasVolume",
+            "DataFrame",
+            "data/electrical_efficiency.csv",
+            "kilowatt * hour * minute / (feet ** 3)",
+            "data/tag_to_var_map.json",
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data_mapped.csv",
+            "ElectricityProductionByGasVolume",
+            "Dict",
+            "data/electrical_efficiency.csv",
+            "kilowatt * hour * minute / (feet ** 3)",
+            "data/tag_to_var_map.json",
+        ),
     ],
 )
 def test_calculate_values(
@@ -344,7 +362,6 @@ def test_calculate_values(
                 data = data[var_names].to_numpy()
             else:
                 data = data.to_numpy()
-            data = data[var_names].to_numpy()
             assert np.allclose(
                 tag.calculate_values(data, **kwargs),
                 expected.to_numpy().flatten(),

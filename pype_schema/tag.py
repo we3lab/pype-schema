@@ -924,9 +924,25 @@ class VirtualTag:
                 else:
                     relevant_data = result[tag_obj.id]
 
-                relevant_data = unary_helper(  # noqa: F405
+                is_series = isinstance(relevant_data, pd.Series)
+                if is_series:  # store info, then convert to np array
+                    original_index = relevant_data.index
+                    original_name = relevant_data.name
+                    relevant_data = relevant_data.values
+
+                processed_relevant_data = unary_helper(  # noqa: F405
                     relevant_data, self.unary_operations[i]
                 )
+
+                # Convert back if original was Series
+                if is_series:
+                    relevant_data = pd.Series(
+                        processed_relevant_data,
+                        index=original_index,
+                        name=original_name,
+                    )
+                else:
+                    relevant_data = processed_relevant_data
 
                 if tag_to_var_map:
                     result[tag_to_var_map[tag_obj.id]] = relevant_data
@@ -1193,7 +1209,10 @@ class VirtualTag:
                 data = self.process_binary_ops(data, tag_to_var_map=tag_to_var_map)
             elif isinstance(data, (dict, DataFrame)):
                 # if no binary ops, get appropriate column from unary ops and rename
-                data = data[self.tags[0].id].rename(self.id)
+                if isinstance(data, dict):
+                    data = pd.Series(data[self.tags[0].id], name=self.id)
+                else:
+                    data = data[self.tags[0].id].rename(self.id)
             elif isinstance(data, ndarray):
                 # flatten array since binary operations do that automatically
                 data = data[:, 0]
@@ -1202,7 +1221,10 @@ class VirtualTag:
                 data = self.process_custom_ops(data, tag_to_var_map=tag_to_var_map)
             elif isinstance(data, (dict, DataFrame)):
                 # if custom_operations is empty, get appropriate column and rename
-                data = data[self.tags[0].id].rename(self.id)
+                if isinstance(data, dict):
+                    data = pd.Series(data[self.tags[0].id], name=self.id)
+                else:
+                    data = data[self.tags[0].id].rename(self.id)
             elif isinstance(data, ndarray):
                 # flatten array since operations do that automatically
                 data = data[:, 0]
