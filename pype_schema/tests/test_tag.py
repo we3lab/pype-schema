@@ -322,6 +322,24 @@ def test_init_errors(json_path, expected):
             "kilowatt * hour * minute / (feet ** 3)",
             "data/tag_to_var_map.json",
         ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "TestEmptyCustom",
+            "Dict",
+            "data/test_empty_custom.csv",
+            "kWh",
+            None,
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "TestEmptyCustom",
+            "DataFrame",
+            "data/test_empty_custom.csv",
+            "kWh",
+            None,
+        ),
     ],
 )
 def test_calculate_values(

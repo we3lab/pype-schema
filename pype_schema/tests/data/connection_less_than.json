@@ -64,6 +64,14 @@
         "type": "Flow",
         "parent_id": "Cogenerator",
         "contents": "Electricity"
+      },
+      "TestEmptyCustom": {
+        "tags": ["ElectricityGeneration"],
+        "custom_operations": "",
+        "type": "Flow",
+        "parent_id": "Cogenerator",
+        "contents": "Electricity",
+        "units": "kWh"
       }
     },
     "DrinkingWaterFacility": {
