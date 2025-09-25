@@ -232,6 +232,24 @@ def test_init_errors(json_path, expected):
             "SCFM",
             "data/tag_to_var_map.json",
         ),
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data_mapped.csv",
+            "GrossGasProduction",
+            "Dict",
+            "data/gross_gas.csv",
+            "SCFM",
+            "data/tag_to_var_map.json",
+        ),
+        (
+            "../data/wrrf_sample.json",
+            "data/sample_data_mapped.csv",
+            "GrossGasProduction",
+            "Array",
+            "data/gross_gas.csv",
+            "SCFM",
+            "data/tag_to_var_map.json",
+        )
     ],
 )
 def test_calculate_values(
@@ -266,7 +284,13 @@ def test_calculate_values(
                 tag.calculate_values(data, **kwargs), expected[tag_name]
             )
         elif data_type == "Array":
-            data = data.to_numpy()
+            if tag_to_var_map is not None:
+                tag_ids = [tag_obj.id for tag_obj in tag.tags]
+                var_names = [tag_to_var_map[tag_id] for tag_id in tag_ids]
+                data = data[var_names].to_numpy()
+            else:
+                data = data.to_numpy()
+            data = data[var_names].to_numpy()
             assert np.allclose(
                 tag.calculate_values(data, **kwargs),
                 expected.to_numpy().flatten(),
