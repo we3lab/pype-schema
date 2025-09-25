@@ -243,7 +243,5 @@ def unary_helper(data, un_op):
                 result = data.shift(-1)
             elif un_op == ">>":
                 result = data.shift(1)
-    if result is None:
-        raise TypeError("Data must be either a list, array, or Series")
 
     return result

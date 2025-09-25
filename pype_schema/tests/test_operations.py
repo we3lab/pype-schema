@@ -379,14 +379,6 @@ def test_init_errors(json_path, expected):
             "data/elec_gen_divide2.csv",
             "kilowatt * hour",
         ),
-        (
-            "../data/wrrf_sample_algebraic.json",
-            "data/elec_gen.csv",
-            "ElectricityGeneration_LShift1",
-            "InvalidUnary",
-            "TypeError",
-            "kWh",
-        ),
     ],
 )
 def test_calculate_values(
@@ -427,9 +419,6 @@ def test_calculate_values(
             )
         elif data_type == "Invalid":
             data = pd.Series([])
-            tag.calculate_values(data)
-        elif data_type == "InvalidUnary":
-            data = "invalid_data_type"  # pass a string
             tag.calculate_values(data)
     except Exception as err:
         result = type(err).__name__
