@@ -323,6 +323,15 @@ def test_init_errors(json_path, expected):
             "data/tag_to_var_map.json",
         ),
         (
+            "../data/wrrf_sample_algebraic.json",
+            "data/sample_data_mapped.csv",
+            "ElectricityGeneration_LShift1",
+            "List",
+            "data/gen_lshift1.csv",
+            "kWh",
+            "data/tag_to_var_map.json",
+        ),
+        (
             "data/connection_less_than.json",
             "data/elec_gen.csv",
             "TestEmptyCustom",
@@ -337,6 +346,15 @@ def test_init_errors(json_path, expected):
             "TestEmptyCustom",
             "DataFrame",
             "data/test_empty_custom.csv",
+            "kWh",
+            None,
+        ),
+        (
+            "data/connection_less_than.json",
+            "data/elec_gen.csv",
+            "TestEmptyCustom",
+            "InvalidMode",
+            "ValueError",
             "kWh",
             None,
         ),
@@ -386,7 +404,12 @@ def test_calculate_values(
                 equal_nan=True,
             )
         elif data_type == "List":
-            data = data.values.T.tolist()
+            if tag_to_var_map is not None:
+                tag_ids = [tag_obj.id for tag_obj in tag.tags]
+                var_names = [tag_to_var_map[tag_id] for tag_id in tag_ids]
+                data = data[var_names].values.T.tolist()
+            else:
+                data = data.values.T.tolist()
             assert np.allclose(
                 np.array(tag.calculate_values(data, **kwargs), dtype=np.float64),
                 expected.values.flatten(),
@@ -399,6 +422,9 @@ def test_calculate_values(
             )
         elif data_type == "Invalid":
             data = pd.Series([])
+            tag.calculate_values(data, **kwargs)
+        elif data_type == "InvalidMode":
+            tag.mode = "InvalidMode"
             tag.calculate_values(data, **kwargs)
     except Exception as err:
         result = type(err).__name__
