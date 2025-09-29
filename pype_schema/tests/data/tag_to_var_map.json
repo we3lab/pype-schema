@@ -1,0 +1,23 @@
+{
+  "ElectricityGeneration_LShift1": "ElectricityGeneration_LShift1",
+  "Digester3GasFlow": "ConditionerToCogen_Biogas_Flow",
+  "Digester2GasFlow": "ConditionerToCogen_Biogas_Flow",
+  "BoilerGasPurchases": "GasToBoiler_NaturalGas_Flow",
+  "TotalizedFlaredGas": "ConditionerToFlare_Biogas_Flow",
+  "NoGasPurchases": "NoGasPurchases",
+  "GrossGasProduction": "GrossGasProduction",
+  "ElectricityProductionByGasVolume": "ElectricityProductionByGasVolume",
+  "ElectricityGeneration_RShift2_List": "ElectricityGeneration_RShift2_List",
+  "Digester1GasFlow": "ConditionerToCogen_Biogas_Flow",
+  "CogenGasPurchases": "GasToCogen_NaturalGas_Flow",
+  "CombinedDigesterGasFlow": "ConditionerToCogen_Biogas_Flow",
+  "ElectricityGeneration": "CogenElecToFacility_Electricity_Flow",
+  "TankLevel": "FOGTank_FatOilGrease_Level",
+  "InfluentFlow": "SewerIntake_UntreatedSewage_Flow",
+  "NoGasPurchasesList": "NoGasPurchasesList",
+  "ElectricityGeneration_LShift1_List": "ElectricityGeneration_LShift1_List",
+  "ElectricityGeneration_RShift2": "ElectricityGeneration_RShift2",
+  "TankVolume": "FOGTank_FatOilGrease_Volume",
+  "GrossGasProductionList": "GrossGasProductionList",
+  "ElectricityGenDelta": "ElectricityGenDelta"
+}

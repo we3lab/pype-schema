@@ -918,15 +918,31 @@ class VirtualTag:
                     else:  # must be a DataFrame
                         relevant_data = pd.Series([tag_obj.value] * len(data))
                 elif isinstance(tag_obj, self.__class__):
-                    relevant_data = tag_obj.calculate_values(data)
+                    relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
                     relevant_data = result[tag_to_var_map[tag_obj.id]]
                 else:
                     relevant_data = result[tag_obj.id]
 
-                relevant_data = unary_helper(  # noqa: F405
+                is_series = isinstance(relevant_data, pd.Series)
+                if is_series:  # store info, then convert to np array
+                    original_index = relevant_data.index
+                    original_name = relevant_data.name
+                    relevant_data = relevant_data.values
+
+                processed_relevant_data = unary_helper(  # noqa: F405
                     relevant_data, self.unary_operations[i]
                 )
+
+                # Convert back if original was Series
+                if is_series:
+                    relevant_data = pd.Series(
+                        processed_relevant_data,
+                        index=original_index,
+                        name=original_name,
+                    )
+                else:
+                    relevant_data = processed_relevant_data
 
                 if tag_to_var_map:
                     result[tag_to_var_map[tag_obj.id]] = relevant_data
@@ -1015,7 +1031,7 @@ class VirtualTag:
                     else:
                         relevant_data = data[tag_obj.id].copy()
                 elif isinstance(tag_obj, self.__class__):
-                    relevant_data = tag_obj.calculate_values(data)
+                    relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
                     relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
@@ -1077,7 +1093,7 @@ class VirtualTag:
                     else:
                         relevant_data = data[tag_obj.id].copy()
                 elif isinstance(tag_obj, self.__class__):
-                    relevant_data = tag_obj.calculate_values(data)
+                    relevant_data = tag_obj.calculate_values(data, tag_to_var_map)
                 elif tag_to_var_map:
                     relevant_data = data[tag_to_var_map[tag_obj.id]].copy()
                 else:
@@ -1155,7 +1171,7 @@ class VirtualTag:
                 varname = tag_to_var_map[tag_obj.id] if tag_to_var_map else tag_obj.id
                 varnames.append(varname)
                 if isinstance(tag_obj, self.__class__):
-                    data[varname] = tag_obj.calculate_values(data)
+                    data[varname] = tag_obj.calculate_values(data, tag_to_var_map)
             result = func_(*[data[varname] for varname in varnames])
             if isinstance(result, Series):
                 result.rename(self.id, inplace=True)
@@ -1193,7 +1209,10 @@ class VirtualTag:
                 data = self.process_binary_ops(data, tag_to_var_map=tag_to_var_map)
             elif isinstance(data, (dict, DataFrame)):
                 # if no binary ops, get appropriate column from unary ops and rename
-                data = data[self.tags[0].id].rename(self.id)
+                if isinstance(data, dict):
+                    data = pd.Series(data[self.tags[0].id], name=self.id)
+                else:
+                    data = data[self.tags[0].id].rename(self.id)
             elif isinstance(data, ndarray):
                 # flatten array since binary operations do that automatically
                 data = data[:, 0]
@@ -1202,7 +1221,10 @@ class VirtualTag:
                 data = self.process_custom_ops(data, tag_to_var_map=tag_to_var_map)
             elif isinstance(data, (dict, DataFrame)):
                 # if custom_operations is empty, get appropriate column and rename
-                data = data[self.tags[0].id].rename(self.id)
+                if isinstance(data, dict):
+                    data = pd.Series(data[self.tags[0].id], name=self.id)
+                else:
+                    data = data[self.tags[0].id].rename(self.id)
             elif isinstance(data, ndarray):
                 # flatten array since operations do that automatically
                 data = data[:, 0]

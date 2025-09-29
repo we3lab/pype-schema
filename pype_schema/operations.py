@@ -198,6 +198,7 @@ def unary_helper(data, un_op):
         numpy array of dataset trannsformed by unary operation
     """
     # allow for multiple unary operations to be performed sequentially
+    result = None
     if isinstance(un_op, list):
         result = data.copy()
         for op in un_op:
@@ -212,15 +213,11 @@ def unary_helper(data, un_op):
             result = [-x for x in data]
         elif isinstance(data, (np.ndarray, pd.Series)):
             result = -data
-        else:
-            raise TypeError("Data must be either a list, array, or Series")
     elif un_op == "~":
         if isinstance(data, list):
-            result = result = [not bool(x) for x in data]
+            result = [not bool(x) for x in data]
         elif isinstance(data, (np.ndarray, pd.Series)):
             result = data == 0
-        else:
-            raise TypeError("Data must be either a list, array, or Series")
     else:
         if isinstance(data, list):
             result = data.copy()
@@ -247,7 +244,8 @@ def unary_helper(data, un_op):
                 result = data.shift(-1)
             elif un_op == ">>":
                 result = data.shift(1)
-        else:
-            raise TypeError("Data must be either a list, array, or Series")
+
+    if result is None:
+        raise TypeError("Data must be either a list, array, or Series")
 
     return result

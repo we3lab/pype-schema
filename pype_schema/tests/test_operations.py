@@ -456,3 +456,20 @@ def test_calculate_values(
 )
 def test_constant_less_than(constant0, constant1, expected):
     assert (constant0 < constant1) == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "data, un_op, expected_error",
+    [
+        ("invalid_string", "<<", TypeError),
+        (123, ">>", TypeError),
+    ],
+)
+def test_unary_helper(data, un_op, expected_error):
+    """
+    Simple test for error,
+    since value functionality is covered in test_calculate_values
+    """
+    with pytest.raises(expected_error):
+        operations.unary_helper(data, un_op)
