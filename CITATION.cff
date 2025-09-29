@@ -20,7 +20,7 @@ authors:
     given-names: "Meagan S."
     orcid: "https://orcid.org/0000-0002-4932-890X"
 title: "Python for Process Engineering Schema (PyPES)"
-version: 0.7.1
+version: 0.7.2
 type: software
 doi: 10.5281/zenodo.17042020
 url: "https://github.com/we3lab/pype-schema"
