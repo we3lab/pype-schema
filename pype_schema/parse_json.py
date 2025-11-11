@@ -13,7 +13,7 @@ from . import utils
 
 
 class NetworkParser:
-    """A parser to convert a JSON file into a `Network` object
+    """A parser to convert a dict file into a `Network` object
 
     Parameters
     ----------
@@ -2228,9 +2228,29 @@ class NetworkParser:
 
 
 class JSONParser(NetworkParser):
-    """A parser to convert a JSON file into a `Network` object"""
+    """A parser to convert a JSON file into a `Network` object
+
+    Parameters
+    ----------
+    config_dict : dict
+        dictionary that defines network
+    network_name: str
+        name of the network being parsed
+
+    Attributes
+    ----------
+    path : str
+        path to the JSON file to load
+
+    config : dict
+        dictionary with the contents the JSON file
+
+    network_obj : Network
+        Python representation of the JSON file
+    """
 
     def __init__(self, path):
+
         f = open(path)
         path = path
         config = json.load(f)
