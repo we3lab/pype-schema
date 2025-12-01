@@ -163,19 +163,19 @@ None if the Tag is associated with a Node object instead of a Connection</p></li
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Tag ID</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Tag ID</p></li>
 <li><p><strong>units</strong> (<em>Unit</em>) – Units represented as a Pint unit. E.g., &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<a class="reference internal" href="#pype_schema.tag.TagType" title="pype_schema.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
-<li><p><strong>source_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
+<li><p><strong>source_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the sources node</p></li>
-<li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
+<li><p><strong>dest_unit_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – integer representing unit number, or <cite>total</cite> if a combined data point
 across all units of the destination node</p></li>
-<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
-<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False by default</p></li>
+<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – True if data is totalized. False by default</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
-<li><p><strong>manufacturer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
-<li><p><strong>measure_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.25rc3.dev1+g20e3dd3)"><em>pint.Quantity</em></a>) – Measurement frequency of the data with units. None by default</p></li>
-<li><p><strong>report_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.25rc3.dev1+g20e3dd3)"><em>pint.Quantity</em></a>) – Reporting frequency of the data with units. None by default</p></li>
+<li><p><strong>manufacturer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the manufacturer for the physical sensor hardware. Default is None</p></li>
+<li><p><strong>measure_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.1.dev50+g84762624b)"><em>pint.Quantity</em></a>) – Measurement frequency of the data with units. None by default</p></li>
+<li><p><strong>report_freq</strong> (<a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.1.dev50+g84762624b)"><em>pint.Quantity</em></a>) – Reporting frequency of the data with units. None by default</p></li>
 <li><p><strong>downsample_method</strong> (<a class="reference internal" href="#pype_schema.tag.DownsampleType" title="pype_schema.tag.DownsampleType"><em>DownsampleType</em></a>) – None by default, meaning that data is reported on the same frequency as measured</p></li>
 <li><p><strong>calibration</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.logbook.Logbook" title="pype_schema.logbook.Logbook"><em>Logbook</em></a>) – A history of sensor calibration.</p></li>
 </ul>
@@ -193,7 +193,7 @@ across all units of the destination node</p></li>
 <dd class="field-even"><p>True if compatible, False otherwise</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,17 +240,17 @@ determined from consituent Tag contents</p></li>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – When <cite>operations</cite> lambda function has the wrong number of elements
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When <cite>operations</cite> lambda function has the wrong number of elements
     When <cite>tag_type</cite> is not specified and constituent tags have different types.
     When <cite>contents</cite> of the constituent tags are different types.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.13)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized tags are combined
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.14)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized tags are combined
     When tags have different units</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Tag ID</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> of </em><a class="reference internal" href="#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – List of Tag objects to combine</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Tag ID</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em> of </em><a class="reference internal" href="#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – List of Tag objects to combine</p></li>
 <li><p><strong>unary_operations</strong> (<em>[</em><em>&quot;noop&quot;</em><em>, </em><em>&quot;delta&quot;</em><em>, </em><em>&quot;&lt;&lt;&quot;</em><em>, </em><em>&quot;&gt;&gt;&quot;</em><em>, </em><em>&quot;~&quot;</em><em>, </em><em>&quot;-&quot;</em><em>]</em>) – <p>Unary operations to apply before combining tags.</p>
 <blockquote>
 <div><p>”noop” : null operator, useful when
@@ -272,12 +272,12 @@ Supported functions are “+”, “-”, “*”, and “/”.
 If a single string is passed, it will be applied to all Tags.
 Otherwise, the <cite>binary_operations</cite> list must be one shorter than <cite>tags</cite>,
 and functions will be applied in order from left to right</p></li>
-<li><p><strong>custom_operations</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – String giving a lambda function to apply to constituent tags</p></li>
-<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
+<li><p><strong>custom_operations</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – String giving a lambda function to apply to constituent tags</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> or </em><em>Unit</em>) – Units represented as a string or Pint unit.
 E.g., ‘MGD’ or ‘cubic meters’ or &lt;Unit(‘MGD’)&gt;</p></li>
 <li><p><strong>tag_type</strong> (<a class="reference internal" href="#pype_schema.tag.TagType" title="pype_schema.tag.TagType"><em>TagType</em></a>) – Type of data saved under the tag. E.g., <cite>InfluentFlow</cite> or <cite>RunTime</cite></p></li>
-<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
-<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
+<li><p><strong>totalized</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – True if data is totalized. False otherwise</p></li>
+<li><p><strong>parent_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – ID for the parent object (either a Node or Connection)</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
 <li><p><strong>mode</strong> (<a class="reference internal" href="#pype_schema.tag.OperationMode" title="pype_schema.tag.OperationMode"><em>OperationMode</em></a>) – Mode of operation. Either <cite>Algebraic</cite> or <cite>Custom</cite>.
 Automatically determined based on values of <cite>unary_operations</cite>,
@@ -303,7 +303,7 @@ that differ from the original SCADA tag naming system</p></li>
 <dd class="field-even"><p>numpy array of combined dataset</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -326,7 +326,7 @@ that differ from the original SCADA tag naming system</p></li>
 <dd class="field-even"><p>numpy array of combined dataset</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -349,7 +349,7 @@ that differ from the original SCADA tag naming system</p></li>
 <dd class="field-even"><p>numpy array of combined dataset</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -389,7 +389,7 @@ that differ from the original SCADA tag naming system</p></li>
 <dd class="field-even"><p>numpy array of combined dataset</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>, array, or Series</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>, array, or Series</p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,7 +411,7 @@ that differ from the original SCADA tag naming system</p></li>
 <dd class="field-even"><p>True if compatible, False otherwise</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>

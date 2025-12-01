@@ -133,12 +133,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Connection ID</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Connection ID</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the node</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this connection</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this connection</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether flow can go from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
@@ -165,7 +165,7 @@ Default is None, indicating the destination does not have any children</p></li>
 <dd class="field-odd"><p>name of the destination node</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -196,7 +196,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-odd"><p>name of the entry point Node (if it exists - None otherwise)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -209,7 +209,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-odd"><p>name of the exit point Node (if it exists - None otherwise)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -222,7 +222,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-odd"><p>number of units in the destination node</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -235,7 +235,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-odd"><p>number of units in the source node</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -248,7 +248,7 @@ returning its entry point if <cite>recurse</cite> is True</p>
 <dd class="field-odd"><p>name of the source node</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,12 +322,12 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pipe ID</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether deliveries are made from destination to source. False by default</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether deliveries are made from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
@@ -358,12 +358,12 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pipe ID</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether electricity can flow from destination to source. False by default</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether electricity can flow from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
@@ -394,12 +394,12 @@ Default is None, indicating the destination does not have any children</p></li>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Pipe ID</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Pipe ID</p></li>
 <li><p><strong>contents</strong> (<a class="reference internal" href="utils.html#pype_schema.utils.ContentsType" title="pype_schema.utils.ContentsType"><em>ContentsType</em></a>) – Contents moving through the connection.</p></li>
 <li><p><strong>source</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Starting point of the connection</p></li>
 <li><p><strong>destination</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – Endpoint of the connection</p></li>
-<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
-<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether data can flow from destination to source. False by default</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><a class="reference internal" href="tag.html#pype_schema.tag.Tag" title="pype_schema.tag.Tag"><em>Tag</em></a>) – Data tags associated with this pipe</p></li>
+<li><p><strong>bidirectional</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether data can flow from destination to source. False by default</p></li>
 <li><p><strong>exit_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node from which this connection leaves its source.
 Default is None, indicating the source does not have any children</p></li>
 <li><p><strong>entry_point</strong> (<a class="reference internal" href="pype_schema.html#pype_schema.node.Node" title="pype_schema.node.Node"><em>Node</em></a>) – The child node at which this connection enters its destination.
