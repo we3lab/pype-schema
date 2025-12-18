@@ -175,7 +175,7 @@
         "tags": {}
     },
     "StaticMixer": {
-        "type": "StaticMixer",
+        "type": "StaticMixing",
         "elevation (meters)": null,
         "volume (cubic meters)": null,
         "input_contents": "ChlorinatedSeawater",

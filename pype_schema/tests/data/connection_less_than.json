@@ -295,7 +295,7 @@
       }
     },
     "OxygenPlant": {
-      "type": "Separator",
+      "type": "Separation",
       "input_contents": "Air",
       "output_contents": ["Oxygen", "IdealGas"],
       "num_units": 1,

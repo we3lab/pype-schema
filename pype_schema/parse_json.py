@@ -691,6 +691,8 @@ class NetworkParser:
                 )
                 electrical_efficiency = None
                 thermal_efficiency = self.config[node_id].get("thermal efficiency")
+                if thermal_efficiency is None:
+                    thermal_efficiency = self.config[node_id].get("thermal_efficiency")
 
             if electrical_efficiency:
 
@@ -887,12 +889,12 @@ class NetworkParser:
                 pH=pH,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "StaticMixer":
+        elif self.config[node_id]["type"] == "StaticMixing":
             pH = self.config[node_id].get("pH")
             residence_time = self.parse_unit_val_dict(
                 self.config[node_id].get("residence_time")
             )
-            node_obj = node.StaticMixer(
+            node_obj = node.StaticMixing(
                 node_id,
                 input_contents,
                 output_contents,
@@ -933,11 +935,11 @@ class NetworkParser:
                 pressure_setting=pressure_setting,
                 tags={},
             )
-        elif self.config[node_id]["type"] == "Separator":
+        elif self.config[node_id]["type"] == "Separation":
             power_rating = self.parse_unit_val_dict(
                 self.config[node_id].get("power_rating")
             )
-            node_obj = node.Separator(
+            node_obj = node.Separation(
                 node_id,
                 input_contents,
                 output_contents,
@@ -2079,7 +2081,7 @@ class NetworkParser:
                 node_dict["permeability"] = JSONParser.unit_val_to_dict(
                     node_obj.permeability
                 )
-        elif isinstance(node_obj, (node.Reactor, node.StaticMixer)):
+        elif isinstance(node_obj, (node.Reactor, node.StaticMixing)):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
 
@@ -2105,7 +2107,7 @@ class NetworkParser:
                 node_obj, "flow_rate"
             )
             node_dict["num_units"] = node_obj.num_units
-        elif isinstance(node_obj, node.Separator):
+        elif isinstance(node_obj, node.Separation):
             if node_obj.volume is not None:
                 node_dict["volume"] = JSONParser.unit_val_to_dict(node_obj.volume)
             if node_obj.power_rating is not None:
