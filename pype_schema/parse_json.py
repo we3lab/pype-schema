@@ -12,13 +12,15 @@ from . import node
 from . import utils
 
 
-class JSONParser:
-    """A parser to convert a JSON file into a `Network` object
+class NetworkParser:
+    """A parser to convert a dict file into a `Network` object
 
     Parameters
     ----------
-    path : str
-        path to the JSON file to load
+    config_dict : dict
+        dictionary that defines network
+    network_name: str
+        name of the network being parsed
 
     Attributes
     ----------
@@ -32,14 +34,12 @@ class JSONParser:
         Python representation of the JSON file
     """
 
-    def __init__(self, path):
-        f = open(path)
-        self.path = path
-        self.config = json.load(f)
+    def __init__(self, config_dict, network_name):
+        self.network_name = network_name
+        self.config = config_dict
         self.network_obj = node.Network(
             "ParentNetwork", None, None, tags={}, nodes={}, connections={}
         )
-        f.close()
 
     def initialize_network(self, verbose=False):
         """Converts a dictionary into a `Network` object
@@ -58,7 +58,9 @@ class JSONParser:
         for node_id in self.config["nodes"]:
             # check that node exists in dictionary (NameError)
             if node_id not in self.config:
-                raise NameError("Node " + node_id + " not found in " + self.path)
+                raise NameError(
+                    "Node " + node_id + " not found in " + self.network_name
+                )
             if verbose:
                 print(f"Initializing network, adding node {node_id}...")
             self.network_obj.add_node(self.create_node(node_id))
@@ -67,7 +69,9 @@ class JSONParser:
                 print(f"Initializing network, adding connection {connection_id}...")
             # check that connection exists in dictionary (NameError)
             if connection_id not in self.config:
-                raise NameError(f"Connection {connection_id} not found in {self.path}")
+                raise NameError(
+                    f"Connection {connection_id} not found in {self.network_name}"
+                )
             self.network_obj.add_connection(
                 self.create_connection(connection_id, self.network_obj)
             )
@@ -210,7 +214,9 @@ class JSONParser:
             )
         for node_id in self.config["nodes"]:
             if node_id not in self.config:
-                raise NameError("Node " + node_id + " not found in " + self.path)
+                raise NameError(
+                    "Node " + node_id + " not found in " + self.network_name
+                )
             # delete existing node before creating the new one if necessary
             elif hasattr(old_network, "nodes") and node_id in old_network.nodes.keys():
                 old_network.remove_node(node_id)
@@ -218,7 +224,7 @@ class JSONParser:
         for connection_id in self.config["connections"]:
             if connection_id not in self.config:
                 raise NameError(
-                    "Connection " + connection_id + " not found in " + self.path
+                    "Connection " + connection_id + " not found in " + self.network_name
                 )
             # delete existing connection before creating the new one if necessary
             if (
@@ -2219,3 +2225,34 @@ class JSONParser:
                 json.dump(result, file, indent=indent)
 
         return result
+
+
+class JSONParser(NetworkParser):
+    """A parser to convert a JSON file into a `Network` object
+
+    Parameters
+    ----------
+    config_dict : dict
+        dictionary that defines network
+    network_name: str
+        name of the network being parsed
+
+    Attributes
+    ----------
+    path : str
+        path to the JSON file to load
+
+    config : dict
+        dictionary with the contents the JSON file
+
+    network_obj : Network
+        Python representation of the JSON file
+    """
+
+    def __init__(self, path):
+
+        f = open(path)
+        path = path
+        config = json.load(f)
+        f.close()
+        super().__init__(config, path)
