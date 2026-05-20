@@ -110,13 +110,15 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 
-<div class="viewcode-block" id="JSONParser"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">JSONParser</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A parser to convert a JSON file into a `Network` object</span>
+<div class="viewcode-block" id="NetworkParser"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NetworkParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A parser to convert a dict file into a `Network` object</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    path : str</span>
-<span class="sd">        path to the JSON file to load</span>
+<span class="sd">    config_dict : dict</span>
+<span class="sd">        dictionary that defines network</span>
+<span class="sd">    network_name: str</span>
+<span class="sd">        name of the network being parsed</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -130,16 +132,14 @@
 <span class="sd">        Python representation of the JSON file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">,</span> <span class="n">network_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network_name</span> <span class="o">=</span> <span class="n">network_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span>
             <span class="s2">&quot;ParentNetwork&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">{},</span> <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span> <span class="n">connections</span><span class="o">=</span><span class="p">{}</span>
         <span class="p">)</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JSONParser.initialize_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.initialize_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.initialize_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.initialize_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Network` object</span>
 
 <span class="sd">        Parameters</span>
@@ -156,7 +156,9 @@
         <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
             <span class="c1"># check that node exists in dictionary (NameError)</span>
             <span class="k">if</span> <span class="n">node_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
+                    <span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_name</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing network, adding node </span><span class="si">{</span><span class="n">node_id</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">))</span>
@@ -165,7 +167,9 @@
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initializing network, adding connection </span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
             <span class="c1"># check that connection exists in dictionary (NameError)</span>
             <span class="k">if</span> <span class="n">connection_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection </span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Connection </span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">network_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">connection_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="p">)</span>
             <span class="p">)</span>
@@ -174,7 +178,7 @@
         <span class="c1"># TODO: check for unused fields and throw a warning for each</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.collect_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.collect_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">collect_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.collect_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.collect_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">collect_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively collects all virtual tags in a network&#39;s dictionary</span>
 <span class="sd">        representation (i.e. config)</span>
 
@@ -211,7 +215,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">collect_virtual_tags</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">obj_id</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">virtual_tags</span><span class="o">=</span><span class="n">virtual_tags</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">virtual_tags</span></div>
 
-<div class="viewcode-block" id="JSONParser.add_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.add_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.add_virtual_tags"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.add_virtual_tags">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_virtual_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds all virtual tags in an object</span>
 <span class="sd">        NOTE: assumes the objects tags have already been added</span>
 
@@ -281,7 +285,7 @@
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span><span class="o">.</span><span class="n">get_node_or_connection</span><span class="p">(</span><span class="n">v_tag</span><span class="o">.</span><span class="n">parent_id</span><span class="p">)</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="JSONParser.merge_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.merge_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">merge_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_network</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.merge_network"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.merge_network">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">merge_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_network</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Incorporates nodes/connections (i.e. the `new_network`) into a network</span>
 <span class="sd">        (i.e. `old_newtwork`) modifying it in place and returning the modified network</span>
 
@@ -308,7 +312,9 @@
             <span class="p">)</span>
         <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">node_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
+                    <span class="s2">&quot;Node &quot;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_name</span>
+                <span class="p">)</span>
             <span class="c1"># delete existing node before creating the new one if necessary</span>
             <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">old_network</span><span class="p">,</span> <span class="s2">&quot;nodes&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="n">old_network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">old_network</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
@@ -316,7 +322,7 @@
         <span class="k">for</span> <span class="n">connection_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">connection_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span>
-                    <span class="s2">&quot;Connection &quot;</span> <span class="o">+</span> <span class="n">connection_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span>
+                    <span class="s2">&quot;Connection &quot;</span> <span class="o">+</span> <span class="n">connection_id</span> <span class="o">+</span> <span class="s2">&quot; not found in &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">network_name</span>
                 <span class="p">)</span>
             <span class="c1"># delete existing connection before creating the new one if necessary</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -331,7 +337,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network_obj</span> <span class="o">=</span> <span class="n">old_network</span>
         <span class="k">return</span> <span class="n">old_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.prefix_children"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.prefix_children">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.prefix_children"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.prefix_children">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">prefix_children</span><span class="p">(</span><span class="n">target_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Renames the children nodes and connections of the `target_node` by</span>
 <span class="sd">        prepending their ID with `prefix`.</span>
@@ -361,7 +367,7 @@
             <span class="n">new_network</span><span class="o">.</span><span class="n">add_connection</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.extend_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.extend_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend_node</span><span class="p">(</span>
+<div class="viewcode-block" id="NetworkParser.extend_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.extend_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">extend_node</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">new_network</span><span class="p">,</span>
         <span class="n">target_node_id</span><span class="p">,</span>
@@ -521,7 +527,7 @@
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">modified_network</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.create_node"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.create_node">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Node` object</span>
 
 <span class="sd">        Parameters</span>
@@ -1086,7 +1092,7 @@
                         <span class="n">node_obj</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">v_tag</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.create_connection">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.create_connection"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.create_connection">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">create_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">node_obj</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a `Connection` object</span>
 
 <span class="sd">        Parameters</span>
@@ -1361,7 +1367,7 @@
 
         <span class="k">return</span> <span class="n">connection_obj</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_contents">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">parse_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<div class="viewcode-block" id="NetworkParser.parse_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_contents">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">parse_contents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of input and output contents</span>
 
 <span class="sd">        Parameters</span>
@@ -1405,7 +1411,7 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="n">input_contents</span><span class="p">,</span> <span class="n">output_contents</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_virtual_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_virtual_tag">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_virtual_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_virtual_tag">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_virtual_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">parent_network</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary information into VirtualTag object</span>
 
@@ -1515,7 +1521,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">v_tag</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_tag">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_tag"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_tag">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_tag</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
@@ -1592,7 +1598,7 @@
 
         <span class="k">return</span> <span class="n">tag</span></div>
 
-<div class="viewcode-block" id="JSONParser.get_tag_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.get_tag_contents">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.get_tag_contents"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.get_tag_contents">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_tag_contents</span><span class="p">(</span><span class="n">tag_id</span><span class="p">,</span> <span class="n">tag_info</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse tag ID and dictionary of information into Tag object</span>
 
@@ -1653,7 +1659,7 @@
 
         <span class="k">return</span> <span class="n">contents</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_dosing_rate">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_dosing_rate"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_dosing_rate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_dosing_rate</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a dictionary of a different format</span>
 
@@ -1687,7 +1693,7 @@
 
         <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.dosing_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.dosing_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.dosing_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.dosing_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">dosing_to_dict</span><span class="p">(</span><span class="n">dosing_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the dosing rate or area dictionary from PyPES to JSON format.</span>
 
@@ -1728,7 +1734,7 @@
 
         <span class="k">return</span> <span class="n">new_dosing_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_min_max_design"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_min_max_design">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_min_max_design"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_min_max_design">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_min_max_design</span><span class="p">(</span><span class="n">min_max_design</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
@@ -1775,7 +1781,7 @@
                     <span class="n">design_val</span><span class="p">,</span>
                 <span class="p">)</span></div>
 
-<div class="viewcode-block" id="JSONParser.unit_val_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.unit_val_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.unit_val_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.unit_val_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">unit_val_to_dict</span><span class="p">(</span><span class="n">attribute</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the given attribute to dictionary of the form {</span>
 <span class="sd">                ``value``: ``float``</span>
@@ -1800,7 +1806,7 @@
             <span class="n">data_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">attribute</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
         <span class="k">return</span> <span class="n">data_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_unit_val_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_unit_val_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_unit_val_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_unit_val_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_unit_val_dict</span><span class="p">(</span><span class="n">unit_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a Pint Quantity</span>
 
@@ -1829,7 +1835,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="JSONParser.parse_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.parse_heating_values">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.parse_heating_values"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.parse_heating_values">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">parse_heating_values</span><span class="p">(</span><span class="n">heating_vals</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a dictionary into a tuple of flow rates</span>
 
@@ -1863,7 +1869,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">),</span> <span class="n">heating_vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;higher&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="JSONParser.tag_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.tag_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.tag_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.tag_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tag_to_dict</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Tag or VirtualTag object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
@@ -1913,7 +1919,7 @@
 
         <span class="k">return</span> <span class="n">tag_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.min_max_design_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.min_max_design_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.min_max_design_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.min_max_design_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">min_max_design_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the flow rate tuple of a `Node` or `Connection` into a</span>
 <span class="sd">        dictionary object</span>
@@ -1970,7 +1976,7 @@
 
         <span class="k">return</span> <span class="n">min_max_design_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.conn_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.conn_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.conn_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.conn_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">conn_to_dict</span><span class="p">(</span><span class="n">conn_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Connection object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
@@ -2036,7 +2042,7 @@
 
         <span class="k">return</span> <span class="n">conn_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.node_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.node_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.node_to_dict"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.node_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">node_to_dict</span><span class="p">(</span><span class="n">node_obj</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Node object to a dictionary that can be</span>
 <span class="sd">        parsed into JSON format</span>
@@ -2247,7 +2253,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unsupported Node type: &quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">node_dict</span></div>
 
-<div class="viewcode-block" id="JSONParser.to_json"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser.to_json">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NetworkParser.to_json"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.NetworkParser.to_json">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Network object to a JSON file</span>
 
@@ -2317,6 +2323,37 @@
                 <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div></div>
+
+
+<div class="viewcode-block" id="JSONParser"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.parse_json.JSONParser">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">JSONParser</span><span class="p">(</span><span class="n">NetworkParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A parser to convert a JSON file into a `Network` object</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_dict : dict</span>
+<span class="sd">        dictionary that defines network</span>
+<span class="sd">    network_name: str</span>
+<span class="sd">        name of the network being parsed</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        path to the JSON file to load</span>
+
+<span class="sd">    config : dict</span>
+<span class="sd">        dictionary with the contents the JSON file</span>
+
+<span class="sd">    network_obj : Network</span>
+<span class="sd">        Python representation of the JSON file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
