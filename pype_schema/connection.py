@@ -1097,6 +1097,7 @@ class Delivery(Connection):
         contents,
         source,
         destination,
+        frequency=None,
         tags={},
         bidirectional=False,
         exit_point=None,
@@ -1106,6 +1107,7 @@ class Delivery(Connection):
         self.contents = contents
         self.source = source
         self.destination = destination
+        self.frequency = frequency
         self.tags = tags
         self.bidirectional = bidirectional
         self.exit_point = exit_point
@@ -1122,10 +1124,15 @@ class Delivery(Connection):
         else:
             entry_point_id = self.entry_point.id
 
+        if self.frequency is None:
+            frequency_txt = "None"
+        else:
+            frequency_txt = str(self.frequency)
+
         return (
             f"<pype_schema.connection.Delivery id:{self.id} "
             f"contents:{self.contents} source:{self.source.id} "
-            f"destination:{self.destination.id} "
+            f"destination:{self.destination.id} frequency:{frequency_txt} "
             f"tags:{self.tags} bidirectional:{self.bidirectional} "
             f"exit_point:{exit_point_id} entry_point:{entry_point_id}>\n"
         )

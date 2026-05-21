@@ -1112,11 +1112,15 @@ class NetworkParser:
                 entry_point=entry_point,
             )
         elif self.config[connection_id]["type"] == "Delivery":
+            frequency = self.parse_unit_val_dict(
+                self.config[connection_id].get("frequency")
+            )
             connection_obj = connection.Delivery(
                 connection_id,
                 contents,
                 source,
                 destination,
+                frequency=frequency,
                 tags={},
                 bidirectional=bidirectional,
                 exit_point=exit_point,

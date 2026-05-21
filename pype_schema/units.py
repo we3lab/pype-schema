@@ -133,7 +133,7 @@ u = unit_registry
 # default formatting includes 4 significant digits.
 # This can be overridden on a per-print basis with
 # print('{:.3f}'.format(3 * ureg.m / 9)).
-u.default_format = ".4g"
+u.default_format = ".4"
 
 units_path = os.path.join(os.path.dirname(__file__), "data", "unit_definitions.txt")
 u.load_definitions(units_path)

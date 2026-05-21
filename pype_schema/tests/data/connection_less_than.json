@@ -1061,6 +1061,10 @@
             "avg": null,
             "units": "tons / day"
         },
+        "frequency": {
+          "value": "1",
+          "units": "day"
+        },
         "tags": {}
     },
     "SolidsDisposal": {
