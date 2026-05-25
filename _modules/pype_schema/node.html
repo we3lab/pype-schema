@@ -2169,14 +2169,14 @@
     <span class="n">dosing_rate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_dosing_rate</span><span class="p">,</span> <span class="n">set_dosing_rate</span><span class="p">,</span> <span class="n">del_dosing_rate</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="StaticMixer"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.StaticMixer">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">StaticMixer</span><span class="p">(</span><span class="n">Reactor</span><span class="p">):</span>
+<div class="viewcode-block" id="StaticMixing"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.StaticMixing">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">StaticMixing</span><span class="p">(</span><span class="n">Reactor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A tank containing a static mixer,</span>
 <span class="sd">    typically used for coagulation in water treatment.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
-<span class="sd">        StaticMixer ID</span>
+<span class="sd">        Static mixer ID</span>
 
 <span class="sd">    input_contents : ContentsType or list of ContentsType</span>
 <span class="sd">        Contents entering the mixer</span>
@@ -2214,7 +2214,7 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
-<span class="sd">        StaticMixer ID</span>
+<span class="sd">        Static mixer ID</span>
 
 <span class="sd">    input_contents : list of ContentsType</span>
 <span class="sd">        Contents entering the mixer</span>
@@ -2281,7 +2281,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.StaticMixer id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.StaticMixing id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;dosing_rate:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dosing_rate</span><span class="si">}</span><span class="s2"> pH:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pH</span><span class="si">}</span><span class="s2"> &quot;</span>
@@ -4227,7 +4227,8 @@
 
 
 <div class="viewcode-block" id="UVSystem"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.UVSystem">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">UVSystem</span><span class="p">(</span><span class="n">Disinfection</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An ultraviolet light disinfection system.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -4368,7 +4369,9 @@
 
 
 <div class="viewcode-block" id="Flaring"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Flaring">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Flaring</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The process of combusting biogas to convert the methane to carbon dioxide</span>
+<span class="sd">    before venting it to the atmosphere.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : str</span>
@@ -4446,7 +4449,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Separator"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Separator">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Separator</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
+<div class="viewcode-block" id="Separation"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.node.Separation">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Separation</span><span class="p">(</span><span class="n">Node</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class representing a separator that divides a mixture into its components,</span>
 <span class="sd">    such as air separation units that produce high purity oxygen and nitrogen.</span>
 
@@ -4549,7 +4552,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Separator id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.node.Separation id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;input_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_contents</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;output_contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_contents</span><span class="si">}</span><span class="s2"> num_units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_units</span><span class="si">}</span><span class="s2"> &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;min_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_flow</span><span class="si">}</span><span class="s2"> max_flow:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_flow</span><span class="si">}</span><span class="s2"> &quot;</span>
