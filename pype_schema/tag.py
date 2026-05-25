@@ -11,7 +11,6 @@ from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
 from .operations import Constant
 
-
 UNARY_OPS = ["noop", "delta", "<<", ">>", "~", "-"]
 BINARY_OPS = ["+", "-", "*", "/"]
 

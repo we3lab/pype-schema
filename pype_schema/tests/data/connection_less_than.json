@@ -295,7 +295,7 @@
       }
     },
     "OxygenPlant": {
-      "type": "Separator",
+      "type": "Separation",
       "input_contents": "Air",
       "output_contents": ["Oxygen", "IdealGas"],
       "num_units": 1,
@@ -1060,6 +1060,10 @@
             "min": null,
             "avg": null,
             "units": "tons / day"
+        },
+        "frequency": {
+          "value": "1",
+          "units": "day"
         },
         "tags": {}
     },

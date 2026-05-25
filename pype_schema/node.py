@@ -2071,14 +2071,14 @@ class Reactor(Node):
     dosing_rate = property(get_dosing_rate, set_dosing_rate, del_dosing_rate)
 
 
-class StaticMixer(Reactor):
+class StaticMixing(Reactor):
     """A tank containing a static mixer,
     typically used for coagulation in water treatment.
 
     Parameters
     ----------
     id : str
-        StaticMixer ID
+        Static mixer ID
 
     input_contents : ContentsType or list of ContentsType
         Contents entering the mixer
@@ -2116,7 +2116,7 @@ class StaticMixer(Reactor):
     Attributes
     ----------
     id : str
-        StaticMixer ID
+        Static mixer ID
 
     input_contents : list of ContentsType
         Contents entering the mixer
@@ -2183,7 +2183,7 @@ class StaticMixer(Reactor):
 
     def __repr__(self):
         return (
-            f"<pype_schema.node.StaticMixer id:{self.id} "
+            f"<pype_schema.node.StaticMixing id:{self.id} "
             f"input_contents:{self.input_contents} num_units:{self.num_units}"
             f"output_contents:{self.output_contents} "
             f"dosing_rate:{self.dosing_rate} pH:{self.pH} "
@@ -4129,7 +4129,8 @@ class Chlorination(Disinfection):
 
 
 class UVSystem(Disinfection):
-    """
+    """An ultraviolet light disinfection system.
+
     Parameters
     ----------
     id : str
@@ -4270,7 +4271,9 @@ class UVSystem(Disinfection):
 
 
 class Flaring(Node):
-    """
+    """The process of combusting biogas to convert the methane to carbon dioxide
+    before venting it to the atmosphere.
+
     Parameters
     ----------
     id : str
@@ -4348,7 +4351,7 @@ class Flaring(Node):
         )
 
 
-class Separator(Node):
+class Separation(Node):
     """A class representing a separator that divides a mixture into its components,
     such as air separation units that produce high purity oxygen and nitrogen.
 
@@ -4451,7 +4454,7 @@ class Separator(Node):
 
     def __repr__(self):
         return (
-            f"<pype_schema.node.Separator id:{self.id} "
+            f"<pype_schema.node.Separation id:{self.id} "
             f"input_contents:{self.input_contents} "
             f"output_contents:{self.output_contents} num_units:{self.num_units} "
             f"min_flow:{self.min_flow} max_flow:{self.max_flow} "

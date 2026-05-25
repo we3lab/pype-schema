@@ -370,7 +370,12 @@ def test_get_fallback_error(json_path, conn_id):
         (
             "../data/desal_sample.json",
             "AntiscalantDelivery",
-            "<pype_schema.connection.Delivery id:AntiscalantDelivery contents:ContentsType.Antiscalant source:ChemicalFactory destination:DesalPlant tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+            "<pype_schema.connection.Delivery id:AntiscalantDelivery contents:ContentsType.Antiscalant source:ChemicalFactory destination:DesalPlant frequency:None tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+        ),
+        (
+            "data/connection_less_than.json",
+            "BiosolidsDelivery",
+            "<pype_schema.connection.Delivery id:BiosolidsDelivery contents:ContentsType.WFBS source:ChemicalFactory destination:WWTP frequency:1 day tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
         ),
     ],
 )
