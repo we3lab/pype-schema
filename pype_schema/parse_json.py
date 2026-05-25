@@ -447,7 +447,7 @@ class NetworkParser:
         """
         if verbose:
             print("Creating node:", node_id)
-        (input_contents, output_contents) = self.parse_contents(node_id)
+        input_contents, output_contents = self.parse_contents(node_id)
         elevation = self.parse_unit_val_dict(self.config[node_id].get("elevation"))
         # strings like `elevation (meters)` and `volume (cubic meters)`
         # are included for backwards compatability
