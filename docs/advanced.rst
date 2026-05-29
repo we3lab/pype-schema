@@ -23,9 +23,9 @@ and ``electrical_efficiency`` of ``Cogeneration`` and ``Boiler`` objects can be 
 
     min_flow = parse_quantity(0, "gpm")
     max_flow = parse_quantity(1000, "gpm")
-    avg_flow = parse_quantity(750, "gpm")
+    design_flow = parse_quantity(750, "gpm")
     elevation = parse_quantity(10, "m")
-    horsepower = parse_quantity(100, "hp")
+    power_rating = parse_quantity(100, "hp")
 
     def efficiency_curve(flowrate):
         return - (flowrate ** 2)
@@ -36,9 +36,9 @@ and ``electrical_efficiency`` of ``Cogeneration`` and ``Boiler`` objects can be 
         ContentsType.UntreatedSewage,
         min_flow,
         max_flow,
-        avg_flow,
+        design_flow,
         elevation,
-        horsepower,
+        power_rating,
         1, 
         pump_type=PumpType.VFD
     )

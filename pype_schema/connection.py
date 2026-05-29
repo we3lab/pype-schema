@@ -246,7 +246,7 @@ class Pipe(Connection):
     max_flow : pint.Quantity or int
         Maximum flow rate through the pipe
 
-    avg_flow : pint.Quantity or int
+    design_flow : pint.Quantity or int
         Average flow rate through the pipe
 
     diameter : pint.Quantity or int
