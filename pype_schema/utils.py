@@ -304,6 +304,7 @@ def build_custom_operation(func_str):
     import math
     import numpy
     import pandas
+    import scipy
 
     safe_globals = {
         "__builtins__": SAFE_BUILTINS,
@@ -311,15 +312,10 @@ def build_custom_operation(func_str):
         "numpy": numpy,
         "pd": pandas,
         "pandas": pandas,
+        "sp": scipy,
+        "scipy": scipy,
         "math": math,
     }
-    try:
-        import scipy
-
-        safe_globals["sp"] = scipy
-        safe_globals["scipy"] = scipy
-    except ImportError:  # scipy is optional for evaluation
-        pass
 
     return eval(func_str, safe_globals, {})
 
