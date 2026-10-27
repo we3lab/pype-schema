@@ -1,11 +1,20 @@
+import ast
 from enum import Enum, auto
 from pint import UndefinedUnitError
 
 from .units import u
 
+ALLOWED_NODES = (
+    ast.Expression, ast.Lambda, ast.arguments, ast.arg, ast.Name, ast.Load,
+    ast.BinOp, ast.UnaryOp, ast.BoolOp, ast.Compare, ast.IfExp, ast.Constant,
+    ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow, ast.Mod, ast.USub, ast.UAdd,
+    ast.And, ast.Or, ast.Not, ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
+)
+
 
 def count_args(func_str):
     """Count the arguments for a lambda function string
+    without executing the function.
 
     Parameters
     ----------
@@ -18,17 +27,52 @@ def count_args(func_str):
         The lambda function's number of arguments
 
     """
-    func = eval(func_str)
-    nargs = 0
-    if func.__code__.co_argcount is not None:
-        nargs += func.__code__.co_argcount
-    if func.__defaults__ is not None:
-        nargs -= len(func.__defaults__)
-    if func.__code__.co_kwonlyargcount is not None:
-        nargs += func.__code__.co_kwonlyargcount
-    if func.__kwdefaults__ is not None:
-        nargs -= len(func.__kwdefaults__)
+    tree = ast.parse(func_str.strip(), mode="eval")
+    if not isinstance(tree.body, ast.Lambda):
+        raise ValueError("`custom_operations` must be a single lambda expression")
+    args = tree.body.args
+    nargs = len(args.posonlyargs) + len(args.args) + len(args.kwonlyargs)
+    nargs -= len(args.defaults)
+    nargs -= sum(d is not None for d in args.kw_defaults)
     return nargs
+
+
+def validate_custom_operation(func_str):
+    """Validate that a custom operation string is a plain arithmetic lambda.
+
+    Parses `func_str` and walks its abstract syntax tree, permitting only
+    names, numeric constants, along with arithmetic, comparison, and boolean
+    operators. Any other syntax (function calls, attribute access,
+    subscripts, imports, comprehensions, etc.) is rejected before the
+    string is ever evaluated, preventing arbitrary code execution.
+
+    Parameters
+    ----------
+    func_str : str
+        A string representation of a lambda function to validate
+
+    Returns
+    -------
+    str :
+        The original `func_str`, unchanged, when validation succeeds
+
+    Raises
+    ------
+    ValueError
+        When `func_str` is not a single lambda expression,
+        or contains syntax that is not on the allow-list
+    SyntaxError
+        When `func_str` is not valid Python syntax
+    """
+    tree = ast.parse(func_str.strip(), mode="eval")
+    if not isinstance(tree.body, ast.Lambda):
+        raise ValueError("`custom_operations` must be a single lambda expression")
+    for node in ast.walk(tree):
+        if not isinstance(node, ALLOWED_NODES):
+            raise ValueError(
+                f"Disallowed syntax in `custom_operations`: {type(node).__name__}"
+            )
+    return func_str
 
 
 def get_tag_sum_lambda_func(unit_ids):
