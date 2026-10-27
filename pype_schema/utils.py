@@ -357,6 +357,12 @@ def parse_quantity(value, units):
     pint.Quantity
         a Pint Quantity with the given value and units
     """
+    if isinstance(value, str):
+        try:
+            value = int(value)
+        except ValueError:
+            value = float(value)
+
     if value is not None:
         if units:
             return value * parse_units(units)
