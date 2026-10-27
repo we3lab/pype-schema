@@ -1,14 +1,139 @@
 import ast
+import builtins
 from enum import Enum, auto
 from pint import UndefinedUnitError
 
 from .units import u
 
+# AST node types permitted anywhere inside a custom operation. This allows the
+# arithmetic/comparison/boolean grammar plus the calls, attribute access,
+# subscripts, slices, and comprehensions needed to use pandas/numpy/scipy
+# (e.g. ``x.diff()``, ``x.shift(-1)``, ``np.where(...)``, ``[f(z) for z in x]``).
+# Security does NOT rely on this structural list alone -- see the name and
+# attribute restrictions enforced in ``validate_custom_operation``.
 ALLOWED_NODES = (
-    ast.Expression, ast.Lambda, ast.arguments, ast.arg, ast.Name, ast.Load,
-    ast.BinOp, ast.UnaryOp, ast.BoolOp, ast.Compare, ast.IfExp, ast.Constant,
-    ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Pow, ast.Mod, ast.USub, ast.UAdd,
-    ast.And, ast.Or, ast.Not, ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE,
+    ast.Expression,
+    ast.Lambda,
+    ast.arguments,
+    ast.arg,
+    ast.Name,
+    ast.Load,
+    ast.Store,
+    ast.Call,
+    ast.keyword,
+    ast.Attribute,
+    ast.Subscript,
+    ast.Slice,
+    ast.Starred,
+    ast.List,
+    ast.Tuple,
+    ast.Dict,
+    ast.Set,
+    ast.ListComp,
+    ast.SetComp,
+    ast.DictComp,
+    ast.GeneratorExp,
+    ast.comprehension,
+    ast.IfExp,
+    ast.BinOp,
+    ast.UnaryOp,
+    ast.BoolOp,
+    ast.Compare,
+    ast.Constant,
+    ast.Add,
+    ast.Sub,
+    ast.Mult,
+    ast.Div,
+    ast.FloorDiv,
+    ast.Mod,
+    ast.Pow,
+    ast.MatMult,
+    ast.USub,
+    ast.UAdd,
+    ast.Invert,
+    ast.And,
+    ast.Or,
+    ast.Not,
+    ast.Eq,
+    ast.NotEq,
+    ast.Lt,
+    ast.LtE,
+    ast.Gt,
+    ast.GtE,
+    ast.Is,
+    ast.IsNot,
+    ast.In,
+    ast.NotIn,
+)
+
+# Free (unbound) names a custom operation may reference. Only the scientific
+# libraries users expect are exposed -- nothing that reaches the OS, the
+# filesystem, or the import system.
+ALLOWED_NAMES = frozenset({"np", "numpy", "pd", "pandas", "sp", "scipy", "math"})
+
+# Builtins exposed to the evaluated expression. Deliberately excludes
+# ``__import__``, ``eval``, ``exec``, ``compile``, ``open``, ``getattr``,
+# ``setattr``, ``globals``, ``locals``, ``vars``, ``input``, etc.
+SAFE_BUILTIN_NAMES = frozenset(
+    {
+        "abs",
+        "all",
+        "any",
+        "bool",
+        "dict",
+        "divmod",
+        "enumerate",
+        "filter",
+        "float",
+        "int",
+        "len",
+        "list",
+        "map",
+        "max",
+        "min",
+        "pow",
+        "range",
+        "reversed",
+        "round",
+        "set",
+        "sorted",
+        "str",
+        "sum",
+        "tuple",
+        "zip",
+    }
+)
+SAFE_BUILTINS = {name: getattr(builtins, name) for name in SAFE_BUILTIN_NAMES}
+
+# Attribute/callable names that execute code or touch the filesystem and so are
+# rejected even though they live on otherwise-allowed modules/objects. This is
+# defense-in-depth, not an exhaustive sandbox (see docs/SECURITY_virtualtag_eval.md).
+DISALLOWED_CALLS = frozenset(
+    {
+        "eval",
+        "exec",
+        "compile",
+        "open",
+        "query",
+        "apply",
+        "applymap",
+        "pipe",
+        "read_pickle",
+        "to_pickle",
+        "read_parquet",
+        "read_hdf",
+        "read_sql",
+        "load",
+        "save",
+        "savez",
+        "savez_compressed",
+        "memmap",
+        "fromfile",
+        "tofile",
+        "genfromtxt",
+        "loadtxt",
+        "savetxt",
+    }
 )
 
 
@@ -26,6 +151,10 @@ def count_args(func_str):
     int :
         The lambda function's number of arguments
 
+    Raises
+    ------
+    ValueError
+        If `custom_operations` is not a single lambda string
     """
     tree = ast.parse(func_str.strip(), mode="eval")
     if not isinstance(tree.body, ast.Lambda):
@@ -38,13 +167,25 @@ def count_args(func_str):
 
 
 def validate_custom_operation(func_str):
-    """Validate that a custom operation string is a plain arithmetic lambda.
+    """Validate that a custom operation string is a safe lambda expression.
 
-    Parses `func_str` and walks its abstract syntax tree, permitting only
-    names, numeric constants, along with arithmetic, comparison, and boolean
-    operators. Any other syntax (function calls, attribute access,
-    subscripts, imports, comprehensions, etc.) is rejected before the
-    string is ever evaluated, preventing arbitrary code execution.
+    Parses `func_str` and walks its abstract syntax tree, enforcing an
+    allow-list so that the expression can use pandas/numpy/scipy (method
+    calls, attribute access, subscripts, comprehensions, and functions from
+    the allowed modules) while remaining unable to execute arbitrary code.
+    Specifically, the function rejects:
+
+    - any syntax node outside ``ALLOWED_NODES`` (e.g. assignments, ``with``,
+      lambdas-of-lambdas producing statements),
+    - any attribute whose name begins with ``_`` (blocks dunder traversal such
+      as ``__class__`` / ``__globals__`` / ``__subclasses__``),
+    - any free (unbound) name that is not in `ALLOWED_NAMES` or the safe
+      builtin set (blocks ``__import__``, ``open``, ``getattr``, ``eval`` ...),
+    - any attribute or name in `DISALLOWED_CALLS` (blocks code/IO entry points
+      such as ``read_pickle``, ``load``, ``eval``, ``query``).
+
+    This is validation only; use `build_custom_operation` to additionally
+    compile the expression in a restricted namespace.
 
     Parameters
     ----------
@@ -60,19 +201,127 @@ def validate_custom_operation(func_str):
     ------
     ValueError
         When `func_str` is not a single lambda expression,
-        or contains syntax that is not on the allow-list
+        or contains syntax, names, or attributes that are not allowed
     SyntaxError
         When `func_str` is not valid Python syntax
     """
     tree = ast.parse(func_str.strip(), mode="eval")
     if not isinstance(tree.body, ast.Lambda):
         raise ValueError("`custom_operations` must be a single lambda expression")
+    lambda_node = tree.body
+
+    # names bound by the lambda's own parameters
+    bound_names = {
+        arg.arg
+        for arg in (
+            lambda_node.args.posonlyargs
+            + lambda_node.args.args
+            + lambda_node.args.kwonlyargs
+        )
+    }
+    if lambda_node.args.vararg is not None:
+        bound_names.add(lambda_node.args.vararg.arg)
+    if lambda_node.args.kwarg is not None:
+        bound_names.add(lambda_node.args.kwarg.arg)
+    # names bound by comprehension targets (e.g. `z` in `[f(z) for z in x]`)
+    for node in ast.walk(lambda_node):
+        if isinstance(node, ast.comprehension):
+            bound_names.update(
+                target.id
+                for target in ast.walk(node.target)
+                if isinstance(target, ast.Name)
+            )
+
     for node in ast.walk(tree):
         if not isinstance(node, ALLOWED_NODES):
             raise ValueError(
                 f"Disallowed syntax in `custom_operations`: {type(node).__name__}"
             )
+        if isinstance(node, ast.Attribute):
+            if node.attr.startswith("_"):
+                raise ValueError(
+                    f"Access to attribute `{node.attr}` is not allowed "
+                    "in `custom_operations`"
+                )
+            if node.attr in DISALLOWED_CALLS:
+                raise ValueError(
+                    f"Use of `{node.attr}` is not allowed in `custom_operations`"
+                )
+        if (
+            isinstance(node, ast.Name)
+            and node.id in DISALLOWED_CALLS
+            and node.id not in bound_names
+        ):
+            raise ValueError(
+                f"Use of `{node.id}` is not allowed in `custom_operations`"
+            )
+
+    # every free name must be an allowed module or a safe builtin
+    for node in ast.walk(lambda_node.body):
+        if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
+            if node.id in bound_names:
+                continue
+            if node.id.startswith("_"):
+                raise ValueError(
+                    f"Reference to `{node.id}` is not allowed in `custom_operations`"
+                )
+            if node.id not in ALLOWED_NAMES and node.id not in SAFE_BUILTIN_NAMES:
+                raise ValueError(
+                    f"Unknown name `{node.id}` in `custom_operations`; only "
+                    f"{sorted(ALLOWED_NAMES)} and basic builtins are allowed"
+                )
     return func_str
+
+
+def build_custom_operation(func_str):
+    """Validate a custom operation string and compile it to a callable.
+
+    The expression is first checked by `validate_custom_operation` and then
+    evaluated in a restricted namespace whose builtins are limited to
+    `SAFE_BUILTINS` and whose only module globals are the allowed scientific
+    libraries. This replaces a bare ``eval`` so that, even if validation were
+    bypassed, the execution environment exposes no dangerous callables.
+
+    Parameters
+    ----------
+    func_str : str
+        A string representation of a lambda function
+
+    Returns
+    -------
+    callable :
+        The compiled lambda function
+
+    Raises
+    ------
+    ValueError
+        When `func_str` fails `validate_custom_operation`
+    SyntaxError
+        When `func_str` is not valid Python syntax
+    """
+    validate_custom_operation(func_str)
+
+    import math
+    import numpy
+    import pandas
+
+    safe_globals = {
+        "__builtins__": SAFE_BUILTINS,
+        "np": numpy,
+        "numpy": numpy,
+        "pd": pandas,
+        "pandas": pandas,
+        "math": math,
+    }
+    try:
+        import scipy
+
+        safe_globals["sp"] = scipy
+        safe_globals["scipy"] = scipy
+    except ImportError:  # scipy is optional for evaluation
+        pass
+
+    return eval(func_str, safe_globals, {})
 
 
 def get_tag_sum_lambda_func(unit_ids):

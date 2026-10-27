@@ -5,7 +5,12 @@ import pandas as pd  # noqa: F401
 import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, array, issubdtype
-from .utils import count_args, parse_units, validate_custom_operation
+from .utils import (
+    count_args,
+    parse_units,
+    validate_custom_operation,
+    build_custom_operation,
+)
 from .units import u
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
@@ -1140,7 +1145,7 @@ class VirtualTag:
         """
         result = data.copy()
         num_ops = count_args(self.custom_operations)
-        _func = eval(validate_custom_operation(self.custom_operations))
+        _func = build_custom_operation(self.custom_operations)
         if isinstance(data, list):
             if num_ops == len(data):
                 result = _func(*[data_ for data_ in data])

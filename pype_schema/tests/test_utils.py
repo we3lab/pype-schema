@@ -49,3 +49,69 @@ def test_parse_units(units, expected):
     except Exception as err:
         result = type(err).__name__
         assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "func_str, expected",
+    [
+        # allowed expressions are returned unchanged
+        ("lambda x, y: x + y", "lambda x, y: x + y"),
+        ("lambda x: x == 0", "lambda x: x == 0"),
+        ("lambda x: x.diff()", "lambda x: x.diff()"),
+        ("lambda x: x.shift(-1)", "lambda x: x.shift(-1)"),
+        ("lambda x: x[1:] + ['nan']", "lambda x: x[1:] + ['nan']"),
+        (
+            "lambda x, y: [sum(z) for z in zip(x, y)]",
+            "lambda x, y: [sum(z) for z in zip(x, y)]",
+        ),
+        ("lambda x, y: np.where(x > 0, x, y)", "lambda x, y: np.where(x > 0, x, y)"),
+        # rejected with a ValueError: not a lambda, or disallowed name/attribute/call
+        ("42", "ValueError"),
+        ("lambda x: __import__('os').system('id')", "ValueError"),
+        ("lambda x: ().__class__.__bases__[0].__subclasses__()", "ValueError"),
+        ("lambda x: x.__class__", "ValueError"),
+        ("lambda x: open('secrets.txt')", "ValueError"),
+        ("lambda x: eval('1')", "ValueError"),
+        ("lambda x: getattr(x, 'y')", "ValueError"),
+        ("lambda x: pd.read_pickle('payload.pkl')", "ValueError"),
+        ("lambda x: np.load('payload.npy', allow_pickle=True)", "ValueError"),
+        ("lambda x: x.query('a')", "ValueError"),
+        # rejected with a SyntaxError: not a valid single expression
+        ("", "SyntaxError"),
+        ("lambda x: x +", "SyntaxError"),
+        ("lambda x: )", "SyntaxError"),
+        ("import os", "SyntaxError"),
+    ],
+)
+def test_validate_custom_operation(func_str, expected):
+    try:
+        result = ut.validate_custom_operation(func_str)
+        assert result == expected
+    except Exception as err:
+        result = type(err).__name__
+        assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_build_custom_operation_runs_allowed():
+    func = ut.build_custom_operation("lambda x, y: x + y")
+    assert func(2, 3) == 5
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "func_str, expected",
+    [
+        ("lambda x: __import__('os').system('id')", "ValueError"),
+        ("lambda x: open('secrets.txt')", "ValueError"),
+        ("import os", "SyntaxError"),
+    ],
+)
+def test_build_custom_operation_blocks(func_str, expected):
+    try:
+        ut.build_custom_operation(func_str)
+        result = None
+    except Exception as err:
+        result = type(err).__name__
+    assert result == expected
