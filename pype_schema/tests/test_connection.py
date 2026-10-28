@@ -355,7 +355,7 @@ def test_get_fallback_error(json_path, conn_id):
         (
             "data/connection.json",
             "GasToCogen",
-            "<pype_schema.connection.Pipe id:GasToCogen contents:ContentsType.Biogas source:Digester destination:Cogenerator min_flow:None max_flow:None design_flow:None min_pressure:None max_pressure:None design_pressure:None heating_values:(<Quantity(600, 'british_thermal_unit / foot ** 3')>, <Quantity(700, 'british_thermal_unit / foot ** 3')>) diameter:None friction_coeff:None tags:{} bidirectional:False exit_point:None entry_point:None>\n",  # noqa: E501
+            '<pype_schema.connection.Pipe id:GasToCogen contents:ContentsType.Biogas source:Digester destination:Cogenerator min_flow:None max_flow:None design_flow:None min_pressure:None max_pressure:None design_pressure:None heating_values:(Quantity(600, "british_thermal_unit / foot ** 3"), Quantity(700, "british_thermal_unit / foot ** 3")) diameter:None friction_coeff:None tags:{} bidirectional:False exit_point:None entry_point:None>\n',  # noqa: E501
         ),
         (
             "../data/wrrf_sample.json",
