@@ -92,6 +92,17 @@ def test_parse_quantity_preserves_numeric_type():
             "lambda x, y: [sum(z) for z in zip(x, y)]",
         ),
         ("lambda x, y: np.where(x > 0, x, y)", "lambda x, y: np.where(x > 0, x, y)"),
+        ("lambda x: x.sum()", "lambda x: x.sum()"),
+        ("lambda x: x.rolling(3).mean()", "lambda x: x.rolling(3).mean()"),
+        # function application: callable specs and allow-listed string specs
+        ("lambda x: x.apply(lambda v: v + 1)", "lambda x: x.apply(lambda v: v + 1)"),
+        ("lambda x: x.apply(np.sqrt)", "lambda x: x.apply(np.sqrt)"),
+        ("lambda x: x.agg(['sum', 'mean'])", "lambda x: x.agg(['sum', 'mean'])"),
+        # nested lambda parameter is scoped (bug fix), not an unknown name
+        (
+            "lambda x: x.where(x > 0, (lambda v: v))",
+            "lambda x: x.where(x > 0, (lambda v: v))",
+        ),
         # rejected with a ValueError: not a lambda, or disallowed name/attribute/call
         ("42", "ValueError"),
         ("lambda x: __import__('os').system('id')", "ValueError"),
@@ -103,6 +114,15 @@ def test_parse_quantity_preserves_numeric_type():
         ("lambda x: pd.read_pickle('payload.pkl')", "ValueError"),
         ("lambda x: np.load('payload.npy', allow_pickle=True)", "ValueError"),
         ("lambda x: x.query('a')", "ValueError"),
+        ("lambda x: x.to_csv('out.csv')", "ValueError"),
+        # dispatch methods can't name a blocked method via a string spec
+        ("lambda x: x.apply('to_pickle')", "ValueError"),
+        ("lambda x: x.agg(['sum', 'to_pickle'])", "ValueError"),
+        # comprehension/lambda binding may not monkeypatch or leak (bug fixes)
+        ("lambda x: [0 for np.where in [1]]", "ValueError"),
+        ("lambda x: ([0 for open in x], open)", "ValueError"),
+        # default argument values are not allowed (bug fix)
+        ("lambda x, y=open: x", "ValueError"),
         # rejected with a SyntaxError: not a valid single expression
         ("", "SyntaxError"),
         ("lambda x: x +", "SyntaxError"),
@@ -120,24 +140,25 @@ def test_validate_custom_operation(func_str, expected):
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-def test_build_custom_operation_runs_allowed():
-    func = ut.build_custom_operation("lambda x, y: x + y")
-    assert func(2, 3) == 5
-
-
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
-    "func_str, expected",
+    "func_str, args, expected",
     [
-        ("lambda x: __import__('os').system('id')", "ValueError"),
-        ("lambda x: open('secrets.txt')", "ValueError"),
-        ("import os", "SyntaxError"),
+        # correctly-built functions: compiled, called, and result checked
+        ("lambda x, y: x + y", (2, 3), 5),
+        ("lambda x: x * 2", (4,), 8),
+        ("lambda x: abs(x)", (-5,), 5),
+        ("lambda x, y: [sum(z) for z in zip(x, y)]", ([1, 2], [10, 20]), [11, 22]),
+        # rejected before/at compilation (args unused)
+        ("lambda x: __import__('os').system('id')", None, "ValueError"),
+        ("lambda x: open('secrets.txt')", None, "ValueError"),
+        ("lambda x: x.to_csv('out.csv')", None, "ValueError"),
+        ("import os", None, "SyntaxError"),
     ],
 )
-def test_build_custom_operation_blocks(func_str, expected):
+def test_build_custom_operation(func_str, args, expected):
     try:
-        ut.build_custom_operation(func_str)
-        result = None
+        func = ut.build_custom_operation(func_str)
     except Exception as err:
-        result = type(err).__name__
-    assert result == expected
+        assert type(err).__name__ == expected
+    else:
+        assert func(*args) == expected
