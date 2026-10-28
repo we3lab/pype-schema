@@ -5,6 +5,7 @@ import pathlib
 import pint
 import pytest
 import re
+import sys
 import warnings
 import numpy as np
 import pandas as pd
@@ -721,7 +722,7 @@ REJECTED = [
     "lambda x: [a for a in x if b for b in x]",  # b not bound yet in the `if`
     "lambda x: [b for a in x for b in b]",  # a generator's own target
     # --- shadowing does not widen what a library name can do ---
-    "lambda np: np.meshgrid(np)",  # meshgrid is a numpy function, not an object attribute
+    "lambda np: np.meshgrid(np)",  # a numpy function, not an object attribute
     "lambda x: (lambda m: m.meshgrid(x))(np)",
     "lambda x: (lambda m: m.load('f'))(np)",
     # --- I/O ---
@@ -1151,17 +1152,48 @@ def walk_tree(nodes=None, path=()):
         yield from walk_tree(child_node, path + (child,))
 
 
-def load_generator():
-    """Import scripts/generate_allowlist.py (skip the test if it is not there)."""
+def is_installed_copy():
+    """Whether the package under test was installed (site-packages), not checked out."""
+    parts = pathlib.Path(operations.__file__).resolve().parts
+    return "site-packages" in parts or "dist-packages" in parts
+
+
+def generator_candidates():
+    """Where generate_allowlist.py may be: in the package (it ships with the tests),
+    or, in a source checkout only, at the top of the repository. The repository root
+    is not searched in an installed copy, because there it would be site-packages
+    itself, and any other installed distribution could drop a file there for the
+    tests to run."""
     here = pathlib.Path(__file__).resolve()
-    for folder in (here.parents[1] / "scripts", here.parents[1] / "tools", here.parent):
-        path = folder / "generate_allowlist.py"
+    roots = [here.parents[1]]
+    if not is_installed_copy():
+        roots += here.parents[2:3]
+    return [
+        root / folder / "generate_allowlist.py"
+        for root in roots
+        for folder in ("scripts", "tools")
+    ]
+
+
+def load_generator():
+    """Import generate_allowlist.py.
+
+    It ships with the tests so that an installed copy can be verified, which means a
+    missing generator is always a failure: skipping would quietly turn off the checks
+    that guard the allow-list.
+    """
+    candidates = generator_candidates()
+    for path in candidates:
         if path.is_file():
             spec = importlib.util.spec_from_file_location("generate_allowlist", path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             return module
-    pytest.skip("generate_allowlist.py not found (expected in scripts/)")
+    pytest.fail(
+        "generate_allowlist.py not found, so the allow-list checks cannot run. "
+        "It must ship with the tests (check the package data). "
+        "Looked in: " + ", ".join(str(path) for path in candidates)
+    )
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
@@ -1299,6 +1331,25 @@ def test_every_allow_listed_member_resolves():
     )
 
 
+def normalize_versions(versions):
+    """Compare Python by major.minor, so that a patch release is not a difference."""
+    return re.sub(r"Python (\d+\.\d+)\.\d+", r"Python \1", versions or "")
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_generator_refuses_to_rewrite_an_installed_copy(tmp_path, monkeypatch):
+    gen = load_generator()
+    installed = tmp_path / "lib" / "site-packages" / "pype_schema"
+    installed.mkdir(parents=True)
+    copy = installed / "operations.py"
+    copy.write_text(pathlib.Path(operations.__file__).read_text())
+    before = copy.read_text()
+    monkeypatch.setattr(sys, "argv", ["generate_allowlist.py", "--target", str(copy)])
+    with pytest.raises(SystemExit, match="refusing to rewrite"):
+        gen.main()
+    assert copy.read_text() == before
+
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 def test_generated_block_has_not_been_edited_by_hand():
     """Tamper check. Rebuild the generated block from the values it defines and
@@ -1316,9 +1367,10 @@ def test_generated_block_has_not_been_edited_by_hand():
         gen.block_versions(block),
     )
     assert block == expected, (
-        "the generated block in operations.py is not exactly what generate_allowlist.py "
-        "writes. If you did not edit it by hand, re-run scripts/generate_allowlist.py; "
-        "if you did, change the generator's rules instead and re-run it."
+        "the generated block in operations.py is not exactly what "
+        "generate_allowlist.py writes. If you did not edit it by hand, re-run "
+        "scripts/generate_allowlist.py; if you did, change the generator's rules "
+        "instead and re-run it."
     )
     assert operations.GUARDED_METHODS == frozenset(gen.GUARDED_METHODS)
 
@@ -1329,6 +1381,9 @@ def test_frozen_allowlist_matches_installed_libraries():
     API is reviewed (re-run generate_allowlist.py and read the diff) instead of
     silently reachable or silently missing."""
     gen = load_generator()
+    block = gen.extract_block(pathlib.Path(operations.__file__).read_text())
+    recorded_versions = normalize_versions(gen.block_versions(block))
+    current_versions = normalize_versions(gen.versions_string())
     fresh = gen.generate()
 
     frozen = {
@@ -1351,8 +1406,15 @@ def test_frozen_allowlist_matches_installed_libraries():
     attr_removed = sorted(operations.ALLOWED_ATTRIBUTES - fresh["attrs"])
     if attr_added or attr_removed:
         problems.append(f"attributes: +{attr_added[:8]} -{attr_removed[:8]}")
+    if problems and is_installed_copy() and recorded_versions != current_versions:
+        # someone else's environment: the allow-lists are frozen to the versions they
+        # were generated with, so a difference here is expected and not a defect
+        pytest.skip(
+            f"installed libraries ({current_versions}) differ from the versions the "
+            f"allow-lists were generated with ({recorded_versions}); not comparable"
+        )
     assert not problems, (
-        "the installed numpy/pandas/scipy differ from the versions the allow-lists were "
-        "generated with. Run `python scripts/generate_allowlist.py`, review the diff, and "
-        "commit it:\n" + "\n".join(problems)
+        "the installed numpy/pandas/scipy differ from the versions the allow-lists "
+        "were generated with. Run `python scripts/generate_allowlist.py`, review "
+        "the diff, and commit it:\n" + "\n".join(problems)
     )

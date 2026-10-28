@@ -670,9 +670,9 @@ def _validate_ast(tree):
             if node.attr in GUARDED_METHODS:
                 raise ValueError(
                     f"`{node.attr}` may only be called directly on an object, with a "
-                    "function written in the expression (a lambda, np.mean, abs, ...) or "
-                    "the name of an allowed method, e.g. x.apply(lambda v: v + 1) or "
-                    "x.agg('sum'); it cannot be passed around as a value"
+                    "function written in the expression (a lambda, np.mean, abs, ...) "
+                    "or the name of an allowed method, e.g. x.apply(lambda v: v + 1) "
+                    "or x.agg('sum'); it cannot be passed around as a value"
                 )
             path, namespace = _library_reference(node.value, scopes)
             if namespace is None:

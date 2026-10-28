@@ -64,10 +64,16 @@ CATEGORY_TITLES = {
     IO: "File, network, clipboard, database, or pickle I/O",
     EVAL: "Evaluates code or expression strings",
     DISPATCH: "Turns a string into a function or attribute lookup",
-    STATE: "Changes process-wide state (config, global RNG seed, registries, mutable globals)",
+    STATE: (
+        "Changes process-wide state (config, global RNG seed, registries, "
+        "mutable globals)"
+    ),
     NATIVE: "Raw memory or native-code interface",
     ENV: "Reveals the environment (paths, build config, versions, source)",
-    OTHER: "Not computation on data, or not reviewed (plotting, testing, typing, deprecated, internals)",
+    OTHER: (
+        "Not computation on data, or not reviewed (plotting, testing, typing, "
+        "deprecated, internals)"
+    ),
 }
 
 # Methods that resolve a *string* argument to an attribute (``x.agg("sum")``).
@@ -162,7 +168,10 @@ KEEP_ATTRS = {
 # reviewed and judged harmless. Anything else that collides is dropped from
 # ALLOWED_ATTRIBUTES.
 COLLISION_OK = {
-    "interpolate": "scipy.interpolate.interpolate is a deprecated alias module of numeric functions",
+    "interpolate": (
+        "scipy.interpolate.interpolate is a deprecated alias module of "
+        "numeric functions"
+    ),
     "stats": "scipy.stats.stats is a deprecated alias module of numeric functions",
     "zeros": "scipy.optimize.zeros is a deprecated alias module of numeric functions",
     "compressed": "scipy.sparse.compressed is a deprecated alias module",
@@ -172,7 +181,10 @@ COLLISION_OK = {
     "bit_generator": "numpy.random.bit_generator only holds bit-generator base classes",
     "base": "scipy.sparse.base is a deprecated alias module of sparse-matrix classes",
     "data": "scipy.sparse.data is a deprecated alias module of sparse-matrix classes",
-    "reduce": "scipy.stats.contingency leaks functools.reduce, which only applies a callable to an iterable",
+    "reduce": (
+        "scipy.stats.contingency leaks functools.reduce, which only applies a "
+        "callable to an iterable"
+    ),
 }
 
 # Explicit exclusions. key: ("dotted.namespace" or "*", "name")
@@ -202,7 +214,8 @@ EXPLICIT = {
     ("numpy", "f2py"): (EVAL, "compiles and imports Fortran/C code"),
     ("numpy", "lib"): (
         IO,
-        "contains npyio (file I/O) and stride_tricks.as_strided (unchecked memory views)",
+        "contains npyio (file I/O) and stride_tricks.as_strided "
+        "(unchecked memory views)",
     ),
     ("numpy", "rec"): (IO, "record-array helpers include fromfile"),
     ("numpy", "testing"): (OTHER, "test runners and assertions (some execute code)"),
@@ -294,7 +307,8 @@ NAME_RULES = [
         "both",
     ),
     (
-        r"to_(csv|excel|json|hdf|sql|parquet|feather|html|latex|markdown|xml|clipboard|stata|orc|gbq|xarray|string|iceberg)",
+        r"to_(csv|excel|json|hdf|sql|parquet|feather|html|latex|markdown|xml|"
+        r"clipboard|stata|orc|gbq|xarray|string|iceberg)",
         IO,
         "writes to a path, buffer, or clipboard, or hands off to an external library",
         "attr",
@@ -321,15 +335,17 @@ NAME_RULES = [
     ),
     # ---- process-wide state ----
     (
-        r"(set_\w+|reset_\w+|use_\w+|register_\w+|unregister_\w+|add_newdoc\w*|add_docstring|"
-        r"seterr|seterrcall|setbufsize|errstate|printoptions|seed|option_context|options|skip_backend)",
+        r"(set_\w+|reset_\w+|use_\w+|register_\w+|unregister_\w+|add_newdoc\w*|"
+        r"add_docstring|seterr|seterrcall|setbufsize|errstate|printoptions|seed|"
+        r"option_context|options|skip_backend)",
         STATE,
         "changes process-wide configuration or state",
         "module",
     ),
     # ---- native / memory ----
     (
-        r"(as_strided|byte_bounds|from_dlpack|LowLevelCallable|ctypeslib|get_blas_funcs|get_lapack_funcs|cython_\w+)",
+        r"(as_strided|byte_bounds|from_dlpack|LowLevelCallable|ctypeslib|"
+        r"get_blas_funcs|get_lapack_funcs|cython_\w+)",
         NATIVE,
         "raw memory or native-code interface",
         "module",
@@ -351,8 +367,8 @@ NAME_RULES = [
     ),
     # ---- environment ----
     (
-        r"(get_include|info|lookfor|source|who|test|tests|show_config|show_runtime|show_versions|"
-        r"get_option|describe_option)",
+        r"(get_include|info|lookfor|source|who|test|tests|show_config|show_runtime|"
+        r"show_versions|get_option|describe_option)",
         ENV,
         "reveals paths, build configuration, versions, or source",
         "module",
@@ -401,7 +417,8 @@ ALLOWED_ORIGIN_ROOTS = {
 SOURCE_RULES = [
     (r"matplotlib|pyplot", OTHER, "imports matplotlib"),
     (
-        r"subprocess|os\.system|os\.popen|os\.environ|os\.remove|os\.unlink|shutil|tempfile|os\.makedirs|os\.mkdir",
+        r"subprocess|os\.system|os\.popen|os\.environ|os\.remove|os\.unlink|"
+        r"shutil|tempfile|os\.makedirs|os\.mkdir",
         IO,
         "starts processes or changes the filesystem",
     ),
@@ -409,7 +426,8 @@ SOURCE_RULES = [
     (r"(?<![\w.])open\(|pathlib|Path\(|\.read_text|\.write_text", IO, "opens files"),
     (r"pickle|marshal|shelve", IO, "uses pickle/marshal"),
     (
-        r"importlib|__import__|(?<![\w.])(eval|exec)\(|_getframe|currentframe|f_globals|f_locals",
+        r"importlib|__import__|(?<![\w.])(eval|exec)\(|_getframe|currentframe|"
+        r"f_globals|f_locals",
         EVAL,
         "imports modules, evaluates code, or inspects stack frames",
     ),
@@ -444,9 +462,12 @@ IO_PARAMS = {
 # Attribute names on result objects that are created by calling a function
 # (so they cannot be found by looking at classes). Reviewed: all plain data.
 EXTRA_ATTRIBUTES = (
-    "x fun success status message nit nfev njev nhev jac hess hess_inv maxcv "  # OptimizeResult
-    "root converged iterations function_calls flag "  # RootResults
-    "t y t_events y_events sol "  # OdeResult
+    # OptimizeResult
+    "x fun success status message nit nfev njev nhev jac hess hess_inv maxcv "
+    # RootResults
+    "root converged iterations function_calls flag "
+    # OdeResult
+    "t y t_events y_events sol "
 )
 
 
@@ -499,7 +520,7 @@ def io_params(obj):
 
 
 def executable_source(obj):
-    """Source of a function/method written in Python, with docstrings removed, or None."""
+    """Source of a function or method written in Python, minus docstrings."""
     try:
         code = textwrap.dedent(inspect.getsource(obj))
         tree = ast.parse(code)
@@ -733,7 +754,8 @@ def attribute_universe(tree):
         reachable = tree[ns]["names"]
         for name, obj in public_members(module).items():
             if name not in reachable or isinstance(obj, (Deprecated, types.ModuleType)):
-                continue  # excluded members cannot be reached, so their attributes do not matter
+                # excluded members cannot be reached, so their attributes do not matter
+                continue
             if inspect.isclass(obj):
                 add(f"{'.'.join(ns)}.{name}", obj)
             elif not callable(obj) and not isinstance(
@@ -746,7 +768,7 @@ def attribute_universe(tree):
 
 
 def sample_results():
-    """Instances of result objects returned by functions, so their field names are seen."""
+    """Result objects returned by functions, so their field names are seen."""
     import scipy.integrate as si
     import scipy.interpolate as sin
     import scipy.optimize as so
@@ -837,7 +859,8 @@ def build_attributes(tree):
                 if params:
                     verdict = (
                         IO,
-                        f"method `{label}.{name}` has file-like parameter(s) {sorted(params)}",
+                        f"method `{label}.{name}` has file-like parameter(s) "
+                        f"{sorted(params)}",
                     )
                 else:
                     verdict = source_verdict(static)
@@ -934,9 +957,10 @@ def render_block(tree, attrs, reviewed, versions):
     lines = [
         f"{BLOCK_BEGIN} -- written by generate_allowlist.py; do not edit by hand.",
         f"# Generated with {versions}.",
-        "# To change a decision, edit the rules in generate_allowlist.py and re-run it, then",
-        "# review the diff. allowlist_report.md lists everything that was excluded and why.",
-        "# A test fails if this block differs from what the generator writes.",
+        "# To change a decision, edit the rules in generate_allowlist.py and",
+        "# re-run it, then review the diff. allowlist_report.md lists everything",
+        "# that was excluded and why. A test fails if this block differs from",
+        "# what the generator writes.",
         "# fmt: off",
         "",
         "",
@@ -945,7 +969,7 @@ def render_block(tree, attrs, reviewed, versions):
         "",
         "",
         "def _ns(names, modules=None):",
-        '    """One namespace: the members reachable as ``lib.name`` and its submodules."""',
+        '    """One namespace: its members, and its submodules."""',
         '    return {"names": _names(names), "modules": modules or {}}',
         "",
         "",
@@ -957,18 +981,18 @@ def render_block(tree, attrs, reviewed, versions):
     lines += [
         "}",
         "",
-        "# Attributes/methods allowed on any other object (Series, DataFrame, ndarray, str, ...).",
+        "# Attributes/methods allowed on any other object (Series, ndarray, ...).",
         "ALLOWED_ATTRIBUTES = _names(",
         _triple(attrs, "    "),
         ")",
         "",
-        "# Methods that resolve a *string* argument to an attribute. They may only be called",
-        "# directly, with a function or an allowed method name (see the validator above).",
+        "# Methods that resolve a *string* argument to an attribute. They may only",
+        "# be called directly, with a function or an allowed method name.",
         f'GUARDED_METHODS = _names("{" ".join(GUARDED_METHODS)}")',
         "",
-        "# Attribute names in ALLOWED_ATTRIBUTES that are also non-allowed attributes of an",
-        "# enumerated library module; reviewed and judged harmless (COLLISION_OK in the",
-        "# generator). A test checks that no *other* such collision exists.",
+        "# Names in ALLOWED_ATTRIBUTES that are also non-allowed attributes of an",
+        "# enumerated library module; reviewed and judged harmless (COLLISION_OK",
+        "# in the generator). A test checks that no *other* collision exists.",
         "REVIEWED_MODULE_COLLISIONS = _names(",
         _triple(reviewed, "    "),
         ")",
@@ -1021,15 +1045,17 @@ def render_report(
     parallel,
 ):
     versions = versions_string()
+    guarded_list = ", ".join(sorted(guarded_seen))
     out = [
         "# Allow-list report",
         "",
         f"Generated with {versions}.",
         "",
-        "Everything below was decided by the rules in `generate_allowlist.py`. To overrule a",
-        "decision, edit `KEEP` (allow a module member), `KEEP_ATTRS` (allow an attribute name),",
-        "`EXPLICIT`, or `NAME_RULES` there and re-run `python generate_allowlist.py`; then review",
-        "the diff of the generated block in `operations.py`.",
+        "Everything below was decided by the rules in `generate_allowlist.py`.",
+        "To overrule a decision, edit `KEEP` (allow a module member), `KEEP_ATTRS`",
+        "(allow an attribute name), `EXPLICIT`, or `NAME_RULES` there and re-run",
+        "`python generate_allowlist.py`; then review the diff of the generated",
+        "block in `operations.py`.",
         "",
     ]
     total = sum(len(n["names"]) for n in tree.values())
@@ -1038,7 +1064,7 @@ def render_report(
         "",
         f"- **{total}** library members across **{len(tree)}** namespaces",
         f"- **{len(attrs)}** attribute/method names for ordinary objects",
-        f"- **{len(guarded_seen)}** guarded methods ({', '.join(sorted(guarded_seen))}): "
+        f"- **{len(guarded_seen)}** guarded methods ({guarded_list}): "
         "callable only with a statically known function, never a string",
         "",
         "| namespace | allowed members |",
@@ -1078,10 +1104,11 @@ def render_report(
 
     if dropped:
         out += [
-            "## Attribute names dropped because they collide with an excluded module member",
+            "## Attribute names dropped: they collide with an excluded module member",
             "",
-            "A module can be passed around as a value, so an attribute name that is allowed on",
-            "Series/ndarray/... must not also reach an *excluded* member of a library.",
+            "A module can be passed around as a value, so an attribute name that is",
+            "allowed on Series/ndarray/... must not also reach an *excluded* member",
+            "of a library.",
             "",
             textwrap.fill(
                 ", ".join(f"`{n}` ({ns})" for n, ns in sorted(dropped.items())), 110
@@ -1090,7 +1117,7 @@ def render_report(
         ]
     if reviewed:
         out += [
-            "## Attribute names kept despite colliding with a non-allowed module attribute",
+            "## Attribute names kept despite colliding with a module attribute",
             "",
             "Reviewed and judged harmless (reasons in COLLISION_OK in the generator):",
             "",
@@ -1101,8 +1128,8 @@ def render_report(
         out += [
             "## Allowed callables that accept a parallelism argument",
             "",
-            "Not excluded (resource use, not a security boundary), but a `workers`/`n_jobs`",
-            "argument can start threads or worker processes:",
+            "Not excluded (resource use, not a security boundary), but a",
+            "`workers`/`n_jobs` argument can start threads or worker processes:",
             "",
             textwrap.fill(", ".join(f"`{n}`" for n in sorted(parallel)), 110),
             "",
@@ -1111,7 +1138,8 @@ def render_report(
         out += [
             "## Allowed callables whose signature could not be inspected",
             "",
-            "These were allowed by name/origin only (no file-like parameter check was possible).",
+            "These were allowed by name/origin only (no file-like parameter check",
+            "was possible).",
             "",
             textwrap.fill(", ".join(f"`{n}`" for n in sorted(set(unknown_sigs))), 110),
             "",
@@ -1159,6 +1187,21 @@ def generate():
     }
 
 
+def is_installed_path(path):
+    """Whether `path` is inside an installed package (site-packages), not a checkout."""
+    parts = os.path.realpath(path).split(os.sep)
+    return "site-packages" in parts or "dist-packages" in parts
+
+
+def default_target(here):
+    """operations.py next to scripts/ (pype_schema/scripts/) or one level down."""
+    candidates = [
+        os.path.join(here, "..", "operations.py"),
+        os.path.join(here, "..", "pype_schema", "operations.py"),
+    ]
+    return next((c for c in candidates if os.path.isfile(c)), candidates[0])
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser(
@@ -1166,11 +1209,22 @@ def main():
     )
     parser.add_argument(
         "--target",
-        default=os.path.join(here, "..", "pype_schema", "operations.py"),
-        help="module whose generated block is rewritten (must contain the BEGIN/END markers)",
+        default=default_target(here),
+        help="module whose generated block is rewritten (needs the BEGIN/END markers)",
     )
     parser.add_argument("--report", default=os.path.join(here, "allowlist_report.md"))
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="allow rewriting a copy installed in site-packages (normally refused)",
+    )
     args = parser.parse_args()
+    if is_installed_path(args.target) and not args.force:
+        sys.exit(
+            f"refusing to rewrite {args.target}: it is an installed copy, and the "
+            "allow-list should only change through a reviewed commit in a source "
+            "checkout. Re-run there, or pass --force if you really mean it."
+        )
 
     result = generate()
     block = render_block(
