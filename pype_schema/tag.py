@@ -5,9 +5,9 @@ import pandas as pd  # noqa: F401
 import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, array, issubdtype
-from .utils import (
+from .utils import parse_units
+from .operations import (
     count_args,
-    parse_units,
     validate_custom_operation,
     build_custom_operation,
 )

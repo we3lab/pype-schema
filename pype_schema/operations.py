@@ -2,6 +2,7 @@ import ast
 import builtins
 import importlib
 import sys
+import math  # noqa: F401
 import warnings
 import numpy as np
 import pandas as pd
