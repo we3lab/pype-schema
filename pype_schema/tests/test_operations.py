@@ -1359,8 +1359,8 @@ def test_generated_block_has_not_been_edited_by_hand():
             "re-run it. If it still fails right after re-running it, something "
             "else (an editor or formatter hook) is rewriting the file.\n"
             f"first difference at block line {first + 1}:\n"
-            f"  as written : {actual_lines[first : first + 1]!r}\n"
-            f"  would write: {expected_lines[first : first + 1]!r}\n"
+            f"  as written : {actual_lines[first : first + 1]!r}\n"  # noqa: E203
+            f"  would write: {expected_lines[first : first + 1]!r}\n"  # noqa: E203
             + "\n".join(diff[:24])
         )
     assert operations.GUARDED_METHODS == frozenset(gen.GUARDED_METHODS)
