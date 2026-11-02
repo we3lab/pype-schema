@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""Generate `the generated block in `operations.py`` and ``allowlist_report.md``.
+"""Regenerate the allow-lists in ``operations.py`` and write ``allowlist_report.md``.
 
-``operations.py`` only lets a custom operation reach functions and attributes
-that appear in the allow-lists in its generated block (between the BEGIN/END
-GENERATED ALLOW-LISTS markers). This script produces
-them by enumerating the public API of the *installed* math, numpy, pandas, and
-scipy, and then removing everything that is judged dangerous.
+``operations.py`` only lets a custom operation reach functions and attributes that
+appear in the allow-lists in its generated block (between the BEGIN/END GENERATED
+ALLOW-LISTS markers). This script produces them by enumerating the public API of the
+*installed* math, numpy, pandas, and scipy, and then removing everything that is
+judged dangerous.
 
-Why generate and freeze, instead of computing the lists when the module is
-imported? A newer library version can add functions. If the lists were
-computed at import time, a new function with a harmless-looking name would be
-allowed automatically. A frozen file keeps the default "deny": new API is
-unreachable until someone re-runs this script and reviews the diff.
+Why generate and freeze, instead of computing the lists when the module is imported?
+A newer library version can add functions. If the lists were computed at import time,
+a new function with a harmless-looking name would be allowed automatically. A frozen
+block keeps the default "deny": new API is unreachable until someone re-runs this
+script and reviews the diff.
 
-What "dangerous" means here (see CATEGORY_TITLES). Everything not excluded for
-one of these reasons is allowed:
+What "dangerous" means here (see CATEGORY_TITLES). Everything not excluded for one of
+these reasons is allowed:
 
 IO        reads or writes files, URLs, the clipboard, databases, or pickles
 EVAL      evaluates code or expression strings
@@ -30,13 +30,28 @@ OTHER     not computation on data, or not reviewed (plotting, testing,
 
 To change a decision, edit KEEP / EXPLICIT / NAME_RULES below and re-run:
 
-    python scripts/generate_allowlist.py [--target pype_schema/operations.py]
+    python generate_allowlist.py            # rewrite the block
+    python generate_allowlist.py --check    # change nothing; for CI
 
-then review the diff of the two generated files.
+Which environment? The block is tied to the environment that generated it: Python's
+version changes the ``math`` members and the methods of built-in types, and a CI matrix
+usually resolves different numpy/pandas/scipy releases for each Python. So generate in
+ONE canonical environment and run ``--check`` in ONE CI job, in that same environment.
+It exits 0 if the block is up to date, 1 if regenerating would change it (new library
+API to review), and 2 if it is run in a different environment from the recorded one,
+which is a CI misconfiguration, not drift. The test suite does not depend on the
+installed libraries, so it runs unchanged across the whole matrix.
+
+Optional packages count as part of the environment. If one is installed, whatever it
+adds to numpy, pandas, or scipy is enumerated like everything else, under the same
+rules, and shows up in the diff for review (numexpr is the known case: once installed,
+importing pandas makes it add ``numpy.expm1x``, an alias of ``numpy.expm1``). Install
+the same optional packages in the CI job that runs ``--check``, or it reports drift.
 """
 
 import argparse
 import ast
+import difflib
 import importlib
 import inspect
 import os
@@ -163,30 +178,6 @@ KEEP_ATTRS = {
     "to_device": "`stream` is an array-API device stream, not a file",
 }
 
-# Attribute names that exist on an enumerated library module that was NOT
-# allowed as a member (so a module passed around as a value could reach it),
-# reviewed and judged harmless. Anything else that collides is dropped from
-# ALLOWED_ATTRIBUTES.
-COLLISION_OK = {
-    "interpolate": (
-        "scipy.interpolate.interpolate is a deprecated alias module of "
-        "numeric functions"
-    ),
-    "stats": "scipy.stats.stats is a deprecated alias module of numeric functions",
-    "zeros": "scipy.optimize.zeros is a deprecated alias module of numeric functions",
-    "compressed": "scipy.sparse.compressed is a deprecated alias module",
-    "extract": "scipy.sparse.extract is a deprecated alias module",
-    "rotation": "scipy.spatial.transform.rotation is a deprecated alias module",
-    "dtypes": "numpy.dtypes only holds dtype classes",
-    "bit_generator": "numpy.random.bit_generator only holds bit-generator base classes",
-    "base": "scipy.sparse.base is a deprecated alias module of sparse-matrix classes",
-    "data": "scipy.sparse.data is a deprecated alias module of sparse-matrix classes",
-    "reduce": (
-        "scipy.stats.contingency leaks functools.reduce, which only applies a "
-        "callable to an iterable"
-    ),
-}
-
 # Explicit exclusions. key: ("dotted.namespace" or "*", "name")
 EXPLICIT = {
     # ---- numpy (top level) ----
@@ -226,6 +217,7 @@ EXPLICIT = {
     ("pandas", "pivot_table"): (DISPATCH, "`aggfunc` string is resolved by name"),
     ("pandas", "crosstab"): (DISPATCH, "`aggfunc` string is resolved by name"),
     ("pandas", "NamedAgg"): (DISPATCH, "`aggfunc` string is resolved by name"),
+    ("pandas", "NamedFunc"): (DISPATCH, "`aggfunc` string is resolved by name"),
     ("pandas", "col"): (
         OTHER,
         "deferred-expression API (new in pandas 3); not reviewed",
@@ -328,7 +320,7 @@ NAME_RULES = [
     ),
     # ---- dispatch by name ----
     (
-        r"(pivot_table|crosstab|NamedAgg)",
+        r"(pivot_table|crosstab|NamedAgg|NamedFunc)",
         DISPATCH,
         "`aggfunc` string is resolved by name",
         "both",
@@ -349,6 +341,12 @@ NAME_RULES = [
         NATIVE,
         "raw memory or native-code interface",
         "module",
+    ),
+    (
+        r"(seed|set_state)",
+        STATE,
+        "reseeds a random generator, which can be the shared global one",
+        "attr",
     ),
     (r"(ctypes|cffi)", NATIVE, "exposes raw pointers / C function pointers", "attr"),
     (r"ids", NATIVE, "returns raw memory addresses", "both"),
@@ -888,32 +886,6 @@ def build_attributes(tree):
     return allowed, excluded, guarded_seen, unknown_signatures
 
 
-def _has(module, name):
-    try:
-        return hasattr(module, name)
-    except Exception:  # lazy import of an optional dependency failed
-        return True  # be conservative: treat as present
-
-
-def drop_module_collisions(allowed_attrs, tree):
-    """Modules can be passed around as values (`lambda m: m.load`), and then
-    ALLOWED_ATTRIBUTES applies to them. Remove any attribute name that is also
-    an attribute of an enumerated module but was *not* allowed there."""
-    dropped, reviewed = {}, {}
-    for ns, node in tree.items():
-        module = resolve_namespace(ns)
-        reachable = node["names"] | node["modules"]
-        for name in sorted(allowed_attrs):
-            if name in dropped:
-                continue
-            if _has(module, name) and name not in reachable:
-                if name in COLLISION_OK:
-                    reviewed.setdefault(name, []).append(".".join(ns))
-                else:
-                    dropped[name] = ".".join(ns)
-    return allowed_attrs - set(dropped), dropped, reviewed
-
-
 # --------------------------------------------------------------------------
 # output
 # --------------------------------------------------------------------------
@@ -949,7 +921,7 @@ def render_node(ns, tree, depth):
     return f"_ns(\n{names},\n{pad}    {{\n{inner}\n{pad}    }},\n{pad})"
 
 
-def render_block(tree, attrs, reviewed, versions):
+def render_block(tree, attrs, versions):
     """The exact text of the generated block, markers included. Deterministic:
     the same inputs always give the same text, which is what lets a test tell a
     hand edit from the real thing."""
@@ -989,13 +961,6 @@ def render_block(tree, attrs, reviewed, versions):
         "# Methods that resolve a *string* argument to an attribute. They may only",
         "# be called directly, with a function or an allowed method name.",
         f'GUARDED_METHODS = _names("{" ".join(GUARDED_METHODS)}")',
-        "",
-        "# Names in ALLOWED_ATTRIBUTES that are also non-allowed attributes of an",
-        "# enumerated library module; reviewed and judged harmless (COLLISION_OK",
-        "# in the generator). A test checks that no *other* collision exists.",
-        "REVIEWED_MODULE_COLLISIONS = _names(",
-        _triple(reviewed, "    "),
-        ")",
         "# fmt: on",
         BLOCK_END,
     ]
@@ -1038,8 +1003,6 @@ def render_report(
     member_excl,
     attr_excl,
     guarded_seen,
-    dropped,
-    reviewed,
     attrs,
     unknown_sigs,
     parallel,
@@ -1102,28 +1065,6 @@ def render_report(
             )
         out.append("")
 
-    if dropped:
-        out += [
-            "## Attribute names dropped: they collide with an excluded module member",
-            "",
-            "A module can be passed around as a value, so an attribute name that is",
-            "allowed on Series/ndarray/... must not also reach an *excluded* member",
-            "of a library.",
-            "",
-            textwrap.fill(
-                ", ".join(f"`{n}` ({ns})" for n, ns in sorted(dropped.items())), 110
-            ),
-            "",
-        ]
-    if reviewed:
-        out += [
-            "## Attribute names kept despite colliding with a module attribute",
-            "",
-            "Reviewed and judged harmless (reasons in COLLISION_OK in the generator):",
-            "",
-            textwrap.fill(", ".join(f"`{n}`" for n in sorted(reviewed)), 110),
-            "",
-        ]
     if parallel:
         out += [
             "## Allowed callables that accept a parallelism argument",
@@ -1172,7 +1113,6 @@ def generate():
         warnings.simplefilter("ignore")
         tree, member_excl, unknown_sigs = build_namespaces()
         attrs, attr_excl, guarded_seen, unknown2 = build_attributes(tree)
-        attrs, dropped, reviewed = drop_module_collisions(attrs, tree)
         parallel = find_parallel(tree)
     return {
         "tree": tree,
@@ -1180,11 +1120,59 @@ def generate():
         "attrs": attrs,
         "attr_excl": attr_excl,
         "guarded_seen": guarded_seen,
-        "dropped": dropped,
-        "reviewed": reviewed,
         "unknown_sigs": unknown_sigs + unknown2,
         "parallel": parallel,
     }
+
+
+CHECK_OK, CHECK_DRIFT, CHECK_WRONG_ENV = 0, 1, 2
+
+
+def normalize_versions(versions):
+    """Python by major.minor (a patch release changes nothing); libraries exactly."""
+    return re.sub(r"Python (\d+\.\d+)\.\d+", r"Python \1", versions or "")
+
+
+def check_block(source, result, versions_now):
+    """Compare the generated block in `source` with what this environment generates.
+
+    Returns (exit code, message): CHECK_OK if the block is up to date, CHECK_DRIFT if
+    regenerating would change it, CHECK_WRONG_ENV if this environment is not the one the
+    block was generated in (then the two cannot be compared, and `result` is not used).
+    """
+    block = extract_block(source)
+    recorded = block_versions(block)
+    if normalize_versions(recorded) != normalize_versions(versions_now):
+        return CHECK_WRONG_ENV, (
+            "this environment is not the one the allow-lists were generated in, "
+            "so they cannot be compared here.\n"
+            f"  recorded : {recorded}\n"
+            f"  this one : {versions_now}\n"
+            "Run the check in the recorded environment, or regenerate in a new one."
+        )
+    expected = render_block(result["tree"], result["attrs"], recorded)
+    if block == expected:
+        return CHECK_OK, "the generated block is up to date"
+    diff = [
+        line
+        for line in difflib.unified_diff(
+            block.splitlines(),
+            expected.splitlines(),
+            "operations.py",
+            "generated",
+            n=0,
+            lineterm="",
+        )
+        if line[:1] in "+-" and line[:3] not in ("+++", "---")
+    ]
+    shown = "\n".join(f"  {line.strip()}" for line in diff[:40])
+    more = f"\n  ... and {len(diff) - 40} more" if len(diff) > 40 else ""
+    return CHECK_DRIFT, (
+        "the generated block is out of date: this environment generates a "
+        "different allow-list. Run `python generate_allowlist.py`, review the diff, "
+        "and commit it.\n"
+        "Regenerating would add (+) or remove (-):\n" + shown + more
+    )
 
 
 def is_installed_path(path):
@@ -1214,11 +1202,27 @@ def main():
     )
     parser.add_argument("--report", default=os.path.join(here, "allowlist_report.md"))
     parser.add_argument(
+        "--check",
+        action="store_true",
+        help="do not write anything: exit 0 if the block is up to date, 1 if "
+        "regenerating would change it, 2 if this environment is not the one it "
+        "was generated in",
+    )
+    parser.add_argument(
         "--force",
         action="store_true",
         help="allow rewriting a copy installed in site-packages (normally refused)",
     )
     args = parser.parse_args()
+    if args.check:
+        with open(args.target) as handle:
+            source = handle.read()
+        recorded = block_versions(extract_block(source))
+        same_env = normalize_versions(recorded) == normalize_versions(versions_string())
+        result = generate() if same_env else None  # no point generating in another env
+        code, message = check_block(source, result, versions_string())
+        print(message)
+        sys.exit(code)
     if is_installed_path(args.target) and not args.force:
         sys.exit(
             f"refusing to rewrite {args.target}: it is an installed copy, and the "
@@ -1227,9 +1231,7 @@ def main():
         )
 
     result = generate()
-    block = render_block(
-        result["tree"], result["attrs"], result["reviewed"], versions_string()
-    )
+    block = render_block(result["tree"], result["attrs"], versions_string())
     with open(args.target) as handle:
         source = handle.read()
     updated = inject_block(source, block)
@@ -1242,8 +1244,6 @@ def main():
                 result["member_excl"],
                 result["attr_excl"],
                 result["guarded_seen"],
-                result["dropped"],
-                result["reviewed"],
                 result["attrs"],
                 result["unknown_sigs"],
                 result["parallel"],

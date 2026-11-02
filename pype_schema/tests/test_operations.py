@@ -1,4 +1,5 @@
 import ast
+import difflib
 import importlib.util
 import os
 import pathlib
@@ -6,7 +7,6 @@ import pint
 import pytest
 import re
 import sys
-import warnings
 import numpy as np
 import pandas as pd
 from pype_schema.units import u
@@ -621,6 +621,8 @@ ACCEPTED = [
     "lambda x: np.log(x) / np.log(10)",
     "lambda x: x * np.pi",
     "lambda x: np.interp(x, [0, 1], [0, 10])",
+    "lambda x: map(np.sqrt, x)",
+    "lambda x: list(map(math.sqrt, x))",
     "lambda x: np.linalg.norm(x)",
     "lambda x: np.fft.fft(x)",
     "lambda x: np.random.default_rng(0).normal(size=3)",
@@ -725,6 +727,17 @@ REJECTED = [
     "lambda np: np.meshgrid(np)",  # a numpy function, not an object attribute
     "lambda x: (lambda m: m.meshgrid(x))(np)",
     "lambda x: (lambda m: m.load('f'))(np)",
+    # --- a library or submodule is a prefix, never a value ---
+    "lambda x: np",
+    "lambda x: [np]",
+    "lambda x: pd",
+    "lambda x: math",
+    "lambda x: map(np, x)",
+    "lambda x: (lambda m: m.mean())(np)",
+    "lambda x: np.linalg",
+    "lambda x: sp.stats",
+    "lambda x: (lambda m: m)(sp.stats)",
+    "lambda x: (lambda m: m.norm(x))(np.linalg)",
     # --- I/O ---
     "lambda x: pd.read_csv('f.csv')",
     "lambda x: pd.read_pickle('f')",
@@ -758,6 +771,7 @@ REJECTED = [
     "lambda x: pd.pivot_table(x)",
     "lambda x: x.pivot_table()",
     "lambda x: pd.crosstab(x, x)",
+    "lambda x: pd.NamedFunc('a', 'sum')",  # same hazard as NamedAgg
     "lambda x: np.bmat('a b')",
     "lambda x: np.f2py",
     "lambda x: '{0}'.format(x)",
@@ -765,6 +779,9 @@ REJECTED = [
     # --- process-wide state ---
     "lambda x: np.random.seed(0)",
     "lambda x: np.random.set_state(0)",
+    "lambda x: np.random.RandomState(0).seed(1)",  # reseeding is a state change
+    "lambda x: sp.stats.norm.random_state.seed(0)",  # ... of the shared global one
+    "lambda x: sp.stats.norm.random_state.set_state(0)",
     "lambda x: np.seterr(all='ignore')",
     "lambda x: np.errstate(all='ignore')",
     "lambda x: np.set_printoptions()",
@@ -1251,7 +1268,8 @@ NEVER_ANYWHERE = re.compile(
     r"read_\w+|to_(csv|excel|json|hdf|sql|parquet|feather|html|latex|markdown|xml|"
     r"clipboard|stata|orc|pickle|string|xarray)|load|loads|loadtxt|save|savez|savetxt|"
     r"dump|dumps|tofile|fromfile|fromregex|genfromtxt|memmap|open|eval|exec|compile|"
-    r"query|pivot_table|crosstab|NamedAgg|bmat|ctypes|cffi|ids|as_strided|byte_bounds|"
+    r"query|pivot_table|crosstab|NamedAgg|NamedFunc|bmat|ctypes|cffi|ids|as_strided|"
+    r"byte_bounds|"
     r"from_dlpack|LowLevelCallable|get_blas_funcs|get_lapack_funcs|cython_\w+|seed|"
     r"set_state|set_printoptions|seterr|seterrcall|setbufsize|errstate|printoptions|"
     r"set_option|reset_option|option_context|options|show_config|show_runtime|"
@@ -1289,54 +1307,6 @@ def test_no_dangerous_names_are_allow_listed():
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-def test_no_unreviewed_name_collisions_with_modules():
-    """A module can be passed around as a value (``lambda m: m.load``), and then
-    ALLOWED_ATTRIBUTES applies to it. So an allowed attribute name must not also
-    reach a member of an enumerated library that was *not* allowed there, unless
-    the collision was reviewed (REVIEWED_MODULE_COLLISIONS)."""
-    problems = []
-    for path, node in walk_tree():
-        module = operations._resolve_namespace(path)
-        reachable = node["names"] | set(node["modules"])
-        unreviewed = (
-            operations.ALLOWED_ATTRIBUTES
-            - reachable
-            - operations.REVIEWED_MODULE_COLLISIONS
-        )
-        for name in sorted(unreviewed):
-            try:
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")  # e.g. np.bytes warns on access
-                    present = hasattr(module, name)
-            except Exception:
-                present = True
-            if present:
-                problems.append((".".join(path), name))
-    assert not problems, problems
-
-
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-def test_every_allow_listed_member_resolves():
-    missing = []
-    for path, node in walk_tree():
-        module = operations._resolve_namespace(path)
-        for name in sorted(node["names"] | set(node["modules"])):
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                if not hasattr(module, name):
-                    missing.append(f"{'.'.join(path)}.{name}")
-    assert not missing, (
-        "allow-listed names that do not exist in the installed libraries "
-        f"(re-run scripts/generate_allowlist.py): {missing}"
-    )
-
-
-def normalize_versions(versions):
-    """Compare Python by major.minor, so that a patch release is not a difference."""
-    return re.sub(r"Python (\d+\.\d+)\.\d+", r"Python \1", versions or "")
-
-
-@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 def test_generator_refuses_to_rewrite_an_installed_copy(tmp_path, monkeypatch):
     gen = load_generator()
     installed = tmp_path / "lib" / "site-packages" / "pype_schema"
@@ -1363,58 +1333,99 @@ def test_generated_block_has_not_been_edited_by_hand():
     expected = gen.render_block(
         gen.tree_from_frozen(operations.ALLOWED_MODULE_MEMBERS),
         set(operations.ALLOWED_ATTRIBUTES),
-        set(operations.REVIEWED_MODULE_COLLISIONS),
         gen.block_versions(block),
     )
-    assert block == expected, (
-        "the generated block in operations.py is not exactly what "
-        "generate_allowlist.py writes. If you did not edit it by hand, re-run "
-        "scripts/generate_allowlist.py; if you did, change the generator's rules "
-        "instead and re-run it."
-    )
+    if block != expected:
+        actual_lines, expected_lines = block.splitlines(), expected.splitlines()
+        diff = list(
+            difflib.unified_diff(
+                actual_lines,
+                expected_lines,
+                "operations.py (as written)",
+                "generate_allowlist.py (would write)",
+                lineterm="",
+                n=1,
+            )
+        )
+        first = next(
+            (i for i, (a, e) in enumerate(zip(actual_lines, expected_lines)) if a != e),
+            min(len(actual_lines), len(expected_lines)),
+        )
+        pytest.fail(
+            "the generated block in operations.py is not exactly what "
+            "generate_allowlist.py writes. If you did not edit it by hand, re-run "
+            "scripts/generate_allowlist.py (a block written by an older generator "
+            "differs too); if you did, change the generator's rules instead and "
+            "re-run it. If it still fails right after re-running it, something "
+            "else (an editor or formatter hook) is rewriting the file.\n"
+            f"first difference at block line {first + 1}:\n"
+            f"  as written : {actual_lines[first : first + 1]!r}\n"
+            f"  would write: {expected_lines[first : first + 1]!r}\n"
+            + "\n".join(diff[:24])
+        )
     assert operations.GUARDED_METHODS == frozenset(gen.GUARDED_METHODS)
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
-def test_frozen_allowlist_matches_installed_libraries():
-    """Fails when numpy/pandas/scipy change under the frozen allow-lists, so new
-    API is reviewed (re-run generate_allowlist.py and read the diff) instead of
-    silently reachable or silently missing."""
-    gen = load_generator()
-    block = gen.extract_block(pathlib.Path(operations.__file__).read_text())
-    recorded_versions = normalize_versions(gen.block_versions(block))
-    current_versions = normalize_versions(gen.versions_string())
-    fresh = gen.generate()
+def test_a_library_is_only_ever_a_prefix():
+    # nothing can hold a module, so the attribute allow-list (which is by name and
+    # applies to ordinary objects) can never be applied to one
+    for expr in ("lambda x: np", "lambda x: np.linalg", "lambda x: sp.stats"):
+        with pytest.raises(ValueError, match="prefix"):
+            operations.validate_custom_operation(expr)
+    f = operations.build_custom_operation("lambda x: np.linalg.norm(x)")
+    assert f(np.array([3.0, 4.0])) == 5.0
 
-    frozen = {
-        path: (set(node["names"]), set(node["modules"])) for path, node in walk_tree()
+
+def synthetic_result(gen, drop_attr=None):
+    """What a generation run would return, built from the frozen data itself, so the
+    check logic can be tested without depending on the installed libraries."""
+    attrs = set(operations.ALLOWED_ATTRIBUTES)
+    attrs.discard(drop_attr)
+    return {
+        "tree": gen.tree_from_frozen(operations.ALLOWED_MODULE_MEMBERS),
+        "attrs": attrs,
     }
-    current = {
-        ns: (set(n["names"]), set(n["modules"])) for ns, n in fresh["tree"].items()
-    }
-    problems = []
-    for ns in sorted(set(frozen) | set(current)):
-        f_names, f_mods = frozen.get(ns, (set(), set()))
-        c_names, c_mods = current.get(ns, (set(), set()))
-        added = (c_names | c_mods) - (f_names | f_mods)
-        removed = (f_names | f_mods) - (c_names | c_mods)
-        if added or removed:
-            problems.append(
-                f"{'.'.join(ns)}: +{sorted(added)[:8]} -{sorted(removed)[:8]}"
-            )
-    attr_added = sorted(fresh["attrs"] - operations.ALLOWED_ATTRIBUTES)
-    attr_removed = sorted(operations.ALLOWED_ATTRIBUTES - fresh["attrs"])
-    if attr_added or attr_removed:
-        problems.append(f"attributes: +{attr_added[:8]} -{attr_removed[:8]}")
-    if problems and is_installed_copy() and recorded_versions != current_versions:
-        # someone else's environment: the allow-lists are frozen to the versions they
-        # were generated with, so a difference here is expected and not a defect
-        pytest.skip(
-            f"installed libraries ({current_versions}) differ from the versions the "
-            f"allow-lists were generated with ({recorded_versions}); not comparable"
-        )
-    assert not problems, (
-        "the installed numpy/pandas/scipy differ from the versions the allow-lists "
-        "were generated with. Run `python scripts/generate_allowlist.py`, review "
-        "the diff, and commit it:\n" + "\n".join(problems)
-    )
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_check_passes_when_the_block_is_up_to_date():
+    gen = load_generator()
+    source = pathlib.Path(operations.__file__).read_text()
+    versions = gen.block_versions(gen.extract_block(source))
+    code, message = gen.check_block(source, synthetic_result(gen), versions)
+    assert code == gen.CHECK_OK, message
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_check_reports_drift_and_names_what_changed():
+    gen = load_generator()
+    source = pathlib.Path(operations.__file__).read_text()
+    versions = gen.block_versions(gen.extract_block(source))
+    result = synthetic_result(gen, drop_attr="loc")
+    code, message = gen.check_block(source, result, versions)
+    assert code == gen.CHECK_DRIFT
+    assert "loc" in message and "out of date" in message
+    assert "would add (+)" in message
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_check_refuses_to_compare_in_a_different_environment():
+    # a CI cell that is not the canonical one must not report drift (nor pass)
+    gen = load_generator()
+    source = pathlib.Path(operations.__file__).read_text()
+    recorded = gen.block_versions(gen.extract_block(source))
+    other = recorded.replace("numpy ", "numpy 0.")  # e.g. numpy 2.4.4 -> 0.2.4.4
+    code, message = gen.check_block(source, None, other)
+    assert code == gen.CHECK_WRONG_ENV
+    assert "recorded" in message and other in message
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_a_python_patch_release_is_not_a_different_environment():
+    gen = load_generator()
+    source = pathlib.Path(operations.__file__).read_text()
+    recorded = gen.block_versions(gen.extract_block(source))
+    patched = re.sub(r"(Python \d+\.\d+\.)\d+", r"\g<1>99", recorded)
+    code, _ = gen.check_block(source, synthetic_result(gen), patched)
+    assert code == gen.CHECK_OK

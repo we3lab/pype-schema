@@ -5,7 +5,6 @@ on: pull_request
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.13
@@ -22,7 +21,6 @@ jobs:
         codecov -t ${{ secrets.CODECOV_TOKEN }}
   lint:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.13
@@ -39,3 +37,16 @@ jobs:
     - name: Check with black
       run: |
         black --check pype_schema
+  check-allow-list:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.12
+    - name: Install Dependencies
+      run: |
+        pip install numpy==2.4.4 pandas==3.0.2 scipy==1.17.1 numexpr==2.14.2
+    - name: Check Allow List
+      run: python pype_schema/scripts/generate_allowlist.py --check

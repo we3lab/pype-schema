@@ -2,7 +2,6 @@ import ast
 import builtins
 import importlib
 import sys
-import math  # noqa: F401
 import warnings
 import numpy as np
 import pandas as pd
@@ -283,6 +282,12 @@ def unary_helper(data, un_op):
 # re-run and the diff is reviewed. scripts/allowlist_report.md lists everything
 # that was excluded and why. Do not edit the generated block by hand; a test fails
 # if it differs from what the generator writes.
+#
+# Library names are prefixes only. ``np.sqrt`` and ``sp.stats.zscore`` are fine, but
+# ``np``, ``sp.stats`` and ``np.linalg`` cannot be used as values (``f(np)``, ``[np]``).
+# That keeps a module object from ever being passed around, which is what lets the
+# attribute allow-list below apply to ordinary objects only, whatever versions of the
+# libraries are installed.
 #
 # ``apply`` / ``agg`` / ``aggregate`` / ``transform`` are special. Called with a
 # string (``x.agg("sum")``) they look an attribute up by name, which would bypass
@@ -669,26 +674,38 @@ def _validate_ast(tree):
                 )
             if node.attr in GUARDED_METHODS:
                 raise ValueError(
-                    f"`{node.attr}` may only be called directly on an object, with a "
-                    "function written in the expression (a lambda, np.mean, abs, ...) "
-                    "or the name of an allowed method, e.g. x.apply(lambda v: v + 1) "
-                    "or x.agg('sum'); it cannot be passed around as a value"
+                    f"`{node.attr}` may only be called directly on an object, with "
+                    "a function written in the expression (a lambda, np.mean, "
+                    "abs, ...) or the name of an allowed method, e.g. "
+                    "x.apply(lambda v: v + 1) or x.agg('sum'); it cannot be "
+                    "passed around as a value"
                 )
             path, namespace = _library_reference(node.value, scopes)
             if namespace is None:
+                # an ordinary object (Series, ndarray, ...)
                 if node.attr not in ALLOWED_ATTRIBUTES:
                     raise ValueError(
                         f"`{node.attr}` is not an allowed attribute in "
                         "`custom_operations` (see ALLOWED_ATTRIBUTES)"
                     )
+                stack.append((node.value, scopes))
             elif node.attr in namespace["modules"]:
-                libraries_used.add(path + (node.attr,))
+                # A library or submodule is only ever a prefix (np.linalg.norm). The
+                # attribute that follows it consumes it below, so a module that gets
+                # here is being used as a value, e.g. `f(np.linalg)`.
+                raise ValueError(
+                    f"`{node.attr}` is a module; it can only be used as a prefix "
+                    "(e.g. np.linalg.norm), not passed around as a value"
+                )
             elif node.attr not in namespace["names"]:
                 raise ValueError(
                     f"`{node.attr}` is not an allowed member of this library in "
                     "`custom_operations` (see ALLOWED_MODULE_MEMBERS)"
                 )
-            stack.append((node.value, scopes))
+            else:
+                # np.sqrt: `node.value` is the library reference itself. It is checked
+                # here and deliberately not visited again as a value.
+                libraries_used.update(path[:i] for i in range(1, len(path) + 1))
 
         elif isinstance(node, ast.Name):
             if not isinstance(node.ctx, ast.Load):
@@ -708,7 +725,12 @@ def _validate_ast(tree):
                     f"{sorted(ALLOWED_NAMES)} and basic builtins are allowed"
                 )
             if name in MODULE_ALIASES:
-                libraries_used.add((MODULE_ALIASES[name],))
+                # `np.sqrt` consumes `np` in the attribute branch; reaching it here
+                # means the library itself is used as a value, e.g. `f(np)`
+                raise ValueError(
+                    f"`{name}` can only be used as a prefix (e.g. {name}.sqrt), not "
+                    "passed around as a value"
+                )
 
         elif (
             isinstance(node, ast.Call)
@@ -899,9 +921,10 @@ def build_custom_operation(func_str):
 
 # BEGIN GENERATED ALLOW-LISTS -- written by generate_allowlist.py; do not edit by hand.
 # Generated with Python 3.12.3, numpy 2.4.4, pandas 3.0.2, scipy 1.17.1.
-# To change a decision, edit the rules in generate_allowlist.py and re-run it, then
-# review the diff. allowlist_report.md lists everything that was excluded and why.
-# A test fails if this block differs from what the generator writes.
+# To change a decision, edit the rules in generate_allowlist.py and
+# re-run it, then review the diff. allowlist_report.md lists everything
+# that was excluded and why. A test fails if this block differs from
+# what the generator writes.
 # fmt: off
 
 
@@ -910,7 +933,7 @@ def _names(space_separated):
 
 
 def _ns(names, modules=None):
-    """One namespace: the members reachable as ``lib.name`` and its submodules."""
+    """One namespace: its members, and its submodules."""
     return {"names": _names(names), "modules": modules or {}}
 
 
@@ -1129,6 +1152,7 @@ ALLOWED_MODULE_MEMBERS = {
         exp2
         expand_dims
         expm1
+        expm1x
         extract
         eye
         fabs
@@ -4123,7 +4147,7 @@ ALLOWED_MODULE_MEMBERS = {
     ),
 }
 
-# Attributes/methods allowed on any other object (Series, DataFrame, ndarray, str, ...).
+# Attributes/methods allowed on any other object (Series, ndarray, ...).
 ALLOWED_ATTRIBUTES = _names(
     """
     A
@@ -4268,6 +4292,7 @@ ALLOWED_ATTRIBUTES = _names(
     coef
     coefficients
     coeffs
+    col
     colorize
     columns
     combine
@@ -5234,27 +5259,8 @@ ALLOWED_ATTRIBUTES = _names(
     """
 )
 
-# Methods that resolve a *string* argument to an attribute. They may only be called
-# directly, with a function or an allowed method name (see the validator above).
+# Methods that resolve a *string* argument to an attribute. They may only
+# be called directly, with a function or an allowed method name.
 GUARDED_METHODS = _names("agg aggregate apply transform")
-
-# Attribute names in ALLOWED_ATTRIBUTES that are also non-allowed attributes of an
-# enumerated library module; reviewed and judged harmless (COLLISION_OK in the
-# generator). A test checks that no *other* such collision exists.
-REVIEWED_MODULE_COLLISIONS = _names(
-    """
-    base
-    bit_generator
-    compressed
-    data
-    dtypes
-    extract
-    interpolate
-    reduce
-    rotation
-    stats
-    zeros
-    """
-)
 # fmt: on
 # END GENERATED ALLOW-LISTS
