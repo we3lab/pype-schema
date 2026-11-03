@@ -103,6 +103,22 @@ def load_generator():
     )
 
 
+def tag_sum(n):
+    """Same shape of string as get_tag_sum_lambda_func(n units)."""
+    args = ",".join(f"tag{i + 1}" for i in range(n))
+    body = "+".join(f"tag{i + 1}" for i in range(n))
+    return f"lambda {args}: {body}"
+
+
+def _outcome(fn, expr):
+    """'ok' or 'rejected'; any other exception (e.g. RecursionError) fails."""
+    try:
+        fn(expr)
+    except (ValueError, SyntaxError):
+        return "rejected"
+    return "ok"
+
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "variable, kwargs, expected",
@@ -652,13 +668,6 @@ def test_build_custom_operation(func_str, args, expected):
         assert func(*args) == expected
 
 
-def tag_sum(n):
-    """Same shape of string as get_tag_sum_lambda_func(n units)."""
-    args = ",".join(f"tag{i + 1}" for i in range(n))
-    body = "+".join(f"tag{i + 1}" for i in range(n))
-    return f"lambda {args}: {body}"
-
-
 # expressions that must be accepted
 ACCEPTED = [
     # methods and indexing
@@ -1141,15 +1150,6 @@ def test_long_sums_validate_build_and_evaluate(n):
     assert operations.build_custom_operation(expr)(*range(1, n + 1)) == n * (n + 1) // 2
 
 
-def _outcome(fn, expr):
-    """'ok' or 'rejected'; any other exception (e.g. RecursionError) fails."""
-    try:
-        fn(expr)
-    except (ValueError, SyntaxError):
-        return "rejected"
-    return "ok"
-
-
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "expr",
@@ -1176,7 +1176,7 @@ def _outcome(fn, expr):
         "huge-sum",
     ],
 )
-def test_pathological_depth_never_raises_recursionerror(expr):
+def test_long_sums_are_accepted_or_cleanly_rejected(expr):
     assert _outcome(operations.validate_custom_operation, expr) in ("ok", "rejected")
     assert _outcome(operations.build_custom_operation, expr) in ("ok", "rejected")
 
