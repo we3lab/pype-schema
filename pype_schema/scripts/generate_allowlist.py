@@ -1,14 +1,7 @@
 #!/usr/bin/env python3
 """Regenerate the allow-lists in ``operations.py`` and write ``allowlist_report.md``.
-
-    python generate_allowlist.py            # rewrite the block
-    python generate_allowlist.py --check    # change nothing; for CI (exit 0, 1, or 2)
-
-The lists come from the public API of the installed math, numpy, pandas, and scipy,
-minus everything judged dangerous (see CATEGORY_TITLES), frozen in a block in
-``operations.py``. To change a decision, edit KEEP / KEEP_ATTRS / EXPLICIT /
-NAME_RULES below and re-run. The environment it must run in, the CI job, and the exit
-codes are explained under Custom Mode in docs/advanced.rst.
+Pass ``--check`` to change nothing (for CI). The rules, the environment, and the exit
+codes are described under Custom Mode in docs/advanced.rst.
 """
 
 import argparse
@@ -426,11 +419,23 @@ EXTRA_ATTRIBUTES = (
 
 
 class Deprecated:
-    pass
+    """Marks a library member that warns or fails when it is read."""
 
 
 def public_members(module):
-    """{name: object | Deprecated()} for the public names of `module`."""
+    """Public members of a module, with deprecated ones marked.
+
+    Parameters
+    ----------
+    module : module
+        The module to list
+
+    Returns
+    -------
+    dict
+        Maps each public name to its object, or to a `Deprecated` marker if reading it
+        warns or fails
+    """
     out = {}
     for name in dir(module):
         if name.startswith("_"):
@@ -445,10 +450,17 @@ def public_members(module):
 
 
 def resolve_namespace(ns):
-    """The module object for a namespace path such as ("numpy", "emath").
+    """The module object for a namespace path.
 
-    Some public namespaces (numpy.emath) are attributes, not importable module
-    paths, so walk attributes first and fall back to importing.
+    Parameters
+    ----------
+    ns : tuple of str
+        A namespace path such as ``("numpy", "emath")``
+
+    Returns
+    -------
+    module
+        The module that `ns` names
     """
     obj = importlib.import_module(ns[0])
     for i, part in enumerate(ns[1:], start=1):
@@ -460,7 +472,18 @@ def resolve_namespace(ns):
 
 
 def io_params(obj):
-    """Set of I/O-looking parameter names, or None if no signature is available."""
+    """The file-like parameter names of a callable.
+
+    Parameters
+    ----------
+    obj : callable
+        The function or class to inspect
+
+    Returns
+    -------
+    set of str or None
+        Parameters that look like they take a file, or None if there is no signature
+    """
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -471,7 +494,18 @@ def io_params(obj):
 
 
 def executable_source(obj):
-    """Source of a function or method written in Python, minus docstrings."""
+    """Source of a function or method written in Python, without docstrings.
+
+    Parameters
+    ----------
+    obj : callable
+        The function, method, or class to read
+
+    Returns
+    -------
+    str or None
+        The source, or None if it is not available (for example compiled code)
+    """
     try:
         code = textwrap.dedent(inspect.getsource(obj))
         tree = ast.parse(code)
@@ -493,7 +527,18 @@ def executable_source(obj):
 
 
 def source_verdict(obj):
-    """(category, reason) if the executable source of `obj` does something excluded."""
+    """Whether the source of a function does something that is excluded.
+
+    Parameters
+    ----------
+    obj : callable
+        The function, method, or class to scan
+
+    Returns
+    -------
+    tuple or None
+        ``(category, reason)`` if the source matches a SOURCE_RULES pattern
+    """
     if inspect.isclass(obj):
         obj = getattr(obj, "__init__", None)
     if not inspect.isfunction(obj):
@@ -513,6 +558,21 @@ def source_verdict(obj):
 
 
 def match_name_rules(name, scope):
+    """The first NAME_RULES entry that excludes a name.
+
+    Parameters
+    ----------
+    name : str
+        The member or attribute name
+
+    scope : str
+        ``"module"`` for library members, ``"attr"`` for attributes of ordinary objects
+
+    Returns
+    -------
+    tuple or None
+        ``(category, reason)`` of the first matching rule
+    """
     for pattern, category, reason, rule_scope in NAME_RULES:
         if rule_scope in (scope, "both") and pattern.fullmatch(name):
             return category, reason
@@ -520,7 +580,27 @@ def match_name_rules(name, scope):
 
 
 def classify_member(ns, name, obj, unknown_signatures):
-    """(category, reason) if `name` in namespace `ns` is excluded, else None."""
+    """Decide whether a library member is excluded.
+
+    Parameters
+    ----------
+    ns : tuple of str
+        The namespace the member is in, such as ``("numpy", "linalg")``
+
+    name : str
+        The member's name
+
+    obj : object
+        The member itself
+
+    unknown_signatures : list of str
+        Collects callables whose signature cannot be inspected (changed in place)
+
+    Returns
+    -------
+    tuple or None
+        ``(category, reason)`` if the member is excluded
+    """
     key = ".".join(ns)
     if (key, name) in KEEP:
         return None
@@ -566,6 +646,19 @@ def classify_member(ns, name, obj, unknown_signatures):
 
 
 def build_namespaces():
+    """Enumerate the allowed members of every namespace in NAMESPACES.
+
+    Returns
+    -------
+    tree : dict
+        Maps each namespace path to its allowed ``names`` and ``modules``
+
+    excluded : list of tuple
+        ``(category, namespace, name, reason)`` for each excluded member
+
+    unknown_signatures : list of str
+        Callables whose signature cannot be inspected
+    """
     tree = {}  # dotted path -> {"names": set, "modules": set}
     excluded = []  # (category, namespace, name, reason)
     unknown_signatures = []
@@ -590,12 +683,32 @@ def build_namespaces():
 
 
 def attribute_universe(tree):
-    """[(label, class-or-instance, use_instance_dir)] of the objects whose
-    attributes custom operations may meaningfully touch."""
+    """The objects whose attributes a custom operation may touch.
+
+    Parameters
+    ----------
+    tree : dict
+        Allowed members per namespace; members that are excluded are skipped
+
+    Returns
+    -------
+    list of tuple
+        ``(label, class or instance)`` for each object
+    """
     items = []
 
-    def add(label, obj, instance_dir=False):
-        items.append((label, obj, instance_dir))
+    def add(label, obj):
+        """Record an object whose attributes are to be enumerated.
+
+        Parameters
+        ----------
+        label : str
+            A name for the object, used in the report
+
+        obj : class or instance
+            The object to take attribute names from
+        """
+        items.append((label, obj))
 
     for t in (
         str,
@@ -713,7 +826,13 @@ def attribute_universe(tree):
 
 
 def sample_results():
-    """Result objects returned by functions, so their field names are seen."""
+    """Result objects returned by functions, so their field names are seen.
+
+    Returns
+    -------
+    list
+        Instances such as the results of ``linregress`` or ``minimize``
+    """
     import scipy.integrate as si
     import scipy.interpolate as sin
     import scipy.optimize as so
@@ -786,12 +905,46 @@ def sample_results():
 
 
 def build_attributes(tree):
+    """Decide which attribute names are allowed on ordinary objects.
+
+    Parameters
+    ----------
+    tree : dict
+        Allowed members per namespace, from `build_namespaces`
+
+    Returns
+    -------
+    allowed : set of str
+        Attribute names that are allowed
+
+    excluded : dict
+        Maps each excluded name to ``(category, reason, label)``
+
+    guarded_seen : set of str
+        GUARDED_METHODS names found on some object
+
+    unknown_signatures : list of str
+        Callables whose signature cannot be inspected
+    """
     seen = {}  # name -> set(labels)
     excluded = {}  # name -> (category, reason, label)
     guarded_seen = set()
     unknown_signatures = []
 
     def consider(label, owner, name):
+        """Allow or exclude one attribute name, recording it in the enclosing sets.
+
+        Parameters
+        ----------
+        label : str
+            The object's label, kept as an example in the report
+
+        owner : class or instance
+            The object the attribute belongs to
+
+        name : str
+            The attribute name
+        """
         verdict = match_name_rules(name, "attr")
         if name in KEEP_ATTRS:
             verdict = None
@@ -817,7 +970,7 @@ def build_attributes(tree):
         else:
             seen.setdefault(name, set()).add(label)
 
-    for label, obj, instance_dir in attribute_universe(tree):
+    for label, obj in attribute_universe(tree):
         for name in dir(obj):
             if not name.startswith("_"):
                 consider(label, obj, name)
@@ -838,6 +991,13 @@ BLOCK_END = "# END GENERATED ALLOW-LISTS"
 
 
 def versions_string():
+    """The Python, numpy, pandas, and scipy versions of this environment.
+
+    Returns
+    -------
+    str
+        For example ``"Python 3.12.3, numpy 2.4.4, pandas 3.0.2, scipy 1.17.1"``
+    """
     return (
         f"Python {sys.version.split()[0]}, numpy {np.__version__}, "
         f"pandas {pd.__version__}, scipy {scipy.__version__}"
@@ -845,13 +1005,44 @@ def versions_string():
 
 
 def _triple(names, indent):
-    """A triple-quoted string with one name per line, so that adding or removing
-    a name shows up as a single added or removed line in a diff."""
+    """A triple-quoted string of names, one per line.
+
+    Parameters
+    ----------
+    names : iterable of str
+        The names to write, which are sorted in the output
+
+    indent : str
+        Indentation of every line
+
+    Returns
+    -------
+    str
+        Source code for the string literal
+    """
     body = "\n".join(f"{indent}{name}" for name in sorted(names))
     return f'{indent}"""\n{body}\n{indent}"""'
 
 
 def render_node(ns, tree, depth):
+    """Source code for one namespace's ``_ns(...)`` call, including its submodules.
+
+    Parameters
+    ----------
+    ns : tuple of str
+        The namespace path
+
+    tree : dict
+        Allowed members per namespace: path -> ``names`` and ``modules``
+
+    depth : int
+        Nesting level, used for indentation
+
+    Returns
+    -------
+    str
+        The source code
+    """
     pad = "    " * depth
     node = tree[ns]
     names = _triple(node["names"], pad + "    ")
@@ -866,9 +1057,24 @@ def render_node(ns, tree, depth):
 
 
 def render_block(tree, attrs, versions):
-    """The exact text of the generated block, markers included. Deterministic:
-    the same inputs always give the same text, which is what lets a test tell a
-    hand edit from the real thing."""
+    """The exact text of the generated block, markers included.
+
+    Parameters
+    ----------
+    tree : dict
+        Allowed members per namespace: path -> ``names`` and ``modules``
+
+    attrs : iterable of str
+        Allowed attribute names
+
+    versions : str
+        The environment recorded in the block's header
+
+    Returns
+    -------
+    str
+        The block, which is identical for identical inputs
+    """
     roots = [ns for ns in NAMESPACES if len(ns) == 1]
     lines = [
         f"{BLOCK_BEGIN} -- written by generate_allowlist.py; do not edit by hand.",
@@ -881,11 +1087,36 @@ def render_block(tree, attrs, versions):
         "",
         "",
         "def _names(space_separated):",
+        '    """Split a string of names into a frozenset.',
+        "",
+        "    Parameters",
+        "    ----------",
+        "    space_separated : str",
+        "        The names, separated by whitespace",
+        "",
+        "    Returns",
+        "    -------",
+        "    frozenset of str",
+        '    """',
         "    return frozenset(space_separated.split())",
         "",
         "",
         "def _ns(names, modules=None):",
-        '    """One namespace: its members, and its submodules."""',
+        '    """One namespace: its members, and its submodules.',
+        "",
+        "    Parameters",
+        "    ----------",
+        "    names : str",
+        "        The member names, separated by whitespace",
+        "",
+        "    modules : dict, optional",
+        "        Maps each submodule's name to its own namespace",
+        "",
+        "    Returns",
+        "    -------",
+        "    dict",
+        '        ``{"names": frozenset, "modules": dict}``',
+        '    """',
         '    return {"names": _names(names), "modules": modules or {}}',
         "",
         "",
@@ -912,27 +1143,97 @@ def render_block(tree, attrs, versions):
 
 
 def extract_block(source):
-    """The generated block (markers included) inside the text of operations.py."""
+    """The generated block, markers included, inside the text of operations.py.
+
+    Parameters
+    ----------
+    source : str
+        The text of operations.py
+
+    Returns
+    -------
+    str
+        The block
+
+    Raises
+    ------
+    ValueError
+        When the BEGIN/END markers are missing
+    """
     start = source.index(BLOCK_BEGIN)
     end = source.index(BLOCK_END, start) + len(BLOCK_END)
     return source[start:end]
 
 
 def inject_block(source, block):
+    """Replace the generated block in the text of operations.py.
+
+    Parameters
+    ----------
+    source : str
+        The text of operations.py
+
+    block : str
+        The new block, markers included
+
+    Returns
+    -------
+    str
+        `source` with its block replaced
+
+    Raises
+    ------
+    ValueError
+        When the BEGIN/END markers are missing from `source`
+    """
     old = extract_block(source)
     return source.replace(old, block, 1)
 
 
 def block_versions(block):
+    """The environment recorded in a generated block's header.
+
+    Parameters
+    ----------
+    block : str
+        The generated block
+
+    Returns
+    -------
+    str or None
+        The versions string, or None if the header has none
+    """
     match = re.search(r"^# Generated with (.*)\.$", block, re.M)
     return match.group(1) if match else None
 
 
 def tree_from_frozen(allowed_module_members):
-    """The nested ALLOWED_MODULE_MEMBERS dict, flattened back to {namespace: ...}."""
+    """Flatten the nested ALLOWED_MODULE_MEMBERS into one entry per namespace.
+
+    Parameters
+    ----------
+    allowed_module_members : dict
+        ALLOWED_MODULE_MEMBERS as defined in operations.py
+
+    Returns
+    -------
+    dict
+        Maps each namespace path to its ``names`` and ``modules``, like
+        `build_namespaces`
+    """
     tree = {}
 
     def visit(ns, node):
+        """Add a namespace and its submodules to the enclosing `tree`.
+
+        Parameters
+        ----------
+        ns : tuple of str
+            The namespace path
+
+        node : dict
+            The namespace's entry in ALLOWED_MODULE_MEMBERS
+        """
         tree[ns] = {"names": set(node["names"]), "modules": set(node["modules"])}
         for child, child_node in node["modules"].items():
             visit(ns + (child,), child_node)
@@ -951,6 +1252,36 @@ def render_report(
     unknown_sigs,
     parallel,
 ):
+    """The Markdown report of what is allowed and what was excluded, and why.
+
+    Parameters
+    ----------
+    tree : dict
+        Allowed members per namespace: path -> ``names`` and ``modules``
+
+    member_excl : list of tuple
+        Excluded library members, ``(category, namespace, name, reason)``
+
+    attr_excl : dict
+        Excluded attribute names, mapping to ``(category, reason, label)``
+
+    guarded_seen : set of str
+        Guarded methods that were found
+
+    attrs : set of str
+        Allowed attribute names
+
+    unknown_sigs : list of str
+        Callables whose signature cannot be inspected
+
+    parallel : list of str
+        Callables that accept a parallelism argument
+
+    Returns
+    -------
+    str
+        The report
+    """
     versions = versions_string()
     guarded_list = ", ".join(sorted(guarded_seen))
     out = [
@@ -1033,7 +1364,18 @@ def render_report(
 
 
 def find_parallel(tree):
-    """Allowed module-level callables with a workers/n_jobs/parallel parameter."""
+    """Allowed library callables that accept a ``workers``-style argument.
+
+    Parameters
+    ----------
+    tree : dict
+        Allowed members per namespace: path -> ``names`` and ``modules``
+
+    Returns
+    -------
+    list of str
+        Dotted names such as ``scipy.optimize.differential_evolution``
+    """
     found = []
     for ns, node in tree.items():
         module = resolve_namespace(ns)
@@ -1052,7 +1394,14 @@ def find_parallel(tree):
 
 
 def generate():
-    """Run the whole pipeline; returns everything needed to render or to test."""
+    """Run the whole pipeline.
+
+    Returns
+    -------
+    dict
+        Everything needed to render or test the lists: ``tree``, ``member_excl``,
+        ``attrs``, ``attr_excl``, ``guarded_seen``, ``unknown_sigs``, and ``parallel``
+    """
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         tree, member_excl, unknown_sigs = build_namespaces()
@@ -1073,16 +1422,47 @@ CHECK_OK, CHECK_DRIFT, CHECK_WRONG_ENV = 0, 1, 2
 
 
 def normalize_versions(versions):
-    """Python by major.minor (a patch release changes nothing); libraries exactly."""
+    """Compare Python by major.minor and the libraries exactly.
+
+    Parameters
+    ----------
+    versions : str or None
+        A versions string, such as the one in a generated block's header
+
+    Returns
+    -------
+    str
+        `versions` without the Python patch number
+    """
     return re.sub(r"Python (\d+\.\d+)\.\d+", r"Python \1", versions or "")
 
 
 def check_block(source, result, versions_now):
-    """Compare the generated block in `source` with what this environment generates.
+    """Compare the generated block with what this environment generates.
 
-    Returns (exit code, message): CHECK_OK if the block is up to date, CHECK_DRIFT if
-    regenerating would change it, CHECK_WRONG_ENV if this environment is not the one the
-    block was generated in (then the two cannot be compared, and `result` is not used).
+    Parameters
+    ----------
+    source : str
+        The text of operations.py
+
+    result : dict or None
+        The output of `generate`; not used if the environment differs
+
+    versions_now : str
+        The versions of this environment, from `versions_string`
+
+    Returns
+    -------
+    code : int
+        CHECK_OK, CHECK_DRIFT, or CHECK_WRONG_ENV
+
+    message : str
+        What to tell the user
+
+    Raises
+    ------
+    ValueError
+        When the BEGIN/END markers are missing from `source`
     """
     block = extract_block(source)
     recorded = block_versions(block)
@@ -1120,13 +1500,36 @@ def check_block(source, result, versions_now):
 
 
 def is_installed_path(path):
-    """Whether `path` is inside an installed package (site-packages), not a checkout."""
+    """Whether a path is inside an installed package, not a source checkout.
+
+    Parameters
+    ----------
+    path : str
+        A file path
+
+    Returns
+    -------
+    bool
+        True for a path under ``site-packages`` or ``dist-packages``
+    """
     parts = os.path.realpath(path).split(os.sep)
     return "site-packages" in parts or "dist-packages" in parts
 
 
 def default_target(here):
-    """operations.py next to scripts/ (pype_schema/scripts/) or one level down."""
+    """Where operations.py is, relative to the generator.
+
+    Parameters
+    ----------
+    here : str
+        The folder that contains the generator
+
+    Returns
+    -------
+    str
+        The first of ``../operations.py`` and ``../pype_schema/operations.py`` that
+        exists
+    """
     candidates = [
         os.path.join(here, "..", "operations.py"),
         os.path.join(here, "..", "pype_schema", "operations.py"),
@@ -1135,6 +1538,14 @@ def default_target(here):
 
 
 def main():
+    """Rewrite the generated block, or check it with ``--check``.
+
+    Raises
+    ------
+    SystemExit
+        With the ``--check`` result as the exit code, or when asked to rewrite an
+        installed copy
+    """
     here = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser(
         description="Regenerate the allow-lists inside operations.py."

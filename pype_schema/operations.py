@@ -437,6 +437,21 @@ def _target_names(target):
     may be bound. ``Attribute`` (``np.sum``) and ``Subscript`` (``x[0]``)
     targets are stores into existing objects, and would let an expression
     rebind attributes of shared modules or objects.
+
+    Parameters
+    ----------
+    target : ast.expr
+        The target of a comprehension's ``for`` clause
+
+    Returns
+    -------
+    frozenset of str
+        The names the target binds
+
+    Raises
+    ------
+    ValueError
+        When the target stores into an attribute or subscript
     """
     names = set()
     pending = [target]
@@ -464,6 +479,19 @@ def _library_reference(expr, scopes):
     ALLOWED_MODULE_MEMBERS (``{"names": ..., "modules": ...}``). A library name
     that has been shadowed by a lambda parameter or comprehension variable is
     an ordinary object, not a library, so ``ALLOWED_ATTRIBUTES`` applies to it.
+
+    Parameters
+    ----------
+    expr : ast.expr
+        The expression to resolve, such as ``np`` or ``sp.stats``
+
+    scopes : tuple of frozenset
+        Names bound by the enclosing lambdas and comprehensions, outermost first
+
+    Returns
+    -------
+    tuple
+        ``(path, namespace)``, or ``(None, None)`` if `expr` is not a library reference
     """
     attrs = []
     while isinstance(expr, ast.Attribute):
@@ -505,6 +533,20 @@ def _is_function_spec(expr, scopes):
     Names bound by a parameter or comprehension, calls, subscripts, string
     expressions such as ``"to_" + "csv"``, and arbitrary attributes are rejected,
     because the method they would name is not known here.
+
+    Parameters
+    ----------
+    expr : ast.expr
+        The argument of ``apply``, ``agg``, ``aggregate`` or ``transform``
+
+    scopes : tuple of frozenset
+        Names bound by the enclosing lambdas and comprehensions, outermost first
+
+    Returns
+    -------
+    bool
+        True for a lambda, library function, safe builtin, allowed method name, or a
+        list or dict of those
     """
     pending = [expr]
     while pending:
@@ -533,7 +575,22 @@ def _is_function_spec(expr, scopes):
 
 
 def _check_guarded_call(node, scopes):
-    """Validate a direct call of a GUARDED_METHODS method, e.g. ``x.agg(np.mean)``."""
+    """Validate a direct call of a GUARDED_METHODS method, e.g. ``x.agg(np.mean)``.
+
+    Parameters
+    ----------
+    node : ast.Call
+        A call whose function is an attribute in GUARDED_METHODS
+
+    scopes : tuple of frozenset
+        Names bound by the enclosing lambdas and comprehensions, outermost first
+
+    Raises
+    ------
+    ValueError
+        When the function argument is not visible, uses ``*`` or ``**``, or is reached
+        through a library
+    """
     method = node.func.attr
     hint = (
         f"`{method}` may only be called directly with a function written in the "
@@ -578,6 +635,22 @@ def _validate_ast(tree):
     frozensets of bound names) in force for that node, so names bound by a
     lambda's parameters or a comprehension's targets are bound only inside
     that lambda/comprehension, and nested lambdas get their own scope.
+
+    Parameters
+    ----------
+    tree : ast.Expression
+        The parsed lambda expression
+
+    Returns
+    -------
+    set of tuple
+        The library paths the expression uses, such as ``("scipy", "stats")``
+
+    Raises
+    ------
+    ValueError
+        When the expression uses syntax, names, or attributes that are not allowed, or
+        is too large
     """
     nodes_seen = 0
     libraries_used = set()
@@ -728,6 +801,27 @@ def _parse_custom_operation(func_str):
     that was validated is also the one that gets compiled -- there is no
     "validate one string, evaluate another" gap (e.g. differing leading
     whitespace between validation and ``eval``).
+
+    Parameters
+    ----------
+    func_str : str
+        A string representation of a lambda function
+
+    Returns
+    -------
+    tuple
+        The parsed tree and the set of library paths it uses
+
+    Raises
+    ------
+    TypeError
+        When `func_str` is not a string
+
+    ValueError
+        When `func_str` is too large, not a single lambda, or not allowed
+
+    SyntaxError
+        When `func_str` is not valid Python syntax
     """
     if not isinstance(func_str, str):
         raise TypeError(
@@ -754,6 +848,16 @@ def _resolve_namespace(path):
 
     Some public namespaces (numpy.emath) are attributes, not importable module
     paths, so walk attributes first and fall back to importing.
+
+    Parameters
+    ----------
+    path : tuple of str
+        A library path such as ``("numpy", "emath")``
+
+    Returns
+    -------
+    module
+        The module that `path` names
     """
     obj = importlib.import_module(path[0])
     for i, part in enumerate(path[1:], start=1):
@@ -899,11 +1003,36 @@ def build_custom_operation(func_str):
 
 
 def _names(space_separated):
+    """Split a string of names into a frozenset.'
+
+    Parameters
+    ----------
+    space_separated : str
+        The names, separated by whitespace
+
+    Returns
+    -------
+    frozenset of str
+    """
     return frozenset(space_separated.split())
 
 
 def _ns(names, modules=None):
-    """One namespace: its members, and its submodules."""
+    """One namespace: its members, and its submodules.
+    
+    Parameters
+    ----------
+    names : str
+        The member names, separated by whitespace
+
+    modules : dict, optional
+        Maps each submodule's name to its own namespace
+
+    Returns
+    -------
+    dict
+        ``{"names": frozenset, "modules": dict}``
+    """
     return {"names": _names(names), "modules": modules or {}}
 
 

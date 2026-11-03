@@ -24,7 +24,21 @@ pint.set_application_registry(u)
 
 
 def walk_tree(nodes=None, path=()):
-    """Yield (path, node) for every namespace in the generated allow-list."""
+    """Every namespace in the generated allow-list.
+
+    Parameters
+    ----------
+    nodes : dict, optional
+        The tree to walk; defaults to ALLOWED_MODULE_MEMBERS
+
+    path : tuple of str
+        The path of `nodes`; used when recursing
+
+    Yields
+    ------
+    path, node : tuple
+        A namespace's path, and its ``names`` and ``modules``
+    """
     nodes = operations.ALLOWED_MODULE_MEMBERS if nodes is None else nodes
     if not path:
         for name, node in nodes.items():
@@ -36,17 +50,26 @@ def walk_tree(nodes=None, path=()):
 
 
 def is_installed_copy():
-    """Whether the package under test was installed (site-packages), not checked out."""
+    """Whether the package under test was installed, not checked out.
+
+    Returns
+    -------
+    bool
+        True if it is under ``site-packages`` or ``dist-packages``
+    """
     parts = pathlib.Path(operations.__file__).resolve().parts
     return "site-packages" in parts or "dist-packages" in parts
 
 
 def generator_candidates():
-    """Where generate_allowlist.py may be: in the package (it ships with the tests),
-    or, in a source checkout only, at the top of the repository. The repository root
-    is not searched in an installed copy, because there it would be site-packages
-    itself, and any other installed distribution could drop a file there for the
-    tests to run."""
+    """Where generate_allowlist.py may be
+    (either in the package or at the top of a checkout).
+
+    Returns
+    -------
+    list of pathlib.Path
+        The paths to try, in order
+    """
     here = pathlib.Path(__file__).resolve()
     roots = [here.parents[1]]
     if not is_installed_copy():
@@ -59,11 +82,12 @@ def generator_candidates():
 
 
 def load_generator():
-    """Import generate_allowlist.py.
+    """Import generate_allowlist.py, failing the test if it is missing.
 
-    It ships with the tests so that an installed copy can be verified, which means a
-    missing generator is always a failure: skipping would quietly turn off the checks
-    that guard the allow-list.
+    Returns
+    -------
+    module
+        The generator module
     """
     candidates = generator_candidates()
     for path in candidates:
