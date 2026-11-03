@@ -23,6 +23,62 @@ skip_all_tests = False
 pint.set_application_registry(u)
 
 
+def walk_tree(nodes=None, path=()):
+    """Yield (path, node) for every namespace in the generated allow-list."""
+    nodes = operations.ALLOWED_MODULE_MEMBERS if nodes is None else nodes
+    if not path:
+        for name, node in nodes.items():
+            yield from walk_tree(node, (name,))
+        return
+    yield path, nodes
+    for child, child_node in nodes["modules"].items():
+        yield from walk_tree(child_node, path + (child,))
+
+
+def is_installed_copy():
+    """Whether the package under test was installed (site-packages), not checked out."""
+    parts = pathlib.Path(operations.__file__).resolve().parts
+    return "site-packages" in parts or "dist-packages" in parts
+
+
+def generator_candidates():
+    """Where generate_allowlist.py may be: in the package (it ships with the tests),
+    or, in a source checkout only, at the top of the repository. The repository root
+    is not searched in an installed copy, because there it would be site-packages
+    itself, and any other installed distribution could drop a file there for the
+    tests to run."""
+    here = pathlib.Path(__file__).resolve()
+    roots = [here.parents[1]]
+    if not is_installed_copy():
+        roots += here.parents[2:3]
+    return [
+        root / folder / "generate_allowlist.py"
+        for root in roots
+        for folder in ("scripts", "tools")
+    ]
+
+
+def load_generator():
+    """Import generate_allowlist.py.
+
+    It ships with the tests so that an installed copy can be verified, which means a
+    missing generator is always a failure: skipping would quietly turn off the checks
+    that guard the allow-list.
+    """
+    candidates = generator_candidates()
+    for path in candidates:
+        if path.is_file():
+            spec = importlib.util.spec_from_file_location("generate_allowlist", path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+    pytest.fail(
+        "generate_allowlist.py not found, so the allow-list checks cannot run. "
+        "It must ship with the tests (check the package data). "
+        "Looked in: " + ", ".join(str(path) for path in candidates)
+    )
+
+
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "variable, kwargs, expected",
@@ -481,11 +537,6 @@ def test_unary_helper(data, un_op, expected_error):
         operations.unary_helper(data, un_op)
 
 
-# ---------------------------------------------------------------------------
-# Custom operations: validate_custom_operation / build_custom_operation
-# ---------------------------------------------------------------------------
-
-
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "func_str, expected",
@@ -711,7 +762,7 @@ def test_custom_operation_accepted(expr):
 
 # expressions that must be rejected
 REJECTED = [
-    # --- regressions from earlier review rounds ---
+    # regressions from earlier review rounds
     "lambda x: [0 for np.sum in [1]]",  # attribute comprehension target
     "lambda x: [0 for x[0] in [1]]",  # subscript comprehension target
     "lambda x: [0 for eval.foo in x]",  # names inside a store target
@@ -723,11 +774,11 @@ REJECTED = [
     "lambda x: [y for y in y]",  # first iterable sees the enclosing scope
     "lambda x: [a for a in x if b for b in x]",  # b not bound yet in the `if`
     "lambda x: [b for a in x for b in b]",  # a generator's own target
-    # --- shadowing does not widen what a library name can do ---
+    # shadowing does not widen what a library name can do
     "lambda np: np.meshgrid(np)",  # a numpy function, not an object attribute
     "lambda x: (lambda m: m.meshgrid(x))(np)",
     "lambda x: (lambda m: m.load('f'))(np)",
-    # --- a library or submodule is a prefix, never a value ---
+    # a library or submodule is a prefix, never a value
     "lambda x: np",
     "lambda x: [np]",
     "lambda x: pd",
@@ -738,7 +789,7 @@ REJECTED = [
     "lambda x: sp.stats",
     "lambda x: (lambda m: m)(sp.stats)",
     "lambda x: (lambda m: m.norm(x))(np.linalg)",
-    # --- I/O ---
+    # I/O
     "lambda x: pd.read_csv('f.csv')",
     "lambda x: pd.read_pickle('f')",
     "lambda x: pd.to_pickle(x, 'f')",
@@ -764,7 +815,7 @@ REJECTED = [
     "lambda x: sp.datasets.face()",
     "lambda x: sp.sparse.load_npz('f')",
     "lambda x: sp.sparse.save_npz('f', x)",
-    # --- evaluation / dispatch by string ---
+    # evaluation / dispatch by string
     "lambda x: pd.eval('1')",
     "lambda x: x.eval('a + 1')",
     "lambda x: x.query('a > 1')",
@@ -776,7 +827,7 @@ REJECTED = [
     "lambda x: np.f2py",
     "lambda x: '{0}'.format(x)",
     "lambda x: '{0}'.format_map(x)",
-    # --- process-wide state ---
+    # process-wide state
     "lambda x: np.random.seed(0)",
     "lambda x: np.random.set_state(0)",
     "lambda x: np.random.RandomState(0).seed(1)",  # reseeding is a state change
@@ -791,7 +842,7 @@ REJECTED = [
     "lambda x: sp.fft.set_workers(2)",
     "lambda x: sp.constants.physical_constants",
     "lambda x: np.typecodes",
-    # --- raw memory / native code ---
+    # raw memory / native code
     "lambda x: x.ctypes",
     "lambda x: x.resize(3)",
     "lambda x: x.setflags(write=True)",
@@ -804,7 +855,7 @@ REJECTED = [
     "lambda x: sp.linalg.blas",
     "lambda x: sp.linalg.get_blas_funcs",
     "lambda x: sp.special.cython_special",
-    # --- environment / plotting / internals ---
+    # environment / plotting / internals
     "lambda x: np.show_config()",
     "lambda x: np.info(x)",
     "lambda x: np.testing",
@@ -823,14 +874,14 @@ REJECTED = [
     "lambda x: sp.stats.stats",  # deprecated alias module
     "lambda x: sp.stats.contingency.reduce",  # leaked functools.reduce
     "lambda x: math.sqrt.foo",
-    # --- frame / generator / dunder access ---
+    # frame / generator / dunder access
     "lambda x: x.__class__",
     "lambda x: x.T.__class__",
     "lambda x: (a for a in x).gi_frame",
     "lambda x: x.f_back",
     "lambda x: x.f_globals",
     "lambda x: np.__dict__",
-    # --- names ---
+    # banned builtins and syntax
     "lambda x: open('f')",
     "lambda x: getattr(x, 'a')",
     "lambda x: __import__('os')",
@@ -838,14 +889,13 @@ REJECTED = [
     "lambda x: globals()",
     "lambda x: type(x)",
     "lambda x: _hidden",
-    # --- syntax ---
     "lambda x: f'{x}'",
     "lambda x: (y := x)",
     "lambda: (yield)",
-    # --- not a single lambda ---
+    # missing lambda
     "x + 1",
     "np.sqrt",
-    # --- guarded methods: names that are not allowed methods ---
+    # guarded methods using names that are explicitly not allowed
     "lambda x: x.agg('to_csv')",
     "lambda x: x.agg('to_pickle')",
     "lambda x: x.apply('to_csv')",
@@ -861,7 +911,7 @@ REJECTED = [
     "lambda x: x.groupby('b').agg('to_csv')",
     "lambda x: x.rolling(3).agg('to_csv')",
     "lambda x: x.resample('D').agg('to_csv')",
-    # --- guarded methods: anything not visibly a function or an allowed name ---
+    # guarded methods: anything not clearly a function
     "lambda x: x.agg('to_' + 'csv')",  # name built at runtime
     "lambda x: x.apply(('su' + 'm'))",
     "lambda x: x.agg(str('sum'))",
@@ -1150,67 +1200,6 @@ def test_removing_a_node_type_rejects_it_everywhere(monkeypatch, removed, expr):
     )
     with pytest.raises(ValueError, match="Disallowed syntax"):
         operations.validate_custom_operation(expr)
-
-
-# ---------------------------------------------------------------------------
-# The generated allow-lists
-# ---------------------------------------------------------------------------
-
-
-def walk_tree(nodes=None, path=()):
-    """Yield (path, node) for every namespace in the generated allow-list."""
-    nodes = operations.ALLOWED_MODULE_MEMBERS if nodes is None else nodes
-    if not path:
-        for name, node in nodes.items():
-            yield from walk_tree(node, (name,))
-        return
-    yield path, nodes
-    for child, child_node in nodes["modules"].items():
-        yield from walk_tree(child_node, path + (child,))
-
-
-def is_installed_copy():
-    """Whether the package under test was installed (site-packages), not checked out."""
-    parts = pathlib.Path(operations.__file__).resolve().parts
-    return "site-packages" in parts or "dist-packages" in parts
-
-
-def generator_candidates():
-    """Where generate_allowlist.py may be: in the package (it ships with the tests),
-    or, in a source checkout only, at the top of the repository. The repository root
-    is not searched in an installed copy, because there it would be site-packages
-    itself, and any other installed distribution could drop a file there for the
-    tests to run."""
-    here = pathlib.Path(__file__).resolve()
-    roots = [here.parents[1]]
-    if not is_installed_copy():
-        roots += here.parents[2:3]
-    return [
-        root / folder / "generate_allowlist.py"
-        for root in roots
-        for folder in ("scripts", "tools")
-    ]
-
-
-def load_generator():
-    """Import generate_allowlist.py.
-
-    It ships with the tests so that an installed copy can be verified, which means a
-    missing generator is always a failure: skipping would quietly turn off the checks
-    that guard the allow-list.
-    """
-    candidates = generator_candidates()
-    for path in candidates:
-        if path.is_file():
-            spec = importlib.util.spec_from_file_location("generate_allowlist", path)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            return module
-    pytest.fail(
-        "generate_allowlist.py not found, so the allow-list checks cannot run. "
-        "It must ship with the tests (check the package data). "
-        "Looked in: " + ", ".join(str(path) for path in candidates)
-    )
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")

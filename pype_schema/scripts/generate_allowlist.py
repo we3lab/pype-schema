@@ -1,52 +1,14 @@
 #!/usr/bin/env python3
 """Regenerate the allow-lists in ``operations.py`` and write ``allowlist_report.md``.
 
-``operations.py`` only lets a custom operation reach functions and attributes that
-appear in the allow-lists in its generated block (between the BEGIN/END GENERATED
-ALLOW-LISTS markers). This script produces them by enumerating the public API of the
-*installed* math, numpy, pandas, and scipy, and then removing everything that is
-judged dangerous.
-
-Why generate and freeze, instead of computing the lists when the module is imported?
-A newer library version can add functions. If the lists were computed at import time,
-a new function with a harmless-looking name would be allowed automatically. A frozen
-block keeps the default "deny": new API is unreachable until someone re-runs this
-script and reviews the diff.
-
-What "dangerous" means here (see CATEGORY_TITLES). Everything not excluded for one of
-these reasons is allowed:
-
-IO        reads or writes files, URLs, the clipboard, databases, or pickles
-EVAL      evaluates code or expression strings
-DISPATCH  turns a *string* into a function/attribute lookup (``df.agg("sum")``).
-          ``apply``/``agg``/``aggregate``/``transform`` are allowed only in a
-          guarded form (see operations.py); the rest are excluded
-STATE     changes process-wide state (config, global RNG seed, registries,
-          mutable module-level containers)
-NATIVE    raw memory or native-code interfaces
-ENV       reveals the environment (paths, build config, versions, source)
-OTHER     not computation on data, or not reviewed (plotting, testing,
-          typing, deprecated aliases, internals)
-
-To change a decision, edit KEEP / EXPLICIT / NAME_RULES below and re-run:
-
     python generate_allowlist.py            # rewrite the block
-    python generate_allowlist.py --check    # change nothing; for CI
+    python generate_allowlist.py --check    # change nothing; for CI (exit 0, 1, or 2)
 
-Which environment? The block is tied to the environment that generated it: Python's
-version changes the ``math`` members and the methods of built-in types, and a CI matrix
-usually resolves different numpy/pandas/scipy releases for each Python. So generate in
-ONE canonical environment and run ``--check`` in ONE CI job, in that same environment.
-It exits 0 if the block is up to date, 1 if regenerating would change it (new library
-API to review), and 2 if it is run in a different environment from the recorded one,
-which is a CI misconfiguration, not drift. The test suite does not depend on the
-installed libraries, so it runs unchanged across the whole matrix.
-
-Optional packages count as part of the environment. If one is installed, whatever it
-adds to numpy, pandas, or scipy is enumerated like everything else, under the same
-rules, and shows up in the diff for review (numexpr is the known case: once installed,
-importing pandas makes it add ``numpy.expm1x``, an alias of ``numpy.expm1``). Install
-the same optional packages in the CI job that runs ``--check``, or it reports drift.
+The lists come from the public API of the installed math, numpy, pandas, and scipy,
+minus everything judged dangerous (see CATEGORY_TITLES), frozen in a block in
+``operations.py``. To change a decision, edit KEEP / KEEP_ATTRS / EXPLICIT /
+NAME_RULES below and re-run. The environment it must run in, the CI job, and the exit
+codes are explained under Custom Mode in docs/advanced.rst.
 """
 
 import argparse
@@ -96,10 +58,8 @@ CATEGORY_TITLES = {
 # when called directly with a statically known callable (never a string).
 GUARDED_METHODS = ("agg", "aggregate", "apply", "transform")
 
-# --------------------------------------------------------------------------
 # Namespaces that are enumerated. Everything else (deprecated aliases such as
 # scipy.stats.stats, internals, I/O modules, ...) is excluded wholesale.
-# --------------------------------------------------------------------------
 NAMESPACES = [
     ("math",),
     ("numpy",),
@@ -150,9 +110,6 @@ NAMESPACES = [
 ]
 NAMESPACE_SET = set(NAMESPACES)
 
-# --------------------------------------------------------------------------
-# Decisions
-# --------------------------------------------------------------------------
 # Names that look excluded by a rule below but were reviewed and are safe.
 # key: ("dotted.namespace", "name")
 KEEP = {
@@ -180,7 +137,7 @@ KEEP_ATTRS = {
 
 # Explicit exclusions. key: ("dotted.namespace" or "*", "name")
 EXPLICIT = {
-    # ---- numpy (top level) ----
+    # top-level numpy
     ("numpy", "bmat"): (
         DISPATCH,
         "resolves names in a string from the caller's stack frame",
@@ -211,8 +168,7 @@ EXPLICIT = {
     ("numpy", "rec"): (IO, "record-array helpers include fromfile"),
     ("numpy", "testing"): (OTHER, "test runners and assertions (some execute code)"),
     ("numpy", "typing"): (OTHER, "typing helpers"),
-    # ---- numpy.random ----
-    # ---- pandas ----
+    # pandas
     ("pandas", "eval"): (EVAL, "evaluates an expression string"),
     ("pandas", "pivot_table"): (DISPATCH, "`aggfunc` string is resolved by name"),
     ("pandas", "crosstab"): (DISPATCH, "`aggfunc` string is resolved by name"),
@@ -237,7 +193,7 @@ EXPLICIT = {
     ("pandas", "testing"): (OTHER, "test assertions"),
     ("pandas", "tseries"): (OTHER, "use pd.offsets / pd.date_range"),
     ("pandas", "util"): (OTHER, "internal utilities"),
-    # ---- scipy ----
+    # scipy
     ("scipy", "LowLevelCallable"): (NATIVE, "wraps raw C function pointers"),
     ("scipy", "datasets"): (IO, "downloads data files from the network"),
     ("scipy", "io"): (IO, "reads and writes files"),
@@ -272,7 +228,7 @@ EXPLICIT = {
 # scope: "module" = names reached through a library, "attr" = attributes of
 # ordinary objects (Series, ndarray, str, ...), "both".
 NAME_RULES = [
-    # ---- I/O ----
+    # I/O
     (r"read_\w+", IO, "reads a file, URL, clipboard, or database", "module"),
     (
         r"(load|loads|loadtxt|loadmat|load_npz|loadarff)",
@@ -305,7 +261,7 @@ NAME_RULES = [
         "writes to a path, buffer, or clipboard, or hands off to an external library",
         "attr",
     ),
-    # ---- evaluation ----
+    # evaluation
     (
         r"(eval|exec|execfile|compile|query)",
         EVAL,
@@ -318,14 +274,14 @@ NAME_RULES = [
         "format-string fields can traverse attributes (e.g. `{0.__class__}`)",
         "attr",
     ),
-    # ---- dispatch by name ----
+    # dispatch by name
     (
         r"(pivot_table|crosstab|NamedAgg|NamedFunc)",
         DISPATCH,
         "`aggfunc` string is resolved by name",
         "both",
     ),
-    # ---- process-wide state ----
+    # process-wide state
     (
         r"(set_\w+|reset_\w+|use_\w+|register_\w+|unregister_\w+|add_newdoc\w*|"
         r"add_docstring|seterr|seterrcall|setbufsize|errstate|printoptions|seed|"
@@ -334,7 +290,7 @@ NAME_RULES = [
         "changes process-wide configuration or state",
         "module",
     ),
-    # ---- native / memory ----
+    # native / memory
     (
         r"(as_strided|byte_bounds|from_dlpack|LowLevelCallable|ctypeslib|"
         r"get_blas_funcs|get_lapack_funcs|cython_\w+)",
@@ -363,7 +319,7 @@ NAME_RULES = [
         "can mark memory writeable/aligned without the usual checks",
         "attr",
     ),
-    # ---- environment ----
+    # environment
     (
         r"(get_include|info|lookfor|source|who|test|tests|show_config|show_runtime|"
         r"show_versions|get_option|describe_option)",
@@ -372,7 +328,7 @@ NAME_RULES = [
         "module",
     ),
     (r"info", ENV, "prints a summary to stdout or a buffer", "attr"),
-    # ---- not computation on data ----
+    # no computation on data
     (
         r"(plot|hist|boxplot|style|dendrogram)",
         OTHER,
@@ -469,9 +425,6 @@ EXTRA_ATTRIBUTES = (
 )
 
 
-# --------------------------------------------------------------------------
-# helpers
-# --------------------------------------------------------------------------
 class Deprecated:
     pass
 
@@ -612,9 +565,6 @@ def classify_member(ns, name, obj, unknown_signatures):
     return source_verdict(obj)
 
 
-# --------------------------------------------------------------------------
-# module members
-# --------------------------------------------------------------------------
 def build_namespaces():
     tree = {}  # dotted path -> {"names": set, "modules": set}
     excluded = []  # (category, namespace, name, reason)
@@ -639,9 +589,6 @@ def build_namespaces():
     return tree, excluded, unknown_signatures
 
 
-# --------------------------------------------------------------------------
-# attributes of ordinary objects
-# --------------------------------------------------------------------------
 def attribute_universe(tree):
     """[(label, class-or-instance, use_instance_dir)] of the objects whose
     attributes custom operations may meaningfully touch."""
@@ -886,9 +833,6 @@ def build_attributes(tree):
     return allowed, excluded, guarded_seen, unknown_signatures
 
 
-# --------------------------------------------------------------------------
-# output
-# --------------------------------------------------------------------------
 BLOCK_BEGIN = "# BEGIN GENERATED ALLOW-LISTS"
 BLOCK_END = "# END GENERATED ALLOW-LISTS"
 

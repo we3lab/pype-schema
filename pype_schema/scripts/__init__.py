@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
 
-"""Sample data for PyPES testing."""
+"""Scripts for PyPES developers provided to end users
+for transparency and reproducibility."""

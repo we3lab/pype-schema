@@ -255,61 +255,15 @@ def unary_helper(data, un_op):
     return result
 
 
-# ---------------------------------------------------------------------------
-# Custom operations: validating and building user-supplied lambda strings
-# ---------------------------------------------------------------------------
-#
-# A custom operation is a single lambda expression, written as a string in a
-# file that is loaded at analysis time, e.g. "lambda x: x.diff().shift(-1)".
-#
-# Trust model. Operations are expected to come from the developer who created
-# the file, or from another trusted party. The checks below stop accidents and
-# make a tampered file hard to turn into arbitrary code execution; they are NOT
-# a substitute for process-level isolation. In particular:
-#
-# - only the *syntax* and the *names/attributes* an expression can touch are
-#   restricted. CPU time and memory used while the expression runs are not
-#   (``9**9**9`` is valid, and so is ``[0] * 10**10``);
-# - operations may modify the data passed to them in place (e.g.
-#   ``inplace=True`` or ``out=``). This is permitted deliberately: it is a side
-#   effect on the caller's data, not a way around the restrictions, so callers
-#   should not assume their inputs are unchanged after an operation runs.
-#
-# Allow-lists. What an expression can reach is defined by the generated block at
-# the bottom of this file, which scripts/generate_allowlist.py writes from the
-# installed numpy, pandas, scipy, and math. It is a frozen, default-deny list: a
-# function added by a newer library version is unreachable until the generator is
-# re-run and the diff is reviewed. scripts/allowlist_report.md lists everything
-# that was excluded and why. Do not edit the generated block by hand; a test fails
-# if it differs from what the generator writes.
-#
-# Library names are prefixes only. ``np.sqrt`` and ``sp.stats.zscore`` are fine, but
-# ``np``, ``sp.stats`` and ``np.linalg`` cannot be used as values (``f(np)``, ``[np]``).
-# That keeps a module object from ever being passed around, which is what lets the
-# attribute allow-list below apply to ordinary objects only, whatever versions of the
-# libraries are installed.
-#
-# ``apply`` / ``agg`` / ``aggregate`` / ``transform`` are special. Called with a
-# string (``x.agg("sum")``) they look an attribute up by name, which would bypass
-# the attribute allow-list. They are therefore allowed only when called directly
-# with something whose method name is visible and checked: a lambda, a library
-# function such as ``np.mean``, a builtin such as ``abs``, a string literal that
-# names an allowed method, or a list/dict of those. A name built at runtime
-# (``"to_" + "csv"``), or the method passed around as a value, is rejected. See
-# `_is_function_spec`.
+# NOTE: the trust model, what an expression may use, and how to maintain allow-lists
+# are detailed under "Custom Mode" in docs/advanced.rst
 
-# Seat-belt limits on the size of an expression. Validation is linear in the
-# size of the expression, so these are generous; they only exist to fail fast
-# on pathological input. Tune as needed.
+# Reject overly large expressions up front by limiting the size of an expression
 MAX_EXPRESSION_LENGTH = 100_000  # characters
 MAX_EXPRESSION_NODES = 50_000  # AST nodes
 
-# AST node types permitted anywhere inside a custom operation. This is the
-# single source of truth: *every* node the validator visits is checked against
-# it. Nodes the validator handles structurally rather than by visiting them
-# (``arguments``/``arg`` of a lambda, ``comprehension`` clauses, and ``Store``
-# contexts of comprehension targets) are deliberately absent, so they fail
-# closed if they ever show up anywhere else.
+# Every visited node must be listed. Lambda arguments, comprehension clauses and Store
+# contexts are handled structurally and left out so they fail closed anywhere else
 ALLOWED_NODES = (
     ast.Expression,
     ast.Lambda,
@@ -369,7 +323,7 @@ ALLOWED_NODES = (
     ast.In,
     ast.NotIn,
 )
-if sys.version_info < (3, 9):  # pragma: no cover
+if sys.version_info < (3, 9):
     # before 3.9, subscripts wrap their index in Index/ExtSlice nodes
     ALLOWED_NODES += (ast.Index, ast.ExtSlice)
 
@@ -388,9 +342,10 @@ MODULE_ALIASES = {
 }
 ALLOWED_NAMES = frozenset(MODULE_ALIASES)
 
-# Builtins exposed to the evaluated expression. Deliberately excludes
-# ``__import__``, ``eval``, ``exec``, ``compile``, ``open``, ``getattr``,
-# ``setattr``, ``globals``, ``locals``, ``vars``, ``input``, etc.
+# Builtins are only allowed if they compute on the given values. Builtins are
+# excluded if they "reach around" the attribute allow-list by importing/exporting
+# modules or running code (``__import__``, ``eval``, ``input``), looking up attributes
+# from a string (``getattr``, ``vars``), or classes/namespaces (``type``, ``globals``)
 SAFE_BUILTIN_NAMES = frozenset(
     {
         "abs",
@@ -421,10 +376,7 @@ SAFE_BUILTIN_NAMES = frozenset(
     }
 )
 SAFE_BUILTINS = {name: getattr(builtins, name) for name in SAFE_BUILTIN_NAMES}
-
-# a library path is at most <library>.<submodule>.<submodule>, so attribute
-# chains deeper than this can never refer to a library
-_MAX_LIBRARY_DEPTH = 3
+MAX_LIBRARY_DEPTH = 3
 
 
 def count_args(func_str):
@@ -457,6 +409,24 @@ def count_args(func_str):
 
 
 def _is_bound(name, scopes):
+    """Whether `name` is a parameter or comprehension variable that is in scope.
+
+    A bound name belongs to the expression itself, so it needs no allow-list check
+    and it shadows a library name (such as ``np``) of the same name.
+
+    Parameters
+    ----------
+    name : str
+        A name used in the expression
+
+    scopes : tuple of frozenset
+        The names bound by each enclosing lambda and comprehension, outermost first
+
+    Returns
+    -------
+    bool
+        True if any enclosing scope binds `name`
+    """
     return any(name in scope for scope in scopes)
 
 
@@ -498,7 +468,7 @@ def _library_reference(expr, scopes):
     attrs = []
     while isinstance(expr, ast.Attribute):
         attrs.append(expr.attr)
-        if len(attrs) > _MAX_LIBRARY_DEPTH:
+        if len(attrs) > MAX_LIBRARY_DEPTH:
             return None, None
         expr = expr.value
     if (
