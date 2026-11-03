@@ -71,8 +71,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">operations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.Constant"><code class="docutils literal notranslate"><span class="pre">Constant</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.binary_helper"><code class="docutils literal notranslate"><span class="pre">binary_helper()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.build_custom_operation"><code class="docutils literal notranslate"><span class="pre">build_custom_operation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.count_args"><code class="docutils literal notranslate"><span class="pre">count_args()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.get_change"><code class="docutils literal notranslate"><span class="pre">get_change()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.unary_helper"><code class="docutils literal notranslate"><span class="pre">unary_helper()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pype_schema.operations.validate_custom_operation"><code class="docutils literal notranslate"><span class="pre">validate_custom_operation()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
@@ -125,8 +128,8 @@ values directly.</p>
 </dd>
 <dt class="field-even">Variables<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – </p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The value of this constant at all timesteps</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – </p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a>) – The value of this constant at all timesteps</p></li>
 </ul>
 </dd>
 </dl>
@@ -149,9 +152,9 @@ Default is False</p></li>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When units are incompatible for addition or subtraction.
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When units are incompatible for addition or subtraction.
     When <cite>operation</cite> is unsupported.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UserWarning" title="(in Python v3.14)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized variables makes it impossible
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#UserWarning" title="(in Python v3.15)"><strong>UserWarning</strong></a> – When a mix of totalized and detotalized variables makes it impossible
     to verify unit compatibility</p></li>
 </ul>
 </dd>
@@ -161,6 +164,62 @@ according to <cite>operation</cite></p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Unit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.operations.build_custom_operation">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">build_custom_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#build_custom_operation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.build_custom_operation" title="Permalink to this definition"></a></dt>
+<dd><p>Validate a custom operation string and compile it to a callable.</p>
+<p>The expression is validated and compiled from a single parsed AST (so the
+validated tree is exactly the one evaluated), then evaluated in a
+restricted namespace whose builtins are limited to <cite>SAFE_BUILTINS</cite> and
+whose only module globals are the libraries the expression actually uses
+(so e.g. scipy is only imported if the expression refers to it).</p>
+<p>The restricted namespace is defense in depth, not a security boundary: the
+AST allow-lists enforced by <cite>validate_custom_operation</cite> are the primary
+control. Operations are expected to come from trusted authors (see the
+comment above ALLOWED_NODES).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func_str</strong> (<em>str</em>) – A string representation of a lambda function</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The compiled lambda function</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – When <cite>func_str</cite> is not a string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When <cite>func_str</cite> fails <cite>validate_custom_operation</cite>, or is too deeply
+    nested to compile</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#SyntaxError" title="(in Python v3.15)"><strong>SyntaxError</strong></a> – When <cite>func_str</cite> is not valid Python syntax</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ImportError" title="(in Python v3.15)"><strong>ImportError</strong></a> – When a library the expression refers to is not installed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.operations.count_args">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">count_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#count_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.count_args" title="Permalink to this definition"></a></dt>
+<dd><p>Count the arguments for a lambda function string
+without executing the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func_str</strong> (<em>str</em>) – A string representation of a lambda function</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lambda function’s number of arguments</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – If <cite>custom_operations</cite> is not a single lambda string</p>
 </dd>
 </dl>
 </dd></dl>
@@ -183,7 +242,7 @@ the value at time t+1 and t</p>
 <dd class="field-even"><p>Rate of change variable or tuple of netative, positive rate of change variable</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v3.0.3)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.4)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v3.1)">pandas.Series</a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,7 +278,71 @@ with NaN so that it is the same length as input data</p>
 <dd class="field-even"><p>numpy array of dataset trannsformed by unary operation</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>, array, or Series</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>, array, or Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.operations.validate_custom_operation">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.operations.</span></span><span class="sig-name descname"><span class="pre">validate_custom_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/operations.html#validate_custom_operation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.operations.validate_custom_operation" title="Permalink to this definition"></a></dt>
+<dd><p>Validate that a custom operation string is a safe lambda expression.</p>
+<p>Parses <cite>func_str</cite> and walks its abstract syntax tree with a scope-aware
+validator, enforcing allow-lists so the expression can use
+pandas/numpy/scipy/math (method calls, attribute access, subscripts,
+comprehensions, nested lambdas, and the functions listed in
+<code class="docutils literal notranslate"><span class="pre">ALLOWED_MODULE_MEMBERS</span></code>) while remaining unable to execute arbitrary
+code. It rejects:</p>
+<ul class="simple">
+<li><p>input longer than <code class="docutils literal notranslate"><span class="pre">MAX_EXPRESSION_LENGTH</span></code> characters or containing more
+than <code class="docutils literal notranslate"><span class="pre">MAX_EXPRESSION_NODES</span></code> syntax nodes,</p></li>
+<li><p>any syntax node outside <code class="docutils literal notranslate"><span class="pre">ALLOWED_NODES</span></code> (e.g. assignments, f-strings),</p></li>
+<li><p>default argument values (they are evaluated when the lambda is built and
+would bypass the free-name check),</p></li>
+<li><p>assignment targets that are not plain names (an <code class="docutils literal notranslate"><span class="pre">Attribute</span></code>/<code class="docutils literal notranslate"><span class="pre">Subscript</span></code>
+target such as <code class="docutils literal notranslate"><span class="pre">np.sum</span></code> could rebind a shared module),</p></li>
+<li><p>any attribute whose name begins with <code class="docutils literal notranslate"><span class="pre">_</span></code> (blocks dunder traversal such
+as <code class="docutils literal notranslate"><span class="pre">__class__</span></code> / <code class="docutils literal notranslate"><span class="pre">__globals__</span></code> / <code class="docutils literal notranslate"><span class="pre">__subclasses__</span></code>),</p></li>
+<li><p>any member of <code class="docutils literal notranslate"><span class="pre">np</span></code>/<code class="docutils literal notranslate"><span class="pre">pd</span></code>/<code class="docutils literal notranslate"><span class="pre">sp</span></code>/<code class="docutils literal notranslate"><span class="pre">math</span></code> (or of one of their
+submodules) that is not in <code class="docutils literal notranslate"><span class="pre">ALLOWED_MODULE_MEMBERS</span></code>, and any attribute of
+any other object that is not in <code class="docutils literal notranslate"><span class="pre">ALLOWED_ATTRIBUTES</span></code> (default-deny, so
+code/IO entry points such as <code class="docutils literal notranslate"><span class="pre">read_pickle</span></code>, <code class="docutils literal notranslate"><span class="pre">load</span></code>, <code class="docutils literal notranslate"><span class="pre">eval</span></code>,
+<code class="docutils literal notranslate"><span class="pre">query</span></code> are never reachable, nor is any future addition to the
+libraries),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apply</span></code>/<code class="docutils literal notranslate"><span class="pre">agg</span></code>/<code class="docutils literal notranslate"><span class="pre">aggregate</span></code>/<code class="docutils literal notranslate"><span class="pre">transform</span></code> unless called directly with a
+function that is visible in the expression, or the name of an allowed method
+(never a name that is built at runtime or passed in),</p></li>
+<li><p>any free (unbound) name that is not in <cite>ALLOWED_NAMES</cite> or the safe
+builtin set (blocks <code class="docutils literal notranslate"><span class="pre">__import__</span></code>, <code class="docutils literal notranslate"><span class="pre">open</span></code>, <code class="docutils literal notranslate"><span class="pre">getattr</span></code>, <code class="docutils literal notranslate"><span class="pre">eval</span></code> …).</p></li>
+</ul>
+<p>Names bound by lambda parameters and comprehension targets are scoped, so a
+name bound inside a comprehension is not treated as bound outside it, and a
+library name that has been shadowed by a parameter (<code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">np:</span> <span class="pre">...</span></code>) is
+treated as an ordinary object.</p>
+<p>The validator is iterative, so the nesting depth of an expression does not
+depend on the Python recursion limit.</p>
+<p>This is validation only; use <cite>build_custom_operation</cite> to additionally
+compile the expression in a restricted namespace. See the comment above
+ALLOWED_NODES for what validation deliberately does not restrict (CPU/memory use,
+in-place modification of arguments).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func_str</strong> (<em>str</em>) – A string representation of a lambda function to validate</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The original <cite>func_str</cite>, unchanged, when validation succeeds</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – When <cite>func_str</cite> is not a string</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When <cite>func_str</cite> is not a single lambda expression, is too large or too
+    deeply nested, or contains syntax, names, or attributes that are not
+    allowed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#SyntaxError" title="(in Python v3.15)"><strong>SyntaxError</strong></a> – When <cite>func_str</cite> is not valid Python syntax</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pype_schema.scripts package &mdash; PyPES 0.8.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PyPES
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="json_rep.html">JSON Representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contribution Agreement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Class Hierarchy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="connection.html">connection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">tag</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">JSON Parsing</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parse_json.html">parse_json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="units.html">units</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Miscellaneous</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="logbook.html">logbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operations.html">operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualize.html">visualize</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyPES</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pype_schema.scripts package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pype_schema.scripts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pype-schema-scripts-package">
+<h1>pype_schema.scripts package<a class="headerlink" href="#pype-schema-scripts-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-pype_schema.scripts.generate_allowlist">
+<span id="pype-schema-scripts-generate-allowlist-module"></span><h2>pype_schema.scripts.generate_allowlist module<a class="headerlink" href="#module-pype_schema.scripts.generate_allowlist" title="Permalink to this heading"></a></h2>
+<p>Regenerate the allow-lists in <code class="docutils literal notranslate"><span class="pre">operations.py</span></code> and write <code class="docutils literal notranslate"><span class="pre">allowlist_report.md</span></code>.
+Pass <code class="docutils literal notranslate"><span class="pre">--check</span></code> to change nothing (for CI). The rules, the environment, and the exit
+codes are described under Custom Mode in docs/advanced.rst.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.Deprecated">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">Deprecated</span></span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#Deprecated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.Deprecated" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Marks a library member that warns or fails when it is read.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.attribute_universe">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">attribute_universe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#attribute_universe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.attribute_universe" title="Permalink to this definition"></a></dt>
+<dd><p>The objects whose attributes a custom operation may touch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace; members that are excluded are skipped</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">class</span> <span class="pre">or</span> <span class="pre">instance)</span></code> for each object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.block_versions">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">block_versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#block_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.block_versions" title="Permalink to this definition"></a></dt>
+<dd><p>The environment recorded in a generated block’s header.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>block</strong> (<em>str</em>) – The generated block</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The versions string, or None if the header has none</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.build_attributes">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">build_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#build_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.build_attributes" title="Permalink to this definition"></a></dt>
+<dd><p>Decide which attribute names are allowed on ordinary objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace, from <cite>build_namespaces</cite></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>allowed</strong> (<em>set of str</em>) – Attribute names that are allowed</p></li>
+<li><p><strong>excluded</strong> (<em>dict</em>) – Maps each excluded name to <code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">reason,</span> <span class="pre">label)</span></code></p></li>
+<li><p><strong>guarded_seen</strong> (<em>set of str</em>) – GUARDED_METHODS names found on some object</p></li>
+<li><p><strong>unknown_signatures</strong> (<em>list of str</em>) – Callables whose signature cannot be inspected</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.build_namespaces">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">build_namespaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#build_namespaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.build_namespaces" title="Permalink to this definition"></a></dt>
+<dd><p>Enumerate the allowed members of every namespace in NAMESPACES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>tree</strong> (<em>dict</em>) – Maps each namespace path to its allowed <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code></p></li>
+<li><p><strong>excluded</strong> (<em>list of tuple</em>) – <code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">namespace,</span> <span class="pre">name,</span> <span class="pre">reason)</span></code> for each excluded member</p></li>
+<li><p><strong>unknown_signatures</strong> (<em>list of str</em>) – Callables whose signature cannot be inspected</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.check_block">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">check_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions_now</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#check_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.check_block" title="Permalink to this definition"></a></dt>
+<dd><p>Compare the generated block with what this environment generates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – The text of operations.py</p></li>
+<li><p><strong>result</strong> (<em>dict or None</em>) – The output of <cite>generate</cite>; not used if the environment differs</p></li>
+<li><p><strong>versions_now</strong> (<em>str</em>) – The versions of this environment, from <cite>versions_string</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>code</strong> (<em>int</em>) – CHECK_OK, CHECK_DRIFT, or CHECK_WRONG_ENV</p></li>
+<li><p><strong>message</strong> (<em>str</em>) – What to tell the user</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When the BEGIN/END markers are missing from <cite>source</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.classify_member">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">classify_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_signatures</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#classify_member"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.classify_member" title="Permalink to this definition"></a></dt>
+<dd><p>Decide whether a library member is excluded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ns</strong> (<em>tuple of str</em>) – The namespace the member is in, such as <code class="docutils literal notranslate"><span class="pre">(&quot;numpy&quot;,</span> <span class="pre">&quot;linalg&quot;)</span></code></p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The member’s name</p></li>
+<li><p><strong>obj</strong> (<em>object</em>) – The member itself</p></li>
+<li><p><strong>unknown_signatures</strong> (<em>list of str</em>) – Collects callables whose signature cannot be inspected (changed in place)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">reason)</span></code> if the member is excluded</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.default_target">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">default_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">here</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#default_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.default_target" title="Permalink to this definition"></a></dt>
+<dd><p>Where operations.py is, relative to the generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>here</strong> (<em>str</em>) – The folder that contains the generator</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The first of <code class="docutils literal notranslate"><span class="pre">../operations.py</span></code> and <code class="docutils literal notranslate"><span class="pre">../pype_schema/operations.py</span></code> that
+exists</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.executable_source">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">executable_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#executable_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.executable_source" title="Permalink to this definition"></a></dt>
+<dd><p>Source of a function or method written in Python, without docstrings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>callable</em>) – The function, method, or class to read</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The source, or None if it is not available (for example compiled code)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.extract_block">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">extract_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#extract_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.extract_block" title="Permalink to this definition"></a></dt>
+<dd><p>The generated block, markers included, inside the text of operations.py.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> (<em>str</em>) – The text of operations.py</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The block</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When the BEGIN/END markers are missing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.find_parallel">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">find_parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#find_parallel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.find_parallel" title="Permalink to this definition"></a></dt>
+<dd><p>Allowed library callables that accept a <code class="docutils literal notranslate"><span class="pre">workers</span></code>-style argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace: path -&gt; <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dotted names such as <code class="docutils literal notranslate"><span class="pre">scipy.optimize.differential_evolution</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.generate">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.generate" title="Permalink to this definition"></a></dt>
+<dd><p>Run the whole pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Everything needed to render or test the lists: <code class="docutils literal notranslate"><span class="pre">tree</span></code>, <code class="docutils literal notranslate"><span class="pre">member_excl</span></code>,
+<code class="docutils literal notranslate"><span class="pre">attrs</span></code>, <code class="docutils literal notranslate"><span class="pre">attr_excl</span></code>, <code class="docutils literal notranslate"><span class="pre">guarded_seen</span></code>, <code class="docutils literal notranslate"><span class="pre">unknown_sigs</span></code>, and <code class="docutils literal notranslate"><span class="pre">parallel</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.inject_block">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">inject_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#inject_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.inject_block" title="Permalink to this definition"></a></dt>
+<dd><p>Replace the generated block in the text of operations.py.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – The text of operations.py</p></li>
+<li><p><strong>block</strong> (<em>str</em>) – The new block, markers included</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>source</cite> with its block replaced</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When the BEGIN/END markers are missing from <cite>source</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.io_params">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">io_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#io_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.io_params" title="Permalink to this definition"></a></dt>
+<dd><p>The file-like parameter names of a callable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>callable</em>) – The function or class to inspect</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parameters that look like they take a file, or None if there is no signature</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#set" title="(in Python v3.15)">set</a> of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.is_installed_path">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">is_installed_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#is_installed_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.is_installed_path" title="Permalink to this definition"></a></dt>
+<dd><p>Whether a path is inside an installed package, not a source checkout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – A file path</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True for a path under <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> or <code class="docutils literal notranslate"><span class="pre">dist-packages</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.main">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.main" title="Permalink to this definition"></a></dt>
+<dd><p>Rewrite the generated block, or check it with <code class="docutils literal notranslate"><span class="pre">--check</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#SystemExit" title="(in Python v3.15)"><strong>SystemExit</strong></a> – With the <code class="docutils literal notranslate"><span class="pre">--check</span></code> result as the exit code, or when asked to rewrite an
+    installed copy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.match_name_rules">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">match_name_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#match_name_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.match_name_rules" title="Permalink to this definition"></a></dt>
+<dd><p>The first NAME_RULES entry that excludes a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The member or attribute name</p></li>
+<li><p><strong>scope</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for library members, <code class="docutils literal notranslate"><span class="pre">&quot;attr&quot;</span></code> for attributes of ordinary objects</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">reason)</span></code> of the first matching rule</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.normalize_versions">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">normalize_versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">versions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#normalize_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.normalize_versions" title="Permalink to this definition"></a></dt>
+<dd><p>Compare Python by major.minor and the libraries exactly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>versions</strong> (<em>str or None</em>) – A versions string, such as the one in a generated block’s header</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>versions</cite> without the Python patch number</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.public_members">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">public_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#public_members"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.public_members" title="Permalink to this definition"></a></dt>
+<dd><p>Public members of a module, with deprecated ones marked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>module</strong> (<em>module</em>) – The module to list</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maps each public name to its object, or to a <cite>Deprecated</cite> marker if reading it
+warns or fails</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.render_block">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">render_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#render_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.render_block" title="Permalink to this definition"></a></dt>
+<dd><p>The exact text of the generated block, markers included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace: path -&gt; <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code></p></li>
+<li><p><strong>attrs</strong> (<em>iterable of str</em>) – Allowed attribute names</p></li>
+<li><p><strong>versions</strong> (<em>str</em>) – The environment recorded in the block’s header</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The block, which is identical for identical inputs</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.render_node">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">render_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#render_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.render_node" title="Permalink to this definition"></a></dt>
+<dd><p>Source code for one namespace’s <code class="docutils literal notranslate"><span class="pre">_ns(...)</span></code> call, including its submodules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ns</strong> (<em>tuple of str</em>) – The namespace path</p></li>
+<li><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace: path -&gt; <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code></p></li>
+<li><p><strong>depth</strong> (<em>int</em>) – Nesting level, used for indentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The source code</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.render_report">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">render_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">member_excl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_excl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guarded_seen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_sigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#render_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.render_report" title="Permalink to this definition"></a></dt>
+<dd><p>The Markdown report of what is allowed and what was excluded, and why.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> (<em>dict</em>) – Allowed members per namespace: path -&gt; <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code></p></li>
+<li><p><strong>member_excl</strong> (<em>list of tuple</em>) – Excluded library members, <code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">namespace,</span> <span class="pre">name,</span> <span class="pre">reason)</span></code></p></li>
+<li><p><strong>attr_excl</strong> (<em>dict</em>) – Excluded attribute names, mapping to <code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">reason,</span> <span class="pre">label)</span></code></p></li>
+<li><p><strong>guarded_seen</strong> (<em>set of str</em>) – Guarded methods that were found</p></li>
+<li><p><strong>attrs</strong> (<em>set of str</em>) – Allowed attribute names</p></li>
+<li><p><strong>unknown_sigs</strong> (<em>list of str</em>) – Callables whose signature cannot be inspected</p></li>
+<li><p><strong>parallel</strong> (<em>list of str</em>) – Callables that accept a parallelism argument</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The report</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.resolve_namespace">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">resolve_namespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ns</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#resolve_namespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.resolve_namespace" title="Permalink to this definition"></a></dt>
+<dd><p>The module object for a namespace path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ns</strong> (<em>tuple of str</em>) – A namespace path such as <code class="docutils literal notranslate"><span class="pre">(&quot;numpy&quot;,</span> <span class="pre">&quot;emath&quot;)</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The module that <cite>ns</cite> names</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>module</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.sample_results">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">sample_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#sample_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.sample_results" title="Permalink to this definition"></a></dt>
+<dd><p>Result objects returned by functions, so their field names are seen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Instances such as the results of <code class="docutils literal notranslate"><span class="pre">linregress</span></code> or <code class="docutils literal notranslate"><span class="pre">minimize</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.source_verdict">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">source_verdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#source_verdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.source_verdict" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the source of a function does something that is excluded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>callable</em>) – The function, method, or class to scan</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(category,</span> <span class="pre">reason)</span></code> if the source matches a SOURCE_RULES pattern</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)">tuple</a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.tree_from_frozen">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">tree_from_frozen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allowed_module_members</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#tree_from_frozen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.tree_from_frozen" title="Permalink to this definition"></a></dt>
+<dd><p>Flatten the nested ALLOWED_MODULE_MEMBERS into one entry per namespace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>allowed_module_members</strong> (<em>dict</em>) – ALLOWED_MODULE_MEMBERS as defined in operations.py</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maps each namespace path to its <code class="docutils literal notranslate"><span class="pre">names</span></code> and <code class="docutils literal notranslate"><span class="pre">modules</span></code>, like
+<cite>build_namespaces</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pype_schema.scripts.generate_allowlist.versions_string">
+<span class="sig-prename descclassname"><span class="pre">pype_schema.scripts.generate_allowlist.</span></span><span class="sig-name descname"><span class="pre">versions_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/scripts/generate_allowlist.html#versions_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.scripts.generate_allowlist.versions_string" title="Permalink to this definition"></a></dt>
+<dd><p>The Python, numpy, pandas, and scipy versions of this environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>For example <code class="docutils literal notranslate"><span class="pre">&quot;Python</span> <span class="pre">3.12.3,</span> <span class="pre">numpy</span> <span class="pre">2.4.4,</span> <span class="pre">pandas</span> <span class="pre">3.0.2,</span> <span class="pre">scipy</span> <span class="pre">1.17.1&quot;</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pype_schema.scripts">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pype_schema.scripts" title="Permalink to this heading"></a></h2>
+<p>Scripts for PyPES developers provided to end users
+for transparency and reproducibility.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, WE3 Lab.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

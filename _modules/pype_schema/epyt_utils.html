@@ -104,7 +104,7 @@
 
 
 <div class="viewcode-block" id="NpEncoder"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.epyt_utils.NpEncoder">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom JSON encoder for numpy types&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Custom JSON encoder for numpy types"""</span>
 
 <div class="viewcode-block" id="NpEncoder.default"><a class="viewcode-back" href="../../pype_schema.html#pype_schema.epyt_utils.NpEncoder.default">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
@@ -121,9 +121,9 @@
     <span class="n">out_file</span><span class="p">,</span>
     <span class="n">add_nodes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">use_name_as_id</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">content_placeholder</span><span class="o">=</span><span class="s2">&quot;DrinkingWater&quot;</span><span class="p">,</span>
+    <span class="n">content_placeholder</span><span class="o">=</span><span class="s2">"DrinkingWater"</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an EPANET input file to a PYPES JSON file</span>
+<span class="w">    </span><span class="sd">"""Convert an EPANET input file to a PYPES JSON file</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -144,11 +144,11 @@
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">        dictionary of `Node`, `Connection`, and `VirtualTag` objects</span>
-<span class="sd">        with keys &quot;nodes&quot;, &quot;connections&quot;, and &quot;virtual_tags&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        with keys "nodes", "connections", and "virtual_tags"</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">add_nodes</span> <span class="ow">and</span> <span class="n">use_name_as_id</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;use_name_as_id is ignored if add_nodes is True&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"use_name_as_id is ignored if add_nodes is True"</span><span class="p">)</span>
 
     <span class="n">G</span> <span class="o">=</span> <span class="n">epanet</span><span class="p">(</span><span class="n">inp_file</span><span class="p">)</span>
 
@@ -157,12 +157,12 @@
     <span class="n">connections</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">obj_counts</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;Junction&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;Tank&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;Reservoir&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;Pipe&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;Pump&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;Valve&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Junction"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Tank"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Reservoir"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Pipe"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Pump"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"Valve"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeIndex</span><span class="p">():</span>
@@ -171,106 +171,106 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elevation</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">elevation</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">elevation</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="c1"># Node type is one of: Junction, Reservoir, Tank</span>
-        <span class="k">if</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">&quot;JUNCTION&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">"JUNCTION"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
                 <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Junction&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">"Junction"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Junction"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Junction&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s2">"id"</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Junction"</span><span class="p">,</span>
+                <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
             <span class="p">}</span>
             <span class="n">node_ids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">id_str</span>
             <span class="n">nodes</span><span class="p">[</span><span class="n">id_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span>
-            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">&quot;RESERVOIR&quot;</span><span class="p">:</span>
+            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Junction"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">"RESERVOIR"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
                 <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Reservoir&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Reservoir&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">"Reservoir"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Reservoir"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Reservoir&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                <span class="s2">&quot;elevation (meters)&quot;</span><span class="p">:</span> <span class="n">elevation</span><span class="p">,</span>
-                <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s2">"id"</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Reservoir"</span><span class="p">,</span>
+                <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                <span class="s2">"elevation (meters)"</span><span class="p">:</span> <span class="n">elevation</span><span class="p">,</span>
+                <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
             <span class="p">}</span>
             <span class="n">node_ids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">id_str</span>
             <span class="n">nodes</span><span class="p">[</span><span class="n">id_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span>
-            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Reservoir&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">&quot;TANK&quot;</span><span class="p">:</span>
+            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Reservoir"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">node_type</span> <span class="o">==</span> <span class="s2">"TANK"</span><span class="p">:</span>
             <span class="n">volume</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeTankMaximumWaterVolume</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
                 <span class="n">volume</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">use_name_as_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">add_nodes</span><span class="p">:</span>
                 <span class="n">id_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getNodeNameID</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">&quot;Tank&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Tank&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="s2">"Tank"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Tank"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">node_obj</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Tank&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                <span class="s2">&quot;elevation (meters)&quot;</span><span class="p">:</span> <span class="n">elevation</span><span class="p">,</span>
-                <span class="s2">&quot;volume (cubic meters)&quot;</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
-                <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s2">"id"</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Tank"</span><span class="p">,</span>
+                <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                <span class="s2">"elevation (meters)"</span><span class="p">:</span> <span class="n">elevation</span><span class="p">,</span>
+                <span class="s2">"volume (cubic meters)"</span><span class="p">:</span> <span class="n">volume</span><span class="p">,</span>
+                <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
             <span class="p">}</span>
             <span class="n">node_ids</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">id_str</span>
             <span class="n">nodes</span><span class="p">[</span><span class="n">id_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_obj</span>
-            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Tank&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Tank"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Node type </span><span class="si">{</span><span class="n">node_type</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Node type </span><span class="si">{</span><span class="n">node_type</span><span class="si">}</span><span class="s2"> not recognized"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">getLinkIndex</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">add_nodes</span><span class="p">:</span>
             <span class="n">conn_type</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getLinkType</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
             <span class="c1"># Link type is one of: Pipe, Pump, Valve</span>
-            <span class="k">if</span> <span class="n">conn_type</span> <span class="o">==</span> <span class="s2">&quot;PIPE&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">conn_type</span> <span class="o">==</span> <span class="s2">"PIPE"</span><span class="p">:</span>
                 <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
-                    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
-                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                    <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                    <span class="s2">"source"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
+                    <span class="s2">"destination"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
+                    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                 <span class="p">}</span>
-                <span class="n">connections</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
-                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="n">conn_type</span> <span class="o">==</span> <span class="s2">&quot;PUMP&quot;</span><span class="p">:</span>
+                <span class="n">connections</span><span class="p">[</span><span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
+                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">conn_type</span> <span class="o">==</span> <span class="s2">"PUMP"</span><span class="p">:</span>
                 <span class="n">pump_obj1</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pump&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pump&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pump"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pump"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pump"</span><span class="p">,</span>
+                    <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                 <span class="p">}</span>
-                <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pump_obj1</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="s2">"Pump"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pump"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pump_obj1</span>
 
                 <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
-                    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;Pump&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                    <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                    <span class="s2">"source"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
+                    <span class="s2">"destination"</span><span class="p">:</span> <span class="s2">"Pump"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pump"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                 <span class="p">}</span>
-                <span class="n">connections</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
-                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">connections</span><span class="p">[</span><span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
+                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Pump&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
-                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                    <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                    <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"Pump"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pump"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"destination"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
+                    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                 <span class="p">}</span>
-                <span class="n">connections</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
-                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">connections</span><span class="p">[</span><span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
+                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># wait to increment pump count until all pipes are set up correctly</span>
-                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pump&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pump"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1"># TODO: change PRV to VALVE_TYPE_LIST to support multiple valve types</span>
-            <span class="k">elif</span> <span class="n">conn_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;PRV&quot;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">conn_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"PRV"</span><span class="p">]:</span>
                 <span class="c1"># Separate valve into multiple pipes and a valve</span>
                 <span class="c1"># Assign the first node to source, and the other nodes to destination</span>
                 <span class="n">sources</span> <span class="o">=</span> <span class="p">[]</span>
@@ -282,45 +282,45 @@
                         <span class="n">destinations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_ids</span><span class="p">[</span><span class="n">linknode</span><span class="p">])</span>
 
                 <span class="n">valve_obj</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Valve&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;PRV&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Valve"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Valve"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"PRV"</span><span class="p">,</span>
+                    <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                    <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                 <span class="p">}</span>
-                <span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">valve_obj</span>
+                <span class="n">nodes</span><span class="p">[</span><span class="s2">"Valve"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Valve"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">valve_obj</span>
 
                 <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
                     <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
-                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;Valve&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                        <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                        <span class="s2">"source"</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+                        <span class="s2">"destination"</span><span class="p">:</span> <span class="s2">"Valve"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Valve"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                     <span class="p">}</span>
-                    <span class="n">connections</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
-                    <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">connections</span><span class="p">[</span><span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
+                    <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="k">for</span> <span class="n">destination</span> <span class="ow">in</span> <span class="n">destinations</span><span class="p">:</span>
                     <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;Valve&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
-                        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="s2">"id"</span><span class="p">:</span> <span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                        <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                        <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"Valve"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Valve"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s2">"destination"</span><span class="p">:</span> <span class="n">destination</span><span class="p">,</span>
+                        <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
                     <span class="p">}</span>
-                    <span class="n">connections</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
-                    <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Pipe&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">connections</span><span class="p">[</span><span class="s2">"Pipe"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">connection_obj</span>
+                    <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Pipe"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="c1"># wait to increment valve count until all pipes are set up correctly</span>
-                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">&quot;Valve&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">obj_counts</span><span class="p">[</span><span class="s2">"Valve"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection type </span><span class="si">{</span><span class="n">conn_type</span><span class="si">}</span><span class="s2"> not recognized&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Connection type </span><span class="si">{</span><span class="n">conn_type</span><span class="si">}</span><span class="s2"> not recognized"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">type_str</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">getLinkType</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
             <span class="c1"># TODO: change this to VALVE_TYPE_LIST to support multiple valve types</span>
-            <span class="k">if</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;PRV&quot;</span><span class="p">]:</span>
-                <span class="n">type_str</span> <span class="o">=</span> <span class="s2">&quot;Valve&quot;</span>
+            <span class="k">if</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"PRV"</span><span class="p">]:</span>
+                <span class="n">type_str</span> <span class="o">=</span> <span class="s2">"Valve"</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">type_str</span> <span class="o">=</span> <span class="n">type_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">type_str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">use_name_as_id</span><span class="p">:</span>
@@ -328,41 +328,41 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">id_str</span> <span class="o">=</span> <span class="n">type_str</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
             <span class="n">connection_obj</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Pipe&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
-                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
-                <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
-                <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s2">"id"</span><span class="p">:</span> <span class="n">id_str</span><span class="p">,</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Pipe"</span><span class="p">,</span>
+                <span class="s2">"contents"</span><span class="p">:</span> <span class="n">content_placeholder</span><span class="p">,</span>
+                <span class="s2">"source"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="s2">"destination"</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">getLinkNodesIndex</span><span class="p">(</span><span class="n">connection</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="s2">"tags"</span><span class="p">:</span> <span class="p">{},</span>
             <span class="p">}</span>
             <span class="n">connections</span><span class="p">[</span><span class="n">id_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">connection_obj</span>
             <span class="n">obj_counts</span><span class="p">[</span><span class="n">type_str</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;nodes&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
-        <span class="s2">&quot;connections&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">connections</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
-        <span class="s2">&quot;virtual_tags&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s2">"nodes"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="s2">"connections"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">connections</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="s2">"virtual_tags"</span><span class="p">:</span> <span class="p">{},</span>
     <span class="p">}</span>
     <span class="k">for</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">node_obj</span> <span class="ow">in</span> <span class="n">nodes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">temp_node</span> <span class="o">=</span> <span class="n">node_obj</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">temp_node</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">temp_node</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">node_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_node</span>
     <span class="k">for</span> <span class="n">connection_name</span><span class="p">,</span> <span class="n">connection_obj</span> <span class="ow">in</span> <span class="n">connections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">temp_connection</span> <span class="o">=</span> <span class="n">connection_obj</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">temp_connection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">temp_connection</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">connection_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_connection</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="c1"># TODO: add flags to command line argument</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="n">epyt2pypes</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EPANET to PYPES conversion from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> complete&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"EPANET to PYPES conversion from </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2"> complete"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 </pre></div>
 
            </div>

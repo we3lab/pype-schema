@@ -53,6 +53,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Features</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#efficiency-curves">Efficiency Curves</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#algebraic-mode">Algebraic Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-mode">Custom Mode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#trust-model">Trust Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-an-expression-can-use">What an Expression Can Use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maintaining-the-allow-lists">Maintaining the Allow-Lists</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contribution Agreement</a></li>
@@ -104,18 +110,25 @@
   <nav class="contents" id="contents" role="doc-toc">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#advanced-features" id="id4">Advanced Features</a></p>
+<li><p><a class="reference internal" href="#advanced-features" id="id5">Advanced Features</a></p>
 <ul>
-<li><p><a class="reference internal" href="#efficiency-curves" id="id5">Efficiency Curves</a></p></li>
-<li><p><a class="reference internal" href="#algebraic-mode" id="id6">Algebraic Mode</a></p></li>
+<li><p><a class="reference internal" href="#efficiency-curves" id="id6">Efficiency Curves</a></p></li>
+<li><p><a class="reference internal" href="#algebraic-mode" id="id7">Algebraic Mode</a></p></li>
+<li><p><a class="reference internal" href="#custom-mode" id="id8">Custom Mode</a></p>
+<ul>
+<li><p><a class="reference internal" href="#trust-model" id="id9">Trust Model</a></p></li>
+<li><p><a class="reference internal" href="#what-an-expression-can-use" id="id10">What an Expression Can Use</a></p></li>
+<li><p><a class="reference internal" href="#maintaining-the-allow-lists" id="id11">Maintaining the Allow-Lists</a></p></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </nav>
 <section id="advanced-features">
-<span id="advanced"></span><h1><a class="toc-backref" href="#id4" role="doc-backlink">Advanced Features</a><a class="headerlink" href="#advanced-features" title="Permalink to this heading"></a></h1>
+<span id="advanced"></span><h1><a class="toc-backref" href="#id5" role="doc-backlink">Advanced Features</a><a class="headerlink" href="#advanced-features" title="Permalink to this heading"></a></h1>
 <section id="efficiency-curves">
-<span id="id1"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">Efficiency Curves</a><a class="headerlink" href="#efficiency-curves" title="Permalink to this heading"></a></h2>
+<span id="id1"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Efficiency Curves</a><a class="headerlink" href="#efficiency-curves" title="Permalink to this heading"></a></h2>
 <p>Some attributes in PyPES are not static metadata. For example, a <code class="docutils literal notranslate"><span class="pre">Pump</span></code> may have an efficiency curve rather
 than a single efficiency value. To define an efficiency curve, first define a function and then use
 <code class="docutils literal notranslate"><span class="pre">set_pump_curve()</span></code> to set the <code class="docutils literal notranslate"><span class="pre">pump_curve</span></code> attribute to that function. <code class="docutils literal notranslate"><span class="pre">thermal_efficiency</span></code>
@@ -123,17 +136,17 @@ and <code class="docutils literal notranslate"><span class="pre">electrical_effi
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pump</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">PumpType</span><span class="p">,</span> <span class="n">ContentsType</span>
 
-<span class="n">min_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;gpm&quot;</span><span class="p">)</span>
-<span class="n">max_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;gpm&quot;</span><span class="p">)</span>
-<span class="n">avg_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="s2">&quot;gpm&quot;</span><span class="p">)</span>
-<span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
-<span class="n">horsepower</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;hp&quot;</span><span class="p">)</span>
+<span class="n">min_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"gpm"</span><span class="p">)</span>
+<span class="n">max_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"gpm"</span><span class="p">)</span>
+<span class="n">avg_flow</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="s2">"gpm"</span><span class="p">)</span>
+<span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">)</span>
+<span class="n">horsepower</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">"hp"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">efficiency_curve</span><span class="p">(</span><span class="n">flowrate</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="n">flowrate</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="n">pump</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span>
-    <span class="s2">&quot;PumpA&quot;</span><span class="p">,</span>
+    <span class="s2">"PumpA"</span><span class="p">,</span>
     <span class="n">ContentsType</span><span class="o">.</span><span class="n">UntreatedSewage</span><span class="p">,</span>
     <span class="n">ContentsType</span><span class="o">.</span><span class="n">UntreatedSewage</span><span class="p">,</span>
     <span class="n">min_flow</span><span class="p">,</span>
@@ -151,7 +164,7 @@ and <code class="docutils literal notranslate"><span class="pre">electrical_effi
 support dictionaries (through interpolation) and lambda functions.</p>
 </section>
 <section id="algebraic-mode">
-<span id="id2"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Algebraic Mode</a><a class="headerlink" href="#algebraic-mode" title="Permalink to this heading"></a></h2>
+<span id="id2"></span><h2><a class="toc-backref" href="#id7" role="doc-backlink">Algebraic Mode</a><a class="headerlink" href="#algebraic-mode" title="Permalink to this heading"></a></h2>
 <p>“Algebraic” mode involves the combination of operations are separated into binary (e.g., “+” or “-”) and unary (e.g., “∼” or “»”).
 Due to the closure of binary and unary operations, it is possible to recursively combine tags in any configuration the user desires.
 This allows for complex new data streams to seamlessly be integrated into system models.</p>
@@ -163,8 +176,8 @@ which is composed of two <code class="docutils literal notranslate"><span class=
 <a class="reference external" href="https://github.com/we3lab/pype-schema/tree/main/pype_schema/data/wrrf_sample_algebraic.json">wrrf_sample.json</a>.
 A full table of supported algebraic operations can be found below.
 Proofs of operator closure will be published along with the PyPES manuscript, which is currently under peer review.</p>
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">A list of all operations, their type (unary, binary, or constant), and a description of the computation performed by each.</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">A list of all operations, their type (unary, binary, or constant), and a description of the computation performed by each.</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Operation</p></th>
 <th class="head"><p>Type</p></th>
@@ -222,6 +235,215 @@ Proofs of operator closure will be published along with the PyPES manuscript, wh
 </tr>
 </tbody>
 </table>
+</section>
+<section id="custom-mode">
+<span id="id3"></span><h2><a class="toc-backref" href="#id8" role="doc-backlink">Custom Mode</a><a class="headerlink" href="#custom-mode" title="Permalink to this heading"></a></h2>
+<p>Where algebraic mode combines tags with a fixed set of operators, custom mode lets a <code class="docutils literal notranslate"><span class="pre">VirtualTag</span></code> apply any
+calculation that can be written as a single lambda expression, given as a string:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">"lambda flow, power: (power / flow).rolling(3).mean()"</span>
+</pre></div>
+</div>
+<p>Every expression is validated before it is built, by <code class="docutils literal notranslate"><span class="pre">validate_custom_operation()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">build_custom_operation()</span></code> in <code class="docutils literal notranslate"><span class="pre">pype_schema.operations</span></code>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Raised</p></th>
+<th class="head"><p>When</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ValueError</span></code></p></td>
+<td><p>The expression uses something that is not allowed, or is too large.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SyntaxError</span></code></p></td>
+<td><p>The string is not valid Python.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code></p></td>
+<td><p>The operation is not a string.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="trust-model">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Trust Model</a><a class="headerlink" href="#trust-model" title="Permalink to this heading"></a></h3>
+<p>Operations should come from the developer who created the file, or another trusted party. The checks stop
+accidents and make a tampered file hard to turn into arbitrary code execution; they are <strong>not</strong> a substitute for
+process-level isolation:</p>
+<ul class="simple">
+<li><p>Only the syntax and the names and attributes an expression can touch are restricted. CPU time and memory used
+while the expression runs are not (<code class="docutils literal notranslate"><span class="pre">9**9**9</span></code> is valid, and so is <code class="docutils literal notranslate"><span class="pre">[0]</span> <span class="pre">*</span> <span class="pre">10**10</span></code>).</p></li>
+<li><p>An operation may modify the data passed to it in place (for example <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code> or <code class="docutils literal notranslate"><span class="pre">out=</span></code>). This is
+deliberate: it is a side effect on the caller’s data, not a way around the restrictions, so do not assume your
+inputs are unchanged afterwards.</p></li>
+</ul>
+</section>
+<section id="what-an-expression-can-use">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">What an Expression Can Use</a><a class="headerlink" href="#what-an-expression-can-use" title="Permalink to this heading"></a></h3>
+<p><strong>Syntax.</strong> Allowed: arithmetic, bitwise, comparison and boolean operators; calls with keyword arguments;
+indexing and slicing; list, tuple, dict and set displays; list, set and dict comprehensions and generator
+expressions; conditional expressions; nested lambdas. Not allowed: statements, assignment expressions (<code class="docutils literal notranslate"><span class="pre">:=</span></code>),
+f-strings, <code class="docutils literal notranslate"><span class="pre">await</span></code> and <code class="docutils literal notranslate"><span class="pre">yield</span></code>, default values for lambda parameters, and comprehension targets that are not
+plain names (<code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">for</span> <span class="pre">np.sum</span> <span class="pre">in</span> <span class="pre">x]</span></code> would rebind a library function). Expressions of more than 100,000
+characters or 50,000 syntax nodes are rejected. Validation does not use the Python call stack, so deeply nested
+expressions, such as a sum of several hundred terms, are fine.</p>
+<p><strong>Names.</strong> An expression can refer to its own parameters, comprehension variables, the library names below, and
+these builtins: <code class="docutils literal notranslate"><span class="pre">abs</span></code>, <code class="docutils literal notranslate"><span class="pre">all</span></code>, <code class="docutils literal notranslate"><span class="pre">any</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">divmod</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerate</span></code>, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>,
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">len</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">pow</span></code>, <code class="docutils literal notranslate"><span class="pre">range</span></code>, <code class="docutils literal notranslate"><span class="pre">reversed</span></code>, <code class="docutils literal notranslate"><span class="pre">round</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sorted</span></code>, <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>. Each only computes on the values it is given. The other
+builtins are left out because they reach around the attribute allow-list: they import modules or run code, touch
+files and input, look an attribute up from a string, or expose classes and namespaces. Any other name is
+rejected, and so is any name or attribute that starts with an underscore, because that is how an expression
+would walk to an object’s internals (for example <code class="docutils literal notranslate"><span class="pre">__class__</span></code>).</p>
+<p><strong>Libraries.</strong> <code class="docutils literal notranslate"><span class="pre">np</span></code> (<code class="docutils literal notranslate"><span class="pre">numpy</span></code>), <code class="docutils literal notranslate"><span class="pre">pd</span></code> (<code class="docutils literal notranslate"><span class="pre">pandas</span></code>), <code class="docutils literal notranslate"><span class="pre">sp</span></code> (<code class="docutils literal notranslate"><span class="pre">scipy</span></code>) and <code class="docutils literal notranslate"><span class="pre">math</span></code> can only be used as
+prefixes, and only for members on the allow-list. A library or submodule cannot be used as a value (<code class="docutils literal notranslate"><span class="pre">f(np)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">[np]</span></code>, a bare <code class="docutils literal notranslate"><span class="pre">np.linalg</span></code>), which keeps a module object from being passed around.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">"lambda x: np.sqrt(x)"</span>                  <span class="c1"># fine</span>
+<span class="s2">"lambda x: sp.stats.zscore(x)"</span>          <span class="c1"># fine: submodules work as prefixes too</span>
+<span class="s2">"lambda x: x.apply(np.sqrt)"</span>            <span class="c1"># fine</span>
+<span class="s2">"lambda x: np.load('data.npy')"</span>         <span class="c1"># rejected: not on the allow-list</span>
+<span class="s2">"lambda x: pd.read_csv('data.csv')"</span>     <span class="c1"># rejected: not on the allow-list</span>
+</pre></div>
+</div>
+<p><strong>Methods and attributes</strong> of ordinary objects (a <code class="docutils literal notranslate"><span class="pre">Series</span></code>, <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>, array, string, and so on) are
+allowed by name, from a generated list. <code class="docutils literal notranslate"><span class="pre">x.diff()</span></code>, <code class="docutils literal notranslate"><span class="pre">x.rolling(3).mean()</span></code>, <code class="docutils literal notranslate"><span class="pre">x.iloc[0]</span></code> and
+<code class="docutils literal notranslate"><span class="pre">x.str.upper()</span></code> are fine; <code class="docutils literal notranslate"><span class="pre">x.to_csv(...)</span></code>, <code class="docutils literal notranslate"><span class="pre">x.query(...)</span></code>, <code class="docutils literal notranslate"><span class="pre">x.eval(...)</span></code>, <code class="docutils literal notranslate"><span class="pre">x.plot()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">x.__class__</span></code> are rejected.</p>
+<p><strong>Guarded methods.</strong> <code class="docutils literal notranslate"><span class="pre">apply</span></code>, <code class="docutils literal notranslate"><span class="pre">agg</span></code>, <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> and <code class="docutils literal notranslate"><span class="pre">transform</span></code> look an attribute up by name when given
+a string (<code class="docutils literal notranslate"><span class="pre">x.agg(&quot;to_csv&quot;)</span></code> would call <code class="docutils literal notranslate"><span class="pre">x.to_csv()</span></code>), which would bypass that list. They are only allowed
+when called directly, with something whose method name is visible and checked. The argument may be:</p>
+<ul class="simple">
+<li><p>a lambda,</p></li>
+<li><p>a library function, such as <code class="docutils literal notranslate"><span class="pre">np.mean</span></code>,</p></li>
+<li><p>a builtin, such as <code class="docutils literal notranslate"><span class="pre">abs</span></code>,</p></li>
+<li><p>a string literal that names an allowed method, such as <code class="docutils literal notranslate"><span class="pre">&quot;sum&quot;</span></code>,</p></li>
+<li><p>a list or tuple of those, or a dict whose keys are literal labels and whose values are those.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">"lambda x: x.apply(lambda v: v + 1)"</span>                    <span class="c1"># fine</span>
+<span class="s2">"lambda x: x.agg(['sum', np.mean])"</span>                     <span class="c1"># fine</span>
+<span class="s2">"lambda x: x.agg({'a': np.mean, 'b': ['min', 'max']})"</span>  <span class="c1"># fine</span>
+<span class="s2">"lambda x: x.agg('to_csv')"</span>                             <span class="c1"># rejected: not an allowed method</span>
+<span class="s2">"lambda x: x.agg('to_' + 'csv')"</span>                        <span class="c1"># rejected: name built at runtime</span>
+<span class="s2">"lambda x: map(x.agg, ['sum'])"</span>                         <span class="c1"># rejected: method passed as a value</span>
+<span class="s2">"lambda x, f: x.apply(f)"</span>                               <span class="c1"># rejected: the function is not visible</span>
+<span class="s2">"lambda x: x.agg(total=('a', np.sum))"</span>                  <span class="c1"># rejected: named aggregation</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">**</span></code> arguments to these methods are also rejected.</p>
+</section>
+<section id="maintaining-the-allow-lists">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Maintaining the Allow-Lists</a><a class="headerlink" href="#maintaining-the-allow-lists" title="Permalink to this heading"></a></h3>
+<p>What an expression can reach is defined by a generated block at the bottom of <code class="docutils literal notranslate"><span class="pre">operations.py</span></code>, between the
+<code class="docutils literal notranslate"><span class="pre">BEGIN</span> <span class="pre">GENERATED</span> <span class="pre">ALLOW-LISTS</span></code> and <code class="docutils literal notranslate"><span class="pre">END</span> <span class="pre">GENERATED</span> <span class="pre">ALLOW-LISTS</span></code> markers. It defines:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_MODULE_MEMBERS</span></code></dt><dd><p>What can be reached through <code class="docutils literal notranslate"><span class="pre">np</span></code>, <code class="docutils literal notranslate"><span class="pre">pd</span></code>, <code class="docutils literal notranslate"><span class="pre">sp</span></code> and <code class="docutils literal notranslate"><span class="pre">math</span></code>, and their submodules.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_ATTRIBUTES</span></code></dt><dd><p>Attribute names allowed on ordinary objects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GUARDED_METHODS</span></code></dt><dd><p>The methods that need the special handling described above.</p>
+</dd>
+</dl>
+<p><code class="docutils literal notranslate"><span class="pre">pype_schema/scripts/generate_allowlist.py</span></code> writes the block from the public API of the installed numpy,
+pandas, scipy and math, and removes everything it judges dangerous (below). The result is frozen and
+default-deny, so a function added by a newer library version is unreachable until the generator is re-run and
+the diff is reviewed. <code class="docutils literal notranslate"><span class="pre">pype_schema/scripts/allowlist_report.md</span></code> lists everything that was excluded, and why.
+Do not edit the block by hand: <code class="docutils literal notranslate"><span class="pre">test_generated_block_has_not_been_edited_by_hand</span></code> fails if it differs from
+what the generator writes.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 85.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Excluded because it</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>IO</p></td>
+<td><p>reads or writes files, URLs, the clipboard, databases, or pickles</p></td>
+</tr>
+<tr class="row-odd"><td><p>EVAL</p></td>
+<td><p>evaluates code or expression strings</p></td>
+</tr>
+<tr class="row-even"><td><p>DISPATCH</p></td>
+<td><p>turns a string into a function or attribute lookup (<code class="docutils literal notranslate"><span class="pre">df.agg(&quot;sum&quot;)</span></code>); the four methods
+above are allowed only in the guarded form, the rest are excluded</p></td>
+</tr>
+<tr class="row-odd"><td><p>STATE</p></td>
+<td><p>changes process-wide state: configuration, the global random seed, registries, mutable
+module-level containers</p></td>
+</tr>
+<tr class="row-even"><td><p>NATIVE</p></td>
+<td><p>exposes raw memory or native-code interfaces</p></td>
+</tr>
+<tr class="row-odd"><td><p>ENV</p></td>
+<td><p>reveals the environment: paths, build configuration, versions, source</p></td>
+</tr>
+<tr class="row-even"><td><p>OTHER</p></td>
+<td><p>is not computation on data, or has not been reviewed: plotting, testing, typing,
+deprecated aliases, internals</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>pype_schema/scripts/generate_allowlist.py<span class="w">          </span><span class="c1"># regenerate, then review the diff</span>
+python<span class="w"> </span>pype_schema/scripts/generate_allowlist.py<span class="w"> </span>--check<span class="w">  </span><span class="c1"># change nothing; for CI</span>
+</pre></div>
+</div>
+<p>The result depends on the environment it runs in, so generate in one canonical environment:</p>
+<ul class="simple">
+<li><p>The Python version changes the <code class="docutils literal notranslate"><span class="pre">math</span></code> members and the methods of built-in types.</p></li>
+<li><p>The versions of numpy, pandas and scipy decide which functions exist. A CI matrix usually resolves different
+versions for each Python.</p></li>
+<li><p>Optional packages count too. If one is installed, whatever it adds to numpy, pandas or scipy is listed like
+everything else. numexpr is the known case: once installed, importing pandas makes it add <code class="docutils literal notranslate"><span class="pre">numpy.expm1x</span></code>, an
+alias of <code class="docutils literal notranslate"><span class="pre">numpy.expm1</span></code>.</p></li>
+</ul>
+<p>The block records the Python, numpy, pandas and scipy versions in a <code class="docutils literal notranslate"><span class="pre">Generated</span> <span class="pre">with</span> <span class="pre">...</span></code> comment, but not
+optional packages. Run <code class="docutils literal notranslate"><span class="pre">--check</span></code> in <strong>one</strong> CI job, with the same Python minor version, pinned libraries and
+optional packages; the rest of a CI matrix runs pytest only.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 85.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Exit code</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>The block is up to date.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Regenerating would change it: new library API to review, or a different set of optional
+packages. The output lists the names that would be added (<code class="docutils literal notranslate"><span class="pre">+</span></code>) or removed (<code class="docutils literal notranslate"><span class="pre">-</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>This is not the environment the block was generated in, so the two cannot be compared.
+This is a CI configuration problem, not drift.</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">--check</span></code> only reads, so it also works on an installed copy of the package. Rewriting an installed copy is
+refused unless <code class="docutils literal notranslate"><span class="pre">--force</span></code> is passed.</p>
+<p>To change a decision, edit the rules at the top of the generator and re-run it:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">KEEP</span></code></dt><dd><p>Allow a library member that a rule would exclude.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">KEEP_ATTRS</span></code></dt><dd><p>Allow an attribute name that a rule would exclude.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EXPLICIT</span> <span class="pre">and</span> <span class="pre">NAME_RULES</span></code></dt><dd><p>Exclude a name, with a category and a reason.</p>
+</dd>
+</dl>
+<p>When reviewing a diff, look for names that read or write files, evaluate strings, turn a string into an
+attribute lookup, change global state or touch raw memory, and for names that another package has leaked into
+the library. For example, <code class="docutils literal notranslate"><span class="pre">pandas.NamedFunc</span></code> has the same signature as <code class="docutils literal notranslate"><span class="pre">NamedAgg</span></code>, which takes a function
+name as a string, so it is excluded in the same way.</p>
+</section>
 </section>
 </section>
 

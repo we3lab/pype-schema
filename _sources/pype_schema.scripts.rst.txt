@@ -1,0 +1,21 @@
+pype\_schema.scripts package
+============================
+
+Submodules
+----------
+
+pype\_schema.scripts.generate\_allowlist module
+-----------------------------------------------
+
+.. automodule:: pype_schema.scripts.generate_allowlist
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pype_schema.scripts
+   :members:
+   :undoc-members:
+   :show-inheritance:

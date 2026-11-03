@@ -96,11 +96,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pype_schema.units</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module containing global unit registry.</span>
+<span></span><span class="sd">"""Module containing global unit registry.</span>
 <span class="sd">The `Pint package &lt;https://pint.readthedocs.io/en/latest/&gt;`_ supports arithmetic</span>
 <span class="sd">of physical quantities, which are combinations of numerical values and units of</span>
-<span class="sd">measurement. The units of a quantity come from Pint&#39;s unit registry. This</span>
-<span class="sd">module contains a unit registry, named ``u``, based on Pint&#39;s unit registry.</span>
+<span class="sd">measurement. The units of a quantity come from Pint's unit registry. This</span>
+<span class="sd">module contains a unit registry, named ``u``, based on Pint's unit registry.</span>
 <span class="sd">It also defines a few additional units.</span>
 <span class="sd">Frequently Used Units and Constants in ``u``</span>
 
@@ -219,34 +219,34 @@
 <span class="sd">* ``u.molar_gas_constant`` = ``u.R``</span>
 <span class="sd">* ``u.avogadro_number``</span>
 <span class="sd">* ``u.boltzmann_constant``</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pint</span>
 
 <span class="c1"># A global unit registry that can be used by any of other module.</span>
-<span class="n">unit_registry</span> <span class="o">=</span> <span class="n">pint</span><span class="o">.</span><span class="n">UnitRegistry</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="s2">&quot;mks&quot;</span><span class="p">,</span> <span class="n">autoconvert_offset_to_baseunit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">unit_registry</span> <span class="o">=</span> <span class="n">pint</span><span class="o">.</span><span class="n">UnitRegistry</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="s2">"mks"</span><span class="p">,</span> <span class="n">autoconvert_offset_to_baseunit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">unit_registry</span>
 
 <span class="c1"># default formatting includes 4 significant digits.</span>
 <span class="c1"># This can be overridden on a per-print basis with</span>
-<span class="c1"># print(&#39;{:.3f}&#39;.format(3 * ureg.m / 9)).</span>
-<span class="n">u</span><span class="o">.</span><span class="n">default_format</span> <span class="o">=</span> <span class="s2">&quot;.4&quot;</span>
+<span class="c1"># print('{:.3f}'.format(3 * ureg.m / 9)).</span>
+<span class="n">u</span><span class="o">.</span><span class="n">default_format</span> <span class="o">=</span> <span class="s2">".4g"</span>
 
-<span class="n">units_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;unit_definitions.txt&quot;</span><span class="p">)</span>
+<span class="n">units_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">"data"</span><span class="p">,</span> <span class="s2">"unit_definitions.txt"</span><span class="p">)</span>
 <span class="n">u</span><span class="o">.</span><span class="n">load_definitions</span><span class="p">(</span><span class="n">units_path</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="set_sig_figs"><a class="viewcode-back" href="../../units.html#pype_schema.units.set_sig_figs">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">set_sig_figs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the default number of significant figures used to print Pint,</span>
+<span class="w">    </span><span class="sd">"""Set the default number of significant figures used to print Pint,</span>
 <span class="sd">    Pandas and NumPy value quantities.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    n : int</span>
 <span class="sd">        number of significant figures to display. Defaults to 4.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">u</span><span class="o">.</span><span class="n">default_format</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;g&quot;</span></div>
+<span class="sd">    """</span>
+    <span class="n">u</span><span class="o">.</span><span class="n">default_format</span> <span class="o">=</span> <span class="s2">"."</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"g"</span></div>
 </pre></div>
 
            </div>

@@ -74,7 +74,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.DigesterType"><code class="docutils literal notranslate"><span class="pre">DigesterType</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.DosingType"><code class="docutils literal notranslate"><span class="pre">DosingType</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.PumpType"><code class="docutils literal notranslate"><span class="pre">PumpType</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.count_args"><code class="docutils literal notranslate"><span class="pre">count_args()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.get_tag_sum_lambda_func"><code class="docutils literal notranslate"><span class="pre">get_tag_sum_lambda_func()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.parse_quantity"><code class="docutils literal notranslate"><span class="pre">parse_quantity()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pype_schema.utils.parse_units"><code class="docutils literal notranslate"><span class="pre">parse_units()</span></code></a></li>
@@ -144,23 +143,6 @@ whether they are sludge, water, or gas</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pype_schema.utils.count_args">
-<span class="sig-prename descclassname"><span class="pre">pype_schema.utils.</span></span><span class="sig-name descname"><span class="pre">count_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/utils.html#count_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.utils.count_args" title="Permalink to this definition"></a></dt>
-<dd><p>Count the arguments for a lambda function string</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>func_str</strong> (<em>str</em>) – A string representation of a lambda function</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The lambda function’s number of arguments</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="pype_schema.utils.get_tag_sum_lambda_func">
 <span class="sig-prename descclassname"><span class="pre">pype_schema.utils.</span></span><span class="sig-name descname"><span class="pre">get_tag_sum_lambda_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit_ids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pype_schema/utils.html#get_tag_sum_lambda_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pype_schema.utils.get_tag_sum_lambda_func" title="Permalink to this definition"></a></dt>
 <dd><p>Generate a lambda function string to sum tags</p>
@@ -172,7 +154,7 @@ whether they are sludge, water, or gas</p>
 <dd class="field-even"><p>A string representation of a lambda function that sums tags</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -192,7 +174,7 @@ whether they are sludge, water, or gas</p>
 <dd class="field-even"><p>a Pint Quantity with the given value and units</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.25.3rc1.dev1+g5e79411e1)">pint.Quantity</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://pint.readthedocs.io/en/stable/api/base.html#pint.Quantity" title="(in pint v0.1.dev50+gaf817a609)">pint.Quantity</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,8 +243,8 @@ unit ID, and contents</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When a source/destination node type is provided to subset tags</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><strong>TypeError</strong></a> – When the objects to select among are not of type
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.15)"><strong>ValueError</strong></a> – When a source/destination node type is provided to subset tags</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#TypeError" title="(in Python v3.15)"><strong>TypeError</strong></a> – When the objects to select among are not of type
     {‘pype_schema.Tag’ or <cite>pype_schema.Connection</cite>}</p></li>
 </ul>
 </dd>
@@ -270,7 +252,7 @@ unit ID, and contents</p>
 <dd class="field-odd"><p>True if <cite>obj</cite> fits the filter criteria; False otherwise.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>

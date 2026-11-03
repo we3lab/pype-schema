@@ -140,7 +140,7 @@ one for water resource recovery (<cite>wrrf_sample.json</cite>) and one for desa
 To load the water resource recovery facility (WRRF) example, run the following code from the <cite>pype_schema/data</cite> folder:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.parse_json</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONParser</span>
 
-<span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">&quot;wrrf_sample.json&quot;</span><span class="p">)</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">JSONParser</span><span class="p">(</span><span class="s2">"wrrf_sample.json"</span><span class="p">)</span>
 <span class="n">network</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">initialize_network</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -158,7 +158,7 @@ To load the water resource recovery facility (WRRF) example, run the following c
 <a class="reference internal image-reference" href="_images/utility-graph.png"><img alt="Example directed graph representation of a city's water and energy infrastructure" src="_images/utility-graph.png" style="width: 600px;" /></a>
 <p>PyPES models can have nodes nested within nodes.
 For example, the <cite>WWTP</cite> node nested inside the top-level network can be visualized as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_id</span> <span class="o">=</span> <span class="s2">&quot;WWTP&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_id</span> <span class="o">=</span> <span class="s2">"WWTP"</span>
 <span class="n">draw_graph</span><span class="p">(</span><span class="n">network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">),</span> <span class="n">pyvis</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -194,12 +194,12 @@ This can be useful for modeling upgrades to existing infrastructure by seamlessl
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tank</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_quantity</span><span class="p">,</span> <span class="n">ContentsType</span>
 
-<span class="n">volume</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;gal&quot;</span><span class="p">)</span>
-<span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">)</span>
+<span class="n">volume</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">"gal"</span><span class="p">)</span>
+<span class="n">elevation</span> <span class="o">=</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"m"</span><span class="p">)</span>
 
 <span class="c1"># create the battery node</span>
 <span class="n">tank</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span>
-    <span class="s2">&quot;StorageTank&quot;</span><span class="p">,</span>
+    <span class="s2">"StorageTank"</span><span class="p">,</span>
     <span class="n">ContentsType</span><span class="o">.</span><span class="n">DrinkingWater</span><span class="p">,</span>
     <span class="n">ContentsType</span><span class="o">.</span><span class="n">DrinkingWater</span><span class="p">,</span>
     <span class="n">elevation</span><span class="p">,</span>
@@ -207,7 +207,7 @@ This can be useful for modeling upgrades to existing infrastructure by seamlessl
 <span class="p">)</span>
 
 <span class="c1"># add the node to the facility</span>
-<span class="n">wds</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="s2">&quot;WaterDistribution&quot;</span><span class="p">)</span>
+<span class="n">wds</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="s2">"WaterDistribution"</span><span class="p">)</span>
 <span class="n">wds</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">tank</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -219,8 +219,8 @@ network, but to a specific storage tank within the distribution network:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span>
 
 <span class="n">wds_conn</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
-    <span class="n">source_id</span><span class="o">=</span><span class="s2">&quot;DrinkingWaterFacility&quot;</span><span class="p">,</span>
-    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WaterDistribution&quot;</span><span class="p">,</span>
+    <span class="n">source_id</span><span class="o">=</span><span class="s2">"DrinkingWaterFacility"</span><span class="p">,</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">"WaterDistribution"</span><span class="p">,</span>
     <span class="n">obj_type</span><span class="o">=</span><span class="n">Connection</span>
 <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">wds_conn</span><span class="o">.</span><span class="n">entry_point</span> <span class="o">=</span> <span class="n">tank</span>
@@ -238,7 +238,7 @@ matching desired characteristics.</p>
 natural gas purchases at a facility without knowing how many boilers or cogenerators (if any) exist, a user
 could query for all connections with <code class="docutils literal notranslate"><span class="pre">ContentsType</span></code> are <code class="docutils literal notranslate"><span class="pre">NaturalGas</span></code> entering the <code class="docutils literal notranslate"><span class="pre">WWTP</span></code> node:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ng_conns</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
-    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WWTP&quot;</span><span class="p">,</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">"WWTP"</span><span class="p">,</span>
     <span class="n">contents_type</span><span class="o">=</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">NaturalGas</span><span class="p">,</span>
     <span class="n">obj_type</span><span class="o">=</span><span class="n">Connection</span><span class="p">,</span>
     <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span>
@@ -250,10 +250,10 @@ column names that can be operated on:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pype_schema.tag</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;sample_data.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"sample_data.csv"</span><span class="p">)</span>
 
 <span class="n">ng_tags</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">select_objs</span><span class="p">(</span>
-    <span class="n">dest_id</span><span class="o">=</span><span class="s2">&quot;WWTP&quot;</span><span class="p">,</span>
+    <span class="n">dest_id</span><span class="o">=</span><span class="s2">"WWTP"</span><span class="p">,</span>
     <span class="n">contents_type</span><span class="o">=</span><span class="n">ContentsType</span><span class="o">.</span><span class="n">NaturalGas</span><span class="p">,</span>
     <span class="n">obj_type</span><span class="o">=</span><span class="n">Tag</span><span class="p">,</span>
     <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span>
@@ -270,11 +270,11 @@ For example, to plot the natural gas imports over time:</p>
 <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">ng_tags</span><span class="p">:</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ng_import_timeseries</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;TotalGasPurchases&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Hour&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Natural Gas Imports (m$^3$ / day)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.45</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;ng-imports.png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ng_import_timeseries</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"TotalGasPurchases"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Hour"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Natural Gas Imports (m$^3$ / day)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">'upper right'</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.45</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"ng-imports.png"</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/ng-imports.png"><img alt="Timeseries of natural gas imports to the cogenerator and boiler combined to calculate total imports using PyPES" src="_images/ng-imports.png" style="width: 600px;" /></a>

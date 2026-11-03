@@ -103,18 +103,23 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sp</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">issubdtype</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_args</span><span class="p">,</span> <span class="n">parse_units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_units</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">count_args</span><span class="p">,</span>
+    <span class="n">validate_custom_operation</span><span class="p">,</span>
+    <span class="n">build_custom_operation</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">u</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa: F401, F403</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.logbook</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logbook</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.operations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Constant</span>
 
-<span class="n">UNARY_OPS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;noop&quot;</span><span class="p">,</span> <span class="s2">&quot;delta&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">]</span>
-<span class="n">BINARY_OPS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">]</span>
+<span class="n">UNARY_OPS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"noop"</span><span class="p">,</span> <span class="s2">"delta"</span><span class="p">,</span> <span class="s2">"&lt;&lt;"</span><span class="p">,</span> <span class="s2">"&gt;&gt;"</span><span class="p">,</span> <span class="s2">"~"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">]</span>
+<span class="n">BINARY_OPS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"+"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"*"</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="TagType"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.TagType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TagType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent types of SCADA tags.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Enum to represent types of SCADA tags."""</span>
 
     <span class="n">Flow</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>  <span class="c1"># flow through a connection</span>
     <span class="n">Volume</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -146,7 +151,7 @@
 
 
 <div class="viewcode-block" id="DownsampleType"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.DownsampleType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DownsampleType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent common methods of downsampling data.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Enum to represent common methods of downsampling data."""</span>
 
     <span class="n">Average</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Decimation</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -154,7 +159,7 @@
 
 
 <div class="viewcode-block" id="OperationMode"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.OperationMode">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">OperationMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum to represent methods of VirtualTag operations.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Enum to represent methods of VirtualTag operations."""</span>
 
     <span class="n">Algebraic</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
     <span class="n">Custom</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span></div>
@@ -171,7 +176,7 @@
 
 
 <div class="viewcode-block" id="check_type_compatibility"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.check_type_compatibility">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">check_type_compatibility</span><span class="p">(</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">other_type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the given tag_type is compatible with another</span>
+<span class="w">    </span><span class="sd">"""Check if the given tag_type is compatible with another</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -184,9 +189,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    bool</span>
 <span class="sd">        True if compatible, False otherwise</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other_type</span><span class="p">,</span> <span class="n">TagType</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;tag_type must be a TagType object&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"tag_type must be a TagType object"</span><span class="p">)</span>
 
     <span class="n">flow_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">TagType</span><span class="o">.</span><span class="n">Flow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">InFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">OutFlow</span><span class="p">,</span> <span class="n">TagType</span><span class="o">.</span><span class="n">NetFlow</span><span class="p">]</span>
 
@@ -200,7 +205,7 @@
 
 
 <div class="viewcode-block" id="Tag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Tag</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to represent a SCADA or other data tag</span>
+<span class="w">    </span><span class="sd">"""Class to represent a SCADA or other data tag</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -209,7 +214,7 @@
 
 <span class="sd">    units : str or Unit</span>
 <span class="sd">        Units represented as a string or Pint unit.</span>
-<span class="sd">        E.g., &#39;MGD&#39; or &#39;cubic meters&#39; or &lt;Unit(&#39;MGD&#39;)&gt;</span>
+<span class="sd">        E.g., 'MGD' or 'cubic meters' or &lt;Unit('MGD')&gt;</span>
 
 <span class="sd">    tag_type : TagType</span>
 <span class="sd">        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`</span>
@@ -253,7 +258,7 @@
 <span class="sd">        Tag ID</span>
 
 <span class="sd">    units : Unit</span>
-<span class="sd">        Units represented as a Pint unit. E.g., &lt;Unit(&#39;MGD&#39;)&gt;</span>
+<span class="sd">        Units represented as a Pint unit. E.g., &lt;Unit('MGD')&gt;</span>
 
 <span class="sd">    tag_type : TagType</span>
 <span class="sd">        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`</span>
@@ -289,7 +294,7 @@
 
 <span class="sd">    calibration : Logbook</span>
 <span class="sd">        A history of sensor calibration.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -330,18 +335,18 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.tag.Tag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> source_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;dest_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="si">}</span><span class="s2"> parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;manufacturer:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="si">}</span><span class="s2"> measure_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;report_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;downsample_method:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;calibration:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">calibration</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"&lt;pype_schema.tag.Tag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> source_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"dest_unit_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="si">}</span><span class="s2"> parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"manufacturer:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">manufacturer</span><span class="si">}</span><span class="s2"> measure_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_freq</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"report_freq:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_freq</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"downsample_method:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">downsample_method</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"calibration:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">calibration</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="c1"># don't attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
@@ -381,7 +386,7 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="c1"># don't attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
 
@@ -394,16 +399,16 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalized</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">totalized</span><span class="p">:</span>
             <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">totalized</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">source_unit_id</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="s2">"total"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">==</span> <span class="s2">"total"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_unit_id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">source_unit_id</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="s2">"total"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">==</span> <span class="s2">"total"</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_unit_id</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">dest_unit_id</span>
@@ -493,7 +498,7 @@
     <span class="n">calibration</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_calibration</span><span class="p">,</span> <span class="n">set_calibration</span><span class="p">,</span> <span class="n">del_calibration</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Tag.check_type_compatibility"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.Tag.check_type_compatibility">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">check_type_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_type</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the given tag_type is compatible with another</span>
+<span class="w">        </span><span class="sd">"""Check if the given tag_type is compatible with another</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -504,12 +509,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 <span class="sd">            True if compatible, False otherwise</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">check_type_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">other_type</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="VirtualTag"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">VirtualTag</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation for data that is not in the SCADA system, but is instead</span>
+<span class="w">    </span><span class="sd">"""Representation for data that is not in the SCADA system, but is instead</span>
 <span class="sd">    a combination of existing tags.</span>
 
 <span class="sd">    Tags are combined via either `custom_operations` lambda function string or the</span>
@@ -573,31 +578,31 @@
 <span class="sd">    tags : list of Tag</span>
 <span class="sd">        List of Tag objects to combine</span>
 
-<span class="sd">    unary_operations : [&quot;noop&quot;, &quot;delta&quot;, &quot;&lt;&lt;&quot;, &quot;&gt;&gt;&quot;, &quot;~&quot;, &quot;-&quot;]</span>
+<span class="sd">    unary_operations : ["noop", "delta", "&lt;&lt;", "&gt;&gt;", "~", "-"]</span>
 <span class="sd">        Unary operations to apply before combining tags.</span>
 
-<span class="sd">            &quot;noop&quot; : null operator, useful when</span>
+<span class="sd">            "noop" : null operator, useful when</span>
 <span class="sd">            skipping tags in a list of unary operations.</span>
 
-<span class="sd">            &quot;delta&quot; : calculate the difference between</span>
+<span class="sd">            "delta" : calculate the difference between</span>
 <span class="sd">            the current timestep and previous timestep</span>
 
-<span class="sd">            &quot;&lt;&lt;&quot; : shift all data left one timestep,</span>
+<span class="sd">            "&lt;&lt;" : shift all data left one timestep,</span>
 <span class="sd">            so that the last time step will be NaN</span>
 
-<span class="sd">            &quot;&gt;&gt;&quot; : shift all data right one timestep,</span>
+<span class="sd">            "&gt;&gt;" : shift all data right one timestep,</span>
 <span class="sd">            so that the first time step will be NaN</span>
 
-<span class="sd">            &quot;~&quot; : Boolean not</span>
+<span class="sd">            "~" : Boolean not</span>
 
-<span class="sd">            &quot;-&quot; : unary negation</span>
+<span class="sd">            "-" : unary negation</span>
 
-<span class="sd">        Note that &quot;delta&quot;, &quot;&lt;&lt;&quot;, and &quot;&gt;&gt;&quot; return a timeseries padded</span>
+<span class="sd">        Note that "delta", "&lt;&lt;", and "&gt;&gt;" return a timeseries padded</span>
 <span class="sd">        with NaN so that it is the same length as input data</span>
 
-<span class="sd">    binary_operations : [&quot;+&quot;, &quot;-&quot;, &quot;*&quot;, &quot;/&quot;]</span>
+<span class="sd">    binary_operations : ["+", "-", "*", "/"]</span>
 <span class="sd">        Binary operaitons to apply when combining tags.</span>
-<span class="sd">        Supported functions are &quot;+&quot;, &quot;-&quot;, &quot;*&quot;, and &quot;/&quot;.</span>
+<span class="sd">        Supported functions are "+", "-", "*", and "/".</span>
 <span class="sd">        If a single string is passed, it will be applied to all Tags.</span>
 <span class="sd">        Otherwise, the `binary_operations` list must be one shorter than `tags`,</span>
 <span class="sd">        and functions will be applied in order from left to right</span>
@@ -607,7 +612,7 @@
 
 <span class="sd">    units : str or Unit</span>
 <span class="sd">        Units represented as a string or Pint unit.</span>
-<span class="sd">        E.g., &#39;MGD&#39; or &#39;cubic meters&#39; or &lt;Unit(&#39;MGD&#39;)&gt;</span>
+<span class="sd">        E.g., 'MGD' or 'cubic meters' or &lt;Unit('MGD')&gt;</span>
 
 <span class="sd">    tag_type : TagType</span>
 <span class="sd">        Type of data saved under the tag. E.g., `InfluentFlow` or `RunTime`</span>
@@ -625,7 +630,7 @@
 <span class="sd">        Mode of operation. Either `Algebraic` or `Custom`.</span>
 <span class="sd">        Automatically determined based on values of `unary_operations`,</span>
 <span class="sd">        `binary_operations` and `custom_operations`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -651,9 +656,9 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">unary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">binary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">custom_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;`custom_operations` cannot be used with binary &quot;</span>
-                    <span class="s2">&quot;and unary operations. I.e., select either &quot;</span>
-                    <span class="s2">&quot;`OperationMode.Algebraic` or `OperationMode.Custom`.&quot;</span>
+                    <span class="s2">"`custom_operations` cannot be used with binary "</span>
+                    <span class="s2">"and unary operations. I.e., select either "</span>
+                    <span class="s2">"`OperationMode.Algebraic` or `OperationMode.Custom`."</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">OperationMode</span><span class="o">.</span><span class="n">Algebraic</span>
@@ -664,8 +669,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;At least one of `unary_operations`, `binary_operations`, &quot;</span>
-                <span class="s2">&quot;and `custom_operations` must be provided.&quot;</span>
+                <span class="s2">"At least one of `unary_operations`, `binary_operations`, "</span>
+                <span class="s2">"and `custom_operations` must be provided."</span>
             <span class="p">)</span>
 
         <span class="n">unit_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -680,9 +685,9 @@
                 <span class="k">if</span> <span class="n">totalized</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">totalized_mix</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">totalized</span> <span class="o">!=</span> <span class="n">tag</span><span class="o">.</span><span class="n">totalized</span><span class="p">:</span>
                         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="s2">&quot;Tags should have the same value for &#39;totalized&#39;. &quot;</span>
-                            <span class="s2">&quot;Setting `totalized` to false under the assumption &quot;</span>
-                            <span class="s2">&quot;that data has been cleaned and detotalized already.&quot;</span>
+                            <span class="s2">"Tags should have the same value for 'totalized'. "</span>
+                            <span class="s2">"Setting `totalized` to false under the assumption "</span>
+                            <span class="s2">"that data has been cleaned and detotalized already."</span>
                         <span class="p">)</span>
                         <span class="n">totalized</span> <span class="o">=</span> <span class="kc">False</span>
                         <span class="n">totalized_mix</span> <span class="o">=</span> <span class="kc">True</span>
@@ -693,7 +698,7 @@
                     <span class="k">if</span> <span class="n">tag_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">check_type_compatibility</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span><span class="p">,</span> <span class="n">tag_type</span><span class="p">):</span>
                             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                <span class="s2">&quot;All Tags must have the same value for &#39;tag_type&#39;&quot;</span>
+                                <span class="s2">"All Tags must have the same value for 'tag_type'"</span>
                             <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">tag_type</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">tag_type</span>
@@ -702,7 +707,7 @@
                     <span class="k">if</span> <span class="n">contents</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">contents</span> <span class="o">!=</span> <span class="n">tag</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                <span class="s2">&quot;All Tags must have the same value for &#39;contents&#39;&quot;</span>
+                                <span class="s2">"All Tags must have the same value for 'contents'"</span>
                             <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">contents</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">contents</span>
@@ -718,7 +723,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unary_operations</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unary_operations</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;`unary_operations` must be same length as Tag list&quot;</span>
+                        <span class="s2">"`unary_operations` must be same length as Tag list"</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">unit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unit_list</span><span class="p">):</span>
@@ -726,30 +731,30 @@
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
                                 <span class="k">if</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNARY_OPS</span><span class="p">:</span>
                                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                        <span class="s2">&quot;Unsupported unary operator:&quot;</span><span class="p">,</span>
+                                        <span class="s2">"Unsupported unary operator:"</span><span class="p">,</span>
                                         <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
                                     <span class="p">)</span>
-                                <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                                <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"~"</span><span class="p">:</span>
                                     <span class="n">unit_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                                <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;delta&quot;</span><span class="p">:</span>
+                                <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"delta"</span><span class="p">:</span>
                                     <span class="c1"># TODO: convert from volume to flow rate</span>
                                     <span class="c1"># once resolution argument exists</span>
                                     <span class="k">pass</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">if</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNARY_OPS</span><span class="p">:</span>
                                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                    <span class="s2">&quot;Unsupported unary operator:&quot;</span><span class="p">,</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                                    <span class="s2">"Unsupported unary operator:"</span><span class="p">,</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                                 <span class="p">)</span>
-                            <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
+                            <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"~"</span><span class="p">:</span>
                                 <span class="n">unit_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;delta&quot;</span><span class="p">:</span>
+                            <span class="k">elif</span> <span class="n">unary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"delta"</span><span class="p">:</span>
                                 <span class="c1"># TODO: convert from volume to flow rate</span>
                                 <span class="c1"># once resolution argument exists</span>
                                 <span class="k">pass</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="o">=</span> <span class="n">unary_operations</span>
             <span class="k">elif</span> <span class="n">unary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">unary_operations</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNARY_OPS</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported unary operator:&quot;</span><span class="p">,</span> <span class="n">unary_operations</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported unary operator:"</span><span class="p">,</span> <span class="n">unary_operations</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="o">=</span> <span class="p">[</span><span class="n">unary_operations</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="o">=</span> <span class="kc">None</span>
@@ -757,7 +762,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binary_operations</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">binary_operations</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;`binary_operations` must be of length one less than Tag list&quot;</span>
+                        <span class="s2">"`binary_operations` must be of length one less than Tag list"</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span> <span class="o">=</span> <span class="n">binary_operations</span>
@@ -770,7 +775,7 @@
                             <span class="c1"># check that operation is supported</span>
                             <span class="k">if</span> <span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BINARY_OPS</span><span class="p">:</span>
                                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                                    <span class="s2">&quot;Unsupported binary operator:&quot;</span><span class="p">,</span>
+                                    <span class="s2">"Unsupported binary operator:"</span><span class="p">,</span>
                                     <span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
                                 <span class="p">)</span>
                             <span class="n">prev_unit</span> <span class="o">=</span> <span class="n">binary_helper</span><span class="p">(</span>  <span class="c1"># noqa: F405</span>
@@ -783,7 +788,7 @@
                             <span class="n">prev_unit</span> <span class="o">=</span> <span class="n">unit</span>
             <span class="k">elif</span> <span class="n">binary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">binary_operations</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BINARY_OPS</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported binary operator:&quot;</span><span class="p">,</span> <span class="n">binary_operations</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unsupported binary operator:"</span><span class="p">,</span> <span class="n">binary_operations</span><span class="p">)</span>
                 <span class="n">prev_unit</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">unit_list</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -803,8 +808,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Binary operations must be specified &quot;</span>
-                        <span class="s2">&quot;when more than one tag is given.&quot;</span>
+                        <span class="s2">"Binary operations must be specified "</span>
+                        <span class="s2">"when more than one tag is given."</span>
                     <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">prev_unit</span> <span class="o">=</span> <span class="n">unit_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -815,37 +820,38 @@
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">OperationMode</span><span class="o">.</span><span class="n">Custom</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">custom_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">custom_operations</span><span class="p">:</span>
+                <span class="n">custom_operations</span> <span class="o">=</span> <span class="n">validate_custom_operation</span><span class="p">(</span><span class="n">custom_operations</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">count_args</span><span class="p">(</span><span class="n">custom_operations</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Operations lambda function must have the same &quot;</span>
-                        <span class="s2">&quot;number of arguments as the Tag list&quot;</span>
+                        <span class="s2">"Operations lambda function must have the same "</span>
+                        <span class="s2">"number of arguments as the Tag list"</span>
                     <span class="p">)</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Operations lambda function must be specified &quot;</span>
-                    <span class="s2">&quot;if multiple tags are given&quot;</span>
+                    <span class="s2">"Operations lambda function must be specified "</span>
+                    <span class="s2">"if multiple tags are given"</span>
                 <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span> <span class="o">=</span> <span class="n">custom_operations</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> not currently supported. &quot;</span>
-                <span class="s2">&quot;Select either `OperationMode.Algebraic` or `OperationMode.Custom`.&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> not currently supported. "</span>
+                <span class="s2">"Select either `OperationMode.Algebraic` or `OperationMode.Custom`."</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;pype_schema.tag.VirtualTag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;unary_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;binary_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;custom_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"&lt;pype_schema.tag.VirtualTag id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> units:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"tag_type:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tag_type</span><span class="si">}</span><span class="s2"> totalized:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">totalized</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"contents:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2"> tags:</span><span class="si">{</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">]</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"unary_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"binary_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"custom_operations:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"parent_id:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="si">}</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="c1"># don&#39;t attempt to compare against unrelated types</span>
+        <span class="c1"># don't attempt to compare against unrelated types</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
@@ -912,7 +918,7 @@
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
 
 <div class="viewcode-block" id="VirtualTag.process_unary_ops"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.process_unary_ops">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">process_unary_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the given data according to the VirtualTag&#39;s unary operator</span>
+<span class="w">        </span><span class="sd">"""Transform the given data according to the VirtualTag's unary operator</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -921,26 +927,26 @@
 <span class="sd">            correct dimensions. I.e., the number of columns is one more than</span>
 <span class="sd">            binary operations and same length as unary operations</span>
 
-<span class="sd">        un_op : [&quot;noop&quot;, &quot;delta&quot;, &quot;&lt;&lt;&quot;, &quot;&gt;&gt;&quot;, &quot;~&quot;, &quot;-&quot;]</span>
+<span class="sd">        un_op : ["noop", "delta", "&lt;&lt;", "&gt;&gt;", "~", "-"]</span>
 <span class="sd">            Supported operations are:</span>
 
-<span class="sd">                &quot;noop&quot; : null operator, useful when</span>
+<span class="sd">                "noop" : null operator, useful when</span>
 <span class="sd">                skipping tags in a list of unary operations.</span>
 
-<span class="sd">                &quot;delta&quot; : calculate the difference between</span>
+<span class="sd">                "delta" : calculate the difference between</span>
 <span class="sd">                the current timestep and previous timestep</span>
 
-<span class="sd">                &quot;&lt;&lt;&quot; : shift all data left one timestep,</span>
+<span class="sd">                "&lt;&lt;" : shift all data left one timestep,</span>
 <span class="sd">                so that the last time step will be NaN</span>
 
-<span class="sd">                &quot;&gt;&gt;&quot; : shift all data right one timestep,</span>
+<span class="sd">                "&gt;&gt;" : shift all data right one timestep,</span>
 <span class="sd">                so that the first time step will be NaN</span>
 
-<span class="sd">                &quot;~&quot; : Boolean not</span>
+<span class="sd">                "~" : Boolean not</span>
 
-<span class="sd">                &quot;-&quot; : unary negation</span>
+<span class="sd">                "-" : unary negation</span>
 
-<span class="sd">            Note that &quot;delta&quot;, &quot;&lt;&lt;&quot;, and &quot;&gt;&gt;&quot; return a timeseries padded</span>
+<span class="sd">            Note that "delta", "&lt;&lt;", and "&gt;&gt;" return a timeseries padded</span>
 <span class="sd">            with NaN so that it is the same length as input data</span>
 
 <span class="sd">        tag_to_var_map : dict</span>
@@ -951,15 +957,15 @@
 <span class="sd">        -------</span>
 <span class="sd">        list, array, or Series</span>
 <span class="sd">            numpy array of combined dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">constant_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">num_ops</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">num_ops</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_constants</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(same length as unary operations). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(same length as unary operations). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">num_ops</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -984,16 +990,16 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">num_ops</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_constants</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(same length as unary operations). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(same length as unary operations). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">num_ops</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">)):</span>
-                    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float"</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_ops</span><span class="p">):</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">Constant</span><span class="p">):</span>
                         <span class="n">relevant_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -1046,12 +1052,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">result</span><span class="p">[</span><span class="n">tag_obj</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">relevant_data</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, dict, or DataFrame&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Data must be either a list, array, dict, or DataFrame"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="VirtualTag.process_binary_ops"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.process_binary_ops">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">process_binary_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine the given data according to the VirtualTag&#39;s binary operations</span>
+<span class="w">        </span><span class="sd">"""Combine the given data according to the VirtualTag's binary operations</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1068,7 +1074,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        list, array, or Series</span>
 <span class="sd">            numpy array of combined dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">constant_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># if there are unary operations, then constants have alrady been added to data</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1078,9 +1084,9 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">+</span> <span class="n">num_constants</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(one more element than binary operations). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> binary operations and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(one more element than binary operations). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> binary operations and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -1094,29 +1100,29 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">num_constants</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Constant</span><span class="p">)</span> <span class="ow">and</span> <span class="n">num_constants</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">constant_count</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                                 <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">):</span>
@@ -1137,20 +1143,20 @@
                 <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">result</span> <span class="o">=</span> <span class="n">relevant_data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">+=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">-=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">*=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">/=</span> <span class="n">relevant_data</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">)</span> <span class="o">!=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">num_constants</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(one more element than binary operations). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> binary operations and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(one more element than binary operations). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> binary operations and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -1163,22 +1169,22 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">num_constants</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Constant</span><span class="p">)</span> <span class="ow">and</span> <span class="n">num_constants</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">constant_count</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">+=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">*=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                             <span class="n">result</span> <span class="o">/=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">constant_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1199,25 +1205,25 @@
                 <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">result</span> <span class="o">=</span> <span class="n">relevant_data</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"+"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">+=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"-"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">-=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">*=</span> <span class="n">relevant_data</span>
-                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">binary_operations</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">:</span>
                         <span class="n">result</span> <span class="o">/=</span> <span class="n">relevant_data</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">Series</span><span class="p">):</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, dict, or DataFrame&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Data must be either a list, array, dict, or DataFrame"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="VirtualTag.process_custom_ops"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.process_custom_ops">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">process_custom_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the given data according to the VirtualTag&#39;s lambda string</span>
+<span class="w">        </span><span class="sd">"""Transform the given data according to the VirtualTag's lambda string</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1234,31 +1240,31 @@
 <span class="sd">        -------</span>
 <span class="sd">        list, array, or Series</span>
 <span class="sd">            numpy array of combined dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">num_ops</span> <span class="o">=</span> <span class="n">count_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">)</span>
-        <span class="n">func_</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">)</span>
+        <span class="n">_func</span> <span class="o">=</span> <span class="n">build_custom_operation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">num_ops</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">func_</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data_</span> <span class="k">for</span> <span class="n">data_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_func</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data_</span> <span class="k">for</span> <span class="n">data_</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(same length as unary operations). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(same length as unary operations). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> unary operations and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">num_ops</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">issubdtype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">)):</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">num_ops</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">func_</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">_func</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Data must have the correct dimensions &quot;</span>
-                    <span class="s2">&quot;(same length as number of args in operations lambda function). &quot;</span>
-                    <span class="s2">&quot;Currently there are </span><span class="si">{}</span><span class="s2"> args and </span><span class="si">{}</span><span class="s2"> data tags&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"Data must have the correct dimensions "</span>
+                    <span class="s2">"(same length as number of args in operations lambda function). "</span>
+                    <span class="s2">"Currently there are </span><span class="si">{}</span><span class="s2"> args and </span><span class="si">{}</span><span class="s2"> data tags"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">num_ops</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -1269,17 +1275,17 @@
                 <span class="n">varnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">varname</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
                     <span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_obj</span><span class="o">.</span><span class="n">calculate_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">func_</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">varnames</span><span class="p">])</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_func</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">varnames</span><span class="p">])</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">Series</span><span class="p">):</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Data must be either a list, array, dict, or DataFrame&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Data must be either a list, array, dict, or DataFrame"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="VirtualTag.calculate_values"><a class="viewcode-back" href="../../tag.html#pype_schema.tag.VirtualTag.calculate_values">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="p">{}):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine the given data according to the VirtualTag&#39;s operations</span>
+<span class="w">        </span><span class="sd">"""Combine the given data according to the VirtualTag's operations</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1296,7 +1302,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        list, array, or Series</span>
 <span class="sd">            numpy array of combined dataset</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">OperationMode</span><span class="o">.</span><span class="n">Algebraic</span><span class="p">:</span>
             <span class="c1"># check if there are unary ops or just</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unary_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1315,6 +1321,7 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">OperationMode</span><span class="o">.</span><span class="n">Custom</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">:</span>
+                <span class="n">validate_custom_operation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_operations</span><span class="p">)</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_custom_ops</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tag_to_var_map</span><span class="o">=</span><span class="n">tag_to_var_map</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">)):</span>
                 <span class="c1"># if custom_operations is empty, get appropriate column and rename</span>
@@ -1327,8 +1334,8 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> not currently supported. &quot;</span>
-                <span class="s2">&quot;Select either `OperationMode.Algebraic` or `OperationMode.Custom`.&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> not currently supported. "</span>
+                <span class="s2">"Select either `OperationMode.Algebraic` or `OperationMode.Custom`."</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span></div></div>
