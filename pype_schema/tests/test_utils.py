@@ -49,3 +49,29 @@ def test_parse_units(units, expected):
     except Exception as err:
         result = type(err).__name__
         assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+@pytest.mark.parametrize(
+    "value, units, expected",
+    [
+        ("1", "day", 1 * u.day),
+        ("1.5", "day", 1.5 * u.day),
+        (2, "day", 2 * u.day),
+        (2.5, None, 2.5),
+        ("3", None, 3),
+        (None, "day", None),
+        (None, None, None),
+    ],
+)
+def test_parse_quantity(value, units, expected):
+    result = ut.parse_quantity(value, units)
+    assert result == expected
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_parse_quantity_preserves_numeric_type():
+    # integer-valued strings stay ints (so reprs render "1 day", not "1.0 day")
+    assert isinstance(ut.parse_quantity("1", "day").magnitude, int)
+    # non-integer strings become floats
+    assert isinstance(ut.parse_quantity("1.5", "day").magnitude, float)

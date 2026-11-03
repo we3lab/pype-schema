@@ -4,33 +4,6 @@ from pint import UndefinedUnitError
 from .units import u
 
 
-def count_args(func_str):
-    """Count the arguments for a lambda function string
-
-    Parameters
-    ----------
-    func_str : str
-        A string representation of a lambda function
-
-    Returns
-    -------
-    int :
-        The lambda function's number of arguments
-
-    """
-    func = eval(func_str)
-    nargs = 0
-    if func.__code__.co_argcount is not None:
-        nargs += func.__code__.co_argcount
-    if func.__defaults__ is not None:
-        nargs -= len(func.__defaults__)
-    if func.__code__.co_kwonlyargcount is not None:
-        nargs += func.__code__.co_kwonlyargcount
-    if func.__kwdefaults__ is not None:
-        nargs -= len(func.__kwdefaults__)
-    return nargs
-
-
 def get_tag_sum_lambda_func(unit_ids):
     """Generate a lambda function string to sum tags
 
@@ -64,6 +37,12 @@ def parse_quantity(value, units):
     pint.Quantity
         a Pint Quantity with the given value and units
     """
+    if isinstance(value, str):
+        try:
+            value = int(value)
+        except ValueError:
+            value = float(value)
+
     if value is not None:
         if units:
             return value * parse_units(units)

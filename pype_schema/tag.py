@@ -5,7 +5,12 @@ import pandas as pd  # noqa: F401
 import numpy as np  # noqa: F401
 import scipy as sp  # noqa: F401
 from numpy import ndarray, array, issubdtype
-from .utils import count_args, parse_units
+from .utils import parse_units
+from .operations import (
+    count_args,
+    validate_custom_operation,
+    build_custom_operation,
+)
 from .units import u
 from .operations import *  # noqa: F401, F403
 from .logbook import Logbook
@@ -717,6 +722,7 @@ class VirtualTag:
 
         elif self.mode == OperationMode.Custom:
             if custom_operations is not None and custom_operations:
+                custom_operations = validate_custom_operation(custom_operations)
                 if count_args(custom_operations) != len(tags):
                     raise ValueError(
                         "Operations lambda function must have the same "
@@ -1139,10 +1145,10 @@ class VirtualTag:
         """
         result = data.copy()
         num_ops = count_args(self.custom_operations)
-        func_ = eval(self.custom_operations)
+        _func = build_custom_operation(self.custom_operations)
         if isinstance(data, list):
             if num_ops == len(data):
-                result = func_(*[data_ for data_ in data])
+                result = _func(*[data_ for data_ in data])
             else:
                 raise ValueError(
                     "Data must have the correct dimensions "
@@ -1155,7 +1161,7 @@ class VirtualTag:
             if issubdtype(data.dtype, (int)):
                 result = result.astype("float")
             if num_ops == data.shape[1]:
-                result = func_(*[data[:, i] for i in range(data.shape[1])])
+                result = _func(*[data[:, i] for i in range(data.shape[1])])
             else:
                 raise ValueError(
                     "Data must have the correct dimensions "
@@ -1171,7 +1177,7 @@ class VirtualTag:
                 varnames.append(varname)
                 if isinstance(tag_obj, self.__class__):
                     data[varname] = tag_obj.calculate_values(data, tag_to_var_map)
-            result = func_(*[data[varname] for varname in varnames])
+            result = _func(*[data[varname] for varname in varnames])
             if isinstance(result, Series):
                 result.rename(self.id, inplace=True)
 
@@ -1217,6 +1223,7 @@ class VirtualTag:
                 data = data[:, 0]
         elif self.mode == OperationMode.Custom:
             if self.custom_operations is not None and self.custom_operations:
+                validate_custom_operation(self.custom_operations)
                 data = self.process_custom_ops(data, tag_to_var_map=tag_to_var_map)
             elif isinstance(data, (dict, DataFrame)):
                 # if custom_operations is empty, get appropriate column and rename
