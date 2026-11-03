@@ -54,6 +54,7 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3.14",
+        "Programming Language :: Python :: 3.15",
     ],
     description="Class hierarchy to represent configurations of process engineering systems.",
     entry_points={},
