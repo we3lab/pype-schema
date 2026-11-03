@@ -1003,7 +1003,7 @@ def build_custom_operation(func_str):
 
 
 def _names(space_separated):
-    """Split a string of names into a frozenset.'
+    """Split a string of names into a frozenset.
 
     Parameters
     ----------
@@ -1019,7 +1019,7 @@ def _names(space_separated):
 
 def _ns(names, modules=None):
     """One namespace: its members, and its submodules.
-    
+
     Parameters
     ----------
     names : str
