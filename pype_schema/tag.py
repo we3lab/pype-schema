@@ -216,6 +216,14 @@ class Tag:
     ):
         self.id = id
         self.units = units
+        if (
+            contents is None
+            and tag_type is not None
+            and tag_type not in CONTENTLESS_TYPES
+        ):
+            raise ValueError(
+                f"Tag {id} has no contents, but {tag_type.name} tags must have contents"
+            )
         self.contents = contents
         self.tag_type = tag_type
         self.totalized = totalized

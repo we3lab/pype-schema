@@ -593,6 +593,26 @@ def test_tag_less_than(
 
 
 @pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_tag_requires_contents():
+    with pytest.raises(ValueError, match="FlowTag.*Flow"):
+        Tag(
+            "FlowTag",
+            parse_units("gal/min"),
+            TagType.Flow,
+            "total",
+            "total",
+            "Pump1",
+        )
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
+def test_contentless_tag_needs_no_contents():
+    tag = Tag("Status", None, TagType.RunStatus, "total", "total", "Pump1")
+    assert tag.contents is None
+    assert "contents" not in JSONParser.tag_to_dict(tag)
+
+
+@pytest.mark.skipif(skip_all_tests, reason="Exclude all tests")
 @pytest.mark.parametrize(
     "json_path, tag_0_id, tag_1_id, expected",
     [
